@@ -4,7 +4,6 @@ import re
 import logging
 import hashlib
 from datetime import datetime, timedelta, timezone
-import requests
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from telethon import TelegramClient
@@ -58,13 +57,15 @@ def upload_raw_pick(pick_data: dict):
         return
         
     try:
-        res = supabase.table('raw_picks').select('id', count='exact').eq('source_unique_id', unique_id).execute()
+        # Use the new 'live_raw_picks' table
+        res = supabase.table('live_raw_picks').select('id', count='exact').eq('source_unique_id', unique_id).execute()
         
         if res.count > 0:
             logging.info(f"Duplicate pick found based on unique ID '{unique_id}'. Skipping.")
             return
             
-        supabase.table('raw_picks').insert(pick_data).execute()
+        # Use the new 'live_raw_picks' table
+        supabase.table('live_raw_picks').insert(pick_data).execute()
         logging.info(f"Uploaded new raw pick with unique ID '{unique_id}'.")
         
     except Exception as e:
@@ -147,10 +148,9 @@ async def run_scrapers():
     tasks = [scrape_telegram()]
     results = await asyncio.gather(*tasks, return_exceptions=True)
     
-    for i, result in enumerate(results):
+    for result in results:
         if isinstance(result, Exception):
-            scraper_name = "Telegram"
-            logging.error(f"{scraper_name} scraper failed: {result}")
+            logging.error(f"A scraper task failed: {result}")
         
     logging.info("Scraper run finished.")
 

@@ -13,8 +13,7 @@ load_dotenv()
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_SERVICE_ROLE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-# *** FIX: AI model is now fully configurable via environment variable ***
-AI_PARSER_MODEL = os.getenv("AI_PARSER_MODEL", "google/gemini-2.0-flash-exp:free")
+AI_PARSER_MODEL = os.getenv("AI_PARSER_MODEL", "anthropic/claude-3-haiku")
 
 try:
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
@@ -107,7 +106,8 @@ def run_processor():
     if not supabase: return
 
     logging.info("Starting processing service run...")
-    response = supabase.table('raw_picks').select('*').eq('status', 'pending').limit(25).execute()
+    # Use the new 'live_raw_picks' table
+    response = supabase.table('live_raw_picks').select('*').eq('status', 'pending').limit(25).execute()
     if not response.data:
         logging.info("No pending raw picks to process.")
         return
@@ -118,9 +118,10 @@ def run_processor():
     parsed_picks = parse_with_ai(raw_picks_for_ai)
 
     if not parsed_picks:
-        logging.error("AI parsing returned no data. Marking as failed to prevent retries.")
+        logging.error("AI parsing returned no data. Marking relevant raw picks as failed.")
         failed_ids = [p['id'] for p in raw_picks]
-        supabase.table('raw_picks').update({'status': 'failed'}).in_('id', failed_ids).execute()
+        # Use the new 'live_raw_picks' table
+        supabase.table('live_raw_picks').update({'status': 'failed'}).in_('id', failed_ids).execute()
         return
 
     picks_to_insert = []
@@ -153,11 +154,13 @@ def run_processor():
         processed_ids.add(raw_pick_id)
         
     if picks_to_insert:
-        supabase.table('live_picks').insert(picks_to_insert).execute()
-        logging.info(f"Inserted {len(picks_to_insert)} new structured picks into 'live_picks'.")
+        # Use the new 'live_structured_picks' table
+        supabase.table('live_structured_picks').insert(picks_to_insert).execute()
+        logging.info(f"Inserted {len(picks_to_insert)} new structured picks into 'live_structured_picks'.")
 
     if processed_ids:
-        supabase.table('raw_picks').update({'status': 'processed'}).in_('id', list(processed_ids)).execute()
+        # Use the new 'live_raw_picks' table
+        supabase.table('live_raw_picks').update({'status': 'processed'}).in_('id', list(processed_ids)).execute()
 
     logging.info("Processing service run finished.")
 

@@ -2,3 +2,4 @@
 my_telegram_session.session
 *.session-journal
 __pycache__/
+test.py

@@ -43,9 +43,6 @@ for channel in raw_telegram_channels:
     except ValueError:
         TELEGRAM_CHANNELS.append(channel)
 
-# GitHub
-GITHUB_PICKS_URL = os.getenv('GITHUB_PICKS_URL')
-
 try:
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 except Exception as e:
@@ -124,12 +121,11 @@ async def scrape_telegram():
                 text_content = text_content.strip()
                 if not text_content: continue
 
-                if re.search(r'([+-]\d{3,}|ML|[+-]\d{1,2}\.?5|\d+\.?\d*u(nit)?\b)', text_content, re.I):
+                if re.search(r'([+-]\d{3,}|ML|[+-]\d{1,2}\.?5|\d+\.?d*u(nit)?\b)', text_content, re.I):
                     capper_name = text_content.strip().split('\n')[0].strip()
                     source_url = f"https://t.me/{entity.username}/{message.id}" if hasattr(entity, 'username') else str(channel_entity)
                     unique_id = f"telegram-{entity.id}-{message.id}"
                     
-                    # *** FIX: Explicitly set the 'status' to 'pending' for new picks ***
                     upload_raw_pick({
                         'capper_name': capper_name,
                         'raw_text': text_content,
@@ -144,35 +140,6 @@ async def scrape_telegram():
     await client.disconnect()
     logging.info("Telegram client disconnected.")
 
-def scrape_github():
-    if not GITHUB_PICKS_URL:
-        logging.warning("GitHub URL not configured. Skipping.")
-        return
-    try:
-        logging.info(f"Scraping GitHub URL: {GITHUB_PICKS_URL}")
-        response = requests.get(GITHUB_PICKS_URL, timeout=20)
-        response.raise_for_status()
-        content = response.text
-        today = datetime.utcnow().date().isoformat()
-        for line in content.splitlines():
-            line = line.strip()
-            if line and not line.startswith('#'):
-                if re.search(r'([+-]\d{3,}|ML|[+-]\d{1,2}\.?5|\d+\.?\d*u(nit)?\b)', line, re.I):
-                    line_hash = hashlib.sha256(line.encode()).hexdigest()
-                    unique_id = f"github-{line_hash[:16]}"
-                    
-                    # *** FIX: Explicitly set the 'status' to 'pending' for new picks ***
-                    upload_raw_pick({
-                        'capper_name': 'GitHub Analyst',
-                        'raw_text': line,
-                        'pick_date': today,
-                        'source_url': GITHUB_PICKS_URL,
-                        'source_unique_id': unique_id,
-                        'status': 'pending'
-                    })
-    except requests.RequestException as e:
-        logging.error(f"Error fetching picks from GitHub: {e}")
-
 async def run_scrapers():
     """Main function to run all scrapers."""
     logging.info("Starting scraper run...")
@@ -184,11 +151,6 @@ async def run_scrapers():
         if isinstance(result, Exception):
             scraper_name = "Telegram"
             logging.error(f"{scraper_name} scraper failed: {result}")
-
-    try:
-        scrape_github()
-    except Exception as e:
-        logging.error(f"GitHub scraper failed: {e}")
         
     logging.info("Scraper run finished.")
 

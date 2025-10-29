@@ -13,7 +13,8 @@ load_dotenv()
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_SERVICE_ROLE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-AI_PARSER_MODEL = os.getenv("AI_PARSER_MODEL", "anthropic/claude-3-haiku")
+# *** FIX: AI model is now fully configurable via environment variable ***
+AI_PARSER_MODEL = os.getenv("AI_PARSER_MODEL", "google/gemini-2.0-flash-exp:free")
 
 try:
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
@@ -38,7 +39,6 @@ def get_or_create_capper(capper_name: str) -> int:
         return None
 
 def clean_unit_value(unit_input: any) -> float:
-    """Cleans a unit value from AI, extracting the number and handling strings like '1U'."""
     default_unit = 1.0
     if isinstance(unit_input, (int, float)):
         return float(unit_input)
@@ -62,7 +62,7 @@ def parse_with_ai(raw_picks: list) -> list:
 
     prompt = f"""
     You are an expert sports data standardization bot. Your task is to analyze raw text messages and reformat EVERY valid pick *exactly* according to the provided formatting guide. A single raw text block may contain MULTIPLE picks.
-
+    
     --- FORMATTING GUIDE ---
     1. Standard `league` values: NFL, NCAAF, NBA, NCAAB, WNBA, MLB, NHL, EPL, MLS, UCL, UFC, PFL, TENNIS, PGA, F1. For multi-league parlays, use "Other". If unknown, also use "Other".
     2. Standard `type` values: Moneyline, Spread, Total, Player Prop, Team Prop, Game Prop, Period, Parlay, Teaser, Future, Unknown.
@@ -104,7 +104,6 @@ def parse_with_ai(raw_picks: list) -> list:
         return []
 
 def run_processor():
-    """Main function to process raw picks."""
     if not supabase: return
 
     logging.info("Starting processing service run...")

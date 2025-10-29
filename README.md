@@ -28,31 +28,29 @@ The application follows a modular architecture with separate components for scra
 
 ```mermaid
 graph TD
-    A[Scheduled Pipeline] --> B{Operational Hours?}
+    A[Scheduled Pipeline] --> B{Within 11 AM - 11 PM ET?}
     B -->|Yes| C[Run Scrapers]
     B -->|No| D[Skip Run]
 
     C --> E[Telegram Scraper]
-    C --> F[GitHub Scraper]
 
-    E --> G[Raw Picks Table]
-    F --> G
+    E --> F[Raw Picks Table]
 
-    G --> H[AI Processing Service]
-    H --> I[Parse with Claude/OpenAI]
-    I --> J[Structured Picks Table]
+    F --> G[AI Processing Service]
+    G --> H[Parse with Claude/OpenAI]
+    H --> I[Structured Picks Table]
 
-    J --> K[Web Application]
-    K --> L[Live Feed Display]
-    K --> M[Capper Rankings]
-    K --> N[AI Graphics Generation]
+    I --> J[Web Application]
+    J --> K[Live Feed Display]
+    J --> L[Capper Rankings]
+    J --> M[AI Graphics Generation]
 
-    L --> O[User Interface]
-    M --> O
-    N --> O
+    K --> N[User Interface]
+    L --> N
+    M --> N
 
-    P[Static JSON Cache] --> O
-    P --> Q[Pre-calculated Stats]
+    O[Static JSON Cache] --> N
+    O --> P[Pre-calculated Stats]
 ```
 
 ### Component Diagram
@@ -61,12 +59,10 @@ graph TD
 graph TB
     subgraph "Data Sources"
         T[Telegram Channels]
-        GH[GitHub Files]
     end
 
     subgraph "Scraping Layer"
         TS[Telegram Scraper]
-        GHS[GitHub Scraper]
     end
 
     subgraph "Processing Layer"
@@ -81,9 +77,7 @@ graph TB
     end
 
     T --> TS
-    GH --> GHS
     TS --> DB
-    GHS --> DB
     DB --> AI
     AI --> DB
     DB --> API
@@ -95,7 +89,7 @@ graph TB
 
 ### Core Features
 
-- **Multi-Source Scraping**: Pulls raw picks from Telegram channels and GitHub files
+- **Multi-Source Scraping**: Pulls raw picks from Telegram channels
 - **AI-Powered Parsing**: Uses Claude or OpenAI models to robustly parse unstructured text into structured pick data
 - **Scheduled Data Pipeline**: Automated scripts run during operational hours (11 AM - 11 PM ET)
 - **Ranked Live Feed**: Real-time display of latest picks sorted by capper performance
@@ -170,19 +164,18 @@ cappers-tracked/
 ## Data Flow
 
 1. **Scraping Phase**:
-   - Telegram scraper connects to configured channels
-   - GitHub scraper fetches raw text files
-   - Raw picks stored in `raw_picks` table with status 'pending'
+    - Telegram scraper connects to configured channels
+    - Raw picks stored in `raw_picks` table with status 'pending'
 
 2. **Processing Phase**:
-   - AI service parses unstructured text into structured data
-   - Capper names normalized and stored in `capper_directory`
-   - Structured picks inserted into `live_picks` table
+    - AI service parses unstructured text into structured data
+    - Capper names normalized and stored in `capper_directory`
+    - Structured picks inserted into `live_picks` table
 
 3. **Presentation Phase**:
-   - Web application queries live picks with capper rankings
-   - Static JSON cache provides fast access to statistics
-   - AI graphics generated on-demand for performance summaries
+    - Web application queries live picks with capper rankings
+    - Static JSON cache provides fast access to statistics
+    - AI graphics generated on-demand for performance summaries
 
 ## Setup Instructions
 
@@ -208,9 +201,6 @@ TELEGRAM_API_ID="your_telegram_api_id"
 TELEGRAM_API_HASH="your_telegram_api_hash"
 TELEGRAM_SESSION_NAME="your_session_string"
 TELEGRAM_CHANNEL_URLS="channel_id_1,channel_id_2"
-
-# GitHub Scraping (Optional)
-GITHUB_PICKS_URL="https://raw.githubusercontent.com/user/repo/main/picks.txt"
 
 # AI Service (Required for parsing)
 OPENROUTER_API_KEY="your_openrouter_api_key"
@@ -300,23 +290,23 @@ Set up a workflow file for automated scheduling.
 The main pipeline can be executed in several ways:
 
 1. **Manual Execution**:
-   ```bash
-   python run_pipeline.py
-   ```
+    ```bash
+    python run_pipeline.py
+    ```
 
 2. **Test Individual Components**:
-   ```bash
-   # Test scrapers only
-   python scrapers.py
+    ```bash
+    # Test scrapers only
+    python scrapers.py
 
-   # Test processing only
-   python processing_service.py
-   ```
+    # Test processing only
+    python processing_service.py
+    ```
 
 3. **Maintenance Operations**:
-   ```bash
-   python maintenance.py
-   ```
+    ```bash
+    python maintenance.py
+    ```
 
 ### Web Interface
 
@@ -387,19 +377,19 @@ Content-Type: application/json
 ### Common Issues
 
 1. **Telegram Connection Failed**
-   - Verify API credentials
-   - Regenerate session string
-   - Check channel permissions
+    - Verify API credentials
+    - Regenerate session string
+    - Check channel permissions
 
 2. **AI Parsing Errors**
-   - Verify OpenRouter API key
-   - Check model availability
-   - Review prompt formatting
+    - Verify OpenRouter API key
+    - Check model availability
+    - Review prompt formatting
 
 3. **Database Connection Issues**
-   - Confirm Supabase credentials
-   - Check network connectivity
-   - Verify table schemas
+    - Confirm Supabase credentials
+    - Check network connectivity
+    - Verify table schemas
 
 ### Logs
 

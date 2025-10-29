@@ -1,0 +1,12 @@
+python-dotenv
+supabase
+openai
+telethon
+requests
+pytesseract
+opencv-python
+Pillow
+numpy
+thefuzz
+pandas
+pytz

@@ -1,0 +1,4 @@
+.env
+my_telegram_session.session
+*.session-journal
+__pycache__/

@@ -1,0 +1,197 @@
+import os
+import asyncio
+import re
+import logging
+import hashlib
+from datetime import datetime, timedelta, timezone
+import requests
+from dotenv import load_dotenv
+from supabase import create_client, Client
+from telethon import TelegramClient
+from telethon.sessions import StringSession
+
+# --- OCR Imports ---
+OCR_AVAILABLE = False
+try:
+    import pytesseract, cv2, numpy as np
+    from PIL import Image
+    pytesseract.get_tesseract_version() 
+    OCR_AVAILABLE = True
+    logging.info("Tesseract OCR engine found and ready. Image processing is enabled.")
+except (ImportError, ModuleNotFoundError) as e:
+    logging.warning(f"An OCR library is not installed ({e}). OCR for images will be disabled.")
+except Exception as e:
+    logging.warning(f"Tesseract OCR engine not found or failed to initialize: {e}. OCR for images will be disabled.")
+
+# --- Configuration ---
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+load_dotenv()
+
+# Supabase
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_SERVICE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+
+# Telegram
+TELEGRAM_API_ID = os.getenv('TELEGRAM_API_ID')
+TELEGRAM_API_HASH = os.getenv('TELEGRAM_API_HASH')
+TELEGRAM_SESSION_NAME = os.getenv('TELEGRAM_SESSION_NAME')
+raw_telegram_channels = [url.strip() for url in os.getenv('TELEGRAM_CHANNEL_URLS', '').split(',') if url.strip()]
+TELEGRAM_CHANNELS = []
+for channel in raw_telegram_channels:
+    try:
+        TELEGRAM_CHANNELS.append(int(channel))
+    except ValueError:
+        TELEGRAM_CHANNELS.append(channel)
+
+# GitHub
+GITHUB_PICKS_URL = os.getenv('GITHUB_PICKS_URL')
+
+try:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+except Exception as e:
+    logging.error(f"Failed to initialize Supabase client: {e}")
+    supabase = None
+
+def upload_raw_pick(pick_data: dict):
+    if not supabase: return
+    
+    unique_id = pick_data.get('source_unique_id')
+    if not unique_id:
+        logging.warning(f"Skipping pick because it has no unique ID: {pick_data.get('raw_text', '')[:50]}...")
+        return
+        
+    try:
+        res = supabase.table('raw_picks').select('id', count='exact').eq('source_unique_id', unique_id).execute()
+        
+        if res.count > 0:
+            logging.info(f"Duplicate pick found based on unique ID '{unique_id}'. Skipping.")
+            return
+            
+        supabase.table('raw_picks').insert(pick_data).execute()
+        logging.info(f"Uploaded new raw pick with unique ID '{unique_id}'.")
+        
+    except Exception as e:
+        if 'duplicate key value violates unique constraint' in str(e):
+             logging.info(f"Database rejected duplicate pick with unique ID '{unique_id}'. Skipping.")
+        else:
+             logging.error(f"Error uploading raw pick with unique ID '{unique_id}': {e}")
+
+
+def perform_ocr(image_bytes: bytes) -> str:
+    if not OCR_AVAILABLE or not image_bytes: return ""
+    try:
+        np_arr = np.frombuffer(image_bytes, np.uint8)
+        image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        if image is None: return ""
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        processed_image = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+        custom_config = r'--oem 3 --psm 6'
+        text = pytesseract.image_to_string(processed_image, config=custom_config)
+        return text.strip()
+    except Exception as e:
+        logging.error(f"OCR processing failed: {e}")
+        return ""
+
+async def scrape_telegram():
+    if not all([TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_SESSION_NAME, TELEGRAM_CHANNELS]):
+        logging.warning("Telegram scraper not fully configured. Skipping.")
+        return
+
+    client = TelegramClient(StringSession(TELEGRAM_SESSION_NAME), int(TELEGRAM_API_ID), TELEGRAM_API_HASH)
+    await client.start()
+    logging.info("Telegram client started.")
+    
+    after_time = datetime.now(timezone.utc) - timedelta(hours=48)
+    logging.info(f"Searching for messages AFTER (UTC): {after_time.strftime('%Y-%m-%d %H:%M:%S')}")
+
+    for channel_entity in TELEGRAM_CHANNELS:
+        try:
+            entity = await client.get_entity(channel_entity)
+            logging.info(f"Scraping Telegram channel: {getattr(entity, 'title', channel_entity)}")
+            
+            async for message in client.iter_messages(entity, limit=500, offset_date=datetime.now(timezone.utc)):
+                if message.date < after_time:
+                    logging.info(f"Message {message.id} is older than the search window. Stopping search for this channel.")
+                    break
+
+                text_content = (message.text or "").strip()
+                if OCR_AVAILABLE and message.photo:
+                    image_bytes = await message.download_media(file=bytes)
+                    if image_bytes:
+                        ocr_text = await asyncio.to_thread(perform_ocr, image_bytes)
+                        if ocr_text: text_content += f"\n\n--- OCR TEXT ---\n{ocr_text}"
+                
+                text_content = text_content.strip()
+                if not text_content: continue
+
+                if re.search(r'([+-]\d{3,}|ML|[+-]\d{1,2}\.?5|\d+\.?\d*u(nit)?\b)', text_content, re.I):
+                    capper_name = text_content.strip().split('\n')[0].strip()
+                    source_url = f"https://t.me/{entity.username}/{message.id}" if hasattr(entity, 'username') else str(channel_entity)
+                    unique_id = f"telegram-{entity.id}-{message.id}"
+                    
+                    # *** FIX: Explicitly set the 'status' to 'pending' for new picks ***
+                    upload_raw_pick({
+                        'capper_name': capper_name,
+                        'raw_text': text_content,
+                        'pick_date': message.date.date().isoformat(),
+                        'source_url': source_url,
+                        'source_unique_id': unique_id,
+                        'status': 'pending'
+                    })
+        except Exception as e:
+            logging.error(f"Error scraping Telegram channel '{channel_entity}': {e}")
+    
+    await client.disconnect()
+    logging.info("Telegram client disconnected.")
+
+def scrape_github():
+    if not GITHUB_PICKS_URL:
+        logging.warning("GitHub URL not configured. Skipping.")
+        return
+    try:
+        logging.info(f"Scraping GitHub URL: {GITHUB_PICKS_URL}")
+        response = requests.get(GITHUB_PICKS_URL, timeout=20)
+        response.raise_for_status()
+        content = response.text
+        today = datetime.utcnow().date().isoformat()
+        for line in content.splitlines():
+            line = line.strip()
+            if line and not line.startswith('#'):
+                if re.search(r'([+-]\d{3,}|ML|[+-]\d{1,2}\.?5|\d+\.?\d*u(nit)?\b)', line, re.I):
+                    line_hash = hashlib.sha256(line.encode()).hexdigest()
+                    unique_id = f"github-{line_hash[:16]}"
+                    
+                    # *** FIX: Explicitly set the 'status' to 'pending' for new picks ***
+                    upload_raw_pick({
+                        'capper_name': 'GitHub Analyst',
+                        'raw_text': line,
+                        'pick_date': today,
+                        'source_url': GITHUB_PICKS_URL,
+                        'source_unique_id': unique_id,
+                        'status': 'pending'
+                    })
+    except requests.RequestException as e:
+        logging.error(f"Error fetching picks from GitHub: {e}")
+
+async def run_scrapers():
+    """Main function to run all scrapers."""
+    logging.info("Starting scraper run...")
+    
+    tasks = [scrape_telegram()]
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    
+    for i, result in enumerate(results):
+        if isinstance(result, Exception):
+            scraper_name = "Telegram"
+            logging.error(f"{scraper_name} scraper failed: {result}")
+
+    try:
+        scrape_github()
+    except Exception as e:
+        logging.error(f"GitHub scraper failed: {e}")
+        
+    logging.info("Scraper run finished.")
+
+if __name__ == "__main__":
+    logging.info("Running scrapers.py directly for testing...")
+    asyncio.run(run_scrapers())

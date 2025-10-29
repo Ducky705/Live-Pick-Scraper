@@ -36,7 +36,6 @@ except Exception as e:
     exit()
 
 def upload_raw_pick_for_test(pick_data: dict):
-    # This is a simplified version for testing purposes
     if not supabase: return
     try:
         supabase.table('live_raw_picks').insert(pick_data).execute()
@@ -65,6 +64,11 @@ async def main():
     unique_id_to_test = None
     
     try:
+        # ==================== 0. PRE-TEST CLEANUP ====================
+        print("\n" + "="*20 + " 0. PRE-TEST CLEANUP " + "="*20)
+        logging.info("Clearing any leftover 'pending' raw picks to ensure a clean test run...")
+        supabase.table('live_raw_picks').delete().eq('status', 'pending').execute()
+        
         # ==================== 1. FETCH TEST DATA ====================
         print("\n" + "="*20 + " 1. FETCH TEST DATA " + "="*20)
         await client.start()

@@ -1,3 +1,4 @@
+# requirements.txt
 python-dotenv
 supabase
 openai
@@ -7,6 +8,7 @@ pytesseract
 opencv-python
 Pillow
 numpy
-thefuzz
 pandas
 pytz
+thefuzz
+python-Levenshtein

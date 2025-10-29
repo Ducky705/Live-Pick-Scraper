@@ -18,7 +18,7 @@ def is_within_operational_hours() -> bool:
     
     # The operational window is from 11:00:00 ET to 22:59:59 ET.
     # *** FIX: Changed the start hour from 10 to 11 ***
-    if 11 <= hour < 23:
+    if 10 <= hour < 23:
         logging.info(f"Current time {now_et.strftime('%H:%M:%S %Z')} is within the operational window (11 AM - 11 PM ET).")
         return True
     else:

@@ -1,11 +1,15 @@
 import os
 import asyncio
 import logging
+import sys
 from dotenv import load_dotenv
 from telethon import TelegramClient
+from telethon.sessions import StringSession
 
 # --- Configuration ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Set stdout to handle UTF-8 encoding
+sys.stdout.reconfigure(encoding='utf-8')
 load_dotenv()
 
 TELEGRAM_API_ID = os.getenv('TELEGRAM_API_ID')
@@ -17,7 +21,7 @@ async def main():
         logging.error("Telegram credentials not found in .env file. Cannot run.")
         return
 
-    client = TelegramClient(TELEGRAM_SESSION_NAME, int(TELEGRAM_API_ID), TELEGRAM_API_HASH)
+    client = TelegramClient(StringSession(TELEGRAM_SESSION_NAME), int(TELEGRAM_API_ID), TELEGRAM_API_HASH)
     
     print("Connecting to Telegram...")
     await client.start()

@@ -4,6 +4,7 @@ import re
 import logging
 import hashlib
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo  # <-- REPLACED pytz
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from telethon import TelegramClient
@@ -57,14 +58,12 @@ def upload_raw_pick(pick_data: dict):
         return
         
     try:
-        # Use the new 'live_raw_picks' table
         res = supabase.table('live_raw_picks').select('id', count='exact').eq('source_unique_id', unique_id).execute()
         
         if res.count > 0:
             logging.info(f"Duplicate pick found based on unique ID '{unique_id}'. Skipping.")
             return
             
-        # Use the new 'live_raw_picks' table
         supabase.table('live_raw_picks').insert(pick_data).execute()
         logging.info(f"Uploaded new raw pick with unique ID '{unique_id}'.")
         
@@ -94,6 +93,8 @@ async def scrape_telegram():
     if not all([TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_SESSION_NAME, TELEGRAM_CHANNELS]):
         logging.warning("Telegram scraper not fully configured. Skipping.")
         return
+
+    EASTERN_TIMEZONE = ZoneInfo('US/Eastern') # <-- UPDATED
 
     client = TelegramClient(StringSession(TELEGRAM_SESSION_NAME), int(TELEGRAM_API_ID), TELEGRAM_API_HASH)
     await client.start()
@@ -127,10 +128,12 @@ async def scrape_telegram():
                     source_url = f"https://t.me/{entity.username}/{message.id}" if hasattr(entity, 'username') else str(channel_entity)
                     unique_id = f"telegram-{entity.id}-{message.id}"
                     
+                    pick_date_et = message.date.astimezone(EASTERN_TIMEZONE)
+                    
                     upload_raw_pick({
                         'capper_name': capper_name,
                         'raw_text': text_content,
-                        'pick_date': message.date.date().isoformat(),
+                        'pick_date': pick_date_et.date().isoformat(),
                         'source_url': source_url,
                         'source_unique_id': unique_id,
                         'status': 'pending'

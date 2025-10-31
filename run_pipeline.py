@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from datetime import datetime
-import pytz
+from zoneinfo import ZoneInfo # <-- REPLACED pytz
 
 # Import the main functions from your existing scripts
 from scrapers import run_scrapers
@@ -9,7 +9,7 @@ from processing_service import run_processor
 
 # --- Configuration ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-EASTERN_TIMEZONE = pytz.timezone('US/Eastern')
+EASTERN_TIMEZONE = ZoneInfo('US/Eastern') # <-- UPDATED
 
 def is_within_operational_hours() -> bool:
     """Checks if the current time is between 11 AM and 11 PM Eastern Time."""

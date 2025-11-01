@@ -1,5 +1,6 @@
 import os
 import subprocess
+import pyperclip
 
 def get_file_tree(path):
     tree = []
@@ -13,7 +14,7 @@ def get_file_tree(path):
     return '\n'.join(tree)
 
 def copy_to_clipboard(text):
-    subprocess.run(['clip'], input=text, text=True, shell=True)
+    pyperclip.copy(text)
 
 def main():
     code_extensions = ('.py', '.html', '.js', '.css')

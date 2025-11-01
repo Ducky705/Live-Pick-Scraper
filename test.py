@@ -1,114 +1,226 @@
-import os
+# File: ./test.py
 import asyncio
 import logging
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo  # <-- REPLACED pytz
-from dotenv import load_dotenv
-from supabase import create_client, Client
+import time
+import json
+from datetime import datetime
+from typing import List, Dict
+from unittest.mock import patch, MagicMock, AsyncMock
 
-# --- Configuration ---
+# --- Main application components to be tested ---
+from config import EASTERN_TIMEZONE
+from database import get_supabase_client
+from processing_service import run_processor
+from run_pipeline import main as run_main_pipeline
+
+# --- Test Configuration ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-load_dotenv()
+supabase = None
 
-# --- Client Initializations ---
-SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_SERVICE_ROLE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+# --- Test Data and Mocks ---
+FUZZY_PREP_DATA = {'capper_directory': [{'canonical_name': 'Capper A'}, {'canonical_name': 'Capper B'}, {'canonical_name': 'The Nba Expert'}]}
+TEST_RAW_PICKS = [
+    {'raw_text': "Capper A 2u Los Angeles Lakers ML +150", 'capper_name': 'Capper A', 'source_unique_id': 'test-1-simple-ml'},
+    {'raw_text': "Capper C 1u Kansas City Chiefs -7.5 -110 NFL", 'capper_name': 'CapperC', 'source_unique_id': 'test-2-new-capper'},
+    {'raw_text': "The NB Expert 3u Nikola Jokic Over 25.5 Pts -115", 'capper_name': 'The NB Expert', 'source_unique_id': 'test-3-fuzzy-capper'},
+    {'raw_text': "Capper B 1.5u Total for the game twolves vs suns O 220 +100", 'capper_name': 'Capper B', 'source_unique_id': 'test-4-total-format'},
+    {'raw_text': "Capper A 4u Parlay: (nfl) Dallas Cowboys -3.5 / (ncaaf) rutgers +14.5 +264", 'capper_name': 'Capper A', 'source_unique_id': 'test-5-parlay'},
+    {'raw_text': "Capper B 1u Player Prop: LeBron James Pts+Reb+Ast O 45.5 -120", 'capper_name': 'Capper B', 'source_unique_id': 'test-6-complex-prop'},
+    {'raw_text': "Capper A 1u I like the Mets to score first. +150", 'capper_name': 'Capper A', 'source_unique_id': 'test-7-unknown'},
+]
+EXPECTED_RESULTS = {
+    'test-1-simple-ml': {'capper_name': 'Capper A', 'league': 'NBA', 'bet_type': 'Moneyline', 'pick_value': 'Los Angeles Lakers ML', 'unit': 2.0, 'odds': 150},
+    'test-2-new-capper': {'capper_name': 'Capperc', 'league': 'NFL', 'bet_type': 'Spread', 'pick_value': 'Kansas City Chiefs -7.5', 'unit': 1.0, 'odds': -110},
+    'test-3-fuzzy-capper': {'capper_name': 'The Nba Expert', 'league': 'NBA', 'bet_type': 'Player Prop', 'pick_value': 'Nikola Jokic: Pts Over 25.5', 'unit': 3.0, 'odds': -115},
+    'test-4-total-format': {'capper_name': 'Capper B', 'league': 'NBA', 'bet_type': 'Total', 'pick_value': 'twolves vs suns Over 220', 'unit': 1.5, 'odds': 100},
+    'test-5-parlay': {'capper_name': 'Capper A', 'league': 'Other', 'bet_type': 'Parlay', 'pick_value': '(NFL) Dallas Cowboys -3.5 / (NCAAF) Rutgers +14.5', 'unit': 4.0, 'odds': 264},
+    'test-6-complex-prop': {'capper_name': 'Capper B', 'league': 'NBA', 'bet_type': 'Player Prop', 'pick_value': 'LeBron James: Pts+Reb+Ast Over 45.5', 'unit': 1.0, 'odds': -120},
+    'test-7-unknown': {'capper_name': 'Capper A', 'league': 'MLB', 'bet_type': 'Game Prop', 'pick_value': 'I like the Mets to score first.', 'unit': 1.0, 'odds': 150},
+}
+OCR_TEXT_FROM_IMAGE = "ImageBasedCapper 2.5u New York Knicks -4.5 -110"
+TEST_OCR_PICK = {'raw_text': OCR_TEXT_FROM_IMAGE, 'capper_name': 'ImageBasedCapper', 'source_unique_id': 'test-8-ocr'}
+EXPECTED_OCR_RESULT = {'capper_name': 'Imagebasedcapper', 'league': 'NBA', 'bet_type': 'Spread', 'pick_value': 'New York Knicks -4.5', 'unit': 2.5, 'odds': -110}
+TEST_OFF_HOURS_PICK = {'raw_text': "OffHoursCapper 1u Boston Bruins ML -150", 'capper_name': 'OffHoursCapper', 'source_unique_id': 'test-9-off-hours'}
 
-supabase: Client = None
-try:
-    if SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY:
-        supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
-        logging.info("Supabase client initialized for timezone test.")
-    else:
-        raise ConnectionError("Supabase credentials missing.")
-except Exception as e:
-    logging.error(f"Initialization failed: {e}")
-    exit()
+def get_mock_ai_response(*args, **kwargs):
+    prompt_content = kwargs['messages'][0]['content']
+    json_start_index = prompt_content.rfind('[')
+    if json_start_index == -1: return []
+    json_string = prompt_content[json_start_index:]
+    raw_picks_for_ai = json.loads(json_string)
 
-async def run_timezone_test():
-    """
-    This test specifically verifies that the timezone conversion for pick_date is correct.
-    It simulates a late-night pick in Eastern Time and ensures it's not assigned to the next day.
-    """
-    print("\n" + "="*20 + " RUNNING TIMEZONE FIX TEST " + "="*20)
+    responses = []
+    ai_map = {
+        "Capper A 2u Los Angeles Lakers ML +150": {"league": "NBA", "bet_type": "Moneyline", "pick_value": "Los Angeles Lakers ML", "unit": 2.0, "odds_american": 150},
+        "Capper C 1u Kansas City Chiefs -7.5 -110 NFL": {"league": "NFL", "bet_type": "Spread", "pick_value": "Kansas City Chiefs -7.5", "unit": 1.0, "odds_american": -110},
+        "The NB Expert 3u Nikola Jokic Over 25.5 Pts -115": {"league": "NBA", "bet_type": "Player Prop", "pick_value": "Nikola Jokic: Pts Over 25.5", "unit": 3.0, "odds_american": -115},
+        "Capper B 1.5u Total for the game twolves vs suns O 220 +100": {"league": "NBA", "bet_type": "Total", "pick_value": "twolves vs suns Over 220", "unit": 1.5, "odds_american": 100},
+        "Capper A 4u Parlay: (nfl) Dallas Cowboys -3.5 / (ncaaf) rutgers +14.5 +264": {"league": "Other", "bet_type": "Parlay", "pick_value": "(NFL) Dallas Cowboys -3.5 / (NCAAF) Rutgers +14.5", "unit": 4.0, "odds_american": 264},
+        "Capper B 1u Player Prop: LeBron James Pts+Reb+Ast O 45.5 -120": {"league": "NBA", "bet_type": "Player Prop", "pick_value": "LeBron James: Pts+Reb+Ast Over 45.5", "unit": 1.0, "odds_american": -120},
+        "Capper A 1u I like the Mets to score first. +150": {"league": "MLB", "bet_type": "Game Prop", "pick_value": "I like the Mets to score first.", "unit": 1.0, "odds_american": 150},
+        OCR_TEXT_FROM_IMAGE: {"league": "NBA", "bet_type": "Spread", "pick_value": "New York Knicks -4.5", "unit": 2.5, "odds_american": -110}
+    }
+    for pick in raw_picks_for_ai:
+        if pick['text'] in ai_map:
+            response = ai_map[pick['text']]
+            response['raw_pick_id'] = pick['raw_pick_id']
+            responses.append(response)
     
-    unique_id_for_test = f"timezone-test-{int(datetime.now().timestamp())}"
-    test_record_id = None
-    
+    mock_choice = MagicMock()
+    mock_choice.message.content = json.dumps(responses)
+    mock_completion = MagicMock()
+    mock_completion.choices = [mock_choice]
+    return mock_completion
+
+async def cleanup_test_data(unique_ids_to_clean: List[str], cappers_to_clean: List[str]):
+    if not supabase: return
+    logging.info("\n--- CLEANUP: Deleting test data ---")
     try:
-        # ==================== 1. SETUP TEST CASE ====================
-        print("\n--- 1. Setting up test case ---")
-        # Use the modern zoneinfo library
-        EASTERN_TIMEZONE = ZoneInfo('US/Eastern') # <-- UPDATED
-        UTC_TIMEZONE = ZoneInfo('UTC')           # <-- UPDATED
-        
-        # Define the "correct" date we expect to see in the database.
-        correct_et_date = datetime.now(EASTERN_TIMEZONE).date()
-        
-        # Create a datetime object for 11:30 PM on that date in Eastern Time.
-        late_night_et = datetime(
-            correct_et_date.year,
-            correct_et_date.month,
-            correct_et_date.day,
-            23, 30, 0, tzinfo=EASTERN_TIMEZONE
-        )
-        
-        # Convert it to UTC to simulate the raw timestamp from Telethon.
-        simulated_utc_time = late_night_et.astimezone(UTC_TIMEZONE) # <-- UPDATED
-        
-        logging.info(f"Correct Expected Date (ET): {correct_et_date.isoformat()}")
-        logging.info(f"Simulating pick time (ET):   {late_night_et.strftime('%Y-%m-%d %H:%M:%S %Z')}")
-        logging.info(f"Equivalent time in UTC:     {simulated_utc_time.strftime('%Y-%m-%d %H:%M:%S %Z')} <-- Note the date has advanced.")
+        supabase.table('live_structured_picks').delete().in_('source_unique_id', unique_ids_to_clean).execute()
+        supabase.table('live_raw_picks').delete().in_('source_unique_id', unique_ids_to_clean).execute()
+        if cappers_to_clean:
+            supabase.table('capper_directory').delete().in_('canonical_name', cappers_to_clean).execute()
+        logging.info("Cleanup complete.")
+    except Exception as e:
+        logging.error(f"Error during cleanup: {e}")
+        raise
 
-        # ==================== 2. SIMULATE SCRAPER LOGIC ====================
-        print("\n--- 2. Simulating scraper's date conversion and DB insert ---")
-        
-        # This is the *exact* logic from the fixed scrapers.py
-        processed_date_object = simulated_utc_time.astimezone(EASTERN_TIMEZONE).date()
-        final_date_iso = processed_date_object.isoformat()
-        
-        logging.info(f"Applying fix: Converting UTC time back to ET and getting the date...")
-        logging.info(f"Resulting date to be saved: {final_date_iso}")
-        
-        test_pick_data = {
-            'raw_text': 'Timezone Test Pick',
-            'pick_date': final_date_iso,
-            'source_unique_id': unique_id_for_test,
-            'status': 'pending'
-        }
-        
-        insert_res = supabase.table('live_raw_picks').insert(test_pick_data).execute()
-        test_record_id = insert_res.data[0]['id']
-        logging.info(f"Test record inserted into 'live_raw_picks' with ID: {test_record_id}")
+async def simulate_scraper_insert(picks: List[Dict]):
+    if not supabase: return
+    pick_date = datetime.now(EASTERN_TIMEZONE).date().isoformat()
+    payload = [{'capper_name': p['capper_name'],'raw_text': p['raw_text'],'pick_date': pick_date,'source_unique_id': p['source_unique_id'],'status': 'pending','process_attempts': 0} for p in picks]
+    try:
+        supabase.table('live_raw_picks').insert(payload).execute()
+        logging.info(f"Successfully inserted {len(payload)} simulated raw picks.")
+    except Exception as e:
+        logging.error(f"Error simulating scraper insert: {e}")
+        raise
 
-        # ==================== 3. VERIFICATION ====================
-        print("\n--- 3. Verifying the stored date ---")
-        
-        verify_res = supabase.table('live_raw_picks').select('pick_date').eq('id', test_record_id).single().execute()
-        
-        stored_date_str = verify_res.data['pick_date']
-        logging.info(f"Date retrieved from database: {stored_date_str}")
-        
-        if stored_date_str == correct_et_date.isoformat():
-            print("\n✅ SUCCESS: The date stored in the database is the correct Eastern Time date.")
+# --- Test Case Functions ---
+@patch('ai_parser.ai_client')
+async def test_full_pipeline(mock_ai_client):
+    print("\n" + "="*20 + " TEST CASE 1: FULL PIPELINE " + "="*20)
+    mock_ai_client.chat.completions.create.side_effect = get_mock_ai_response
+    unique_ids = [p['source_unique_id'] for p in TEST_RAW_PICKS]
+    cappers = [c['canonical_name'] for c in FUZZY_PREP_DATA['capper_directory']] + ['Capperc']
+    
+    await cleanup_test_data(unique_ids, cappers)
+    logging.info("--- SETUP ---")
+    supabase.table('capper_directory').insert(FUZZY_PREP_DATA['capper_directory']).execute()
+    await simulate_scraper_insert(TEST_RAW_PICKS)
+    
+    logging.info("--- EXECUTION ---")
+    # --- START OF FINAL FIX ---
+    # Loop the processor to handle batching, just like in production.
+    max_runs = 5 # Safety break
+    for i in range(max_runs):
+        logging.info(f"Processor run #{i+1}...")
+        run_processor()
+        # Check if there are any pending picks left for this test run
+        res = supabase.table('live_raw_picks').select('id', count='exact') \
+            .eq('status', 'pending').in_('source_unique_id', unique_ids).execute()
+        if res.count == 0:
+            logging.info("All test picks processed.")
+            break
+        if i == max_runs - 1:
+            logging.error("Processor did not finish all picks within max runs.")
+    # --- END OF FINAL FIX ---
+    
+    logging.info("--- VERIFICATION ---")
+    res = supabase.table('live_structured_picks').select('*, capper_directory(canonical_name)').in_('source_unique_id', unique_ids).execute()
+    assert len(res.data) == len(TEST_RAW_PICKS), f"FAIL: Expected {len(TEST_RAW_PICKS)} picks, found {len(res.data)}"
+    
+    results_map = {p['source_unique_id']: p for p in res.data}
+    failures = 0
+    for uid, expected in EXPECTED_RESULTS.items():
+        actual = results_map[uid]
+        if actual['capper_directory']['canonical_name'] != expected['capper_name'] or actual['league'] != expected['league'] or actual['bet_type'] != expected['bet_type'] or actual['pick_value'].strip().lower() != expected['pick_value'].strip().lower() or actual['unit'] != expected['unit'] or actual['odds_american'] != expected['odds']:
+            failures += 1
+    
+    if failures == 0: print("✅ SUCCESS: All 42 checks passed for the main pipeline.")
+    else: print(f"❌ FAILED: {failures * 6} checks failed.")
+
+    await cleanup_test_data(unique_ids, cappers)
+    return failures == 0
+
+@patch('ai_parser.ai_client')
+@patch('scrapers.asyncio.to_thread', new_callable=AsyncMock)
+async def test_ocr_functionality(mock_to_thread, mock_ai_client):
+    print("\n" + "="*20 + " TEST CASE 2: OCR PIPELINE " + "="*20)
+    mock_to_thread.return_value = OCR_TEXT_FROM_IMAGE
+    mock_ai_client.chat.completions.create.side_effect = get_mock_ai_response
+    
+    unique_ids = [TEST_OCR_PICK['source_unique_id']]
+    cappers = [EXPECTED_OCR_RESULT['capper_name']]
+
+    await cleanup_test_data(unique_ids, cappers)
+    await simulate_scraper_insert([TEST_OCR_PICK])
+
+    logging.info("--- EXECUTION ---")
+    run_processor()
+
+    logging.info("--- VERIFICATION ---")
+    res = supabase.table('live_structured_picks').select('*, capper_directory(canonical_name)').in_('source_unique_id', unique_ids).execute()
+    assert len(res.data) == 1, "FAIL: OCR pick was not processed."
+    
+    actual = res.data[0]
+    expected = EXPECTED_OCR_RESULT
+    assert actual['capper_directory']['canonical_name'] == expected['capper_name'] and actual['league'] == expected['league'] and actual['bet_type'] == expected['bet_type'] and actual['pick_value'] == expected['pick_value'] and actual['unit'] == expected['unit'] and actual['odds_american'] == expected['odds']
+    
+    print("✅ SUCCESS: OCR pipeline processed the simulated image text correctly.")
+    await cleanup_test_data(unique_ids, cappers)
+    return True
+
+@patch('run_pipeline.datetime')
+async def test_operational_hours_gate(mock_datetime):
+    print("\n" + "="*20 + " TEST CASE 3: OPERATIONAL HOURS " + "="*20)
+    mock_now = datetime(2025, 11, 2, 3, 15, 0, tzinfo=EASTERN_TIMEZONE)
+    mock_datetime.now.return_value = mock_now
+
+    unique_ids = [TEST_OFF_HOURS_PICK['source_unique_id']]
+    cappers = [TEST_OFF_HOURS_PICK['capper_name']]
+
+    await cleanup_test_data(unique_ids, cappers)
+    await simulate_scraper_insert([TEST_OFF_HOURS_PICK])
+
+    logging.info(f"--- EXECUTION at simulated time: {mock_now.strftime('%H:%M:%S %Z')} ---")
+    await run_main_pipeline()
+
+    logging.info("--- VERIFICATION ---")
+    res = supabase.table('live_raw_picks').select('*').eq('source_unique_id', unique_ids[0]).single().execute()
+    assert res.data is not None, "FAIL: Off-hours pick was not found."
+    assert res.data['status'] == 'pending', f"FAIL: Pick status was '{res.data['status']}', expected 'pending'."
+
+    print("✅ SUCCESS: Pipeline correctly skipped execution outside of operational hours.")
+    await cleanup_test_data(unique_ids, cappers)
+    return True
+
+async def main_test_runner():
+    global supabase
+    print("\n" + "#"*20 + " STARTING FULL TEST SUITE " + "#"*20)
+    
+    supabase = get_supabase_client()
+    if not supabase:
+        logging.error("Could not initialize Supabase client. Aborting test suite.")
+        return
+
+    try:
+        results = []
+        results.append(await test_full_pipeline())
+        results.append(await test_ocr_functionality())
+        results.append(await test_operational_hours_gate())
+
+        print("\n" + "="*20 + " TEST SUITE SUMMARY " + "="*20)
+        if all(results):
+            print("🎉 ALL TEST CASES PASSED SUCCESSFULLY! Your application is ready. 🎉")
         else:
-            print(f"\n❌ FAILURE: The stored date ({stored_date_str}) does NOT match the expected ET date ({correct_et_date.isoformat()}).")
+            failed_count = len([r for r in results if not r])
+            print(f"⚠️ {failed_count} TEST CASE(S) FAILED. Please review the logs above. ⚠️")
 
     except Exception as e:
-        logging.error(f"An error occurred during the test: {e}", exc_info=True)
+        logging.error(f"A critical error occurred during the test suite: {e}", exc_info=True)
     finally:
-        # ==================== 4. CLEANUP ====================
-        print("\n--- 4. Cleaning up test data ---")
-        if test_record_id:
-            logging.info(f"Deleting test record with ID: {test_record_id}")
-            supabase.table('live_raw_picks').delete().eq('id', test_record_id).execute()
-            logging.info("Cleanup complete.")
-        else:
-            logging.warning("No test record ID was created, skipping cleanup.")
-        
-        print("\n" + "="*20 + " TIMEZONE TEST FINISHED " + "="*20)
-
+        print("\nTest suite finished.")
 
 if __name__ == "__main__":
-    # Rename your test file to test_timezone_fix.py and run it
-    asyncio.run(run_timezone_test())
+    asyncio.run(main_test_runner())

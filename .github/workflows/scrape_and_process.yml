@@ -1,20 +1,31 @@
+# File: .github/workflows/scrape_and_process.yml
+
 name: Scrape and Process Picks
 
 on:
+  workflow_dispatch: # Allows you to trigger this workflow manually from the Actions tab
   schedule:
-    # Runs every 30 minutes, all day.
-    # The Python script itself will check if it's within the operational hours (11 AM - 11 PM ET).
-    - cron: '*/30 * * * *'
-  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
+    # Triggers every 15 minutes. The job's 'if' condition below controls actual execution.
+    - cron: '*/15 * * * *'
 
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
+    
+    # This 'if' condition is the key to saving minutes.
+    # 1. It ALWAYS runs if triggered manually ('workflow_dispatch').
+    # 2. For scheduled runs, it checks if the current UTC hour is between 15:00 and 03:59.
+    #    This corresponds to your operational window of 11:00 AM ET to ~11:00 PM ET,
+    #    safely accounting for Daylight Saving Time shifts.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'schedule' && (fromJSON(format('{0:H}', github.event.schedule)) >= 15 || fromJSON(format('{0:H}', github.event.schedule)) < 4))
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -23,13 +34,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
+      
+      # The scraper attempts to use OCR. This step installs the required OS-level package.
       - name: Install Tesseract OCR
         run: |
           sudo apt-get update
           sudo apt-get install -y tesseract-ocr
 
-      - name: Run the pipeline
+      - name: Run Scrape and Process Pipeline
+        run: python run_pipeline.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
@@ -38,5 +51,3 @@ jobs:
           TELEGRAM_SESSION_NAME: ${{ secrets.TELEGRAM_SESSION_NAME }}
           TELEGRAM_CHANNEL_URLS: ${{ secrets.TELEGRAM_CHANNEL_URLS }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          AI_PARSER_MODEL: ${{ secrets.AI_PARSER_MODEL }} # Optional, uses default if not set
-        run: python run_pipeline.py

@@ -33,6 +33,10 @@ for channel in raw_telegram_channels:
         TELEGRAM_CHANNELS.append(channel)
 SCRAPE_WINDOW_HOURS = int(os.getenv('SCRAPE_WINDOW_HOURS', '48'))
 
+raw_aggregator_ids = [id.strip() for id in os.getenv('AGGREGATOR_CHANNEL_IDS', '').split(',') if id.strip()]
+AGGREGATOR_CHANNEL_IDS = {int(id) for id in raw_aggregator_ids if id.lstrip('-').isdigit()}
+
+
 # --- AI Parser Configuration ---
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 AI_PARSER_MODEL = os.getenv("AI_PARSER_MODEL", "google/gemini-2.0-flash-exp:free")
@@ -65,7 +69,8 @@ BET_TYPE_STANDARDS = {
     'SPREAD': 'Spread', 'POINT SPREAD': 'Spread', 'RUN LINE': 'Spread', 'PUCK LINE': 'Spread',
     'TOTAL': 'Total', 'OVER/UNDER': 'Total',
     'PLAYER PROP': 'Player Prop', 'PROP': 'Player Prop',
-    'TEAM PROP': 'Team Prop', 'TEAM TOTAL': 'Team Prop',
+    # --- FIX: Added TTU and TTO to map to Team Prop ---
+    'TEAM PROP': 'Team Prop', 'TEAM TOTAL': 'Team Prop', 'TTU': 'Team Prop', 'TTO': 'Team Prop',
     'GAME PROP': 'Game Prop',
     'PERIOD': 'Period', 'HALF': 'Period', 'QUARTER': 'Period', 'INNING': 'Period',
     'PARLAY': 'Parlay', 'ACCUMULATOR': 'Parlay',

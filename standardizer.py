@@ -34,10 +34,14 @@ def clean_unit_value(unit_input: any) -> float:
         return float(unit_input)
     if not isinstance(unit_input, str) or not unit_input:
         return default_unit
-    match = re.search(r'(\d+\.?\d*)', unit_input.strip())
+    
+    # --- FIX: Update regex to accept comma OR dot as decimal separator ---
+    match = re.search(r'(\d+[\.,]?\d*)', unit_input.strip())
     if match:
         try:
-            return float(match.group(1))
+            # Always replace comma with dot before converting to float
+            unit_str = match.group(1).replace(',', '.')
+            return float(unit_str)
         except (ValueError, TypeError):
             return default_unit
     return default_unit

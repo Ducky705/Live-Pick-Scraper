@@ -1,53 +1,50 @@
 # File: .github/workflows/scrape_and_process.yml
-
 name: Scrape and Process Picks
 
+# --- Triggers ---
+# This workflow is triggered on a schedule and can also be run manually.
 on:
-  workflow_dispatch: # Allows you to trigger this workflow manually from the Actions tab
   schedule:
-    # Triggers every 15 minutes. The job's 'if' condition below controls actual execution.
+    # This cron schedule runs the workflow automatically every 15 minutes.
     - cron: '*/15 * * * *'
+  workflow_dispatch:
+    # This allows the workflow to be run manually from the GitHub Actions tab.
 
 jobs:
   run-pipeline:
+    name: Scrape and Process Picks
     runs-on: ubuntu-latest
-    
-    # This 'if' condition is the key to saving minutes.
-    # 1. It ALWAYS runs if triggered manually ('workflow_dispatch').
-    # 2. For scheduled runs, it checks if the current UTC hour is between 15:00 and 03:59.
-    #    This corresponds to your operational window of 11:00 AM ET to ~11:00 PM ET,
-    #    safely accounting for Daylight Saving Time shifts.
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'schedule' && (fromJSON(format('{0:H}', github.event.schedule)) >= 15 || fromJSON(format('{0:H}', github.event.schedule)) < 4))
+
+    # FIX: The invalid 'if' condition that caused the original error has been removed.
+    # The Python script, `run_pipeline.py`, already contains a function `is_within_operational_hours`
+    # that correctly handles the logic of whether to run the full process or exit early.
+    # This simplifies the workflow, fixes the error, and relies on the Python script
+    # as the single source of truth for the time check.
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip' # Caches dependencies to speed up subsequent runs
 
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
-      # The scraper attempts to use OCR. This step installs the required OS-level package.
-      - name: Install Tesseract OCR
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y tesseract-ocr
 
       - name: Run Scrape and Process Pipeline
-        run: python run_pipeline.py
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # Pass secrets securely from GitHub repository secrets to the Python script
           TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
           TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
           TELEGRAM_SESSION_NAME: ${{ secrets.TELEGRAM_SESSION_NAME }}
           TELEGRAM_CHANNEL_URLS: ${{ secrets.TELEGRAM_CHANNEL_URLS }}
+          AGGREGATOR_CHANNEL_IDS: ${{ secrets.AGGREGATOR_CHANNEL_IDS }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: python run_pipeline.py

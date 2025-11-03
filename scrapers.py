@@ -84,28 +84,47 @@ async def scrape_telegram():
                     content_lines = lines[:separator_index] if separator_index != -1 else lines
                     if not content_lines: continue
 
-                    parsed_capper_name = channel_title
-                    pick_body_lines = content_lines
-
-                    if entity.id in config.AGGREGATOR_CHANNEL_IDS:
-                        # --- NEW HEURISTIC CHECK ---
+                    # --- START OF FIX: Improved Capper Name Parsing Logic ---
+                    
+                    # Heuristic: Check if the message is in the format "Capper Name\nPick Details"
+                    is_aggregator_format = False
+                    if len(content_lines) > 1:
                         first_line = content_lines[0]
-                        is_likely_capper = (
-                            len(first_line) < 35 and
-                            not re.search(r'([+-]\d|\bML\b|\b[OU]\d|\d+u)', first_line, re.I)
-                        )
+                        second_line = content_lines[1]
                         
-                        if is_likely_capper:
-                            parsed_capper_name = content_lines[0]
-                            pick_body_lines = content_lines[1:]
-                        else:
-                            # Malformed message: first line looks like a pick, not a capper.
-                            # Skip this message to prevent incorrect attribution.
-                            logging.warning(f"Skipping malformed aggregator message {message.id}: First line '{first_line[:50]}...' does not appear to be a capper name.")
-                            continue # Move to the next message
-                        # --- END HEURISTIC CHECK ---
+                        # A more robust regex to identify lines containing betting information.
+                        pick_terms_regex = r'([+-]\d{3,}|ML|[+-]\d{1,2}\.?5|\b[OU]\d|\d+[\.,]?\d*\s*u(nit)?s?)'
+                        
+                        # A line is likely a capper name if it's short and lacks betting terms...
+                        first_line_is_clean = (
+                            len(first_line) < 40 and 
+                            not re.search(pick_terms_regex, first_line, re.I)
+                        )
+                        # ...and the following line *does* contain betting terms.
+                        second_line_has_pick = re.search(pick_terms_regex, second_line, re.I)
+
+                        if first_line_is_clean and second_line_has_pick:
+                            is_aggregator_format = True
+
+                    # --- Determine Capper Name and Pick Body based on the format ---
+                    if is_aggregator_format:
+                        # Format matches "Capper Name\nPick". Use the first line as the capper.
+                        # This correctly handles both configured and misconfigured aggregator channels.
+                        parsed_capper_name = content_lines[0]
+                        pick_body_lines = content_lines[1:]
+                        logging.info(f"Heuristic success: Parsed capper '{parsed_capper_name}' from message in '{channel_title}'.")
+                    elif entity.id in config.AGGREGATOR_CHANNEL_IDS:
+                        # It's a known aggregator but doesn't match the format. Skip to avoid misattribution.
+                        logging.warning(f"Skipping message {message.id} in aggregator '{channel_title}': Does not match expected 'Capper\\nPick' format.")
+                        continue
+                    else:
+                        # It's a regular channel and doesn't match the format. Use the channel name as the capper.
+                        parsed_capper_name = channel_title
+                        pick_body_lines = content_lines
 
                     cleaned_capper_name = parsed_capper_name.strip('*- _')
+                    # --- END OF FIX ---
+                    
                     final_text_content = "\n".join(pick_body_lines)
                     
                     if not final_text_content:

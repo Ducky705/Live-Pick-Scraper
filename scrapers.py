@@ -86,25 +86,28 @@ async def scrape_telegram():
 
                     # --- START OF FIX: Improved Capper Name Parsing Logic ---
                     
-                    # Heuristic: Check if the message is in the format "Capper Name\nPick Details"
+                    # Heuristic: Check if message matches 'Capper Name' then 'Pick Details' format
                     is_aggregator_format = False
                     if len(content_lines) > 1:
                         first_line = content_lines[0]
                         second_line = content_lines[1]
+                        third_line = content_lines[2] if len(content_lines) > 2 else ""
                         
                         # A more robust regex to identify lines containing betting information.
-                        pick_terms_regex = r'([+-]\d{3,}|ML|[+-]\d{1,2}\.?5|\b[OU]\d|\d+[\.,]?\d*\s*u(nit)?s?)'
+                        pick_terms_regex = r'([+-]\d{3,}|ML|[+-]\d{1,2}\.?5|[OU]\d|\d+[\.,]?\d*\s*u(nit)?s?)'
                         
                         # A line is likely a capper name if it's short and lacks betting terms...
                         first_line_is_clean = (
                             len(first_line) < 40 and 
                             not re.search(pick_terms_regex, first_line, re.I)
                         )
-                        # ...and the following line *does* contain betting terms.
+                        # Check second line first, then third line if second is empty (common in aggregator format).
                         second_line_has_pick = re.search(pick_terms_regex, second_line, re.I)
+                        third_line_has_pick = not second_line_has_pick and second_line.strip() == "" and re.search(pick_terms_regex, third_line, re.I)
 
-                        if first_line_is_clean and second_line_has_pick:
+                        if first_line_is_clean and (second_line_has_pick or third_line_has_pick):
                             is_aggregator_format = True
+
 
                     # --- Determine Capper Name and Pick Body based on the format ---
                     if is_aggregator_format:

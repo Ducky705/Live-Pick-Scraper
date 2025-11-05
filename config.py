@@ -36,6 +36,25 @@ SCRAPE_WINDOW_HOURS = int(os.getenv('SCRAPE_WINDOW_HOURS', '48'))
 raw_aggregator_ids = [id.strip() for id in os.getenv('AGGREGATOR_CHANNEL_IDS', '').split(',') if id.strip()]
 AGGREGATOR_CHANNEL_IDS = {int(id) for id in raw_aggregator_ids if id.lstrip('-').isdigit()}
 
+# --- Channel Name Blacklist (Watermarks that are NOT actual cappers) ---
+BLACKLISTED_CAPPER_NAMES = [
+    'Free Cappers Picks',
+    'Free Cappers Picks | 🔮',
+    'FREE CAPPERS PICKS',
+    'FREE CAPPERS PICKS | 🔮',
+    'The Capper',
+    'Capper Picks',
+    'Free Picks',
+    'Daily Picks',
+    'Best Bets',
+    'Pick Central',
+    'Bet Tips',
+    'Sports Picks',
+    'Winners Only',
+    'Pro Picks',
+    'Capper Network'
+]
+
 
 # --- AI Parser Configuration ---
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")

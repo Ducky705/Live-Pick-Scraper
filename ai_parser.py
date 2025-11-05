@@ -26,6 +26,14 @@ def parse_with_ai(raw_picks: list) -> list:
     formatting_guide = """
     ### Sports Pick Data Formatting Guide
 
+    ### 0. CRITICAL: Channel Watermark Filtering
+    **NEVER use channel watermark names as capper names.** These are NOT actual cappers:
+    - "Free Cappers Picks", "FREE CAPPERS PICKS", "Free Cappers Picks | 🔮"
+    - "The Capper", "Capper Picks", "Free Picks", "Daily Picks", "Best Bets"
+    - "Pick Central", "Bet Tips", "Sports Picks", "Winners Only", "Pro Picks", "Capper Network"
+
+    If the `capper_name` is one of these watermark names, extract the **actual capper name** from the first line of the raw text. If no actual capper name exists, set `capper_name` to `null`.
+
     ### 1. Standardized `league` Column Values
     Use one of these: `NFL`, `NCAAF`, `NBA`, `NCAAB`, `WNBA`, `MLB`, `NHL`, `EPL`, `MLS`, `UCL`, `UFC`, `PFL`, `TENNIS`, `PGA`, `F1`, `Other`. 'Other' is for parlays with multiple leagues or unknown leagues.
 

@@ -126,6 +126,11 @@ async def scrape_telegram():
                         pick_body_lines = content_lines
 
                     cleaned_capper_name = parsed_capper_name.strip('*- _')
+
+                    # --- Filter out blacklisted channel watermark names ---
+                    if cleaned_capper_name in config.BLACKLISTED_CAPPER_NAMES:
+                        logging.warning(f"Skipping message {message.id} in channel '{channel_title}': Capper name '{cleaned_capper_name}' is a blacklisted watermark/channel name.")
+                        continue
                     # --- END OF FIX ---
                     
                     final_text_content = "\n".join(pick_body_lines)

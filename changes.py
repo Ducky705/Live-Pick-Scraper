@@ -1,107 +1,84 @@
 import os
 
-CONFIG_FIX_CONTENT = """import os
-import logging
-from typing import List, Set, Union
-from dotenv import load_dotenv
-from zoneinfo import ZoneInfo
+# ==============================================================================
+# GITHUB ACTIONS: SNIPER SCHEDULE
+# ==============================================================================
+# Weekdays: 5:30 PM ET  -> 22:30 UTC
+# Weekends: 11:30 AM ET -> 16:30 UTC
+#           2:30 PM ET  -> 19:30 UTC
+#           5:30 PM ET  -> 22:30 UTC
+# ==============================================================================
 
-load_dotenv()
+YAML_CONTENT = """name: Sniper Pick Scraper
 
-logging.basicConfig(
-    level=logging.INFO, 
-    format='%(asctime)s - [%(levelname)s] - %(name)s - %(message)s',
-    handlers=[logging.StreamHandler()]
-)
-
-EASTERN_TIMEZONE = ZoneInfo('US/Eastern')
-UTC_TIMEZONE = ZoneInfo('UTC')
-
-OPERATIONAL_START_HOUR_ET = int(os.getenv('OPERATIONAL_START_HOUR_ET', '11'))
-OPERATIONAL_END_HOUR_ET = int(os.getenv('OPERATIONAL_END_HOUR_ET', '23'))
-SCRAPE_WINDOW_HOURS = int(os.getenv('SCRAPE_WINDOW_HOURS', '48'))
-ARCHIVE_AFTER_HOURS = int(os.getenv('ARCHIVE_PENDING_PICKS_AFTER_HOURS', '72'))
-
-SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
-
-TELEGRAM_API_ID = os.getenv('TELEGRAM_API_ID')
-TELEGRAM_API_HASH = os.getenv('TELEGRAM_API_HASH')
-TELEGRAM_SESSION_NAME = os.getenv('TELEGRAM_SESSION_NAME')
-
-def parse_int_list(env_var: str) -> Set[int]:
-    if not env_var: return set()
-    # Remove brackets and quotes just in case
-    clean = env_var.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
-    return {int(x.strip()) for x in clean.split(',') if x.strip().lstrip('-').isdigit()}
-
-def parse_telegram_identifiers(env_var: str) -> List[Union[str, int]]:
-    if not env_var: return []
-    items = []
-    # robust cleaning
-    clean = env_var.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
+on:
+  schedule:
+    # WEEKDAYS (Mon-Fri): Run at 5:30 PM ET (22:30 UTC)
+    - cron: '30 22 * * 1-5'
     
-    for x in clean.split(','):
-        x = x.strip()
-        if not x: continue
-        # Check if it's a number (including negative channel IDs)
-        if x.lstrip('-').isdigit():
-            items.append(int(x))
-        else:
-            items.append(x)
-    return items
+    # WEEKENDS (Sat-Sun): Run at 11:30 AM, 2:30 PM, 5:30 PM ET
+    # UTC Equivalents: 16:30, 19:30, 22:30
+    - cron: '30 16,19,22 * * 0,6'
 
-TELEGRAM_CHANNELS = parse_telegram_identifiers(os.getenv('TELEGRAM_CHANNEL_URLS', ''))
-AGGREGATOR_CHANNEL_IDS = parse_int_list(os.getenv('AGGREGATOR_CHANNEL_IDS', ''))
+  # Allows manual trigger for testing
+  workflow_dispatch: 
 
-DISTRIBUTION_CHANNEL_ID = os.getenv('DISTRIBUTION_CHANNEL_ID')
-if DISTRIBUTION_CHANNEL_ID and DISTRIBUTION_CHANNEL_ID.lstrip('-').isdigit():
-    DISTRIBUTION_CHANNEL_ID = int(DISTRIBUTION_CHANNEL_ID)
+jobs:
+  run-sniper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8 # Hard limit to save money
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-AI_PARSER_MODEL = os.getenv("AI_PARSER_MODEL", "google/gemini-2.0-flash-exp:free")
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
 
-# --- BLACKLIST ---
-BLACKLISTED_CAPPERS = {
-    'free cappers picks', 'the capper', 'capper picks', 'free picks', 
-    'daily picks', 'best bets', 'pick central', 'bet tips', 'sports picks', 
-    'winners only', 'pro picks', 'capper network', 'betting tips',
-    'cappers free', 'cappersfree', 'dm', 'bonus', 'promo'
-}
+      # --- CACHING STRATEGY ---
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip' 
 
-HYPE_TERMS = {
-    'max bet', 'whale play', 'lock of the day', 'guaranteed', 'bomb', 
-    'nuke', 'system play', 'vip pick', 'free pick', 'bonus', 'promo',
-    'hammer', 'stake', 'unit', 'play of the day', 'potd', 'bankroll',
-    'investment', 'insider'
-}
+      # Cache Tesseract to save ~30s setup time
+      - name: Cache Tesseract
+        id: cache-tesseract
+        uses: actions/cache@v3
+        with:
+          path: /usr/bin/tesseract
+          key: ${{ runner.os }}-tesseract-v1
 
-LEAGUE_STANDARDS = {
-    'NFL': 'NFL', 'NCAAF': 'NCAAF', 'NBA': 'NBA', 'NCAAB': 'NCAAB',
-    'WNBA': 'WNBA', 'MLB': 'MLB', 'NHL': 'NHL', 'EPL': 'EPL',
-    'MLS': 'MLS', 'UCL': 'UCL', 'UFC': 'UFC', 'PFL': 'PFL',
-    'TENNIS': 'TENNIS', 'PGA': 'PGA', 'F1': 'F1', 'OTHER': 'Other'
-}
+      - name: Install System Dependencies
+        if: steps.cache-tesseract.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr libtesseract-dev
 
-LEAGUE_MAP = {
-    'NATIONAL FOOTBALL LEAGUE': 'NFL', 'COLLEGE FOOTBALL': 'NCAAF',
-    'NATIONAL BASKETBALL ASSOCIATION': 'NBA', 'COLLEGE BASKETBALL': 'NCAAB',
-    'MAJOR LEAGUE BASEBALL': 'MLB', 'NATIONAL HOCKEY LEAGUE': 'NHL',
-    'PREMIER LEAGUE': 'EPL', 'SOCCER': 'EPL', 'CHAMPIONS LEAGUE': 'UCL',
-    'MMA': 'UFC', 'GOLF': 'PGA', 'FORMULA 1': 'F1'
-}
-LEAGUE_MAP.update(LEAGUE_STANDARDS)
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
 
-BET_TYPE_MAP = {
-    'MONEYLINE': 'Moneyline', 'ML': 'Moneyline',
-    'SPREAD': 'Spread', 'RUN LINE': 'Spread', 'PUCK LINE': 'Spread',
-    'TOTAL': 'Total', 'OVER/UNDER': 'Total',
-    'PLAYER PROP': 'Player Prop', 'PROP': 'Player Prop',
-    'TEAM PROP': 'Team Prop', 'TTU': 'Team Prop', 'TTO': 'Team Prop',
-    'PARLAY': 'Parlay', 'TEASER': 'Teaser'
-}
+      - name: Run Pipeline
+        env:
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+          TELEGRAM_SESSION_NAME: ${{ secrets.TELEGRAM_SESSION_NAME }}
+          TELEGRAM_CHANNEL_URLS: ${{ secrets.TELEGRAM_CHANNEL_URLS }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          AI_PARSER_MODEL: "google/gemini-2.0-flash-exp:free"
+        run: |
+          # The script will auto-exit early if no new data is found
+          python main.py --force
 """
 
-with open('config.py', 'w', encoding='utf-8') as f:
-    f.write(CONFIG_FIX_CONTENT)
-    print("✅ Updated 'config.py' with robust parsing logic.")
+def write_yaml():
+    # Ensure directory exists
+    os.makedirs('.github/workflows', exist_ok=True)
+    
+    with open('.github/workflows/scrape_and_process.yml', 'w', encoding='utf-8') as f:
+        f.write(YAML_CONTENT)
+    print("✅ Sniper Schedule enforced in '.github/workflows/scrape_and_process.yml'")
+
+if __name__ == "__main__":
+    write_yaml()

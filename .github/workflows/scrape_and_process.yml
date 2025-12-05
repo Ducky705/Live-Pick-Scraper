@@ -9,6 +9,7 @@ on:
     # UTC Equivalents: 16:30, 19:30, 22:30
     - cron: '30 16,19,22 * * 0,6'
 
+  # Allows manual trigger for testing
   workflow_dispatch: 
 
 jobs:
@@ -27,7 +28,7 @@ jobs:
           python-version: '3.11'
           cache: 'pip' 
 
-      # We cache the apt-get installation of Tesseract to save ~30s
+      # Cache Tesseract to save ~30s setup time
       - name: Cache Tesseract
         id: cache-tesseract
         uses: actions/cache@v3

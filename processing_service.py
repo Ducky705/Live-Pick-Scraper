@@ -1,60 +1,30 @@
 import logging
-import json
-import os
 import time
 import re
 from typing import List
 from thefuzz import process as fuzz_process
 
 from database import db
-from models import ParsedPick, StandardizedPick
+from models import StandardizedPick
 import simple_parser
 import ai_parser
 import standardizer
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_FILE = "extracted_picks.jsonl"
-
 def sanitize_text(text: str) -> str:
     if not text: return ""
-    # Remove non-printable control characters (except newlines/tabs)
     return re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', text)
-
-def append_to_local_file(picks: List[StandardizedPick]):
-    try:
-        with open(OUTPUT_FILE, 'a', encoding='utf-8') as f:
-            for p in picks:
-                data = p.model_dump()
-                data['pick_date'] = data['pick_date'].isoformat()
-                # Sanitize string fields
-                if data.get('pick_value'):
-                    data['pick_value'] = sanitize_text(data['pick_value'])
-                f.write(json.dumps(data) + "\n")
-        print(f"✅ Saved {len(picks)} picks to {OUTPUT_FILE}")
-    except Exception as e:
-        logger.error(f"Failed to write to local file: {e}")
-
-def print_picks_to_console(picks: List[StandardizedPick]):
-    if not picks: return
-    print(f"\n🚀 EXTRACTED {len(picks)} NEW PICKS:")
-    print("-" * 60)
-    for p in picks:
-        # Sanitize for display
-        clean_pick = sanitize_text(p.pick_value)
-        pick_str = (clean_pick[:45] + '..') if len(clean_pick) > 45 else clean_pick
-        print(f"[{p.league:<4}] {p.bet_type:<10} | {pick_str:<48} | {p.odds_american if p.odds_american else '-':<4} | {p.unit if p.unit else '-':<4}u")
-    print("-" * 60)
 
 def filter_duplicates(picks: List[StandardizedPick]) -> List[StandardizedPick]:
     if not picks: return []
     unique_picks = []
     seen = set()
     for p in picks:
-        # Sanitize before dedupe check
         clean_val = sanitize_text(p.pick_value)
         p.pick_value = clean_val
         
+        # Deduplication Signature
         sig = (p.capper_id, p.pick_date, clean_val, p.bet_type)
         if sig not in seen:
             unique_picks.append(p)
@@ -77,11 +47,10 @@ def process_picks():
     to_standardize = []
     ai_batch = []
     processed_ids = []
-    failed_ids = []
 
-    # 2. Parse
+    # 2. Parse (Regex First)
     for pick in raw_picks:
-        if len(pick.raw_text) < 50 and "\n" not in pick.raw_text:
+        if len(pick.raw_text) < 100 and "\n" not in pick.raw_text:
             simple = simple_parser.parse_with_regex(pick)
             if simple:
                 to_standardize.append((simple, pick))
@@ -101,16 +70,20 @@ def process_picks():
                     if orig.id not in processed_ids:
                         processed_ids.append(orig.id)
             
+            # Mark items as processed even if AI found nothing (to prevent loops)
             for p in ai_batch:
                 if p.id not in processed_ids:
                     processed_ids.append(p.id)
 
         except Exception as e:
             logger.error(f"AI batch failed: {e}")
-            for p in ai_batch:
-                processed_ids.append(p.id)
+            # On failure, increment attempts so we retry later
+            failed_ids = [p.id for p in ai_batch]
+            db.increment_attempts(failed_ids)
+            # Do NOT mark as processed
+            processed_ids = [pid for pid in processed_ids if pid not in failed_ids]
 
-    # 4. Standardize & Save
+    # 4. Standardize & Save to DB
     potential_picks = []
     
     for parsed, raw in to_standardize:
@@ -134,13 +107,12 @@ def process_picks():
         )
         potential_picks.append(std)
 
-    final_picks = []
-    if potential_picks:
-        final_picks = filter_duplicates(potential_picks)
-        if final_picks:
-            # LOCAL DEBUG: NO DB INSERT
-            append_to_local_file(final_picks)
-            print_picks_to_console(final_picks)
+    final_picks = filter_duplicates(potential_picks)
+    
+    if final_picks:
+        # CRITICAL: Insert into Supabase
+        db.insert_structured_picks(final_picks)
+        print(f"✅ Inserted {len(final_picks)} picks into DB.")
 
     # 5. Update Status
     if processed_ids:

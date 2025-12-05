@@ -1,12 +1,7 @@
 import os
 
 # ==============================================================================
-# GITHUB ACTIONS: SNIPER SCHEDULE
-# ==============================================================================
-# Weekdays: 5:30 PM ET  -> 22:30 UTC
-# Weekends: 11:30 AM ET -> 16:30 UTC
-#           2:30 PM ET  -> 19:30 UTC
-#           5:30 PM ET  -> 22:30 UTC
+# UPDATE GITHUB WORKFLOW TO USE SECRET FOR AI MODEL
 # ==============================================================================
 
 YAML_CONTENT = """name: Sniper Pick Scraper
@@ -66,19 +61,18 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          AI_PARSER_MODEL: "google/gemini-2.0-flash-exp:free"
+          # CHANGED: Now uses the Secret variable instead of hardcoded string
+          AI_PARSER_MODEL: ${{ secrets.AI_PARSER_MODEL }}
         run: |
           # The script will auto-exit early if no new data is found
           python main.py --force
 """
 
-def write_yaml():
-    # Ensure directory exists
+def update_yaml():
     os.makedirs('.github/workflows', exist_ok=True)
-    
     with open('.github/workflows/scrape_and_process.yml', 'w', encoding='utf-8') as f:
         f.write(YAML_CONTENT)
-    print("✅ Sniper Schedule enforced in '.github/workflows/scrape_and_process.yml'")
+    print("✅ Updated workflow to use ${{ secrets.AI_PARSER_MODEL }}")
 
 if __name__ == "__main__":
-    write_yaml()
+    update_yaml()

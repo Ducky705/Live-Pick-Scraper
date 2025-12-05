@@ -55,7 +55,8 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          AI_PARSER_MODEL: "google/gemini-2.0-flash-exp:free"
+          # CHANGED: Now uses the Secret variable instead of hardcoded string
+          AI_PARSER_MODEL: ${{ secrets.AI_PARSER_MODEL }}
         run: |
           # The script will auto-exit early if no new data is found
           python main.py --force

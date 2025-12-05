@@ -23,8 +23,6 @@ def filter_duplicates(picks: List[StandardizedPick]) -> List[StandardizedPick]:
     for p in picks:
         clean_val = sanitize_text(p.pick_value)
         p.pick_value = clean_val
-        
-        # Deduplication Signature
         sig = (p.capper_id, p.pick_date, clean_val, p.bet_type)
         if sig not in seen:
             unique_picks.append(p)
@@ -48,7 +46,7 @@ def process_picks():
     ai_batch = []
     processed_ids = []
 
-    # 2. Parse (Regex First)
+    # 2. Parse
     for pick in raw_picks:
         if len(pick.raw_text) < 100 and "\n" not in pick.raw_text:
             simple = simple_parser.parse_with_regex(pick)
@@ -70,20 +68,17 @@ def process_picks():
                     if orig.id not in processed_ids:
                         processed_ids.append(orig.id)
             
-            # Mark items as processed even if AI found nothing (to prevent loops)
             for p in ai_batch:
                 if p.id not in processed_ids:
                     processed_ids.append(p.id)
 
         except Exception as e:
             logger.error(f"AI batch failed: {e}")
-            # On failure, increment attempts so we retry later
             failed_ids = [p.id for p in ai_batch]
             db.increment_attempts(failed_ids)
-            # Do NOT mark as processed
             processed_ids = [pid for pid in processed_ids if pid not in failed_ids]
 
-    # 4. Standardize & Save to DB
+    # 4. Standardize & Save
     potential_picks = []
     
     for parsed, raw in to_standardize:
@@ -91,6 +86,12 @@ def process_picks():
         if not capper_id: capper_id = 9999 
 
         std_league = standardizer.standardize_league(parsed.league)
+        
+        # --- NEW: League Inference Fallback ---
+        if std_league == 'Other':
+            std_league = standardizer.infer_league(parsed.pick_value)
+        # --------------------------------------
+
         std_type = standardizer.standardize_bet_type(parsed.bet_type)
         std_val = standardizer.format_pick_value(parsed.pick_value, std_type, std_league)
 
@@ -110,7 +111,6 @@ def process_picks():
     final_picks = filter_duplicates(potential_picks)
     
     if final_picks:
-        # CRITICAL: Insert into Supabase
         db.insert_structured_picks(final_picks)
         print(f"✅ Inserted {len(final_picks)} picks into DB.")
 
@@ -118,7 +118,6 @@ def process_picks():
     if processed_ids:
         db.update_raw_status(processed_ids, 'processed')
     
-    # 6. Stats
     duration = time.time() - start_time
     print(f"⏱️  Batch finished in {duration:.2f}s")
 

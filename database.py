@@ -30,17 +30,14 @@ class DatabaseManager:
             logger.error(f"Failed to init Supabase: {e}")
             self.client = None
 
-    # --- CHECKPOINT METHODS (MISSING IN YOUR LAST DEPLOY) ---
     def get_last_checkpoint(self, channel_id: int) -> Optional[datetime]:
         if not self.client: return None
         try:
             res = self.client.table('scraper_checkpoints').select('last_scraped_at').eq('channel_id', channel_id).execute()
             if res.data:
-                # Parse ISO string to datetime
                 return datetime.fromisoformat(res.data[0]['last_scraped_at'])
             return None
         except Exception:
-            # If table doesn't exist or other error, return None to trigger full scan
             return None
 
     def update_checkpoint(self, channel_id: int, timestamp: datetime):
@@ -52,7 +49,6 @@ class DatabaseManager:
             }).execute()
         except Exception as e:
             logger.error(f"Failed to save checkpoint: {e}")
-    # -------------------------------------------------------
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
     def upload_raw_pick(self, pick: RawPick) -> bool:
@@ -81,36 +77,62 @@ class DatabaseManager:
 
     def get_or_create_capper(self, name: str, fuzzer) -> Optional[int]:
         if not self.client or not name: return None
+        
+        # 1. Normalize Name
         normalized = ' '.join(name.strip().split()).title()
-        if normalized in self.capper_cache: return self.capper_cache[normalized]
+        
+        # 2. POPULATE CACHE (The Fix)
+        # If cache is empty, fetch the ENTIRE directory (up to 10k).
+        # This ensures fuzzy matching works against EVERYONE, not just recent cappers.
+        if not self.capper_cache:
+            try:
+                logger.info("📚 Loading Capper Directory into cache...")
+                # Fetch ID and Name for up to 10,000 cappers
+                res = self.client.table('capper_directory').select('id, canonical_name').limit(10000).execute()
+                for item in res.data:
+                    c_name = item['canonical_name'].strip().title()
+                    self.capper_cache[c_name] = item['id']
+                logger.info(f"📚 Loaded {len(self.capper_cache)} cappers.")
+            except Exception as e:
+                logger.error(f"Failed to populate capper cache: {e}")
+
+        # 3. Check Local Cache (Exact Match)
+        if normalized in self.capper_cache: 
+            return self.capper_cache[normalized]
 
         try:
-            picks_res = self.client.table('live_structured_picks').select('capper_id').order('created_at', desc=True).limit(2000).execute()
-            active_ids = {item['capper_id'] for item in picks_res.data if item.get('capper_id')}
-            
-            lookup_map = {}
-            if active_ids:
-                capper_res = self.client.table('capper_directory').select('id, canonical_name').in_('id', list(active_ids)).execute()
-                for item in capper_res.data:
-                    lookup_map[item['canonical_name'].strip().title()] = item['id']
-
-            if normalized in lookup_map:
-                self.capper_cache[normalized] = lookup_map[normalized]
-                return lookup_map[normalized]
-
-            if lookup_map:
-                best_match, score = fuzzer.extractOne(normalized, lookup_map.keys())
+            # 4. Fuzzy Match against the FULL Cache
+            if self.capper_cache:
+                best_match, score = fuzzer.extractOne(normalized, self.capper_cache.keys())
                 if score > 90:
-                    self.capper_cache[normalized] = lookup_map[best_match]
-                    return lookup_map[best_match]
+                    logger.info(f"✨ Fuzzy matched '{normalized}' to '{best_match}' ({score}%)")
+                    self.capper_cache[normalized] = self.capper_cache[best_match]
+                    return self.capper_cache[best_match]
 
+            # 5. If not found, INSERT
             res = self.client.table('capper_directory').insert({'canonical_name': normalized}).execute()
             if res.data:
                 new_id = res.data[0]['id']
                 self.capper_cache[normalized] = new_id
                 return new_id
+            
             return None
-        except Exception: return None
+
+        except Exception as e:
+            # 6. THE LOOP BACK (Conflict Recovery)
+            # If insert failed (409 Conflict), it means it exists but wasn't in our cache.
+            # Fetch it directly.
+            try:
+                res = self.client.table('capper_directory').select('id').eq('canonical_name', normalized).execute()
+                if res.data:
+                    existing_id = res.data[0]['id']
+                    self.capper_cache[normalized] = existing_id
+                    logger.info(f"🔄 Recovered existing capper ID {existing_id} for '{normalized}'")
+                    return existing_id
+            except Exception as e2:
+                logger.error(f"❌ Critical Capper Error: {e2}")
+            
+            return None
 
     def insert_structured_picks(self, picks: List[StandardizedPick]):
         if not self.client or not picks: return

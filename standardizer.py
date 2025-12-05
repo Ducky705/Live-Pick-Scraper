@@ -2,6 +2,43 @@ import re
 from typing import Optional
 import config
 
+# Keyword mapping for league inference
+LEAGUE_KEYWORDS = {
+    'NFL': [
+        'Lions', 'Chiefs', 'Bills', 'Eagles', '49ers', 'Ravens', 'Cowboys', 'Bengals', 
+        'Dolphins', 'Browns', 'Texans', 'Jaguars', 'Steelers', 'Colts', 'Seahawks', 
+        'Buccaneers', 'Packers', 'Rams', 'Falcons', 'Saints', 'Vikings', 'Bears', 
+        'Raiders', 'Broncos', 'Chargers', 'Giants', 'Commanders', 'Titans', 'Cardinals', 
+        'Panthers', 'Patriots', 'Jets'
+    ],
+    'NBA': [
+        'Celtics', 'Nuggets', 'Bucks', 'Timberwolves', 'Thunder', 'Clippers', 'Suns', 
+        'Knicks', 'Cavaliers', 'Magic', 'Sixers', '76ers', 'Pacers', 'Heat', 'Kings', 
+        'Mavericks', 'Lakers', 'Warriors', 'Pelicans', 'Rockets', 'Grizzlies', 'Hawks', 
+        'Nets', 'Jazz', 'Bulls', 'Raptors', 'Hornets', 'Wizards', 'Pistons', 'Spurs', 
+        'Trail Blazers'
+    ],
+    'NHL': [
+        'Bruins', 'Rangers', 'Stars', 'Canucks', 'Panthers', 'Avalanche', 'Jets', 
+        'Oilers', 'Hurricanes', 'Maple Leafs', 'Golden Knights', 'Predators', 'Kings', 
+        'Lightning', 'Red Wings', 'Blues', 'Flyers', 'Capitals', 'Islanders', 'Devils', 
+        'Flames', 'Kraken', 'Penguins', 'Wild', 'Sabres', 'Senators', 'Coyotes', 
+        'Canadiens', 'Blackhawks', 'Ducks', 'Blue Jackets', 'Sharks'
+    ],
+    'NCAAF': [
+        'Boise State', 'Alabama', 'Georgia', 'Ohio State', 'Michigan', 'Texas', 'Oregon',
+        'Notre Dame', 'Penn State', 'Ole Miss', 'Missouri', 'LSU', 'Clemson', 'Florida State',
+        'Tennessee', 'Oklahoma', 'USC', 'Tulane', 'James Madison', 'JMU', 'Liberty', 
+        'UNLV', 'Kennesaw', 'ETSU', 'TCU', 'Navy', 'Army'
+    ],
+    'NCAAB': [
+        'Gonzaga', 'Duke', 'Kansas', 'UConn', 'Houston', 'Purdue', 'Arizona', 'Marquette',
+        'Creighton', 'North Carolina', 'Tennessee', 'Auburn', 'Kentucky', 'Illinois',
+        'Baylor', 'Iowa State', 'South Florida', 'North Texas', 'Xavier', 'Drake', 'Iona',
+        'Quinnipiac'
+    ]
+}
+
 def standardize_league(val: str) -> str:
     if not val: return 'Other'
     val = val.upper().strip()
@@ -39,7 +76,8 @@ def _smart_title_case(text: str) -> str:
         r'\bNhl\b': 'NHL', r'\bNcaaf\b': 'NCAAF', r'\bNcaab\b': 'NCAAB',
         r'\bUfc\b': 'UFC', r'\bPra\b': 'PRA', r'\bSog\b': 'SOG',
         r'\b1H\b': '1H', r'\b2H\b': '2H', r'\b1Q\b': '1Q', r'\b2Q\b': '2Q',
-        r'\b3Q\b': '3Q', r'\b4Q\b': '4Q', r'\bVs\b': 'vs'
+        r'\b3Q\b': '3Q', r'\b4Q\b': '4Q', r'\bVs\b': 'vs', r'\bJmu\b': 'JMU',
+        r'\bTcu\b': 'TCU', r'\bUnlv\b': 'UNLV', r'\bEtsu\b': 'ETSU'
     }
     for pattern, replacement in acronyms.items():
         text = re.sub(pattern, replacement, text)
@@ -65,8 +103,8 @@ def format_pick_value(pick: str, bet_type: str, league: str) -> str:
         return pick
 
     if bet_type == 'Total':
-        pick = re.sub(r'\b(O|Over)\s*(\d)', r'Over ', pick, flags=re.I)
-        pick = re.sub(r'\b(U|Under)\s*(\d)', r'Under ', pick, flags=re.I)
+        pick = re.sub(r'\b(O|Over)\s*(\d)', r'Over  ', pick, flags=re.I)
+        pick = re.sub(r'\b(U|Under)\s*(\d)', r'Under  ', pick, flags=re.I)
         return pick
 
     if bet_type == 'Player Prop':
@@ -77,3 +115,15 @@ def format_pick_value(pick: str, bet_type: str, league: str) -> str:
         return pick
 
     return pick
+
+def infer_league(pick_text: str) -> str:
+    if not pick_text: return 'Other'
+    
+    # Check exact team matches
+    for league, teams in LEAGUE_KEYWORDS.items():
+        for team in teams:
+            # Word boundary check to avoid partial matches
+            if re.search(r'\b' + re.escape(team) + r'\b', pick_text, re.IGNORECASE):
+                return league
+                
+    return 'Other'

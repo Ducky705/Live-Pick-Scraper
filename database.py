@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Optional, Any
 from supabase import create_client, Client
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -30,6 +30,30 @@ class DatabaseManager:
             logger.error(f"Failed to init Supabase: {e}")
             self.client = None
 
+    # --- CHECKPOINT METHODS (MISSING IN YOUR LAST DEPLOY) ---
+    def get_last_checkpoint(self, channel_id: int) -> Optional[datetime]:
+        if not self.client: return None
+        try:
+            res = self.client.table('scraper_checkpoints').select('last_scraped_at').eq('channel_id', channel_id).execute()
+            if res.data:
+                # Parse ISO string to datetime
+                return datetime.fromisoformat(res.data[0]['last_scraped_at'])
+            return None
+        except Exception:
+            # If table doesn't exist or other error, return None to trigger full scan
+            return None
+
+    def update_checkpoint(self, channel_id: int, timestamp: datetime):
+        if not self.client: return
+        try:
+            self.client.table('scraper_checkpoints').upsert({
+                'channel_id': channel_id,
+                'last_scraped_at': timestamp.isoformat()
+            }).execute()
+        except Exception as e:
+            logger.error(f"Failed to save checkpoint: {e}")
+    # -------------------------------------------------------
+
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
     def upload_raw_pick(self, pick: RawPick) -> bool:
         if not self.client: return False
@@ -43,19 +67,13 @@ class DatabaseManager:
     def get_pending_raw_picks(self, limit: int = 10) -> List[RawPick]:
         if not self.client: return []
         try:
-            # OPTIMIZATION:
-            # 1. Order by created_at DESC (Process newest picks first)
-            # 2. Filter out anything created > 24 hours ago (Ignore stuck backlog)
-            
             yesterday_iso = (datetime.utcnow() - timedelta(hours=24)).isoformat()
-            
             response = self.client.table('live_raw_picks').select('*') \
                 .eq('status', 'pending') \
                 .lt('process_attempts', 3) \
                 .gt('created_at', yesterday_iso) \
                 .order('created_at', desc=True) \
                 .limit(limit).execute()
-            
             return [RawPick(**item) for item in response.data]
         except Exception as e:
             logger.error(f"Error fetching picks: {e}")
@@ -116,14 +134,9 @@ class DatabaseManager:
     def increment_attempts(self, ids: List[int]):
         if not self.client or not ids: return
         try:
-            # Batch optimization: If we are here, AI failed.
-            # Instead of reading/writing one by one, we just blindly increment.
-            # This is slightly risky but MUCH faster. 
-            # Or we can mark them as 'failed' immediately if they crash the JSON parser.
             for pick_id in ids:
                  self.client.rpc('increment_process_attempts', {'pick_ids': [pick_id]}).execute()
         except Exception:
-            # Fallback to slow Python loop if RPC missing
              for pick_id in ids:
                 res = self.client.table('live_raw_picks').select('process_attempts').eq('id', pick_id).execute()
                 if res.data:

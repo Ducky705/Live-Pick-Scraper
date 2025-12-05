@@ -1,78 +1,65 @@
+import asyncio
 import os
+import logging
+import sys
+from dotenv import load_dotenv
+from supabase import create_client
 
-# ==============================================================================
-# UPDATE GITHUB WORKFLOW TO USE SECRET FOR AI MODEL
-# ==============================================================================
+# Load env vars
+load_dotenv()
 
-YAML_CONTENT = """name: Sniper Pick Scraper
+# Setup logging to show everything
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
-on:
-  schedule:
-    # WEEKDAYS (Mon-Fri): Run at 5:30 PM ET (22:30 UTC)
-    - cron: '30 22 * * 1-5'
+def reset_and_debug():
+    print("="*60)
+    print("🔧 PROCESSOR DIAGNOSTIC TOOL")
+    print("="*60)
+
+    # 1. Check Credentials
+    url = os.getenv('SUPABASE_URL')
+    key = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+    ai_key = os.getenv('OPENROUTER_API_KEY')
+    ai_model = os.getenv('AI_PARSER_MODEL')
+
+    print(f"Checking Config:")
+    print(f"  - Supabase URL:   {'✅ Found' if url else '❌ MISSING'}")
+    print(f"  - Supabase Key:   {'✅ Found' if key else '❌ MISSING'}")
+    print(f"  - AI API Key:     {'✅ Found' if ai_key else '❌ MISSING'}")
+    print(f"  - AI Model:       {ai_model}")
+
+    if not all([url, key, ai_key]):
+        print("\n❌ STOPPING: Missing credentials in .env file.")
+        return
+
+    # 2. Reset Failed Attempts in DB
+    print("\n1. Resetting 'process_attempts' for today's picks...")
+    db = create_client(url, key)
     
-    # WEEKENDS (Sat-Sun): Run at 11:30 AM, 2:30 PM, 5:30 PM ET
-    # UTC Equivalents: 16:30, 19:30, 22:30
-    - cron: '30 16,19,22 * * 0,6'
+    try:
+        # Reset picks from the last 24 hours so we can retry them
+        res = db.table('live_raw_picks') \
+            .update({'process_attempts': 0, 'status': 'pending'}) \
+            .gt('id', 0) \
+            .execute()
+        print(f"   ✅ Reset complete. Ready to re-process.")
+    except Exception as e:
+        print(f"   ❌ DB Connection Failed: {e}")
+        return
 
-  # Allows manual trigger for testing
-  workflow_dispatch: 
+    # 3. Import Processing Service (Dynamic Import to use local env)
+    print("\n2. Starting Processor (Watch for RED errors below)...")
+    print("-" * 60)
+    
+    try:
+        from processing_service import process_picks
+        process_picks()
+    except Exception as e:
+        print(f"\n❌ CRITICAL FAILURE: {e}")
 
-jobs:
-  run-sniper:
-    runs-on: ubuntu-latest
-    timeout-minutes: 8 # Hard limit to save money
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      # --- CACHING STRATEGY ---
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-          cache: 'pip' 
-
-      # Cache Tesseract to save ~30s setup time
-      - name: Cache Tesseract
-        id: cache-tesseract
-        uses: actions/cache@v3
-        with:
-          path: /usr/bin/tesseract
-          key: ${{ runner.os }}-tesseract-v1
-
-      - name: Install System Dependencies
-        if: steps.cache-tesseract.outputs.cache-hit != 'true'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y tesseract-ocr libtesseract-dev
-
-      - name: Install Python Dependencies
-        run: |
-          pip install -r requirements.txt
-
-      - name: Run Pipeline
-        env:
-          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
-          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
-          TELEGRAM_SESSION_NAME: ${{ secrets.TELEGRAM_SESSION_NAME }}
-          TELEGRAM_CHANNEL_URLS: ${{ secrets.TELEGRAM_CHANNEL_URLS }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          # CHANGED: Now uses the Secret variable instead of hardcoded string
-          AI_PARSER_MODEL: ${{ secrets.AI_PARSER_MODEL }}
-        run: |
-          # The script will auto-exit early if no new data is found
-          python main.py --force
-"""
-
-def update_yaml():
-    os.makedirs('.github/workflows', exist_ok=True)
-    with open('.github/workflows/scrape_and_process.yml', 'w', encoding='utf-8') as f:
-        f.write(YAML_CONTENT)
-    print("✅ Updated workflow to use ${{ secrets.AI_PARSER_MODEL }}")
+    print("-" * 60)
+    print("Diagnostic finished.")
 
 if __name__ == "__main__":
-    update_yaml()
+    reset_and_debug()

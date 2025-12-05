@@ -1,0 +1,21 @@
+# File: ./.gitignore
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+test.py
+
+# Environment
+.env
+*.env
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Telethon Session
+*.session

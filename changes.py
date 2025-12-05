@@ -1,202 +1,107 @@
 import os
 
-SCRAPERS_INCREMENTAL_CONTENT = """import asyncio
-import re
+CONFIG_FIX_CONTENT = """import os
 import logging
-import os
-import numpy as np
-from datetime import datetime, timezone, timedelta
+from typing import List, Set, Union
+from dotenv import load_dotenv
 from zoneinfo import ZoneInfo
-from telethon import TelegramClient
-from telethon.sessions import StringSession
-from telethon.tl.types import Message
 
-import config
-from database import db
-from models import RawPick
+load_dotenv()
 
-OCR_AVAILABLE = False
-try:
-    import pytesseract
-    import cv2
-    OCR_AVAILABLE = True
-    default_path = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
-    if os.path.exists(default_path):
-        pytesseract.pytesseract.tesseract_cmd = default_path
-except ImportError:
-    pass
+logging.basicConfig(
+    level=logging.INFO, 
+    format='%(asctime)s - [%(levelname)s] - %(name)s - %(message)s',
+    handlers=[logging.StreamHandler()]
+)
 
-logger = logging.getLogger(__name__)
+EASTERN_TIMEZONE = ZoneInfo('US/Eastern')
+UTC_TIMEZONE = ZoneInfo('UTC')
 
-class TelegramScraper:
-    def __init__(self):
-        self.client = None
-        if all([config.TELEGRAM_API_ID, config.TELEGRAM_API_HASH, config.TELEGRAM_SESSION_NAME]):
-            self.client = TelegramClient(
-                StringSession(config.TELEGRAM_SESSION_NAME), 
-                int(config.TELEGRAM_API_ID), 
-                config.TELEGRAM_API_HASH
-            )
+OPERATIONAL_START_HOUR_ET = int(os.getenv('OPERATIONAL_START_HOUR_ET', '11'))
+OPERATIONAL_END_HOUR_ET = int(os.getenv('OPERATIONAL_END_HOUR_ET', '23'))
+SCRAPE_WINDOW_HOURS = int(os.getenv('SCRAPE_WINDOW_HOURS', '48'))
+ARCHIVE_AFTER_HOURS = int(os.getenv('ARCHIVE_PENDING_PICKS_AFTER_HOURS', '72'))
 
-    def _remove_watermark(self, img):
-        try:
-            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            mask = cv2.inRange(hsv, np.array([0, 50, 50]), np.array([10, 255, 255])) + \\
-                   cv2.inRange(hsv, np.array([160, 50, 50]), np.array([180, 255, 255]))
-            kernel = np.ones((2,2), np.uint8)
-            mask = cv2.dilate(mask, kernel, iterations=1)
-            img[mask > 0] = [255, 255, 255]
-            return img
-        except: return img
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
 
-    def _cpu_bound_ocr(self, image_bytes: bytes) -> str:
-        try:
-            np_arr = np.frombuffer(image_bytes, np.uint8)
-            img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-            img = cv2.resize(img, None, fx=2.5, fy=2.5, interpolation=cv2.INTER_CUBIC)
-            
-            clean = self._remove_watermark(img)
-            gray = cv2.cvtColor(clean, cv2.COLOR_BGR2GRAY)
-            
-            _, b1 = cv2.threshold(gray, 180, 255, cv2.THRESH_BINARY)
-            t1 = pytesseract.image_to_string(b1, config='--psm 6')
-            
-            _, b2 = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-            t2 = pytesseract.image_to_string(b2, config='--psm 6')
+TELEGRAM_API_ID = os.getenv('TELEGRAM_API_ID')
+TELEGRAM_API_HASH = os.getenv('TELEGRAM_API_HASH')
+TELEGRAM_SESSION_NAME = os.getenv('TELEGRAM_SESSION_NAME')
 
-            inverted = cv2.bitwise_not(gray)
-            _, b3 = cv2.threshold(inverted, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-            t3 = pytesseract.image_to_string(b3, config='--psm 6')
+def parse_int_list(env_var: str) -> Set[int]:
+    if not env_var: return set()
+    # Remove brackets and quotes just in case
+    clean = env_var.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
+    return {int(x.strip()) for x in clean.split(',') if x.strip().lstrip('-').isdigit()}
 
-            combined = set()
-            for t in [t1, t2, t3]:
-                for line in t.split('\\n'):
-                    l = line.strip()
-                    if len(l) > 4 and re.search(r'[A-Z0-9]', l, re.I):
-                        combined.add(l)
-            
-            final = "\\n".join(sorted(list(combined)))
-            return f"\\n\\n[OCR RESULT (Combines 3 Passes)]:\\n{final}" if len(final) > 5 else ""
-        except Exception: return ""
+def parse_telegram_identifiers(env_var: str) -> List[Union[str, int]]:
+    if not env_var: return []
+    items = []
+    # robust cleaning
+    clean = env_var.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
+    
+    for x in clean.split(','):
+        x = x.strip()
+        if not x: continue
+        # Check if it's a number (including negative channel IDs)
+        if x.lstrip('-').isdigit():
+            items.append(int(x))
+        else:
+            items.append(x)
+    return items
 
-    async def _perform_ocr(self, message: Message) -> str:
-        if not OCR_AVAILABLE or not message.photo: return ""
-        try:
-            data = await message.download_media(file=bytes)
-            return await asyncio.to_thread(self._cpu_bound_ocr, data)
-        except: return ""
+TELEGRAM_CHANNELS = parse_telegram_identifiers(os.getenv('TELEGRAM_CHANNEL_URLS', ''))
+AGGREGATOR_CHANNEL_IDS = parse_int_list(os.getenv('AGGREGATOR_CHANNEL_IDS', ''))
 
-    def _get_pick_regex(self):
-        return r"([+-]\d+|\\b(ML|Pk|Pick'?em|Ev|Even)\\b|\\b(Over|Under)\\b|\d+(\.\d+)?\s*u)"
+DISTRIBUTION_CHANNEL_ID = os.getenv('DISTRIBUTION_CHANNEL_ID')
+if DISTRIBUTION_CHANNEL_ID and DISTRIBUTION_CHANNEL_ID.lstrip('-').isdigit():
+    DISTRIBUTION_CHANNEL_ID = int(DISTRIBUTION_CHANNEL_ID)
 
-    def _clean_capper_name(self, name: str) -> str:
-        return re.sub(r'^[\W_]+|[\W_]+$', '', name).strip()
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+AI_PARSER_MODEL = os.getenv("AI_PARSER_MODEL", "google/gemini-2.0-flash-exp:free")
 
-    def _extract_capper_name(self, lines: list, channel_title: str, channel_id: int) -> str:
-        is_aggregator = (channel_id in config.AGGREGATOR_CHANNEL_IDS) or ("CAPPERS FREE" in channel_title.upper())
-        if not lines: return "Unknown Capper"
+# --- BLACKLIST ---
+BLACKLISTED_CAPPERS = {
+    'free cappers picks', 'the capper', 'capper picks', 'free picks', 
+    'daily picks', 'best bets', 'pick central', 'bet tips', 'sports picks', 
+    'winners only', 'pro picks', 'capper network', 'betting tips',
+    'cappers free', 'cappersfree', 'dm', 'bonus', 'promo'
+}
 
-        if is_aggregator:
-            candidate = self._clean_capper_name(lines[0].strip())
-            is_blacklisted = candidate.lower() in config.BLACKLISTED_CAPPERS
-            is_pick = re.search(self._get_pick_regex(), candidate, re.I)
-            if candidate and not is_blacklisted and not is_pick:
-                return candidate
+HYPE_TERMS = {
+    'max bet', 'whale play', 'lock of the day', 'guaranteed', 'bomb', 
+    'nuke', 'system play', 'vip pick', 'free pick', 'bonus', 'promo',
+    'hammer', 'stake', 'unit', 'play of the day', 'potd', 'bankroll',
+    'investment', 'insider'
+}
 
-        clean = channel_title
-        for bad in config.BLACKLISTED_CAPPERS:
-            clean = re.sub(re.escape(bad), '', clean, flags=re.I)
-        return self._clean_capper_name(clean) or "Unknown Capper"
+LEAGUE_STANDARDS = {
+    'NFL': 'NFL', 'NCAAF': 'NCAAF', 'NBA': 'NBA', 'NCAAB': 'NCAAB',
+    'WNBA': 'WNBA', 'MLB': 'MLB', 'NHL': 'NHL', 'EPL': 'EPL',
+    'MLS': 'MLS', 'UCL': 'UCL', 'UFC': 'UFC', 'PFL': 'PFL',
+    'TENNIS': 'TENNIS', 'PGA': 'PGA', 'F1': 'F1', 'OTHER': 'Other'
+}
 
-    def _is_valid_pick_message(self, text: str) -> bool:
-        if not text: return False
-        if not re.search(self._get_pick_regex(), text, re.I): return False
-        if re.search(r'\\b(VOID|CANCEL|REFUND|CORRECTION|LOSS|PUSH|GRADE|WON|LOST)\\b', text, re.I): return False
-        if re.search(r'(❌|💰|🚫)', text): return False
-        return True
+LEAGUE_MAP = {
+    'NATIONAL FOOTBALL LEAGUE': 'NFL', 'COLLEGE FOOTBALL': 'NCAAF',
+    'NATIONAL BASKETBALL ASSOCIATION': 'NBA', 'COLLEGE BASKETBALL': 'NCAAB',
+    'MAJOR LEAGUE BASEBALL': 'MLB', 'NATIONAL HOCKEY LEAGUE': 'NHL',
+    'PREMIER LEAGUE': 'EPL', 'SOCCER': 'EPL', 'CHAMPIONS LEAGUE': 'UCL',
+    'MMA': 'UFC', 'GOLF': 'PGA', 'FORMULA 1': 'F1'
+}
+LEAGUE_MAP.update(LEAGUE_STANDARDS)
 
-    async def scrape(self):
-        if not self.client: return
-        try:
-            await self.client.start()
-            
-            # 1. Determine "Start of Today" (Absolute Hard Stop)
-            tz = ZoneInfo("US/Eastern")
-            now_et = datetime.now(tz)
-            start_of_today_et = now_et.replace(hour=0, minute=0, second=0, microsecond=0)
-            start_of_today_utc = start_of_today_et.astimezone(timezone.utc)
-            
-            # We track the latest message time seen in this run to update the checkpoint later
-            run_start_time = datetime.now(timezone.utc)
-
-            for entity_id in config.TELEGRAM_CHANNELS:
-                try:
-                    try:
-                        entity = await self.client.get_entity(entity_id)
-                    except: continue
-
-                    title = getattr(entity, 'title', 'Unknown')
-                    channel_id = getattr(entity, 'id', 0)
-                    
-                    # 2. Get Last Checkpoint for this specific channel
-                    last_scraped = db.get_last_checkpoint(channel_id)
-                    
-                    # 3. Determine Cutoff: Max(Start of Today, Last Checkpoint)
-                    # This ensures we never go back further than today, 
-                    # but also don't re-scrape what we did an hour ago.
-                    if last_scraped:
-                        cutoff_utc = max(last_scraped, start_of_today_utc)
-                        logger.info(f"🔄 Resuming {title} from {cutoff_utc}")
-                    else:
-                        cutoff_utc = start_of_today_utc
-                        logger.info(f"📅 First run for {title}: Scanning from {cutoff_utc}")
-
-                    # 4. Iterate
-                    latest_msg_date = None
-                    
-                    async for msg in self.client.iter_messages(entity, limit=None):
-                        # Capture the date of the newest message we see
-                        if latest_msg_date is None:
-                            latest_msg_date = msg.date
-
-                        # STOP CONDITION
-                        if msg.date <= cutoff_utc:
-                            break 
-                        
-                        text = (msg.text or "").strip()
-                        ocr = await self._perform_ocr(msg)
-                        full_text = f"{text}\\n{ocr}".strip()
-                        
-                        if not self._is_valid_pick_message(full_text): continue
-
-                        lines = [l.strip() for l in full_text.split('\\n') if l.strip()]
-                        capper = self._extract_capper_name(lines, title, channel_id)
-                        
-                        pick = RawPick(
-                            source_unique_id=f"tg-{channel_id}-{msg.id}",
-                            source_url=f"https://t.me/c/{channel_id}/{msg.id}",
-                            capper_name=capper,
-                            raw_text=full_text,
-                            pick_date=msg.date.astimezone(tz).date()
-                        )
-                        db.upload_raw_pick(pick)
-                    
-                    # 5. Update Checkpoint
-                    # If we found messages, update the checkpoint to the newest one we saw.
-                    # If we didn't find anything new, we update it to 'now' so we don't check empty space again.
-                    new_checkpoint = latest_msg_date if latest_msg_date else run_start_time
-                    db.update_checkpoint(channel_id, new_checkpoint)
-                        
-                except Exception as e:
-                    logger.error(f"Error scraping {entity_id}: {e}")
-        finally:
-            await self.client.disconnect()
-
-async def run_scrapers():
-    s = TelegramScraper()
-    await s.scrape()
+BET_TYPE_MAP = {
+    'MONEYLINE': 'Moneyline', 'ML': 'Moneyline',
+    'SPREAD': 'Spread', 'RUN LINE': 'Spread', 'PUCK LINE': 'Spread',
+    'TOTAL': 'Total', 'OVER/UNDER': 'Total',
+    'PLAYER PROP': 'Player Prop', 'PROP': 'Player Prop',
+    'TEAM PROP': 'Team Prop', 'TTU': 'Team Prop', 'TTO': 'Team Prop',
+    'PARLAY': 'Parlay', 'TEASER': 'Teaser'
+}
 """
 
-with open('scrapers.py', 'w', encoding='utf-8') as f:
-    f.write(SCRAPERS_INCREMENTAL_CONTENT)
-    print("✅ Updated 'scrapers.py' with Incremental Checkpoint Logic.")
+with open('config.py', 'w', encoding='utf-8') as f:
+    f.write(CONFIG_FIX_CONTENT)
+    print("✅ Updated 'config.py' with robust parsing logic.")

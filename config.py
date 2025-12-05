@@ -29,14 +29,20 @@ TELEGRAM_SESSION_NAME = os.getenv('TELEGRAM_SESSION_NAME')
 
 def parse_int_list(env_var: str) -> Set[int]:
     if not env_var: return set()
-    return {int(x.strip()) for x in env_var.split(',') if x.strip().lstrip('-').isdigit()}
+    # Remove brackets and quotes just in case
+    clean = env_var.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
+    return {int(x.strip()) for x in clean.split(',') if x.strip().lstrip('-').isdigit()}
 
 def parse_telegram_identifiers(env_var: str) -> List[Union[str, int]]:
     if not env_var: return []
     items = []
-    for x in env_var.split(','):
+    # robust cleaning
+    clean = env_var.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
+    
+    for x in clean.split(','):
         x = x.strip()
         if not x: continue
+        # Check if it's a number (including negative channel IDs)
         if x.lstrip('-').isdigit():
             items.append(int(x))
         else:
@@ -54,7 +60,6 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 AI_PARSER_MODEL = os.getenv("AI_PARSER_MODEL", "google/gemini-2.0-flash-exp:free")
 
 # --- BLACKLIST ---
-# Added 'cappers free' and 'cappersfree' to ensure we never use the channel name
 BLACKLISTED_CAPPERS = {
     'free cappers picks', 'the capper', 'capper picks', 'free picks', 
     'daily picks', 'best bets', 'pick central', 'bet tips', 'sports picks', 

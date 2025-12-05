@@ -38,19 +38,12 @@ Output: [{{"raw_pick_id": 123, "pick_value": "Lakers -5", "bet_type": "Spread", 
 """
 
 def _repair_json(text: str) -> str:
-    # 1. Clean up markdown
     text = re.sub(r'```json', '', text, flags=re.I)
     text = re.sub(r'```', '', text)
     text = text.strip()
-
-    # 2. Find the LAST closing bracket ']'
     end = text.rfind(']')
     if end == -1: return "[]"
-
-    # 3. Find ALL opening brackets '['
     starts = [m.start() for m in re.finditer(r'\[', text)]
-    
-    # 4. Iterate backwards to find the matching pair
     for start in reversed(starts):
         if start >= end: continue
         candidate = text[start:end+1]
@@ -59,11 +52,14 @@ def _repair_json(text: str) -> str:
             return candidate
         except json.JSONDecodeError:
             continue
-            
     return "[]"
 
 def parse_with_ai(raw_picks: List[RawPick]) -> List[ParsedPick]:
     if not client or not raw_picks: return []
+
+    # --- DEBUG: PRINT MODEL BEING USED ---
+    print(f"🤖 AI PARSER: Using Model -> {AI_PARSER_MODEL}")
+    # -------------------------------------
 
     input_data = []
     for p in raw_picks:
@@ -78,39 +74,26 @@ def parse_with_ai(raw_picks: List[RawPick]) -> List[ParsedPick]:
         
         content = completion.choices[0].message.content
         
-        # --- DEBUG PRINT ---
-        print("\n" + "="*40)
-        print("🤖 RAW AI RESPONSE DEBUG:")
-        print(content)
-        print("="*40 + "\n")
-        # -------------------
-        
         clean_json = _repair_json(content)
         
         try:
             parsed_data = json.loads(clean_json)
         except json.JSONDecodeError:
-            # Fallback for messy lists
             objects = re.findall(r'\{[^{}]+\}', clean_json)
             parsed_data = [json.loads(o) for o in objects]
 
         results = []
         for item in parsed_data:
-            # 1. ID Recovery
             if 'raw_pick_id' not in item and len(raw_picks) == 1:
                 item['raw_pick_id'] = raw_picks[0].id
 
             if 'raw_pick_id' in item:
                 try:
-                    # 2. NULL SANITIZATION (Critical Fix)
                     if item.get('league') is None: item['league'] = "Unknown"
                     if item.get('pick_value') is None: continue
-                    
-                    # 3. Create Object
                     if len(item['pick_value']) > 3:
                         results.append(ParsedPick(**item))
                 except Exception as e:
-                    print(f"❌ VALIDATION ERROR for item {item}: {e}")
                     pass
         
         return results

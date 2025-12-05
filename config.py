@@ -29,20 +29,16 @@ TELEGRAM_SESSION_NAME = os.getenv('TELEGRAM_SESSION_NAME')
 
 def parse_int_list(env_var: str) -> Set[int]:
     if not env_var: return set()
-    # Remove brackets and quotes just in case
     clean = env_var.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
     return {int(x.strip()) for x in clean.split(',') if x.strip().lstrip('-').isdigit()}
 
 def parse_telegram_identifiers(env_var: str) -> List[Union[str, int]]:
     if not env_var: return []
     items = []
-    # robust cleaning
     clean = env_var.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
-    
     for x in clean.split(','):
         x = x.strip()
         if not x: continue
-        # Check if it's a number (including negative channel IDs)
         if x.lstrip('-').isdigit():
             items.append(int(x))
         else:
@@ -57,8 +53,14 @@ if DISTRIBUTION_CHANNEL_ID and DISTRIBUTION_CHANNEL_ID.lstrip('-').isdigit():
     DISTRIBUTION_CHANNEL_ID = int(DISTRIBUTION_CHANNEL_ID)
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-# REMOVED DEFAULT MODEL - USES .ENV ONLY
+
+# --- STRICT MODEL LOADING ---
+# This ensures NO default value exists. 
+# If the .env or Secret is missing, this will be None.
 AI_PARSER_MODEL = os.getenv("AI_PARSER_MODEL")
+
+if not AI_PARSER_MODEL:
+    logging.warning("⚠️ AI_PARSER_MODEL is not set! The scraper will fail if it tries to use AI.")
 
 # --- BLACKLIST ---
 BLACKLISTED_CAPPERS = {

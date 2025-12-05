@@ -1,4 +1,10 @@
-import asyncio
+import os
+
+# ==============================================================================
+# UPDATING SCRAPERS.PY
+# Feature: Explicit "Backfill" logging and strict Midnight ET cutoff.
+# ==============================================================================
+SCRAPERS_BACKFILL_CONTENT = """import asyncio
 import re
 import logging
 import os
@@ -18,7 +24,7 @@ try:
     import pytesseract
     import cv2
     OCR_AVAILABLE = True
-    default_path = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    default_path = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
     if os.path.exists(default_path):
         pytesseract.pytesseract.tesseract_cmd = default_path
 except ImportError:
@@ -39,7 +45,7 @@ class TelegramScraper:
     def _remove_watermark(self, img):
         try:
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            mask = cv2.inRange(hsv, np.array([0, 50, 50]), np.array([10, 255, 255])) + \
+            mask = cv2.inRange(hsv, np.array([0, 50, 50]), np.array([10, 255, 255])) + \\
                    cv2.inRange(hsv, np.array([160, 50, 50]), np.array([180, 255, 255]))
             kernel = np.ones((2,2), np.uint8)
             mask = cv2.dilate(mask, kernel, iterations=1)
@@ -68,13 +74,13 @@ class TelegramScraper:
 
             combined = set()
             for t in [t1, t2, t3]:
-                for line in t.split('\n'):
+                for line in t.split('\\n'):
                     l = line.strip()
                     if len(l) > 4 and re.search(r'[A-Z0-9]', l, re.I):
                         combined.add(l)
             
-            final = "\n".join(sorted(list(combined)))
-            return f"\n\n[OCR RESULT (Combines 3 Passes)]:\n{final}" if len(final) > 5 else ""
+            final = "\\n".join(sorted(list(combined)))
+            return f"\\n\\n[OCR RESULT (Combines 3 Passes)]:\\n{final}" if len(final) > 5 else ""
         except Exception: return ""
 
     async def _perform_ocr(self, message: Message) -> str:
@@ -85,7 +91,7 @@ class TelegramScraper:
         except: return ""
 
     def _get_pick_regex(self):
-        return r"([+-]\d+|\b(ML|Pk|Pick'?em|Ev|Even)\b|\b(Over|Under)\b|\d+(\.\d+)?\s*u)"
+        return r"([+-]\d+|\\b(ML|Pk|Pick'?em|Ev|Even)\\b|\\b(Over|Under)\\b|\d+(\.\d+)?\s*u)"
 
     def _clean_capper_name(self, name: str) -> str:
         return re.sub(r'^[\W_]+|[\W_]+$', '', name).strip()
@@ -109,7 +115,7 @@ class TelegramScraper:
     def _is_valid_pick_message(self, text: str) -> bool:
         if not text: return False
         if not re.search(self._get_pick_regex(), text, re.I): return False
-        if re.search(r'\b(VOID|CANCEL|REFUND|CORRECTION|LOSS|PUSH|GRADE|WON|LOST)\b', text, re.I): return False
+        if re.search(r'\\b(VOID|CANCEL|REFUND|CORRECTION|LOSS|PUSH|GRADE|WON|LOST)\\b', text, re.I): return False
         if re.search(r'(❌|💰|🚫)', text): return False
         return True
 
@@ -148,11 +154,11 @@ class TelegramScraper:
                         
                         text = (msg.text or "").strip()
                         ocr = await self._perform_ocr(msg)
-                        full_text = f"{text}\n{ocr}".strip()
+                        full_text = f"{text}\\n{ocr}".strip()
                         
                         if not self._is_valid_pick_message(full_text): continue
 
-                        lines = [l.strip() for l in full_text.split('\n') if l.strip()]
+                        lines = [l.strip() for l in full_text.split('\\n') if l.strip()]
                         capper = self._extract_capper_name(lines, title, getattr(entity, 'id', 0))
                         
                         pick = RawPick(
@@ -174,3 +180,8 @@ class TelegramScraper:
 async def run_scrapers():
     s = TelegramScraper()
     await s.scrape()
+"""
+
+with open('scrapers.py', 'w', encoding='utf-8') as f:
+    f.write(SCRAPERS_BACKFILL_CONTENT)
+    print("✅ Updated 'scrapers.py' with explicit Backfill Logic.")

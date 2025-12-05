@@ -118,17 +118,14 @@ class TelegramScraper:
         try:
             await self.client.start()
             
-            # --- BACKFILL LOGIC ---
-            # 1. Determine "Start of Today" in Eastern Time
+            # 1. Determine "Start of Today" (Absolute Hard Stop)
             tz = ZoneInfo("US/Eastern")
             now_et = datetime.now(tz)
             start_of_today_et = now_et.replace(hour=0, minute=0, second=0, microsecond=0)
+            start_of_today_utc = start_of_today_et.astimezone(timezone.utc)
             
-            # 2. Convert to UTC (Telegram uses UTC)
-            cutoff_utc = start_of_today_et.astimezone(timezone.utc)
-            
-            logger.info(f"📅 BACKFILL ACTIVE: Scanning all messages since {start_of_today_et.strftime('%Y-%m-%d %H:%M:%S')} ET")
-            logger.info(f"   (UTC Cutoff: {cutoff_utc})")
+            # We track the latest message time seen in this run to update the checkpoint later
+            run_start_time = datetime.now(timezone.utc)
 
             for entity_id in config.TELEGRAM_CHANNELS:
                 try:
@@ -137,13 +134,31 @@ class TelegramScraper:
                     except: continue
 
                     title = getattr(entity, 'title', 'Unknown')
+                    channel_id = getattr(entity, 'id', 0)
                     
-                    # 3. Iterate BACKWARDS from Now -> Midnight
-                    # This ensures we cover the entire day, catching anything missed.
+                    # 2. Get Last Checkpoint for this specific channel
+                    last_scraped = db.get_last_checkpoint(channel_id)
+                    
+                    # 3. Determine Cutoff: Max(Start of Today, Last Checkpoint)
+                    # This ensures we never go back further than today, 
+                    # but also don't re-scrape what we did an hour ago.
+                    if last_scraped:
+                        cutoff_utc = max(last_scraped, start_of_today_utc)
+                        logger.info(f"🔄 Resuming {title} from {cutoff_utc}")
+                    else:
+                        cutoff_utc = start_of_today_utc
+                        logger.info(f"📅 First run for {title}: Scanning from {cutoff_utc}")
+
+                    # 4. Iterate
+                    latest_msg_date = None
+                    
                     async for msg in self.client.iter_messages(entity, limit=None):
-                        
-                        # STOP CONDITION: If message is older than Midnight ET, we stop.
-                        if msg.date < cutoff_utc:
+                        # Capture the date of the newest message we see
+                        if latest_msg_date is None:
+                            latest_msg_date = msg.date
+
+                        # STOP CONDITION
+                        if msg.date <= cutoff_utc:
                             break 
                         
                         text = (msg.text or "").strip()
@@ -153,18 +168,22 @@ class TelegramScraper:
                         if not self._is_valid_pick_message(full_text): continue
 
                         lines = [l.strip() for l in full_text.split('\n') if l.strip()]
-                        capper = self._extract_capper_name(lines, title, getattr(entity, 'id', 0))
+                        capper = self._extract_capper_name(lines, title, channel_id)
                         
                         pick = RawPick(
-                            source_unique_id=f"tg-{getattr(entity, 'id', 0)}-{msg.id}",
-                            source_url=f"https://t.me/c/{getattr(entity, 'id', 0)}/{msg.id}",
+                            source_unique_id=f"tg-{channel_id}-{msg.id}",
+                            source_url=f"https://t.me/c/{channel_id}/{msg.id}",
                             capper_name=capper,
                             raw_text=full_text,
                             pick_date=msg.date.astimezone(tz).date()
                         )
-                        
-                        # 4. UPSERT: If pick exists, ignore. If missing, insert.
                         db.upload_raw_pick(pick)
+                    
+                    # 5. Update Checkpoint
+                    # If we found messages, update the checkpoint to the newest one we saw.
+                    # If we didn't find anything new, we update it to 'now' so we don't check empty space again.
+                    new_checkpoint = latest_msg_date if latest_msg_date else run_start_time
+                    db.update_checkpoint(channel_id, new_checkpoint)
                         
                 except Exception as e:
                     logger.error(f"Error scraping {entity_id}: {e}")

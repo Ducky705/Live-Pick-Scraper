@@ -25,22 +25,20 @@ async def run_pipeline(force=False):
 
     # --- PHASE 2: EFFICIENCY CHECK ---
     # Check if there is ANY work to do.
-    # This covers:
-    # 1. New picks just scraped (status='pending')
-    # 2. Old picks that failed AI previously (status='pending', attempts < 3)
     try:
         pending_picks = db.get_pending_raw_picks(limit=1)
         if not pending_picks:
             logger.info("🛑 No new picks & no pending retries. SHUTTING DOWN.")
-            sys.exit(0) # Exit with success code, 0 mins used for processing
+            sys.exit(0) # Exit with success code
     except Exception as e:
         logger.error(f"Error checking DB status: {e}")
 
     # --- PHASE 3: PROCESS BATCHES ---
     logger.info("🧠 Work detected! Running AI Processor...")
     try:
-        # Run batches until queue is empty or max 5 batches (prevent timeouts)
-        for i in range(5): 
+        # FIX: Reduced batch count from 5 to 2 to prevent GitHub Action timeouts.
+        # Previous runs took ~2 mins per batch, causing 10m+ runs which get cancelled.
+        for i in range(2): 
             if not db.get_pending_raw_picks(limit=1):
                 break
             process_picks()

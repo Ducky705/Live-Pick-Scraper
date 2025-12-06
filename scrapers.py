@@ -18,6 +18,7 @@ try:
     import pytesseract
     import cv2
     OCR_AVAILABLE = True
+    # Check common paths or use PATH
     default_path = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
     if os.path.exists(default_path):
         pytesseract.pytesseract.tesseract_cmd = default_path
@@ -119,12 +120,18 @@ class TelegramScraper:
             await self.client.start()
             
             # 1. Determine "Start of Today" (Absolute Hard Stop)
-            tz = ZoneInfo("US/Eastern")
+            # This logic strictly enforces scraping ONLY from 00:00 ET today onwards.
+            try:
+                tz = ZoneInfo("US/Eastern")
+            except Exception:
+                # Fallback for systems without tzdata
+                tz = timezone(timedelta(hours=-5))
+
             now_et = datetime.now(tz)
             start_of_today_et = now_et.replace(hour=0, minute=0, second=0, microsecond=0)
             start_of_today_utc = start_of_today_et.astimezone(timezone.utc)
             
-            # We track the latest message time seen in this run to update the checkpoint later
+            # We track the run start time to update checkpoints if no new messages are found
             run_start_time = datetime.now(timezone.utc)
 
             for entity_id in config.TELEGRAM_CHANNELS:
@@ -139,9 +146,13 @@ class TelegramScraper:
                     # 2. Get Last Checkpoint for this specific channel
                     last_scraped = db.get_last_checkpoint(channel_id)
                     
+                    # FIX: Ensure last_scraped is timezone-aware (UTC) to prevent TypeError
+                    if last_scraped and last_scraped.tzinfo is None:
+                        last_scraped = last_scraped.replace(tzinfo=timezone.utc)
+                    
                     # 3. Determine Cutoff: Max(Start of Today, Last Checkpoint)
-                    # This ensures we never go back further than today, 
-                    # but also don't re-scrape what we did an hour ago.
+                    # If we scraped 1 hour ago, resume from there.
+                    # If we scraped yesterday, force jump to Start of Today.
                     if last_scraped:
                         cutoff_utc = max(last_scraped, start_of_today_utc)
                         logger.info(f"🔄 Resuming {title} from {cutoff_utc}")
@@ -153,13 +164,13 @@ class TelegramScraper:
                     latest_msg_date = None
                     
                     async for msg in self.client.iter_messages(entity, limit=None):
-                        # Capture the date of the newest message we see
-                        if latest_msg_date is None:
-                            latest_msg_date = msg.date
-
-                        # STOP CONDITION
+                        # STOP CONDITION: If message is older than our cutoff, stop.
                         if msg.date <= cutoff_utc:
                             break 
+
+                        # Capture the date of the newest message we see (that is within the window)
+                        if latest_msg_date is None:
+                            latest_msg_date = msg.date
                         
                         text = (msg.text or "").strip()
                         ocr = await self._perform_ocr(msg)
@@ -180,8 +191,8 @@ class TelegramScraper:
                         db.upload_raw_pick(pick)
                     
                     # 5. Update Checkpoint
-                    # If we found messages, update the checkpoint to the newest one we saw.
-                    # If we didn't find anything new, we update it to 'now' so we don't check empty space again.
+                    # If we found new messages, update to the latest one.
+                    # If we found NO messages (channel silent today), update to NOW so we don't re-scan empty time.
                     new_checkpoint = latest_msg_date if latest_msg_date else run_start_time
                     db.update_checkpoint(channel_id, new_checkpoint)
                         

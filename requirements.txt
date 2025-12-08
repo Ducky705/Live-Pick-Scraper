@@ -1,0 +1,8 @@
+flask
+telethon
+pytesseract
+supabase
+pillow
+python-dotenv
+opencv-python-headless
+# pywebview  <-- Keep this commented out if you are sticking to the browser method for now

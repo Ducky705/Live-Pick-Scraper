@@ -1,0 +1,7 @@
+Successfully copied project code to clipboard!
+Statistics:
+   - Total lines: 19760
+   - Total characters: 542,425
+   - Tree structure generated
+   - Files excluded: {'static/temp_images/', 'tesseract_bin/'}
+   - Binary files skipped: {'.zip', '.jar', '.ttf', '.dll', '.jpg', '.exe', '.gif', '.pdf', '.png', '.bmp', '.rar'}

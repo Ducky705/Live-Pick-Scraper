@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, field_validator, ConfigDict, model_validator
-from typing import Optional, List, Literal, Any
+from pydantic import BaseModel, Field, field_validator, ConfigDict
+from typing import Optional
 from datetime import datetime, date
 import re
 import logging
@@ -24,25 +24,24 @@ class ParsedPick(BaseModel):
     league: str = "Unknown"
     bet_type: str
     pick_value: str
-    # CHANGED: Unit is now Optional, default is None (Blank)
     unit: Optional[float] = None
     odds_american: Optional[int] = None
 
     @field_validator('unit', mode='before')
     @classmethod
     def validate_unit(cls, v):
-        if v is None: return None  # Allow blank
-        if isinstance(v, (float, int)): return float(v)
+        if v is None: return None
+        if isinstance(v, (float, int)): 
+            # Allow high units (e.g. 150, 500) as per user requirement
+            return float(v)
+            
         s = str(v).lower().strip()
-        
-        # Strict numerical extraction only
         clean = re.sub(r'[^\d.]', '', s)
         try:
             val = float(clean)
-            if val > 100: return None # Sanity check for bad OCR
             return round(val, 2)
         except:
-            return None # If we can't parse a number, return None
+            return None
 
     @field_validator('odds_american', mode='before')
     @classmethod
@@ -50,8 +49,10 @@ class ParsedPick(BaseModel):
         if v is None: return None
         try:
             val = int(v)
-            if val < -20000 or val > 20000:
-                return None 
+            # Odds range sanity check
+            if val < -20000 or val > 20000: return None 
+            # Odds usually aren't single digits (except maybe very weird formats, but standard US odds are >100 or <-100)
+            if -100 < val < 100: return None
             return val
         except:
             return None
@@ -62,7 +63,6 @@ class StandardizedPick(BaseModel):
     league: str
     pick_value: str
     bet_type: str
-    # CHANGED: Unit is now Optional
     unit: Optional[float] = None
     odds_american: Optional[int] = None
     source_url: str

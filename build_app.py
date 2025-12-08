@@ -1,3 +1,4 @@
+# build_app.py
 import PyInstaller.__main__
 import os
 import sys
@@ -11,8 +12,6 @@ def get_separator():
     return ';' if sys.platform == 'win32' else ':'
 
 def build():
-    # NOTE: Cleaning handled by external script to avoid lock errors
-    
     # Base arguments
     args = [
         ENTRY_POINT,
@@ -25,7 +24,14 @@ def build():
         '--exclude-module=scipy',
         '--exclude-module=pandas', 
         '--exclude-module=numpy',
+        
+        # --- FIX: ADD THESE HIDDEN IMPORTS ---
         '--hidden-import=webview',
+        '--hidden-import=webview.platforms.winforms',      # Required for Windows
+        '--hidden-import=webview.platforms.edgechromium',  # Required for Edge
+        '--hidden-import=clr',                             # Required for pythonnet
+        '--hidden-import=System',                          # Required for .NET interaction
+        # -------------------------------------
     ]
 
     # --- DATA BUNDLING ---

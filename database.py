@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import datetime, timedelta, timezone
 from typing import List, Optional, Any
 from supabase import create_client, Client
@@ -75,22 +76,27 @@ class DatabaseManager:
             logger.error(f"Error fetching picks: {e}")
             return []
 
+    def _normalize_capper_name(self, name: str) -> str:
+        # Remove emojis, special chars like *, -, _, and extra spaces
+        # " **AFS** " -> "AFS"
+        clean = re.sub(r'[^a-zA-Z0-9\s]', '', name)
+        return ' '.join(clean.strip().split()).title()
+
     def get_or_create_capper(self, name: str, fuzzer) -> Optional[int]:
         if not self.client or not name: return None
         
-        # 1. Normalize Name
-        normalized = ' '.join(name.strip().split()).title()
+        # 1. Normalize Name (Strict Cleaning)
+        normalized = self._normalize_capper_name(name)
+        if not normalized: return None
         
-        # 2. POPULATE CACHE (The Fix)
-        # If cache is empty, fetch the ENTIRE directory (up to 10k).
-        # This ensures fuzzy matching works against EVERYONE, not just recent cappers.
+        # 2. POPULATE CACHE
         if not self.capper_cache:
             try:
                 logger.info("📚 Loading Capper Directory into cache...")
-                # Fetch ID and Name for up to 10,000 cappers
                 res = self.client.table('capper_directory').select('id, canonical_name').limit(10000).execute()
                 for item in res.data:
-                    c_name = item['canonical_name'].strip().title()
+                    # Also normalize cache keys to ensure matching works
+                    c_name = self._normalize_capper_name(item['canonical_name'])
                     self.capper_cache[c_name] = item['id']
                 logger.info(f"📚 Loaded {len(self.capper_cache)} cappers.")
             except Exception as e:
@@ -120,8 +126,6 @@ class DatabaseManager:
 
         except Exception as e:
             # 6. THE LOOP BACK (Conflict Recovery)
-            # If insert failed (409 Conflict), it means it exists but wasn't in our cache.
-            # Fetch it directly.
             try:
                 res = self.client.table('capper_directory').select('id').eq('canonical_name', normalized).execute()
                 if res.data:

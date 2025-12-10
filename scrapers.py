@@ -86,7 +86,8 @@ class TelegramScraper:
         except: return ""
 
     def _get_pick_regex(self):
-        return r"([+-]\d+|\b(ML|Pk|Pick'?em|Ev|Even)\b|\b(Over|Under)\b|\d+(\.\d+)?\s*u)"
+        # Looks for Spread (-5, +3.5), Moneyline (ML, Pk), Totals (Over, Under), or Units (2u)
+        return r"([+-]\d+\.?\d*|\b(ML|Pk|Pick'?em|Ev|Even)\b|\b(Over|Under|o|u)\s*\d+|\d+(\.\d+)?\s*u)"
 
     def _clean_capper_name(self, name: str) -> str:
         return re.sub(r'^[\W_]+|[\W_]+$', '', name).strip()
@@ -109,9 +110,21 @@ class TelegramScraper:
 
     def _is_valid_pick_message(self, text: str) -> bool:
         if not text: return False
+        
+        # 1. Must contain pick-like numbers or keywords
         if not re.search(self._get_pick_regex(), text, re.I): return False
+        
+        # 2. Explicit Exclusions (Grading, Results, Spam)
         if re.search(r'\b(VOID|CANCEL|REFUND|CORRECTION|LOSS|PUSH|GRADE|WON|LOST)\b', text, re.I): return False
-        if re.search(r'(❌|💰|🚫)', text): return False
+        if re.search(r'(❌|💰|🚫|✅)', text): return False # Results usually have these
+        
+        # 3. Spam Filters (New)
+        lower = text.lower()
+        if "dm me" in lower or "join vip" in lower or "promo code" in lower:
+            # If it's short and spammy, ignore it. 
+            # If it's long, it might be a pick with a footer, so we keep it.
+            if len(text) < 200: return False
+            
         return True
 
     async def scrape(self):
@@ -119,19 +132,15 @@ class TelegramScraper:
         try:
             await self.client.start()
             
-            # 1. Determine "Start of Today" (Absolute Hard Stop)
-            # This logic strictly enforces scraping ONLY from 00:00 ET today onwards.
             try:
                 tz = ZoneInfo("US/Eastern")
             except Exception:
-                # Fallback for systems without tzdata
                 tz = timezone(timedelta(hours=-5))
 
             now_et = datetime.now(tz)
             start_of_today_et = now_et.replace(hour=0, minute=0, second=0, microsecond=0)
             start_of_today_utc = start_of_today_et.astimezone(timezone.utc)
             
-            # We track the run start time to update checkpoints if no new messages are found
             run_start_time = datetime.now(timezone.utc)
 
             for entity_id in config.TELEGRAM_CHANNELS:
@@ -143,16 +152,11 @@ class TelegramScraper:
                     title = getattr(entity, 'title', 'Unknown')
                     channel_id = getattr(entity, 'id', 0)
                     
-                    # 2. Get Last Checkpoint for this specific channel
                     last_scraped = db.get_last_checkpoint(channel_id)
                     
-                    # FIX: Ensure last_scraped is timezone-aware (UTC) to prevent TypeError
                     if last_scraped and last_scraped.tzinfo is None:
                         last_scraped = last_scraped.replace(tzinfo=timezone.utc)
                     
-                    # 3. Determine Cutoff: Max(Start of Today, Last Checkpoint)
-                    # If we scraped 1 hour ago, resume from there.
-                    # If we scraped yesterday, force jump to Start of Today.
                     if last_scraped:
                         cutoff_utc = max(last_scraped, start_of_today_utc)
                         logger.info(f"🔄 Resuming {title} from {cutoff_utc}")
@@ -160,15 +164,12 @@ class TelegramScraper:
                         cutoff_utc = start_of_today_utc
                         logger.info(f"📅 First run for {title}: Scanning from {cutoff_utc}")
 
-                    # 4. Iterate
                     latest_msg_date = None
                     
                     async for msg in self.client.iter_messages(entity, limit=None):
-                        # STOP CONDITION: If message is older than our cutoff, stop.
                         if msg.date <= cutoff_utc:
                             break 
 
-                        # Capture the date of the newest message we see (that is within the window)
                         if latest_msg_date is None:
                             latest_msg_date = msg.date
                         
@@ -190,9 +191,6 @@ class TelegramScraper:
                         )
                         db.upload_raw_pick(pick)
                     
-                    # 5. Update Checkpoint
-                    # If we found new messages, update to the latest one.
-                    # If we found NO messages (channel silent today), update to NOW so we don't re-scan empty time.
                     new_checkpoint = latest_msg_date if latest_msg_date else run_start_time
                     db.update_checkpoint(channel_id, new_checkpoint)
                         

@@ -5,26 +5,36 @@ from models import ParsedPick, RawPick
 
 logger = logging.getLogger(__name__)
 
-# Stricter Unit Regex: Must be explicitly labeled 'u', 'unit', 'star', etc.
-# This allows "150u" or "1000 units" but ignores "-150" (odds).
+# 1. Units: "5u", "5.5 units", "10 star"
 RE_UNIT = re.compile(r'\b(?P<val>\d+(\.\d+)?)\s*(u|unit|star)s?\b', re.IGNORECASE)
-RE_ODDS = re.compile(r'\(([-+]?\d{3,})\)|\b([-+]?\d{3,})\b')
+
+# 2. Odds Extraction
+# Looks for 3+ digit numbers with optional +/- (e.g., -110, +200, 110)
+RE_ODDS = re.compile(r'(?<!\d)([-+]?\d{3,})(?!\d)')
 
 PATTERNS = [
+    # 1. TOTALS (Start with O/U): "Over 215.5", "o 55.5"
     {
         'type': 'Total',
         're': re.compile(r"^(?P<dir>o|u|over|under)\s*(?P<line>\d+(\.\d+)?)\s*(?P<odds_part>.*)$", re.I),
         'val_fmt': "{dir} {line}"
     },
+    # 2. PLAYER PROPS / TEAM TOTALS (Name + O/U + Line): "Jalen Hurts Over 31.5"
+    {
+        'type': 'Player Prop', 
+        're': re.compile(r"^(?P<name>.+?)\s+(?P<dir>over|under|o|u)\s*(?P<line>\d+(\.\d+)?)\s*(?P<stat>[a-zA-Z\s]+)?(?P<odds_part>.*)$", re.I),
+        'val_fmt': "{name} {dir} {line} {stat}"
+    },
+    # 3. MONEYLINE (Explicit): "Lakers ML", "Celtics Moneyline"
     {
         'type': 'Moneyline',
-        're': re.compile(r"^(?P<team>.+?)\s+(?:ML|Moneyline)\s*(?P<odds_part>.*)$", re.I),
+        're': re.compile(r"^(?P<team>.+?)\s+(?:ML|Moneyline|M/L)\s*(?P<odds_part>.*)$", re.I),
         'val_fmt': "{team} ML"
     },
+    # 4. SPREADS / HANDICAPS (The tricky one)
+    # Matches "Team -5", "Team +3.5", "Team -110" (Ambiguous)
     {
         'type': 'Spread',
-        # Stricter spread: Look for team followed by -X or +X. 
-        # Excludes lines starting with O/U to avoid totals being caught as spreads.
         're': re.compile(r"^(?!over|under|o\s|u\s)(?P<team>.{2,}?)\s+(?P<spread>[-+]\d+(\.\d+)?|Pk|Pick'em|Ev)\s*(?P<odds_part>.*)$", re.I),
         'val_fmt': "{team} {spread}"
     }
@@ -32,39 +42,32 @@ PATTERNS = [
 
 def _extract_unit(text: str) -> Optional[float]:
     if not text: return None
-    
-    # 1. Explicit units (e.g., "150u", "500 units", "5*")
     m = RE_UNIT.search(text)
     if m:
-        try:
-            return float(m.group('val'))
-        except:
-            pass
-            
-    # 2. Keywords
+        try: return float(m.group('val'))
+        except: pass
+    
     lower = text.lower()
     if 'max' in lower or 'whale' in lower: return 5.0
-    
+    if 'pod' in lower or 'potd' in lower: return 3.0
     return None
 
 def _extract_odds(text: str) -> Optional[int]:
     if not text: return None
-    # Find numbers > 100 or < -100
+    # Look for odds in the remaining text
     matches = RE_ODDS.findall(text)
     for m in matches:
-        val_str = m[0] or m[1]
         try:
-            val = int(val_str)
+            val = int(m)
+            # Standard US odds are usually >100 or <-100
             if abs(val) >= 100: return val
-        except:
-            continue
+        except: continue
     return None
 
 def _stitch_lines(lines: List[str]) -> List[str]:
     stitched = []
     skip_next = False
-    # Look for lines starting with spread/total indicators
-    start_info_re = re.compile(r'^([-+]\d|ML|Over|Under|o\d|u\d)', re.I)
+    start_info_re = re.compile(r'^([-+]\d|ML|Over|Under|o\s*\d|u\s*\d|[-+]\d{3})', re.I)
     
     for i in range(len(lines)):
         if skip_next:
@@ -73,7 +76,6 @@ def _stitch_lines(lines: List[str]) -> List[str]:
         current = lines[i]
         if i < len(lines) - 1:
             next_line = lines[i+1]
-            # If current line is just text and next line starts with numbers/bet info
             if not start_info_re.match(current) and start_info_re.match(next_line):
                 stitched.append(f"{current} {next_line}")
                 skip_next = True
@@ -82,15 +84,11 @@ def _stitch_lines(lines: List[str]) -> List[str]:
     return stitched
 
 def parse_with_regex(raw: RawPick) -> Optional[ParsedPick]:
-    # Clean raw text
     lines = [l.strip() for l in raw.raw_text.split('\n') if l.strip()]
-    lines = [l for l in lines if len(l) < 100 and not l.lower().startswith('http')]
-    
+    lines = [l for l in lines if len(l) < 150 and not l.lower().startswith('http')]
     lines = _stitch_lines(lines)
     
-    # Only try regex on short messages. Complex ones go to AI.
-    if len(lines) > 4: 
-        return None
+    if len(lines) > 6: return None
 
     for line in lines:
         for pat in PATTERNS:
@@ -99,20 +97,58 @@ def parse_with_regex(raw: RawPick) -> Optional[ParsedPick]:
                 data = match.groupdict()
                 odds_part = data.get('odds_part', '')
                 
+                # --- LOGIC TO HANDLE SPREAD VS ODDS ---
+                if pat['type'] == 'Spread':
+                    raw_spread = data['spread']
+                    
+                    # Handle "Pk", "Ev"
+                    if raw_spread.lower() in ['pk', "pick'em", 'ev']:
+                        final_spread = '-0'
+                    else:
+                        try:
+                            val = float(raw_spread)
+                            # CRITICAL CHECK: Is this a spread (-5) or Moneyline odds (-110)?
+                            if abs(val) >= 100:
+                                # It's actually Moneyline Odds!
+                                # Example: "Lakers -150" -> Team: Lakers, Odds: -150
+                                return ParsedPick(
+                                    raw_pick_id=raw.id or 0,
+                                    league="Unknown",
+                                    bet_type="Moneyline",
+                                    pick_value=f"{data['team'].strip()} ML",
+                                    unit=_extract_unit(odds_part),
+                                    odds_american=int(val)
+                                )
+                            final_spread = raw_spread
+                        except:
+                            continue # Not a valid number
+
+                    # If we are here, it's a valid small number spread (e.g. -5)
+                    # Now look for odds in the 'odds_part' (e.g. "+110" in "Lakers -5 +110")
+                    found_odds = _extract_odds(odds_part)
+                    
+                    return ParsedPick(
+                        raw_pick_id=raw.id or 0,
+                        league="Unknown",
+                        bet_type="Spread",
+                        pick_value=f"{data['team'].strip()} {final_spread}",
+                        unit=_extract_unit(odds_part),
+                        odds_american=found_odds
+                    )
+
+                # --- HANDLING TOTALS & PROPS ---
                 if pat['type'] == 'Total':
                     direction = data['dir'].lower()
                     if direction.startswith('o'): data['dir'] = 'Over'
                     elif direction.startswith('u'): data['dir'] = 'Under'
                 
-                if pat['type'] == 'Spread':
-                    spr = data['spread'].lower()
-                    if spr in ['pk', "pick'em", 'ev']: data['spread'] = '-0'
-                    # Safety: If spread is > 50 (likely a total), ignore
-                    try:
-                        if abs(float(data['spread'])) > 50: continue
-                    except: pass
+                if pat['type'] == 'Player Prop':
+                    direction = data['dir'].lower()
+                    if direction.startswith('o'): data['dir'] = 'Over'
+                    elif direction.startswith('u'): data['dir'] = 'Under'
+                    if not data.get('stat'): data['stat'] = ''
 
-                pick_val = pat['val_fmt'].format(**data)
+                pick_val = pat['val_fmt'].format(**data).strip()
                 
                 return ParsedPick(
                     raw_pick_id=raw.id or 0,

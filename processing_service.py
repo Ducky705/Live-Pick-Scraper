@@ -16,6 +16,30 @@ def sanitize_text(text: str) -> str:
     if not text: return ""
     return re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', text)
 
+def clean_ocr_garbage(text: str) -> str:
+    """
+    Removes lines that look like OCR noise (low alphanumeric density, just symbols).
+    """
+    if not text: return ""
+    lines = text.split('\n')
+    valid_lines = []
+    
+    for line in lines:
+        stripped = line.strip()
+        if len(stripped) < 3: continue # Skip very short lines
+        
+        # Count alphanumeric chars
+        alpha_num = sum(c.isalnum() for c in stripped)
+        total = len(stripped)
+        
+        # If line is mostly symbols (e.g. " . - ; . "), skip it
+        if total > 0 and (alpha_num / total) < 0.5:
+            continue
+            
+        valid_lines.append(stripped)
+        
+    return "\n".join(valid_lines)
+
 def get_existing_pick_signatures(capper_ids: List[int], dates: List[str]) -> Set[Tuple[int, str, str, str]]:
     """
     Queries the DB to find existing picks for these cappers on these dates
@@ -69,6 +93,9 @@ def process_picks():
 
     # 2. Parse
     for pick in raw_picks:
+        # CLEAN OCR NOISE HERE
+        pick.raw_text = clean_ocr_garbage(pick.raw_text)
+        
         # Heuristic: If short and simple, try Regex first to save AI tokens
         if len(pick.raw_text) < 150 and "\n" not in pick.raw_text:
             simple = simple_parser.parse_with_regex(pick)

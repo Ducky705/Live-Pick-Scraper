@@ -531,6 +531,7 @@ jobs:
           fi
 """
 
+# REMOVED CACHE TESSERACT STEP TO FIX PERMISSION ERROR
 SCRAPE_AND_PROCESS_YML = """name: Sniper Pick Scraper
 
 on:
@@ -565,15 +566,7 @@ jobs:
           python-version: '3.11'
           cache: 'pip' 
 
-      - name: Cache Tesseract
-        id: cache-tesseract
-        uses: actions/cache@v3
-        with:
-          path: /usr/bin/tesseract
-          key: ${{ runner.os }}-tesseract-v2
-
       - name: Install System Dependencies
-        if: steps.cache-tesseract.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y tesseract-ocr libtesseract-dev

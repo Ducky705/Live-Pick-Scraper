@@ -35,7 +35,7 @@ LEAGUE_KEYWORDS = {
         'Padres', 'Royals', 'Twins', 'Astros', 'Mariners', 'Diamondbacks', 'D-Backs', 
         'Mets', 'Rays', 'Red Sox', 'Tigers', 'Cubs', 'Giants', 'Reds', 'Cardinals', 
         'Blue Jays', 'Jays', 'Pirates', 'Nationals', 'Nats', 'Angels', 'Rangers', 
-        'Marlins', 'Rockies', 'Athletics', 'A\'s', 'White Sox', 'Guardians'
+        'Marlins', 'Rockies', 'Athletics', "A's", 'White Sox', 'Guardians'
     ],
     'NCAAF': [
         # --- SEC ---
@@ -176,7 +176,7 @@ LEAGUE_KEYWORDS = {
         'Mystics', 'Sky', 'Wings', 'Sparks', 'Caitlin Clark', 'Angel Reese'
     ],
     'UFC': [
-        'Makhachev', 'Jones', 'Pereira', 'Topuria', 'O'Malley', 'Strickland', 
+        'Makhachev', 'Jones', 'Pereira', 'Topuria', "O'Malley", 'Strickland', 
         'Du Plessis', 'Edwards', 'Aspinall', 'Pantoja', 'Grasso', 'Zhang', 'Shevchenko', 
         'Nunes', 'McGregor', 'Poirier', 'Gaethje', 'Oliveira', 'Holloway', 'Volkanovski', 
         'Adesanya', 'Whittaker', 'Chimaev', 'Usman', 'Covington', 'Muhammad', 

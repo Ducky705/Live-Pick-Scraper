@@ -132,13 +132,12 @@ class TelegramScraper:
             
         return True
 
-    async def scrape(self):
+    async def scrape(self, force_full_day=False):
         if not self.client:
             logger.warning("Telegram Client not initialized. Skipping scrape.")
             return
 
         try:
-            # Wrap connection logic in try/except to prevent crash on invalid session
             try:
                 await self.client.start()
             except (SessionPasswordNeededError, AuthKeyError, ValueError) as e:
@@ -173,12 +172,14 @@ class TelegramScraper:
                     if last_scraped and last_scraped.tzinfo is None:
                         last_scraped = last_scraped.replace(tzinfo=timezone.utc)
                     
-                    if last_scraped:
+                    # LOGIC: If force_full_day is True, we ignore the checkpoint and start from 00:00 Today.
+                    # Otherwise, we use the checkpoint (efficient).
+                    if last_scraped and not force_full_day:
                         cutoff_utc = max(last_scraped, start_of_today_utc)
                         logger.info(f"🔄 Resuming {title} from {cutoff_utc}")
                     else:
                         cutoff_utc = start_of_today_utc
-                        logger.info(f"📅 First run for {title}: Scanning from {cutoff_utc}")
+                        logger.info(f"📅 Full Day Scan for {title}: Scanning from {cutoff_utc}")
 
                     latest_msg_date = None
                     
@@ -207,8 +208,12 @@ class TelegramScraper:
                         )
                         db.upload_raw_pick(pick)
                     
-                    new_checkpoint = latest_msg_date if latest_msg_date else run_start_time
-                    db.update_checkpoint(channel_id, new_checkpoint)
+                    # Only update checkpoint if we actually found a newer message
+                    if latest_msg_date:
+                         db.update_checkpoint(channel_id, latest_msg_date)
+                    elif not last_scraped:
+                         # If it was a first run and no messages, set checkpoint to now so we don't scan forever next time
+                         db.update_checkpoint(channel_id, run_start_time)
                         
                 except Exception as e:
                     logger.error(f"Error scraping {entity_id}: {e}")
@@ -216,6 +221,6 @@ class TelegramScraper:
             if self.client.is_connected():
                 await self.client.disconnect()
 
-async def run_scrapers():
+async def run_scrapers(force=False):
     s = TelegramScraper()
-    await s.scrape()
+    await s.scrape(force_full_day=force)

@@ -139,13 +139,12 @@ class TelegramScraper:
             
         return True
 
-    async def scrape(self):
+    async def scrape(self, force_full_day=False):
         if not self.client:
             logger.warning("Telegram Client not initialized. Skipping scrape.")
             return
 
         try:
-            # Wrap connection logic in try/except to prevent crash on invalid session
             try:
                 await self.client.start()
             except (SessionPasswordNeededError, AuthKeyError, ValueError) as e:
@@ -180,12 +179,14 @@ class TelegramScraper:
                     if last_scraped and last_scraped.tzinfo is None:
                         last_scraped = last_scraped.replace(tzinfo=timezone.utc)
                     
-                    if last_scraped:
+                    # LOGIC: If force_full_day is True, we ignore the checkpoint and start from 00:00 Today.
+                    # Otherwise, we use the checkpoint (efficient).
+                    if last_scraped and not force_full_day:
                         cutoff_utc = max(last_scraped, start_of_today_utc)
                         logger.info(f"🔄 Resuming {title} from {cutoff_utc}")
                     else:
                         cutoff_utc = start_of_today_utc
-                        logger.info(f"📅 First run for {title}: Scanning from {cutoff_utc}")
+                        logger.info(f"📅 Full Day Scan for {title}: Scanning from {cutoff_utc}")
 
                     latest_msg_date = None
                     
@@ -214,8 +215,12 @@ class TelegramScraper:
                         )
                         db.upload_raw_pick(pick)
                     
-                    new_checkpoint = latest_msg_date if latest_msg_date else run_start_time
-                    db.update_checkpoint(channel_id, new_checkpoint)
+                    # Only update checkpoint if we actually found a newer message
+                    if latest_msg_date:
+                         db.update_checkpoint(channel_id, latest_msg_date)
+                    elif not last_scraped:
+                         # If it was a first run and no messages, set checkpoint to now so we don't scan forever next time
+                         db.update_checkpoint(channel_id, run_start_time)
                         
                 except Exception as e:
                     logger.error(f"Error scraping {entity_id}: {e}")
@@ -223,325 +228,90 @@ class TelegramScraper:
             if self.client.is_connected():
                 await self.client.disconnect()
 
-async def run_scrapers():
+async def run_scrapers(force=False):
     s = TelegramScraper()
-    await s.scrape()
+    await s.scrape(force_full_day=force)
 """
 
-SIMPLE_PARSER_PY = """import re
+MAIN_PY = """import asyncio
 import logging
-from typing import Optional, List
-from models import ParsedPick, RawPick
+import argparse
+import sys
+from datetime import datetime
 
+import config
+from scrapers import run_scrapers
+from processing_service import process_picks
+from database import db
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - [%(levelname)s] - %(name)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# 1. Units: "5u", "5.5 units", "10 star"
-RE_UNIT = re.compile(r'\\b(?P<val>\\d+(\\.\\d+)?)\\s*(u|unit|star)s?\\b', re.IGNORECASE)
-
-# 2. Odds Extraction
-# Looks for 3+ digit numbers with optional +/- (e.g., -110, +200, 110)
-RE_ODDS = re.compile(r'(?<!\\d)([-+]?\\d{3,})(?!\\d)')
-
-PATTERNS = [
-    # 1. TOTALS (Start with O/U): "Over 215.5", "o 55.5"
-    {
-        'type': 'Total',
-        're': re.compile(r"^(?P<dir>o|u|over|under)\\s*(?P<line>\\d+(\\.\\d+)?)\\s*(?P<odds_part>.*)$", re.I),
-        'val_fmt': "{dir} {line}"
-    },
-    # 2. PLAYER PROPS / TEAM TOTALS (Name + O/U + Line): "Jalen Hurts Over 31.5"
-    {
-        'type': 'Player Prop', 
-        're': re.compile(r"^(?P<name>.+?)\\s+(?P<dir>over|under|o|u)\\s*(?P<line>\\d+(\\.\\d+)?)\\s*(?P<stat>[a-zA-Z\\s]+)?(?P<odds_part>.*)$", re.I),
-        'val_fmt': "{name} {dir} {line} {stat}"
-    },
-    # 3. MONEYLINE (Explicit): "Lakers ML", "Celtics Moneyline"
-    {
-        'type': 'Moneyline',
-        're': re.compile(r"^(?P<team>.+?)\\s+(?:ML|Moneyline|M/L)\\s*(?P<odds_part>.*)$", re.I),
-        'val_fmt': "{team} ML"
-    },
-    # 4. SPREADS / HANDICAPS (The tricky one)
-    # Matches "Team -5", "Team +3.5", "Team -110" (Ambiguous)
-    {
-        'type': 'Spread',
-        're': re.compile(r"^(?!over|under|o\\s|u\\s)(?P<team>.{2,}?)\\s+(?P<spread>[-+]\\d+(\\.\\d+)?|Pk|Pick'em|Ev)\\s*(?P<odds_part>.*)$", re.I),
-        'val_fmt': "{team} {spread}"
-    }
-]
-
-def _extract_unit(text: str) -> Optional[float]:
-    if not text: return None
-    m = RE_UNIT.search(text)
-    if m:
-        try: return float(m.group('val'))
-        except: pass
+async def run_pipeline(force=False):
+    logger.info("🚀 STARTING SNIPER PIPELINE")
     
-    lower = text.lower()
-    if 'max' in lower or 'whale' in lower: return 5.0
-    if 'pod' in lower or 'potd' in lower: return 3.0
-    return None
+    # --- PHASE 1: SCRAPE TODAY'S PICKS ---
+    try:
+        logger.info(f"📡 Checking Telegram (Force Full Day: {force})...")
+        await run_scrapers(force=force)
+    except Exception as e:
+        logger.error(f"❌ Scraper Crashed: {e}")
+        sys.exit(1)
 
-def _extract_odds(text: str) -> Optional[int]:
-    if not text: return None
-    # Look for odds in the remaining text
-    matches = RE_ODDS.findall(text)
-    for m in matches:
-        try:
-            val = int(m)
-            # Standard US odds are usually >100 or <-100
-            if abs(val) >= 100: return val
-        except: continue
-    return None
+    # --- PHASE 2: EFFICIENCY CHECK ---
+    # Check if there is ANY work to do.
+    try:
+        pending_picks = db.get_pending_raw_picks(limit=1)
+        if not pending_picks:
+            logger.info("🛑 No new picks & no pending retries. SHUTTING DOWN.")
+            sys.exit(0) # Exit with success code
+    except Exception as e:
+        logger.error(f"Error checking DB status: {e}")
 
-def _stitch_lines(lines: List[str]) -> List[str]:
-    stitched = []
-    skip_next = False
-    start_info_re = re.compile(r'^([-+]\\d|ML|Over|Under|o\\s*\\d|u\\s*\\d|[-+]\\d{3})', re.I)
-    
-    for i in range(len(lines)):
-        if skip_next:
-            skip_next = False
-            continue
-        current = lines[i]
-        if i < len(lines) - 1:
-            next_line = lines[i+1]
-            if not start_info_re.match(current) and start_info_re.match(next_line):
-                stitched.append(f"{current} {next_line}")
-                skip_next = True
-                continue
-        stitched.append(current)
-    return stitched
+    # --- PHASE 3: PROCESS BATCHES ---
+    logger.info("🧠 Work detected! Running AI Processor...")
+    try:
+        # FIX: Reduced batch count from 5 to 2 to prevent GitHub Action timeouts.
+        # Previous runs took ~2 mins per batch, causing 10m+ runs which get cancelled.
+        for i in range(2): 
+            if not db.get_pending_raw_picks(limit=1):
+                break
+            process_picks()
+            await asyncio.sleep(1) 
+    except Exception as e:
+        logger.error(f"❌ Processor Crashed: {e}")
 
-def parse_with_regex(raw: RawPick) -> Optional[ParsedPick]:
-    if not raw.raw_text: return None
-    
-    lines = [l.strip() for l in raw.raw_text.split('\\n') if l.strip()]
-    lines = [l for l in lines if len(l) < 150 and not l.lower().startswith('http')]
-    lines = _stitch_lines(lines)
-    
-    if len(lines) > 6: return None
+    # --- PHASE 4: CLEANUP ---
+    try:
+        db.archive_old_picks(config.ARCHIVE_AFTER_HOURS)
+    except: pass
 
-    for line in lines:
-        for pat in PATTERNS:
-            match = pat['re'].match(line)
-            if match:
-                data = match.groupdict()
-                odds_part = data.get('odds_part', '')
-                
-                # --- LOGIC TO HANDLE SPREAD VS ODDS ---
-                if pat['type'] == 'Spread':
-                    raw_spread = data['spread']
-                    
-                    # Handle "Pk", "Ev"
-                    if raw_spread.lower() in ['pk', "pick'em", 'ev']:
-                        final_spread = '-0'
-                    else:
-                        try:
-                            val = float(raw_spread)
-                            # CRITICAL CHECK: Is this a spread (-5) or Moneyline odds (-110)?
-                            if abs(val) >= 100:
-                                # It's actually Moneyline Odds!
-                                # Example: "Lakers -150" -> Team: Lakers, Odds: -150
-                                return ParsedPick(
-                                    raw_pick_id=raw.id or 0,
-                                    league="Unknown",
-                                    bet_type="Moneyline",
-                                    pick_value=f"{data['team'].strip()} ML",
-                                    unit=_extract_unit(odds_part),
-                                    odds_american=int(val)
-                                )
-                            final_spread = raw_spread
-                        except:
-                            continue # Not a valid number
-
-                    # If we are here, it's a valid small number spread (e.g. -5)
-                    # Now look for odds in the 'odds_part' (e.g. "+110" in "Lakers -5 +110")
-                    found_odds = _extract_odds(odds_part)
-                    
-                    return ParsedPick(
-                        raw_pick_id=raw.id or 0,
-                        league="Unknown",
-                        bet_type="Spread",
-                        pick_value=f"{data['team'].strip()} {final_spread}",
-                        unit=_extract_unit(odds_part),
-                        odds_american=found_odds
-                    )
-
-                # --- HANDLING TOTALS & PROPS ---
-                if pat['type'] == 'Total':
-                    direction = data['dir'].lower()
-                    if direction.startswith('o'): data['dir'] = 'Over'
-                    elif direction.startswith('u'): data['dir'] = 'Under'
-                
-                if pat['type'] == 'Player Prop':
-                    direction = data['dir'].lower()
-                    if direction.startswith('o'): data['dir'] = 'Over'
-                    elif direction.startswith('u'): data['dir'] = 'Under'
-                    if not data.get('stat'): data['stat'] = ''
-
-                pick_val = pat['val_fmt'].format(**data).strip()
-                
-                return ParsedPick(
-                    raw_pick_id=raw.id or 0,
-                    league="Unknown",
-                    bet_type=pat['type'],
-                    pick_value=pick_val,
-                    unit=_extract_unit(odds_part),
-                    odds_american=_extract_odds(odds_part)
-                )
-    return None
-"""
-
-SCHEDULER_PY = """import datetime
-import os
-import re
-
-# ==============================================================================
-# 🧠 THE BRAIN: SEASONAL LOGIC
-# ==============================================================================
-def get_optimized_schedule():
-    today = datetime.date.today()
-    month = today.month
-
-    # ------------------------------------------------------------------
-    # SEASON 1: THE "FULL SEND" (September - January)
-    # Active: NFL, NCAAF, NBA, NHL, CBB
-    # Strategy: Heavy Weekend Mornings (Football) + Heavy Daily Evenings
-    # ------------------------------------------------------------------
-    if month in [9, 10, 11, 12, 1]:
-        print(f"📅 Month {month}: Detected FOOTBALL/WINTER Season. Loading Max Schedule.")
-        return [
-            "- cron: '0 14-23,0-4 * * *'",       # Baseline: Hourly 10am-12am ET
-            "- cron: '15,30,45 21-23 * * 1-5'",  # Weekdays: Every 15m 5pm-8pm ET (NBA/NHL/MNF)
-            "- cron: '15,30,45 15-20 * * 0,6'"   # Weekends: Every 15m 11am-4pm ET (NFL/NCAAF Kickoffs)
-        ]
-
-    # ------------------------------------------------------------------
-    # SEASON 2: MARCH MADNESS (March)
-    # Active: NCAA Tournament, NBA, NHL
-    # Strategy: Heavy All Day on Weekends
-    # ------------------------------------------------------------------
-    elif month == 3:
-        print(f"📅 Month {month}: Detected MARCH MADNESS. Loading Tournament Schedule.")
-        return [
-            "- cron: '0 14-23,0-4 * * *'",       # Baseline: Hourly
-            "- cron: '15,30,45 16-23 * * 4-7'"   # Thu-Sun: Every 15m 12pm-7pm ET (Tournament Games)
-        ]
-
-    # ------------------------------------------------------------------
-    # SEASON 3: PLAYOFFS & BASEBALL (February, April, May, June)
-    # Active: NBA/NHL Playoffs, MLB
-    # Strategy: Focus on Evenings. No Weekend Morning Blitz needed (No Football).
-    # ------------------------------------------------------------------
-    elif month in [2, 4, 5, 6]:
-        print(f"📅 Month {month}: Detected SPRING/PLAYOFF Season. Loading Evening Schedule.")
-        return [
-            "- cron: '0 15-23,0-4 * * *'",       # Baseline: Hourly
-            "- cron: '15,30,45 22-23 * * *'"     # Daily: Every 15m 6pm-8pm ET (Playoff Tipoffs/First Pitch)
-        ]
-
-    # ------------------------------------------------------------------
-    # SEASON 4: THE DEAD ZONE (July - August)
-    # Active: MLB Only
-    # Strategy: Save Money. Hourly only. No 15-minute blitzes.
-    # ------------------------------------------------------------------
-    else:
-        print(f"📅 Month {month}: Detected SUMMER/OFF-SEASON. Loading Economy Schedule.")
-        return [
-            "- cron: '0 16-23,0-4 * * *'"        # Baseline: Hourly 12pm-12am ET only
-        ]
-
-# ==============================================================================
-# 📝 THE WRITER: YAML UPDATER
-# ==============================================================================
-def update_workflow_file():
-    workflow_path = '.github/workflows/scrape_and_process.yml'
-    
-    if not os.path.exists(workflow_path):
-        print("❌ Workflow file not found.")
-        return
-
-    with open(workflow_path, 'r', encoding='utf-8') as f:
-        content = f.read()
-
-    new_cron_lines = get_optimized_schedule()
-    
-    # Regex to find the existing schedule block and replace it
-    # Looks for "schedule:" followed by any indented lines starting with "- cron:"
-    pattern = r"(schedule:\\s*\\n)(\\s*- cron:.*\\n)+"
-    
-    # Construct the replacement string
-    replacement = "\\\\1" + "\\n".join([f"    {line}" for line in new_cron_lines]) + "\\n"
-    
-    new_content = re.sub(pattern, replacement, content)
-
-    if new_content != content:
-        with open(workflow_path, 'w', encoding='utf-8') as f:
-            f.write(new_content)
-        print("✅ Schedule updated successfully.")
-        # Create a flag file so the GitHub Action knows to commit
-        with open("schedule_updated.flag", "w") as f:
-            f.write("true")
-    else:
-        print("⚡ Schedule is already optimized for this month. No changes.")
+    logger.info("🏁 Pipeline Finished")
 
 if __name__ == "__main__":
-    update_workflow_file()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--force", action="store_true", help="Force re-scrape of the entire day (00:00 ET)")
+    args = parser.parse_args()
+    asyncio.run(run_pipeline(force=args.force))
 """
 
-SCHEDULE_MANAGER_YML = """name: Schedule Manager
-
-on:
-  # Run at 00:00 on the 1st and 15th of every month
-  schedule:
-    - cron: '0 0 1,15 * *'
-  # Allow manual trigger to force an update
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-jobs:
-  optimize-schedule:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Calculate Optimal Schedule
-        run: python scheduler.py
-
-      - name: Commit Changes
-        run: |
-          if [ -f schedule_updated.flag ]; then
-            git config --global user.name 'SniperBot'
-            git config --global user.email 'bot@noreply.github.com'
-            git add .github/workflows/scrape_and_process.yml
-            git commit -m "📅 SniperBot: Optimized schedule for new sports season"
-            git push
-            echo "🚀 Schedule updated and pushed to repo."
-          else
-            echo "💤 No schedule changes needed."
-          fi
-"""
-
-# REMOVED CACHE TESSERACT STEP TO FIX PERMISSION ERROR
 SCRAPE_AND_PROCESS_YML = """name: Sniper Pick Scraper
 
 on:
+  # 1. Manual Trigger with Options
   workflow_dispatch:
+    inputs:
+      force_scrape:
+        description: 'Force Full Day Scrape (Ignore Checkpoints)'
+        required: false
+        default: false
+        type: boolean
+
+  # 2. Register changes immediately when you push to main
   push:
     branches: ["main"]
   
-  # 🤖 DYNAMIC SCHEDULE BLOCK
-  # This block is automatically managed by scheduler.py
-  # Do not manually edit the cron lines below, they will be overwritten.
+  # 3. DYNAMIC SCHEDULE BLOCK (Managed by scheduler.py)
   schedule:
     - cron: '0 14-23,0-4 * * *'
     - cron: '15,30,45 21-23 * * 1-5'
@@ -586,7 +356,17 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           AI_PARSER_MODEL: ${{ secrets.AI_PARSER_MODEL }}
         run: |
-          python main.py --force
+          # Logic:
+          # 1. If triggered manually with checkbox checked -> Run with --force
+          # 2. If triggered by Schedule or Push -> Run normally (incremental)
+          
+          if [[ "${{ github.event.inputs.force_scrape }}" == "true" ]]; then
+            echo "⚠️ MANUAL OVERRIDE: Forcing Full Day Scrape..."
+            python main.py --force
+          else
+            echo "⚡ Standard Run: Incremental Scrape..."
+            python main.py
+          fi
 """
 
 # ==============================================================================
@@ -604,13 +384,11 @@ def write_file(path, content):
     print(f"✅ Created/Updated: {path}")
 
 def main():
-    print("🚀 Applying Smart System Fixes...")
+    print("🚀 Applying Force Logic & YAML Updates...")
     
     files_to_write = {
         "scrapers.py": SCRAPERS_PY,
-        "simple_parser.py": SIMPLE_PARSER_PY,
-        "scheduler.py": SCHEDULER_PY,
-        ".github/workflows/schedule_manager.yml": SCHEDULE_MANAGER_YML,
+        "main.py": MAIN_PY,
         ".github/workflows/scrape_and_process.yml": SCRAPE_AND_PROCESS_YML
     }
 
@@ -618,7 +396,7 @@ def main():
         write_file(path, content)
 
     print("\n🎉 All files updated successfully!")
-    print("👉 Now run: git add . && git commit -m 'Apply Smart Schedule System' && git push")
+    print("👉 Now run: git add . && git commit -m 'Add Force Scrape Logic' && git push")
 
 if __name__ == "__main__":
     main()

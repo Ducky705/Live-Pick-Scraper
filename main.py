@@ -9,7 +9,7 @@ from scrapers import run_scrapers
 from processing_service import process_picks
 from database import db
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - [%(levelname)s] - %(name)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 async def run_pipeline(force=False):
@@ -17,8 +17,8 @@ async def run_pipeline(force=False):
     
     # --- PHASE 1: SCRAPE TODAY'S PICKS ---
     try:
-        logger.info("📡 Checking Telegram for TODAY'S messages...")
-        await run_scrapers()
+        logger.info(f"📡 Checking Telegram (Force Full Day: {force})...")
+        await run_scrapers(force=force)
     except Exception as e:
         logger.error(f"❌ Scraper Crashed: {e}")
         sys.exit(1)
@@ -55,6 +55,6 @@ async def run_pipeline(force=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--force", action="store_true")
+    parser.add_argument("--force", action="store_true", help="Force re-scrape of the entire day (00:00 ET)")
     args = parser.parse_args()
     asyncio.run(run_pipeline(force=args.force))

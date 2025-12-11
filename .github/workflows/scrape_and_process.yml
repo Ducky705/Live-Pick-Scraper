@@ -1,13 +1,20 @@
 name: Sniper Pick Scraper
 
 on:
+  # 1. Manual Trigger with Options
   workflow_dispatch:
+    inputs:
+      force_scrape:
+        description: 'Force Full Day Scrape (Ignore Checkpoints)'
+        required: false
+        default: false
+        type: boolean
+
+  # 2. Register changes immediately when you push to main
   push:
     branches: ["main"]
   
-  # 🤖 DYNAMIC SCHEDULE BLOCK
-  # This block is automatically managed by scheduler.py
-  # Do not manually edit the cron lines below, they will be overwritten.
+  # 3. DYNAMIC SCHEDULE BLOCK (Managed by scheduler.py)
   schedule:
     - cron: '0 14-23,0-4 * * *'
     - cron: '15,30,45 21-23 * * 1-5'
@@ -52,4 +59,14 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           AI_PARSER_MODEL: ${{ secrets.AI_PARSER_MODEL }}
         run: |
-          python main.py --force
+          # Logic:
+          # 1. If triggered manually with checkbox checked -> Run with --force
+          # 2. If triggered by Schedule or Push -> Run normally (incremental)
+          
+          if [[ "${{ github.event.inputs.force_scrape }}" == "true" ]]; then
+            echo "⚠️ MANUAL OVERRIDE: Forcing Full Day Scrape..."
+            python main.py --force
+          else
+            echo "⚡ Standard Run: Incremental Scrape..."
+            python main.py
+          fi

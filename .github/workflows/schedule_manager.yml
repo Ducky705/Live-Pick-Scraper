@@ -1,0 +1,39 @@
+name: Schedule Manager
+
+on:
+  # Run at 00:00 on the 1st and 15th of every month
+  schedule:
+    - cron: '0 0 1,15 * *'
+  # Allow manual trigger to force an update
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  optimize-schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Calculate Optimal Schedule
+        run: python scheduler.py
+
+      - name: Commit Changes
+        run: |
+          if [ -f schedule_updated.flag ]; then
+            git config --global user.name 'SniperBot'
+            git config --global user.email 'bot@noreply.github.com'
+            git add .github/workflows/scrape_and_process.yml
+            git commit -m "📅 SniperBot: Optimized schedule for new sports season"
+            git push
+            echo "🚀 Schedule updated and pushed to repo."
+          else
+            echo "💤 No schedule changes needed."
+          fi

@@ -1,40 +1,43 @@
 name: Sniper Pick Scraper
 
 on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+  
+  # 🤖 DYNAMIC SCHEDULE BLOCK
+  # This block is automatically managed by scheduler.py
+  # Do not manually edit the cron lines below, they will be overwritten.
   schedule:
-    # WEEKDAYS (Mon-Fri): Run at 5:30 PM ET (22:30 UTC)
-    - cron: '30 22 * * 1-5'
-    
-    # WEEKENDS (Sat-Sun): Run at 11:30 AM, 2:30 PM, 5:30 PM ET
-    # UTC Equivalents: 16:30, 19:30, 22:30
-    - cron: '30 16,19,22 * * 0,6'
+    - cron: '0 14-23,0-4 * * *'
+    - cron: '15,30,45 21-23 * * 1-5'
+    - cron: '15,30,45 15-20 * * 0,6'
 
-  # Allows manual trigger for testing
-  workflow_dispatch: 
+permissions:
+  contents: read
+  actions: write
 
 jobs:
   run-sniper:
     runs-on: ubuntu-latest
-    timeout-minutes: 8 # Hard limit to save money
+    timeout-minutes: 5
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
 
-      # --- CACHING STRATEGY ---
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
           cache: 'pip' 
 
-      # Cache Tesseract to save ~30s setup time
       - name: Cache Tesseract
         id: cache-tesseract
         uses: actions/cache@v3
         with:
           path: /usr/bin/tesseract
-          key: ${{ runner.os }}-tesseract-v1
+          key: ${{ runner.os }}-tesseract-v2
 
       - name: Install System Dependencies
         if: steps.cache-tesseract.outputs.cache-hit != 'true'
@@ -55,8 +58,6 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          # CHANGED: Now uses the Secret variable instead of hardcoded string
           AI_PARSER_MODEL: ${{ secrets.AI_PARSER_MODEL }}
         run: |
-          # The script will auto-exit early if no new data is found
           python main.py --force

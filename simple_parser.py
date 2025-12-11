@@ -84,6 +84,8 @@ def _stitch_lines(lines: List[str]) -> List[str]:
     return stitched
 
 def parse_with_regex(raw: RawPick) -> Optional[ParsedPick]:
+    if not raw.raw_text: return None
+    
     lines = [l.strip() for l in raw.raw_text.split('\n') if l.strip()]
     lines = [l for l in lines if len(l) < 150 and not l.lower().startswith('http')]
     lines = _stitch_lines(lines)

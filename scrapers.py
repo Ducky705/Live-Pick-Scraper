@@ -8,6 +8,7 @@ from zoneinfo import ZoneInfo
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import Message
+from telethon.errors import SessionPasswordNeededError, AuthKeyError
 
 import config
 from database import db
@@ -31,11 +32,15 @@ class TelegramScraper:
     def __init__(self):
         self.client = None
         if all([config.TELEGRAM_API_ID, config.TELEGRAM_API_HASH, config.TELEGRAM_SESSION_NAME]):
-            self.client = TelegramClient(
-                StringSession(config.TELEGRAM_SESSION_NAME), 
-                int(config.TELEGRAM_API_ID), 
-                config.TELEGRAM_API_HASH
-            )
+            try:
+                self.client = TelegramClient(
+                    StringSession(config.TELEGRAM_SESSION_NAME), 
+                    int(config.TELEGRAM_API_ID), 
+                    config.TELEGRAM_API_HASH
+                )
+            except Exception as e:
+                logger.error(f"Failed to initialize Telegram Client: {e}")
+                self.client = None
 
     def _remove_watermark(self, img):
         try:
@@ -52,6 +57,8 @@ class TelegramScraper:
         try:
             np_arr = np.frombuffer(image_bytes, np.uint8)
             img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+            if img is None: return ""
+            
             img = cv2.resize(img, None, fx=2.5, fy=2.5, interpolation=cv2.INTER_CUBIC)
             
             clean = self._remove_watermark(img)
@@ -121,16 +128,25 @@ class TelegramScraper:
         # 3. Spam Filters (New)
         lower = text.lower()
         if "dm me" in lower or "join vip" in lower or "promo code" in lower:
-            # If it's short and spammy, ignore it. 
-            # If it's long, it might be a pick with a footer, so we keep it.
             if len(text) < 200: return False
             
         return True
 
     async def scrape(self):
-        if not self.client: return
+        if not self.client:
+            logger.warning("Telegram Client not initialized. Skipping scrape.")
+            return
+
         try:
-            await self.client.start()
+            # Wrap connection logic in try/except to prevent crash on invalid session
+            try:
+                await self.client.start()
+            except (SessionPasswordNeededError, AuthKeyError, ValueError) as e:
+                logger.error(f"❌ Authentication failed (Invalid Session): {e}")
+                return
+            except Exception as e:
+                logger.error(f"❌ Connection failed: {e}")
+                return
             
             try:
                 tz = ZoneInfo("US/Eastern")
@@ -197,7 +213,8 @@ class TelegramScraper:
                 except Exception as e:
                     logger.error(f"Error scraping {entity_id}: {e}")
         finally:
-            await self.client.disconnect()
+            if self.client.is_connected():
+                await self.client.disconnect()
 
 async def run_scrapers():
     s = TelegramScraper()

@@ -25,12 +25,13 @@ Your job is to find valid picks hidden in messy Telegram messages and OCR text.
 
 ### RULES
 1. **IGNORE HYPE**: Words like "Banger", "Whale", "Lock" are noise.
-2. **FIND THE LINES**: Look for Team Names followed by a spread (+5, -3.5) or Moneyline.
-3. **OCR IS MESSY**: "Cow boy +5" -> "Cowboys +5".
-4. **IMPORTANT**: You MUST include the "raw_pick_id" from the input in your output object.
+2. **IGNORE OCR HEADERS**: Ignore lines like "[OCR RESULT (Combines 3 Passes)]:" and repetitive garbage text.
+3. **FIND THE LINES**: Look for Team Names followed by a spread (+5, -3.5) or Moneyline.
+4. **OCR IS MESSY**: "Cow boy +5" -> "Cowboys +5".
+5. **IMPORTANT**: You MUST include the "raw_pick_id" from the input in your output object.
 
 ### EXAMPLES
-Input: {{"raw_pick_id": 123, "text": "Lakers -5"}}
+Input: {{"raw_pick_id": 123, "text": "[OCR RESULT]:\nLakers -5\nLakers -5"}}
 Output: [{{"raw_pick_id": 123, "pick_value": "Lakers -5", "bet_type": "Spread", "unit": null, "odds_american": null, "league": "NBA"}}]
 
 ### DATA TO PROCESS

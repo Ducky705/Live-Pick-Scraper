@@ -1,11 +1,13 @@
+asyncio
 telethon
 supabase
-tenacity
 openai
-python-dotenv
-pytesseract
-thefuzz
+tenacity
 pydantic
-numpy
+python-dotenv
+# --- NEW DEPENDENCIES FOR V3 ---
+thefuzz
+python-levenshtein
 opencv-python-headless
-httpx
+pytesseract
+numpy

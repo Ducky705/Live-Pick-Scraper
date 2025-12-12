@@ -253,7 +253,8 @@ def standardize_bet_type(val: str) -> str:
         'FUTURE': 'Future', 'TO WIN': 'Future', 'OUTRIGHT': 'Future',
         'PERIOD': 'Period', 'QUARTER': 'Period', 'HALF': 'Period', 
         '1H': 'Period', '1Q': 'Period', '2H': 'Period', '2Q': 'Period',
-        'YRFI': 'Game Prop', 'NRFI': 'Game Prop'
+        'YRFI': 'Game Prop', 'NRFI': 'Game Prop',
+        'ANYTIME TD': 'Player Prop', 'ATD': 'Player Prop'
     }
     for k, v in mapping.items():
         if k in val: return v
@@ -276,6 +277,7 @@ def _smart_title_case(text: str) -> str:
         r'\bAtt\b': 'ATT', r'\bYds\b': 'Yds', r'\bTds\b': 'TDs', r'\bTd\b': 'TD',
         r'\bPts\b': 'Pts', r'\bReb\b': 'Reb', r'\bAst\b': 'Ast',
         r'\bYrfi\b': 'YRFI', r'\bNrfi\b': 'NRFI', r'\bSgp\b': 'SGP',
+        r'\bAtd\b': 'Anytime TD', r'\bAnytime Td\b': 'Anytime TD',
         
         # Periods
         r'\b1H\b': '1H', r'\b2H\b': '2H', r'\b1Q\b': '1Q', r'\b2Q\b': '2Q',
@@ -322,6 +324,11 @@ def format_pick_value(pick: str, bet_type: str, league: str) -> str:
         return pick
 
     if bet_type == 'Player Prop':
+        # Handle Anytime TD specifically
+        if "Anytime TD" in pick or "ATD" in pick:
+            clean = re.sub(r'\b(Anytime TD|ATD)\b', '', pick, flags=re.I).strip()
+            return f"{clean} Anytime TD"
+            
         if ':' not in pick:
             parts = pick.split()
             if len(parts) > 2:

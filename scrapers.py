@@ -97,17 +97,30 @@ class TelegramScraper:
         return r"([+-]\d+\.?\d*|\b(ML|Pk|Pick'?em|Ev|Even)\b|\b(Over|Under|o|u)\s*\d+|\d+(\.\d+)?\s*u)"
 
     def _clean_capper_name(self, name: str) -> str:
+        # Remove OCR artifacts from name if they slip through
+        name = name.replace("[OCR RESULT (Combines 3 Passes)]:", "").strip()
         return re.sub(r'^[\W_]+|[\W_]+$', '', name).strip()
 
     def _extract_capper_name(self, lines: list, channel_title: str, channel_id: int) -> str:
+        # Filter out OCR headers and empty lines first to prevent "OCR RESULT" becoming the name
+        clean_lines = [
+            l for l in lines 
+            if l.strip() and "[OCR RESULT" not in l and "Combines 3 Passes" not in l
+        ]
+        
         is_aggregator = (channel_id in config.AGGREGATOR_CHANNEL_IDS) or ("CAPPERS FREE" in channel_title.upper())
-        if not lines: return "Unknown Capper"
+        
+        if not clean_lines: 
+            # If no lines remain after cleaning (e.g. bad OCR), fallback to channel title
+            return self._clean_capper_name(channel_title) if not is_aggregator else "Unknown Capper"
 
         if is_aggregator:
-            candidate = self._clean_capper_name(lines[0].strip())
+            candidate = self._clean_capper_name(clean_lines[0].strip())
             is_blacklisted = candidate.lower() in config.BLACKLISTED_CAPPERS
             is_pick = re.search(self._get_pick_regex(), candidate, re.I)
-            if candidate and not is_blacklisted and not is_pick:
+            
+            # Ensure candidate isn't just a symbol or too short
+            if candidate and len(candidate) > 2 and not is_blacklisted and not is_pick:
                 return candidate
 
         clean = channel_title
@@ -172,8 +185,6 @@ class TelegramScraper:
                     if last_scraped and last_scraped.tzinfo is None:
                         last_scraped = last_scraped.replace(tzinfo=timezone.utc)
                     
-                    # LOGIC: If force_full_day is True, we ignore the checkpoint and start from 00:00 Today.
-                    # Otherwise, we use the checkpoint (efficient).
                     if last_scraped and not force_full_day:
                         cutoff_utc = max(last_scraped, start_of_today_utc)
                         logger.info(f"🔄 Resuming {title} from {cutoff_utc}")
@@ -208,11 +219,9 @@ class TelegramScraper:
                         )
                         db.upload_raw_pick(pick)
                     
-                    # Only update checkpoint if we actually found a newer message
                     if latest_msg_date:
                          db.update_checkpoint(channel_id, latest_msg_date)
                     elif not last_scraped:
-                         # If it was a first run and no messages, set checkpoint to now so we don't scan forever next time
                          db.update_checkpoint(channel_id, run_start_time)
                         
                 except Exception as e:

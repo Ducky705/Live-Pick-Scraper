@@ -32,13 +32,15 @@ class ParsedPick(BaseModel):
     def validate_unit(cls, v):
         if v is None: return None
         if isinstance(v, (float, int)): 
-            # Allow high units (e.g. 150, 500) as per user requirement
             return float(v)
             
         s = str(v).lower().strip()
+        # Remove 'u', 'units'
         clean = re.sub(r'[^\d.]', '', s)
         try:
             val = float(clean)
+            # Sanity check: 5000 unit bets are usually simulated money ($5000), not units
+            # But let's keep them as float for now, standardization can handle logic later
             return round(val, 2)
         except:
             return None
@@ -49,10 +51,10 @@ class ParsedPick(BaseModel):
         if v is None: return None
         try:
             val = int(v)
-            # Odds range sanity check
-            if val < -20000 or val > 20000: return None 
-            # Odds usually aren't single digits (except maybe very weird formats, but standard US odds are >100 or <-100)
-            if -100 < val < 100: return None
+            # Odds sanity check: -100 to 100 usually invalid for American odds (except exactly 100)
+            if -100 < val < 100 and val != 0: return None
+            # Extreme outlier check (OCR Errors like -11000)
+            if val < -5000 or val > 5000: return None
             return val
         except:
             return None

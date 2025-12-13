@@ -20,24 +20,14 @@ UI_NOISE_TERMS = [
     "bets placed", "my bets", "share my bet", "book a bet",
     "login", "sign up", "forgot password", "face id", "touch id",
     "combines 3 passes", "ocr result", "making money as usual",
-    "see less", "bankroll", "unit =", "units =", "ecapper", "capper:"
+    "see less", "bankroll", "unit =", "units =", "ecapper", "capper:",
+    "betslip", "parlay", "teaser", "straight", "risk", "win"
 ]
 
-def sanitize_text(text: str) -> str:
-    if not text: return ""
-    return re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', text)
-
 def clean_ocr_garbage(text: str) -> str:
-    """
-    Advanced cleaning pipeline:
-    1. Strip specific headers.
-    2. Filter UI noise.
-    3. Fuzzy Deduplication (Removes 'Baker under' vs 'Baker undér').
-    4. Density check.
-    """
     if not text: return ""
     
-    # Remove the specific header that confuses parsers
+    # Remove headers
     text = text.replace("[OCR RESULT (Combines 3 Passes)]:", "")
     
     lines = text.split('\n')
@@ -51,19 +41,17 @@ def clean_ocr_garbage(text: str) -> str:
         # 1. Skip very short lines
         if len(stripped) < 3: continue 
         
-        # 2. Skip Sportsbook UI Noise & Watermarks
+        # 2. Skip Sportsbook UI Noise
         if any(term in lower_line for term in UI_NOISE_TERMS):
             continue
 
         # 3. Fuzzy Consecutive Deduplication
-        # If the current line is > 85% similar to the previous line, skip it.
-        # This handles "Baker under 1.5" vs "Baker undér 1.5"
         if prev_line:
             similarity = SequenceMatcher(None, prev_line, stripped).ratio()
             if similarity > 0.85:
                 continue
         
-        # 4. Alphanumeric Density Check (Skip lines like "--- . . --")
+        # 4. Alphanumeric Density Check
         alpha_num = sum(c.isalnum() for c in stripped)
         total = len(stripped)
         if total > 0 and (alpha_num / total) < 0.5:
@@ -77,7 +65,6 @@ def clean_ocr_garbage(text: str) -> str:
 def get_existing_pick_signatures(capper_ids: List[int], dates: List[str]) -> Set[Tuple[int, str, str, str]]:
     if not db.client or not capper_ids:
         return set()
-    
     try:
         date_strs = [d.isoformat() if hasattr(d, 'isoformat') else str(d) for d in dates]
         response = db.client.table('live_structured_picks') \
@@ -85,7 +72,6 @@ def get_existing_pick_signatures(capper_ids: List[int], dates: List[str]) -> Set
             .in_('capper_id', capper_ids) \
             .in_('pick_date', date_strs) \
             .execute()
-            
         existing = set()
         for item in response.data:
             sig = (item['capper_id'], item['pick_date'], item['pick_value'], item['bet_type'])
@@ -98,36 +84,41 @@ def get_existing_pick_signatures(capper_ids: List[int], dates: List[str]) -> Set
 def process_picks():
     start_time = time.time()
     
-    raw_picks = db.get_pending_raw_picks(limit=5)
+    # Increase batch size slightly for efficiency
+    raw_picks = db.get_pending_raw_picks(limit=10)
     if not raw_picks: 
         print("💤 No pending picks found in DB.")
         return
 
     print(f"\n📥 PROCESSING BATCH: {len(raw_picks)} Messages")
-    for p in raw_picks:
-        print(f"   - ID {p.id}: {p.capper_name} ({len(p.raw_text)} chars)")
 
     to_standardize = []
     ai_batch = []
     processed_ids = []
 
     for pick in raw_picks:
-        # CLEAN OCR NOISE HERE
-        pick.raw_text = clean_ocr_garbage(pick.raw_text)
+        # 1. Clean Text
+        clean_text = clean_ocr_garbage(pick.raw_text)
+        pick.raw_text = clean_text 
         
-        # Heuristic: If short and simple, try Regex first
-        if len(pick.raw_text) < 200 and "\n" not in pick.raw_text:
-            simple_picks = simple_parser.parse_with_regex(pick)
-            if simple_picks:
-                # Regex parser now returns a LIST of picks
-                for sp in simple_picks:
-                    to_standardize.append((sp, pick))
-                processed_ids.append(pick.id)
-                continue
-        
-        # If regex failed or text is long/complex, send to AI
-        ai_batch.append(pick)
+        if len(clean_text) < 5: 
+            processed_ids.append(pick.id)
+            continue
 
+        # 2. Hybrid Strategy: Regex First
+        simple_picks = simple_parser.parse_with_regex(pick)
+        
+        if simple_picks:
+            print(f"   ⚡ Regex found {len(simple_picks)} picks in ID {pick.id}")
+            for sp in simple_picks:
+                to_standardize.append((sp, pick))
+            processed_ids.append(pick.id)
+        else:
+            # 3. Fallback to AI
+            print(f"   🤖 Regex failed for ID {pick.id}, queueing for AI...")
+            ai_batch.append(pick)
+
+    # 4. Run AI Batch
     if ai_batch:
         try:
             ai_results = ai_parser.parse_with_ai(ai_batch)
@@ -147,14 +138,25 @@ def process_picks():
             db.increment_attempts(failed_ids)
             processed_ids = [pid for pid in processed_ids if pid not in failed_ids]
 
+    # 5. Standardize & Deduplicate
     potential_picks = []
     involved_capper_ids = []
     involved_dates = []
 
-    for parsed, raw in to_standardize:
-        capper_id = db.get_or_create_capper(raw.capper_name, fuzz_process)
-        if not capper_id: capper_id = 9999 
+    # Cache "Unknown Capper" ID to avoid repeated DB calls
+    unknown_capper_id = None
 
+    for parsed, raw in to_standardize:
+        # Dynamic Capper Lookup
+        capper_id = db.get_or_create_capper(raw.capper_name, fuzz_process)
+        
+        if not capper_id:
+            # If still None, get/create 'Unknown Capper' dynamically
+            if not unknown_capper_id:
+                unknown_capper_id = db.get_or_create_capper("Unknown Capper", fuzz_process)
+            capper_id = unknown_capper_id
+
+        # League & Bet Type Standardization
         std_league = standardizer.standardize_league(parsed.league)
         if std_league == 'Other':
             std_league = standardizer.infer_league(parsed.pick_value)

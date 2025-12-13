@@ -10,6 +10,29 @@ from models import RawPick, StandardizedPick
 
 logger = logging.getLogger(__name__)
 
+# --- SMART ALIAS MAPPING ---
+CAPPER_ALIASES = {
+    "big al": "bigalmcmordie",
+    "al mcmordie": "bigalmcmordie",
+    "alan mcmordie": "bigalmcmordie",
+    "doc sports": "docsports",
+    "docs sports": "docsports",
+    "scott sprietzer": "scottspreitzer",
+    "scott spreitzer": "scottspreitzer",
+    "vernon croy": "vernoncroy",
+    "vc": "vernoncroy",
+    "tony george": "tonygeorge",
+    "jason sharpe": "jasonsharpe",
+    "strike point": "strikepointsports",
+    "sps": "strikepointsports",
+    "ferringo": "robertferringo",
+    "robert ferringo": "robertferringo",
+    "indian cowboy": "indiancowboy",
+    "ic": "indiancowboy",
+    "vegas mirabe": "vegasmirabet",
+    "vegas mira": "vegasmirabet"
+}
+
 class DatabaseManager:
     _instance = None
     
@@ -76,66 +99,82 @@ class DatabaseManager:
             logger.error(f"Error fetching picks: {e}")
             return []
 
-    def _normalize_capper_name(self, name: str) -> str:
-        # Remove emojis, special chars like *, -, _, and extra spaces
-        # " **AFS** " -> "AFS"
-        clean = re.sub(r'[^a-zA-Z0-9\s]', '', name)
-        return ' '.join(clean.strip().split()).title()
+    def _normalize_key(self, name: str) -> str:
+        if not name: return ""
+        clean = name.lower()
+        noise_words = ['vip', 'picks', 'locks', 'plays', 'sports', 'betting', 'consulting', 'capper', 'official', 'premium']
+        for word in noise_words:
+            clean = clean.replace(word, '')
+        clean = re.sub(r'[^a-z0-9]', '', clean)
+        return clean
+
+    def _clean_display_name(self, name: str) -> str:
+        clean = re.sub(r'[^\x00-\x7F]+', '', name)
+        clean = re.sub(r'^[\W_]+|[\W_]+$', '', clean)
+        return clean.strip()
 
     def get_or_create_capper(self, name: str, fuzzer) -> Optional[int]:
         if not self.client or not name: return None
         
-        # 1. Normalize Name (Strict Cleaning)
-        normalized = self._normalize_capper_name(name)
-        if not normalized: return None
+        display_name = self._clean_display_name(name)
         
-        # 2. POPULATE CACHE
+        # --- STRICT VALIDATION ---
+        if len(display_name) < 2: return None 
+        if re.search(r'\b(vs|over|under)\b', display_name, re.I):
+            logger.warning(f"⚠️ Rejected invalid capper name (Matchup): {display_name}")
+            return None 
+        if re.match(r'^[-+]?\d+(\.\d+)?$', display_name):
+            logger.warning(f"⚠️ Rejected invalid capper name (Numeric): {display_name}")
+            return None
+
+        normalized_key = self._normalize_key(display_name)
+        if not normalized_key: return None
+
+        # Smart Alias Check
+        if normalized_key in CAPPER_ALIASES:
+            normalized_key = CAPPER_ALIASES[normalized_key]
+
+        # Populate Cache
         if not self.capper_cache:
             try:
-                logger.info("📚 Loading Capper Directory into cache...")
                 res = self.client.table('capper_directory').select('id, canonical_name').limit(10000).execute()
                 for item in res.data:
-                    # Also normalize cache keys to ensure matching works
-                    c_name = self._normalize_capper_name(item['canonical_name'])
-                    self.capper_cache[c_name] = item['id']
-                logger.info(f"📚 Loaded {len(self.capper_cache)} cappers.")
+                    key = self._normalize_key(item['canonical_name'])
+                    if key:
+                        self.capper_cache[key] = item['id']
+                    self.capper_cache[item['canonical_name']] = item['id']
             except Exception as e:
                 logger.error(f"Failed to populate capper cache: {e}")
 
-        # 3. Check Local Cache (Exact Match)
-        if normalized in self.capper_cache: 
-            return self.capper_cache[normalized]
+        # Exact Match
+        if normalized_key in self.capper_cache:
+            return self.capper_cache[normalized_key]
 
+        # Fuzzy Match
         try:
-            # 4. Fuzzy Match against the FULL Cache
             if self.capper_cache:
-                best_match, score = fuzzer.extractOne(normalized, self.capper_cache.keys())
-                if score > 90:
-                    logger.info(f"✨ Fuzzy matched '{normalized}' to '{best_match}' ({score}%)")
-                    self.capper_cache[normalized] = self.capper_cache[best_match]
-                    return self.capper_cache[best_match]
+                existing_keys = list(self.capper_cache.keys())
+                best_match, score = fuzzer.extractOne(normalized_key, existing_keys)
+                
+                if score >= 88:
+                    matched_id = self.capper_cache[best_match]
+                    logger.info(f"✨ Fuzzy matched '{display_name}' to existing ({best_match}) - Score: {score}")
+                    self.capper_cache[normalized_key] = matched_id
+                    return matched_id
 
-            # 5. If not found, INSERT
-            res = self.client.table('capper_directory').insert({'canonical_name': normalized}).execute()
+            # Create New
+            logger.info(f"🆕 Creating NEW Capper: {display_name}")
+            res = self.client.table('capper_directory').insert({'canonical_name': display_name}).execute()
             if res.data:
                 new_id = res.data[0]['id']
-                self.capper_cache[normalized] = new_id
+                self.capper_cache[normalized_key] = new_id
+                self.capper_cache[display_name] = new_id
                 return new_id
             
             return None
 
         except Exception as e:
-            # 6. THE LOOP BACK (Conflict Recovery)
-            try:
-                res = self.client.table('capper_directory').select('id').eq('canonical_name', normalized).execute()
-                if res.data:
-                    existing_id = res.data[0]['id']
-                    self.capper_cache[normalized] = existing_id
-                    logger.info(f"🔄 Recovered existing capper ID {existing_id} for '{normalized}'")
-                    return existing_id
-            except Exception as e2:
-                logger.error(f"❌ Critical Capper Error: {e2}")
-            
+            logger.error(f"❌ Error in capper lookup/creation: {e}")
             return None
 
     def insert_structured_picks(self, picks: List[StandardizedPick]):

@@ -16,28 +16,26 @@ async def run_pipeline(force=False):
     logger.info("🚀 STARTING SNIPER PIPELINE")
     
     # --- PHASE 1: SCRAPE TODAY'S PICKS ---
+    # We purposefully catch errors here so Processing (Phase 3) still runs
     try:
         logger.info(f"📡 Checking Telegram (Force Full Day: {force})...")
         await run_scrapers(force=force)
     except Exception as e:
         logger.error(f"❌ Scraper Crashed: {e}")
-        sys.exit(1)
 
     # --- PHASE 2: EFFICIENCY CHECK ---
-    # Check if there is ANY work to do.
     try:
         pending_picks = db.get_pending_raw_picks(limit=1)
         if not pending_picks:
             logger.info("🛑 No new picks & no pending retries. SHUTTING DOWN.")
-            sys.exit(0) # Exit with success code
+            sys.exit(0)
     except Exception as e:
         logger.error(f"Error checking DB status: {e}")
 
     # --- PHASE 3: PROCESS BATCHES ---
     logger.info("🧠 Work detected! Running AI Processor...")
     try:
-        # FIX: Reduced batch count from 5 to 2 to prevent GitHub Action timeouts.
-        # Previous runs took ~2 mins per batch, causing 10m+ runs which get cancelled.
+        # Run 2 batches max to respect GitHub Action limits
         for i in range(2): 
             if not db.get_pending_raw_picks(limit=1):
                 break

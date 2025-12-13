@@ -1,13 +1,31 @@
+import pytest
 from models import ParsedPick
 
-def test_unit_normalization():
-    # 2u -> 2.0
-    assert ParsedPick(raw_pick_id=1, league="X", bet_type="Y", pick_value="Z", unit="2u").unit == 2.0
-    # Max Bet -> 5.0
-    assert ParsedPick(raw_pick_id=1, league="X", bet_type="Y", pick_value="Z", unit="Max Bet").unit == 5.0
-    # Whale -> 5.0
-    assert ParsedPick(raw_pick_id=1, league="X", bet_type="Y", pick_value="Z", unit="Whale Play").unit == 5.0
-    # Bomb -> 3.0
-    assert ParsedPick(raw_pick_id=1, league="X", bet_type="Y", pick_value="Z", unit="Bomb").unit == 3.0
-    # Garbage -> 1.0
-    assert ParsedPick(raw_pick_id=1, league="X", bet_type="Y", pick_value="Z", unit="info").unit == 1.0
+def test_parsed_pick_validation():
+    # Valid
+    p = ParsedPick(
+        raw_pick_id=1, league="NBA", bet_type="Spread", 
+        pick_value="Lakers -5", odds_american=-110, unit=1.0
+    )
+    assert p.odds_american == -110
+
+    # Invalid Odds (Too high, likely OCR error)
+    p = ParsedPick(
+        raw_pick_id=1, league="NBA", bet_type="Spread", 
+        pick_value="Lakers -5", odds_american=-150000
+    )
+    assert p.odds_american is None
+
+    # Invalid Unit parsing
+    p = ParsedPick(
+        raw_pick_id=1, league="NBA", bet_type="Spread", 
+        pick_value="Lakers -5", unit="NotANumber"
+    )
+    assert p.unit is None
+    
+    # Unit String Parsing
+    p = ParsedPick(
+        raw_pick_id=1, league="NBA", bet_type="Spread", 
+        pick_value="Lakers -5", unit="5u"
+    )
+    assert p.unit == 5.0

@@ -10,6 +10,7 @@ from scrapers import TelegramScraper
 from models import RawPick
 import simple_parser
 import ai_parser
+import processing_service  # Import the cleaner!
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
@@ -17,13 +18,12 @@ logger = logging.getLogger(__name__)
 
 async def run_backtest():
     print("="*60)
-    print("🧪 LIVE BACKTEST & ACCURACY REPORT")
+    print("🧪 LIVE BACKTEST & ACCURACY REPORT (IMPROVED)")
     print("="*60)
-    print("This script will fetch recent messages and test parsing logic.")
-    print("It does NOT save to the database.")
+    print("This script simulates the FULL production pipeline logic.")
     print("-" * 60)
 
-    # 1. Initialize Telegram Client directly
+    # 1. Initialize Telegram Client
     if not config.TELEGRAM_SESSION_NAME:
         print("❌ Error: TELEGRAM_SESSION_NAME not found in .env")
         return
@@ -34,65 +34,67 @@ async def run_backtest():
         config.TELEGRAM_API_HASH
     )
     
-    scraper = TelegramScraper() # Used for text cleaning/OCR methods
-    
+    scraper = TelegramScraper()
     results = []
     
     try:
         await client.start()
         print("✅ Telegram Connected.")
         
-        # 2. Iterate Channels
         for channel_id in config.TELEGRAM_CHANNELS:
             try:
                 entity = await client.get_entity(channel_id)
                 print(f"\n📡 Scanning: {entity.title} ({channel_id})")
                 
                 count = 0
-                # Fetch last 30 messages per channel
                 async for msg in client.iter_messages(entity, limit=30):
-                    if not msg.text and not msg.photo:
-                        continue
+                    # Filter empty messages unless they have a photo
+                    if not msg.text and not msg.photo: continue
 
-                    # Simulate OCR (Simplified for backtest speed - skip large image processing if needed)
-                    # We will grab text. If text is empty and photo exists, we note it.
                     raw_text = (msg.text or "").strip()
                     is_ocr = False
+                    
+                    # Simulate OCR trigger
                     if not raw_text and msg.photo:
-                        # Attempt OCR if scraper is configured (this might be slow)
                         print(f"   📷 Performing OCR on Msg ID {msg.id}...")
                         ocr_text = await scraper._perform_ocr(msg)
                         raw_text = ocr_text
                         is_ocr = True
 
-                    if not raw_text: 
-                        continue
+                    if not raw_text: continue
 
-                    # Create Dummy RawPick
+                    # *** PRODUCTION CLEANING STEP ***
+                    # This filters out "bets placed", "balance", and duplicate lines
+                    cleaned_text = processing_service.clean_ocr_garbage(raw_text)
+
                     pick = RawPick(
                         source_unique_id=str(msg.id),
                         source_url=f"t.me/c/{channel_id}/{msg.id}",
                         capper_name=entity.title,
-                        raw_text=raw_text,
+                        raw_text=cleaned_text,  # Use CLEANED text
                         pick_date=datetime.now().date()
                     )
 
                     # --- RUN TEST 1: REGEX ---
                     regex_picks = simple_parser.parse_with_regex(pick)
                     
-                    # --- RUN TEST 2: AI (Only if Regex fails, to simulate real flow) ---
+                    # --- RUN TEST 2: AI (Fallback) ---
                     ai_picks = []
                     used_ai = False
-                    if not regex_picks and len(raw_text) < 1000:
-                        # Only AI test valid-looking short messages to save time/credits
-                        if "bet" in raw_text.lower() or "u" in raw_text.lower() or "-" in raw_text:
+                    if not regex_picks and len(cleaned_text) < 1000:
+                        # Heuristic to decide if it's worth sending to AI
+                        if "bet" in cleaned_text.lower() or "u" in cleaned_text.lower() or "-" in cleaned_text:
                             print(f"   🤖 Invoking AI for Msg ID {msg.id}...")
                             ai_picks = ai_parser.parse_with_ai([pick])
                             used_ai = True
 
-                    # Prepare Output
                     parsed_list = regex_picks if regex_picks else ai_picks
+                    
+                    # Determine Status
                     status = "✅ EXTRACTED" if parsed_list else "❌ SKIPPED/FAILED"
+                    
+                    # Use scraper's own validator to see if we SHOULD have ignored it
+                    # Note: We check against raw_text here because the scraper checks raw messages
                     if not parsed_list and not scraper._is_valid_pick_message(raw_text):
                         status = "🗑️ IGNORED (Noise)"
 
@@ -100,16 +102,14 @@ async def run_backtest():
                         "Channel": entity.title,
                         "Msg ID": msg.id,
                         "Date": msg.date.strftime('%Y-%m-%d'),
-                        "Raw Text": raw_text[:100].replace("\n", " ") + ("..." if len(raw_text)>100 else ""),
-                        "Parsing Method": "AI" if used_ai else ("Regex" if regex_picks else "None"),
-                        "Extraction Status": status,
-                        "Extracted Pick": str([p.pick_value for p in parsed_list]) if parsed_list else "",
-                        "Bet Type": str([p.bet_type for p in parsed_list]) if parsed_list else "",
-                        "Units": str([p.unit for p in parsed_list]) if parsed_list else ""
+                        "Cleaned Text": cleaned_text[:100].replace("\n", " ") + "...",
+                        "Method": "AI" if used_ai else ("Regex" if regex_picks else "None"),
+                        "Status": status,
+                        "Pick": str([p.pick_value for p in parsed_list]) if parsed_list else ""
                     }
                     results.append(row)
                     count += 1
-                    print(f"   Msg {msg.id}: {status} -> {row['Extracted Pick']}")
+                    print(f"   Msg {msg.id}: {status} -> {row['Pick']}")
 
             except Exception as e:
                 print(f"   ⚠️ Error scanning channel {channel_id}: {e}")
@@ -117,9 +117,8 @@ async def run_backtest():
     finally:
         await client.disconnect()
 
-    # 3. Export to CSV
     if results:
-        filename = "backtest_report.csv"
+        filename = "backtest_report_v2.csv"
         keys = results[0].keys()
         with open(filename, 'w', newline='', encoding='utf-8') as f:
             dict_writer = csv.DictWriter(f, keys)
@@ -128,10 +127,6 @@ async def run_backtest():
         print("\n" + "="*60)
         print(f"📄 REPORT GENERATED: {os.path.abspath(filename)}")
         print("="*60)
-        print("👉 Open this CSV in Excel/Numbers.")
-        print("1. Look at 'Raw Text'.")
-        print("2. Look at 'Extracted Pick'.")
-        print("3. If the Pick is empty but the Text clearly had a bet, we need to tune the AI or Regex.")
 
 if __name__ == "__main__":
     asyncio.run(run_backtest())

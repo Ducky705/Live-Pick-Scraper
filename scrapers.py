@@ -19,7 +19,6 @@ try:
     import pytesseract
     import cv2
     OCR_AVAILABLE = True
-    # Common windows path, adjust if needed
     default_path = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
     if os.path.exists(default_path):
         pytesseract.pytesseract.tesseract_cmd = default_path
@@ -27,6 +26,9 @@ except ImportError:
     pass
 
 logger = logging.getLogger(__name__)
+
+# IGNORE THESE HANDLES (Aggregators)
+IGNORE_HANDLES = {'capperstree', 'cappersfree', 'cappers', 'free', 'picks', 'locks'}
 
 class TelegramScraper:
     def __init__(self):
@@ -42,49 +44,17 @@ class TelegramScraper:
                 logger.error(f"Failed to initialize Telegram Client: {e}")
                 self.client = None
 
-    def _remove_watermark(self, img):
-        try:
-            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            # Mask out common watermark colors (light grey/white/semitransparent)
-            mask = cv2.inRange(hsv, np.array([0, 0, 200]), np.array([180, 50, 255]))
-            # Invert mask to keep text
-            return img
-        except: return img
-
     def _cpu_bound_ocr(self, image_bytes: bytes) -> str:
         try:
             np_arr = np.frombuffer(image_bytes, np.uint8)
             img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
             if img is None: return ""
-            
-            # Upscale
             img = cv2.resize(img, None, fx=2.5, fy=2.5, interpolation=cv2.INTER_CUBIC)
-            
-            # Preprocessing
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            
-            # Multiple Thresholds for better capture
             _, b1 = cv2.threshold(gray, 180, 255, cv2.THRESH_BINARY)
             t1 = pytesseract.image_to_string(b1, config='--psm 6')
-            
-            _, b2 = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-            t2 = pytesseract.image_to_string(b2, config='--psm 6')
-
-            inverted = cv2.bitwise_not(gray)
-            _, b3 = cv2.threshold(inverted, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-            t3 = pytesseract.image_to_string(b3, config='--psm 6')
-
-            # Deduplicate lines
-            combined = set()
-            for t in [t1, t2, t3]:
-                for line in t.split('\n'):
-                    l = line.strip()
-                    # Basic filter: must have letters/numbers and be > 4 chars
-                    if len(l) > 4 and re.search(r'[A-Z0-9]', l, re.I):
-                        combined.add(l)
-            
-            final = "\n".join(sorted(list(combined)))
-            return f"\n\n[OCR RESULT (Combines 3 Passes)]:\n{final}" if len(final) > 5 else ""
+            final = t1.strip()
+            return f"\n\n[OCR RESULT]:\n{final}" if len(final) > 5 else ""
         except Exception: return ""
 
     async def _perform_ocr(self, message: Message) -> str:
@@ -95,89 +65,91 @@ class TelegramScraper:
         except: return ""
 
     def _get_pick_regex(self):
-        # Catch Spreads, ML, Totals, Units
         return r"([+-]\d+\.?\d*|\b(ML|Pk|Pick'?em|Ev|Even)\b|\b(Over|Under|o|u)\s*\d+|\d+(\.\d+)?\s*u)"
 
-    def _clean_capper_name(self, name: str) -> str:
-        name = name.replace("[OCR RESULT (Combines 3 Passes)]:", "").strip()
-        name = re.sub(r'^(from|source):?', '', name, flags=re.I)
-        
-        # Logic Fix: "30 @srcgroup << 2m ago" -> "srcgroup"
-        name = re.sub(r'^\d+\s+', '', name) # Remove leading numbers
-        name = re.sub(r'\s*«.*$', '', name) # Remove trailing timestamps
-        
-        # Logic Fix: "five (added)" -> "five"
-        name = re.sub(r'\s*\([^)]*\)$', '', name)
-
-        return re.sub(r'^[\W_]+|[\W_]+$', '', name).strip()
+    def _clean_name(self, name: str) -> str:
+        name = re.sub(r'\[OCR RESULT.*?\]:?', '', name, flags=re.I)
+        name = re.sub(r'^(source|credit|from|capper|pick by):', '', name, flags=re.I)
+        name = re.sub(r'[^\w\s@&.\']', '', name) # Remove emojis
+        name = re.sub(r'\s*«.*$', '', name) 
+        return name.strip()
 
     def _is_invalid_name(self, name: str) -> bool:
-        if len(name) < 2 or len(name) > 50: return True
-        lower_name = name.lower()
-        
-        # Reject Matchups
-        if re.search(r'\b(vs|over|under)\b', lower_name): return True
-        
-        # Reject Pure Numbers ("110")
-        if re.match(r'^\d+$', name.strip()): return True
-        # Reject Odds ("-110")
-        if re.search(r'[-+]\d+', lower_name): return True
-        # Reject Dates/Times
-        if re.search(r'\d+/\d+|\d+:\d+', lower_name): return True
-        
-        # Reject Generic Terms
-        if "combined reasoning" in lower_name or "ocr result" in lower_name: return True
-        
-        # Reject if name contains pick logic
-        if re.search(self._get_pick_regex(), name, re.I): return True
-        
+        if len(name) < 2 or len(name) > 40: return True
+        lower = name.lower()
+        if re.search(r'\b(vs|over|under)\b', lower): return True
+        if re.search(r'[-+]\d+', lower): return True 
+        if re.search(r'\d+/\d+', lower): return True 
+        if "ocr result" in lower or "combined reasoning" in lower: return True
+        # Check against blacklist words
+        if lower in {'picks', 'bet', 'game', 'today', 'free', 'lock'}: return True
         return False
 
-    def _extract_capper_name(self, lines: list, channel_title: str, channel_id: int) -> str:
-        # Filter raw lines first
-        clean_lines = [l for l in lines if l.strip() and "[OCR RESULT" not in l and "Combines 3 Passes" not in l]
-        is_aggregator = (channel_id in config.AGGREGATOR_CHANNEL_IDS) or ("CAPPERS" in channel_title.upper())
-        
-        # Default Fallback
-        fallback_name = self._clean_capper_name(channel_title)
-        
-        # Force 'Unknown Capper' if channel name is purely generic
-        if "CAPPERS" in fallback_name.upper() or "FREE PICKS" in fallback_name.upper():
-            fallback_name = "Unknown Capper"
-        else:
-            # Clean "Free Picks" out of specific names (e.g. "Gold Boys Free Picks" -> "Gold Boys")
-            fallback_name = re.sub(r'(free|capper|picks|locks|betting|official)', '', fallback_name, flags=re.I).strip()
-            if len(fallback_name) < 2: fallback_name = "Unknown Capper"
-
-        if not clean_lines: 
-            return fallback_name
-
-        if is_aggregator:
-            # Check Line 1
-            candidate = self._clean_capper_name(clean_lines[0])
-            if candidate.startswith("@"):
-                return candidate.replace("@", "").strip()
-            
+    def _extract_capper_name(self, text: str, raw_original_text: str, channel_title: str, channel_id: int) -> str:
+        """
+        Hierarchical Name Extraction
+        """
+        # 1. MARKDOWN HEADER (Highest Priority)
+        # Matches **CapperName** at start of message
+        md_match = re.match(r'^\s*\*\*([^*\n]+)\*\*', raw_original_text)
+        if md_match:
+            candidate = self._clean_name(md_match.group(1))
             if not self._is_invalid_name(candidate):
-                if candidate.lower() not in config.BLACKLISTED_CAPPERS:
-                    return candidate
-            
-            # Check Line 2
-            if len(clean_lines) > 1:
-                candidate_2 = self._clean_capper_name(clean_lines[1])
-                if not self._is_invalid_name(candidate_2) and len(candidate_2) < 30:
-                    return candidate_2
+                return candidate
 
-        return fallback_name
+        lines = [l.strip() for l in text.split('\n') if l.strip()]
+        
+        # 2. EXPLICIT SOURCE TAGS
+        for line in lines:
+            if re.match(r'^(source|credit|from|capper):', line, re.I):
+                candidate = line.split(':', 1)[1].strip()
+                clean = self._clean_name(candidate)
+                if not self._is_invalid_name(clean):
+                    return clean
+
+        # 3. INTERNAL HANDLES (@name)
+        # Scan lines for "@handle" but ignore common aggregators
+        for line in lines:
+            if '@' in line:
+                words = line.split()
+                for w in words:
+                    if w.startswith('@'):
+                        handle = w.replace('@', '').lower()
+                        # Ignore aggregator handles
+                        if any(bad in handle for bad in IGNORE_HANDLES):
+                            continue
+                        clean = self._clean_name(w)
+                        if not self._is_invalid_name(clean):
+                            return clean
+
+        # 4. FIRST LINE (Aggregator Logic)
+        # If channel is aggregator, check first 2 lines for a name
+        is_aggregator = (channel_id in config.AGGREGATOR_CHANNEL_IDS) or ("CAPPERS" in channel_title.upper())
+        if is_aggregator and lines:
+            # Check Line 1
+            line1 = self._clean_name(lines[0])
+            if not self._is_invalid_name(line1) and not re.search(self._get_pick_regex(), line1):
+                # Ignore generic headers
+                if "cbb" not in line1.lower() and "nba" not in line1.lower():
+                    return line1
+            
+            # Check Line 2 (Often Line 1 is "@capperstree")
+            if len(lines) > 1:
+                line2 = self._clean_name(lines[1])
+                if not self._is_invalid_name(line2) and not re.search(self._get_pick_regex(), line2):
+                     if "cbb" not in line2.lower() and "nba" not in line2.lower():
+                        return line2
+
+        # 5. FALLBACK: Channel Title
+        fallback = self._clean_name(channel_title)
+        cleaned_fallback = re.sub(r'(free|capper|picks|locks|betting|official|channel)', '', fallback, flags=re.I).strip()
+        return cleaned_fallback if len(cleaned_fallback) > 2 else fallback
 
     def _is_valid_pick_message(self, text: str) -> bool:
         if not text: return False
-        # Must contain pick keywords/numbers
         if not re.search(self._get_pick_regex(), text, re.I): return False
-        # Reject Results/Grading messages
         if re.search(r'\b(VOID|CANCEL|REFUND|CORRECTION|LOSS|PUSH|GRADE|WON|LOST)\b', text, re.I): return False
         if re.search(r'(❌|💰|🚫|✅)', text): return False
-        # Reject Spam
         lower = text.lower()
         if "dm me" in lower or "join vip" in lower or "promo code" in lower:
             if len(text) < 200: return False
@@ -185,15 +157,12 @@ class TelegramScraper:
 
     async def scrape(self, force_full_day=False):
         if not self.client:
-            logger.warning("Telegram Client not initialized. Skipping scrape.")
+            logger.warning("Telegram Client not initialized.")
             return
 
         try:
             try:
                 await self.client.start()
-            except (SessionPasswordNeededError, AuthKeyError, ValueError) as e:
-                logger.error(f"❌ Authentication failed (Invalid Session): {e}")
-                return
             except Exception as e:
                 logger.error(f"❌ Connection failed: {e}")
                 return
@@ -217,11 +186,7 @@ class TelegramScraper:
                     if last_scraped and last_scraped.tzinfo is None:
                         last_scraped = last_scraped.replace(tzinfo=timezone.utc)
                     
-                    if last_scraped and not force_full_day:
-                        cutoff_utc = max(last_scraped, start_of_today_utc)
-                    else:
-                        cutoff_utc = start_of_today_utc
-
+                    cutoff_utc = start_of_today_utc if force_full_day or not last_scraped else max(last_scraped, start_of_today_utc)
                     latest_msg_date = None
                     
                     async for msg in self.client.iter_messages(entity, limit=None):
@@ -234,8 +199,8 @@ class TelegramScraper:
                         
                         if not self._is_valid_pick_message(full_text): continue
 
-                        lines = [l.strip() for l in full_text.split('\n') if l.strip()]
-                        capper = self._extract_capper_name(lines, title, channel_id)
+                        # Pass raw original text for Markdown Header detection
+                        capper = self._extract_capper_name(full_text, msg.text or "", title, channel_id)
                         
                         pick = RawPick(
                             source_unique_id=f"tg-{channel_id}-{msg.id}",

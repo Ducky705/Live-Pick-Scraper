@@ -27,13 +27,18 @@ Your ONLY task is to extract the picks into a valid JSON array.
 ### INPUT DATA
 {data_json}
 
-### RULES
-1. **Output ONLY JSON**. Do not write "Here is the JSON" or markdown ticks. Just the array.
-2. **IGNORE HYPE**: Ignore words like "Whale", "Lock", "Banger", "Max Bet".
-3. **EXTRACT LINES**: Look for Team Names followed by spreads (-5, +3.5), Moneyline (ML), or Totals (Over/Under).
-4. **MANDATORY**: You MUST include the "raw_pick_id" from the input in your output object.
-5. **NULLS**: If unit or odds are not found, set them to null.
-6. **NO PICKS?**: If the text contains no valid picks, return an empty array [].
+### STRICT RULES (ACCURACY IS KING)
+1. **IGNORE NOISE**: 
+   - IGNORE "Parlay", "Teaser", "Leg 1", "Bet Slip", "Odds", "Wager", "Potential Payout".
+   - IGNORE general conversation or hype (e.g., "Max bet on this!", "Dm for vip").
+   - IGNORE half-formed text from OCR errors (e.g., "3:41 a 7 Om").
+2. **FORMATTING**:
+   - Spread: "Team -Spread" (e.g., "Lakers -5")
+   - Moneyline: "Team ML" (e.g., "Celtics ML")
+   - Total: "Over/Under Line" (e.g., "Over 210.5")
+   - Player Prop: "Player Name PropType Line" (e.g., "LeBron James Over 25.5 Points")
+3. **MANDATORY**: You MUST include the "raw_pick_id" from the input in your output object.
+4. **NO PICKS?**: If the text contains no valid picks, return an empty array [].
 
 ### OUTPUT FORMAT
 [
@@ -62,7 +67,12 @@ def parse_with_ai(raw_picks: List[RawPick]) -> List[ParsedPick]:
 
     input_data = []
     for p in raw_picks:
-        input_data.append({"raw_pick_id": p.id, "text": p.raw_text[:1000]})
+        input_data.append({
+            "raw_pick_id": p.id, 
+            "text": p.raw_text[:1000], # Truncate very long messages
+            "capper_name": p.capper_name,
+            "pick_date": str(p.pick_date)
+        })
     
     try:
         completion = client.chat.completions.create(
@@ -91,8 +101,10 @@ def parse_with_ai(raw_picks: List[RawPick]) -> List[ParsedPick]:
                 try:
                     if item.get('league') is None: item['league'] = "Unknown"
                     if item.get('pick_value') is None: continue
+                    
                     # Sanity check length to filter hallucinations
-                    if 3 < len(str(item['pick_value'])) < 50:
+                    val_len = len(str(item['pick_value']))
+                    if 3 < val_len < 60:
                         results.append(ParsedPick(**item))
                 except Exception:
                     pass
@@ -101,5 +113,5 @@ def parse_with_ai(raw_picks: List[RawPick]) -> List[ParsedPick]:
 
     except Exception as e:
         logger.error(f"AI Error: {e}")
-        # Don't raise, just return empty so flow continues (main loop handles retry logic)
+        # Don't raise, just return empty so flow continues
         return []

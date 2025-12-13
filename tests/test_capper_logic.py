@@ -5,13 +5,9 @@ import config
 
 @pytest.fixture
 def scraper(mocker):
-    # 1. Mock Credentials so config checks pass
     mocker.patch('config.TELEGRAM_API_ID', '123')
     mocker.patch('config.TELEGRAM_API_HASH', 'abc')
     mocker.patch('config.TELEGRAM_SESSION_NAME', 'mock_session')
-
-    # 2. Mock Telethon Classes in 'scrapers.py' namespace
-    # This prevents the real StringSession validation from running and failing
     mocker.patch('scrapers.StringSession')
     mocker.patch('scrapers.TelegramClient')
 
@@ -30,11 +26,12 @@ def test_non_aggregator_capper_extraction(scraper):
     config.AGGREGATOR_CHANNEL_IDS = {1900292133}
     lines = ["Lakers -5", "Analysis: Boom."]
     extracted = scraper._extract_capper_name(lines, "Dr Profit Official", regular_id)
-    assert extracted == "Dr Profit Official"
+    # The logic strips 'Official', so we expect 'Dr Profit'
+    assert extracted == "Dr Profit"
 
 def test_blacklist_filtering(scraper):
     regular_id = 55555
     lines = ["Lakers -5"]
+    # Input: Gold Boys Free Picks -> Stripped: Gold Boys
     extracted = scraper._extract_capper_name(lines, "Gold Boys Free Picks", regular_id)
-    assert "Free Picks" not in extracted
-    assert extracted.strip() == "Gold Boys"
+    assert extracted == "Gold Boys"

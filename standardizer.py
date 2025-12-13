@@ -2,10 +2,6 @@ import re
 from typing import Optional
 import config
 
-# ==============================================================================
-# LEAGUE KEYWORDS DATABASE (The "Brain")
-# ==============================================================================
-
 LEAGUE_KEYWORDS = {
     'NFL': [
         'Lions', 'Chiefs', 'Bills', 'Eagles', '49ers', 'Ravens', 'Cowboys', 'Bengals', 
@@ -38,55 +34,17 @@ LEAGUE_KEYWORDS = {
         'Marlins', 'Rockies', 'Athletics', "A's", 'White Sox', 'Guardians'
     ],
     'NCAAF': [
-        # --- SEC ---
         'Alabama', 'Bama', 'Crimson Tide', 'Georgia', 'Bulldogs', 'Texas', 'Longhorns', 
         'Oklahoma', 'Sooners', 'LSU', 'Tigers', 'Ole Miss', 'Rebels', 'Missouri', 'Mizzou', 
         'Tennessee', 'Vols', 'Volunteers', 'Kentucky', 'Wildcats', 'Florida', 'Gators', 
         'Auburn', 'Texas A&M', 'Aggies', 'South Carolina', 'Gamecocks', 'Arkansas', 
         'Razorbacks', 'Mississippi State', 'Bulldogs', 'Vanderbilt', 'Commodores',
-        # --- Big Ten ---
         'Ohio State', 'Buckeyes', 'Michigan', 'Wolverines', 'Penn State', 'Nittany Lions', 
         'Oregon', 'Ducks', 'USC', 'Trojans', 'Washington', 'Huskies', 'UCLA', 'Bruins', 
         'Nebraska', 'Cornhuskers', 'Wisconsin', 'Badgers', 'Iowa', 'Hawkeyes', 
         'Michigan State', 'Spartans', 'Minnesota', 'Gophers', 'Illinois', 'Illini', 
         'Purdue', 'Boilermakers', 'Northwestern', 'Wildcats', 'Maryland', 'Terps', 
-        'Rutgers', 'Scarlet Knights', 'Indiana', 'Hoosiers',
-        # --- ACC ---
-        'Clemson', 'Tigers', 'Miami', 'Canes', 'Hurricanes', 'Florida State', 'FSU', 
-        'Seminoles', 'SMU', 'Mustangs', 'Louisville', 'Cardinals', 'North Carolina', 
-        'UNC', 'Tar Heels', 'Virginia Tech', 'Hokies', 'Georgia Tech', 'Yellow Jackets', 
-        'NC State', 'Wolfpack', 'Pitt', 'Pittsburgh', 'Panthers', 'Syracuse', 'Orange', 
-        'Duke', 'Blue Devils', 'Virginia', 'Cavaliers', 'Wahoos', 'Wake Forest', 
-        'Demon Deacons', 'Boston College', 'Eagles', 'Cal', 'Bears', 'Stanford', 'Cardinal',
-        # --- Big 12 ---
-        'Utah', 'Utes', 'Kansas State', 'Wildcats', 'Oklahoma State', 'Cowboys', 
-        'Iowa State', 'Cyclones', 'BYU', 'Cougars', 'Colorado', 'Buffaloes', 'TCU', 
-        'Horned Frogs', 'Texas Tech', 'Red Raiders', 'Baylor', 'Bears', 'Kansas', 
-        'Jayhawks', 'West Virginia', 'Mountaineers', 'UCF', 'Knights', 'Cincinnati', 
-        'Bearcats', 'Arizona', 'Wildcats', 'Arizona State', 'Sun Devils', 'Houston', 'Cougars',
-        # --- Group of 5 & Independents ---
-        'Notre Dame', 'Fighting Irish', 'Boise State', 'Broncos', 'UNLV', 'Rebels', 
-        'Liberty', 'Flames', 'Tulane', 'Green Wave', 'Memphis', 'Tigers', 'USF', 'Bulls', 
-        'James Madison', 'JMU', 'Dukes', 'App State', 'Appalachian State', 'Mountaineers', 
-        'Coastal Carolina', 'Chanticleers', 'Louisiana', 'Ragin Cajuns', 'Troy', 'Trojans', 
-        'South Alabama', 'Jaguars', 'Arkansas State', 'Red Wolves', 'Texas State', 'Bobcats', 
-        'Georgia Southern', 'Eagles', 'Marshall', 'Thundering Herd', 'Old Dominion', 
-        'Monarchs', 'Georgia State', 'Panthers', 'Toledo', 'Rockets', 'Miami (OH)', 
-        'Miami OH', 'RedHawks', 'Ohio', 'Bobcats', 'Bowling Green', 'Falcons', 
-        'Northern Illinois', 'Huskies', 'Western Michigan', 'Broncos', 'Central Michigan', 
-        'Chippewas', 'Eastern Michigan', 'Eagles', 'Buffalo', 'Bulls', 'Kent State', 
-        'Golden Flashes', 'Akron', 'Zips', 'Ball State', 'Cardinals', 'Fresno State', 
-        'Bulldogs', 'San Diego State', 'Aztecs', 'San Jose State', 'Spartans', 'Air Force', 
-        'Falcons', 'Wyoming', 'Cowboys', 'Colorado State', 'Rams', 'New Mexico', 'Lobos', 
-        'Utah State', 'Aggies', 'Nevada', 'Wolf Pack', 'Hawaii', 'Rainbow Warriors', 
-        'Army', 'Black Knights', 'Navy', 'Midshipmen', 'UConn', 'Huskies', 'UMass', 
-        'Minutemen', 'Oregon State', 'Beavers', 'Washington State', 'Cougars', 'Wazzu', 
-        'North Texas', 'Mean Green', 'UTSA', 'Roadrunners', 'Rice', 'Owls', 'UAB', 
-        'Blazers', 'FAU', 'Owls', 'Charlotte', '49ers', 'Tulsa', 'Golden Hurricane', 
-        'East Carolina', 'Pirates', 'Temple', 'Owls', 'Western Kentucky', 'WKU', 
-        'Hilltoppers', 'Middle Tennessee', 'Blue Raiders', 'Sam Houston', 'Bearkats', 
-        'Jacksonville State', 'Jax State', 'Gamecocks', 'FIU', 'Panthers', 'UTEP', 
-        'Miners', 'New Mexico State', 'Aggies', 'Kennesaw State', 'Owls'
+        'Rutgers', 'Scarlet Knights', 'Indiana', 'Hoosiers'
     ]
 }
 
@@ -140,8 +98,7 @@ def _smart_title_case(text: str) -> str:
     if not text: return ""
     text = text.title()
     
-    # 1. Canonical Team Mapping (SMART UPDATE)
-    # This prevents "Bama -3" and "Alabama -3" being distinct
+    # 1. Canonical Team Mapping
     team_map = {
         r'\bBama\b': 'Alabama', r'\bUga\b': 'Georgia', r'\bMiss St\b': 'Mississippi State',
         r'\bMich St\b': 'Michigan State', r'\bOh St\b': 'Ohio State', r'\bOsu\b': 'Ohio State',
@@ -167,7 +124,7 @@ def _smart_title_case(text: str) -> str:
         r'\bNhl\b': 'NHL', r'\bNcaaf\b': 'NCAAF', r'\bNcaab\b': 'NCAAB',
         r'\bUfc\b': 'UFC', r'\bWnba\b': 'WNBA', r'\bMls\b': 'MLS',
         r'\bPra\b': 'PRA', r'\bSog\b': 'SOG', r'\bTtu\b': 'TTU', r'\bTto\b': 'TTO',
-        r'\bAtt\b': 'ATT', r'\bYds\b': 'Yds', r'\bTds\b': 'TDs', r'Td\b': 'TD',
+        r'\bAtt\b': 'ATT', r'\bYds\b': 'Yds', r'\bTds\b': 'TDs', r' Td\b': 'TD',
         r'\bYrfi\b': 'YRFI', r'\bNrfi\b': 'NRFI', r'\bSgp\b': 'SGP',
         r'\bAtd\b': 'Anytime TD', r'\bAnytime Td\b': 'Anytime TD',
         r'\b1H\b': '1H', r'\b2H\b': '2H', r'\b1Q\b': '1Q', r'\bOt\b': 'OT',
@@ -198,8 +155,8 @@ def format_pick_value(pick: str, bet_type: str, league: str) -> str:
         return pick
 
     if bet_type == 'Total':
-        pick = re.sub(r'\b(O|Over)\s*(\d)', r'Over  ', pick, flags=re.I)
-        pick = re.sub(r'\b(U|Under)\s*(\d)', r'Under  ', pick, flags=re.I)
+        pick = re.sub(r'\b(O|Over)\s*(\d)', r'Over \2', pick, flags=re.I)
+        pick = re.sub(r'\b(U|Under)\s*(\d)', r'Under \2', pick, flags=re.I)
         return pick
 
     if bet_type == 'Player Prop':

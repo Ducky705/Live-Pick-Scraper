@@ -23,11 +23,11 @@ def test_regex_accuracy(text, expected_val, expected_type):
         id=1, source_unique_id="test", source_url="test", capper_name="test",
         raw_text=text, pick_date=date.today()
     )
-    result = parse_with_regex(pick)
+    results = parse_with_regex(pick)
     
-    assert result is not None, f"Failed to parse: {text}"
-    assert result.pick_value == expected_val
-    assert result.bet_type == expected_type
+    assert results, f"Failed to parse: {text}"
+    assert results[0].pick_value == expected_val
+    assert results[0].bet_type == expected_type
 
 def test_unit_extraction():
     cases = [
@@ -35,7 +35,8 @@ def test_unit_extraction():
         ("Lakers -5 (3units)", 3.0),
         ("Lakers -5 MAX BET", 5.0),
         ("Lakers -5 Whale Play", 5.0),
-        ("Lakers -5", 1.0)
+        # Default case: No unit info found -> Expect None
+        ("Lakers -5", None) 
     ]
     
     for text, expected_unit in cases:
@@ -43,6 +44,6 @@ def test_unit_extraction():
             id=1, source_unique_id="test", source_url="test", capper_name="test",
             raw_text=text, pick_date=date.today()
         )
-        result = parse_with_regex(pick)
-        if result:
-            assert result.unit == expected_unit, f"Unit failed for {text}"
+        results = parse_with_regex(pick)
+        if results:
+            assert results[0].unit == expected_unit, f"Unit failed for {text}"

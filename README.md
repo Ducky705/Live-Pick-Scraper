@@ -1,137 +1,73 @@
-# Telegram Scraper
+# Telegram Scraper 2.0 (CapperSuite) v2.0.0
 
-A streamlined sports betting picks management application that automates extraction, parsing, grading, and uploading of betting picks from Telegram channels. Built with Python, Flask, and modern web technologies.
+CapperSuite is a standalone desktop application for aggregating and parsing sports betting picks from Telegram channels. It uses AI (LLM) and OCR to extract picks, odds, and units from structured and unstructured messages.
 
-![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
-![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)
-![Tesseract](https://img.shields.io/badge/Tesseract-OCR-orange.svg)
-![Telegram](https://img.shields.io/badge/Telegram-API-blue.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+## Features
 
-## 🎯 What It Does
+-   **Standalone Desktop App**: Native application for macOS and Windows. No Python installation required for end-users.
+-   **AI-Powered Parsing**: Uses advanced LLMs (via OpenRouter) to extract picks from complex text.
+-   **Integrated OCR**: Automatically extracts text from images (screenshots, slips) using Tesseract.
+-   **Multi-Channel Sync**: Connects to your Telegram account and syncs selected channels.
+-   **Smart Filtering**: Advanced table filtering and "Intelligence Refinery" for manual review.
+-   **Auto-Review**: AI-powered review system to validate and correct pick metadata.
+-   **CSV Export**: Export processed picks to CSV for analysis.
+-   **Supabase Integration**: Optional integration for syncing picks to a central database.
 
-Telegram Scraper helps sports betting analysts automate their workflow by:
+## Installation
 
-- **Extract** picks from Telegram channels and groups
-- **Parse** unstructured data using AI and OCR
-- **Grade** picks against real game results
-- **Upload** processed data to cloud databases
+### For End Users
+Download the latest release for your OS:
+-   **macOS**: `TelegramScraper.app`
+-   **Windows**: `TelegramScraper.exe`
 
-## 🚀 Quick Start
+Run the application. On first launch, you will be asked to log in with your Telegram phone number.
 
-### Installation
+### For Developers
 
-```bash
-# Clone and setup
-git clone <repository-url>
-cd TelegramScraper
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/Ducky705/Telegram-Scraper.git
+    cd Telegram-Scraper
+    ```
 
-### Run the Application
+2.  Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-```bash
-python main.py
-```
+3.  Configure `.env` (Create a `.env` file in root):
+    ```env
+    API_ID=your_api_id
+    API_HASH=your_api_hash
+    OPENROUTER_API_KEY=your_key
+    SUPabase_URL=your_url
+    SUPabase_KEY=your_key
+    ```
+    *Note: The standalone build packages the `.env` internally.*
 
-### 4-Step Workflow
+4.  Run from source:
+    ```bash
+    python main.py
+    ```
 
-1. **Connect** - Authenticate with Telegram using your phone number
-2. **Select** - Choose channels and target date for picks
-3. **Process** - Review messages, enable OCR, and generate AI prompts
-4. **Grade** - Compare picks against results and upload to database
+## Building from Source
 
-## 🔄 Complete Workflow
+See [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) for detailed instructions on how to build the standalone executables for macOS and Windows using PyInstaller.
 
-```mermaid
-flowchart TD
-    A[Launch App] --> B[Authentication]
-    B --> C{Connected?}
-    C -->|No| D[Enter Phone & Code]
-    C -->|Yes| E[Fetch Channels]
-    D --> E
-    
-    E --> F[Select Channels]
-    F --> G[Choose Date]
-    G --> H[Fetch Messages]
-    H --> I[Display Grid]
-    
-    I --> J[Review Messages]
-    J --> K[Select & Enable OCR]
-    K --> L[Detect Watermarks]
-    L --> M[Generate AI Prompts]
-    
-    M --> N[Paste AI Responses]
-    N --> O[Validate Data]
-    O --> P[Smart Fill Missing]
-    P --> Q[Review Picks]
-    
-    Q --> R[Grade Against Results]
-    R --> S[Upload to Database]
-    S --> T[Complete]
-    
-    %% Parallel processing
-    H --> AA[Parallel Fetch]
-    AA --> BB[Download Images]
-    M --> CC[Parallel Processing]
-    R --> DD[Fetch Scores]
-    DD --> EE[Compare Results]
-    
-    style A fill:#e3f2fd
-    style T fill:#c8e6c9
-    style M fill:#e8f5e9
-    style R fill:#fff8e1
-```
+## Usage
 
-## 🛠️ Key Features
+1.  **Select Channels**: Choose the Telegram channels you want to scrape.
+2.  **Fetch Messages**: Click "Initialize Data Fetch".
+3.  **Refine**: Use the "Intelligence Refinery" to process messages with AI.
+4.  **Export**: Export the final table to CSV or upload to the database.
 
-- **Telegram Integration**: Connect to multiple channels and fetch messages
-- **OCR Processing**: Extract text from images using Tesseract
-- **AI-Powered Parsing**: Convert unstructured data to structured JSON
-- **Smart Filtering**: Remove watermarks and noise
-- **Automatic Grading**: Compare picks against ESPN API results
-- **Cross-Platform**: Works on Windows, macOS, and Linux
-- **Desktop App**: Package as standalone executable
+## Architecture
 
-## 📦 Building the Desktop App
+-   **Frontend**: HTML/JS/CSS (Tailwind + Swiss Style) served via Flask.
+-   **Backend**: Python (Flask + Waitress) running locally.
+-   **GUI Wrapper**: `pywebview` creates a native window wrapper around the local web server.
+-   **Data**: `user_session.session` stores Telegram auth state locally.
 
-```bash
-# Clean and build
-rm -rf dist/ build/ *.spec
-python build_app.py
-# Executable created in /dist
-```
+## License
 
-The built application is completely self-contained with no external dependencies required.
-
-## ⚙️ Configuration
-
-Create a `.env` file with your credentials:
-
-```env
-# Telegram API
-API_ID=your_telegram_api_id
-API_HASH=your_telegram_api_hash
-
-# Supabase (Optional)
-SUPABASE_URL=your_supabase_url
-SUPABASE_KEY=your_supabase_key
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Commit your changes: `git commit -m 'Add feature'`
-4. Push to your fork: `git push origin feature-name`
-5. Create a Pull Request
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
----
-
-**Telegram Scraper** - Streamlining sports betting data management 🎯
+Private / Proprietary

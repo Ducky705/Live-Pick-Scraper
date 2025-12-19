@@ -123,6 +123,43 @@ def interpret_bet_result(bet_desc, team1_name, team2_name, score1, score2, sport
         elif adj_score < opponent_score: return "Loss"
         else: return "PUSH"
 
+def _find_matching_game(bet_text, potential_games):
+    """
+    Helper to find a matching game from a list of candidates.
+    Returns the game object or None.
+    """
+    desc_norm = normalize_text(bet_text).lower()
+    
+    for game in potential_games:
+        t1_name = game.get('team1', '')
+        t2_name = game.get('team2', '')
+        
+        t1_norm = normalize_name(t1_name)
+        t2_norm = normalize_name(t2_name)
+        
+        t1_match = False
+        t2_match = False
+        
+        # 1. Alias Matching
+        for k, v in TEAM_ALIASES.items():
+            if team_in_description(desc_norm, k):
+                for alias in v:
+                    an = normalize_name(alias)
+                    if an and an in t1_norm: t1_match = True
+                    if an and an in t2_norm: t2_match = True
+        
+        # 2. Direct Matching
+        if not t1_match and not t2_match:
+            def strict_match(team, text):
+                return re.search(r'\b' + re.escape(team.lower()) + r'\b', text.lower())
+
+            if strict_match(t1_name, bet_text): t1_match = True
+            if strict_match(t2_name, bet_text): t2_match = True
+
+        if t1_match or t2_match:
+            return game
+    return None
+
 def grade_picks(picks, scores):
     graded_results = []
     
@@ -130,6 +167,13 @@ def grade_picks(picks, scores):
     scores_by_league = defaultdict(list)
     for g in scores:
         scores_by_league[g.get('league', '').lower()].append(g)
+
+    # Cross-League Map
+    CROSS_LEAGUE_MAP = {
+        'ncaaf': 'ncaab',
+        'ncaab': 'ncaaf',
+        'cfb': 'ncaab'
+    }
 
     for pick in picks:
         pick_obj = pick.copy()
@@ -140,43 +184,32 @@ def grade_picks(picks, scores):
             
             matched_game = None
             
-            # Only look at games in the relevant league(s)
+            # --- Attempt 1: Primary League ---
             target_leagues = LEAGUE_ALIASES.get(sport, [sport])
             potential_games = []
             for tl in target_leagues:
                 potential_games.extend(scores_by_league.get(tl, []))
             
-            for game in potential_games:
-                t1_name = game.get('team1', '')
-                t2_name = game.get('team2', '')
-                
-                t1_norm = normalize_name(t1_name)
-                t2_norm = normalize_name(t2_name)
-                
-                t1_match = False
-                t2_match = False
-                
-                # 1. Alias Matching
-                desc_norm = normalize_text(bet_text).lower()
-                for k, v in TEAM_ALIASES.items():
-                    if team_in_description(desc_norm, k):
-                        for alias in v:
-                            an = normalize_name(alias)
-                            if an and an in t1_norm: t1_match = True
-                            if an and an in t2_norm: t2_match = True
-                
-                # 2. Direct Matching
-                if not t1_match and not t2_match:
-                    def strict_match(team, text):
-                        return re.search(r'\b' + re.escape(team.lower()) + r'\b', text.lower())
-
-                    if strict_match(t1_name, bet_text): t1_match = True
-                    if strict_match(t2_name, bet_text): t2_match = True
-
-                if t1_match or t2_match:
-                    matched_game = game
-                    break
+            matched_game = _find_matching_game(bet_text, potential_games)
             
+            # --- Attempt 2: Cross-League Fallback ---
+            if not matched_game and sport in CROSS_LEAGUE_MAP:
+                alt_sport = CROSS_LEAGUE_MAP[sport]
+                # logging.info(f"Fallback check: {sport} -> {alt_sport} for '{bet_text}'")
+                
+                alt_leagues = LEAGUE_ALIASES.get(alt_sport, [alt_sport])
+                alt_games = []
+                for tl in alt_leagues:
+                    alt_games.extend(scores_by_league.get(tl, []))
+                
+                matched_game = _find_matching_game(bet_text, alt_games)
+                
+                if matched_game:
+                    # Found in other league! Update the pick object
+                    pick_obj['league'] = alt_sport.upper()
+                    # logging.info(f"Corrected League: {sport} -> {alt_sport}")
+                    sport = alt_sport # Update local var for interpret logic if needed
+
             if matched_game:
                 result = interpret_bet_result(
                     bet_text,

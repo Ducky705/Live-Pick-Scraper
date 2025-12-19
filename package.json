@@ -1,0 +1,29 @@
+{
+  "name": "telegram-scraper-2.0",
+  "version": "1.0.0",
+  "description": "A streamlined sports betting picks management application that automates extraction, parsing, grading, and uploading of betting picks from Telegram channels. Built with Python, Flask, and modern web technologies.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ducky705/Telegram-Scraper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ducky705/Telegram-Scraper/issues"
+  },
+  "homepage": "https://github.com/Ducky705/Telegram-Scraper#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.23",
+    "cssnano": "^7.1.2",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^4.1.18",
+    "vite": "^7.3.0"
+  }
+}

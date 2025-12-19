@@ -61,6 +61,10 @@ def refresh_caches():
     except Exception as e:
         print(f"Error refreshing caches: {e}")
 
+def get_capper_cache():
+    if not _capper_map: refresh_caches()
+    return _capper_map, _variant_map
+
 def get_or_create_capper_id(name):
     if not name or str(name).lower() == 'unknown': return None
     

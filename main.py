@@ -1,13 +1,28 @@
-# main.py
 import sys
 import os
+
+# Load .env file FIRST before any other imports that might need env vars
+from dotenv import load_dotenv
+load_dotenv()
+import json
 import threading
 import asyncio
 import logging
 import time
 import platform
+from datetime import datetime
+from threading import Lock # ADDED: Thread safety
 import webview # Requires: pip install pywebview
 from flask import Flask, render_template, request, jsonify
+from concurrent.futures import ThreadPoolExecutor
+from src.openrouter_client import openrouter_completion
+from src.utils import clean_text_for_ai
+
+# ADDED: Production server import
+try:
+    from waitress import serve
+except ImportError:
+    pass
 
 # Import config to get paths
 from config import TEMP_IMG_DIR, BASE_DIR, EXEC_DIR
@@ -28,12 +43,14 @@ from src.prompt_builder import generate_ai_prompt, generate_revision_prompt, gen
 from src.utils import detect_common_watermark, filter_text, backfill_odds, is_ad_content, cleanup_temp_images
 from src.score_fetcher import fetch_scores_for_date
 from src.grader import grade_picks
+from src.capper_matcher import capper_matcher
 
 try:
-    from src.supabase_client import fetch_all_cappers, upload_picks
+    from src.supabase_client import fetch_all_cappers, upload_picks, get_or_create_capper_id
 except ImportError:
     def fetch_all_cappers(): return []
     def upload_picks(p, d): return {'success': False, 'error': 'Supabase module missing'}
+    def get_or_create_capper_id(n): return None
 
 app = Flask(__name__)
 log = logging.getLogger('werkzeug')
@@ -54,15 +71,34 @@ def run_async(coro):
     return future.result()
 
 _score_cache = {}
+_global_progress = {"percent": 0, "status": "IDLE"}
+
+# --- GLOBAL STATE LOCKS ---
+# Critical for production stability when threaded
+progress_lock = Lock()
+score_cache_lock = Lock()
+
+def set_progress(p, s):
+    with progress_lock:
+        _global_progress['percent'] = p
+        _global_progress['status'] = s
+
+# Hook up callback
+tg_manager.set_progress_callback(set_progress)
 
 def background_score_fetch(target_date):
     try:
         scores = fetch_scores_for_date(target_date)
-        _score_cache[target_date] = scores
+        with score_cache_lock:
+            _score_cache[target_date] = scores
     except Exception as e:
-        print(f"[Background] Score fetch failed: {e}")
+        logging.error(f"[Background] Score fetch failed: {e}")
 
 # --- FLASK ROUTES ---
+
+@app.route('/api/progress')
+def get_progress():
+    return jsonify(_global_progress)
 
 @app.route('/')
 def index(): return render_template('index.html')
@@ -100,7 +136,7 @@ def get_channels():
 
 @app.route('/api/fetch_messages', methods=['POST'])
 def fetch_messages():
-    cleanup_temp_images(TEMP_IMG_DIR)
+    # cleanup_temp_images(TEMP_IMG_DIR)
     data = request.json
     channel_ids = data.get('channel_id')
     target_date = data.get('date')
@@ -131,51 +167,155 @@ def api_generate_prompt():
     watermark_filter = data.get('watermark', '').strip()
     
     processed_messages = []
+    total = len(selected_messages)
     
-    for msg in selected_messages:
-        full_text = (msg.get('text', '') + " " + (msg.get('ocr_text', '') or "")).strip()
-        if is_ad_content(full_text):
-            continue 
+    ocr_futures = {}
+    
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        for i, msg in enumerate(selected_messages):
+            # Report progress
+            percent = int((i / total) * 50) if total > 0 else 0
+            if i % 5 == 0: set_progress(percent, f"Queueing Tasks {i+1}/{total}...")
+            
+            # Clean Text Pre-processing
+            if msg.get('text'):
+                msg['text'] = clean_text_for_ai(msg['text'])
 
-        processed_msg = msg.copy()
-        
-        if msg.get('image') and msg.get('do_ocr') and not msg.get('ocr_text'):
+            msg['ocr_texts'] = [] 
+            
+            # Determine images
+            images_to_process = []
+            if msg.get('images') and isinstance(msg['images'], list):
+                images_to_process = msg['images']
+            elif msg.get('image'):
+                images_to_process = [msg['image']]
+                
+            if msg.get('do_ocr') and images_to_process:
+                for img_path in images_to_process:
+                    future = executor.submit(extract_text, img_path)
+                    if i not in ocr_futures: ocr_futures[i] = []
+                    ocr_futures[i].append(future)
+
+    # Collect Results
+    for i, futures in ocr_futures.items():
+        set_progress(50 + int((i/total)*40), f"Processing OCR {i+1}...")
+        for f in futures:
             try:
-                raw_ocr = extract_text(msg['image'])
-                processed_msg['ocr_text'] = raw_ocr
+                raw_ocr = f.result()
+                if raw_ocr:
+                    # Apply cleaning immediately
+                    cleaned = clean_text_for_ai(raw_ocr)
+                    selected_messages[i]['ocr_texts'].append(cleaned)
             except Exception as e:
-                processed_msg['ocr_text'] = "" 
-        else:
-             processed_msg['ocr_text'] = msg.get('ocr_text', "")
+                logging.error(f"OCR Future Error: {e}")
 
-        if processed_msg.get('ocr_text'):
-            processed_msg['ocr_text'] = filter_text(processed_msg['ocr_text'], watermark_filter)
-        if processed_msg.get('text'):
-            processed_msg['text'] = filter_text(processed_msg['text'], watermark_filter)
-            
-        processed_messages.append(processed_msg)
-            
-    MAX_CHARS = 150000 
-    prompts = []
-    current_batch = []
-    current_chars = 0
+    set_progress(95, "Generating Prompts...")
     
-    for msg in processed_messages:
-        msg_len = len(msg.get('text', '')) + len(msg.get('ocr_text', '')) + 200
-        if current_chars + msg_len > MAX_CHARS and current_batch:
-            prompts.append(generate_ai_prompt(current_batch))
-            current_batch = []
-            current_chars = 0
-        current_batch.append(msg)
-        current_chars += msg_len
-        
-    if current_batch:
-        prompts.append(generate_ai_prompt(current_batch))
+    # Generate Master Prompt
+    master_prompt = generate_ai_prompt(selected_messages)
+    
+    set_progress(100, "Complete")
     
     return jsonify({
-        'prompts': prompts,
-        'updated_messages': processed_messages 
+        'master_prompt': master_prompt,
+        'updated_messages': selected_messages 
     })
+
+import difflib
+
+def smart_merge_odds(picks):
+    """
+    Fuzzy matches picks to propagate odds from those that have them to those that don't.
+    """
+    # 1. Separate sources (have odds) and targets (missing odds)
+    sources = [p for p in picks if p.get('odds') is not None]
+    targets = [p for p in picks if p.get('odds') is None]
+    
+    if not sources or not targets:
+        return picks
+        
+    for target in targets:
+        best_match = None
+        best_ratio = 0.0
+        
+        target_norm = target.get('pick', '').lower().strip()
+        target_type = target.get('type')
+        target_league = target.get('league')
+        
+        for source in sources:
+            # STRICT filters first: Must match League and Type
+            if source.get('league') != target_league or source.get('type') != target_type:
+                continue
+                
+            source_norm = source.get('pick', '').lower().strip()
+            
+            # Simple substring check (e.g. "Seahawks ML" in "Seattle Seahawks ML -120")
+            if target_norm in source_norm or source_norm in target_norm:
+                ratio = 1.0
+            else:
+                # Fuzzy match
+                ratio = difflib.SequenceMatcher(None, target_norm, source_norm).ratio()
+            
+            # Update best match if this is better and passes threshold
+            if ratio > 0.85 and ratio > best_ratio:
+                best_ratio = ratio
+                best_match = source
+        
+        # Apply the odds if we found a good match
+        if best_match:
+            target['odds'] = best_match['odds']
+            # logging.info(f"Fuzzy Matched Odds: {target['pick']} -> {best_match['pick']} ({best_match['odds']})")
+            
+    return picks
+
+@app.route('/api/ai_fill', methods=['POST'])
+def api_ai_fill():
+    data = request.json
+    prompt = data.get('prompt')
+    model = data.get('model', 'mistralai/devstral-2512:free') # Default to a free one
+    
+    if not prompt: 
+        return jsonify({'error': 'No prompt provided'}), 400
+        
+    try:
+        logging.info(f"Calling OpenRouter with model: {model}")
+        result_json_str = openrouter_completion(prompt, model)
+        # Parse it here to ensure it's valid JSON before sending to frontend? 
+        # Or just send string. Frontend expects Object or Array.
+        # openrouter_completion returns a string (the content).
+        # Let's try to parse it to ensure it's JSON, but return the parsed obj.
+        try:
+            result_obj = json.loads(result_json_str)
+            # Unwrap if it's the new container format
+            if isinstance(result_obj, dict) and 'picks' in result_obj:
+                raw_picks = result_obj['picks']
+                # Remap Short Keys to Long Keys
+                remapped = []
+                for p in raw_picks:
+                    remapped.append({
+                        "message_id": p.get("id"),
+                        "capper_name": p.get("cn"),
+                        "league": p.get("lg"),
+                        "type": p.get("ty"),
+                        "pick": p.get("p"),
+                        "odds": p.get("od"),
+                        "units": p.get("u", 1.0),
+                        "date": p.get("dt")
+                    })
+                
+                # Apply Fuzzy Odds Matching
+                result_obj = smart_merge_odds(remapped)
+            
+            return jsonify({'result': result_obj})
+        except json.JSONDecodeError as e:
+            logging.error(f"[AI Fill] JSON Decode Error: {e}")
+            logging.error(f"[AI Fill] Raw Response: {result_json_str[:500]}")
+            return jsonify({'error': 'AI returned invalid JSON', 'raw': result_json_str[:500]}), 500
+            
+    except Exception as e:
+        logging.error(f"[AI Fill] Exception: {e}")
+        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/validate_picks', methods=['POST'])
 def api_validate_picks():
@@ -185,23 +325,67 @@ def api_validate_picks():
     msg_map = {m['id']: f"[CAPTION]: {m.get('text','')}\n[OCR]: {m.get('ocr_text','')}" for m in original_messages}
     
     failed_items = []
+    
+    # Noise patterns that indicate a bad pick extraction
+    noise_patterns = [
+        # Sportsbook names
+        'hard rock', 'draftkings', 'fanduel', 'betmgm', 'caesars', 'bet365', 'pointsbet',
+        # Record labels / promo text
+        'main play', 'potd', 'lock of the day', 'fire pick', 'max bet', 'bomb',
+        '5-', '4-', '3-', '2-', '1-', '0-',  # Record patterns like "5-2 Run"
+        # Generic descriptions (missing specifics)
+        'player passing yards', 'player rushing yards', 'player receiving yards',
+        'team totals', 'moneyline pick', 'spread pick'
+    ]
+    
+    import re
+    # Pattern: Valid pick should have a number (spread/total) or "ML"
+    has_number_or_ml = re.compile(r'(-?\d+\.?\d*|ML|ml|Over|Under|over|under)', re.IGNORECASE)
+    
     for pick in picks:
         capper = pick.get('capper_name', 'Unknown')
         league = pick.get('league', 'Unknown')
+        pick_value = pick.get('pick', '')
+        pick_lower = pick_value.lower() if pick_value else ''
         
-        if capper == "Unknown" or league == "Unknown" or league == "Other":
+        # Check for any failure condition
+        is_failed = (
+            capper in ["Unknown", "N/A", None, ""] or
+            league in ["Unknown", "Other", None, ""] or
+            not pick_value or pick_value == "Unknown"
+        )
+        
+        # Check for noise patterns in pick
+        if not is_failed and pick_value:
+            for noise in noise_patterns:
+                if noise in pick_lower:
+                    is_failed = True
+                    break
+            
+            # Check if pick lacks proper formatting (no number or ML)
+            if not is_failed and not has_number_or_ml.search(pick_value):
+                is_failed = True
+        
+        if is_failed:
             msg_id = pick.get('message_id')
             failed_items.append({
                 "message_id": msg_id,
                 "capper_name": capper,
                 "league": league,
-                "pick": pick.get('pick'),
+                "pick": pick_value,
                 "original_text": msg_map.get(msg_id, "")[:1500] 
             })
 
-    if not failed_items: return jsonify({'status': 'clean'})
+    if not failed_items: 
+        return jsonify({'status': 'clean'})
+    
     revision_prompt = generate_revision_prompt(failed_items)
-    return jsonify({'status': 'needs_revision', 'failed_count': len(failed_items), 'revision_prompt': revision_prompt})
+    return jsonify({
+        'status': 'needs_revision', 
+        'failed_count': len(failed_items), 
+        'failed_items': failed_items,  # Return list for frontend
+        'revision_prompt': revision_prompt
+    })
 
 @app.route('/api/merge_revisions', methods=['POST'])
 def api_merge_revisions():
@@ -219,15 +403,24 @@ def api_merge_revisions():
     merged = []
     for orig in original_picks:
         mid = orig.get('message_id')
-        if (orig.get('capper_name') == 'Unknown' or orig.get('league') == 'Unknown') and mid in revised_map:
+        # Always merge if a revision exists (trusting the revision process)
+        if mid in revised_map:
             if len(revised_map[mid]) > 0:
                 replacement = revised_map[mid].pop(0)
-                if replacement.get('capper_name') != "Unknown": 
-                    orig['capper_name'] = replacement.get('capper_name')
-                if replacement.get('league') != "Unknown":
-                    orig['league'] = replacement.get('league')
-                if replacement.get('type'): orig['type'] = replacement.get('type')
-                if replacement.get('pick'): orig['pick'] = replacement.get('pick')
+                
+                # Update fields if they exist in replacement (even if null/empty, to allow correction)
+                # Update fields with support for minified keys
+                if 'capper_name' in replacement: orig['capper_name'] = replacement['capper_name']
+                elif 'cn' in replacement: orig['capper_name'] = replacement['cn']
+                
+                if 'league' in replacement: orig['league'] = replacement['league']
+                elif 'lg' in replacement: orig['league'] = replacement['lg']
+                
+                if 'type' in replacement: orig['type'] = replacement['type']
+                elif 'ty' in replacement: orig['type'] = replacement['ty']
+                
+                if 'pick' in replacement: orig['pick'] = replacement['pick']
+                elif 'p' in replacement: orig['pick'] = replacement['p']
         merged.append(orig)
     return jsonify({'merged_picks': merged})
 
@@ -272,8 +465,7 @@ def api_grade_picks():
     target_date = data.get('date')
     if not picks: return jsonify([])
     
-    picks = backfill_odds(picks)
-    
+    # 1. Fetch Scores (Cache or Live)
     if target_date in _score_cache:
         scores = _score_cache[target_date]
     else:
@@ -284,7 +476,70 @@ def api_grade_picks():
             print(f"Score fetch failed: {e}")
             return jsonify({'error': 'Score fetch failed'}), 500
             
+    # 2. Traditional Grading (Regex/Fuzzy)
     graded_data = grade_picks(picks, scores)
+
+    # 3. AI Fallback (Smart & Efficient)
+    # Filter for items that failed grading (Pending/Unknown) BUT have potential game data or are just tricky
+    pending_items = [p for p in graded_data if p.get('result') in ["Pending/Unknown", "Error"]]
+    
+    if pending_items:
+        # We only send specific data to save tokens
+        # We need the pick description and the available scores for that sport
+        logging.info(f"AI Grading Fallback triggered for {len(pending_items)} items")
+        
+        # Structure the prompt efficiently
+        # We'll group by Sport to provide relevant context
+        
+        ai_payload = []
+        for p in pending_items:
+            # Try to narrow down scores to relevant sport/league to reduce context
+            sport = str(p.get('league', '')).lower()
+            relevant_scores = [s for s in scores if s.get('league', '').lower() in sport or sport in s.get('league', '').lower()]
+            
+            # If no relevant scores found, maybe send all? Or skip?
+            # Let's send a simplified list of scores if possible, or just the whole batch if small.
+            # For efficiency, let's just send the pick text and ask AI to match against PROVIDED simplified score list.
+            
+            ai_payload.append({
+                "id": p.get('message_id'),
+                "desc": p.get('pick'),
+                "sport": p.get('league'),
+                "candidates": [f"{s['team1']} {s['score1']} - {s['score2']} {s['team2']}" for s in relevant_scores[:20]] # Limit candidates
+            })
+
+        if ai_payload:
+            try:
+                # Construct Minimal Prompt
+                prompt = f"""
+### GRADING TASK
+Determine WIN/LOSS/PUSH for these picks based on the scores.
+Return JSON Object: {{ "grades": [ {{ "id": 123, "result": "Win/Loss/Push", "score": "Lakers 110-100 Celtics" }} ] }}
+If score not found, result="Unknown".
+
+### SCORES AVAILABLE
+{json.dumps([s['team1'] + ' ' + str(s['score1']) + '-' + str(s['score2']) + ' ' + s['team2'] for s in scores[:50]])}
+
+### PICKS TO GRADE
+{json.dumps([{ 'id': x['id'], 'pick': x['desc'], 'sport': x['sport'] } for x in ai_payload])}
+"""
+                # Call AI
+                ai_resp_str = openrouter_completion(prompt, "mistralai/devstral-2512:free")
+                ai_resp = json.loads(ai_resp_str)
+                
+                # Merge AI Grades
+                if 'grades' in ai_resp:
+                    grade_map = {g['id']: g for g in ai_resp['grades']}
+                    for p in graded_data:
+                        if p.get('message_id') in grade_map:
+                            ai_g = grade_map[p.get('message_id')]
+                            if ai_g.get('result') and ai_g.get('result') != "Unknown":
+                                p['result'] = ai_g['result']
+                                p['score_summary'] = ai_g.get('score', 'AI Graded')
+                                
+            except Exception as e:
+                logging.error(f"AI Grading Failed: {e}")
+
     return jsonify(graded_data)
 
 @app.route('/api/get_cappers', methods=['GET'])
@@ -293,6 +548,62 @@ def api_get_cappers():
         cappers = fetch_all_cappers() 
         return jsonify(cappers)
     except Exception as e: return jsonify([])
+
+@app.route('/api/export_csv', methods=['POST'])
+def api_export_csv():
+    """Server-side CSV export - saves directly to Desktop for pywebview compatibility"""
+    import csv
+    from pathlib import Path
+    
+    data = request.json
+    picks = data.get('picks', [])
+    
+    if not picks:
+        return jsonify({'success': False, 'error': 'No picks to export'})
+    
+    try:
+        # Save to Desktop
+        desktop = Path.home() / "Desktop"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"picks_export_{timestamp}.csv"
+        filepath = desktop / filename
+        
+        with open(filepath, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            # Header
+            writer.writerow(['ID', 'Capper', 'Sport', 'Type', 'Pick', 'Odds', 'Units', 'Date', 'Result'])
+            
+            # Data rows
+            blacklist = ['80k main play', 'vip whale', 'lock of the', 'max bet', 'hard rock', 'draftkings', 'fanduel']
+            
+            for pick in picks:
+                # Final Safety Check: If pick matches noise exactly or contains noise, scrub it
+                p_val = pick.get('pick', '') or ''
+                p_lower = p_val.lower()
+                
+                is_noise = False
+                for b in blacklist:
+                    if b in p_lower:
+                        is_noise = True
+                        break
+                
+                final_pick = "Unknown (Manual Review)" if is_noise else p_val
+
+                writer.writerow([
+                    pick.get('message_id', ''),
+                    pick.get('capper_name', ''),
+                    pick.get('league', ''),
+                    pick.get('type', 'BET'),
+                    final_pick,
+                    pick.get('odds', ''),
+                    pick.get('units', ''),
+                    pick.get('date', ''),
+                    pick.get('result', '')
+                ])
+        
+        return jsonify({'success': True, 'path': str(filepath), 'filename': filename})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
 
 @app.route('/api/upload', methods=['POST'])
 def api_upload():
@@ -303,23 +614,199 @@ def api_upload():
     result = upload_picks(picks, target_date)
     return jsonify(result)
 
+@app.route('/api/auto_review', methods=['POST'])
+def api_auto_review():
+    data = request.json
+    picks = data.get('picks', [])
+    
+    if not picks:
+        return jsonify({'changes': []})
+
+    # 1. Identify items needing review
+    # Criteria: Unknown/N/A in critical fields, or generic types
+    to_review = []
+    
+    # Get all known cappers for context
+    known_cappers = [c['name'] for c in fetch_all_cappers()]
+    
+    for p in picks:
+        reasons = []
+        if p.get('capper_name') in ['Unknown', 'N/A', '', None]: reasons.append('Missing Capper')
+        if p.get('league') in ['Unknown', 'Other', '', None]: reasons.append('Missing Sport')
+        if p.get('type') in ['Unknown', 'Other', '', None]: reasons.append('Missing Type')
+        
+        # Also check for likely mistakes or noise in pick name if we want, but let's stick to metadata first
+        
+        if reasons:
+            to_review.append({
+                'item': p,
+                'reasons': reasons
+            })
+            
+    if not to_review:
+        return jsonify({'changes': []})
+        
+    # 2. Build Prompt
+    # We'll batch them to save time, but not too many at once. Let's do all in one go if < 50, else batch?
+    # For now, simplistic approach: one big prompt.
+    
+    review_context = []
+    for entry in to_review[:50]: # Limit to 50 for safety/speed
+        p = entry['item']
+        # We need original text context. Ideally the frontend passes it, or we have it in the pick object?
+        # The pick object usually comes from the frontend state which might NOT have the full text if it's the final table.
+        # But wait, looking at swiss_app.js: state.processedData has the full object usually. 
+        # API expects frontend to send enough data.
+        # Let's assume frontend sends { ...pick, original_text: "..." } or we just rely on what's there.
+        # If 'original_text' is missing, AI will struggle.
+        # CHECK: Does frontend export have original text?
+        # Answer: The `processedData` in swiss_app.js usually has it. We will ensure frontend sends it.
+        
+        review_context.append({
+            "id": p.get('message_id'),
+            "current": {
+                "capper": p.get('capper_name'),
+                "sport": p.get('league'),
+                "type": p.get('type'),
+                "pick": p.get('pick')
+            },
+            "context": p.get('original_text', '')[:500] # Truncate for token limits
+        })
+        
+    prompt = f"""
+### ANALYTICAL REVIEW TASK
+You are a Sports Betting Data Analyst.
+Review the following extracted picks. Some have missing or incorrect metadata (Capper, Sport, Type).
+Use the Context (original message) to determine the correct values.
+
+### KNOWN CAPPERS (Use these if applicable, otherwise infer new name):
+{json.dumps(known_cappers[:100])} ... (and others)
+
+### INSTRUCTIONS
+1. Fix "Unknown" or "N/A" values using the Context.
+2. "Sport" should be standard (NBA, NFL, NHL, MLB, NCAA, SOCCER, TENNIS, UFC, etc).
+3. "Type" should be one of: SPREAD, TOTAL, MONEYLINE, PROP, PARLAY, TEASER.
+4. "Capper" is the person/group giving the pick. 
+5. Return ONLY changes. If a value is currently correct, do not return it.
+6. **IMPORTANT**: If a pick is GARBAGE, NOISE, an AD, or NOT A REAL BET (e.g., promotional text, website ads, crypto talk, non-sports content), recommend DELETION by setting field="DELETE" and new="true".
+
+### INPUT DATA
+{json.dumps(review_context)}
+
+### OUTPUT FORMAT (JSON)
+{{
+  "changes": [
+    {{ "id": "msg_1", "field": "capper_name", "old": "Unknown", "new": "CorrectName", "reason": "Found in signature" }},
+    {{ "id": "msg_1", "field": "league", "old": "Unknown", "new": "NBA", "reason": "Lakers vs Celtics mentioned" }},
+    {{ "id": "msg_2", "field": "DELETE", "old": "-", "new": "true", "reason": "This is an advertisement, not a pick" }}
+  ]
+}}
+"""
+    
+    try:
+        # Call AI
+        # Using a smart model for reasoning
+        model = "mistralai/devstral-2512:free" # Fast and usually adequate
+        response_str = openrouter_completion(prompt, model)
+        
+        # Parse
+        try:
+            resp_json = json.loads(response_str)
+            return jsonify({'changes': resp_json.get('changes', [])})
+        except json.JSONDecodeError:
+            # Try to find JSON block
+            import re
+            match = re.search(r'\{.*\}', response_str, re.DOTALL)
+            if match:
+                try:
+                    resp_json = json.loads(match.group(0))
+                    return jsonify({'changes': resp_json.get('changes', [])})
+                except:
+                    pass
+            return jsonify({'changes': [], 'error': 'AI Parse Fail', 'raw': response_str})
+            
+    except Exception as e:
+        return jsonify({'changes': [], 'error': str(e)})
+
+# --- CAPPER RECONCILIATION ---
+@app.route('/api/match_cappers', methods=['POST'])
+def api_match_cappers():
+    try:
+        data = request.json
+        capper_names = data.get('names', [])
+        # Bulk match
+        matches = capper_matcher.match_names_bulk(capper_names)
+        return jsonify({'matches': matches})
+    except Exception as e:
+        logging.error(f"Error matching cappers: {e}")
+        return jsonify({'matches': {}})
+
+@app.route('/api/create_capper', methods=['POST'])
+def api_create_capper():
+    try:
+        data = request.json
+        name = data.get('name')
+        if not name: return jsonify({'success': False})
+        
+        # This function creates if not exists and returns ID
+        new_id = get_or_create_capper_id(name)
+        
+        if new_id:
+            # Force cache refresh so next match finds it immediately?
+            # Or just trust the return.
+            # Ideally we return the structured object expected by frontend
+            return jsonify({
+                'success': True,
+                'capper': {
+                    'name': name.title(), # Title case for display
+                    'id': new_id,
+                    'is_new': False 
+                }
+            })
+        else:
+            return jsonify({'success': False})
+    except Exception as e:
+        logging.error(f"Error creating capper: {e}")
+        return jsonify({'success': False, 'error': str(e)})
+
 # --- APP LAUNCHER ---
-def start_flask():
-    # Run Flask in a thread, daemon=True means it dies when main thread dies
-    app.run(port=5000, debug=False, use_reloader=False, threaded=True)
+def start_server():
+    """
+    Uses Waitress for production-grade stability instead of Flask's dev server.
+    This handles multiple requests better and prevents random crashes.
+    """
+    try:
+        from waitress import serve
+        logger = logging.getLogger('waitress')
+        logger.setLevel(logging.INFO)
+        # 4 threads is a sweet spot for this specific workload
+        serve(app, host='127.0.0.1', port=5000, threads=4, _quiet=True) 
+    except ImportError:
+        # Fallback if waitress isn't installed
+        app.run(port=5000, debug=False, use_reloader=False, threaded=True)
 
 if __name__ == '__main__':
-    cleanup_temp_images(TEMP_IMG_DIR)
+    # cleanup_temp_images(TEMP_IMG_DIR) 
     
-    # 1. Start Flask in background
-    t = threading.Thread(target=start_flask, daemon=True)
+    # 1. Start Server in background
+    t = threading.Thread(target=start_server, daemon=True)
     t.start()
     
-    # 2. Start Native Window (Blocks until closed)
-    # This creates a window without address bar/tabs
-    webview.create_window("CapperSuite", "http://127.0.0.1:5000", width=1200, height=800)
-    webview.start()
+    # 2. Start Native Window
+    # Performance Polish: Enable GPU acceleration hints if supported by webview
+    webview.create_window(
+        "CapperSuite", 
+        "http://127.0.0.1:5000", 
+        width=1280, # Increased default width for modern displays
+        height=850,
+        min_size=(1024, 768),
+        background_color='#FFFFFF'
+    )
     
-    # 3. When window closes, script ends here.
-    print("Window closed. Exiting...")
+    # Set icon path (Prefer .icns on Mac, .ico on Windows if available)
+    icon_path = os.path.join(BASE_DIR, 'static', 'logo.icns')
+    if not os.path.exists(icon_path):
+         icon_path = os.path.join(BASE_DIR, 'static', 'logo.ico')
+
+    webview.start(icon=icon_path, debug=False) # Debug False for production
     sys.exit(0)

@@ -124,3 +124,41 @@ def backfill_odds(picks):
                 p['units'] = 1.0
                 
     return picks
+
+def clean_text_for_ai(text):
+    """
+    Retrieval-Augmented compression: Removes high-entropy noise to save tokens.
+    """
+    if not text: return ""
+    
+    # 1. Remove URLs
+    text = re.sub(r'http\S+|www\.\S+', '', text)
+    
+    # 2. Remove standard legal disclaimers
+    text = re.sub(r'(?i)(gambling\sproblem|1-800-\d{3}-\d{4}|call\s*1-800).*', '', text)
+    
+    # 3. Remove excess punctuation/separators
+    text = re.sub(r'[-=_]{3,}', ' ', text)
+    
+    # 4. Remove generic Telegram noise
+    text = re.sub(r'(?i)(join\s*us|subscribe|link\s*in\s*bio|click\s*here|t\.me\/).*', '', text)
+    
+    # 5. CRITICAL: Remove known channel watermarks that get misidentified as cappers
+    # These are channel branding, NOT capper names
+    watermarks = [
+        r'@?cappersfree',
+        r'@?capperstree', 
+        r'@?cappers_free',
+        r'@?freecappers',
+        r'@?vippicks',
+        r'@?freepicks',
+        r'@?sportsbetting',
+        r'DM\s*@\w+',  # "DM @username" patterns
+    ]
+    for wm in watermarks:
+        text = re.sub(wm, '', text, flags=re.IGNORECASE)
+    
+    # 6. Collapse whitespace
+    text = re.sub(r'\s+', ' ', text).strip()
+    
+    return text[:2500] # Safe clamp

@@ -12,7 +12,23 @@ class TelegramManager:
     def __init__(self):
         self.client = None # Lazy init
         self.phone = None
+        self.phone = None
         self.phone_code_hash = None
+        self.progress_callback = None
+
+    def set_progress_callback(self, callback):
+        self.progress_callback = callback
+
+    async def _report_progress(self, percent, status):
+        if self.progress_callback:
+            # Run in executor if callback is synchronous or just call if async?
+            # Assuming callback is simple sync function or we run it safely.
+            # Since this is async method, we can just call it.
+            # But the callback in main.py will likely update a global dict.
+            try:
+                self.progress_callback(percent, status)
+            except Exception as e:
+                print(f"Progress Error: {e}")
 
     async def get_client(self):
         """
@@ -89,14 +105,43 @@ class TelegramManager:
             return []
         
         try:
+            await self._report_progress(10, "Fetching Dialogs...")
             dialogs = await client.get_dialogs()
             channels = []
-            for d in dialogs:
+            
+            # Create temp dir if not exists
+            if not os.path.exists(TEMP_IMG_DIR):
+                os.makedirs(TEMP_IMG_DIR)
+
+            total = len(dialogs)
+            for i, d in enumerate(dialogs):
                 if d.is_channel or d.is_group:
+                    # Report Progress
+                    percent = 10 + int((i / total) * 80)
+                    await self._report_progress(percent, f"Syncing {d.name[:15]}...")
+
+                    # Download profile photo
+                    photo_path = None
+                    try:
+                        # cached photo name
+                        fname = f"channel_{d.id}.jpg"
+                        fpath = os.path.join(TEMP_IMG_DIR, fname)
+                        
+                        if not os.path.exists(fpath):
+                            await client.download_profile_photo(d.entity, file=fpath)
+                        
+                        if os.path.exists(fpath):
+                            photo_path = f"/static/temp_images/{fname}"
+                    except Exception as e:
+                        print(f"Failed to download photo for {d.name}: {e}")
+
                     channels.append({
                         'id': d.id,
-                        'name': d.name or "Unnamed Channel"
+                        'name': d.name or "Unnamed Channel",
+                        'photo': photo_path
                     })
+            
+            await self._report_progress(100, "Complete")
             return channels
         except Exception as e:
             print(f"[ERROR] Get Channels Failed: {e}")
@@ -129,17 +174,25 @@ class TelegramManager:
                 await asyncio.sleep(random.uniform(0.2, 0.8)) 
                 try:
                     path = os.path.join(TEMP_IMG_DIR, filename)
-                    await client.download_media(message, path)
+                    if os.path.exists(path):
+                        return path
+                    
+                    # 'x' is large (800px), 'y' is extra large (1280px). 'x' is a good balance.
+                    await client.download_media(message, path, thumb='x')
                     return path
                 except FloodWaitError as e:
                     print(f"[Anti-Flood] Sleeping {e.seconds}s...")
                     await asyncio.sleep(e.seconds + 1)
-                    return await client.download_media(message, path)
+                    return await client.download_media(message, path, thumb='x')
                 except Exception as e:
                     print(f"Download failed: {e}")
                     return None
 
         for i, channel_id in enumerate(channel_ids):
+            # Report Progress - Channel reading gets 0-10% of the bar (fast)
+            percent = int((i / len(channel_ids)) * 10)
+            await self._report_progress(percent, f"Reading Channel {i+1}/{len(channel_ids)}...")
+
             if i > 0:
                 await asyncio.sleep(random.uniform(1.5, 3.5))
 
@@ -149,6 +202,9 @@ class TelegramManager:
                 
                 channel_name = entity.title if hasattr(entity, 'title') else "Unknown"
 
+                # GROUPING LOGIC
+                grouped_buffer = {} # grouped_id -> { 'main_msg': msg_dict, 'images': [] }
+                
                 try:
                     async for message in client.iter_messages(entity, limit=200):
                         if not message.date: continue
@@ -156,45 +212,105 @@ class TelegramManager:
                         msg_et = message.date.astimezone(ET_OFFSET)
                         msg_date = msg_et.date()
                         
-                        if msg_date > target_date_obj:
-                            continue
+                        if msg_date > target_date_obj: continue
+                        if msg_date < target_date_obj: break 
+
+                        # Determine if message is part of a group
+                        gid = message.grouped_id
                         
-                        if msg_date < target_date_obj:
-                            break 
-                        
+                        # Base Message Dict
                         msg_dict = {
                             'id': message.id,
                             'channel_name': channel_name,
                             'date': msg_et.strftime("%Y-%m-%d %H:%M ET"),
                             'text': message.text or "",
-                            'image': None,
+                            'images': [], # NEW: List of all images
+                            'image': None, # Legacy compatibility (thumbnail)
+                            'grouped_id': gid,
                             'selected': True,
                             'do_ocr': True
                         }
 
+                        # IMAGE HANDLING
                         if message.media and isinstance(message.media, MessageMediaPhoto):
-                            timestamp = int(datetime.now().timestamp())
-                            filename = f"{message.id}_{timestamp}.jpg"
+                            filename = f"{channel_id}_{message.id}.jpg"
                             task = asyncio.create_task(download_image_task(message, filename))
-                            download_tasks.append((msg_dict, task, filename))
-                        
-                        all_messages.append(msg_dict)
-                
+                            # We store the task/metadata temporarily
+                            msg_dict['pending_download'] = (task, filename)
+
+                        # GROUPING STRATEGY
+                        if gid:
+                            if gid not in grouped_buffer:
+                                # New Group
+                                grouped_buffer[gid] = msg_dict
+                            else:
+                                # Existing Group - Merge
+                                existing = grouped_buffer[gid]
+                                # Prefer the ID of the message with text (usually first)
+                                if msg_dict['text'] and not existing['text']:
+                                    existing['text'] = msg_dict['text']
+                                    existing['id'] = msg_dict['id'] # Use ID of text message? Or keep first? Telethon usually sends text with first.
+                                
+                                # Add image to existing group
+                                if 'pending_download' in msg_dict:
+                                    # If existing already has a pending download, we need to handle multiple
+                                    # We need a structure to hold multiple pending downloads
+                                    if 'pending_downloads' not in existing:
+                                        existing['pending_downloads'] = []
+                                        if 'pending_download' in existing:
+                                            existing['pending_downloads'].append(existing['pending_download'])
+                                            del existing['pending_download']
+                                    
+                                    existing['pending_downloads'].append(msg_dict['pending_download'])
+                        else:
+                            # Single Message - Add immediately (but handle deferred download)
+                            if 'pending_download' in msg_dict:
+                                msg_dict['pending_downloads'] = [msg_dict['pending_download']]
+                                del msg_dict['pending_download']
+                            all_messages.append(msg_dict)
+
                 except FloodWaitError as e:
                     print(f"[Anti-Flood] Wait {e.seconds}s")
                     await asyncio.sleep(e.seconds + 2)
-                    continue
+
+                # FLUSH GROUPS
+                for gid, group_msg in grouped_buffer.items():
+                    # Ensure pending_downloads is list
+                    if 'pending_download' in group_msg:
+                         group_msg['pending_downloads'] = [group_msg['pending_download']]
+                         del group_msg['pending_download']
+                    all_messages.append(group_msg)
+
+                # PROCESS DOWNLOADS
+                for msg in all_messages:
+                    if 'pending_downloads' in msg:
+                        for task, filename in msg.get('pending_downloads', []):
+                             download_tasks.append((msg, task, filename))
+                        del msg['pending_downloads']  # Cleanup logic dict
 
             except Exception as e:
                 print(f"Error fetching channel {channel_id}: {e}")
                 continue
         
+        # Media downloading gets 10-95% of the bar with per-file progress
         if download_tasks:
-            results = await asyncio.gather(*[t[1] for t in download_tasks])
-            for i, res in enumerate(results):
-                if res:
-                    download_tasks[i][0]['image'] = f"/static/temp_images/{download_tasks[i][2]}"
+            total_downloads = len(download_tasks)
+            completed = 0
             
+            for i, (msg_dict, task, filename) in enumerate(download_tasks):
+                # Update progress for each file (10% to 95%)
+                percent = 10 + int((i / total_downloads) * 85)
+                await self._report_progress(percent, f"Downloading {i+1}/{total_downloads}...")
+                
+                result = await task
+                result = await task
+                if result:
+                    path = f"/static/temp_images/{filename}"
+                    msg_dict['images'].append(path)
+                    if not msg_dict['image']:
+                        msg_dict['image'] = path  # Thumbnail / Backwards Compat
+        
+        await self._report_progress(100, "Complete")
         return all_messages
 
 tg_manager = TelegramManager()

@@ -1,241 +1,572 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CapperSuite</title>
-    
-    <!-- FAVICON: Forces Windows Taskbar to use this icon in App Mode -->
-    <link rel="icon" type="image/x-icon" href="/static/logo.ico?v=2">
-    <link rel="shortcut icon" type="image/x-icon" href="/static/logo.ico?v=2">
-    
-    <!-- Dependencies -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <meta name="description" content="Professional Sports Betting Data Aggregation Terminal">
+    <meta name="theme-color" content="#ffffff">
+    <title>CapperSuite | Enterprise Terminal</title>
+
+    <!-- PERFORMANCE: Preconnect to critical assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+
+    <!-- FONTS: Inter (Structure) & JetBrains Mono (Data) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- ICONS -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js"></script>
-    <link rel="stylesheet" href="/static/temp_images/css/styles.css">
+
+    <!-- TAILWIND (Utility) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- CUSTOM SWISS/INTERNATIONAL STYLES -->
+    <link rel="stylesheet" href="/static/css/swiss.css">
 </head>
-<body class="flex flex-col h-screen w-screen overflow-hidden text-gray-800 bg-gray-50">
 
-    <!-- Toast -->
-    <div id="toast" class="toast"><span class="material-icons text-green-400 text-sm">check_circle</span><span id="toastMsg"></span></div>
+<body class="flex flex-col h-screen w-screen overflow-hidden">
 
-    <!-- Loader -->
-    <div id="globalLoader" class="loader-overlay hidden">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl text-center border border-gray-100 max-w-sm w-full">
-            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <div class="font-bold text-lg text-gray-800" id="loaderText">Loading...</div>
-            <div class="loader-bar w-full mt-4"><div class="loader-progress"></div></div>
+    <!-- GLOBAL LOADER -->
+    <div id="globalLoader" class="hidden fixed inset-0 bg-white/95 z-[9999] flex items-center justify-center">
+        <div class="w-80">
+            <div class="flex justify-between mb-2 items-end">
+                <div class="font-black text-3xl tracking-tighter uppercase leading-none" id="loaderTitle">PROCESSING
+                </div>
+                <div class="font-mono text-xs text-blue-700 font-bold" id="loaderPercent">0%</div>
+            </div>
+            <div class="w-full bg-gray-200 h-2">
+                <div id="loaderBar" class="bg-blue-600 h-2 w-0 transition-all duration-300 loader-bar"></div>
+            </div>
+            <div class="mt-2 font-mono text-[10px] text-gray-400 uppercase tracking-widest flex justify-between">
+                <span id="loaderStatus">SYSTEM WAIT</span>
+                <span>ID: <span id="loaderId" class="text-black">--</span></span>
+            </div>
         </div>
     </div>
 
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 shrink-0 z-50 shadow-sm">
-        <div class="flex items-center w-1/4">
-            <button onclick="goBack()" id="backBtn" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 disabled:opacity-0 mr-2 transition"><span class="material-icons">arrow_back</span></button>
-            <div class="flex items-center gap-2 select-none hidden md:flex">
-                <!-- Logo Area -->
-                <div class="bg-blue-50 p-1.5 rounded-lg"><span class="material-icons text-blue-600">smart_toy</span></div>
-                <div><div class="font-bold leading-none tracking-tight">CapperSuite</div><div class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Pick Studio</div></div>
+    <!-- TOAST -->
+    <div id="toast"
+        class="hidden fixed bottom-8 right-8 bg-black text-white p-5 z-[9000] border-l-4 border-blue-600 flex items-center gap-4 shadow-none toast-animate min-w-[300px]">
+        <span class="material-icons text-blue-500">check_circle</span>
+        <div class="flex flex-col">
+            <span class="font-bold text-xs uppercase tracking-widest text-gray-400">System Notification</span>
+            <span id="toastMsg" class="font-bold tracking-tight text-sm">Action Completed</span>
+        </div>
+    </div>
+
+    <!-- HEADER: Brutalist & Architectural -->
+    <header class="bg-white border-b-2 border-black h-20 flex items-center justify-between px-8 shrink-0 z-50">
+        <div class="flex items-center w-1/3">
+            <div class="flex flex-col select-none cursor-pointer" onclick="window.location.reload()">
+                <div class="text-[10px] font-bold uppercase tracking-[0.3em] text-blue-700 leading-none mb-1">Pick
+                    Studio</div>
+                <div class="font-black text-3xl tracking-tighter leading-none">CAPPER<span
+                        class="font-light">SUITE</span></div>
             </div>
         </div>
-        <div class="w-1/2 flex justify-center" id="stepper"></div>
-        <div class="w-1/4 flex justify-end">
-             <button onclick="exportDebugData()" class="hidden md:flex items-center gap-1 bg-gray-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-black transition shadow-sm"><span class="material-icons text-xs text-amber-400">bug_report</span> Debug</button>
+
+        <!-- STEPPER -->
+        <div class="w-1/3 flex justify-center gap-1">
+            <div id="step-1-ind" class="h-1 w-8 bg-black transition-all duration-300"></div>
+            <div id="step-2-ind" class="h-1 w-8 bg-gray-200 transition-all duration-300"></div>
+            <div id="step-3-ind" class="h-1 w-8 bg-gray-200 transition-all duration-300"></div>
+            <div id="step-4-ind" class="h-1 w-8 bg-gray-200 transition-all duration-300"></div>
+        </div>
+
+        <div class="w-1/3 flex justify-end">
+            <div class="flex items-center gap-2 border border-gray-200 px-3 py-1 bg-gray-50">
+                <div class="w-2 h-2 bg-green-500 animate-pulse"></div>
+                <span class="font-mono text-[10px] uppercase tracking-widest text-gray-500">System Online</span>
+            </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="flex-grow relative overflow-hidden flex flex-col w-full">
-        
-        <!-- PAGE 1: SOURCES -->
-        <div id="page-1" class="w-full h-full flex flex-col p-4 md:p-6 fade-in min-h-0">
-            <div class="max-w-6xl mx-auto w-full h-full flex flex-col min-h-0">
-                <div class="mb-4 shrink-0">
-                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Select Channels</h1>
-                    <p class="text-gray-500 text-sm">Connect Telegram and choose sources to parse.</p>
-                </div>
-                
-                <div class="flex flex-col md:flex-row gap-6 flex-grow min-h-0">
-                    <!-- Auth Panel -->
-                    <div class="w-full md:w-1/3 card p-6 h-fit shrink-0 shadow-sm bg-white">
-                        <h2 class="font-bold text-lg mb-4 flex items-center text-gray-800"><span class="material-icons mr-2 text-gray-400">login</span> Authentication</h2>
-                        
-                        <div id="auth-loading" class="text-center py-8">
-                            <div class="animate-spin h-8 w-8 border-b-2 border-blue-600 rounded-full mx-auto"></div>
-                            <p class="text-sm text-gray-500 mt-2">Checking connection...</p>
-                        </div>
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow relative overflow-hidden flex flex-col w-full bg-white">
 
-                        <div id="auth-phone" class="hidden space-y-3">
-                            <input type="text" id="phoneNumber" placeholder="Phone (e.g., +1234567890)" class="w-full border rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
-                            <button onclick="sendCode()" class="w-full bg-gray-900 hover:bg-black text-white py-2 rounded-lg font-bold text-sm transition shadow-sm">Send Code</button>
-                        </div>
+        <!-- STEP 1: SOURCES -->
+        <div id="page-1" class="w-full h-full flex flex-col fade-in">
+            <div class="flex h-full">
+                <!-- Left: Auth -->
+                <div
+                    class="w-full md:w-1/3 lg:w-1/4 bg-gray-50 border-r border-gray-200 p-8 flex flex-col justify-between">
+                    <div>
+                        <h2
+                            class="font-bold text-xs uppercase tracking-widest mb-8 border-b border-black pb-2 flex justify-between items-center">
+                            <span>Authentication</span>
+                            <div class="w-2 h-2 bg-black"></div>
+                        </h2>
 
-                        <div id="auth-code" class="hidden space-y-3">
-                            <input type="text" id="otpCode" placeholder="Code" class="w-full border rounded-lg px-3 py-2 text-center tracking-widest outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition font-mono">
-                            <input type="password" id="2faPassword" placeholder="2FA Password (Optional)" class="w-full border rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500 transition">
-                            <button onclick="verifyCode()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-bold text-sm transition shadow-sm">Verify</button>
-                        </div>
-
-                        <div id="auth-success" class="hidden text-center py-6 bg-green-50 rounded-xl border border-green-100">
-                            <div class="text-green-600 font-bold flex items-center justify-center gap-2"><span class="material-icons">check_circle</span> Connected</div>
-                        </div>
-                    </div>
-
-                    <!-- Channel List -->
-                    <div class="w-full md:w-2/3 card flex flex-col shadow-md bg-white overflow-hidden h-full md:h-auto md:max-h-full">
-                        <div class="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center shrink-0 rounded-t-xl">
-                            <span class="font-bold text-sm text-gray-700">Available Channels</span>
-                            <input type="date" id="targetDate" class="bg-white text-sm border border-gray-200 rounded-md px-2 py-1 cursor-pointer text-gray-600 font-medium focus:outline-none focus:border-blue-500" onchange="triggerScorePrefetch()">
-                        </div>
-                        
-                        <div id="channelList" class="flex-grow overflow-y-auto p-2 space-y-1 relative min-h-[200px]">
-                            <div class="text-center py-12 text-gray-400 text-sm flex flex-col items-center justify-center h-full">
-                                <span class="material-icons text-4xl text-gray-200 mb-2">link_off</span>
-                                Waiting for connection...
+                        <!-- Auth Form Simulation -->
+                        <div id="authContainer" class="space-y-6">
+                            <div class="group relative">
+                                <input type="text" id="phoneInput" placeholder=" "
+                                    class="block w-full bg-transparent border-b border-gray-300 py-2 text-lg font-medium focus:outline-none focus:border-blue-600 focus:bg-white transition-colors peer placeholder-transparent">
+                                <label
+                                    class="absolute left-0 -top-3.5 text-gray-400 text-[10px] uppercase font-mono transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-[10px]">Phone
+                                    Number</label>
                             </div>
-                        </div>
-                        
-                        <div class="p-4 border-t border-gray-100 bg-white shrink-0 z-10 rounded-b-xl">
-                            <button onclick="fetchMessages()" id="btnFetch" class="w-full bg-gray-200 text-gray-400 px-6 py-3 rounded-xl font-bold flex items-center justify-center transition-all duration-200 disabled:cursor-not-allowed group" disabled>
-                                <span id="btnFetchText">Select a Channel to Fetch</span> <span class="material-icons ml-2 text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+
+                            <div id="otpGroup" class="hidden space-y-6">
+                                <div class="group relative">
+                                    <input type="text" id="otpInput" placeholder=" "
+                                        class="block w-full bg-transparent border-b border-gray-300 py-2 text-lg font-mono tracking-widest focus:outline-none focus:border-blue-600 transition-colors peer">
+                                    <label
+                                        class="absolute left-0 -top-3.5 text-gray-400 text-[10px] uppercase font-mono">Security
+                                        Code</label>
+                                </div>
+                            </div>
+
+                            <div id="passwordGroup" class="hidden space-y-6">
+                                <div class="group relative">
+                                    <input type="password" id="passwordInput" placeholder=" "
+                                        class="block w-full bg-transparent border-b border-gray-300 py-2 text-lg font-mono tracking-widest focus:outline-none focus:border-blue-600 transition-colors peer">
+                                    <label
+                                        class="absolute left-0 -top-3.5 text-gray-400 text-[10px] uppercase font-mono">2FA
+                                        Password (Optional)</label>
+                                </div>
+                            </div>
+
+                            <button id="authBtn" onclick="handleAuth()"
+                                class="w-full bg-black text-white h-12 font-bold text-xs uppercase tracking-widest hover:bg-blue-600 transition-colors swiss-btn flex items-center justify-center gap-2">
+                                <span>Request Access</span>
+                                <span class="material-icons text-sm">east</span>
                             </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- PAGE 2: GRID -->
-        <div id="page-2" class="hidden w-full h-full flex-col p-4 md:p-6 fade-in min-h-0">
-            <div class="max-w-7xl mx-auto w-full h-full flex flex-col min-h-0">
-                <div class="flex justify-between items-end mb-4 shrink-0">
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Review Picks</h1>
-                        <p class="text-gray-500 text-sm">Select specific messages to process.</p>
-                    </div>
-                    <button onclick="goToStep(3)" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold flex items-center shadow-md transition-all">Next <span class="material-icons ml-1 text-sm">arrow_forward</span></button>
-                </div>
-                <div id="messageGrid" class="flex-grow overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-20 pr-2"></div>
-            </div>
-        </div>
-
-        <!-- PAGE 3: AI -->
-        <div id="page-3" class="hidden w-full h-full flex-col p-4 md:p-6 fade-in min-h-0">
-            <div class="flex flex-col lg:flex-row h-full gap-6 min-h-0">
-                <!-- Config -->
-                <div class="w-full lg:w-1/3 flex flex-col gap-4 h-fit lg:h-full shrink-0 min-h-0">
-                    <div class="card p-4 shrink-0 bg-white shadow-sm">
-                        <div class="font-bold mb-2 text-sm text-gray-700">Filters & Cleanup</div>
-                        <textarea id="watermarkInput" class="w-full border rounded-lg p-2 text-xs h-20 resize-none bg-gray-50 focus:bg-white focus:border-blue-500 outline-none transition" placeholder="Enter watermarks to remove (comma separated)..."></textarea>
-                        <div class="flex gap-2 mt-2">
-                            <button onclick="detectWatermark()" class="flex-1 border border-gray-300 bg-white text-gray-700 py-1.5 rounded text-xs font-bold hover:bg-gray-50 transition">Auto-Detect</button>
-                            <button onclick="copyRawOCR()" class="flex-1 bg-gray-900 hover:bg-black text-white py-1.5 rounded text-xs font-bold transition shadow-sm"><span class="material-icons text-[14px] align-middle mr-1">content_copy</span>Copy OCR</button>
-                        </div>
-                    </div>
-                    <div class="card flex-grow overflow-hidden h-64 lg:h-auto shadow-sm bg-white flex flex-col">
-                        <div class="p-3 bg-gray-50 border-b text-xs font-bold text-gray-500 uppercase tracking-wider shrink-0">Source Preview</div>
-                        <div id="ocrPreview" class="flex-grow overflow-y-auto p-3 space-y-3 bg-gray-50/50"></div>
-                    </div>
-                </div>
-                <!-- Workflow -->
-                <div class="w-full lg:w-2/3 card flex flex-col overflow-hidden h-full shadow-md bg-white">
-                    <div class="flex border-b shrink-0">
-                        <button onclick="switchTab('prompts')" id="tab-prompts" class="tab-btn active flex-1 py-3 text-sm font-bold text-center">1. Generate Prompts</button>
-                        <button onclick="switchTab('responses')" id="tab-responses" class="tab-btn flex-1 py-3 text-sm font-bold text-center">2. Paste AI Responses</button>
-                    </div>
-                    
-                    <!-- Tab Contents -->
-                    <div class="flex-grow relative min-h-0">
-                        <!-- Prompts Tab -->
-                        <div id="content-prompts" class="absolute inset-0 overflow-y-auto p-6 space-y-4 bg-gray-50/30">
-                            <div id="promptsContainer" class="space-y-4"></div>
-                        </div>
-                        <!-- Responses Tab -->
-                        <div id="content-responses" class="hidden absolute inset-0 overflow-y-auto p-6 flex flex-col bg-gray-50/30">
-                            <div id="revisionSection" class="hidden bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 relative shadow-sm shrink-0">
-                                <div class="flex justify-between items-center mb-2">
-                                    <div class="text-amber-800 font-bold text-sm flex items-center gap-2"><span class="material-icons text-sm">lightbulb</span> Smart Fill Required</div>
-                                </div>
-                                <textarea id="revisionPromptBox" class="w-full h-24 border border-amber-200 rounded p-2 text-xs mb-2 bg-white text-gray-600 font-mono resize-none" readonly></textarea>
-                                <textarea id="revisionResponseInput" class="w-full h-24 border border-amber-300 rounded p-2 text-xs bg-white focus:ring-2 focus:ring-amber-500 outline-none shadow-inner font-mono" placeholder="Paste AI fix here..."></textarea>
-                                <div class="flex justify-end gap-3 mt-2 items-center">
-                                    <button onclick="document.getElementById('revisionSection').classList.add('hidden'); runGrading();" class="text-xs text-gray-500 hover:text-gray-800 underline">Skip & Grade</button>
-                                    <button onclick="processRevisions()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-1.5 rounded text-xs font-bold shadow-sm transition-colors">Merge Fixes</button>
-                                </div>
+                        <!-- Success State -->
+                        <div id="authSuccess" class="hidden p-4 border border-green-600 bg-green-50">
+                            <div class="text-green-800 font-mono text-xs uppercase flex items-center gap-2">
+                                <span class="material-icons text-sm">verified</span>
+                                Secure Connection
                             </div>
-                            <div id="responsesContainer" class="space-y-4 mb-4"></div>
                         </div>
                     </div>
 
-                    <!-- FIXED FOOTER -->
-                    <div class="p-4 border-t border-gray-100 bg-white shrink-0 z-10">
-                        <button id="step3ActionBtn" onclick="switchTab('responses')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold shadow-md transition-all transform active:scale-[0.99]">
-                            Go to Step 2 (Paste)
+                    <div class="text-[10px] text-gray-400 font-mono uppercase">
+                        Client v2.0.0 <br> Build: Stable
+                    </div>
+                </div>
+
+                <!-- Right: Channels -->
+                <div class="w-full md:w-2/3 lg:w-3/4 flex flex-col bg-white">
+                    <div class="h-16 border-b border-gray-200 flex items-center justify-between px-8 bg-white shrink-0">
+                        <span class="font-black text-xl uppercase tracking-tighter">Source Feeds</span>
+                        <div class="flex items-center gap-4">
+                            <span class="font-mono text-[10px] uppercase text-gray-400">Target Date</span>
+                            <input type="date" id="targetDateInput"
+                                class="border border-gray-300 bg-white font-mono text-xs px-2 py-1 uppercase focus:outline-none focus:border-blue-600">
+                        </div>
+                    </div>
+
+                    <div class="flex-grow p-8 bg-gray-100 overflow-y-auto">
+                        <!-- Mock Channels Grid -->
+                        <div id="channelGrid"
+                            class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-px bg-gray-300 border border-gray-300">
+                            <!-- Injected via JS -->
+                            <div
+                                class="col-span-full bg-white p-8 flex flex-col items-center justify-center text-gray-400 gap-2 h-64">
+                                <span class="material-icons text-4xl text-gray-300">lock</span>
+                                <span class="font-mono text-xs uppercase">Awaiting Authentication</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="fetchBtn" onclick="startFetch()"
+                        class="h-20 bg-white border-t border-black text-gray-300 font-black text-lg uppercase tracking-widest flex items-center justify-between px-8 hover:bg-black hover:text-white transition-colors disabled:bg-gray-50 disabled:text-gray-200 disabled:hover:bg-gray-50 disabled:cursor-not-allowed group"
+                        disabled>
+                        <span>Initialize Data Fetch</span>
+                        <span
+                            class="material-icons text-2xl group-hover:translate-x-2 transition-transform">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: REVIEW GRID -->
+        <div id="page-2" class="hidden w-full h-full flex flex-col bg-white">
+            <div class="h-20 border-b border-black flex items-center justify-between px-8 shrink-0">
+                <div class="flex items-center gap-4">
+                    <button onclick="changeStep(1)"
+                        class="w-10 h-10 border border-black hover:bg-black hover:text-white flex items-center justify-center transition-colors">
+                        <span class="material-icons">west</span>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-black tracking-tighter uppercase">Data Select</h1>
+                        <div class="text-[10px] font-mono text-gray-500 uppercase tracking-widest mt-0.5">Filter
+                            incoming
+                            noise</div>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex items-center gap-2 px-4 py-2 border border-gray-200 bg-gray-50">
+                        <span class="font-mono text-xs text-gray-500">SELECTED:</span>
+                        <span id="selectionCount" class="font-black text-blue-600 text-sm">0</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="initRefinery()"
+                            class="border border-blue-600 text-blue-600 px-6 h-10 font-bold text-xs uppercase tracking-widest hover:bg-blue-50 transition-colors swiss-btn">
+                            Manual Refinery
+                        </button>
+                        <button onclick="runAutoPilot()"
+                            class="bg-blue-600 text-white px-6 h-10 font-bold text-xs uppercase tracking-widest hover:bg-black transition-colors swiss-btn flex items-center gap-2">
+                            <span>Auto-Pilot</span>
+                            <span class="material-icons text-sm">bolt</span>
                         </button>
                     </div>
                 </div>
             </div>
+
+            <div id="messageGrid"
+                class="flex-grow overflow-y-auto bg-gray-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-px border border-gray-200 p-px">
+                <!-- Javascript populates cards here -->
+            </div>
         </div>
 
-        <!-- PAGE 4: REVIEW -->
-        <div id="page-4" class="hidden w-full h-full flex-col p-4 md:p-6 fade-in min-h-0">
-            <div class="card h-full flex flex-col overflow-hidden shadow-xl border-0 bg-white">
-                <div class="p-4 border-b flex justify-between items-center shrink-0 bg-white z-20">
-                    <div>
-                        <h2 class="font-bold text-lg text-gray-900">Final Review</h2>
-                        <p class="text-xs text-gray-500">Edit cells directly before uploading.</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="goToStep(3)" class="px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-lg text-sm font-bold transition-colors">Back</button>
-                        <button onclick="upload()" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold shadow-md transition-colors flex items-center gap-2"><span class="material-icons text-sm">cloud_upload</span> Upload</button>
+        <!-- STEP 3: REFINERY (REDESIGNED) -->
+        <div id="page-3" class="hidden w-full h-full flex flex-col bg-white fade-in">
+            <!-- Header -->
+            <div class="h-16 border-b border-black flex items-center justify-between px-6 shrink-0 bg-white z-20">
+                <div class="flex items-center gap-4">
+                    <button onclick="changeStep(2)"
+                        class="w-8 h-8 border border-gray-300 hover:border-black hover:bg-black hover:text-white flex items-center justify-center transition-colors">
+                        <span class="material-icons text-sm">west</span>
+                    </button>
+                    <div class="flex items-center gap-4">
+                        <div class="w-3 h-3 bg-blue-600 animate-pulse"></div>
+                        <h1 class="text-lg font-black tracking-tighter uppercase">Intelligence Refinery</h1>
                     </div>
                 </div>
-                <div class="flex-grow overflow-y-auto bg-white relative">
-                    <div class="overflow-x-auto pb-12">
-                        <table class="w-full text-left text-sm border-collapse min-w-[900px] bg-white">
-                            <thead class="bg-gray-50 text-gray-600 border-b shadow-sm">
-                                <tr>
-                                    <!-- Headers injected by JS -->
-                                </tr>
-                            </thead>
-                            <tbody id="reviewBody" class="divide-y divide-gray-100"></tbody>
-                        </table>
+                <div class="flex gap-3">
+                    <div class="px-3 py-1 bg-gray-100 border border-gray-200 font-mono text-[10px] uppercase">
+                        Pending: <span id="pendingCount" class="font-bold text-black">0</span>
                     </div>
-                    <div class="p-8 text-center border-t border-gray-100"><button onclick="addNewRow()" class="text-blue-600 font-bold hover:bg-blue-50 px-4 py-2 rounded transition-colors">+ Add Manual Pick</button></div>
+                    <div
+                        class="px-3 py-1 bg-green-50 border border-green-200 font-mono text-[10px] uppercase text-green-700">
+                        Completed: <span id="completedCount" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Workspace -->
+            <div class="flex-grow flex overflow-hidden">
+
+                <!-- LEFT: Item Navigator (The Manifest) -->
+                <div class="w-80 border-r border-gray-200 flex flex-col bg-gray-50 shrink-0">
+                    <div
+                        class="p-4 border-b border-gray-200 font-mono text-[10px] uppercase text-gray-500 tracking-widest">
+                        Refinery Stages
+                    </div>
+                    <div id="aiQueueList" class="flex-grow overflow-y-auto">
+                        <!-- List Items Injected Here -->
+                    </div>
+                </div>
+
+                <!-- RIGHT: The Workbench -->
+                <div class="flex-grow flex flex-col bg-white relative">
+
+                    <!-- Empty State (Before Selection) -->
+                    <div id="aiEmptyState" class="absolute inset-0 flex flex-col items-center justify-center z-0">
+                        <span class="material-icons text-4xl text-gray-200 mb-4">bolt</span>
+                        <span class="font-mono text-xs text-gray-400 uppercase tracking-widest">Select an item to
+                            process</span>
+                    </div>
+
+                    <!-- Active Work Area -->
+                    <div id="aiWorkArea" class="hidden flex flex-col h-full z-10">
+
+                        <!-- Top Half: Source vs Prompt -->
+                        <div class="h-1/2 flex border-b border-gray-200 min-h-[300px]">
+
+                            <!-- Source Pane -->
+                            <div class="w-1/2 border-r border-gray-200 flex flex-col p-6 overflow-hidden">
+                                <div class="font-bold text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <span class="material-icons text-sm text-gray-400">help_outline</span> Workflow
+                                    Guide
+                                </div>
+                                <div class="flex-grow overflow-y-auto bg-gray-50 border border-gray-100 p-4 font-mono text-xs text-gray-600 leading-relaxed whitespace-pre-wrap"
+                                    id="activeSourceText">
+                                    <!-- Source Text -->
+                                </div>
+                            </div>
+
+                            <!-- Prompt Pane -->
+                            <div class="w-1/2 flex flex-col p-0 bg-blue-50/30">
+                                <div class="p-4 border-b border-blue-100 flex justify-between items-center bg-white">
+                                    <div
+                                        class="font-bold text-xs uppercase tracking-widest text-blue-700 flex items-center gap-2">
+                                        <span class="material-icons text-sm">terminal</span> Prompt Engine
+                                    </div>
+                                    <button onclick="copyActivePrompt()"
+                                        class="flex items-center gap-2 px-3 py-1 bg-black text-white hover:bg-blue-600 text-[10px] font-bold uppercase tracking-widest transition-colors swiss-btn">
+                                        <span class="material-icons text-[12px]">content_copy</span> Copy
+                                    </button>
+                                </div>
+                                <div class="flex-grow relative group">
+                                    <textarea id="activePromptText"
+                                        class="w-full h-full bg-transparent p-6 font-mono text-xs text-gray-700 resize-none outline-none"
+                                        readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Half: JSON Input -->
+                        <div class="h-1/2 flex flex-col p-6 bg-white min-h-[250px]">
+                            <div class="flex justify-between items-end mb-2">
+                                <label
+                                    class="font-bold text-xs uppercase tracking-widest text-black flex items-center gap-2">
+                                    <span class="material-icons text-sm">data_object</span> JSON Return Input
+                                </label>
+                                <div class="flex gap-2">
+
+                                </div>
+                            </div>
+
+                            <div id="jsonInputWrapper"
+                                class="flex-grow flex flex-col relative border-2 border-gray-200 focus-within:border-black transition-colors">
+                                <textarea id="activeJsonInput"
+                                    class="flex-grow p-4 font-mono text-xs resize-none outline-none placeholder-gray-300"></textarea>
+
+                                <!-- Validation Overlay (Hidden by default) -->
+                                <div id="jsonStatus"
+                                    class="absolute bottom-4 right-4 text-[10px] font-bold uppercase tracking-widest px-2 py-1 hidden">
+                                </div>
+                            </div>
+
+                            <div class="mt-4 flex justify-end gap-2" id="actionFooter">
+                                <button onclick="handleAutoFill()" id="autoFillBtn"
+                                    class="h-12 px-6 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors transition-all duration-300 swiss-btn">
+                                    <span>Auto-Fill with AI</span>
+                                    <span class="material-icons text-sm">auto_awesome</span>
+                                </button>
+
+                                <button onclick="saveAndNext()" id="validateBtn"
+                                    class="h-12 px-8 bg-black text-white hover:bg-green-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors swiss-btn">
+                                    <span>Validate & Next</span>
+                                    <span class="material-icons text-sm">south</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Navigation -->
+            <div
+                class="h-14 border-t border-black flex items-center justify-between px-6 bg-white shrink-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                <button onclick="changeStep(2)"
+                    class="swiss-btn text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-black focus:text-black">Back
+                    to
+                    Selection</button>
+                <button id="finishProcessingBtn" onclick="finalizeBatch()"
+                    class="text-xs font-bold uppercase tracking-widest text-gray-300 cursor-not-allowed flex items-center gap-2"
+                    disabled>
+                    Finalize Batch <span class="material-icons text-sm">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- STEP 4: FINAL TABLE -->
+        <div id="page-4" class="hidden w-full h-full flex flex-col bg-white">
+            <div class="h-20 border-b-2 border-black flex items-center justify-between px-8 shrink-0">
+                <div class="flex items-center gap-4">
+                    <button onclick="changeStep(3)"
+                        class="w-10 h-10 border border-black hover:bg-black hover:text-white flex items-center justify-center transition-colors">
+                        <span class="material-icons">west</span>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-black tracking-tighter uppercase">Manifest Export</h1>
+                        <div class="text-[10px] font-mono text-gray-500 uppercase tracking-widest mt-0.5">Final
+                            validation
+                            before commit</div>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <button id="deleteSelectedBtn" onclick="confirmBulkDelete()"
+                        class="hidden px-6 h-10 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors transition-all duration-300">
+                        <span class="material-icons text-sm">delete</span> Delete (<span id="deleteCount">0</span>)
+                    </button>
+
+                    <button onclick="runAutoReview()"
+                        class="px-6 h-10 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 swiss-btn shadow-none transition-colors border border-purple-800">
+                        <span class="material-icons text-sm">auto_fix_high</span> AI Review
+                    </button>
+
+
+
+                    <button type="button" onclick="exportToCSV()"
+                        class="px-6 h-10 border border-black hover:bg-gray-100 font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors">
+                        <span class="material-icons text-sm">download</span> Export CSV
+                    </button>
+
+                    <button onclick="uploadData()"
+                        class="px-8 h-10 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 swiss-btn shadow-none">
+                        <span class="material-icons text-sm">cloud_upload</span> Commit to Database
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-grow bg-gray-50 overflow-auto p-0">
+                <table class="w-full text-left border-collapse bg-white min-w-[1000px]">
+                    <thead class="bg-black text-white sticky top-0 z-10">
+                        <tr>
+                            <th class="p-4 border-r border-gray-800 w-12 text-center align-bottom">
+                                <input type="checkbox" onchange="toggleAllTableRows(this)"
+                                    class="accent-blue-600 cursor-pointer w-4 h-4">
+                            </th>
+                            <th
+                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-16 align-bottom">
+                                <div class="mb-1">ID</div>
+                                <input type="text" oninput="updateFilter('message_id', this.value)"
+                                    class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
+                                    placeholder="Filter">
+                            </th>
+                            <th
+                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
+                                <div class="mb-1">Capper</div>
+                                <input type="text" oninput="updateFilter('capper_name', this.value)"
+                                    class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
+                                    placeholder="Filter">
+                            </th>
+                            <th
+                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
+                                <div class="mb-1">Sport</div>
+                                <input type="text" oninput="updateFilter('league', this.value)"
+                                    class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
+                                    placeholder="Filter">
+                            </th>
+                            <th
+                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
+                                <div class="mb-1">Type</div>
+                                <input type="text" oninput="updateFilter('type', this.value)"
+                                    class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
+                                    placeholder="Filter">
+                            </th>
+                            <th
+                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
+                                <div class="mb-1">Selection</div>
+                                <input type="text" oninput="updateFilter('pick', this.value)"
+                                    class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
+                                    placeholder="Filter">
+                            </th>
+                            <th
+                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-24 align-bottom">
+                                <div class="mb-1">Odds</div>
+                                <input type="text" oninput="updateFilter('odds', this.value)"
+                                    class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
+                                    placeholder="Filter">
+                            </th>
+                            <th
+                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-24 align-bottom">
+                                <div class="mb-1">Unit Size</div>
+                                <input type="text" oninput="updateFilter('units', this.value)"
+                                    class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
+                                    placeholder="Filter">
+                            </th>
+                            <th
+                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-24 align-bottom">
+                                <div class="mb-1">Result</div>
+                                <input type="text" oninput="updateFilter('result', this.value)"
+                                    class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
+                                    placeholder="Filter">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="finalTableBody" class="font-mono text-xs text-gray-800 divide-y divide-gray-200">
+                        <!-- Rows injected via JS -->
+                    </tbody>
+                </table>
+                <div class="p-8 border-t border-gray-200 bg-white text-center">
+                    <button onclick="addManualRow()"
+                        class="text-blue-600 font-bold text-xs uppercase tracking-widest border-b border-blue-600 hover:text-black hover:border-black pb-1 transition-colors">
+                        + Initialize Manual Entry Row
+                    </button>
                 </div>
             </div>
         </div>
+
     </main>
 
-    <!-- Modals -->
-    <div id="imageModal" class="fixed inset-0 z-[200] bg-black/95 hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal()">
-        <img id="modalImg" src="" class="max-h-[90vh] max-w-[90vw] rounded shadow-2xl object-contain">
-    </div>
-    
-    <div id="sourceModal" class="fixed inset-0 z-[150] bg-black/80 hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-200 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-2xl max-h-[85vh] rounded-xl shadow-2xl flex flex-col overflow-hidden transform scale-95 transition-transform duration-200" onclick="event.stopPropagation()">
-            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
-                <h3 class="font-bold text-gray-800">Raw Source Data</h3>
-                <button onclick="closeSourceModal()" class="text-gray-400 hover:text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-full p-1 transition"><span class="material-icons text-sm">close</span></button>
-            </div>
-            <div class="flex-grow overflow-y-auto p-6 space-y-6">
-                <div id="sourceModalImageContainer" class="hidden justify-center bg-gray-900 rounded-lg p-1 border border-gray-200 h-64">
-                    <img id="sourceModalImg" src="" class="h-full object-contain rounded">
-                </div>
-                <div>
-                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Original Caption</h4>
-                    <div id="sourceModalText" class="text-sm font-mono bg-gray-50 p-3 rounded border border-gray-200 text-gray-700 whitespace-pre-wrap max-h-40 overflow-y-auto"></div>
-                </div>
-                <div>
-                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">OCR Extraction</h4>
-                    <div id="sourceModalOCR" class="text-sm font-mono bg-amber-50 p-3 rounded border border-amber-100 text-gray-700 whitespace-pre-wrap max-h-40 overflow-y-auto"></div>
-                </div>
+    <!-- LOGIC -->
+    <script src="/static/js/swiss_app.js"></script>
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div class="bg-white p-8 max-w-sm w-full border-2 border-black shadow-2xl">
+            <h3 class="text-xl font-black uppercase mb-4">Confirm Delete</h3>
+            <p class="font-serif text-sm text-gray-600 mb-6">
+                Are you sure you want to delete <span id="deleteModalCount" class="font-bold">1</span> item(s)?
+                <br>This action cannot be undone.
+            </p>
+            <div class="flex gap-4 justify-end">
+                <button onclick="closeDeleteModal()"
+                    class="px-6 h-10 border border-gray-300 hover:border-black font-bold text-xs uppercase tracking-widest transition-colors">
+                    Cancel
+                </button>
+                <button onclick="confirmDeleteAction()"
+                    class="px-6 h-10 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest transition-colors">
+                    Delete
+                </button>
             </div>
         </div>
     </div>
 
-    <script src="/static/temp_images/js/script.js"></script>
+    <!-- Review Changes Modal -->
+    <div id="reviewModal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm fade-in">
+        <div class="bg-white w-[800px] max-h-[80vh] flex flex-col border-2 border-black shadow-2xl">
+            <!-- Header -->
+            <div class="h-16 border-b border-black flex items-center justify-between px-6 shrink-0 bg-gray-50">
+                <div class="flex items-center gap-3">
+                    <span class="material-icons text-purple-600">auto_fix_high</span>
+                    <div>
+                        <h3 class="text-lg font-black uppercase tracking-tighter">AI Auto-Review</h3>
+                        <div class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Proposed Corrections
+                        </div>
+                    </div>
+                </div>
+                <div class="px-3 py-1 bg-purple-100 text-purple-700 border border-purple-200 font-bold text-xs rounded">
+                    <span id="reviewChangeCount">0</span> Changes Found
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-grow overflow-y-auto p-0 bg-white">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-100 text-gray-500 sticky top-0 border-b border-gray-200">
+                        <tr>
+                            <th class="p-3 font-mono text-[9px] uppercase tracking-widest w-20">ID</th>
+                            <th class="p-3 font-mono text-[9px] uppercase tracking-widest w-24">Field</th>
+                            <th class="p-3 font-mono text-[9px] uppercase tracking-widest w-1/3">Original Value</th>
+                            <th class="p-3 font-mono text-[9px] uppercase tracking-widest w-1/3">New Value</th>
+                            <th class="p-3 font-mono text-[9px] uppercase tracking-widest">Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reviewTableBody" class="font-mono text-xs text-gray-800 divide-y divide-gray-100">
+                        <!-- Rows injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer -->
+            <div class="h-16 border-t border-gray-200 flex items-center justify-end px-6 shrink-0 gap-3 bg-gray-50">
+                <button onclick="closeReviewModal()"
+                    class="px-6 h-10 border border-gray-300 hover:border-black font-bold text-xs uppercase tracking-widest transition-colors">
+                    Cancel
+                </button>
+                <button onclick="applyReviewChanges()"
+                    class="px-8 h-10 bg-black text-white hover:bg-purple-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors shadow-lg">
+                    <span>Apply Changes</span>
+                    <span class="material-icons text-sm">done_all</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

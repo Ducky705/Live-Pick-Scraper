@@ -98,7 +98,7 @@ app_debug.log
 
 # PyInstaller
 *.manifest
-*.spec
+# *.spec
 
 # macOS app bundle (if created)
 *.app

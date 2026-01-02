@@ -61,6 +61,10 @@ def build():
             args.append('--icon=static/logo.icns')
     
     print(f"Building for {sys.platform}...")
+    
+    # Store spec files in build_specs folder to keep root clean
+    args.append('--specpath=build_specs')
+    
     PyInstaller.__main__.run(args)
     print("Build Complete. Check /dist folder.")
 

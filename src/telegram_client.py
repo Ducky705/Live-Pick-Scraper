@@ -303,7 +303,6 @@ class TelegramManager:
                 await self._report_progress(percent, f"Downloading {i+1}/{total_downloads}...")
                 
                 result = await task
-                result = await task
                 if result:
                     path = f"/static/temp_images/{filename}"
                     msg_dict['images'].append(path)

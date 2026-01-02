@@ -137,14 +137,8 @@ def extract_text(image_relative_path):
         # Tesseract config optimized for sports betting text:
         # PSM 6 = Assume uniform block of text
         # OEM 3 = Default OCR Engine Mode
-        # Whitelist: Letters, numbers, common sports betting symbols
-        whitelist = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-.,/:()@#$%& "
-        
-        custom_config = (
-            f'--tessdata-dir "{TESSDATA_DIR}" '
-            f'--psm 6 --oem 3 '
-            f'-c tessedit_char_whitelist="{whitelist}"'
-        )
+        # NOTE: TESSDATA_PREFIX env var is set at module load time
+        custom_config = '--psm 6 --oem 3'
         
         text = pytesseract.image_to_string(img, config=custom_config)
         return text.strip()

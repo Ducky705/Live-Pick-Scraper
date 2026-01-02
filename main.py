@@ -214,6 +214,37 @@ def api_generate_prompt():
     # Generate Master Prompt
     master_prompt = generate_ai_prompt(selected_messages)
     
+    # DEBUG: Log prompt stats
+    msg_with_text = sum(1 for m in selected_messages if m.get('text') or m.get('ocr_texts'))
+    msg_with_ocr = sum(1 for m in selected_messages if m.get('ocr_texts') and len(m.get('ocr_texts', [])) > 0)
+    logging.info(f"[Prompt Gen] Total messages: {len(selected_messages)}")
+    logging.info(f"[Prompt Gen] Messages with any text: {msg_with_text}")
+    logging.info(f"[Prompt Gen] Messages with OCR text: {msg_with_ocr}")
+    logging.info(f"[Prompt Gen] Prompt length: {len(master_prompt)} chars")
+    
+    # DEBUG: Show OCR quality stats
+    empty_ocr_count = 0
+    small_ocr_count = 0
+    total_ocr_chars = 0
+    sample_ocr = None
+    for m in selected_messages:
+        ocr_texts = m.get('ocr_texts', [])
+        if not ocr_texts or all(not t or len(t.strip()) < 5 for t in ocr_texts):
+            empty_ocr_count += 1
+        else:
+            for t in ocr_texts:
+                total_ocr_chars += len(t) if t else 0
+                if len(t.strip()) < 50:
+                    small_ocr_count += 1
+                if sample_ocr is None and t and len(t.strip()) > 20:
+                    sample_ocr = t[:200]
+    
+    logging.info(f"[OCR Quality] Empty OCR results: {empty_ocr_count}/{len(selected_messages)}")
+    logging.info(f"[OCR Quality] Small OCR results (<50 chars): {small_ocr_count}")
+    logging.info(f"[OCR Quality] Total OCR chars: {total_ocr_chars}")
+    if sample_ocr:
+        logging.info(f"[OCR Quality] Sample OCR text: {sample_ocr[:150]}...")
+    
     set_progress(100, "Complete")
     
     return jsonify({
@@ -286,9 +317,12 @@ def api_ai_fill():
         # Let's try to parse it to ensure it's JSON, but return the parsed obj.
         try:
             result_obj = json.loads(result_json_str)
+            logging.info(f"[AI Fill] Raw AI Response Keys: {result_obj.keys() if isinstance(result_obj, dict) else 'Array'}")
+            logging.info(f"[AI Fill] Raw Response Preview: {result_json_str[:1000]}")
             # Unwrap if it's the new container format
             if isinstance(result_obj, dict) and 'picks' in result_obj:
                 raw_picks = result_obj['picks']
+                logging.info(f"[AI Fill] Number of raw picks from AI: {len(raw_picks)}")
                 # Remap Short Keys to Long Keys
                 remapped = []
                 for p in raw_picks:

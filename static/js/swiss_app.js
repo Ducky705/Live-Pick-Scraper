@@ -2172,8 +2172,10 @@ function buildMessageHTML(msg) {
     let imgHTML = '';
     if (msg.image) {
         // LAZY LOAD: use data-src and opacity-0
-        imgHTML = `<div class="h-40 bg-gray-100 border-b border-gray-100 overflow-hidden relative">
-            <img data-src="${msg.image}" class="w-full h-full object-cover transition-opacity duration-500 opacity-0 lazy-img">
+        imgHTML = `<div class="h-40 bg-gray-100 border-b border-gray-100 overflow-hidden relative group/img">
+            <img data-src="${msg.image}" 
+                 onclick="event.stopPropagation(); viewPropImage('${msg.id}')"
+                 class="w-full h-full object-cover transition-opacity duration-500 opacity-0 lazy-img cursor-pointer hover:opacity-90">
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-200">
                 <span class="material-icons text-xl animate-pulse">image</span>
             </div>

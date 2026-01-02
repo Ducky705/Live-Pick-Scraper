@@ -1,0 +1,542 @@
+[
+  {
+    "id": "case_1767183084_-1001900292133_55839",
+    "image_file": "samples/-1001900292133_55839.jpg",
+    "description": "Imported from -1001900292133_55839.jpg",
+    "input_text": "**BankrollBill\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183084,
+        "cn": "BankrollBill",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Wake Forest PK",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1767183084,
+        "cn": "BankrollBill",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Tasmania JackJumpers vs Illawarra Hawks 1H Over 90.5",
+        "od": -125,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1767183084,
+        "cn": "BankrollBill",
+        "lg": "Other",
+        "ty": "Total",
+        "p": "Shenzhen Leopards vs Beijing Royal Fighters Over 179.5",
+        "od": -112,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183109_-1001900292133_55838",
+    "image_file": "samples/-1001900292133_55838.jpg",
+    "description": "Imported from -1001900292133_55838.jpg",
+    "input_text": "**KimsPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183109,
+        "cn": "KimsPicks",
+        "lg": "Other",
+        "ty": "Total",
+        "p": "Mobis Phoebus vs Changwon Under 450.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1767183109,
+        "cn": "KimsPicks",
+        "lg": "Other",
+        "ty": "Spread",
+        "p": "Shenzhen Leopards -6.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183135_-1001900292133_55837",
+    "image_file": "samples/-1001900292133_55837.jpg",
+    "description": "Imported from -1001900292133_55837.jpg",
+    "input_text": "**PorterPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183135,
+        "cn": "PorterPicks",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Lakers vs Pistons Over 215.5",
+        "od": null,
+        "u": 1.0,
+        "dt": "2025-12-31"
+      }
+    ]
+  },
+  {
+    "id": "case_1767183162_-1001900292133_55834",
+    "image_file": "samples/-1001900292133_55834.jpg",
+    "description": "Imported from -1001900292133_55834.jpg",
+    "input_text": "**TMS\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183162,
+        "cn": "TMS",
+        "lg": "Other",
+        "ty": "Unknown",
+        "p": "Premium Selection",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183187_-1001900292133_55833",
+    "image_file": "samples/-1001900292133_55833.jpg",
+    "description": "Imported from -1001900292133_55833.jpg",
+    "input_text": "**AFS\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183187,
+        "cn": "AFS",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Pistons ML",
+        "od": null,
+        "u": 5000.0,
+        "dt": "2023-12-07"
+      }
+    ]
+  },
+  {
+    "id": "case_1767183213_-1001900292133_55832",
+    "image_file": "samples/-1001900292133_55832.jpg",
+    "description": "Imported from -1001900292133_55832.jpg",
+    "input_text": "**TMS\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183213,
+        "cn": "TMS",
+        "lg": "Other",
+        "ty": "Parlay",
+        "p": "(NCAAB) JMU ML / (NBA) Clippers ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183238_-1001900292133_55831",
+    "image_file": "samples/-1001900292133_55831.jpg",
+    "description": "Imported from -1001900292133_55831.jpg",
+    "input_text": "**BL\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183238,
+        "cn": "BL",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Iowa -4.5",
+        "od": -110,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183264_-1001900292133_55830",
+    "image_file": "samples/-1001900292133_55830.jpg",
+    "description": "Imported from -1001900292133_55830.jpg",
+    "input_text": "**PorterPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183264,
+        "cn": "PorterPicks",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Suns vs Jazz Over 234.5",
+        "od": null,
+        "u": 1.0,
+        "dt": "2025-12-31"
+      }
+    ]
+  },
+  {
+    "id": "case_1767183290_-1001900292133_55829",
+    "image_file": "samples/-1001900292133_55829.jpg",
+    "description": "Imported from -1001900292133_55829.jpg",
+    "input_text": "**NickyCashin\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183290,
+        "cn": "NickyCashin",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "USC Trojans -4.5",
+        "od": -110,
+        "u": 2,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183317_-1001900292133_55828",
+    "image_file": "samples/-1001900292133_55828.jpg",
+    "description": "Imported from -1001900292133_55828.jpg",
+    "input_text": "**DarthFader\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183317,
+        "cn": "DarthFader",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "New Mexico +5.5",
+        "od": null,
+        "u": 2.0,
+        "dt": "2025-12-31"
+      }
+    ]
+  },
+  {
+    "id": "case_1767183343_-1001900292133_55827",
+    "image_file": "samples/-1001900292133_55827.jpg",
+    "description": "Imported from -1001900292133_55827.jpg",
+    "input_text": "**AnalyticsCapper\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183343,
+        "cn": "AnalyticsCapper",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Bowling Green -8.5",
+        "od": -110,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1767183343,
+        "cn": "AnalyticsCapper",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Blackhawks ML",
+        "od": 120,
+        "u": 4.0,
+        "dt": null
+      },
+      {
+        "id": 1767183343,
+        "cn": "AnalyticsCapper",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "USC -4.5",
+        "od": -110,
+        "u": 5.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183368_-1001900292133_55818",
+    "image_file": "samples/-1001900292133_55818.jpg",
+    "description": "Imported from -1001900292133_55818.jpg",
+    "input_text": "**HammeringHank \n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183368,
+        "cn": "HammeringHank",
+        "lg": "Other",
+        "ty": "Unknown",
+        "p": "eoappersivee",
+        "od": null,
+        "u": 1.0,
+        "dt": "2025-12-31"
+      }
+    ]
+  },
+  {
+    "id": "case_1767183394_-1001900292133_55817",
+    "image_file": "samples/-1001900292133_55817.jpg",
+    "description": "Imported from -1001900292133_55817.jpg",
+    "input_text": "**TMS\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183394,
+        "cn": "TMS",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Marquette ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183420_-1001900292133_55814",
+    "image_file": "samples/-1001900292133_55814.jpg",
+    "description": "Imported from -1001900292133_55814.jpg",
+    "input_text": "**Kleos\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183420,
+        "cn": "Kleos",
+        "lg": "NBA",
+        "ty": "Unknown",
+        "p": "NBANITRO.SLATE prsronsoeARnersivee TUNIT1%OFYOURBETTINGBANKROLL",
+        "od": null,
+        "u": 1.0,
+        "dt": "2025-12-31"
+      }
+    ]
+  },
+  {
+    "id": "case_1767183446_-1001900292133_55813",
+    "image_file": "samples/-1001900292133_55813.jpg",
+    "description": "Imported from -1001900292133_55813.jpg",
+    "input_text": "**PardonMyPick\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183446,
+        "cn": "PardonMyPick",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Lakers -4",
+        "od": -118,
+        "u": 2.0,
+        "dt": "2025-12-31"
+      }
+    ]
+  },
+  {
+    "id": "case_1767183471_-1001900292133_55812",
+    "image_file": "samples/-1001900292133_55812.jpg",
+    "description": "Imported from -1001900292133_55812.jpg",
+    "input_text": "**CashCing\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183471,
+        "cn": "CashCing",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Louisville ML",
+        "od": -130,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1767183471,
+        "cn": "CashCing",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Stanford ML",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1767183471,
+        "cn": "CashCing",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Louisville ML",
+        "od": -124,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1767183471,
+        "cn": "CashCing",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Boise State ML",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1767183471,
+        "cn": "CashCing",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Marquette +2",
+        "od": -115,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1767183471,
+        "cn": "CashCing",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Colorado State ML",
+        "od": -120,
+        "u": 1.5,
+        "dt": null
+      },
+      {
+        "id": 1767183471,
+        "cn": "CashCing",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Miami -9.5",
+        "od": 110,
+        "u": 1.8,
+        "dt": null
+      },
+      {
+        "id": 1767183471,
+        "cn": "CashCing",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Bowling Green ML",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183497_-1001900292133_55811",
+    "image_file": "samples/-1001900292133_55811.jpg",
+    "description": "Imported from -1001900292133_55811.jpg",
+    "input_text": "**duckinvestments\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183497,
+        "cn": "DuckInvestments",
+        "lg": "NBA",
+        "ty": "Team Prop",
+        "p": "Detroit Pistons: Total Points Over 117.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1767183497,
+        "cn": "DuckInvestments",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Detroit Pistons ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1767183497,
+        "cn": "DuckInvestments",
+        "lg": "NBA",
+        "ty": "Parlay",
+        "p": "(NBA) Utah Jazz -8.5 / (NBA) Detroit Pistons ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183523_-1001900292133_55810",
+    "image_file": "samples/-1001900292133_55810.jpg",
+    "description": "Imported from -1001900292133_55810.jpg",
+    "input_text": "**provenwinner\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183523,
+        "cn": "provenwinner",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Los Angeles Lakers +3",
+        "od": -114,
+        "u": 2.0,
+        "dt": "2024-04-03"
+      },
+      {
+        "id": 1767183523,
+        "cn": "provenwinner",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "TCU +6.5",
+        "od": null,
+        "u": 2.0,
+        "dt": "2024-04-03"
+      },
+      {
+        "id": 1767183523,
+        "cn": "provenwinner",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Iowa +6.5",
+        "od": -130,
+        "u": 2.0,
+        "dt": "2024-04-03"
+      }
+    ]
+  },
+  {
+    "id": "case_1767183550_-1001900292133_55809",
+    "image_file": "samples/-1001900292133_55809.jpg",
+    "description": "Imported from -1001900292133_55809.jpg",
+    "input_text": "**vegasmirabet\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183550,
+        "cn": "vegasmirabet",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Jazz vs Celtics Over 229.5",
+        "od": null,
+        "u": 10000.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "case_1767183576_-1001900292133_55808",
+    "image_file": "samples/-1001900292133_55808.jpg",
+    "description": "Imported from -1001900292133_55808.jpg",
+    "input_text": "**Tbsportsbetting\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "expected_picks": [
+      {
+        "id": 1767183576,
+        "cn": "Tb",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Jazz vs Celtics Over 242.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1767183576,
+        "cn": "Tb",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Illinois -1.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1767183576,
+        "cn": "Tb",
+        "lg": "NCAAF",
+        "ty": "Total",
+        "p": "TCU vs USC Over 56.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  }
+]

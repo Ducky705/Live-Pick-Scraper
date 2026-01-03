@@ -1,7 +1,9 @@
 # src/supabase_client.py
 import os
 from datetime import datetime
-from supabase import create_client, Client
+# Lazy import: supabase module is loaded on first use
+# from supabase import create_client, Client  # Moved to get_supabase()
+
 # Import directly from config (bundled in EXE) instead of .env
 from config import SUPABASE_URL, SUPABASE_KEY
 
@@ -13,15 +15,32 @@ MANUAL_ALIASES = {
     "asa": "ASA Inc"
 }
 
-try:
-    if SUPABASE_URL and SUPABASE_KEY:
-        supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    else:
-        print("Supabase Config Error: Credentials missing in config.py")
-        supabase = None
-except Exception as e:
-    print(f"Supabase Init Error: {e}")
-    supabase = None
+# --- LAZY SUPABASE CLIENT ---
+# Client is created on first use to speed up startup
+_supabase = None
+_supabase_init_attempted = False
+
+def get_supabase():
+    """Lazily initialize and return the Supabase client."""
+    global _supabase, _supabase_init_attempted
+    
+    if _supabase_init_attempted:
+        return _supabase
+    
+    _supabase_init_attempted = True
+    
+    try:
+        if SUPABASE_URL and SUPABASE_KEY:
+            from supabase import create_client
+            _supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+        else:
+            print("Supabase Config Error: Credentials missing in config.py")
+            _supabase = None
+    except Exception as e:
+        print(f"Supabase Init Error: {e}")
+        _supabase = None
+    
+    return _supabase
 
 # --- CACHES ---
 _capper_map = {}    # Name -> ID
@@ -29,8 +48,10 @@ _league_map = {}    # Name -> ID
 _bet_type_map = {}  # Name -> ID
 _variant_map = {}   # Variant Name -> Capper ID
 
+
 def refresh_caches():
     """Fetches IDs for Foreign Key constraints."""
+    supabase = get_supabase()
     if not supabase: return
 
     global _capper_map, _league_map, _bet_type_map, _variant_map
@@ -78,6 +99,7 @@ def get_or_create_capper_id(name):
     if clean_lookup in _variant_map: return _variant_map[clean_lookup]
 
     clean_insert_name = str(name).strip()
+    supabase = get_supabase()
     try:
         print(f"[DB] Creating new capper: {clean_insert_name}")
         res = supabase.table("capper_directory").insert({
@@ -114,6 +136,7 @@ def fetch_all_cappers():
     return [{"name": k.title(), "id": v} for k, v in _capper_map.items()]
 
 def upload_picks(picks, target_date=None):
+    supabase = get_supabase()
     if not supabase: return {"success": False, "error": "Supabase not configured."}
     
     refresh_caches()

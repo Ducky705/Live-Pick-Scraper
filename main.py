@@ -44,20 +44,79 @@ if getattr(sys, 'frozen', False):
     except Exception:
         pass
 
-from src.telegram_client import tg_manager
-from src.ocr_handler import extract_text
-from src.prompt_builder import generate_ai_prompt, generate_revision_prompt, generate_smart_fill_prompt
-from src.utils import detect_common_watermark, filter_text, backfill_odds, is_ad_content, cleanup_temp_images
-from src.score_fetcher import fetch_scores_for_date
-from src.grader import grade_picks
-from src.capper_matcher import capper_matcher
+# --- LAZY LOADING FOR FASTER STARTUP ---
+# Heavy modules are loaded on first use instead of at startup
+_tg_manager = None
+_extract_text = None
+_prompt_funcs = None
+_utils_funcs = None
+_score_fetcher = None
+_grader = None
+_capper_matcher = None
+_supabase_funcs = None
 
-try:
-    from src.supabase_client import fetch_all_cappers, upload_picks, get_or_create_capper_id
-except ImportError:
-    def fetch_all_cappers(): return []
-    def upload_picks(p, d): return {'success': False, 'error': 'Supabase module missing'}
-    def get_or_create_capper_id(n): return None
+def get_tg_manager():
+    global _tg_manager
+    if _tg_manager is None:
+        from src.telegram_client import tg_manager
+        _tg_manager = tg_manager
+        _tg_manager.set_progress_callback(set_progress)
+    return _tg_manager
+
+def get_extract_text():
+    global _extract_text
+    if _extract_text is None:
+        from src.ocr_handler import extract_text
+        _extract_text = extract_text
+    return _extract_text
+
+def get_prompt_funcs():
+    global _prompt_funcs
+    if _prompt_funcs is None:
+        from src.prompt_builder import generate_ai_prompt, generate_revision_prompt, generate_smart_fill_prompt
+        _prompt_funcs = (generate_ai_prompt, generate_revision_prompt, generate_smart_fill_prompt)
+    return _prompt_funcs
+
+def get_utils_funcs():
+    global _utils_funcs
+    if _utils_funcs is None:
+        from src.utils import detect_common_watermark, filter_text, backfill_odds, is_ad_content, cleanup_temp_images
+        _utils_funcs = (detect_common_watermark, filter_text, backfill_odds, is_ad_content, cleanup_temp_images)
+    return _utils_funcs
+
+def get_score_fetcher():
+    global _score_fetcher
+    if _score_fetcher is None:
+        from src.score_fetcher import fetch_scores_for_date
+        _score_fetcher = fetch_scores_for_date
+    return _score_fetcher
+
+def get_grader():
+    global _grader
+    if _grader is None:
+        from src.grader import grade_picks
+        _grader = grade_picks
+    return _grader
+
+def get_capper_matcher():
+    global _capper_matcher
+    if _capper_matcher is None:
+        from src.capper_matcher import capper_matcher
+        _capper_matcher = capper_matcher
+    return _capper_matcher
+
+def get_supabase_funcs():
+    global _supabase_funcs
+    if _supabase_funcs is None:
+        try:
+            from src.supabase_client import fetch_all_cappers, upload_picks, get_or_create_capper_id
+            _supabase_funcs = (fetch_all_cappers, upload_picks, get_or_create_capper_id)
+        except ImportError:
+            def fetch_all_cappers(): return []
+            def upload_picks(p, d): return {'success': False, 'error': 'Supabase module missing'}
+            def get_or_create_capper_id(n): return None
+            _supabase_funcs = (fetch_all_cappers, upload_picks, get_or_create_capper_id)
+    return _supabase_funcs
 
 app = Flask(__name__)
 log = logging.getLogger('werkzeug')
@@ -90,12 +149,11 @@ def set_progress(p, s):
         _global_progress['percent'] = p
         _global_progress['status'] = s
 
-# Hook up callback
-tg_manager.set_progress_callback(set_progress)
+# Note: tg_manager callback is now set lazily in get_tg_manager()
 
 def background_score_fetch(target_date):
     try:
-        scores = fetch_scores_for_date(target_date)
+        scores = get_score_fetcher()(target_date)
         with score_cache_lock:
             _score_cache[target_date] = scores
     except Exception as e:
@@ -113,7 +171,7 @@ def index(): return render_template('index.html')
 @app.route('/api/check_auth', methods=['GET'])
 def check_auth():
     try:
-        is_authorized = run_async(tg_manager.connect_client())
+        is_authorized = run_async(get_tg_manager().connect_client())
         return jsonify({'authorized': is_authorized})
     except Exception as e: return jsonify({'authorized': False, 'error': str(e)})
 
@@ -121,7 +179,7 @@ def check_auth():
 def send_code():
     phone = request.json.get('phone')
     try:
-        run_async(tg_manager.send_code(phone))
+        run_async(get_tg_manager().send_code(phone))
         return jsonify({'status': 'success'})
     except Exception as e: return jsonify({'error': str(e)}), 500
 
@@ -130,14 +188,14 @@ def verify_code():
     code = request.json.get('code')
     password = request.json.get('password')
     try:
-        result = run_async(tg_manager.sign_in(code, password))
+        result = run_async(get_tg_manager().sign_in(code, password))
         return jsonify({'status': result})
     except Exception as e: return jsonify({'error': str(e)}), 500
 
 @app.route('/api/get_channels', methods=['GET'])
 def get_channels():
     try:
-        channels = run_async(tg_manager.get_channels())
+        channels = run_async(get_tg_manager().get_channels())
         return jsonify(channels)
     except Exception as e: return jsonify({'error': str(e)}), 500
 
@@ -152,7 +210,7 @@ def fetch_messages():
         threading.Thread(target=background_score_fetch, args=(target_date,), daemon=True).start()
 
     try:
-        msgs = run_async(tg_manager.fetch_messages(channel_ids, target_date))
+        msgs = run_async(get_tg_manager().fetch_messages(channel_ids, target_date))
         return jsonify(msgs)
     except Exception as e: return jsonify({'error': str(e)}), 500
 
@@ -164,6 +222,7 @@ def api_detect_watermark():
     for msg in messages:
         if msg.get('ocr_text'): ocr_texts.append(msg.get('ocr_text'))
         if msg.get('text'): ocr_texts.append(msg['text'])
+    detect_common_watermark = get_utils_funcs()[0]
     detected = detect_common_watermark(ocr_texts)
     return jsonify({'watermark': detected})
 
@@ -199,7 +258,7 @@ def api_generate_prompt():
                 
             if msg.get('do_ocr') and images_to_process:
                 for img_path in images_to_process:
-                    future = executor.submit(extract_text, img_path)
+                    future = executor.submit(get_extract_text(), img_path)
                     if i not in ocr_futures: ocr_futures[i] = []
                     ocr_futures[i].append(future)
 
@@ -219,6 +278,7 @@ def api_generate_prompt():
     set_progress(95, "Generating Prompts...")
     
     # Generate Master Prompt
+    generate_ai_prompt = get_prompt_funcs()[0]
     master_prompt = generate_ai_prompt(selected_messages)
     
     # DEBUG: Log prompt stats
@@ -420,6 +480,7 @@ def api_validate_picks():
     if not failed_items: 
         return jsonify({'status': 'clean'})
     
+    generate_revision_prompt = get_prompt_funcs()[1]
     revision_prompt = generate_revision_prompt(failed_items)
     return jsonify({
         'status': 'needs_revision', 
@@ -489,6 +550,7 @@ def api_generate_smart_fill():
     if not unknowns:
         return jsonify({'prompt': None})
         
+    generate_smart_fill_prompt = get_prompt_funcs()[2]
     prompt = generate_smart_fill_prompt(unknowns)
     return jsonify({'prompt': prompt})
 
@@ -511,14 +573,14 @@ def api_grade_picks():
         scores = _score_cache[target_date]
     else:
         try:
-            scores = fetch_scores_for_date(target_date)
+            scores = get_score_fetcher()(target_date)
             _score_cache[target_date] = scores
         except Exception as e:
             print(f"Score fetch failed: {e}")
             return jsonify({'error': 'Score fetch failed'}), 500
             
     # 2. Traditional Grading (Regex/Fuzzy)
-    graded_data = grade_picks(picks, scores)
+    graded_data = get_grader()(picks, scores)
 
     # 3. AI Fallback (Smart & Efficient)
     # Filter for items that failed grading (Pending/Unknown) BUT have potential game data or are just tricky
@@ -586,6 +648,7 @@ If score not found, result="Unknown".
 @app.route('/api/get_cappers', methods=['GET'])
 def api_get_cappers():
     try:
+        fetch_all_cappers = get_supabase_funcs()[0]
         cappers = fetch_all_cappers() 
         return jsonify(cappers)
     except Exception as e: return jsonify([])
@@ -652,6 +715,7 @@ def api_upload():
     picks = data.get('picks', [])
     target_date = data.get('date')
     if not picks: return jsonify({'success': False, 'error': 'No picks'})
+    upload_picks = get_supabase_funcs()[1]
     result = upload_picks(picks, target_date)
     return jsonify(result)
 
@@ -668,6 +732,7 @@ def api_auto_review():
     to_review = []
     
     # Get all known cappers for context
+    fetch_all_cappers = get_supabase_funcs()[0]
     known_cappers = [c['name'] for c in fetch_all_cappers()]
     
     for p in picks:
@@ -776,7 +841,7 @@ def api_match_cappers():
         data = request.json
         capper_names = data.get('names', [])
         # Bulk match
-        matches = capper_matcher.match_names_bulk(capper_names)
+        matches = get_capper_matcher().match_names_bulk(capper_names)
         return jsonify({'matches': matches})
     except Exception as e:
         logging.error(f"Error matching cappers: {e}")
@@ -790,6 +855,7 @@ def api_create_capper():
         if not name: return jsonify({'success': False})
         
         # This function creates if not exists and returns ID
+        get_or_create_capper_id = get_supabase_funcs()[2]
         new_id = get_or_create_capper_id(name)
         
         if new_id:

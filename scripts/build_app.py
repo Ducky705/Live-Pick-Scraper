@@ -12,6 +12,11 @@ def get_separator():
     return ';' if sys.platform == 'win32' else ':'
 
 def build():
+    # Ensure we're in the project root (parent of scripts/)
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    os.chdir(project_root)
+    print(f"Building from: {os.getcwd()}")
+    
     # Base arguments
     args = [
         ENTRY_POINT,

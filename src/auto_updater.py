@@ -272,20 +272,26 @@ def _apply_windows_update(update_file_path, restart=True):
         new_exe = update_file_path
     
     # Write batch script that:
-    # 1. Waits for current process to exit
-    # 2. Replaces the exe
+    # 1. Kills the running process
+    # 2. Waits and retries the copy
     # 3. Starts the new exe
     # 4. Deletes itself
+    exe_name = os.path.basename(current_exe)
     batch_content = f'''@echo off
-echo Updating CapperSuite...
-timeout /t 2 /nobreak >nul
-copy /Y "{new_exe}" "{current_exe}"
+taskkill /F /IM "{exe_name}" >nul 2>&1
+timeout /t 3 /nobreak >nul
+
+set RETRY=0
+:RETRY_COPY
+copy /Y "{new_exe}" "{current_exe}" >nul 2>&1
 if errorlevel 1 (
-    echo Update failed!
-    pause
+    set /a RETRY+=1
+    if %RETRY% LSS 5 (
+        timeout /t 2 /nobreak >nul
+        goto RETRY_COPY
+    )
     exit /b 1
 )
-echo Update complete!
 '''
     
     if restart:
@@ -300,9 +306,16 @@ del "%~f0"
     with open(batch_script, 'w') as f:
         f.write(batch_content)
     
-    # Run the batch script and exit
-    subprocess.Popen(['cmd', '/c', batch_script], 
-                     creationflags=subprocess.CREATE_NEW_CONSOLE)
+    # Run the batch script HIDDEN (no console window)
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    startupinfo.wShowWindow = 0  # SW_HIDE
+    
+    subprocess.Popen(
+        ['cmd', '/c', batch_script],
+        startupinfo=startupinfo,
+        creationflags=subprocess.CREATE_NO_WINDOW
+    )
     
     # Exit current app
     if restart:
@@ -354,12 +367,16 @@ def _apply_mac_update(update_file_path, restart=True):
         logging.error(f"Unsupported update format: {update_file_path}")
         return False
     
-    # Write shell script
+    # Write shell script (silent, no output)
     script_content = f'''#!/bin/bash
-echo "Updating CapperSuite..."
-sleep 2
-rm -rf "{current_app}"
-cp -R "{new_app}" "{os.path.dirname(current_app)}/"
+sleep 3
+rm -rf "{current_app}" 2>/dev/null
+
+# Retry copy up to 5 times
+for i in 1 2 3 4 5; do
+    cp -R "{new_app}" "{os.path.dirname(current_app)}/" 2>/dev/null && break
+    sleep 2
+done
 '''
     
     if restart:
@@ -376,8 +393,13 @@ rm "$0"
     
     os.chmod(script_path, 0o755)
     
-    # Run the script and exit
-    subprocess.Popen(['/bin/bash', script_path])
+    # Run the script silently (detached, no terminal)
+    subprocess.Popen(
+        ['/bin/bash', script_path],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True
+    )
     
     if restart:
         sys.exit(0)

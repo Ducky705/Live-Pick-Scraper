@@ -203,6 +203,7 @@ const apiCall = async (endpoint, method, body) => {
 // --- INIT ---
 window.addEventListener('DOMContentLoaded', async () => {
     await checkAuth();
+    await checkUpdate();
 });
 
 async function checkAuth() {
@@ -2212,3 +2213,49 @@ function buildMessageHTML(msg) {
         </div>
     `;
 }
+
+// --- AUTO-UPDATE ---
+async function checkUpdate() {
+    try {
+        const res = await apiCall('/api/check_update', 'GET');
+        if (res && res.update_available) {
+            const newVerEl = getEl('newVersionNumber');
+            const currVerEl = getEl('currentVersionNumber');
+            const notesEl = getEl('releaseNotes');
+            
+            if (newVerEl) newVerEl.innerText = res.latest_version;
+            if (currVerEl) currVerEl.innerText = res.current_version;
+            if (notesEl) notesEl.innerText = res.release_notes || 'No release notes provided.';
+            
+            const modal = getEl('updateModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+    } catch (e) {
+        console.error('Update check failed', e);
+    }
+}
+
+function closeUpdateModal() {
+    const modal = getEl('updateModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+async function installUpdate() {
+    closeUpdateModal();
+    showLoader('SYSTEM UPDATE IN PROGRESS', 'auto'); 
+    
+    try {
+        const res = await apiCall('/api/download_update', 'POST', {});
+        if (res && res.success) {
+           showToast('Update Complete. Restarting...');
+           // Keep loader visible until restart kills the process
+        } else {
+            hideLoader();
+            showToast('Update Failed: ' + (res.error || 'Unknown Error'));
+        }
+    } catch(e) {
+        hideLoader();
+        showToast('Update Failed: ' + e.message);
+    }
+}
+

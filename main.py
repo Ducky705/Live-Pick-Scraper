@@ -3,7 +3,14 @@ import os
 
 # Load .env file FIRST before any other imports that might need env vars
 from dotenv import load_dotenv
-load_dotenv()
+
+# For frozen apps, .env is bundled inside the exe - load from there
+if getattr(sys, 'frozen', False):
+    _env_path = os.path.join(sys._MEIPASS, '.env')
+    if os.path.exists(_env_path):
+        load_dotenv(_env_path)
+else:
+    load_dotenv()
 import json
 import threading
 import asyncio
@@ -802,6 +809,75 @@ def api_create_capper():
     except Exception as e:
         logging.error(f"Error creating capper: {e}")
         return jsonify({'success': False, 'error': str(e)})
+
+# --- AUTO-UPDATE API ---
+from src.auto_updater import check_for_updates, download_update, apply_update, get_all_releases
+from config import APP_VERSION
+
+@app.route('/api/version', methods=['GET'])
+def api_get_version():
+    """Return current app version."""
+    return jsonify({'version': APP_VERSION})
+
+@app.route('/api/check_update', methods=['GET'])
+def api_check_update():
+    """Check if an update is available."""
+    try:
+        result = check_for_updates()
+        return jsonify(result)
+    except Exception as e:
+        logging.error(f"Update check failed: {e}")
+        return jsonify({'update_available': False, 'error': str(e)})
+
+@app.route('/api/download_update', methods=['POST'])
+def api_download_update():
+    """Download and apply the update."""
+    try:
+        # First check for update to get download URL
+        check_result = check_for_updates()
+        logging.info(f"[Update] Check result: {check_result}")
+        
+        if not check_result.get('update_available'):
+            return jsonify({'success': False, 'error': 'No update available'})
+        
+        download_url = check_result.get('download_url')
+        if not download_url:
+            return jsonify({'success': False, 'error': 'No download URL for this platform'})
+        
+        logging.info(f"[Update] Download URL: {download_url}")
+        
+        # Download the update
+        set_progress(10, "Downloading update...")
+        update_file = download_update(download_url, progress_callback=lambda p, s: set_progress(10 + int(p * 0.7), s))
+        
+        if not update_file:
+            logging.error("[Update] Download returned None - check auto_updater logs")
+            return jsonify({'success': False, 'error': 'Download failed - check logs for details'})
+        
+        logging.info(f"[Update] Downloaded to: {update_file}")
+        set_progress(90, "Applying update...")
+        
+        # Apply the update (this will restart the app)
+        success = apply_update(update_file, restart=True)
+        
+        if success:
+            return jsonify({'success': True, 'message': 'Update applied, restarting...'})
+        else:
+            logging.error("[Update] apply_update returned False")
+            return jsonify({'success': False, 'error': 'Failed to apply update'})
+            
+    except Exception as e:
+        logging.error(f"Update download/apply failed: {e}", exc_info=True)
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/api/releases', methods=['GET'])
+def api_get_releases():
+    """Get changelog/release history."""
+    try:
+        releases = get_all_releases()
+        return jsonify({'releases': releases})
+    except Exception as e:
+        return jsonify({'releases': [], 'error': str(e)})
 
 # --- APP LAUNCHER ---
 def start_server():

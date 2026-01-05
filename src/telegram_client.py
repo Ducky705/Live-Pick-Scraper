@@ -206,7 +206,12 @@ class TelegramManager:
                 grouped_buffer = {} # grouped_id -> { 'main_msg': msg_dict, 'images': [] }
                 
                 try:
-                    async for message in client.iter_messages(entity, limit=200):
+                    # Calculate offset_date: Start of the day AFTER target date (in ET)
+                    # This ensures we fetch messages starting from midnight after target date, going backwards
+                    offset_dt = datetime.combine(target_date_obj + timedelta(days=1), datetime.min.time())
+                    offset_dt = offset_dt.replace(tzinfo=ET_OFFSET)
+                    
+                    async for message in client.iter_messages(entity, limit=500, offset_date=offset_dt):
                         if not message.date: continue
                         
                         msg_et = message.date.astimezone(ET_OFFSET)

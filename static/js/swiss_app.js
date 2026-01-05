@@ -1696,12 +1696,17 @@ function renderTable() {
             ${generateEditableTd(msg.id, idx, 'type', row.type || "BET", 'uppercase text-xs font-bold text-black border-l-4 border-black pl-2')}
             <td class="p-4 border-r border-gray-100 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:z-10 relative font-bold text-black truncate max-w-[200px] text-xs" 
                 contenteditable="true" 
+                onkeydown="handleCellKeydown(event, this)"
                 onblur="updateRowData('${msg.id}', ${idx}, 'pick', this.innerText)">
                 ${row.pick || ''}
             </td>
             ${generateEditableTd(msg.id, idx, 'odds', row.odds, 'font-mono text-xs text-gray-600')}
             ${generateEditableTd(msg.id, idx, 'units', row.units, 'font-mono text-xs text-blue-600 font-bold')}
-            <td class="p-4 border-r border-gray-100 font-mono text-xs uppercase tracking-widest ${getResultClass(row.result)}" title="${safeText(row.score_summary)}">
+            <td class="p-4 border-r border-gray-100 font-mono text-xs uppercase tracking-widest outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:z-10 relative ${getResultClass(row.result)}" 
+                title="${safeText(row.score_summary)}"
+                contenteditable="true" 
+                onkeydown="handleCellKeydown(event, this)"
+                onblur="updateRowData('${msg.id}', ${idx}, 'result', this.innerText)">
                 ${row.result || "Pending"}
             </td>
         `;
@@ -1717,16 +1722,48 @@ function renderTable() {
 function generateEditableTd(id, idx, field, val, classes) {
     return `<td class="p-4 border-r border-gray-100 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:z-10 relative ${classes}" 
             contenteditable="true" 
-            onkeydown="handleEnterKey(event, this)"
+            onkeydown="handleCellKeydown(event, this)"
             onblur="updateRowData('${id}', ${idx}, '${field}', this.innerText)">${val || ''}</td>`;
 }
 
-// POLISH: Add "Enter to Blur" for better keyboard workflow
-function handleEnterKey(e, el) {
+// POLISH: Add keyboard navigation for editable cells
+// - Enter to blur/save
+// - Left/Right arrows scroll horizontally when at edge of text
+function handleCellKeydown(e, el) {
     if (e.key === 'Enter') {
         e.preventDefault();
         el.blur();
+        return;
     }
+
+    // Arrow key horizontal scrolling
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        const selection = window.getSelection();
+        const range = selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+
+        // Only scroll if we're at the edge of the text or selection is collapsed
+        if (range && range.collapsed) {
+            const textLen = el.innerText.length;
+            const cursorPos = range.startOffset;
+
+            // At the start and pressing left, or at the end and pressing right
+            if ((e.key === 'ArrowLeft' && cursorPos === 0 && el.scrollLeft > 0) ||
+                (e.key === 'ArrowRight' && el.scrollWidth > el.clientWidth)) {
+                // Let native scrolling happen but also add manual scroll
+                const scrollAmount = 30;
+                if (e.key === 'ArrowLeft') {
+                    el.scrollLeft = Math.max(0, el.scrollLeft - scrollAmount);
+                } else {
+                    el.scrollLeft = el.scrollLeft + scrollAmount;
+                }
+            }
+        }
+    }
+}
+
+// Legacy function name for backwards compatibility
+function handleEnterKey(e, el) {
+    handleCellKeydown(e, el);
 }
 
 function generateCapperHtml(msg, idx, row) {
@@ -2222,11 +2259,11 @@ async function checkUpdate() {
             const newVerEl = getEl('newVersionNumber');
             const currVerEl = getEl('currentVersionNumber');
             const notesEl = getEl('releaseNotes');
-            
+
             if (newVerEl) newVerEl.innerText = res.latest_version;
             if (currVerEl) currVerEl.innerText = res.current_version;
             if (notesEl) notesEl.innerText = res.release_notes || 'No release notes provided.';
-            
+
             const modal = getEl('updateModal');
             if (modal) modal.classList.remove('hidden');
         }
@@ -2242,18 +2279,18 @@ function closeUpdateModal() {
 
 async function installUpdate() {
     closeUpdateModal();
-    showLoader('SYSTEM UPDATE IN PROGRESS', 'auto'); 
-    
+    showLoader('SYSTEM UPDATE IN PROGRESS', 'auto');
+
     try {
         const res = await apiCall('/api/download_update', 'POST', {});
         if (res && res.success) {
-           showToast('Update Complete. Restarting...');
-           // Keep loader visible until restart kills the process
+            showToast('Update Complete. Restarting...');
+            // Keep loader visible until restart kills the process
         } else {
             hideLoader();
             showToast('Update Failed: ' + (res.error || 'Unknown Error'));
         }
-    } catch(e) {
+    } catch (e) {
         hideLoader();
         showToast('Update Failed: ' + e.message);
     }

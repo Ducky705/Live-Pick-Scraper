@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR Preprocessing Comparison - -1001900292133_55832</title>
+    <title>OCR Preprocessing Comparison Report</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -13,34 +13,42 @@
             margin: 0;
             padding: 20px;
         }
-        h1 { text-align: center; color: #00d4ff; }
-        h2 { color: #ffd700; margin-top: 40px; }
-        .summary {
+        h1 { text-align: center; color: #00d4ff; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+        h2 { color: #ffd700; margin-top: 50px; border-bottom: 2px solid #ffd700; padding-bottom: 10px; }
+        .image-section {
             background: #16213e;
+            border-radius: 15px;
             padding: 20px;
+            margin-bottom: 40px;
+        }
+        .summary {
+            background: #0f3460;
+            padding: 15px;
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .summary table {
             width: 100%;
             border-collapse: collapse;
         }
         .summary th, .summary td {
-            padding: 10px;
+            padding: 8px 12px;
             text-align: left;
             border-bottom: 1px solid #333;
         }
         .summary th { color: #00d4ff; }
-        .best { background: rgba(0, 255, 0, 0.1); }
+        .best { background: rgba(0, 255, 0, 0.15); }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 15px;
         }
         .card {
-            background: #16213e;
+            background: #0a0a15;
             border-radius: 10px;
             overflow: hidden;
+            border: 1px solid #333;
         }
         .card img {
             width: 100%;
@@ -48,140 +56,430 @@
             display: block;
         }
         .card-body {
-            padding: 15px;
+            padding: 12px;
         }
-        .card h3 {
-            margin: 0 0 10px 0;
+        .card h4 {
+            margin: 0 0 8px 0;
             color: #00d4ff;
+            font-size: 14px;
         }
         .stats {
             display: flex;
-            gap: 20px;
-            margin-bottom: 10px;
+            gap: 15px;
+            margin-bottom: 8px;
         }
         .stat {
-            background: #0f3460;
-            padding: 5px 10px;
-            border-radius: 5px;
+            background: #16213e;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
         }
         .ocr-text {
-            background: #0a0a15;
-            padding: 10px;
+            background: #16213e;
+            padding: 8px;
             border-radius: 5px;
             font-family: monospace;
-            font-size: 12px;
-            max-height: 200px;
+            font-size: 11px;
+            max-height: 150px;
             overflow-y: auto;
             white-space: pre-wrap;
             word-break: break-word;
         }
+        .legend {
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .legend h3 { margin-top: 0; color: #ffd700; }
+        .legend ul { margin: 0; padding-left: 20px; }
+        .legend li { margin: 5px 0; }
     </style>
 </head>
 <body>
-    <h1>🔬 OCR Preprocessing Comparison</h1>
-    <h2>Image: -1001900292133_55832</h2>
+    <h1>🔬 OCR Preprocessing Comparison Report</h1>
+    <p class="subtitle">Compare preprocessing variants across multiple sample images</p>
     
-    <div class="summary">
-        <h3>📊 Summary (sorted by word count)</h3>
-        <table>
-            <tr>
-                <th>Variant</th>
-                <th>Words</th>
-                <th>Characters</th>
-            </tr>
-            <tr class="best">
-                <td>v1_baseline</td>
-                <td>10</td>
-                <td>57</td>
-            </tr>
-            <tr >
-                <td>v3_best</td>
-                <td>8</td>
-                <td>46</td>
-            </tr>
-            <tr >
-                <td>v3_no_watermark_removal</td>
-                <td>8</td>
-                <td>50</td>
-            </tr>
-            <tr >
-                <td>v2_lanczos_pad_gamma</td>
-                <td>7</td>
-                <td>46</td>
-            </tr>
-            <tr >
-                <td>original</td>
-                <td>5</td>
-                <td>25</td>
-            </tr>
-        </table>
+    <div class="legend">
+        <h3>📋 Variant Descriptions</h3>
+        <ul>
+            <li><strong>original</strong> - Raw image, no processing</li>
+            <li><strong>v1_baseline</strong> - Basic preprocessing (Cubic upscale, CLAHE, Otsu)</li>
+            <li><strong>v2_improved</strong> - Lanczos4 upscale, padding, gamma, bilateral filter</li>
+            <li><strong>v3_best</strong> - Full pipeline: Lanczos4 + sharpen + NLM denoise + watermark removal</li>
+            <li><strong>v3_no_watermark</strong> - Same as v3_best but without watermark removal</li>
+        </ul>
     </div>
-    
-    <h2>🖼️ Visual Comparison</h2>
-    <div class="grid">
-        <div class="card">
-            <img src="comparison_images/-1001900292133_55832_original.png" alt="original">
-            <div class="card-body">
-                <h3>original</h3>
-                <div class="stats">
-                    <span class="stat">📝 5 words</span>
-                    <span class="stat">🔤 25 chars</span>
-                </div>
-                <div class="ocr-text">[Original image - no OCR]</div>
-            </div>
+
+    <div class="image-section">
+        <h2>📸 -1001900292133_55832</h2>
+        
+        <div class="summary">
+            <table>
+                <tr>
+                    <th>Variant</th>
+                    <th>Words</th>
+                    <th>Characters</th>
+                </tr>
+                <tr class="best">
+                    <td>v1_baseline</td>
+                    <td>10</td>
+                    <td>57</td>
+                </tr>
+                <tr >
+                    <td>v3_standard</td>
+                    <td>8</td>
+                    <td>46</td>
+                </tr>
+                <tr >
+                    <td>v3_red_channel</td>
+                    <td>8</td>
+                    <td>46</td>
+                </tr>
+                <tr >
+                    <td>v2_improved</td>
+                    <td>7</td>
+                    <td>46</td>
+                </tr>
+                <tr >
+                    <td>original</td>
+                    <td>5</td>
+                    <td>25</td>
+                </tr>
+            </table>
         </div>
-        <div class="card">
-            <img src="comparison_images/-1001900292133_55832_v1_baseline.png" alt="v1_baseline">
-            <div class="card-body">
-                <h3>v1_baseline</h3>
-                <div class="stats">
-                    <span class="stat">📝 10 words</span>
-                    <span class="stat">🔤 57 chars</span>
+        
+        <div class="grid">
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55832_original.png" alt="original">
+                <div class="card-body">
+                    <h4>original</h4>
+                    <div class="stats">
+                        <span class="stat">📝 5 words</span>
+                        <span class="stat">🔤 25 chars</span>
+                    </div>
+                    <div class="ocr-text">[Original image - no OCR]</div>
                 </div>
-                <div class="ocr-text">2-Team Parlay (1 unit)
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55832_v1_baseline.png" alt="v1_baseline">
+                <div class="card-body">
+                    <h4>v1_baseline</h4>
+                    <div class="stats">
+                        <span class="stat">📝 10 words</span>
+                        <span class="stat">🔤 57 chars</span>
+                    </div>
+                    <div class="ocr-text">2-Team Parlay (1 unit)
 Stanford est
 
 f
 Clippers bpers ree</div>
-            </div>
-        </div>
-        <div class="card">
-            <img src="comparison_images/-1001900292133_55832_v2_lanczos_pad_gamma.png" alt="v2_lanczos_pad_gamma">
-            <div class="card-body">
-                <h3>v2_lanczos_pad_gamma</h3>
-                <div class="stats">
-                    <span class="stat">📝 7 words</span>
-                    <span class="stat">🔤 46 chars</span>
                 </div>
-                <div class="ocr-text">2-Team Parlay (1 unit)
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55832_v2_improved.png" alt="v2_improved">
+                <div class="card-body">
+                    <h4>v2_improved</h4>
+                    <div class="stats">
+                        <span class="stat">📝 7 words</span>
+                        <span class="stat">🔤 46 chars</span>
+                    </div>
+                    <div class="ocr-text">2-Team Parlay (1 unit)
 So eabperstree
 Clippers</div>
-            </div>
-        </div>
-        <div class="card">
-            <img src="comparison_images/-1001900292133_55832_v3_best.png" alt="v3_best">
-            <div class="card-body">
-                <h3>v3_best</h3>
-                <div class="stats">
-                    <span class="stat">📝 8 words</span>
-                    <span class="stat">🔤 46 chars</span>
                 </div>
-                <div class="ocr-text">2-Team Parlay (1 unit)
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55832_v3_standard.png" alt="v3_standard">
+                <div class="card-body">
+                    <h4>v3_standard</h4>
+                    <div class="stats">
+                        <span class="stat">📝 8 words</span>
+                        <span class="stat">🔤 46 chars</span>
+                    </div>
+                    <div class="ocr-text">2-Team Parlay (1 unit)
 Stanford ML
 Clippers ML</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55832_v3_red_channel.png" alt="v3_red_channel">
+                <div class="card-body">
+                    <h4>v3_red_channel</h4>
+                    <div class="stats">
+                        <span class="stat">📝 8 words</span>
+                        <span class="stat">🔤 46 chars</span>
+                    </div>
+                    <div class="ocr-text">2-Team Parlay (1 unit)
+Stanford ML
+Clippers ML</div>
+                </div>
             </div>
         </div>
-        <div class="card">
-            <img src="comparison_images/-1001900292133_55832_v3_no_watermark_removal.png" alt="v3_no_watermark_removal">
-            <div class="card-body">
-                <h3>v3_no_watermark_removal</h3>
-                <div class="stats">
-                    <span class="stat">📝 8 words</span>
-                    <span class="stat">🔤 50 chars</span>
+    </div>
+
+    <div class="image-section">
+        <h2>📸 -1001900292133_55810</h2>
+        
+        <div class="summary">
+            <table>
+                <tr>
+                    <th>Variant</th>
+                    <th>Words</th>
+                    <th>Characters</th>
+                </tr>
+                <tr class="best">
+                    <td>v3_standard</td>
+                    <td>50</td>
+                    <td>242</td>
+                </tr>
+                <tr >
+                    <td>v3_red_channel</td>
+                    <td>49</td>
+                    <td>240</td>
+                </tr>
+                <tr >
+                    <td>v1_baseline</td>
+                    <td>47</td>
+                    <td>245</td>
+                </tr>
+                <tr >
+                    <td>v2_improved</td>
+                    <td>47</td>
+                    <td>245</td>
+                </tr>
+                <tr >
+                    <td>original</td>
+                    <td>5</td>
+                    <td>25</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55810_original.png" alt="original">
+                <div class="card-body">
+                    <h4>original</h4>
+                    <div class="stats">
+                        <span class="stat">📝 5 words</span>
+                        <span class="stat">🔤 25 chars</span>
+                    </div>
+                    <div class="ocr-text">[Original image - no OCR]</div>
                 </div>
-                <div class="ocr-text">2-Team Parlay (1 unit)
-so eeabperstree
-Clippers ML</div>
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55810_v1_baseline.png" alt="v1_baseline">
+                <div class="card-body">
+                    <h4>v1_baseline</h4>
+                    <div class="stats">
+                        <span class="stat">📝 47 words</span>
+                        <span class="stat">🔤 245 chars</span>
+                    </div>
+                    <div class="ocr-text">12/30 7:30 pm
+Los Angeles Lakers +3 (Fanduel) -114 | 2 unit +3
+risk “114
+(NBA)
+
+2u Straight
+zeocoom@Gapperstyee
+TCU +6.5 -125 | 6G UNIT RISK PLATINUM *6.5
+(CFB) .
+
+6u Straight
+12/31 9:00 am
+lowa +6.5 -130 | to WIN 2 UNITS +65
+(CFB)
+2.6u Straight</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55810_v2_improved.png" alt="v2_improved">
+                <div class="card-body">
+                    <h4>v2_improved</h4>
+                    <div class="stats">
+                        <span class="stat">📝 47 words</span>
+                        <span class="stat">🔤 245 chars</span>
+                    </div>
+                    <div class="ocr-text">12/30 7:30 pm
+Los Angeles Lakers +3 (Fanduel) -114|/2unit 43
+risk “114
+(NBA)
+
+2u Straight
+1220600 Cap perstree
+TCU +6. -125 | 6 UNIT RISK PLATINUM *6.5
+(CFB) 7
+
+6u Straight
+12/31 9:00 am
+lowa +6.5 -130 | to WIN 2 UNITS *6.5
+(CFB) :
+2.6u Straight</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55810_v3_standard.png" alt="v3_standard">
+                <div class="card-body">
+                    <h4>v3_standard</h4>
+                    <div class="stats">
+                        <span class="stat">📝 50 words</span>
+                        <span class="stat">🔤 242 chars</span>
+                    </div>
+                    <div class="ocr-text">12/30 7:30 pm
+Los Angeles Lakers +3 (Fanduel) -114 | 2 unit +3
+risk “114
+(NBA)
+
+2u Straight
+12/30 6:00 pr,
+TCU +6.5 -125 | 6 UNIT RISK PLATINUM *6.5
+(CFB) :
+
+6u Straight
+12/31 9:00 am
+lowa +6.5 -130 | to WIN 2 UNITS *6.5
+(CFB) :
+2.6u Straight</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55810_v3_red_channel.png" alt="v3_red_channel">
+                <div class="card-body">
+                    <h4>v3_red_channel</h4>
+                    <div class="stats">
+                        <span class="stat">📝 49 words</span>
+                        <span class="stat">🔤 240 chars</span>
+                    </div>
+                    <div class="ocr-text">12/30 7:30 pm
+Los Angeles Lakers +3 (Fanduel) -114 | 2 unit +3
+risk -114
+(NBA)
+
+2u Straight
+12/30 6:00 pm.
+TCU +6.5 -125 | 6 UNIT RISK PLATINUM *6.5
+(CFB) 7
+
+6u Straight
+12/31 9:00 am
+lowa +6.5 -130 | to WIN 2 UNITS *6.5
+(CFB)
+2.6u Straight</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="image-section">
+        <h2>📸 -1001900292133_55827</h2>
+        
+        <div class="summary">
+            <table>
+                <tr>
+                    <th>Variant</th>
+                    <th>Words</th>
+                    <th>Characters</th>
+                </tr>
+                <tr class="best">
+                    <td>v3_standard</td>
+                    <td>34</td>
+                    <td>176</td>
+                </tr>
+                <tr >
+                    <td>v3_red_channel</td>
+                    <td>34</td>
+                    <td>176</td>
+                </tr>
+                <tr >
+                    <td>v1_baseline</td>
+                    <td>33</td>
+                    <td>173</td>
+                </tr>
+                <tr >
+                    <td>v2_improved</td>
+                    <td>33</td>
+                    <td>173</td>
+                </tr>
+                <tr >
+                    <td>original</td>
+                    <td>5</td>
+                    <td>25</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55827_original.png" alt="original">
+                <div class="card-body">
+                    <h4>original</h4>
+                    <div class="stats">
+                        <span class="stat">📝 5 words</span>
+                        <span class="stat">🔤 25 chars</span>
+                    </div>
+                    <div class="ocr-text">[Original image - no OCR]</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55827_v1_baseline.png" alt="v1_baseline">
+                <div class="card-body">
+                    <h4>v1_baseline</h4>
+                    <div class="stats">
+                        <span class="stat">📝 33 words</span>
+                        <span class="stat">🔤 173 chars</span>
+                    </div>
+                    <div class="ocr-text">Main Card: NCAAB eRe NC Rar
+Bowling Green -5.5 (-110) v. Miami Ohio 3u
+Creighton -5.5 (-110) v. Butler 3u
+Blackhawks ML (+120) v. Islanders 4u
+USC -4.5 (-110) v. TCU 5u POTD</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55827_v2_improved.png" alt="v2_improved">
+                <div class="card-body">
+                    <h4>v2_improved</h4>
+                    <div class="stats">
+                        <span class="stat">📝 33 words</span>
+                        <span class="stat">🔤 173 chars</span>
+                    </div>
+                    <div class="ocr-text">Main Card: NCAAB ORR PS ESF
+Bowling Green -5.5 (-110) v. Miami Ohio 3u
+Creighton -5.5 (-110) v. Butler 3u
+Blackhawks ML (+120) v. Islanders 4u
+USC -4.5 (-110) v. TCU 5u POTD</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55827_v3_standard.png" alt="v3_standard">
+                <div class="card-body">
+                    <h4>v3_standard</h4>
+                    <div class="stats">
+                        <span class="stat">📝 34 words</span>
+                        <span class="stat">🔤 176 chars</span>
+                    </div>
+                    <div class="ocr-text">Main Card: NCAAB & NHL & NCAAF
+Bowling Green -5.5 (-110) v. Miami Ohio 3u
+Creighton -5.5 (-110) v. Butler 3u
+Blackhawks ML (+120) v. Islanders 4u
+USC -4.5 (-110) v. TCU 5u POTD</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="comparison_images/-1001900292133_55827_v3_red_channel.png" alt="v3_red_channel">
+                <div class="card-body">
+                    <h4>v3_red_channel</h4>
+                    <div class="stats">
+                        <span class="stat">📝 34 words</span>
+                        <span class="stat">🔤 176 chars</span>
+                    </div>
+                    <div class="ocr-text">Main Card: NCAAB & NHL & NCAAF
+Bowling Green -5.5 (-110) v. Miami Ohio 3u
+Creighton -5.5 (-110) v. Butler 3u
+Blackhawks ML (+120) v. Islanders 4u
+USC -4.5 (-110) v. TCU 5u POTD</div>
+                </div>
             </div>
         </div>
     </div>

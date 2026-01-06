@@ -73,8 +73,8 @@ def get_extract_text():
 def get_prompt_funcs():
     global _prompt_funcs
     if _prompt_funcs is None:
-        from src.prompt_builder import generate_ai_prompt, generate_revision_prompt, generate_smart_fill_prompt
-        _prompt_funcs = (generate_ai_prompt, generate_revision_prompt, generate_smart_fill_prompt)
+        from src.prompt_builder import generate_ai_prompt, generate_revision_prompt, generate_smart_fill_prompt, generate_multimodal_prompt
+        _prompt_funcs = (generate_ai_prompt, generate_revision_prompt, generate_smart_fill_prompt, generate_multimodal_prompt)
     return _prompt_funcs
 
 def get_utils_funcs():
@@ -237,43 +237,65 @@ def api_generate_prompt():
     
     ocr_futures = {}
     
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        for i, msg in enumerate(selected_messages):
-            # Report progress
-            percent = int((i / total) * 50) if total > 0 else 0
-            if i % 5 == 0: set_progress(percent, f"Queueing Tasks {i+1}/{total}...")
+    # --- BATCH OCR PROCESSING ---
+    all_ocr_tasks = [] # List of (message_index, image_path)
+    
+    for i, msg in enumerate(selected_messages):
+        # Clean Text Pre-processing
+        if msg.get('text'):
+            msg['text'] = clean_text_for_ai(msg['text'])
+        
+        msg['ocr_texts'] = []
+        
+        images_to_process = []
+        if msg.get('images') and isinstance(msg['images'], list):
+            images_to_process = msg['images']
+        elif msg.get('image'):
+            images_to_process = [msg['image']]
             
-            # Clean Text Pre-processing
-            if msg.get('text'):
-                msg['text'] = clean_text_for_ai(msg['text'])
+        if msg.get('do_ocr') and images_to_process:
+            for img_path in images_to_process:
+                all_ocr_tasks.append((i, img_path))
 
-            msg['ocr_texts'] = [] 
+    # Process in Batches of 8 (reduced from 32 to avoid token limits with Vision AI)
+    BATCH_SIZE = 8
+    if all_ocr_tasks:
+        from src.ocr_handler import extract_text_batch
+        
+        total_batches = (len(all_ocr_tasks) + BATCH_SIZE - 1) // BATCH_SIZE
+        
+        # Initial progress update
+        set_progress(50, f"Starting OCR: {len(all_ocr_tasks)} images in {total_batches} batches...")
+        
+        for b_idx in range(total_batches):
+            start = b_idx * BATCH_SIZE
+            end = start + BATCH_SIZE
+            batch_tasks = all_ocr_tasks[start:end]
             
-            # Determine images
-            images_to_process = []
-            if msg.get('images') and isinstance(msg['images'], list):
-                images_to_process = msg['images']
-            elif msg.get('image'):
-                images_to_process = [msg['image']]
-                
-            if msg.get('do_ocr') and images_to_process:
-                for img_path in images_to_process:
-                    future = executor.submit(get_extract_text(), img_path)
-                    if i not in ocr_futures: ocr_futures[i] = []
-                    ocr_futures[i].append(future)
-
-    # Collect Results
-    for i, futures in ocr_futures.items():
-        set_progress(50 + int((i/total)*40), f"Processing OCR {i+1}...")
-        for f in futures:
+            # Extract paths
+            batch_paths = [t[1] for t in batch_tasks]
+            
             try:
-                raw_ocr = f.result()
-                if raw_ocr:
-                    # Apply cleaning immediately
-                    cleaned = clean_text_for_ai(raw_ocr)
-                    selected_messages[i]['ocr_texts'].append(cleaned)
+                # Call Batch OCR
+                results = extract_text_batch(batch_paths)
+                
+                # Assign results back
+                for t_idx, text_result in enumerate(results):
+                    original_msg_idx = batch_tasks[t_idx][0]
+                    if text_result and not text_result.startswith("[Error"):
+                        cleaned = clean_text_for_ai(text_result)
+                        selected_messages[original_msg_idx]['ocr_texts'].append(cleaned)
+                    else:
+                        logging.error(f"OCR Error for Msg {original_msg_idx}: {text_result}")
+                        
             except Exception as e:
-                logging.error(f"OCR Future Error: {e}")
+                 logging.error(f"Batch {b_idx} Failed: {e}")
+            
+            # Update progress AFTER batch completes (50% to 95% range = 45% for OCR)
+            completed = b_idx + 1
+            progress_pct = 50 + int((completed / total_batches) * 45)
+            set_progress(progress_pct, f"OCR Complete: {completed}/{total_batches} batches ({completed * BATCH_SIZE}/{len(all_ocr_tasks)} images)")
+
 
     set_progress(95, "Generating Prompts...")
     
@@ -719,6 +741,192 @@ def api_upload():
     result = upload_picks(picks, target_date)
     return jsonify(result)
 
+
+@app.route('/api/prepare_manual_export', methods=['POST'])
+def api_prepare_manual_export():
+    from pathlib import Path
+    from PIL import Image, ImageDraw, ImageFont
+    
+    data = request.json
+    selected_messages = data.get('messages', [])
+    
+    if not selected_messages:
+        return jsonify({'success': False, 'error': 'No messages selected'})
+        
+    try:
+        # 1. Create PDF path in Downloads
+        downloads = Path.home() / "Downloads"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_filename = f"CapperSuite_Export_{timestamp}.pdf"
+        pdf_path = downloads / pdf_filename
+        
+        # Helper: Add text overlay to image
+        def add_caption_overlay(img, caption_text, msg_id):
+            """Overlays caption text at top of image for AI context matching."""
+            try:
+                # Ensure RGB mode
+                if img.mode != 'RGB':
+                    img = img.convert('RGB')
+                
+                # Create header for caption
+                header_height = 80 if len(caption_text) < 100 else 120
+                new_height = img.height + header_height
+                
+                # New image with header space
+                new_img = Image.new('RGB', (img.width, new_height), color=(30, 30, 30))
+                new_img.paste(img, (0, header_height))
+                
+                # Draw caption text
+                draw = ImageDraw.Draw(new_img)
+                
+                # Try to use a readable font, fallback to default
+                try:
+                    font = ImageFont.truetype("arial.ttf", 14)
+                except:
+                    font = ImageFont.load_default()
+                
+                # Truncate caption if too long
+                max_chars = 200
+                display_text = caption_text[:max_chars] + "..." if len(caption_text) > max_chars else caption_text
+                display_text = f"[MSG {msg_id}] {display_text}"
+                
+                # Wrap text
+                chars_per_line = max(50, img.width // 7)
+                lines = []
+                for i in range(0, len(display_text), chars_per_line):
+                    lines.append(display_text[i:i+chars_per_line])
+                
+                # Draw each line
+                y_offset = 10
+                for line in lines[:5]:  # Max 5 lines
+                    draw.text((10, y_offset), line, fill=(255, 255, 255), font=font)
+                    y_offset += 18
+                
+                return new_img
+            except Exception as e:
+                logging.error(f"Caption overlay failed: {e}")
+                return img  # Return original if overlay fails
+        
+        # 2. Collect and process all images
+        pdf_pages = []
+        
+        for msg in selected_messages:
+            mid = msg.get('id')
+            caption = msg.get('text', '') or ''
+            
+            # Get image paths (web paths like /static/temp_images/...)
+            images = []
+            if msg.get('images') and isinstance(msg['images'], list):
+                images = msg['images']
+            elif msg.get('image'):
+                images = [msg['image']]
+            
+            for web_path in images:
+                # Convert web path to absolute path
+                if web_path.startswith('/static/temp_images/'):
+                    filename = web_path.split('/')[-1]
+                    src_path = Path(TEMP_IMG_DIR) / filename
+                else:
+                    src_path = Path(web_path)
+                    if not src_path.is_absolute():
+                        src_path = Path(BASE_DIR) / web_path.lstrip('/')
+                
+                if src_path.exists():
+                    try:
+                        img = Image.open(src_path)
+                        
+                        # Ensure RGB for PDF
+                        if img.mode != 'RGB':
+                            img = img.convert('RGB')
+                        
+                        # Resize if too large (max 1200px width for PDF)
+                        max_width = 1200
+                        if img.width > max_width:
+                            ratio = max_width / img.width
+                            new_size = (int(img.width * ratio), int(img.height * ratio))
+                            img = img.resize(new_size, Image.Resampling.LANCZOS)
+                        
+                        # Add caption overlay
+                        img_with_caption = add_caption_overlay(img, caption, mid)
+                        pdf_pages.append(img_with_caption)
+                        
+                    except Exception as e:
+                        logging.error(f"Error processing image {src_path}: {e}")
+                else:
+                    logging.warning(f"Image not found: {src_path}")
+        
+        if not pdf_pages:
+            return jsonify({'success': False, 'error': 'No valid images found'})
+        
+        # 3. Save as single PDF
+        pdf_pages[0].save(
+            str(pdf_path),
+            "PDF",
+            save_all=True,
+            append_images=pdf_pages[1:] if len(pdf_pages) > 1 else [],
+            resolution=100.0
+        )
+        
+        pdf_size_mb = pdf_path.stat().st_size / (1024 * 1024)
+        image_count = len(pdf_pages)
+
+        # 4. Generate Prompt with Formatting Guide
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        prompt = f"""You are an expert sports betting data parser. I have uploaded a PDF containing betting pick images.
+
+**IMPORTANT**: Each page has a HEADER showing the Message ID and Caption/Context text at the top (dark bar with white text).
+Use this embedded context along with the image content to extract picks.
+
+---
+## FORMATTING RULES
+
+### Leagues
+Use: `NFL`, `NCAAF`, `NBA`, `NCAAB`, `WNBA`, `MLB`, `NHL`, `EPL`, `MLS`, `UCL`, `UFC`, `PFL`, `TENNIS`, `PGA`, `F1`, `Other`
+
+### Types
+Use: `Moneyline`, `Spread`, `Total`, `Player Prop`, `Team Prop`, `Game Prop`, `Period`, `Parlay`, `Teaser`, `Future`, `Unknown`
+
+### Pick Value Formats (by Type)
+- **Moneyline**: `Team Name ML` → `Los Angeles Lakers ML`
+- **Spread**: `Team Name Spread` → `Green Bay Packers -7.5`
+- **Total**: `Team A vs Team B Over/Under Number` → `Lakers vs Celtics Over 215.5`
+- **Player Prop**: `Player Name: Stat Over/Under Value` → `LeBron James: Pts Over 25.5`
+  - Stats: `Pts`, `Reb`, `Ast`, `PRA`, `PassYds`, `RushYds`, `RecYds`, `PassTD`, `Rec`, `K`, `H`, `HR`, `RBI`, `SOG`, `G`, `A`
+- **Team Prop**: `Team Name: Stat Over/Under Value` → `Cowboys: Total Points Over 27.5`
+- **Period**: `Identifier Format` → `1H NYK vs BOS Total Over 110.5`, `1Q Thunder -2`
+  - Identifiers: `1H`, `2H`, `1Q`, `2Q`, `3Q`, `4Q`, `P1`, `P2`, `P3`, `F5`, `60 min`
+- **Parlay**: `(League) Leg / (League) Leg` → `(NFL) Cowboys -10.5 / (NBA) Lakers ML`
+- **Teaser**: `(Teaser Xpt League) Leg / ...` → `(Teaser 6pt NFL) Chiefs -2.5 / (Teaser 6pt NFL) Eagles +8.5`
+- **Future**: `Event: Selection` → `Super Bowl LIX Winner: Kansas City Chiefs`
+
+### Key Rules
+- Odds (-110, +150) go ONLY in the `od` field, NOT in pick value
+- Omit trailing `.0` (use `48` not `48.0`, but keep `48.5`)
+- Capper name is the person/brand, NOT watermarks like "@cappersfree"
+
+---
+## OUTPUT FORMAT
+Return a JSON object:
+{{
+  "picks": [
+    {{ "id": <message_id>, "cn": "<capper_name>", "lg": "<league>", "ty": "<type>", "p": "<pick_value>", "od": <odds_or_null>, "u": 1.0, "dt": "{current_date}" }}
+  ]
+}}
+
+Extract ALL picks from ALL pages. Return ONLY valid JSON."""
+            
+        return jsonify({
+            'success': True, 
+            'path': str(pdf_path), 
+            'prompt': prompt,
+            'image_count': image_count,
+            'pdf_size_mb': round(pdf_size_mb, 1)
+        })
+        
+    except Exception as e:
+        logging.error(f"Manual Export Failed: {e}", exc_info=True)
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/api/auto_review', methods=['POST'])
 def api_auto_review():
     data = request.json
@@ -816,9 +1024,38 @@ Use the Context (original message) to determine the correct values.
         response_str = openrouter_completion(prompt, model)
         
         # Parse
+        # Build context map for enriching response
+        # Handle duplicate IDs (multiple picks per msg) by aggregating selections
+        context_map = {}
+        selection_map = {}
+        
+        for item in review_context:
+            mid = item["id"]
+            ctxt = item.get("context", "")
+            pick_val = item["current"].get("pick", "") or "No Pick"
+            
+            # Context is same for the ID
+            context_map[mid] = ctxt
+            
+            # Selection: Append if exists
+            if mid in selection_map:
+                if pick_val not in selection_map[mid]:
+                    selection_map[mid] += f"; {pick_val}"
+            else:
+                selection_map[mid] = pick_val
+        
+        def enrich_changes(changes):
+            """Add original context and selection to each change for display."""
+            for c in changes:
+                mid = c.get('id')
+                c['context'] = context_map.get(mid, '')[:300]
+                c['selection'] = selection_map.get(mid, 'Unknown')
+            return changes
+        
         try:
             resp_json = json.loads(response_str)
-            return jsonify({'changes': resp_json.get('changes', [])})
+            changes = enrich_changes(resp_json.get('changes', []))
+            return jsonify({'changes': changes})
         except json.JSONDecodeError:
             # Try to find JSON block
             import re
@@ -826,7 +1063,8 @@ Use the Context (original message) to determine the correct values.
             if match:
                 try:
                     resp_json = json.loads(match.group(0))
-                    return jsonify({'changes': resp_json.get('changes', [])})
+                    changes = enrich_changes(resp_json.get('changes', []))
+                    return jsonify({'changes': changes})
                 except:
                     pass
             return jsonify({'changes': [], 'error': 'AI Parse Fail', 'raw': response_str})

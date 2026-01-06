@@ -60,11 +60,16 @@ const showLoader = (text, duration, callback) => {
 
     // Reset
     if (loaderInterval) clearInterval(loaderInterval);
+    loaderSessionId++; // Invalidate any pending hideLoader timeouts
     title.innerText = text;
     l.classList.remove('hidden');
-    bar.style.transition = "width 0.5s ease-out";
-    bar.style.width = "0%";
-    percent.innerText = "0%";
+
+    // Initial state: Start from 0 unless continuing? 
+    // Usually safe to reset to 0 for a new task.
+    // Ensure transition doesn't animate the reset loop
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    percent.innerText = '0%';
 
     // Randomize ID
     const loaderIdEl = getEl('loaderId');
@@ -74,6 +79,10 @@ const showLoader = (text, duration, callback) => {
         const randomId = chars[Math.floor(Math.random() * 26)] + chars[Math.floor(Math.random() * 26)] + '-' + nums[Math.floor(Math.random() * 10)] + nums[Math.floor(Math.random() * 10)];
         loaderIdEl.innerText = randomId;
     }
+
+    // Force reflow/flush before enabling transition for animation
+    void bar.offsetWidth;
+    bar.style.transition = "width 0.3s ease-out";
 
     // Mode 1: Polling (Real Progress)
     if (duration === 'poll') {
@@ -114,51 +123,34 @@ const showLoader = (text, duration, callback) => {
 
     // Mode 2: Indefinite (Spinning / Waiting) - Duration 0
     if (!duration) {
-        bar.style.transition = "none"; // Instant reset
+        bar.style.transition = "none";
         bar.style.width = "100%";
-        bar.classList.add("animate-pulse"); // Add pulse if possible, or just solid
+        bar.classList.add("animate-pulse");
         percent.innerText = "BUSY";
         return;
     } else {
         bar.classList.remove("animate-pulse");
     }
 
-    // Mode 3: Fake Progress (Legacy) - Linear
-    // Mode 4: Time-based linear (4 min to 99%)
+    // Mode 3: Fake Progress (Smoothed)
     if (duration === 'auto' || (typeof duration === 'object' && duration.mode === 'auto-continue')) {
-        // CRITICAL: Clear any existing interval first to prevent stacking
-        if (loaderInterval) clearInterval(loaderInterval);
+        const start = Date.now();
+        const startP = (typeof duration === 'object' && duration.startPercent) ? duration.startPercent : 0;
 
-        bar.style.transition = "width 0.5s linear";
-        bar.style.maxWidth = "100%";
-        bar.classList.remove("animate-pulse");
-        bar.style.opacity = "1";
+        // Logarithmic approach: Fast start, slows down.
+        // Reaches 70% in 15s, 90% in 40s.
+        const TIME_CONSTANT = 20000;
+        const TARGET = 95;
 
-        const EXPECTED_DURATION_MS = (typeof duration === 'object' && duration.expectedDuration)
-            ? duration.expectedDuration
-            : 300000; // Default 5 minutes if not specified
-
-        let startTime = Date.now();
-
-        // Support continuing from a starting percentage
-        const startPercent = (typeof duration === 'object' && duration.startPercent) ? duration.startPercent : 0;
-        const endPercent = 99;
-        const range = endPercent - startPercent;
-
+        // Smoother interval
         loaderInterval = setInterval(() => {
-            let elapsed = Date.now() - startTime;
-            // Progress from startPercent to endPercent over expected duration
-            let progress = startPercent + Math.min(range, (elapsed / EXPECTED_DURATION_MS) * range);
+            const elapsed = Date.now() - start;
+            // curve: p = start + (target - start) * (1 - e^(-t/T))
+            const rawP = startP + (TARGET - startP) * (1 - Math.exp(-elapsed / TIME_CONSTANT));
 
-            // After expected time, continue creeping very slowly
-            if (elapsed > EXPECTED_DURATION_MS) {
-                progress = endPercent + ((elapsed - EXPECTED_DURATION_MS) / 60000) * 0.5;
-                if (progress > 99.9) progress = 99.9; // Never hit 100
-            }
-
-            bar.style.width = progress + "%";
-            percent.innerText = Math.floor(progress) + "%";
-        }, 500);
+            bar.style.width = rawP.toFixed(1) + "%";
+            percent.innerText = Math.floor(rawP) + "%";
+        }, 100);
         return;
     }
 
@@ -178,10 +170,32 @@ const showLoader = (text, duration, callback) => {
     }, duration ? duration / 50 : 50);
 };
 
+let loaderSessionId = 0; // Track current loader session
+
 const hideLoader = () => {
     const l = getEl('globalLoader');
+    const bar = getEl('loaderBar');
+    const percent = getEl('loaderPercent');
+
     if (loaderInterval) clearInterval(loaderInterval);
-    if (l) l.classList.add('hidden');
+
+    const hideId = loaderSessionId; // Capture current session
+
+    // Smooth Completion Animation
+    if (l && !l.classList.contains('hidden')) {
+        if (bar) {
+            bar.style.transition = "width 0.25s ease-out";
+            bar.style.width = "100%";
+        }
+        if (percent) percent.innerText = "100%";
+
+        // Wait for animation then hide - but ONLY if no new loader started
+        setTimeout(() => {
+            if (l && loaderSessionId === hideId) {
+                l.classList.add('hidden');
+            }
+        }, 300);
+    }
 };
 
 const apiCall = async (endpoint, method, body) => {
@@ -626,8 +640,6 @@ function toggleMessage(el, msg) {
 
 // --- STEP 3: REFINERY (AI) ---
 
-// --- STEP 3: REFINERY (AI - 2 STAGE) ---
-
 
 async function runAutoPilot() {
     if (state.selectedMessages.length === 0) {
@@ -792,36 +804,165 @@ async function initRefinery() {
     changeStep(3);
 
     // Reset State
-    state.refineryStage = 'BULK';
+    state.refineryStage = 'MANUAL';
     state.processedData = {};
     state.failedItems = [];
     state.masterPrompt = "";
-    state.revisionPrompt = "";
 
-    // UI Updates
-    updateRefineryCounts();
-    renderRefineryUI();
+    // Reset UI Elements
+    getEl('activePromptText').value = "";
+    getEl('activeJsonInput').value = "";
+    getEl('downloadStatus').classList.add('hidden');
+    getEl('downloadBtn').disabled = false;
+    getEl('downloadBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+}
 
-    // Call API to prepare messages (OCR logic) and get MASTER PROMPT
-    showLoader("PREPARING INTELLIGENCE", "poll");
+async function downloadBundle() {
+    const btn = getEl('downloadBtn');
+    btn.disabled = true;
+    btn.classList.add('opacity-50', 'cursor-not-allowed');
+    btn.innerHTML = `<span class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></span> BUNDLING...`;
 
-    const res = await apiCall('/api/generate_prompt', 'POST', {
-        messages: state.selectedMessages,
-        watermark: ""
-    });
+    showLoader("PREPARING ASSET BUNDLE", "poll"); // or just fake it if fast
 
-    hideLoader();
+    try {
+        const res = await apiCall('/api/prepare_manual_export', 'POST', {
+            messages: state.selectedMessages
+        });
 
-    if (res && res.updated_messages) {
-        state.selectedMessages = res.updated_messages;
-        if (res.master_prompt) {
-            state.masterPrompt = res.master_prompt;
-            getEl('activePromptText').value = res.master_prompt;
+        hideLoader();
+
+        if (res && res.success) {
+            // Show Success UI
+            const status = getEl('downloadStatus');
+            const pathEl = getEl('downloadPath');
+            status.classList.remove('hidden');
+            pathEl.innerText = res.path;
+
+            // Fill Prompt
+            getEl('activePromptText').value = res.prompt;
+
+            // Show batch info in toast
+            const sizeMb = res.pdf_size_mb ? `(${res.pdf_size_mb} MB)` : '';
+            showToast(`Created PDF with ${res.image_count} pages ${sizeMb}`);
+
+            // Allow retry if needed, but change Text
+            btn.innerHTML = `<span>Export Again</span> <span class="material-icons text-sm">refresh</span>`;
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            showToast("Export Failed: " + (res.error || "Unknown Error"));
+            btn.innerHTML = `<span>Try Again</span> <span class="material-icons text-sm">warning</span>`;
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
+    } catch (e) {
+        hideLoader();
+        console.error(e);
+        showToast("System Error during export");
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        btn.innerText = "Download Bundle";
+    }
+}
+
+async function processManualResults() {
+    await addBatchResults(true); // true = finalize after adding
+}
+
+async function addBatchResults(finalize = false) {
+    const input = getEl('activeJsonInput').value.trim();
+    if (!input) {
+        showToast("Please paste JSON results first");
+        return;
     }
 
-    renderRefineryUI();
+    showLoader(finalize ? "PARSING & FINALIZING" : "ADDING BATCH", 1000);
+
+    try {
+        // Try to find JSON in the text (in case user pasted extra stuff)
+        let jsonStr = input;
+        const firstBrace = input.indexOf('{');
+        const lastBrace = input.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1) {
+            jsonStr = input.substring(firstBrace, lastBrace + 1);
+        }
+
+        let data = JSON.parse(jsonStr);
+
+        // Handle { "picks": [...] } wrapper
+        if (data.picks && Array.isArray(data.picks)) {
+            data = data.picks;
+        }
+
+        if (!Array.isArray(data)) {
+            // Try wrapping if it's a single object
+            data = [data];
+        }
+
+        // Map short keys to long keys
+        const mappedData = data.map(item => ({
+            message_id: item.id || item.message_id,
+            capper_name: item.cn || item.capper_name,
+            league: item.lg || item.league,
+            type: item.ty || item.type,
+            pick: item.p || item.pick,
+            odds: item.od || item.odds,
+            units: item.u || item.units,
+            date: item.dt || item.date
+        }));
+
+        // APPEND to existing state (don't reset if adding batch)
+        if (!state.processedData) {
+            state.processedData = {};
+        }
+
+        let addedCount = 0;
+        mappedData.forEach(item => {
+            if (item.message_id) {
+                if (!state.processedData[item.message_id]) {
+                    state.processedData[item.message_id] = [];
+                }
+
+                if (Array.isArray(state.processedData[item.message_id])) {
+                    state.processedData[item.message_id].push(item);
+                } else {
+                    state.processedData[item.message_id] = [item];
+                }
+                addedCount++;
+            }
+        });
+
+        // Clear input for next batch
+        getEl('activeJsonInput').value = "";
+
+        // Count total picks so far
+        let totalPicks = 0;
+        Object.values(state.processedData).forEach(arr => {
+            totalPicks += Array.isArray(arr) ? arr.length : 1;
+        });
+
+        if (finalize) {
+            // Done - go to review
+            setTimeout(() => {
+                hideLoader();
+                finalizeBatch();
+            }, 500);
+        } else {
+            // Just added a batch - show count and wait for more
+            hideLoader();
+            showToast(`Added ${addedCount} picks (Total: ${totalPicks})`);
+        }
+
+    } catch (e) {
+        hideLoader();
+        console.error(e);
+        showToast("Invalid JSON: " + e.message);
+    }
 }
+
+// UI Updates
+
 
 // --- AUTO REVIEW (AI) ---
 let pendingReviewChanges = [];
@@ -867,45 +1008,165 @@ async function runAutoReview() {
     }
 }
 
+let currentReviewFilter = 'ALL';
+
 function renderReviewModal(changes) {
     const modal = getEl('reviewModal');
-    const tbody = getEl('reviewTableBody');
-    const count = getEl('reviewChangeCount');
+    const container = getEl('reviewCardsContainer');
+    const badge = getEl('reviewCountBadge');
+    const applyCount = getEl('applyCount');
 
-    if (!modal || !tbody) return;
+    if (!modal || !container) return;
 
-    tbody.innerHTML = '';
-    count.innerText = changes.length;
+    // Update counts
+    if (badge) badge.innerText = `${changes.length} CHANGES`;
+    if (applyCount) applyCount.innerText = changes.length;
 
-    changes.forEach(c => {
-        const tr = document.createElement('tr');
+    // Filter
+    let visibleChanges = changes;
+    if (currentReviewFilter === 'FIX') visibleChanges = changes.filter(c => c.field !== 'DELETE');
+    if (currentReviewFilter === 'DELETE') visibleChanges = changes.filter(c => c.field === 'DELETE');
+
+    container.innerHTML = '';
+
+    if (visibleChanges.length === 0) {
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center h-full text-gray-400">
+                <span class="material-icons text-4xl mb-2">check_circle</span>
+                <span class="font-bold text-sm">ALL CAUGHT UP</span>
+            </div>
+        `;
+    }
+
+    visibleChanges.forEach((c, index) => {
+        // Find actual index in main array to ensure actions target correct item
+        const realIndex = changes.indexOf(c);
+        const card = document.createElement('div');
         const isDelete = c.field === 'DELETE';
-        tr.className = isDelete
-            ? "bg-red-50 hover:bg-red-100 transition-colors"
-            : "hover:bg-purple-50 transition-colors";
 
-        if (isDelete) {
-            tr.innerHTML = `
-                <td class="p-3 border-b border-red-200 font-bold text-red-600 align-top">${c.id}</td>
-                <td class="p-3 border-b border-red-200 font-bold text-red-600 align-top uppercase">
-                    <span class="material-icons text-sm align-middle mr-1">delete</span>DELETE
-                </td>
-                <td class="p-3 border-b border-red-200 text-gray-400 align-top" colspan="2">Item will be removed</td>
-                <td class="p-3 border-b border-red-200 italic text-red-500 text-[10px] align-top">${c.reason}</td>
-            `;
-        } else {
-            tr.innerHTML = `
-                <td class="p-3 border-b border-gray-100 font-bold text-gray-400 align-top">${c.id}</td>
-                <td class="p-3 border-b border-gray-100 font-bold text-blue-600 align-top">${c.field}</td>
-                <td class="p-3 border-b border-gray-100 text-red-400 line-through decoration-red-400 align-top">${c.old}</td>
-                <td class="p-3 border-b border-gray-100 text-green-600 font-bold bg-green-50/50 align-top">${c.new}</td>
-                <td class="p-3 border-b border-gray-100 italic text-gray-500 text-[10px] align-top">${c.reason}</td>
-            `;
-        }
-        tbody.appendChild(tr);
+        // Card styling
+        card.className = `flex flex-col bg-white border-2 hover:shadow-lg transition-shadow duration-200 overflow-hidden ${isDelete ? 'border-red-100' : 'border-black'}`;
+
+        const sourceText = (c.context || '').substring(0, 150) + (c.context?.length > 150 ? '...' : '');
+
+        card.innerHTML = `
+            <div class="flex border-b ${isDelete ? 'border-red-100 bg-red-50' : 'border-gray-100 bg-gray-50'}">
+                <div class="p-4 flex-1 border-r ${isDelete ? 'border-red-200' : 'border-gray-200'}">
+                    <div class="font-bold text-sm text-black mb-1 flex items-center gap-2">
+                        <span>${c.selection || 'Unknown Pick'}</span>
+                        ${isDelete ? '<span class="bg-red-600 text-white px-1 rounded text-[9px]">DELETION</span>' : '<span class="bg-blue-600 text-white px-1 rounded text-[9px]">FIELD FIX</span>'}
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="w-24 flex items-center justify-center shrink-0">
+                    <button onclick="rejectChange(${realIndex})" class="w-full h-full hover:bg-red-500 hover:text-white transition-colors flex items-center justify-center gap-1 text-red-500 font-bold text-xs">
+                        <span class="material-icons text-sm">close</span> REJECT
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-4 flex gap-4 items-center bg-white">
+                <div class="flex-1 grid grid-cols-2 gap-4">
+                    <!-- Change Details -->
+                    ${isDelete ? `
+                        <div class="col-span-2 text-sm font-bold text-red-600 flex items-center gap-2">
+                            <span class="material-icons text-base">delete_forever</span>
+                            Item will be removed from manifest
+                        </div>
+                    ` : `
+                        <div>
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">FIELD</div>
+                            <div class="font-bold text-sm border-b-2 border-black inline-block">${c.field}</div>
+                        </div>
+                        <div>
+                           <div class="grid grid-cols-[1fr,auto,1fr] gap-2 items-center">
+                                <div>
+                                    <div class="text-[10px] font-bold text-red-400 uppercase tracking-wider mb-1">WAS</div>
+                                    <div class="text-xs line-through text-red-400 font-mono break-all">${c.old}</div>
+                                </div>
+                                <span class="material-icons text-gray-300 text-sm">arrow_forward</span>
+                                <div>
+                                    <div class="text-[10px] font-bold text-green-600 uppercase tracking-wider mb-1">BECOMES</div>
+                                    <div class="text-xs font-bold text-green-600 font-mono break-all bg-green-50 px-1 py-0.5 rounded">${c.new}</div>
+                                </div>
+                           </div>
+                        </div>
+                    `}
+                </div>
+                
+                <!-- Reason -->
+                <div class="w-1/3 text-xs border-l border-gray-100 pl-4 py-1 italic text-gray-500">
+                    <span class="not-italic font-bold text-gray-300 text-[9px] uppercase block mb-1">AI REASONING</span>
+                    "${c.reason}"
+                </div>
+            </div>
+        `;
+
+        container.appendChild(card);
     });
 
     modal.classList.remove('hidden');
+}
+
+// Helpers for Review Modal
+function filterReview(type) {
+    currentReviewFilter = type;
+
+    // Update tabs with clear visual distinction
+    ['ALL', 'FIX', 'DELETE'].forEach(t => {
+        const btn = getEl(`tab-${t}`);
+        if (t === type) {
+            btn.classList.add('bg-black', 'text-white');
+            btn.classList.remove('bg-white', 'text-black');
+        } else {
+            btn.classList.remove('bg-black', 'text-white');
+            btn.classList.add('bg-white', 'text-black');
+        }
+    });
+
+    // Re-render
+    renderReviewModal(pendingReviewChanges);
+}
+
+function rejectChange(index) {
+    // Remove from array
+    pendingReviewChanges.splice(index, 1);
+    renderReviewModal(pendingReviewChanges);
+}
+
+function acceptChange(index) {
+    // Ideally we animate it out or mark it?
+    // For now, let's just "confirm" it visually by greying out other options or remove it from list?
+    // Actually, "Keep" implies it stays. But if the list is "Things to Review", then "Keep" means "Reviewed".
+    // Let's remove it from VIEW but keep it in ARRAY? No, user needs to know what will be applied.
+
+    // Simple flow: 'Reject' deletes it. 'Keep' does nothing (it's already kept).
+    // BUT to make it interactive, 'Keep' could remove it from the list as "Done".
+    // But then we need a separate "Applied" list. 
+
+    // Let's make "Keep" just flash green to show confirmation.
+    showToast("Marked for application");
+}
+
+function acceptAllLeft() {
+    // Just closes modal? No, we filter based on current tab?
+    // "Accept All" usually means "I'm done reviewing, apply these".
+    // But we have an "APPLY" button at bottom.
+
+    // Maybe "Accept All" in a tab deletes the OTHER items?
+    // No, that's dangerous.
+
+    // Let's change "Accept All" to "Dismiss Others"?
+    // Or just remove this button if it's confusing.
+    // The "APPLY" button at bottom applies EVERYTHING currently in the list.
+    // So if you didn't reject it, it gets applied.
+    // So we don't really need "Accept All". 
+    // Wait, the button says "ACCEPT ALL" in my HTML. 
+
+    // Let's make it specific: "Accept All [Current Filter]" -> Does nothing, just confirms.
+    // Maybe we rename it to "Recover All" if we had a trash can, but we don't.
+    // I will remove the logic for now or make it a no-op that verifies.
+    showToast(`All ${pendingReviewChanges.length} remaining changes will be applied.`);
 }
 
 function closeReviewModal() {
@@ -1440,8 +1701,8 @@ async function checkResults() {
     if (loaderInterval) clearInterval(loaderInterval);
 
     try {
-        // Grading phase (continue from where we were)
-        if (title) title.innerText = "GRADING RESULTS (ESPN)";
+        // Grading phase
+        showLoader("GRADING RESULTS (ESPN)", 'auto');
 
         // 1. Grading
         const gradeRes = await apiCall('/api/grade_picks', 'POST', {
@@ -1472,17 +1733,11 @@ async function checkResults() {
         }
 
         // 2. Capper Reconciliation
-        if (title) title.innerText = "VERIFYING CAPPERS (DATABASE)";
-        if (bar) bar.style.width = "92%";
-        if (percent) percent.innerText = "92%";
+        showLoader("VERIFYING CAPPERS (DATABASE)", 'auto');
 
         await reconcileCappers(allPicks);
 
-        // Finalize
-        if (title) title.innerText = "COMPLETE";
-        if (bar) bar.style.width = "100%";
-        if (percent) percent.innerText = "100%";
-        await new Promise(r => setTimeout(r, 400));
+        // Done - hideLoader handles the completion animation
 
     } catch (e) {
         console.error("Grading/Reconciliation Error:", e);
@@ -2015,6 +2270,10 @@ async function finalizeBatch() {
     tableSortedOnce = false;
     state.tableRowOrder = [];
     changeStep(4);
+
+    // Show loader upfront for grading phase
+    showLoader("GRADING & VERIFYING", 'auto');
+
     // Auto-run grading
     await checkResults();
 }
@@ -2296,3 +2555,185 @@ async function installUpdate() {
     }
 }
 
+
+
+// --- CAPPER SUGGESTIONS (Restored/Implemented) ---
+
+window.showCapperSuggestions = function (el, msgId, idx, currentName) {
+    // 1. Remove existing popovers
+    const existing = document.getElementById('capper-popover');
+    if (existing) existing.remove();
+
+    // 2. Locate entry
+    let entry = getEntry(msgId, idx);
+    if (!entry) return;
+
+    // 3. Find specific matches
+    const matches = entry.capper_matches || [];
+
+    // 4. Count identical occurrences for "Apply to All"
+    let sameNameCount = 0;
+    Object.values(state.processedData).forEach(d => {
+        let rows = Array.isArray(d) ? d : [d];
+        rows.forEach(r => {
+            if (r.capper_name === currentName) sameNameCount++;
+        });
+    });
+
+    // 5. Build Popover Content (Don't append yet)
+    const div = document.createElement('div');
+    div.id = 'capper-popover';
+    div.className = "fixed z-[9999] bg-white border-2 border-black shadow-2xl p-4 w-72 flex flex-col gap-3 fade-in";
+
+    // Initial Hidden State for Measuring
+    div.style.visibility = 'hidden';
+    div.style.top = '0px';
+    div.style.left = '0px';
+
+    const safeMsgId = msgId;
+    const safeIdx = idx;
+
+    let html = `<div class="font-bold text-xs uppercase tracking-widest border-b border-gray-100 pb-2 mb-1 flex justify-between items-center">
+        <span>Resolve Capper</span>
+        <button onclick="this.closest('#capper-popover').remove()" class="text-gray-400 hover:text-black"><span class="material-icons text-sm">close</span></button>
+    </div>`;
+
+    if (matches.length > 0) {
+        const top = matches[0];
+        html += `<div class="bg-blue-50 p-2 border border-blue-100 mb-2">
+            <div class="text-[10px] text-blue-500 font-bold mb-1">BEST MATCH (${top.score}%)</div>
+            <div class="font-bold text-sm mb-2">${top.name}</div>
+            <div class="flex flex-col gap-1">
+                <button onclick="matchCapper('${safeMsgId}', ${safeIdx}, '${top.name.replace(/'/g, "\\'")}', false)" 
+                    class="bg-blue-600 text-white font-bold text-xs py-1 px-2 hover:bg-blue-700 w-full text-left flex justify-between">
+                    <span>Use "${top.name}"</span>
+                    <span class="material-icons text-xs">done</span>
+                </button>
+                ${sameNameCount > 1 ? `
+                <button onclick="matchCapper('${safeMsgId}', ${safeIdx}, '${top.name.replace(/'/g, "\\'")}', true)" 
+                    class="bg-white border border-blue-600 text-blue-600 font-bold text-xs py-1 px-2 hover:bg-blue-50 w-full text-left flex justify-between items-center">
+                    <span>Apply to all ${sameNameCount} items</span>
+                    <span class="material-icons text-xs">done_all</span>
+                </button>` : ''}
+            </div>
+        </div>`;
+    }
+
+    html += `<div class="text-[10px] font-bold text-gray-400 mb-1">MANUAL CORRECTION</div>
+    <div class="flex gap-1 mb-2">
+        <input type="text" id="manualCapperInput" value="${currentName.replace(/"/g, '&quot;')}" class="border border-gray-300 px-2 py-1 text-xs w-full font-bold focus:border-black outline-none">
+    </div>
+    <div class="flex flex-col gap-1">
+        <button onclick="createNewCapper('${safeMsgId}', ${safeIdx}, false)" 
+            class="bg-black text-white font-bold text-xs py-1 px-2 hover:bg-gray-800 w-full text-left">
+            Save Changes
+        </button>
+        ${sameNameCount > 1 ? `
+        <button onclick="createNewCapper('${safeMsgId}', ${safeIdx}, true)" 
+            class="bg-white border border-black text-black font-bold text-xs py-1 px-2 hover:bg-gray-50 w-full text-left flex justify-between items-center">
+            <span>Update all ${sameNameCount} items</span>
+            <span class="material-icons text-xs">update</span>
+        </button>` : ''}
+    </div>`;
+
+    div.innerHTML = html;
+    document.body.appendChild(div);
+
+    // 6. Smart Positioning with Flip
+    const rect = el.getBoundingClientRect();
+    const h = div.offsetHeight;
+    const w = div.offsetWidth;
+    const viewportH = window.innerHeight;
+    const viewportW = window.innerWidth;
+
+    let top = rect.bottom + 5;
+    let left = rect.left;
+
+    // Horizontal Flip
+    if (left + w > viewportW) {
+        left = Math.max(10, viewportW - w - 20);
+    }
+
+    // Vertical Flip
+    // Check if bottom fits
+    if (top + h > viewportH) {
+        // Not enough space below. Check above.
+        const spaceAbove = rect.top;
+        if (spaceAbove > h + 10) {
+            // Flip up
+            top = rect.top - h - 5;
+        } else {
+            // Squeeze / force to fit
+            // Prefer bottom view, but maxed at bottom edge
+            top = viewportH - h - 10;
+        }
+    }
+
+    // Ensure not off-top
+    if (top < 10) top = 10;
+
+    div.style.top = top + 'px';
+    div.style.left = left + 'px';
+    div.style.visibility = 'visible';
+
+    // Focus input
+    setTimeout(() => {
+        const inp = document.getElementById('manualCapperInput');
+        if (inp) inp.select();
+    }, 50);
+
+    // Close on click outside
+    setTimeout(() => {
+        const closer = (e) => {
+            if (!div.contains(e.target) && e.target !== el) {
+                div.remove();
+                document.removeEventListener('click', closer);
+            }
+        };
+        document.addEventListener('click', closer);
+    }, 100);
+};
+
+window.matchCapper = function (msgId, idx, newName, applyAll) {
+    const entry = getEntry(msgId, idx);
+    const oldName = entry.capper_name; // Capture before change
+
+    if (applyAll) {
+        let count = 0;
+        Object.values(state.processedData).forEach(d => {
+            let rows = Array.isArray(d) ? d : [d];
+            rows.forEach(r => {
+                // Check name. 
+                if (r.capper_name === oldName) {
+                    r.capper_name = newName;
+                    r.capper_verified = true;
+                    count++;
+                }
+            });
+        });
+        showToast(`Updated ${count} items to "` + newName + `"`);
+    } else {
+        entry.capper_name = newName;
+        entry.capper_verified = true;
+        showToast(`Updated to "` + newName + `"`);
+    }
+
+    const pop = document.getElementById('capper-popover');
+    if (pop) pop.remove();
+    renderTable();
+};
+
+window.createNewCapper = function (msgId, idx, applyAll) {
+    const input = document.getElementById('manualCapperInput');
+    const newName = input.value.trim();
+    if (!newName) return;
+
+    window.matchCapper(msgId, idx, newName, applyAll);
+};
+
+// Helper used by above
+function getEntry(msgId, idx) {
+    let d = state.processedData[msgId];
+    if (Array.isArray(d)) return d[idx];
+    return d;
+}

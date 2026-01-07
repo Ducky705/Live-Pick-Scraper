@@ -3,6 +3,8 @@ import requests
 import json
 import logging
 import time
+import base64
+from pathlib import Path
 
 # Model fallback list (ordered by reliability)
 DEFAULT_MODELS = [
@@ -10,13 +12,14 @@ DEFAULT_MODELS = [
     'tngtech/deepseek-r1t2-chimera:free'
 ]
 
-def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2):
+def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=2):
     """
     Calls OpenRouter API with retry logic and model fallback.
     
     Args:
         prompt: The prompt to send
         model: Primary model to use (will be first in fallback list)
+        images: Optional list of image paths (str or Path) to include in the request
         timeout: Timeout in seconds per request (default 3 minutes)
         max_cycles: Number of times to cycle through all models before giving up
     
@@ -48,10 +51,34 @@ def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2):
         for current_model in models:
             logging.info(f"[OpenRouter] Cycle {cycle+1}/{max_cycles}, Model: {current_model}")
             
+            # Construct Content
+            content_payload = [{"type": "text", "text": prompt}]
+            
+            if images:
+                for img_path in images:
+                    try:
+                        with open(img_path, "rb") as f:
+                            b64_img = base64.b64encode(f.read()).decode("utf-8")
+                            content_payload.append({
+                                "type": "image_url", 
+                                "image_url": {"url": f"data:image/jpeg;base64,{b64_img}"}
+                            })
+                    except Exception as e:
+                        logging.error(f"[OpenRouter] Failed to load image {img_path}: {e}")
+
+            # If only text, simplify structure for compatibility? 
+            # Most Vision capable models support array content.
+            # But non-vision models might prefer string content.
+            # Let's check if we have images.
+            if not images:
+                final_content = prompt
+            else:
+                final_content = content_payload
+
             payload = {
                 "model": current_model,
                 "messages": [
-                    {"role": "user", "content": prompt}
+                    {"role": "user", "content": final_content}
                 ],
                 "temperature": 0.1,
                 "response_format": {"type": "json_object"}

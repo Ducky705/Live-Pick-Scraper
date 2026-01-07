@@ -1022,10 +1022,8 @@ function renderReviewModal(changes) {
     if (badge) badge.innerText = `${changes.length} CHANGES`;
     if (applyCount) applyCount.innerText = changes.length;
 
-    // Filter
+    // Filter removed - show all
     let visibleChanges = changes;
-    if (currentReviewFilter === 'FIX') visibleChanges = changes.filter(c => c.field !== 'DELETE');
-    if (currentReviewFilter === 'DELETE') visibleChanges = changes.filter(c => c.field === 'DELETE');
 
     container.innerHTML = '';
 
@@ -1109,24 +1107,8 @@ function renderReviewModal(changes) {
 }
 
 // Helpers for Review Modal
-function filterReview(type) {
-    currentReviewFilter = type;
-
-    // Update tabs with clear visual distinction
-    ['ALL', 'FIX', 'DELETE'].forEach(t => {
-        const btn = getEl(`tab-${t}`);
-        if (t === type) {
-            btn.classList.add('bg-black', 'text-white');
-            btn.classList.remove('bg-white', 'text-black');
-        } else {
-            btn.classList.remove('bg-black', 'text-white');
-            btn.classList.add('bg-white', 'text-black');
-        }
-    });
-
-    // Re-render
-    renderReviewModal(pendingReviewChanges);
-}
+// Tabs removed, showing all items by default.
+// func filterReview(type) was removed.
 
 function rejectChange(index) {
     // Remove from array
@@ -2405,7 +2387,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let msgObserver = null;
 let currentRenderIdx = 0;
 let sortedMsgCache = [];
-const BATCH_SIZE = 40;
+const BATCH_SIZE = 200;
 
 // Lazy Load Observer
 const imgObserver = new IntersectionObserver((entries, observer) => {
@@ -2466,13 +2448,22 @@ function renderNextBatch() {
 }
 
 function buildMessageHTML(msg) {
+    // Default Selected State (checked)
+    const isSelected = state.selectedMessages.some(m => m.id === msg.id);
+    const checkClass = isSelected ? "bg-blue-600 border-blue-600 scale-110" : "border-gray-300";
+    const checkContent = isSelected ? '<span class="material-icons text-[12px] text-white">check</span>' : '';
+    const idClass = isSelected ? "text-blue-600" : "text-gray-300";
+
+    // Image visual state
+    const imgStateClass = isSelected ? "" : "grayscale opacity-50";
+
     let imgHTML = '';
     if (msg.image) {
         // LAZY LOAD: use data-src and opacity-0
         imgHTML = `<div class="h-40 bg-gray-100 border-b border-gray-100 overflow-hidden relative group/img">
             <img data-src="${msg.image}" 
                  onclick="event.stopPropagation(); viewPropImage('${msg.id}')"
-                 class="w-full h-full object-cover transition-opacity duration-500 opacity-0 lazy-img cursor-pointer hover:opacity-90">
+                 class="w-full h-full object-cover transition-all duration-300 opacity-0 lazy-img cursor-pointer hover:opacity-90 ${imgStateClass} msg-image">
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-200">
                 <span class="material-icons text-xl animate-pulse">image</span>
             </div>
@@ -2487,12 +2478,6 @@ function buildMessageHTML(msg) {
         const timeMatch = msg.date.match(/(\d{2}:\d{2})/);
         if (timeMatch) msgTime = timeMatch[1] + " ET";
     }
-
-    // Default Selected State (checked)
-    const isSelected = state.selectedMessages.some(m => m.id === msg.id);
-    const checkClass = isSelected ? "bg-blue-600 border-blue-600 scale-110" : "border-gray-300";
-    const checkContent = isSelected ? '<span class="material-icons text-[12px] text-white">check</span>' : '';
-    const idClass = isSelected ? "text-blue-600" : "text-gray-300";
 
     return `
         ${imgHTML}

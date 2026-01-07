@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .chart-container {
+            width: 800px;
+            height: 500px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chart-container">
+        <canvas id="ocrChart"></canvas>
+    </div>
+    <script>
+        const ctx = document.getElementById('ocrChart').getContext('2d');
+
+        // Data derived from ocr_benchmark_results.json
+        const data = {
+            labels: ['Mixed Slip (Img 1)', 'Long Receipt (Img 2)', 'Handwritten/Poor (Img 3)'],
+            datasets: [
+                {
+                    label: 'Tesseract 5 (Local)',
+                    data: [88.7, 67.9, 82.0],
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Qwen 2.5-VL (Cloud)',
+                    data: [92.8, 79.8, 83.2],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Gemma 3-12b (Cloud)',
+                    data: [88.7, 79.2, 96.7],
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#ffffff', font: { size: 14 } } },
+                    title: { display: true, text: 'OCR Engine Accuracy Comparison', color: '#ffffff', font: { size: 20 } }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Accuracy (%)', color: '#aaaaaa' },
+                        grid: { color: '#333' },
+                        ticks: { color: '#dddddd' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#dddddd', font: { size: 12 } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

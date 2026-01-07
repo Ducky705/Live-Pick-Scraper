@@ -1,0 +1,752 @@
+{
+    "image_01.jpg": [
+        {
+            "id": 1,
+            "cn": "Tbsportsbetting",
+            "lg": "NBA",
+            "ty": "Total",
+            "p": "Jazz vs Celtics Over 242.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": "Tbsportsbetting",
+            "lg": "NBA",
+            "ty": "Spread",
+            "p": "76ers +1.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": "Tbsportsbetting",
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "Illinois +3",
+            "od": null,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 4,
+            "cn": "Tbsportsbetting",
+            "lg": "NCAAF",
+            "ty": "Total",
+            "p": "TCU vs USC Over 56.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_02.jpg": [
+        {
+            "id": 1,
+            "cn": "Vegasmira VIP",
+            "lg": "NBA",
+            "ty": "Total",
+            "p": "Utah Jazz vs Boston Celtics Over 241.5",
+            "od": -110,
+            "u": 4.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_03.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Spread",
+            "p": "Los Angeles Lakers +3",
+            "od": -114,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": null,
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "TCU +6.5",
+            "od": -125,
+            "u": 6.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": null,
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "Iowa +6.5",
+            "od": -130,
+            "u": 2.6,
+            "dt": "2024-12-31"
+        }
+    ],
+    "image_04.jpg": [
+        {
+            "id": 1,
+            "cn": "Duck",
+            "lg": "NBA",
+            "ty": "Team Prop",
+            "p": "DET Pistons: Total Points Over 117.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": "Duck",
+            "lg": "NBA",
+            "ty": "Moneyline",
+            "p": "DET Pistons ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": "Duck",
+            "lg": "NBA",
+            "ty": "Moneyline",
+            "p": "MEM Grizzlies ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 4,
+            "cn": "Duck",
+            "lg": "NBA",
+            "ty": "Spread",
+            "p": "UTA Jazz +8.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 5,
+            "cn": "Duck",
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "TCU Horned Frogs +5.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 6,
+            "cn": "Duck",
+            "lg": "NBA",
+            "ty": "Parlay",
+            "p": "(NBA) DET Pistons ML / (NBA) MEM Grizzlies ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 7,
+            "cn": "Duck",
+            "lg": "Other",
+            "ty": "Parlay",
+            "p": "(NBA) UTA Jazz +8.5 / (NCAAF) TCU Horned Frogs +5.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_05.jpg": [
+        {
+            "id": 1,
+            "cn": "CashCing",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "(NCAAB) Louisville ML / (NCAAB) Stanford ML",
+            "od": -130,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": "CashCing",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "(NCAAB) Louisville ML / (NCAAB) Boise State ML",
+            "od": -124,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": "CashCing",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Marquette +2",
+            "od": -115,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 4,
+            "cn": "CashCing",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Colorado State ML",
+            "od": -120,
+            "u": 1.5,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 5,
+            "cn": "CashCing",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Miami -9.5",
+            "od": -110,
+            "u": 1.5,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 6,
+            "cn": "CashCing",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Bowling Green ML",
+            "od": null,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_06.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Spread",
+            "p": "LAKERS +3",
+            "od": -118,
+            "u": 10.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Total",
+            "p": "CELTICS vs JAZZ Over 242.5",
+            "od": -108,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": null,
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "USC -4.5",
+            "od": -118,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 4,
+            "cn": null,
+            "lg": "NHL",
+            "ty": "Moneyline",
+            "p": "FLYERS ML",
+            "od": -127,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_07.jpg": [
+        {
+            "id": 1,
+            "cn": "ALL INCLUSIVE",
+            "lg": "NBA",
+            "ty": "Spread",
+            "p": "PISTONS -2.5",
+            "od": -105,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": "ALL INCLUSIVE",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "LOUISVILLE -8",
+            "od": -110,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": "ALL INCLUSIVE",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "BOWLING GREEN -5.5",
+            "od": -110,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_08.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "MARQUETTE +0",
+            "od": -110,
+            "u": 0.5,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_09.jpg": [
+        {
+            "id": 1,
+            "cn": "HammeringHank",
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "TCU +5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_10.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Bowling Green -5.5",
+            "od": -110,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": null,
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Creighton -5.5",
+            "od": -110,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": null,
+            "lg": "NHL",
+            "ty": "Moneyline",
+            "p": "Blackhawks ML",
+            "od": 120,
+            "u": 4.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 4,
+            "cn": null,
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "USC -4.5",
+            "od": -110,
+            "u": 5.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_11.jpg": [
+        {
+            "id": 1,
+            "cn": "DarthFader",
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "TCU +4.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": "DarthFader",
+            "lg": "NBA",
+            "ty": "Spread",
+            "p": "Lakers +2.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": "DarthFader",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Butler +5.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 4,
+            "cn": "DarthFader",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Cal +8.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 5,
+            "cn": "DarthFader",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "New Mexico +5.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_12.jpg": [
+        {
+            "id": 1,
+            "cn": "NickyCashin",
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "USC Trojans -4.5",
+            "od": -110,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_13.jpg": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NBA",
+            "ty": "Total",
+            "p": "76ERS vs GRIZZLIES Over 234",
+            "od": -105,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": "PorterPicks",
+            "lg": "NBA",
+            "ty": "Total",
+            "p": "CELTICS vs JAZZ Over 243.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_14.jpg": [
+        {
+            "id": 1,
+            "cn": "LAB",
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "Iowa +5.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_15.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "Other",
+            "ty": "Parlay",
+            "p": "(NBA) LA CLIPPERS ML / (NCAAB) STANFORD ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_16.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Moneyline",
+            "p": "Detroit Pistons ML",
+            "od": -131,
+            "u": 5000.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_17.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "USC -4",
+            "od": -130,
+            "u": 2.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_18.jpg": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NBA",
+            "ty": "Spread",
+            "p": "DETROIT PISTONS -2.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_19.jpg": [
+        {
+            "id": 1,
+            "cn": "KimsVIP",
+            "lg": "Other",
+            "ty": "Total",
+            "p": "Mobis Phoebus vs Changwon Under 150.5",
+            "od": null,
+            "u": 1.5,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": "KimsVIP",
+            "lg": "Other",
+            "ty": "Spread",
+            "p": "Shenzhen Leopards -6.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": "KimsVIP",
+            "lg": "Other",
+            "ty": "Spread",
+            "p": "Laioning flying leopards +7",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_20.jpg": [
+        {
+            "id": 1,
+            "cn": "BankrollBill",
+            "lg": "Other",
+            "ty": "Spread",
+            "p": "Wonju DB Promy +3",
+            "od": -118,
+            "u": 1.5,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 2,
+            "cn": "BankrollBill",
+            "lg": "Other",
+            "ty": "Period",
+            "p": "1H Tasmania JackJumpers vs Illawarra Hawks Total Over 90.5",
+            "od": -125,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 3,
+            "cn": "BankrollBill",
+            "lg": "Other",
+            "ty": "Period",
+            "p": "1H SE Melbourne Phoenix -5",
+            "od": -120,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        },
+        {
+            "id": 4,
+            "cn": "BankrollBill",
+            "lg": "Other",
+            "ty": "Total",
+            "p": "Shenzhen Leopards vs Beijing Royal Fighters Over 179.5",
+            "od": -112,
+            "u": 1.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_21.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Spread",
+            "p": "Heat +4.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-29"
+        }
+    ],
+    "image_22.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Moneyline",
+            "p": "Portland Trail Blazers ML",
+            "od": -142,
+            "u": 4500.0,
+            "dt": "2024-12-29"
+        }
+    ],
+    "image_23.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NFL",
+            "ty": "Spread",
+            "p": "Rams -7",
+            "od": -115,
+            "u": 1.0,
+            "dt": "2024-12-29"
+        },
+        {
+            "id": 2,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Spread",
+            "p": "Cavs +3.5",
+            "od": -120,
+            "u": 1.0,
+            "dt": "2024-12-29"
+        }
+    ],
+    "image_24.jpg": [
+        {
+            "id": 1,
+            "cn": "yourdailycapper",
+            "lg": "NHL",
+            "ty": "Moneyline",
+            "p": "Senators ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-29"
+        },
+        {
+            "id": 2,
+            "cn": "yourdailycapper",
+            "lg": "NFL",
+            "ty": "Spread",
+            "p": "Falcons +7.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-29"
+        },
+        {
+            "id": 3,
+            "cn": "yourdailycapper",
+            "lg": "NHL",
+            "ty": "Moneyline",
+            "p": "Canucks ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-29"
+        }
+    ],
+    "image_25.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "William & Mary ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2024-12-29"
+        },
+        {
+            "id": 2,
+            "cn": null,
+            "lg": "NFL",
+            "ty": "Spread",
+            "p": "Falcons +7.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2024-12-29"
+        }
+    ],
+    "image_26.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Moneyline",
+            "p": "Warriors ML",
+            "od": null,
+            "u": 4.0,
+            "dt": "2024-12-29"
+        }
+    ],
+    "image_27.jpg": [
+        {
+            "id": 1,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Moneyline",
+            "p": "Bucks ML",
+            "od": null,
+            "u": 4.0,
+            "dt": "2024-12-29"
+        },
+        {
+            "id": 2,
+            "cn": null,
+            "lg": "NBA",
+            "ty": "Moneyline",
+            "p": "Nuggets ML",
+            "od": null,
+            "u": 4.0,
+            "dt": "2024-12-29"
+        }
+    ],
+    "image_28.jpg": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NCAAF",
+            "ty": "Total",
+            "p": "Tennessee vs Illinois Over 61.5",
+            "od": -105,
+            "u": 4.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_29.jpg": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "TCU +7",
+            "od": null,
+            "u": 3.0,
+            "dt": "2024-12-30"
+        }
+    ],
+    "image_30.jpg": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NCAAF",
+            "ty": "Spread",
+            "p": "Illinois +3.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2024-12-30"
+        }
+    ]
+}

@@ -6,12 +6,7 @@ def get_master_formatting_guide():
     return """
 ### **Sports Pick Data Formatting Guide**
 
-### **1. Introduction**
-This document specifies the standard format for storing sports betting picks. Adherence to this guide is mandatory.
-
-### **2. Standardized `league` Column Values**
-Use the following official uppercase abbreviations for the `league` column. 
-
+### **1. Standardized `league` Values**
 | League | Description |
 | :--- | :--- |
 | `NFL` | National Football League |
@@ -27,76 +22,74 @@ Use the following official uppercase abbreviations for the `league` column.
 | `UFC` | Ultimate Fighting Championship |
 | `PFL` | Professional Fighters League |
 | `TENNIS` | ATP / WTA Tours |
-| `SOCCER` | All Soccer Leagues (EPL, La Liga, MLS, etc.) |
-| `EUROLEAGUE` | EuroLeague Basketball |
 | `PGA` | PGA Tour |
 | `F1` | Formula 1 |
-| `Other` | Parlay with multiple leagues OR Unknown |
+| `Other` | Multi-sport Parlay (e.g. NBA + NFL) OR Unknown |
 
-### **3. Standardized `type` Column Values**
-The `type` column must use one of the following values:
-
+### **2. Standardized `type` Values**
 | Type | Description |
 | :--- | :--- |
-| `Moneyline` | Win outright. |
-| `Spread` | Margin of victory (e.g. -7.5). |
-| `Total` | Over/Under combined score. |
-| `Player Prop` | Specific player's performance. |
-| `Team Prop` | Specific team's performance. |
-| `Game Prop` | Event not tied to final outcome. |
-| `Period` | Quarter, Half, Period, Set. |
-| `Parlay` | Linked wagers. |
-| `Teaser` | Adjusted spreads/totals. |
-| `Future` | Long-term event. |
-| `Unknown` | Cannot determine. |
+| `Moneyline` | Win outright |
+| `Spread` | Margin of victory (Point Spread, Run/Puck Line) |
+| `Total` | Combined score Over/Under |
+| `Player Prop` | Player's statistical performance |
+| `Team Prop` | Team's statistical performance (includes Team Totals) |
+| `Game Prop` | Game event not tied to final outcome |
+| `Period` | Quarter, Half, Period specific bet |
+| `Parlay` | Two or more linked wagers |
+| `Teaser` | Parlay with adjusted spreads/totals |
+| `Future` | Long-term bet on future event |
+| `Unknown` | Cannot determine bet type |
 
-### **4. `pick_value` Format Specification**
-The format of the `pick_value` string is strictly determined by the bet `type`.
+### **3. `pick_value` Format by Type**
 
 **Key Rules:**
-*   **Pick vs. Odds:** The `pick_value` describes *what* is being bet on. Payouts (e.g. -110) go to `odds_american`.
-*   **Decimals:** Omit trailing .0 (use `48` not `48.0`). Retain necessary decimals (`48.5`).
-*   **Unknown Type:** Use original unformatted text.
+- The `pick_value` describes WHAT is being bet. Odds (-110) go ONLY in `odds_american`.
+- Omit trailing `.0` decimals. Use `48` not `48.0`, but keep `48.5`.
+- If type is `Unknown`, use original unformatted text.
 
-#### **`Moneyline`**
-*   `Team or Competitor Name ML`
-*   Example: `Los Angeles Lakers ML`
+#### `Moneyline`
+Format: `Team or Competitor Name ML`
+Example: `Los Angeles Lakers ML`
 
-#### **`Spread`**
-*   `Team Name [space] Point Spread`
-*   Example: `Green Bay Packers -7.5`
+#### `Spread`
+Format: `Team Name [space] Point Spread`
+Example: `Green Bay Packers -7.5`
 
-#### **`Total`**
-*   `Team A vs Team B Over/Under Number`
-*   Example: `Lakers vs Celtics Over 215.5`
+#### `Total`
+Format: `Team A vs Team B Over/Under Number`
+Example: `Lakers vs Celtics Over 215.5`, `Rutgers vs Unknown Under 143.5`
 
-#### **`Player Prop`**
-*   `Player Name: Stat Over/Under/Value`
-*   Stats: `Pts`, `Reb`, `Ast`, `PRA`, `PassYds`, `RushYds`, `RecYds`, `PassTD`, `Rec`, `K`, `H`, `HR`, `RBI`, `SOG`, `G`, `A`.
-*   Example: `LeBron James: Pts Over 25.5`
+#### `Player Prop`
+Format: `Player Name: Stat Over/Under/Value`
+Stats: `Pts`, `Reb`, `Ast`, `3PM`, `PRA` (Pts+Reb+Ast), `PassYds`, `RushYds`, `RecYds`, `PassTD`, `Rec`, `Comp`, `K`, `H`, `HR`, `RBI`, `TotalBases`, `SOG`, `G`, `A`, `P`
+Example: `LeBron James: Pts Over 25.5`
 
-#### **`Team Prop`**
-*   `Team Name: Stat Over/Under/Value`
-*   Example: `Dallas Cowboys: Total Points Over 27.5`
+#### `Team Prop`
+Format: `Team Name: Stat Over/Under/Value`
+Example: `Dallas Cowboys: Total Points Over 27.5`
 
-#### **`Game Prop`**
-*   `Description: Value`
-*   Example: `Fight to go the Distance: No`
+#### `Game Prop`
+Format: `Description: Value`
+Example: `Fight to go the Distance: No`
 
-#### **`Period`**
-*   `Period Identifier [Standard Bet Format]`
-*   Ids: `1H`, `2H`, `1Q`, `2Q`, `3Q`, `4Q`, `P1`, `P2`, `P3`, `F5`.
-*   Example: `1H NYK vs BOS Total Over 110.5`
+#### `Period`
+Format: `Period Identifier [Standard Bet Format]`
+Identifiers: `1H`, `2H`, `1Q`, `2Q`, `3Q`, `4Q`, `P1`, `P2`, `P3`, `F5`, `F3`, `F1`, `Set 1`, `60 min`
+Example: `1H NYK vs BOS Total Over 110.5`, `1Q Thunder -2`
 
-#### **`Parlay` / `Teaser`**
-*   `(League) Leg 1 / (League) Leg 2`
-*   Prefix each leg with league in parens.
-*   Example: `(NFL) Cowboys -10.5 / (NBA) Lakers ML`
-*   Teaser: `(Teaser 6pt NFL) Chiefs -2.5 / (Teaser 6pt NFL) Eagles +8.5`
+#### `Parlay` / `Teaser`
+Format: `(League) Leg 1 / (League) Leg 2 / ...`
+- Prefix EACH leg with league in parentheses: `(NFL)`, `(NBA)`, etc.
+- For Teasers, include points: `(Teaser 6pt NFL)`
+Examples:
+- `(NFL) Cowboys -10.5 / (NBA) Lakers ML`
+- `(NFL) Jalen Hurts: RushYds Over 48.5 / (NFL) A.J. Brown: RecYds Over 80.5`
+- `(Teaser 6pt NFL) Chiefs -2.5 / (Teaser 6pt NFL) Eagles +8.5`
 
-#### **`Future`**
-*   `Award or Event: Selection`
-*   Example: `Super Bowl LIX Winner: Kansas City Chiefs`
+#### `Future`
+Format: `Award or Event: Selection`
+Example: `Super Bowl LIX Winner: Kansas City Chiefs`
 """
 
 
@@ -124,7 +117,7 @@ def generate_ai_prompt(selected_data):
             
         raw_content_list.append(entry)
         
-    full_raw_data = "\n".join(raw_content_list)
+    full_raw_data = "\\n".join(raw_content_list)
     current_date = datetime.now().strftime("%Y-%m-%d")
 
     prompt = f"""
@@ -227,7 +220,7 @@ Re-analyze failed fields using the Context (ctx).
 
 ### TIPS
 1. **CN (Capper)**: Look at top of image/text.
-2. **LG (League)**: NFL, NBA, MLB, etc.
+2. **LG (League)**: NFL, NBA, MLB, etc. **IMPORTANT: If Multi-Sport Parlay (e.g. NBA+NFL), MUST use "Other".**
 3. **P (Pick)**: "Team -7.5", "Team ML".
 
 ### NOISE CORRECTION
@@ -271,3 +264,72 @@ INPUT:
 OUTPUT (JSON Array):
 [ {{ "id": 123, "cn": "FoundName" }} ]
 """
+
+def generate_multimodal_prompt(selected_data, image_map):
+    """
+    Generates a prompt for Multimodal AI (User uploads images + this prompt).
+    image_map: { msg_id: ["filename1.jpg", "filename2.jpg"] }
+    """
+    context_list = []
+    
+    for item in selected_data:
+        mid = item['id']
+        caption = clean_text_for_ai(item.get('text', ''))
+        filenames = image_map.get(mid, [])
+        
+        if not filenames:
+            # If no images, just provide text
+            entry = f"### Message {mid}\\n[No Image]\\n[Context]: {caption}"
+            context_list.append(entry)
+        else:
+            for fname in filenames:
+                entry = f"### Image File: {fname}\\n[Message ID]: {mid}\\n[Context]: {caption}"
+                context_list.append(entry)
+            
+    full_context = "\\n\\n".join(context_list)
+    current_date = datetime.now().strftime("%Y-%m-%d")
+
+    prompt = f"""
+*** SYSTEM INSTRUCTION: SET TEMPERATURE TO 0 ***
+*** OUTPUT FORMAT: SINGLE LINE RAW JSON ONLY. NO MARKDOWN. ***
+
+You are an expert sports betting data parser. I have uploaded a set of images containing betting picks.
+Below is the CAPTION/CONTEXT text associated with each image file.
+
+Use BOTH the image visual data and the provided context text to extract the picks.
+
+### **CRITICAL INSTRUCTIONS**
+1.  **Map Picks to correct Message ID**: Use the '[Message ID]' provided in the context for each image.
+2.  **Combine Data**: Visuals give you the pick/odds, Context gives you the Capper/Sport often.
+3.  **Odds**: Extract American odds (e.g., -110). If NOT visible, set "od": null.
+4.  **Multiple Cappers**: If multiple picks in one image, separate them.
+
+### **AVOID THESE COMMON MISTAKES:**
+- **MARKETING HEADERS**: "80K MAIN PLAY", "VIP WHALE PLAY", "MAX BET" -> IGNORE.
+- **Sportsbook names**: "Hard Rock", "DraftKings" -> IGNORE.
+- **Watermarks**: "@cappersfree" is NOT the capper. Look for the real name.
+
+{get_master_formatting_guide()}
+
+### **REQUIRED OUTPUT FORMAT (JSON OBJECT)**
+Respond ONLY with a JSON Object with a "picks" key containing the array using SHORT KEYS:
+- "id": message_id (FROM CONTEXT)
+- "cn": capper_name
+- "lg": league
+- "ty": type
+- "p": pick
+- "od": odds (int or null)
+- "u": units (float, default 1.0)
+- "dt": date (YYYY-MM-DD)
+
+Example:
+{{
+  "picks": [
+      {{ "id": 12345, "cn": "KingCap", "lg": "NBA", "ty": "Player Prop", "p": "LeBron James: Pts Over 25.5", "od": -110, "u": 1.0, "dt": "{current_date}" }}
+  ]
+}}
+
+### **IMAGE CONTEXT DATA**
+{full_context}
+"""
+    return prompt

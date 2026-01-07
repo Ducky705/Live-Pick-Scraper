@@ -358,61 +358,61 @@
                 <table class="w-full text-left border-collapse bg-white min-w-[1000px]">
                     <thead class="bg-black text-white sticky top-0 z-10">
                         <tr>
-                            <th class="p-4 border-r border-gray-800 w-12 text-center align-bottom">
+                            <th class="bg-black p-4 border-r border-gray-800 w-12 text-center align-bottom">
                                 <input type="checkbox" onchange="toggleAllTableRows(this)"
                                     class="accent-blue-600 cursor-pointer w-4 h-4">
                             </th>
                             <th
-                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-16 align-bottom">
+                                class="bg-black p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-16 align-bottom">
                                 <div class="mb-1">ID</div>
                                 <input type="text" oninput="updateFilter('message_id', this.value)"
                                     class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
                                     placeholder="Filter">
                             </th>
                             <th
-                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
+                                class="bg-black p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
                                 <div class="mb-1">Capper</div>
                                 <input type="text" oninput="updateFilter('capper_name', this.value)"
                                     class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
                                     placeholder="Filter">
                             </th>
                             <th
-                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
+                                class="bg-black p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
                                 <div class="mb-1">Sport</div>
                                 <input type="text" oninput="updateFilter('league', this.value)"
                                     class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
                                     placeholder="Filter">
                             </th>
                             <th
-                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
+                                class="bg-black p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
                                 <div class="mb-1">Type</div>
                                 <input type="text" oninput="updateFilter('type', this.value)"
                                     class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
                                     placeholder="Filter">
                             </th>
                             <th
-                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
+                                class="bg-black p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 align-bottom">
                                 <div class="mb-1">Selection</div>
                                 <input type="text" oninput="updateFilter('pick', this.value)"
                                     class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
                                     placeholder="Filter">
                             </th>
                             <th
-                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-24 align-bottom">
+                                class="bg-black p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-24 align-bottom">
                                 <div class="mb-1">Odds</div>
                                 <input type="text" oninput="updateFilter('odds', this.value)"
                                     class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
                                     placeholder="Filter">
                             </th>
                             <th
-                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-24 align-bottom">
+                                class="bg-black p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-24 align-bottom">
                                 <div class="mb-1">Unit Size</div>
                                 <input type="text" oninput="updateFilter('units', this.value)"
                                     class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
                                     placeholder="Filter">
                             </th>
                             <th
-                                class="p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-24 align-bottom">
+                                class="bg-black p-2 font-mono text-[10px] uppercase tracking-widest border-r border-gray-800 w-24 align-bottom">
                                 <div class="mb-1">Result</div>
                                 <input type="text" oninput="updateFilter('result', this.value)"
                                     class="w-full bg-gray-800 text-white border-none text-[9px] px-1 py-0.5 outline-none placeholder-gray-500"
@@ -477,24 +477,8 @@
                 </button>
             </div>
 
-            <!-- Tabs -->
-            <div class="flex border-b border-black bg-white">
-                <button onclick="filterReview('ALL')" id="tab-ALL"
-                    class="flex-1 py-3 text-xs font-bold border-r border-black hover:bg-gray-50 transition-colors relative group active-tab">
-                    ALL CHANGES
-                    <div class="absolute bottom-0 left-0 w-full h-1 bg-black hidden group-[.active-tab]:block"></div>
-                </button>
-                <button onclick="filterReview('FIX')" id="tab-FIX"
-                    class="flex-1 py-3 text-xs font-bold border-r border-black hover:bg-gray-50 transition-colors relative group">
-                    <span class="text-blue-600">FIELD FIXES</span>
-                    <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-600 hidden group-[.active-tab]:block"></div>
-                </button>
-                <button onclick="filterReview('DELETE')" id="tab-DELETE"
-                    class="flex-1 py-3 text-xs font-bold hover:bg-gray-50 transition-colors relative group">
-                    <span class="text-red-600">DELETIONS</span>
-                    <div class="absolute bottom-0 left-0 w-full h-1 bg-red-600 hidden group-[.active-tab]:block"></div>
-                </button>
-            </div>
+            <!-- Tabs REMOVED -->
+
 
             <!-- Cards Container -->
             <div id="reviewCardsContainer" class="flex-1 overflow-y-auto p-6 bg-gray-100 space-y-4">

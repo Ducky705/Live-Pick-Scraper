@@ -1,0 +1,29 @@
+[
+  {
+    "pipeline": "Pipeline A: Tesseract \u2192 AI",
+    "total_gt_picks": 132,
+    "total_sys_picks": 89,
+    "correct_matches": 70,
+    "precision": 0.7865168539325843,
+    "recall": 0.5303030303030303,
+    "f1_score": 0.6334841628959276
+  },
+  {
+    "pipeline": "Pipeline B: Tesseract+V3 \u2192 AI",
+    "total_gt_picks": 132,
+    "total_sys_picks": 130,
+    "correct_matches": 95,
+    "precision": 0.7307692307692307,
+    "recall": 0.7196969696969697,
+    "f1_score": 0.7251908396946564
+  },
+  {
+    "pipeline": "Pipeline C: AI Vision \u2192 AI",
+    "total_gt_picks": 132,
+    "total_sys_picks": 85,
+    "correct_matches": 65,
+    "precision": 0.7647058823529411,
+    "recall": 0.49242424242424243,
+    "f1_score": 0.5990783410138248
+  }
+]

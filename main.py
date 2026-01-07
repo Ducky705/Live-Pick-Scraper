@@ -445,6 +445,10 @@ def api_validate_picks():
     data = request.json
     picks = data.get('picks', [])
     original_messages = data.get('original_messages', [])
+    
+    # AUTO-FIX: Try to deduce odds from siblings BEFORE validation
+    picks = smart_merge_odds(picks)
+    
     msg_map = {m['id']: f"[CAPTION]: {m.get('text','')}\n[OCR]: {m.get('ocr_text','')}" for m in original_messages}
     
     failed_items = []
@@ -546,6 +550,10 @@ def api_merge_revisions():
                 if 'pick' in replacement: orig['pick'] = replacement['pick']
                 elif 'p' in replacement: orig['pick'] = replacement['p']
         merged.append(orig)
+    
+    # AUTO-FIX: Re-run deductions on the full merged set
+    merged = smart_merge_odds(merged)
+        
     return jsonify({'merged_picks': merged})
 
 @app.route('/api/generate_smart_fill', methods=['POST'])

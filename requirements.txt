@@ -1,10 +1,13 @@
-requests
 flask
-telethon
-pytesseract
-supabase
-pillow
+waitress
 python-dotenv
+telethon
+pywebview
+pytesseract
+pillow
+requests
+supabase
+openai
 packaging
-opencv-python-headless
-# pywebview  <-- Keep this commented out if you are sticking to the browser method for now
+clr
+pythonnet

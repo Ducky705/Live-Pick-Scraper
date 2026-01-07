@@ -1,0 +1,219 @@
+{
+  "engine": "tesseract_simple",
+  "metrics": {
+    "avg_cer": 0.26285123067854643,
+    "avg_wer": 0.3386343030601509
+  },
+  "details": [
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55808.jpg",
+      "cer": 0.145,
+      "wer": 0.20588235294117646,
+      "output_length": 207,
+      "ground_truth_length": 200
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55809.jpg",
+      "cer": 0.30920372285418823,
+      "wer": 0.3854748603351955,
+      "output_length": 733,
+      "ground_truth_length": 967
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55810.jpg",
+      "cer": 0.26,
+      "wer": 0.32,
+      "output_length": 248,
+      "ground_truth_length": 250
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55811.jpg",
+      "cer": 0.7304964539007093,
+      "wer": 0.7608695652173914,
+      "output_length": 96,
+      "ground_truth_length": 282
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55812.jpg",
+      "cer": 0.06726457399103139,
+      "wer": 0.05,
+      "output_length": 234,
+      "ground_truth_length": 223
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55813.jpg",
+      "cer": 0.24806201550387597,
+      "wer": 0.25925925925925924,
+      "output_length": 155,
+      "ground_truth_length": 129
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55814.jpg",
+      "cer": 0.1782178217821782,
+      "wer": 0.1794871794871795,
+      "output_length": 194,
+      "ground_truth_length": 202
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55817.jpg",
+      "cer": 0.8185483870967742,
+      "wer": 0.8571428571428571,
+      "output_length": 64,
+      "ground_truth_length": 248
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55818.jpg",
+      "cer": 0.46875,
+      "wer": 0.5,
+      "output_length": 39,
+      "ground_truth_length": 32
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55827.jpg",
+      "cer": 0.028409090909090908,
+      "wer": 0.08823529411764706,
+      "output_length": 176,
+      "ground_truth_length": 176
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55828.jpg",
+      "cer": 0.11188811188811189,
+      "wer": 0.045454545454545456,
+      "output_length": 151,
+      "ground_truth_length": 143
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55829.jpg",
+      "cer": 0.2692307692307692,
+      "wer": 0.2222222222222222,
+      "output_length": 65,
+      "ground_truth_length": 52
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55830.jpg",
+      "cer": 0.1736111111111111,
+      "wer": 0.2635135135135135,
+      "output_length": 843,
+      "ground_truth_length": 864
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55831.jpg",
+      "cer": 0.061527057079318014,
+      "wer": 0.10852713178294573,
+      "output_length": 1399,
+      "ground_truth_length": 1349
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55832.jpg",
+      "cer": 0.7440476190476191,
+      "wer": 0.8275862068965517,
+      "output_length": 65,
+      "ground_truth_length": 168
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55833.jpg",
+      "cer": 0.26,
+      "wer": 0.5294117647058824,
+      "output_length": 209,
+      "ground_truth_length": 200
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55834.jpg",
+      "cer": 0.6744791666666666,
+      "wer": 0.7428571428571429,
+      "output_length": 166,
+      "ground_truth_length": 384
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55837.jpg",
+      "cer": 0.0835680751173709,
+      "wer": 0.12631578947368421,
+      "output_length": 1049,
+      "ground_truth_length": 1065
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55838.jpg",
+      "cer": 0.17177914110429449,
+      "wer": 0.2857142857142857,
+      "output_length": 176,
+      "ground_truth_length": 163
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/tests/samples/-1001900292133_55839.jpg",
+      "cer": 0.07569721115537849,
+      "wer": 0.14285714285714285,
+      "output_length": 265,
+      "ground_truth_length": 251
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55713.jpg",
+      "cer": 0.08490566037735849,
+      "wer": 0.18181818181818182,
+      "output_length": 107,
+      "ground_truth_length": 106
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55714.jpg",
+      "cer": 0.3194444444444444,
+      "wer": 0.5405405405405406,
+      "output_length": 225,
+      "ground_truth_length": 216
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55715.jpg",
+      "cer": 0.08333333333333333,
+      "wer": 0.3,
+      "output_length": 48,
+      "ground_truth_length": 48
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55716.jpg",
+      "cer": 0.12267657992565056,
+      "wer": 0.25925925925925924,
+      "output_length": 276,
+      "ground_truth_length": 269
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55717.jpg",
+      "cer": 0.16091954022988506,
+      "wer": 0.2631578947368421,
+      "output_length": 90,
+      "ground_truth_length": 87
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55718.jpg",
+      "cer": 0.34375,
+      "wer": 0.42857142857142855,
+      "output_length": 78,
+      "ground_truth_length": 64
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55719.jpg",
+      "cer": 0.4666666666666667,
+      "wer": 0.6470588235294118,
+      "output_length": 99,
+      "ground_truth_length": 75
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55721.jpg",
+      "cer": 0.13008130081300814,
+      "wer": 0.20710059171597633,
+      "output_length": 968,
+      "ground_truth_length": 984
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55722.jpg",
+      "cer": 0.18736141906873613,
+      "wer": 0.2545454545454545,
+      "output_length": 1004,
+      "ground_truth_length": 902
+    },
+    {
+      "image": "D:/Programs/Sports Betting/TelegramScraper/v0.0.15/static/temp_images/-1001900292133_55723.jpg",
+      "cer": 0.10661764705882353,
+      "wer": 0.17616580310880828,
+      "output_length": 1094,
+      "ground_truth_length": 1088
+    }
+  ]
+}

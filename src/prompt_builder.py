@@ -168,12 +168,12 @@ Respond ONLY with a JSON Object with a "picks" key containing the array using SH
 - "p": pick
 - "od": odds (int or null)
 - "u": units (float, default 1.0)
-- "dt": date (YYYY-MM-DD)
+- "u": units (float, default 1.0)
 
 Example:
 {{
   "picks": [
-      {{ "id": 12345, "cn": "KingCap", "lg": "NBA", "ty": "Player Prop", "p": "LeBron James: Pts Over 25.5", "od": -110, "u": 1.0, "dt": "{current_date}" }}
+      {{ "id": 12345, "cn": "KingCap", "lg": "NBA", "ty": "Player Prop", "p": "LeBron James: Pts Over 25.5", "od": -110, "u": 1.0 }}
   ]
 }}
 
@@ -320,12 +320,12 @@ Respond ONLY with a JSON Object with a "picks" key containing the array using SH
 - "p": pick
 - "od": odds (int or null)
 - "u": units (float, default 1.0)
-- "dt": date (YYYY-MM-DD)
+- "u": units (float, default 1.0)
 
 Example:
 {{
   "picks": [
-      {{ "id": 12345, "cn": "KingCap", "lg": "NBA", "ty": "Player Prop", "p": "LeBron James: Pts Over 25.5", "od": -110, "u": 1.0, "dt": "{current_date}" }}
+      {{ "id": 12345, "cn": "KingCap", "lg": "NBA", "ty": "Player Prop", "p": "LeBron James: Pts Over 25.5", "od": -110, "u": 1.0 }}
   ]
 }}
 

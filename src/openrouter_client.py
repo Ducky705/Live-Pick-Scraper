@@ -8,8 +8,13 @@ from pathlib import Path
 
 # Model fallback list (ordered by reliability)
 DEFAULT_MODELS = [
-    'mistralai/devstral-2512:free',
-    'tngtech/deepseek-r1t2-chimera:free'
+    'tngtech/deepseek-r1t2-chimera:free',    # Primary (Best Accuracy: 97.6%)
+    'google/gemini-2.0-flash-exp:free',      # Backup 1 (Fastest: 6.4s)
+    'meta-llama/llama-3.3-70b-instruct:free', # Backup 2 (Fast: 10.2s)
+    'google/gemma-3-27b-it:free',            # Backup 3 (Reliable: 20.8s)
+    'mistralai/devstral-2512:free',          # Backup 4 (Reliable: 21.2s)
+    'nousresearch/hermes-3-llama-3.1-405b:free', # Backup 5 (Huge Model)
+    'z-ai/glm-4.5-air:free'                  # Backup 6 (Slow but accurate)
 ]
 
 def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=2):

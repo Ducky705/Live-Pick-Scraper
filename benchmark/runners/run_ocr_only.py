@@ -98,7 +98,6 @@ def run_ocr_benchmark(engine="tesseract_v3"):
              possible_paths = [
                  img_path,
                  os.path.join("benchmark", "dataset", "images", img_path),
-                 os.path.join("tests", "samples", img_path)
              ]
              for p in possible_paths:
                  if os.path.exists(p):

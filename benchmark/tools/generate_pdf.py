@@ -7,7 +7,7 @@ def generate_pdf():
     # Define source directories
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     sources = [
-        os.path.join(base_dir, "tests", "samples"),
+        os.path.join(base_dir, "benchmark", "dataset", "images"),
         os.path.join(base_dir, "static", "temp_images"),
     ]
     

@@ -908,8 +908,7 @@ async function addBatchResults(finalize = false) {
             type: item.ty || item.type,
             pick: item.p || item.pick,
             odds: item.od || item.odds,
-            units: item.u || item.units,
-            date: item.dt || item.date
+            units: item.u || item.units
         }));
 
         // APPEND to existing state (don't reset if adding batch)
@@ -2285,7 +2284,7 @@ async function uploadData() {
 
     const res = await apiCall('/api/upload', 'POST', {
         picks: picks,
-        date: new Date().toISOString().split('T')[0] // or selected date
+        date: getEl('targetDateInput').value || new Date().toISOString().split('T')[0]
     });
 
     hideLoader();

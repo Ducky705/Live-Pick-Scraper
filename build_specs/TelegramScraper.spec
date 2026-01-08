@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['../main.py'],
+    ['..\\main.py'],
     pathex=[],
     binaries=[],
-    datas=[('/Users/diegosargent/Documents/Programs/Telegram Scraper 2.0/templates', 'templates'), ('/Users/diegosargent/Documents/Programs/Telegram Scraper 2.0/static', 'static'), ('/Users/diegosargent/Documents/Programs/Telegram Scraper 2.0/tessdata', 'tessdata'), ('/Users/diegosargent/Documents/Programs/Telegram Scraper 2.0/.env', '.'), ('/Users/diegosargent/Documents/Programs/Telegram Scraper 2.0/bin/mac', 'bin/mac')],
+    datas=[('D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\templates', 'templates'), ('D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\static', 'static'), ('D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\tessdata', 'tessdata'), ('D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\.env', '.'), ('D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\bin\\win', 'bin/win')],
     hiddenimports=['webview', 'webview.platforms.winforms', 'webview.platforms.edgechromium', 'clr', 'System'],
     hookspath=[],
     hooksconfig={},
@@ -19,33 +19,21 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.datas,
     [],
-    exclude_binaries=True,
     name='TelegramScraper',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['/Users/diegosargent/Documents/Programs/Telegram Scraper 2.0/static/logo.icns'],
-)
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='TelegramScraper',
-)
-app = BUNDLE(
-    coll,
-    name='TelegramScraper.app',
-    icon='/Users/diegosargent/Documents/Programs/Telegram Scraper 2.0/static/logo.icns',
-    bundle_identifier='com.cappersuite.app',
+    icon=['D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\static\\logo.ico'],
 )

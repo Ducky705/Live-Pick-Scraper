@@ -9,5 +9,4 @@ requests
 supabase
 openai
 packaging
-clr
 pythonnet

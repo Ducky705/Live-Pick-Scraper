@@ -29,6 +29,7 @@ def build():
         '--exclude-module=scipy',
         '--exclude-module=pandas', 
         '--exclude-module=numpy',
+        '--onefile',
         
         # --- FIX: ADD THESE HIDDEN IMPORTS ---
         '--hidden-import=webview',

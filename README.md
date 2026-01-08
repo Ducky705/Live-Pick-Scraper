@@ -134,8 +134,8 @@ On first launch, you will be asked to log in with your Telegram phone number. Th
     API_ID=your_api_id
     API_HASH=your_api_hash
     OPENROUTER_API_KEY=your_key
-    SUPabase_URL=your_url         # Optional
-    SUPabase_KEY=your_key         # Optional
+    SUPABASE_URL=your_url         # Optional
+    SUPABASE_KEY=your_key         # Optional
     ```
 
 4.  **Run from source**:

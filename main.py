@@ -168,6 +168,12 @@ def get_progress():
 @app.route('/')
 def index(): return render_template('index.html')
 
+# Serve temp images from writable DATA_DIR (outside bundle for App Translocation)
+@app.route('/static/temp_images/<path:filename>')
+def serve_temp_image(filename):
+    from flask import send_from_directory
+    return send_from_directory(TEMP_IMG_DIR, filename)
+
 @app.route('/api/check_auth', methods=['GET'])
 def check_auth():
     try:

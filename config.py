@@ -43,10 +43,23 @@ else:
 # Common Data Path
 TESSDATA_DIR = os.path.join(BASE_DIR, 'tessdata')
 
-# App settings
-TEMP_IMG_DIR = os.path.join(BASE_DIR, 'static', 'temp_images')
+# --- WRITABLE DATA DIRECTORY ---
+# Use a writable location for temp images (app bundle is read-only on macOS)
+if getattr(sys, 'frozen', False):
+    # Frozen app: use user's Application Support (Mac) or AppData (Windows)
+    if platform.system() == 'Darwin':
+        DATA_DIR = os.path.join(os.path.expanduser('~'), 'Library', 'Application Support', 'TelegramScraper')
+    elif platform.system() == 'Windows':
+        DATA_DIR = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')), 'TelegramScraper')
+    else:
+        DATA_DIR = os.path.join(os.path.expanduser('~'), '.telegramscraper')
+else:
+    # Running from source: use project directory
+    DATA_DIR = BASE_DIR
+
+TEMP_IMG_DIR = os.path.join(DATA_DIR, 'temp_images')
 if not os.path.exists(TEMP_IMG_DIR):
-    os.makedirs(TEMP_IMG_DIR)
+    os.makedirs(TEMP_IMG_DIR, exist_ok=True)
 
 SESSION_FILE_PATH = os.path.join(EXEC_DIR, 'user_session')
 

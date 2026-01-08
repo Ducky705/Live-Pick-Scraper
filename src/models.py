@@ -24,6 +24,17 @@ class BetPick(BaseModel):
     date: Optional[str] = None
     result: Optional[str] = "Pending"
     score_summary: Optional[str] = ""
+    ai_reasoning: Optional[str] = None # Stores "confidence | reason"
+    tags: List[str] = [] # e.g. ["Live", "AltLine", "Hedge"]
+    warning: Optional[str] = None # e.g. "Odds Mismatch", "Stat Anomaly"
+    is_update: bool = False # True if this is an update to a previous play
+    
+    # Phase 3: Granular Props
+    subject: Optional[str] = None # "LeBron James"
+    market: Optional[str] = None # "Points"
+    line: Optional[float] = None # 25.5
+    prop_side: Optional[str] = None # "Over", "Under"
+    deduction_source: Optional[str] = "Explicit" # "Explicit", "Implied", "Visual"
     
     @field_validator('units', mode='before')
     def parse_units(cls, v):

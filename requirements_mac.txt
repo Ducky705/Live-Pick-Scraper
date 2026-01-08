@@ -1,0 +1,11 @@
+flask
+waitress
+python-dotenv
+telethon
+pywebview
+pytesseract
+pillow
+requests
+supabase
+openai
+packaging

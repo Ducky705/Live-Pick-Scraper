@@ -43,11 +43,17 @@ class TelegramManager:
             except: real_api_id = API_ID
             
             # Create client attached to the CURRENT running loop
+            # STEALTH MODE: Mimic iPhone 15 Pro
             self.client = TelegramClient(
                 SESSION_FILE_PATH, 
                 real_api_id, 
                 API_HASH, 
-                loop=asyncio.get_running_loop()
+                loop=asyncio.get_running_loop(),
+                device_model="iPhone 15 Pro",
+                system_version="17.5.1",
+                app_version="10.12.0",
+                lang_code="en",
+                system_lang_code="en-US"
             )
             await self.client.connect()
         
@@ -177,15 +183,25 @@ class TelegramManager:
                     if os.path.exists(path):
                         return path
                     
-                    # 'x' is large (800px), 'y' is extra large (1280px). 'x' is a good balance.
-                    await client.download_media(message, path, thumb='x')
-                    return path
+                    # Try thumbnail first ('x' = 800px), fallback to full image for older posts
+                    try:
+                        await client.download_media(message, path, thumb='x')
+                    except Exception:
+                        # Thumbnail not available (common for older messages), try full image
+                        print(f"[Fallback] Thumbnail unavailable for {filename}, downloading full image...")
+                        await client.download_media(message, path)  # No thumb = full image
+                    
+                    return path if os.path.exists(path) else None
                 except FloodWaitError as e:
                     print(f"[Anti-Flood] Sleeping {e.seconds}s...")
                     await asyncio.sleep(e.seconds + 1)
-                    return await client.download_media(message, path, thumb='x')
+                    try:
+                        await client.download_media(message, path)  # Retry with full image
+                        return path if os.path.exists(path) else None
+                    except:
+                        return None
                 except Exception as e:
-                    print(f"Download failed: {e}")
+                    print(f"Download failed for {filename}: {e}")
                     return None
 
         for i, channel_id in enumerate(channel_ids):

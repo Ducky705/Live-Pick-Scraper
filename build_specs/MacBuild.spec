@@ -104,6 +104,6 @@ app = BUNDLE(
     bundle_identifier='com.diegosargent.telegramscraper',
     info_plist={
         'NSHighResolutionCapable': 'True',
-        'CFBundleShortVersionString': '2.0.3',
+        'CFBundleShortVersionString': '3.0.0',
     },
 )

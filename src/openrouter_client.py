@@ -8,13 +8,13 @@ from pathlib import Path
 
 # Model fallback list (ordered by reliability)
 DEFAULT_MODELS = [
-    'tngtech/deepseek-r1t2-chimera:free',    # Primary (Best Accuracy: 97.6%)
-    'google/gemini-2.0-flash-exp:free',      # Backup 1 (Fastest: 6.4s)
-    'meta-llama/llama-3.3-70b-instruct:free', # Backup 2 (Fast: 10.2s)
-    'google/gemma-3-27b-it:free',            # Backup 3 (Reliable: 20.8s)
-    'mistralai/devstral-2512:free',          # Backup 4 (Reliable: 21.2s)
-    'nousresearch/hermes-3-llama-3.1-405b:free', # Backup 5 (Huge Model)
-    'z-ai/glm-4.5-air:free'                  # Backup 6 (Slow but accurate)
+    "tngtech/deepseek-r1t2-chimera:free",
+    "google/gemini-2.0-flash-exp:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "mistralai/devstral-2512:free",
+    "google/gemma-3-27b-it:free",
+    "nousresearch/hermes-3-llama-3.1-405b:free",
+    "z-ai/glm-4.5-air:free",
 ]
 
 def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=2):
@@ -101,11 +101,28 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                 data = response.json()
                 if 'choices' in data and len(data['choices']) > 0:
                     content = data['choices'][0]['message']['content']
+                    
+                    # Clean DeepSeek R1 thinking blocks (they wrap reasoning in <think>...</think>)
+                    import re
+                    content = re.sub(r'<think>.*?</think>', '', content, flags=re.DOTALL)
+                    
                     # Clean markdown code blocks if present
                     if "```json" in content:
                         content = content.split("```json")[1].split("```")[0].strip()
                     elif "```" in content:
                         content = content.split("```")[1].split("```")[0].strip()
+                    
+                    # Fallback: Find JSON object/array if there's extra text
+                    content = content.strip()
+                    if content and content[0] not in '{[':
+                        # Try to find JSON block manually
+                        json_start = None
+                        for i, c in enumerate(content):
+                            if c == '{' or c == '[':
+                                json_start = i
+                                break
+                        if json_start is not None:
+                            content = content[json_start:]
                     
                     logging.info(f"[OpenRouter] Success with {current_model}")
                     return content.strip()

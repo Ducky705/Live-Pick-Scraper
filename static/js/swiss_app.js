@@ -888,6 +888,10 @@ async function addBatchResults(finalize = false) {
             jsonStr = input.substring(firstBrace, lastBrace + 1);
         }
 
+        // FIX: Handle invalid JSON with +NUMBER (e.g. "od": +125 is invalid JSON)
+        // Replace patterns like ": +123" with ": 123" (only for standalone + before numbers)
+        jsonStr = jsonStr.replace(/:\s*\+(\d)/g, ': $1');
+
         let data = JSON.parse(jsonStr);
 
         // Handle { "picks": [...] } wrapper
@@ -1160,32 +1164,77 @@ function applyReviewChanges() {
     let appliedCount = 0;
     let deletedCount = 0;
 
+    // Field name mapping: AI uses long names, data might use short keys
+    const fieldMap = {
+        'league': 'league',
+        'lg': 'league',
+        'type': 'type',
+        'ty': 'type',
+        'capper_name': 'capper_name',
+        'cn': 'capper_name',
+        'pick': 'pick',
+        'p': 'pick'
+    };
+
+    // Helper to find entry by ID (handles both string and numeric keys)
+    const findEntry = (id) => {
+        // Try direct lookup first
+        if (state.processedData[id]) return { key: id, entry: state.processedData[id] };
+        // Try string version
+        if (state.processedData[String(id)]) return { key: String(id), entry: state.processedData[String(id)] };
+        // Try numeric version
+        if (state.processedData[Number(id)]) return { key: Number(id), entry: state.processedData[Number(id)] };
+        return null;
+    };
+
+    // Helper to apply a change to an entry
+    const applyToEntry = (entry, change) => {
+        const targetField = change.field;
+        const normalizedField = fieldMap[targetField] || targetField;
+
+        // Get current value - try both original field and normalized field
+        let currentValue = entry[targetField] ?? entry[normalizedField];
+
+        // Check if we should apply
+        const currentStr = String(currentValue || '').trim();
+        const oldStr = String(change.old || '').trim();
+
+        // Apply if: current matches old, OR old is 'Unknown'/'N/A', OR current is undefined
+        if (currentStr === oldStr || oldStr === 'Unknown' || oldStr === 'N/A' || currentValue === undefined) {
+            entry[normalizedField] = change.new;
+            // Also set the original field if different
+            if (targetField !== normalizedField) {
+                entry[targetField] = change.new;
+            }
+            return true;
+        }
+        return false;
+    };
+
     // First pass: handle deletions
     const toDelete = pendingReviewChanges.filter(c => c.field === 'DELETE');
     toDelete.forEach(c => {
-        if (state.processedData[c.id]) {
-            delete state.processedData[c.id];
+        const found = findEntry(c.id);
+        if (found) {
+            delete state.processedData[found.key];
             deletedCount++;
         }
     });
 
     // Second pass: handle edits (skip deleted items)
     pendingReviewChanges.filter(c => c.field !== 'DELETE').forEach(c => {
-        let entry = state.processedData[c.id];
-        if (entry) {
+        const found = findEntry(c.id);
+        if (found) {
+            let entry = found.entry;
             if (Array.isArray(entry)) {
                 entry.forEach(sub => {
-                    if (String(sub[c.field]).trim() === String(c.old).trim() || c.old === 'Unknown') {
-                        sub[c.field] = c.new;
-                        appliedCount++;
-                    }
+                    if (applyToEntry(sub, c)) appliedCount++;
                 });
             } else {
-                if (String(entry[c.field]).trim() === String(c.old).trim() || c.old === 'Unknown') {
-                    entry[c.field] = c.new;
-                    appliedCount++;
-                }
+                if (applyToEntry(entry, c)) appliedCount++;
             }
+        } else {
+            console.warn('[Apply] Could not find entry for ID:', c.id);
         }
     });
 
@@ -1389,8 +1438,13 @@ async function handleAutoFill() {
     const prompt = getEl('activePromptText').value;
     // Primary + Backup Models
     const models = [
+        'tngtech/deepseek-r1t2-chimera:free',
+        'google/gemini-2.0-flash-exp:free',
+        'meta-llama/llama-3.3-70b-instruct:free',
         'mistralai/devstral-2512:free',
-        'tngtech/deepseek-r1t2-chimera:free'
+        'google/gemma-3-27b-it:free',
+        'nousresearch/hermes-3-llama-3.1-405b:free',
+        'z-ai/glm-4.5-air:free'
     ];
 
     if (!prompt) { showToast("No prompt generated yet"); return; }
@@ -1930,12 +1984,40 @@ function renderTable() {
             </td>
             ${generateEditableTd(msg.id, idx, 'league', row.league, 'uppercase text-xs font-bold text-gray-400')}
             ${generateEditableTd(msg.id, idx, 'type', row.type || "BET", 'uppercase text-xs font-bold text-black border-l-4 border-black pl-2')}
-            <td class="p-4 border-r border-gray-100 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:z-10 relative font-bold text-black truncate max-w-[200px] text-xs" 
-                contenteditable="true" 
-                onkeydown="handleCellKeydown(event, this)"
-                onblur="updateRowData('${msg.id}', ${idx}, 'pick', this.innerText)">
-                ${row.pick || ''}
+            
+            <td class="p-4 border-r border-gray-100 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:z-10 relative font-bold text-black truncate max-w-[200px] text-xs group/pick">
+                <div contenteditable="true" 
+                     onkeydown="handleCellKeydown(event, this)"
+                     onblur="updateRowData('${msg.id}', ${idx}, 'pick', this.innerText)">${row.pick || ''}</div>
+                
+                ${row.tags && row.tags.length ?
+                `<div class="flex gap-1 mt-1 flex-wrap">
+                     ${row.tags.map(t => `<span class="bg-gray-100 text-gray-500 text-[9px] px-1 rounded uppercase tracking-wider">${t}</span>`).join('')}
+                   </div>` : ''}
+
+                ${row.subject ?
+                `<div class="absolute invisible group-hover/pick:visible z-50 bg-black text-white p-2 rounded text-[10px] font-mono shadow-xl -top-12 left-0 w-48 pointer-events-none">
+                     <strong class="text-blue-300">Chemistry Data</strong><br>
+                     Sub: ${row.subject}<br>
+                     Mkt: ${row.market}<br>
+                     Line: ${row.line}<br>
+                     Src: <span class="${row.deduction_source === 'Implied' ? 'text-amber-300' : 'text-green-300'}">${row.deduction_source}</span>
+                   </div>` : ''}
             </td>
+
+            <td class="p-4 border-r border-gray-100 text-center text-xs">
+                ${row.warning ?
+                `<div class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded inline-block text-[9px] uppercase tracking-tight flex items-center justify-center gap-1" title="${row.warning}">
+                     <span class="material-icons text-[10px]">warning</span> Alert
+                   </div>` : ''}
+                ${row.is_update ?
+                `<div class="bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded inline-block text-[9px] uppercase tracking-tight flex items-center justify-center gap-1 mt-1">
+                     <span class="material-icons text-[10px]">update</span> Update
+                   </div>` : ''}
+                ${!row.warning && !row.is_update ?
+                `<span class="text-gray-300 text-[9px] font-mono">CLEAN</span>` : ''}
+            </td>
+
             ${generateEditableTd(msg.id, idx, 'odds', row.odds, 'font-mono text-xs text-gray-600')}
             ${generateEditableTd(msg.id, idx, 'units', row.units, 'font-mono text-xs text-blue-600 font-bold')}
             <td class="p-4 border-r border-gray-100 font-mono text-xs uppercase tracking-widest outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:z-10 relative ${getResultClass(row.result)}" 

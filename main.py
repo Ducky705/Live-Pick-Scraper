@@ -422,8 +422,7 @@ def api_ai_fill():
                         "type": p.get("ty"),
                         "pick": p.get("p"),
                         "odds": p.get("od"),
-                        "units": p.get("u", 1.0),
-                        "date": p.get("dt")
+                        "units": p.get("u", 1.0)
                     })
                 
                 # Apply Fuzzy Odds Matching
@@ -476,13 +475,27 @@ def api_validate_picks():
         pick_lower = pick_value.lower() if pick_value else ''
         
         # Check for any failure condition
+        # 1. Critical Missing Info
+        is_unknown_capper = capper in ["Unknown", "N/A", None, ""]
+        is_unknown_league = league in ["Unknown", "Other", None, ""]
+        is_invalid_pick = not pick_value or pick_value == "Unknown"
+        
+        # 2. Strict Parlay Logic: If '/' is present, Type MUST be 'Parlay'
+        # If not, it's a "Failed" extraction that needs AI review
+        has_slash = '/' in pick_value
+        is_parlay = pick.get('type') == 'Parlay'
+        
+        # If it looks like a parlay but isn't marked as one -> FAIL
+        potential_parlay_fail = has_slash and not is_parlay
+        
         is_failed = (
-            capper in ["Unknown", "N/A", None, ""] or
-            league in ["Unknown", "Other", None, ""] or
-            not pick_value or pick_value == "Unknown"
+            is_unknown_capper or 
+            is_unknown_league or 
+            is_invalid_pick or
+            potential_parlay_fail
         )
         
-        # Check for noise patterns in pick
+            # Check for noise patterns in pick
         if not is_failed and pick_value:
             for noise in noise_patterns:
                 if noise in pick_lower:
@@ -491,6 +504,12 @@ def api_validate_picks():
             
             # Check if pick lacks proper formatting (no number or ML)
             if not is_failed and not has_number_or_ml.search(pick_value):
+                is_failed = True
+
+        # FORCE REVISION FOR ULTIMATE AI FEATURES
+        # If the pick is "Clean" but lacks our new rich data (chem/tags), fail it to force the review prompt.
+        if not is_failed:
+            if not pick.get('chem') or not pick.get('tags'):
                 is_failed = True
         
         if is_failed:
@@ -506,8 +525,11 @@ def api_validate_picks():
     if not failed_items: 
         return jsonify({'status': 'clean'})
     
+    # Collect Reference Picks (Good picks with odds)
+    reference_picks = [p for p in picks if p not in failed_items and p.get('odds')]
+    
     generate_revision_prompt = get_prompt_funcs()[1]
-    revision_prompt = generate_revision_prompt(failed_items)
+    revision_prompt = generate_revision_prompt(failed_items, reference_picks=reference_picks)
     return jsonify({
         'status': 'needs_revision', 
         'failed_count': len(failed_items), 
@@ -523,7 +545,8 @@ def api_merge_revisions():
     
     revised_map = {}
     for r in revised_picks:
-        mid = r.get('message_id')
+        # Support both 'message_id' and 'id' keys (AI uses 'id')
+        mid = r.get('message_id') or r.get('id')
         if mid:
             if mid not in revised_map: revised_map[mid] = []
             revised_map[mid].append(r)
@@ -549,6 +572,31 @@ def api_merge_revisions():
                 
                 if 'pick' in replacement: orig['pick'] = replacement['pick']
                 elif 'p' in replacement: orig['pick'] = replacement['p']
+                
+                # Phase 2: Units, Tags, Warnings
+                if 'u' in replacement: orig['units'] = replacement['u']
+                if 'tags' in replacement: orig['tags'] = replacement['tags']
+                if 'warning' in replacement: orig['warning'] = replacement['warning']
+                if 'is_update' in replacement: orig['is_update'] = replacement['is_update']
+                
+                # Phase 3: Granular Props ("chem" object)
+                chem = replacement.get('chem')
+                if chem:
+                    orig['subject'] = chem.get('sub')
+                    orig['market'] = chem.get('mkt')
+                    orig['line'] = chem.get('ln')
+                    orig['prop_side'] = chem.get('sd')
+                    orig['deduction_source'] = chem.get('src', 'Explicit')
+                
+                # STORE ULTIMATE REASONING METADATA
+                reason = replacement.get('reason', '')
+                conf = replacement.get('conf')
+                
+                if reason or conf is not None:
+                     # Format: "Conf: 95% | Reason: Detected slash..."
+                     meta_str = f"Conf: {conf}% | {reason}" if conf is not None else reason
+                     orig['ai_reasoning'] = meta_str
+                     
         merged.append(orig)
     
     # AUTO-FIX: Re-run deductions on the full merged set
@@ -656,8 +704,10 @@ If score not found, result="Unknown".
 ### PICKS TO GRADE
 {json.dumps([{ 'id': x['id'], 'pick': x['desc'], 'sport': x['sport'] } for x in ai_payload])}
 """
-                # Call AI
-                ai_resp_str = openrouter_completion(prompt, "mistralai/devstral-2512:free")
+                # Call AI with SHORT timeout (30s) and only 1 cycle to prevent hanging
+                # Grading is non-critical, so we fail fast instead of retrying forever
+                logging.info(f"[AI Grading] Calling AI for {len(ai_payload)} pending items...")
+                ai_resp_str = openrouter_completion(prompt, "tngtech/deepseek-r1t2-chimera:free", timeout=30, max_cycles=1)
                 ai_resp = json.loads(ai_resp_str)
                 
                 # Merge AI Grades
@@ -669,9 +719,10 @@ If score not found, result="Unknown".
                             if ai_g.get('result') and ai_g.get('result') != "Unknown":
                                 p['result'] = ai_g['result']
                                 p['score_summary'] = ai_g.get('score', 'AI Graded')
+                    logging.info(f"[AI Grading] Successfully graded {len(grade_map)} picks")
                                 
             except Exception as e:
-                logging.error(f"AI Grading Failed: {e}")
+                logging.error(f"AI Grading Failed (non-critical): {e}")
 
     return jsonify(graded_data)
 
@@ -879,7 +930,6 @@ def api_prepare_manual_export():
         image_count = len(pdf_pages)
 
         # 4. Generate Prompt with Formatting Guide
-        current_date = datetime.now().strftime("%Y-%m-%d")
         prompt = f"""You are an expert sports betting data parser. I have uploaded a PDF containing betting pick images.
 
 **IMPORTANT**: Each page has a HEADER showing the Message ID and Caption/Context text at the top (dark bar with white text).
@@ -917,7 +967,7 @@ Use: `Moneyline`, `Spread`, `Total`, `Player Prop`, `Team Prop`, `Game Prop`, `P
 Return a JSON object:
 {{
   "picks": [
-    {{ "id": <message_id>, "cn": "<capper_name>", "lg": "<league>", "ty": "<type>", "p": "<pick_value>", "od": <odds_or_null>, "u": 1.0, "dt": "{current_date}" }}
+    {{ "id": <message_id>, "cn": "<capper_name>", "lg": "<league>", "ty": "<type>", "p": "<pick_value>", "od": <odds_or_null>, "u": 1.0 }}
   ]
 }}
 
@@ -1027,8 +1077,8 @@ Use the Context (original message) to determine the correct values.
     
     try:
         # Call AI
-        # Using a smart model for reasoning
-        model = "mistralai/devstral-2512:free" # Fast and usually adequate
+        # Using the primary reasoning model (same as parser)
+        model = "tngtech/deepseek-r1t2-chimera:free"
         response_str = openrouter_completion(prompt, model)
         
         # Parse

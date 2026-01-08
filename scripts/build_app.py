@@ -5,7 +5,7 @@ import sys
 import shutil
 
 # --- CONFIGURATION ---
-APP_NAME = "CapperSuite"
+APP_NAME = "TelegramScraper"
 ENTRY_POINT = "main.py"
 
 def get_separator():
@@ -43,27 +43,43 @@ def build():
     sep = get_separator()
     
     # 1. Web Assets
-    args.append(f'--add-data=templates{sep}templates')
-    args.append(f'--add-data=static{sep}static')
+    templates_path = os.path.join(project_root, 'templates')
+    static_path = os.path.join(project_root, 'static')
+    args.append(f'--add-data={templates_path}{sep}templates')
+    args.append(f'--add-data={static_path}{sep}static')
     
     # 2. Tesseract Data
+    tessdata_path = os.path.join(project_root, 'tessdata')
     if os.path.exists('tessdata'):
-        args.append(f'--add-data=tessdata{sep}tessdata')
+        args.append(f'--add-data={tessdata_path}{sep}tessdata')
+
+    # 3. Environment Variables (.env) - CRITICAL for API keys
+    env_path = os.path.join(project_root, '.env')
+    if os.path.exists(env_path):
+        args.append(f'--add-data={env_path}{sep}.')
+        print("✅ Bundling .env file for API keys")
+    else:
+        print("⚠️  WARNING: .env file not found - API keys will not work in built app!")
 
     # 3. OS Specific Binaries & Icons
+    bin_win_path = os.path.join(project_root, 'bin', 'win')
+    bin_mac_path = os.path.join(project_root, 'bin', 'mac')
+    
     if sys.platform == 'win32':
         args.append('--windowed')
-        args.append(f'--add-data=bin/win{sep}bin/win')
-        if os.path.exists('static/logo.ico'):
-            args.append('--icon=static/logo.ico')
+        args.append(f'--add-data={bin_win_path}{sep}bin/win')
+        if os.path.exists(os.path.join(project_root, 'static', 'logo.ico')):
+            icon_path = os.path.join(project_root, 'static', 'logo.ico')
+            args.append(f'--icon={icon_path}')
             
     elif sys.platform == 'darwin':
         args.append('--windowed')
-        args.append(f'--add-data=bin/mac{sep}bin/mac')
+        args.append(f'--add-data={bin_mac_path}{sep}bin/mac')
         args.append('--osx-bundle-identifier=com.cappersuite.app')
         
-        if os.path.exists('static/logo.icns'):
-            args.append('--icon=static/logo.icns')
+        if os.path.exists(os.path.join(project_root, 'static', 'logo.icns')):
+            icon_path = os.path.join(project_root, 'static', 'logo.icns')
+            args.append(f'--icon={icon_path}')
     
     print(f"Building for {sys.platform}...")
     

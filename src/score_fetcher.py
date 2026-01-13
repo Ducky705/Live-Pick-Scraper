@@ -1,4 +1,4 @@
-# src/score_fetcher.py
+
 import requests
 import datetime
 import time
@@ -30,6 +30,24 @@ LEAGUES_TO_SCRAPE = {
         "nfl": "nfl",
         "college-football": "ncaaf",
     },
+    "soccer": {
+        "eng.1": "epl",
+        "usa.1": "mls",
+        "uefa.champions": "ucl"
+    },
+    "mma": {
+        "ufc": "ufc"
+    },
+    "golf": {
+        "pga": "pga"
+    },
+    "racing": {
+        "f1": "f1"
+    },
+    "tennis": {
+        "atp": "atp",
+        "wta": "wta"
+    }
 }
 
 # ESPN's internal group IDs for every D1 Men's Basketball conference.
@@ -84,28 +102,31 @@ def fetch_scores_for_date(date_str):
             if league_key_url == "mens-college-basketball":
                 for group_id in NCAAB_CONFERENCE_GROUPS:
                     url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_key}/{league_key_url}/scoreboard?dates={api_date}&groups={group_id}&limit=100"
-                    urls_to_fetch.append((url, sheet_league_name))
+                    urls_to_fetch.append((url, sheet_league_name, sport_key, league_key_url))
             
             # --- STANDARD HANDLING ---
             else:
                 url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_key}/{league_key_url}/scoreboard?dates={api_date}&limit=300"
-                urls_to_fetch.append((url, sheet_league_name))
+                urls_to_fetch.append((url, sheet_league_name, sport_key, league_key_url))
 
     logger.info(f"Fetching scores from {len(urls_to_fetch)} endpoints in parallel...")
 
     # Execute in parallel
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        future_to_league = {executor.submit(fetch_url, url, lname): lname for url, lname in urls_to_fetch}
+        future_to_league = {executor.submit(fetch_url, url, lname): (lname, skey, lkey) for url, lname, skey, lkey in urls_to_fetch}
         
         for future in concurrent.futures.as_completed(future_to_league):
-            league_name = future_to_league[future]
+            league_name, sport_key, league_key = future_to_league[future]
             try:
                 events = future.result()
                 for game in events:
                     if game['id'] not in processed_game_ids:
-                        game_obj = _parse_espn_event(game, league_name)
-                        if game_obj:
-                            all_scores.append(game_obj)
+                        game_objs = _parse_espn_event(game, league_name)
+                        if game_objs:
+                            if isinstance(game_objs, list):
+                                all_scores.extend(game_objs)
+                            else:
+                                all_scores.append(game_objs)
                             processed_game_ids.add(game['id'])
             except Exception as e:
                 logger.error(f"Error processing {league_name}: {e}")
@@ -113,31 +134,133 @@ def fetch_scores_for_date(date_str):
     return all_scores
 
 def _parse_espn_event(game_data, league_name):
-    """Parses a raw ESPN event JSON object into a simplified dictionary."""
+    """
+    Parses a raw ESPN event JSON object into a list of standardized dictionaries.
+    Handles Team vs Team (NFL, NBA, Soccer, Tennis, UFC) and Multi-Competitor (F1, Golf).
+    Returns a LIST of game objects (one event might have multiple competitions/fights).
+    """
     try:
-        comp = game_data["competitions"][0]
-        teams = comp["competitors"]
+        # Determine format based on league or structure
+        is_multi_competitor = league_name.lower() in ['f1', 'pga', 'racing', 'golf']
         
-        home_team_data = next((t for t in teams if t.get('homeAway') == 'home'), teams[0])
-        away_team_data = next((t for t in teams if t.get('homeAway') == 'away'), teams[1])
-
-        # Check if game is started/finished
+        # Check if event is started/finished
+        
+        # Check if event is started/finished
         status_state = game_data.get('status', {}).get('type', {}).get('state', '')
         if status_state == 'pre':
-            return None 
+            # print(f"Skipping {league_name} {game_data.get('id')} due to pre state")
+            return []
 
-        home_score = home_team_data.get("score")
-        away_score = away_team_data.get("score")
+        parsed_games = []
         
-        if home_score is None or away_score is None:
-            return None
+        # Iterate ALL competitions (fights/matches) in the event
+        competitions = game_data.get("competitions", [])
+        
+        # Handle Tennis Groupings (e.g. Singles/Doubles) if competitions is empty
+        if not competitions and "groupings" in game_data:
+            for group in game_data["groupings"]:
+                competitions.extend(group.get("competitions", []))
+        
+        for comp in competitions:
+            # --- Multi-Competitor Logic (F1, Golf) ---
+            if is_multi_competitor:
+                competitors = comp.get("competitors", [])
+                parsed_competitors = []
+                
+                for c in competitors:
+                    ath = c.get("athlete", {})
+                    name = ath.get("displayName") or ath.get("fullName") or c.get("name", "")
+                    rank = c.get("order")
+                    score = c.get("score")
+                    winner = c.get("winner", False)
+                    
+                    parsed_competitors.append({
+                        "name": name,
+                        "rank": rank,
+                        "score": score,
+                        "winner": winner
+                    })
+                
+                parsed_games.append({
+                    "league": league_name,
+                    "id": game_data.get("id", ""),
+                    "name": game_data.get("name", ""),
+                    "shortName": game_data.get("shortName", ""),
+                    "type": "multi_competitor",
+                    "competitors": parsed_competitors
+                })
 
-        return {
-            "league": league_name,
-            "team1": home_team_data["team"]["displayName"], 
-            "score1": home_score,
-            "team2": away_team_data["team"]["displayName"],
-            "score2": away_score
-        }
+            # --- Team/Head-to-Head Logic (NFL, NBA, Soccer, Tennis, UFC) ---
+            else:
+                teams = comp.get("competitors", [])
+                if len(teams) < 2: continue
+                
+                # Normalize Home/Away
+                home_team_data = next((t for t in teams if t.get('homeAway') == 'home'), teams[0])
+                away_team_data = next((t for t in teams if t.get('homeAway') == 'away'), teams[1])
+                
+                def get_name(c_data):
+                    if 'athlete' in c_data:
+                        return c_data['athlete'].get('displayName', '')
+                    if 'team' in c_data:
+                        return c_data['team'].get('displayName', '')
+                    if 'roster' in c_data:
+                        return c_data['roster'].get('displayName', '')
+                    return "Unknown"
+
+                try:
+                    team1_name = get_name(home_team_data)
+                    team2_name = get_name(away_team_data)
+                except:
+                    continue
+                
+                home_score = home_team_data.get("score")
+                away_score = away_team_data.get("score")
+                
+                team1_winner = home_team_data.get("winner", False)
+                team2_winner = away_team_data.get("winner", False)
+
+                # Relaxed check: Allow missing score if winner is present (Tennis/UFC)
+                if home_score is None and not (team1_winner or team2_winner):
+                     # print(f"Skipping {league_name} {game_data.get('id')} due to no score/winner")
+                     continue
+
+                parsed_games.append({
+                    "league": league_name,
+                    "id": game_data.get("id", ""), 
+                    "type": "matchup",
+                    "team1": team1_name, 
+                    "score1": home_score,
+                    "winner1": team1_winner,
+                    "team2": team2_name,
+                    "score2": away_score,
+                    "winner2": team2_winner,
+                    "team1_data": {
+                        "linescores": home_team_data.get("linescores", []),
+                        "statistics": home_team_data.get("statistics", []),
+                        "leaders": home_team_data.get("leaders", [])
+                    },
+                    "team2_data": {
+                        "linescores": away_team_data.get("linescores", []),
+                        "statistics": away_team_data.get("statistics", []),
+                        "leaders": away_team_data.get("leaders", [])
+                    }
+                })
+        
+        return parsed_games
+
     except (KeyError, IndexError, StopIteration):
-        return None
+        return []
+
+def fetch_boxscore(game_id, sport, league):
+    """
+    Fetches the detailed boxscore for a game.
+    """
+    url = f"https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/summary?event={game_id}"
+    try:
+        resp = requests.get(url, timeout=5, verify=False)
+        if resp.status_code == 200:
+            return resp.json().get('boxscore', {})
+    except:
+        pass
+    return {}

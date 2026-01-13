@@ -1,9 +1,11 @@
-# Sports Pick Data Formatting Guide
+### **Sports Pick Data Formatting Guide**
 
-## 1. Introduction
+### **1. Introduction**
+
 This document specifies the standard format for storing sports betting picks in the `picks_test` Supabase table. Adherence to this guide is mandatory to ensure data consistency, clarity, and parsability for all front-end, back-end, and analytical applications.
 
-## 2. Standardized `league` Column Values
+### **2. Standardized `league` Column Values**
+
 Use the following official uppercase abbreviations for the `league` column. This list also includes special values for handling multi-league parlays and unknown leagues.
 
 | `league` | Description |
@@ -26,7 +28,8 @@ Use the following official uppercase abbreviations for the `league` column. This
 | `Other` | Parlay with multiple leagues |
 | `Other` | League is not listed or is unknown |
 
-## 3. Standardized `type` Column Values
+### **3. Standardized `type` Column Values**
+
 The `type` column must use one of the following values to categorize the bet.
 
 | `type` | Description |
@@ -43,28 +46,34 @@ The `type` column must use one of the following values to categorize the bet.
 | `Future` | A long-term bet on a future event (e.g., Championship winner). |
 | `Unknown` | Used when the bet type cannot be determined from the source text. |
 
-## 4. `pick_value` Format Specification
+### **4. `pick_value` Format Specification**
+
 The format of the `pick_value` string is strictly determined by the bet `type`.
 
 **Key Formatting Rules:**
+
 * **Pick vs. Odds:** The `pick_value` string describes *what* is being bet on. The price/payout (e.g., -110, +150) must **only** be stored in the `odds_american` column.
 * **Number Formatting:** For all numerical values, omit trailing `.0` decimals. Use `48` instead of `48.0`, but retain decimals where necessary (e.g., `48.5`).
 * **Unknown Type Handling:** If the `type` is set to `Unknown`, the `pick_value` column must contain the **original, unformatted text** of the pick.
 
-#### `Moneyline`
+#### **`Moneyline`**
+
 * **Format:** `Team or Competitor Name ML`
 * **Example:** `Los Angeles Lakers ML`
 
-#### `Spread`
+#### **`Spread`**
+
 * **Format:** `Team Name [space] Point Spread`
 * **Example:** `Green Bay Packers -7.5`
 
-#### `Total`
+#### **`Total`**
+
 * **Format:** `Team A vs Team B Over/Under Number`
 * **Note:** The matchup `Team A vs Team B` is required context. The team on the right is typically the home team. If one team is unknown, use "Unknown".
 * **Example:** `Lakers vs Celtics Over 215.5`, `Rutgers vs Unknown Under 143.5`
 
-#### `Player Prop`
+#### **`Player Prop`**
+
 * **Format:** `Player Name: Stat Over/Under/Value`
 * **Standard Stat Abbreviations:**
   * **Basketball:** `Pts`, `Reb`, `Ast`, `Blk`, `Stl`, `3PM`, `Pts+Reb+Ast` (or `PRA`)
@@ -73,20 +82,24 @@ The format of the `pick_value` string is strictly determined by the bet `type`.
   * **Hockey:** `SOG`, `G`, `A`, `P`
 * **Example:** `LeBron James: Pts Over 25.5`
 
-#### `Team Prop`
+#### **`Team Prop`**
+
 * **Format:** `Team Name: Stat Over/Under/Value`
 * **Example:** `Dallas Cowboys: Total Points Over 27.5`
 
-#### `Game Prop`
+#### **`Game Prop`**
+
 * **Format:** `Description of Prop: Value`
 * **Example:** `Fight to go the Distance: No`
 
-#### `Period`
+#### **`Period`**
+
 * **Format:** `Period Identifier [Standard Bet Format]`
 * **Period Identifiers:** `1H`, `2H`, `1Q`, `2Q`, `3Q`, `4Q`, `P1`, `P2`, `P3`, `F5`, `F3`, `F1`, `Set 1`
 * **Example:** `1H NYK vs BOS Total Over 110.5`, `1Q Thunder -2`, `60 min Vegas ML`
 
-#### `Parlay` / `Teaser` (UPDATED FORMAT)
+#### **`Parlay` / `Teaser` (UPDATED FORMAT)**
+
 * **Format:** `(Leg 1 League) Details [space]/[space] (Leg 2 League) Details [space]/...`
 * **Rule:** Each leg is described using its standard format (e.g., `Team -X.5`, `Team ML`) and separated by `/`. The bet type (Spread, ML, etc.) is **not** included in the leg description.
 * **League Prefix:** Prefixing each leg with its league in parentheses (e.g., `(NFL)`) is **mandatory**.
@@ -98,11 +111,13 @@ The format of the `pick_value` string is strictly determined by the bet `type`.
 * **Teaser Example (6-Point Football Teaser):**
   * `(Teaser 6pt NFL) Kansas City Chiefs -2.5 / (Teaser 6pt NFL) Philadelphia Eagles +8.5`
 
-#### `Future`
+#### **`Future`**
+
 * **Format:** `Award or Event: Selection`
 * **Example:** `Super Bowl LIX Winner: Kansas City Chiefs`
 
-## 5. Master Example Table
+### **5. Master Example Table**
+
 The following table demonstrates the correct formatting for a wide variety of picks, including the new error-handling and parlay rules.
 
 | league | type | pick_value | odds_american |

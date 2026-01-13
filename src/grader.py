@@ -5,6 +5,7 @@ import requests
 import logging
 from collections import defaultdict
 from src.team_aliases import TEAM_ALIASES
+from src.score_fetcher import fetch_odds_for_date, ODDS_LEAGUE_MAPPING, SOCCER_LEAGUES
 
 LEAGUE_ALIASES = {
     "ncaaf": ["ncaaf", "cfb"],
@@ -741,7 +742,165 @@ def fetch_full_boxscore(game_id, league_name):
         # logging.error(f"Failed to fetch boxscore: {e}")
         return None
 
-def grade_picks(picks, scores):
+
+# =============================================================================
+# ESPN ODDS LOOKUP HELPERS
+# =============================================================================
+
+def _pick_has_blank_odds(pick_obj: dict) -> bool:
+    """
+    Checks if a pick has blank/missing odds that should be filled.
+    """
+    odds = pick_obj.get('odds')
+    if odds is None:
+        return True
+    if isinstance(odds, str) and odds.strip() == '':
+        return True
+    return False
+
+
+def _lookup_espn_odds_for_game(matched_game: dict, odds_data: dict, league: str) -> dict | None:
+    """
+    Finds ESPN odds for a matched game from pre-fetched odds data.
+    
+    Args:
+        matched_game: The matched game object from scores
+        odds_data: Dict from fetch_odds_for_date()
+        league: The league name
+        
+    Returns:
+        Odds dict or None if not found
+    """
+    if not matched_game or not odds_data:
+        return None
+    
+    game_id = matched_game.get('id')
+    league_lower = league.lower()
+    
+    # Try exact key match: "league:event_id:comp_id"
+    # For most sports, event_id == comp_id
+    key1 = f"{league_lower}:{game_id}:{game_id}"
+    if key1 in odds_data:
+        return odds_data[key1]
+    
+    # Try with just league prefix match (in case comp_id differs)
+    for key, odds in odds_data.items():
+        if key.startswith(f"{league_lower}:{game_id}:"):
+            return odds
+    
+    # Fallback: Match by team names
+    t1 = normalize_name(matched_game.get('team1', ''))
+    t2 = normalize_name(matched_game.get('team2', ''))
+    
+    for key, odds in odds_data.items():
+        if not key.startswith(f"{league_lower}:"):
+            continue
+        
+        home = normalize_name(odds.get('home_team', ''))
+        away = normalize_name(odds.get('away_team', ''))
+        
+        # Check if teams match (in either order since home/away might differ)
+        if (t1 in home or home in t1 or t1 in away or away in t1) and \
+           (t2 in home or home in t2 or t2 in away or away in t2):
+            return odds
+    
+    return None
+
+
+def _infer_odds_for_pick(bet_text: str, espn_odds: dict, matched_game: dict, league: str) -> int | None:
+    """
+    Infers the correct odds value for a pick based on bet type.
+    
+    Args:
+        bet_text: The pick description text
+        espn_odds: ESPN odds dict for the game
+        matched_game: The matched game object
+        league: The league name
+        
+    Returns:
+        The appropriate odds value (int) or None if can't determine
+    """
+    desc = bet_text.lower()
+    
+    # Determine which team/side was picked
+    t1_name = matched_game.get('team1', '')
+    t2_name = matched_game.get('team2', '')
+    
+    t1_mentioned = team_in_description(desc, t1_name.lower()) or \
+                   any(team_in_description(desc, k) for k, v in TEAM_ALIASES.items() 
+                       if any(a.lower() in t1_name.lower() for a in v))
+    t2_mentioned = team_in_description(desc, t2_name.lower()) or \
+                   any(team_in_description(desc, k) for k, v in TEAM_ALIASES.items() 
+                       if any(a.lower() in t2_name.lower() for a in v))
+    
+    # Simple word boundary check fallback
+    if not t1_mentioned and not t2_mentioned:
+        for word in t1_name.lower().split():
+            if len(word) > 2 and re.search(r'\b' + re.escape(word) + r'\b', desc):
+                t1_mentioned = True
+                break
+        for word in t2_name.lower().split():
+            if len(word) > 2 and re.search(r'\b' + re.escape(word) + r'\b', desc):
+                t2_mentioned = True
+                break
+    
+    # Determine if home or away was picked
+    # team1 = home, team2 = away in our game objects
+    picked_home = t1_mentioned and not t2_mentioned
+    picked_away = t2_mentioned and not t1_mentioned
+    
+    # --- 1. TOTALS (Over/Under) ---
+    if 'over' in desc or 'under' in desc or re.search(r'\bo/?u\b', desc):
+        is_over = 'over' in desc or 'o ' in desc or desc.startswith('o')
+        if 'under' in desc or 'u ' in desc:
+            is_over = False
+        
+        if is_over:
+            return espn_odds.get('over_odds')
+        else:
+            return espn_odds.get('under_odds')
+    
+    # --- 2. DRAW (Soccer) ---
+    if league.lower() in SOCCER_LEAGUES and ('draw' in desc or 'tie' in desc):
+        return espn_odds.get('moneyline_draw')
+    
+    # --- 3. MONEYLINE ---
+    is_ml = 'ml' in desc or 'moneyline' in desc
+    
+    # Also treat as ML if no spread number found
+    spread_match = re.search(r'[+-]\s*\d+\.?\d*', desc)
+    has_spread = spread_match is not None and 'ml' not in desc
+    
+    if is_ml or (not has_spread and (picked_home or picked_away)):
+        if picked_home:
+            return espn_odds.get('moneyline_home')
+        elif picked_away:
+            return espn_odds.get('moneyline_away')
+    
+    # --- 4. SPREAD ---
+    if has_spread:
+        if picked_home:
+            return espn_odds.get('spread_home_odds')
+        elif picked_away:
+            return espn_odds.get('spread_away_odds')
+    
+    # Couldn't determine - return None (don't fill)
+    return None
+
+
+def grade_picks(picks, scores, odds_data=None):
+    """
+    Grades picks against scores and optionally fills in missing odds from ESPN.
+    
+    Args:
+        picks: List of pick dictionaries
+        scores: List of game score dictionaries
+        odds_data: Optional dict from fetch_odds_for_date(). If None and picks have
+                   blank odds, will attempt to fetch odds automatically.
+    
+    Returns:
+        List of graded pick dictionaries with results and optionally filled odds
+    """
     graded_results = []
     
     # Optimization: Index scores by league first
@@ -834,6 +993,24 @@ def grade_picks(picks, scores):
                         )
 
                 pick_obj['result'] = result
+                
+                # --- ODDS LOOKUP: Fill in blank odds from ESPN ---
+                if _pick_has_blank_odds(pick_obj) and odds_data:
+                    espn_odds = _lookup_espn_odds_for_game(
+                        matched_game, 
+                        odds_data, 
+                        sport
+                    )
+                    if espn_odds:
+                        inferred_odds = _infer_odds_for_pick(
+                            bet_text, 
+                            espn_odds, 
+                            matched_game,
+                            sport
+                        )
+                        if inferred_odds is not None:
+                            pick_obj['odds'] = inferred_odds
+                
                 if matched_game.get('type') == 'multi_competitor':
                      pick_obj['score_summary'] = f"Event: {matched_game.get('name', 'Unknown')}"
                 else:

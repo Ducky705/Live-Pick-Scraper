@@ -19,6 +19,7 @@ LEAGUES_TO_SCRAPE = {
         "nba": "nba",
         "wnba": "wnba",
         "mens-college-basketball": "ncaab",
+        "womens-college-basketball": "wncaab",
     },
     "hockey": {
         "nhl": "nhl",
@@ -33,20 +34,32 @@ LEAGUES_TO_SCRAPE = {
     "soccer": {
         "eng.1": "epl",
         "usa.1": "mls",
-        "uefa.champions": "ucl"
+        "uefa.champions": "ucl",
+        "eng.2": "championship",
+        "esp.1": "laliga",
+        "ger.1": "bundesliga",
+        "ita.1": "seriea",
+        "fra.1": "ligue1",
+        "usa.nwsl": "nwsl",
     },
     "mma": {
         "ufc": "ufc"
     },
     "golf": {
-        "pga": "pga"
+        "pga": "pga",
+        "lpga": "lpga",
     },
     "racing": {
-        "f1": "f1"
+        "f1": "f1",
+        "nascar-premier": "nascar",
+        "irl": "indycar",
     },
     "tennis": {
         "atp": "atp",
         "wta": "wta"
+    },
+    "lacrosse": {
+        "pll": "pll"
     }
 }
 

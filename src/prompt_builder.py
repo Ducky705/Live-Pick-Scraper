@@ -16,16 +16,27 @@ Use the following official uppercase abbreviations for the `league` column.
 | `NBA` | National Basketball Assoc. |
 | `NCAAB` | NCAA Basketball |
 | `WNBA` | Women's National Basketball |
+| `WNCAAB` | Women's NCAA Basketball |
 | `MLB` | Major League Baseball |
 | `NHL` | National Hockey League |
 | `EPL` | English Premier League |
 | `MLS` | Major League Soccer |
 | `UCL` | UEFA Champions League |
+| `LALIGA` | Spanish La Liga |
+| `BUNDESLIGA` | German Bundesliga |
+| `SERIEA` | Italian Serie A |
+| `LIGUE1` | French Ligue 1 |
+| `NWSL` | National Women's Soccer League |
+| `CHAMPIONSHIP` | English Championship |
 | `UFC` | Ultimate Fighting Championship |
 | `PFL` | Professional Fighters League |
 | `TENNIS` | ATP / WTA Tours |
 | `PGA` | PGA Tour |
+| `LPGA` | LPGA Tour |
 | `F1` | Formula 1 |
+| `NASCAR` | NASCAR Cup Series |
+| `INDYCAR` | IndyCar Series |
+| `PLL` | Premier Lacrosse League |
 | `Other` | Parlay with multiple leagues |
 | `Other` | League is not listed or is unknown |
 

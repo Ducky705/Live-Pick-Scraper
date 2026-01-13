@@ -11,6 +11,15 @@ LEAGUE_ALIASES = {
     "cfb": ["ncaaf", "cfb"],
     "ncaab": ["ncaab", "mcb"],
     "mcb": ["ncaab", "mcb"],
+    "soccer": ["epl", "mls", "ucl", "championship", "laliga", "bundesliga", "seriea", "ligue1", "nwsl"],
+    "tennis": ["atp", "wta"],
+    "f1": ["f1"],
+    "nascar": ["nascar"],
+    "indycar": ["indycar"],
+    "pga": ["pga"],
+    "lpga": ["lpga"],
+    "pll": ["pll"],
+    "lacrosse": ["pll"],
 }
 
 def normalize_name(name):
@@ -49,7 +58,7 @@ def get_period_scores(game_obj, period_key):
     league_ctx = game_obj.get('league', '').lower()
     
     # Soccer Specific Period Mapping
-    if league_ctx in ['epl', 'mls', 'ucl', 'soccer', 'eng.1', 'usa.1', 'uefa.champions']:
+    if league_ctx in ['epl', 'mls', 'ucl', 'soccer', 'eng.1', 'usa.1', 'uefa.champions', 'championship', 'laliga', 'bundesliga', 'seriea', 'ligue1', 'nwsl']:
         if period_key == '1H': target_periods = [1]
         elif period_key == '2H': target_periods = [2]
     # Standard Mapping (Basketball/Football/etc)
@@ -517,7 +526,7 @@ def interpret_bet_result(bet_desc, team1_name, team2_name, score1, score2, sport
             if "draw" in desc or "tie" in desc: return "Win"
             
             # Soccer ML (3-way) is a LOSS on a draw
-            if sport in ['epl', 'mls', 'ucl', 'soccer']:
+            if sport in ['epl', 'mls', 'ucl', 'soccer', 'championship', 'laliga', 'bundesliga', 'seriea', 'ligue1', 'nwsl']:
                 return "Loss"
                 
             return "PUSH"
@@ -668,10 +677,28 @@ def fetch_full_boxscore(game_id, league_name):
         'nba': 'basketball/nba',
         'wnba': 'basketball/wnba',
         'ncaab': 'basketball/mens-college-basketball',
+        'wncaab': 'basketball/womens-college-basketball',
         'ncaaf': 'football/college-football',
         'nfl': 'football/nfl',
         'nhl': 'hockey/nhl',
-        'mlb': 'baseball/mlb'
+        'mlb': 'baseball/mlb',
+        'epl': 'soccer/eng.1',
+        'mls': 'soccer/usa.1',
+        'ucl': 'soccer/uefa.champions',
+        'championship': 'soccer/eng.2',
+        'laliga': 'soccer/esp.1',
+        'bundesliga': 'soccer/ger.1',
+        'seriea': 'soccer/ita.1',
+        'ligue1': 'soccer/fra.1',
+        'nwsl': 'soccer/usa.nwsl',
+        'atp': 'tennis/atp',
+        'wta': 'tennis/wta',
+        'f1': 'racing/f1',
+        'nascar': 'racing/nascar-premier',
+        'indycar': 'racing/irl',
+        'pga': 'golf/pga',
+        'lpga': 'golf/lpga',
+        'pll': 'lacrosse/pll'
     }
     
     path = SPORT_LEAGUE_MAP.get(league_name.lower())

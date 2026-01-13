@@ -15,7 +15,7 @@ import shutil
 
 # --- CONFIGURATION ---
 APP_NAME = "TelegramScraper"
-VERSION = "3.0.0"
+VERSION = "3.1.0"
 
 def get_project_root():
     """Get the project root directory (parent of scripts/)"""

@@ -54,6 +54,7 @@ _score_fetcher = None
 _grader = None
 _capper_matcher = None
 _supabase_funcs = None
+_auto_processor = None
 
 def get_tg_manager():
     global _tg_manager
@@ -117,6 +118,13 @@ def get_supabase_funcs():
             def get_or_create_capper_id(n): return None
             _supabase_funcs = (fetch_all_cappers, upload_picks, get_or_create_capper_id)
     return _supabase_funcs
+
+def get_auto_processor():
+    global _auto_processor
+    if _auto_processor is None:
+        from src.auto_processor import auto_select_messages, PostClassification
+        _auto_processor = (auto_select_messages, PostClassification)
+    return _auto_processor
 
 app = Flask(__name__)
 log = logging.getLogger('werkzeug')
@@ -211,14 +219,58 @@ def fetch_messages():
     data = request.json
     channel_ids = data.get('channel_id')
     target_date = data.get('date')
+    auto_classify = data.get('auto_classify', True)  # NEW: Enable auto-classification by default
     
     if target_date:
         threading.Thread(target=background_score_fetch, args=(target_date,), daemon=True).start()
 
     try:
         msgs = run_async(get_tg_manager().fetch_messages(channel_ids, target_date))
+        
+        # NEW: Auto-classify messages to set selection state
+        if auto_classify and msgs:
+            try:
+                auto_select_messages, _ = get_auto_processor()
+                set_progress(95, "Classifying posts...")
+                msgs = auto_select_messages(msgs, use_ai=False)  # Fast heuristic-only for now
+                set_progress(100, "Complete")
+            except Exception as e:
+                logging.error(f"[AutoClassify] Error: {e}")
+                # If classification fails, keep all selected (safe default)
+        
         return jsonify(msgs)
     except Exception as e: return jsonify({'error': str(e)}), 500
+
+@app.route('/api/classify_messages', methods=['POST'])
+def api_classify_messages():
+    """
+    NEW API: Classify messages using AI vision for accurate filtering.
+    Call this after fetch_messages for higher accuracy classification.
+    """
+    data = request.json
+    messages = data.get('messages', [])
+    use_ai = data.get('use_ai', True)
+    
+    if not messages:
+        return jsonify({'messages': []})
+    
+    try:
+        auto_select_messages, PostClassification = get_auto_processor()
+        classified = auto_select_messages(messages, use_ai=use_ai)
+        
+        # Count classifications for stats
+        stats = {}
+        for msg in classified:
+            cls = msg.get('classification', 'UNKNOWN')
+            stats[cls] = stats.get(cls, 0) + 1
+        
+        return jsonify({
+            'messages': classified,
+            'stats': stats
+        })
+    except Exception as e:
+        logging.error(f"[ClassifyMessages] Error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/detect_watermark', methods=['POST'])
 def api_detect_watermark():

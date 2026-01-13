@@ -185,9 +185,9 @@ Image shows: "[A11Bets] Eagles ML, Lakers -5" ... "[HammeringHank] Chiefs +3"
 OUTPUT:
 ```
 [
-  {"id": 123, "cn": "A11Bets", "p": "Eagles ML", ...},
-  {"id": 123, "cn": "A11Bets", "p": "Lakers -5", ...},
-  {"id": 123, "cn": "HammeringHank", "p": "Chiefs +3", ...}
+  {{"id": 123, "cn": "A11Bets", "p": "Eagles ML", ...}},
+  {{"id": 123, "cn": "A11Bets", "p": "Lakers -5", ...}},
+  {{"id": 123, "cn": "HammeringHank", "p": "Chiefs +3", ...}}
 ]
 ```
 

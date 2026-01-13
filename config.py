@@ -64,6 +64,6 @@ if not os.path.exists(TEMP_IMG_DIR):
 SESSION_FILE_PATH = os.path.join(EXEC_DIR, 'user_session')
 
 # --- AUTO-UPDATE CONFIGURATION ---
-APP_VERSION = "3.0.0"
+APP_VERSION = "3.1.0"
 GITHUB_REPO = "Ducky705/Telegram-Scraper"  # Format: "owner/repo"
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '')  # Set in .env file

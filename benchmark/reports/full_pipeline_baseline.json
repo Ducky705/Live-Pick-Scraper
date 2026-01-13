@@ -1,0 +1,98 @@
+{
+  "config": {
+    "model": "tngtech/deepseek-r1t2-chimera:free",
+    "use_vision_ocr": false,
+    "images_tested": 10
+  },
+  "metrics": {
+    "precision": 0.9705882352941176,
+    "recall": 0.9705882352941176,
+    "f1": 0.9705882352941176,
+    "total_tp": 33,
+    "total_fp": 1,
+    "total_fn": 1,
+    "avg_latency": 31.947382402420043
+  },
+  "per_image": {
+    "image_01.jpg": {
+      "expected": 4,
+      "extracted": 4,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "latency": 29.81322956085205
+    },
+    "image_02.jpg": {
+      "expected": 1,
+      "extracted": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency": 8.847607135772705
+    },
+    "image_03.jpg": {
+      "expected": 3,
+      "extracted": 3,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "latency": 38.399779081344604
+    },
+    "image_04.jpg": {
+      "expected": 7,
+      "extracted": 7,
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "latency": 26.1240873336792
+    },
+    "image_05.jpg": {
+      "expected": 6,
+      "extracted": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "latency": 34.65025782585144
+    },
+    "image_06.jpg": {
+      "expected": 4,
+      "extracted": 4,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "latency": 28.527793884277344
+    },
+    "image_07.jpg": {
+      "expected": 3,
+      "extracted": 3,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "latency": 48.13069820404053
+    },
+    "image_08.jpg": {
+      "expected": 1,
+      "extracted": 1,
+      "tp": 0,
+      "fp": 1,
+      "fn": 1,
+      "latency": 31.334116458892822
+    },
+    "image_09.jpg": {
+      "expected": 1,
+      "extracted": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency": 31.841593503952026
+    },
+    "image_10.jpg": {
+      "expected": 4,
+      "extracted": 4,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "latency": 41.80466103553772
+    }
+  }
+}

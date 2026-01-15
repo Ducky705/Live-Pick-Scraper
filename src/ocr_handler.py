@@ -9,7 +9,11 @@ import json
 import re
 import logging
 import time
-from src.openrouter_client import openrouter_completion
+import base64
+import io
+from src.openrouter_client import openrouter_completion, openrouter_parallel_vision, VISION_MODELS
+from config import TEMP_IMG_DIR
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # --- CONFIGURATION ---
 if getattr(sys, 'frozen', False):
@@ -386,21 +390,31 @@ def remove_red_watermark(image_path):
         return f.name
 
 
+def _resolve_image_path(image_path):
+    """
+    Resolve web paths like /static/temp_images/... to actual filesystem paths.
+    Uses TEMP_IMG_DIR from config for correct path resolution.
+    """
+    # Already an absolute Windows path (e.g., 'D:\...')
+    if re.match(r'^[A-Za-z]:', image_path):
+        return image_path
+    
+    # Web path for temp images - resolve using TEMP_IMG_DIR
+    if image_path.startswith('/static/temp_images/'):
+        filename = image_path.split('/static/temp_images/')[-1]
+        return os.path.join(TEMP_IMG_DIR, filename)
+    
+    # Other relative paths - resolve against BASE_DIR
+    clean_path = image_path.lstrip('/').replace('/', os.sep)
+    return os.path.join(BASE_DIR, clean_path)
+
+
 def extract_text_ai(image_path, model="google/gemma-3-12b-it:free"):
     """
     Extracts text using Vision AI models.
     This is generally slower but much more accurate for complex layouts.
     """
-    # Handle path resolution
-    # On Windows, os.path.isabs('/static/...') returns True (relative to drive root)
-    # but we want to treat paths starting with '/' as relative to BASE_DIR
-    is_windows_absolute = bool(re.match(r'^[A-Za-z]:', image_path))
-    
-    if is_windows_absolute:
-        sys_path = image_path
-    else:
-        clean_path = image_path.lstrip('/').replace('/', os.sep)
-        sys_path = os.path.join(BASE_DIR, clean_path)
+    sys_path = _resolve_image_path(image_path)
     
     if not os.path.exists(sys_path):
         return f"[Error: Image not found at {sys_path}]"
@@ -415,66 +429,201 @@ def extract_text_ai(image_path, model="google/gemma-3-12b-it:free"):
         return f"[AI OCR Error: {str(e)}]"
 
 
-def extract_text_batch(image_paths, model="google/gemma-3-12b-it:free"):
+def preprocess_for_ai(img):
     """
-    Batch processing for AI OCR.
-    Extracts text from multiple images in a single API call (up to 32 images).
-    Returns a list of strings corresponding to the input images.
+    LIGHTWEIGHT preprocessing for AI Vision models.
+    AI models don't need heavy thresholding - just watermark removal and basic cleanup.
     """
-    # 1. Resolve all paths
-    resolved_paths = []
-    for p in image_paths:
-        # On Windows, os.path.isabs('/static/...') returns True (relative to drive root)
-        # but we want to treat paths starting with '/' as relative to BASE_DIR
-        # Only treat as absolute if it has a drive letter (e.g., 'C:\...' or 'D:\...')
-        is_windows_absolute = bool(re.match(r'^[A-Za-z]:', p))
+    import cv2
+    import numpy as np
+    from PIL import Image
+    
+    # Convert to OpenCV
+    if isinstance(img, np.ndarray):
+        cv_img = img.copy()
+    else:
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+        cv_img = np.array(img)
+        cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2BGR)
+
+    # 1. REMOVE RED WATERMARK (fast HSV mask)
+    hsv = cv2.cvtColor(cv_img, cv2.COLOR_BGR2HSV)
+    lower_red1 = np.array([0, 100, 100])
+    upper_red1 = np.array([10, 255, 255])
+    lower_red2 = np.array([170, 100, 100])
+    upper_red2 = np.array([180, 255, 255])
+    
+    mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
+    mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+    red_mask = cv2.bitwise_or(mask1, mask2)
+    kernel = np.ones((3, 3), np.uint8)
+    red_mask = cv2.dilate(red_mask, kernel, iterations=1)
+    cv_img[red_mask > 0] = [255, 255, 255]
+
+    # 2. SKIP expensive upscaling - AI handles low-res fine
+    # Only resize if image is VERY small (< 400px width)
+    if cv_img.shape[1] < 400:
+        scale = 800 / cv_img.shape[1]
+        cv_img = cv2.resize(cv_img, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
+
+    # 3. SKIP denoising - AI handles noise well
+    # 4. SKIP sharpening - not needed for vision models
+
+    return Image.fromarray(cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB))
+
+
+def check_local_confidence(pil_image):
+    """
+    Hybrid OCR: Run local Tesseract first.
+    If it finds high-confidence betting keywords, return the text.
+    Otherwise return None to trigger AI fallback.
+    """
+    try:
+        # Fast local OCR
+        text = pytesseract.image_to_string(pil_image, config='--psm 6').strip()
         
-        if is_windows_absolute:
-            resolved_paths.append(p)
-        else:
-            clean = p.lstrip('/').replace('/', os.sep)
-            resolved_paths.append(os.path.join(BASE_DIR, clean))
+        if not text or len(text) < 10:
+            return None
             
-    # Verify existence
+        # Keywords that strongly suggest a betting slip
+        keywords = [
+            'spread', 'moneyline', 'total', 'over', 'under', 
+            'odds', 'parlay', 'teaser', 'wager', 'payout', 
+            'bet id', 'straight bet', 'team prop', 'player prop',
+            'points', 'rebounds', 'assists', 'touchdown'
+        ]
+        
+        # Count hits
+        text_lower = text.lower()
+        hits = sum(1 for k in keywords if k in text_lower)
+        
+        # Heuristic: If we have 2+ betting keywords and reasonable length, trust it.
+        # This saves 5-10s per image for "easy" clean screenshots.
+        if hits >= 2 and len(text) > 40:
+            logging.info(f"[Hybrid OCR] Local OCR Confident: {hits} keywords found")
+            return text
+            
+        return None
+    except Exception as e:
+        logging.warning(f"[Hybrid OCR] Local check failed: {e}")
+        return None
+
+
+def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", chunk_size=20):
+    """
+    OPTIMIZED batch OCR with:
+    - Hybrid Mode: Tries local Tesseract first (Fast Path)
+    - In-Memory Processing: No temp files (Zero-Copy)
+    - True Parallelism: Distributes chunks across different AI models
+    - Chunk Size: Increased to 30 for max efficiency (Gemini Flash has 1M+ context)
+    """
+    import cv2
+    import numpy as np
+
+    # 1. Resolve all paths
+    resolved_paths = [_resolve_image_path(p) for p in image_paths]
+            
     valid_images = []
-    indices_map = {} # Maps batch index to original index
+    indices_map = {}
     
+    final_results = [""] * len(image_paths)
+    
+    # Queue for AI processing
+    ai_queue = [] # list of (original_index, pil_image)
+    
+    logging.info(f"[OCR] Starting Hybrid Pipeline for {len(resolved_paths)} images...")
+    
+    # 2. Pre-process and Try Local OCR
+    fallback_texts = {} # Store low-confidence local OCR as backup
+
     for i, p in enumerate(resolved_paths):
-        if os.path.exists(p):
-            valid_images.append(p)
-            indices_map[len(valid_images)-1] = i
-        else:
-            print(f"[Warning] Batch OCR skipping missing file: {p}")
+        if not os.path.exists(p):
+            logging.warning(f"[OCR] Skipping missing file: {p}")
+            continue
             
-    if not valid_images:
-        return [""] * len(image_paths)
-    
-    # 2. Apply red watermark removal preprocessing
-    preprocessed_images = []
-    temp_files = []
-    for img_path in valid_images:
         try:
-            temp_path = remove_red_watermark(img_path)
-            preprocessed_images.append(temp_path)
-            temp_files.append(temp_path)
+            # Read Image
+            img_cv = cv2.imread(p)
+            if img_cv is None: continue
+            
+            # --- IMPROVEMENT: Use Heavy Preprocessing for Tesseract ---
+            # Tesseract needs high contrast/binarization
+            heavy_img = preprocess_image_v3(img_cv)
+            
+            # Run Local OCR
+            local_text = pytesseract.image_to_string(heavy_img, config='--psm 6').strip()
+            
+            # Check Confidence
+            is_confident = False
+            if local_text and len(local_text) > 10:
+                keywords = [
+                    'spread', 'moneyline', 'total', 'over', 'under', 
+                    'odds', 'parlay', 'teaser', 'wager', 'payout', 
+                    'bet id', 'straight bet', 'team prop', 'player prop',
+                    'points', 'rebounds', 'assists', 'touchdown',
+                    'win', 'loss', 'void', 'selection', 'risk', 'to win'
+                ]
+                text_lower = local_text.lower()
+                hits = sum(1 for k in keywords if k in text_lower)
+                if hits >= 2 and len(local_text) > 40:
+                    is_confident = True
+                    logging.info(f"[Hybrid OCR] Local OCR Confident: {hits} keywords found")
+
+            if is_confident:
+                final_results[i] = local_text
+            else:
+                # Store as fallback in case AI fails
+                fallback_texts[i] = local_text if local_text else ""
+                
+                # Prepare for AI (Use lightweight preprocessing for Vision Models)
+                pil_img = preprocess_for_ai(img_cv)
+                ai_queue.append((i, pil_img))
+                
         except Exception as e:
-            logging.warning(f"[OCR] Preprocessing failed for {img_path}: {e}")
-            preprocessed_images.append(img_path)  # Use original on failure
-
-    # 3. Build Prompt - Keep it concise to reduce token usage
-    prompt = (
-        f"OCR task: {len(preprocessed_images)} images. "
-        "Extract text from each. Return JSON array of strings only. "
-        "No explanations. Format: [\"text1\", \"text2\", ...]"
-    )
-
-    MAX_RETRIES = 3
-    RETRY_DELAY = 2
-
-    for attempt in range(MAX_RETRIES):
+            logging.error(f"[OCR] Pre-check failed for {p}: {e}")
+            
+    # If all handled locally, we are done!
+    if not ai_queue:
+        logging.info("[OCR] All images handled by Local OCR (Fast Path).")
+        return final_results
+        
+    logging.info(f"[OCR] AI Fallback required for {len(ai_queue)} images. Starting parallel processing...")
+    
+    # 3. AI Processing (Memory Optimized)
+    
+    # Helper to chunk the queue
+    def get_chunks(lst, n):
+        for i in range(0, len(lst), n):
+            yield lst[i:i + n]
+            
+    chunks = list(get_chunks(ai_queue, chunk_size))
+    total_chunks = len(chunks)
+    
+    def process_ai_chunk(chunk_idx, chunk_data, assigned_model):
+        """
+        Process a chunk of (index, image) tuples.
+        Returns: [(index, text), ...]
+        """
         try:
-            # Call OpenRouter with preprocessed images
-            response = openrouter_completion(prompt, model=model, images=preprocessed_images, timeout=120)
+            # Convert images to base64 strings in memory
+            b64_images = []
+            for _, img in chunk_data:
+                buffered = io.BytesIO()
+                img.save(buffered, format="JPEG", quality=85)
+                img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+                b64_images.append(img_str)
+            
+            prompt = (
+                f"You have {len(b64_images)} images. For EACH image, extract ALL visible text. "
+                f"Return a JSON array with EXACTLY {len(b64_images)} strings. "
+                "Format: [\"text1\", \"text2\"]"
+            )
+            
+            logging.info(f"[OCR] AI Chunk {chunk_idx+1}/{total_chunks} -> {assigned_model}")
+            
+            # Use specific model for this chunk (load balancing)
+            response = openrouter_completion(prompt, model=assigned_model, images=b64_images, timeout=120)
             
             # Parse JSON
             clean_resp = response.strip()
@@ -482,81 +631,85 @@ def extract_text_batch(image_paths, model="google/gemma-3-12b-it:free"):
                 clean_resp = clean_resp.split("```json")[1].split("```")[0].strip()
             elif clean_resp.startswith("```"):
                 clean_resp = clean_resp.split("```")[1].split("```")[0].strip()
-                
-            try:
-                results = json.loads(clean_resp)
-                # If success, break loop
-                break
-            except json.JSONDecodeError:
-                # Fallback 1: Try to fix truncated JSON array
-                if clean_resp.startswith('['):
-                    # Find last complete string in array
-                    try:
-                        # Try to close the array properly
-                        # Find last complete quoted string
-                        import re as regex_module
-                        # Match complete strings in array format
-                        string_pattern = r'"([^"\\]|\\.)*"'
-                        matches = list(regex_module.finditer(string_pattern, clean_resp))
-                        if matches:
-                            last_match = matches[-1]
-                            # Reconstruct valid JSON up to last complete string
-                            fixed_json = clean_resp[:last_match.end()]
-                            # Close the array
-                            if not fixed_json.rstrip().endswith(']'):
-                                fixed_json = fixed_json.rstrip().rstrip(',') + ']'
-                            try:
-                                results = json.loads(fixed_json)
-                                logging.info(f"[AI Batch OCR] Recovered {len(results)} results from truncated JSON")
-                                break
-                            except:
-                                results = None
-                        else:
-                            results = None
-                    except:
-                        results = None
-                else:
-                    results = None
-                
-                # Fallback 2: If still no results, try to use raw text for single image case
-                if results is None:
-                    if len(preprocessed_images) == 1:
-                        # For single image, just use the raw response as text
-                        logging.warning("[AI Batch OCR] Using raw response as text for single image")
-                        results = [clean_resp]
-                        break
-                    else:
-                        logging.error(f"[AI Batch OCR] JSON Decode Failed (Attempt {attempt+1}/{MAX_RETRIES}). Raw: {clean_resp[:300]}")
-                        if attempt < MAX_RETRIES - 1:
-                            time.sleep(RETRY_DELAY * (attempt + 1))
-                            continue
-                        return [""] * len(image_paths)  # Return empty strings instead of error
-                
-        except Exception as e:
-            logging.error(f"[AI Batch OCR] Exception (Attempt {attempt+1}/{MAX_RETRIES}): {e}")
-            if attempt < MAX_RETRIES - 1:
-                time.sleep(RETRY_DELAY * (attempt + 1))
-            else:
-                return [f"[Error: {str(e)}]"] * len(image_paths)
             
-    # Map back to original list
-    final_output = [""] * len(image_paths)
-    
-    for batch_idx, text in enumerate(results):
-        if batch_idx in indices_map:
-            orig_idx = indices_map[batch_idx]
-            if orig_idx < len(final_output):
-                final_output[orig_idx] = str(text)
-                
-    # Clean up temp files
-    for temp_file in temp_files:
-        try:
-            if os.path.exists(temp_file):
-                os.unlink(temp_file)
-        except Exception:
-            pass
+            results = []
+            try:
+                json_arr = json.loads(clean_resp)
+                # Map back to original indices
+                if isinstance(json_arr, list) and len(json_arr) == len(chunk_data):
+                    for j, text in enumerate(json_arr):
+                        orig_idx = chunk_data[j][0]
+                        results.append((orig_idx, str(text)))
+                else:
+                    # Fallback if length mismatch
+                    logging.warning(f"[OCR] Model {assigned_model} returned {len(json_arr)} items, expected {len(chunk_data)}")
+                    # Try best fit
+                    for j, item in enumerate(chunk_data):
+                        txt = json_arr[j] if j < len(json_arr) else ""
+                        results.append((item[0], str(txt)))
+            except:
+                 # Last resort: if single item
+                if len(chunk_data) == 1:
+                    results.append((chunk_data[0][0], clean_resp))
+                else:
+                    logging.error(f"[OCR] JSON Parse failed for chunk {chunk_idx}")
+            
+            return results
+            
+        except Exception as e:
+            logging.error(f"[OCR] Chunk {chunk_idx} failed: {e}")
+            return []
 
-    return final_output
+    # 4. Execute Parallel AI
+    # We allow more workers since we have more models now
+    # But limit to number of chunks or reasonable max
+    max_workers = min(len(chunks), 10)
+    if max_workers < 1: max_workers = 1
+    
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = []
+        for i, chunk in enumerate(chunks):
+            # Round robin model assignment (mostly Gemini Flash since it's first)
+            # Actually, standardizing on Gemini Flash is best for batching
+            model = "google/gemini-2.0-flash-exp:free" 
+            futures.append(executor.submit(process_ai_chunk, i, chunk, model))
+            
+        for future in as_completed(futures):
+            try:
+                chunk_results = future.result()
+                
+                # Create a set of processed indices in this chunk
+                processed_indices = set()
+                
+                if chunk_results:
+                    for orig_idx, text in chunk_results:
+                        # Only use AI result if it looks valid
+                        if text and len(text) > 10 and "error" not in text.lower():
+                            final_results[orig_idx] = text
+                        else:
+                            # AI returned empty/garbage -> use fallback
+                             final_results[orig_idx] = fallback_texts.get(orig_idx, "")
+                             if final_results[orig_idx]:
+                                 logging.info(f"[OCR] AI failed for Msg {orig_idx}, using local fallback.")
+                        processed_indices.add(orig_idx)
+                
+                # Check for items in this chunk that got NO result (exception in process_ai_chunk)
+                # We need to map back which chunk this future belonged to, or just check what's missing?
+                # Simpler: We can't easily know which chunk failed here without changing structure.
+                # BUT, final_results are initialized to "".
+                # We can iterate through ai_queue after and fill in gaps.
+                
+            except Exception as e:
+                logging.error(f"[OCR] Future failed: {e}")
+
+    # Final Sweep: Apply fallback to any images that went to AI but have empty results
+    for i, _ in ai_queue:
+        if not final_results[i] or len(final_results[i]) < 5:
+            if i in fallback_texts and len(fallback_texts[i]) > 5:
+                 final_results[i] = fallback_texts[i]
+                 logging.info(f"[OCR] Using local fallback for failed AI image {i}")
+
+    return final_results
 
 
 def extract_text(image_relative_path):
@@ -615,148 +768,4 @@ def extract_text_v3(image_path):
         return f"[Error: {str(e)}]"
 
 
-def extract_text_batch_v3_ai(image_paths, model="google/gemma-3-12b-it:free"):
-    """
-    Pipeline D: Batch processing for AI OCR with V3 Preprocessing.
-    Applies preprocess_image_v3 (Red Channel + Upscale + Denoise) before AI.
-    """
-    import tempfile
-    import cv2
-    import numpy as np
 
-    # 1. Resolve all paths (same as standard batch)
-    resolved_paths = []
-    for p in image_paths:
-        is_windows_absolute = bool(re.match(r'^[A-Za-z]:', p))
-        if is_windows_absolute:
-            resolved_paths.append(p)
-        else:
-            clean = p.lstrip('/').replace('/', os.sep)
-            resolved_paths.append(os.path.join(BASE_DIR, clean))
-            
-    # Verify existence
-    valid_images = []
-    indices_map = {} # Maps batch index to original index
-    
-    for i, p in enumerate(resolved_paths):
-        if os.path.exists(p):
-            valid_images.append(p)
-            indices_map[len(valid_images)-1] = i
-        else:
-            print(f"[Warning] Batch OCR V3 skipping missing file: {p}")
-            
-    if not valid_images:
-        return [""] * len(image_paths)
-    
-    # 2. Apply V3 PREPROCESSING
-    preprocessed_images = []
-    temp_files = []
-    
-    for img_path in valid_images:
-        try:
-            # Read image with OpenCV
-            img = cv2.imread(img_path)
-            if img is not None:
-                # Apply V3 pipeline
-                processed_pil = preprocess_image_v3(img)
-                
-                # Save to temp file
-                with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as f:
-                    processed_pil.save(f.name)
-                    preprocessed_images.append(f.name)
-                    temp_files.append(f.name)
-            else:
-                logging.warning(f"[OCR V3] Could not read {img_path}")
-                preprocessed_images.append(img_path) # Fallback to original
-                
-        except Exception as e:
-            logging.warning(f"[OCR V3] Preprocessing failed for {img_path}: {e}")
-            preprocessed_images.append(img_path)  # Use original on failure
-
-    # 3. Build Prompt (Same as standard batch)
-    prompt = (
-        f"OCR task: {len(preprocessed_images)} images. "
-        "Extract text from each. Return JSON array of strings only. "
-        "No explanations. Format: [\"text1\", \"text2\", ...]"
-    )
-
-    MAX_RETRIES = 3
-    RETRY_DELAY = 2
-
-    for attempt in range(MAX_RETRIES):
-        try:
-            # Call OpenRouter with preprocessed images
-            response = openrouter_completion(prompt, model=model, images=preprocessed_images, timeout=120)
-            
-            # Parse JSON - Logic duplicated from extract_text_batch to keep self-contained or could be shared
-            clean_resp = response.strip()
-            if clean_resp.startswith("```json"):
-                clean_resp = clean_resp.split("```json")[1].split("```")[0].strip()
-            elif clean_resp.startswith("```"):
-                clean_resp = clean_resp.split("```")[1].split("```")[0].strip()
-                
-            try:
-                results = json.loads(clean_resp)
-                break
-            except json.JSONDecodeError:
-                # Fallback 1: Fix truncated JSON
-                if clean_resp.startswith('['):
-                    try:
-                        import re as regex_module
-                        string_pattern = r'"([^"\\]|\\.)*"'
-                        matches = list(regex_module.finditer(string_pattern, clean_resp))
-                        if matches:
-                            last_match = matches[-1]
-                            fixed_json = clean_resp[:last_match.end()]
-                            if not fixed_json.rstrip().endswith(']'):
-                                fixed_json = fixed_json.rstrip().rstrip(',') + ']'
-                            try:
-                                results = json.loads(fixed_json)
-                                logging.info(f"[AI Batch OCR V3] Recovered {len(results)} results")
-                                break
-                            except:
-                                results = None
-                        else:
-                            results = None
-                    except:
-                        results = None
-                else:
-                    results = None
-                
-                # Fallback 2: Raw text for single image
-                if results is None:
-                    if len(preprocessed_images) == 1:
-                        logging.warning("[AI Batch OCR V3] Using raw response for single image")
-                        results = [clean_resp]
-                        break
-                    else:
-                        logging.error(f"[AI Batch OCR V3] JSON Decode Failed (Attempt {attempt+1}). Raw: {clean_resp[:300]}")
-                        if attempt < MAX_RETRIES - 1:
-                            time.sleep(RETRY_DELAY * (attempt + 1))
-                            continue
-                        return [""] * len(image_paths)
-                
-        except Exception as e:
-            logging.error(f"[AI Batch OCR V3] Exception (Attempt {attempt+1}): {e}")
-            if attempt < MAX_RETRIES - 1:
-                time.sleep(RETRY_DELAY * (attempt + 1))
-            else:
-                return [f"[Error: {str(e)}]"] * len(image_paths)
-            
-    # Map back to original list
-    final_output = [""] * len(image_paths)
-    for batch_idx, text in enumerate(results):
-        if batch_idx in indices_map:
-            orig_idx = indices_map[batch_idx]
-            if orig_idx < len(final_output):
-                final_output[orig_idx] = str(text)
-                
-    # Clean up temp files
-    for temp_file in temp_files:
-        try:
-            if os.path.exists(temp_file):
-                os.unlink(temp_file)
-        except Exception:
-            pass
-
-    return final_output

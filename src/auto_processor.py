@@ -207,9 +207,10 @@ def classify_messages_with_ai(messages: List[Dict[str, Any]],
 
 def _batch_classify_with_ai(messages: List[Dict[str, Any]], 
                             model: str,
-                            batch_size: int = 5) -> Dict[str, Dict]:
+                            batch_size: int = 20) -> Dict[str, Dict]:
     """
     Internal function to classify messages with images using VLM.
+    OPTIMIZED: Increased batch size to 20 for efficient AI usage.
     """
     results = {}
     
@@ -248,28 +249,19 @@ def _batch_classify_with_ai(messages: List[Dict[str, Any]],
         if not images_to_send:
             continue
         
-        # Build classification prompt
-        prompt = """You are a Sports Betting Content Classifier. Analyze each image and classify it.
-
-CLASSIFICATIONS:
-- PICK: Contains specific betting picks (Team + Line/Odds). SELECT this.
-- PROMO: Advertisements, "Join VIP", subscription offers. DESELECT this.
-- RECAP: Yesterday's results with ✅/❌, "we went 5-0". DESELECT this.
-- DATA: Spreadsheets, model outputs with 10+ rows, raw projections. DESELECT this.
-
-CONTEXT FOR IMAGES:
+        # Build classification prompt - MINIFIED for efficiency
+        prompt = """Classify sports betting images.
+CODES: PICK (Valid Bet), PROMO (Ad/VIP), RECAP (Results), DATA (Spreadsheet).
+CONTEXT:
 """ + "\n".join(context_parts) + """
-
-OUTPUT: Return a JSON object mapping message IDs to classifications:
-{
-  "123": {"class": "PICK", "reason": "Shows Lakers -5 bet slip"},
-  "124": {"class": "RECAP", "reason": "Shows checkmarks for yesterday's results"}
-}
-
-Return ONLY valid JSON, no markdown."""
+OUTPUT: Single-line JSON Object {"msg_id":{"class":"CODE","reason":"short reason"}}
+Example: {"123":{"class":"PICK","reason":"Lakers -5 slip"}}"""
 
         try:
-            response = openrouter_completion(prompt, model=model, images=images_to_send, timeout=60)
+            # Enforce fast model for classification
+            # Using standard completion (which now uses our optimized sequential logic if parallel called, but here we call direct)
+            # We want the FASTEST model for this.
+            response = openrouter_completion(prompt, model="google/gemini-2.0-flash-exp:free", images=images_to_send, timeout=60)
             
             # Parse response
             cleaned = response.strip()
@@ -297,7 +289,7 @@ Return ONLY valid JSON, no markdown."""
                     results[msg.get('id')] = {
                         "class": PostClassification.PICK,
                         "confidence": 0.6,
-                        "reason": "Not classified by AI, defaulting to PICK",
+                        "reason": "Default",
                         "method": "ai_default"
                     }
                     
@@ -308,7 +300,7 @@ Return ONLY valid JSON, no markdown."""
                 results[msg.get('id')] = {
                     "class": PostClassification.PICK,
                     "confidence": 0.5,
-                    "reason": "JSON parse failed",
+                    "reason": "JSON error",
                     "method": "fallback"
                 }
         except Exception as e:
@@ -317,7 +309,7 @@ Return ONLY valid JSON, no markdown."""
                 results[msg.get('id')] = {
                     "class": PostClassification.PICK,
                     "confidence": 0.5,
-                    "reason": f"Error: {str(e)[:50]}",
+                    "reason": "Error",
                     "method": "fallback"
                 }
     

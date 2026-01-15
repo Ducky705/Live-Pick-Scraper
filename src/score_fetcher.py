@@ -85,12 +85,30 @@ def fetch_url(url, league_name, retries=2):
             time.sleep(0.2)
     return []
 
-def fetch_scores_for_date(date_str):
+def fetch_scores_for_date(date_str, requested_leagues=None, current_scores=None):
     """
     Scrapes scores for all configured leagues for a given date string.
     Uses ThreadPoolExecutor for parallel fetching.
+    
+    Args:
+        date_str: "YYYY-MM-DD" or "MM/DD/YYYY"
+        requested_leagues: Optional list/set of league names (e.g. ['nba', 'nfl']) to filter by.
+                           If None, fetches all.
+        current_scores: Optional list of existing game objects. If provided, we skip fetching
+                        leagues that are already present in this list.
     """
     
+    # Normalize requested leagues
+    if requested_leagues:
+        requested_leagues = {l.lower() for l in requested_leagues}
+    
+    # Determine which leagues we already have
+    existing_leagues = set()
+    if current_scores:
+        for game in current_scores:
+            if 'league' in game:
+                existing_leagues.add(game['league'].lower())
+                
     # Standardize date format for API
     try:
         if "-" in date_str:
@@ -102,15 +120,27 @@ def fetch_scores_for_date(date_str):
         logger.error(f"Invalid date format: {date_str}")
         return []
 
-    all_scores = []
-    processed_game_ids = set()
+    # Start with existing scores if provided, or empty list
+    all_scores = list(current_scores) if current_scores else []
+    processed_game_ids = {g['id'] for g in all_scores}
     
     urls_to_fetch = []
 
     # Prepare URL list
     for sport_key, leagues in LEAGUES_TO_SCRAPE.items():
         for league_key_url, sheet_league_name in leagues.items():
+            norm_league = sheet_league_name.lower()
             
+            # Optimization: Skip if we already have this league
+            if norm_league in existing_leagues:
+                # Unless explicitly requested? No, implicit lazy loading.
+                # If user wants to force refresh, they should pass current_scores=None
+                continue
+
+            # Filter by requested leagues if provided
+            if requested_leagues and norm_league not in requested_leagues:
+                continue
+
             # --- SPECIAL HANDLING FOR NCAAB ---
             if league_key_url == "mens-college-basketball":
                 for group_id in NCAAB_CONFERENCE_GROUPS:

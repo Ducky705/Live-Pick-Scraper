@@ -22,7 +22,7 @@ from threading import Lock # ADDED: Thread safety
 import webview # Requires: pip install pywebview
 from flask import Flask, render_template, request, jsonify
 from concurrent.futures import ThreadPoolExecutor
-from src.openrouter_client import openrouter_completion
+from src.openrouter_client import openrouter_completion, openrouter_parallel_completion
 from src.utils import clean_text_for_ai
 
 # ADDED: Production server import
@@ -315,44 +315,32 @@ def api_generate_prompt():
             for img_path in images_to_process:
                 all_ocr_tasks.append((i, img_path))
 
-    # Process in Batches of 8 (reduced from 32 to avoid token limits with Vision AI)
-    BATCH_SIZE = 8
+    # Process ALL images in one call - extract_text_batch handles chunking internally
     if all_ocr_tasks:
         from src.ocr_handler import extract_text_batch
         
-        total_batches = (len(all_ocr_tasks) + BATCH_SIZE - 1) // BATCH_SIZE
+        set_progress(50, f"Starting OCR: {len(all_ocr_tasks)} images...")
         
-        # Initial progress update
-        set_progress(50, f"Starting OCR: {len(all_ocr_tasks)} images in {total_batches} batches...")
+        # Extract all paths
+        all_paths = [t[1] for t in all_ocr_tasks]
         
-        for b_idx in range(total_batches):
-            start = b_idx * BATCH_SIZE
-            end = start + BATCH_SIZE
-            batch_tasks = all_ocr_tasks[start:end]
+        try:
+            # Single call - internal parallelization handles chunks across models
+            results = extract_text_batch(all_paths)
             
-            # Extract paths
-            batch_paths = [t[1] for t in batch_tasks]
-            
-            try:
-                # Call Batch OCR
-                results = extract_text_batch(batch_paths)
-                
-                # Assign results back
-                for t_idx, text_result in enumerate(results):
-                    original_msg_idx = batch_tasks[t_idx][0]
-                    if text_result and not text_result.startswith("[Error"):
-                        cleaned = clean_text_for_ai(text_result)
-                        selected_messages[original_msg_idx]['ocr_texts'].append(cleaned)
-                    else:
-                        logging.error(f"OCR Error for Msg {original_msg_idx}: {text_result}")
-                        
-            except Exception as e:
-                 logging.error(f"Batch {b_idx} Failed: {e}")
-            
-            # Update progress AFTER batch completes (50% to 95% range = 45% for OCR)
-            completed = b_idx + 1
-            progress_pct = 50 + int((completed / total_batches) * 45)
-            set_progress(progress_pct, f"OCR Complete: {completed}/{total_batches} batches ({completed * BATCH_SIZE}/{len(all_ocr_tasks)} images)")
+            # Assign results back to messages
+            for t_idx, text_result in enumerate(results):
+                original_msg_idx = all_ocr_tasks[t_idx][0]
+                if text_result and not text_result.startswith("[Error"):
+                    cleaned = clean_text_for_ai(text_result)
+                    selected_messages[original_msg_idx]['ocr_texts'].append(cleaned)
+                else:
+                    logging.error(f"OCR Error for Msg {original_msg_idx}: {text_result}")
+                    
+        except Exception as e:
+            logging.error(f"OCR Failed: {e}")
+        
+        set_progress(95, f"OCR Complete: {len(all_ocr_tasks)} images")
 
 
     set_progress(95, "Generating Prompts...")
@@ -404,45 +392,68 @@ import difflib
 def smart_merge_odds(picks):
     """
     Fuzzy matches picks to propagate odds from those that have them to those that don't.
+    OPTIMIZED: Buckets by League/Type to avoid N^2 complexity.
     """
-    # 1. Separate sources (have odds) and targets (missing odds)
-    sources = [p for p in picks if p.get('odds') is not None]
-    targets = [p for p in picks if p.get('odds') is None]
+    from collections import defaultdict
+    import difflib
     
-    if not sources or not targets:
+    # 1. Separate sources (have odds) and targets (missing odds)
+    # Bucket by (league, type) tuple
+    sources_map = defaultdict(list)
+    targets = []
+    
+    for p in picks:
+        # Check if odds exist and are not empty/None
+        has_odds = p.get('odds') is not None and str(p.get('odds')).strip() != ""
+        
+        # Normalize keys
+        league = str(p.get('league', '')).lower().strip()
+        p_type = str(p.get('type', '')).lower().strip()
+        key = (league, p_type)
+        
+        if has_odds:
+            sources_map[key].append(p)
+        else:
+            targets.append(p)
+    
+    if not targets or not sources_map:
         return picks
         
     for target in targets:
+        league = str(target.get('league', '')).lower().strip()
+        p_type = str(target.get('type', '')).lower().strip()
+        key = (league, p_type)
+        
+        # Only compare against relevant sources
+        relevant_sources = sources_map.get(key, [])
+        if not relevant_sources:
+            continue
+            
+        target_norm = target.get('pick', '').lower().strip()
+        if not target_norm: continue
+        
         best_match = None
         best_ratio = 0.0
         
-        target_norm = target.get('pick', '').lower().strip()
-        target_type = target.get('type')
-        target_league = target.get('league')
-        
-        for source in sources:
-            # STRICT filters first: Must match League and Type
-            if source.get('league') != target_league or source.get('type') != target_type:
-                continue
-                
+        for source in relevant_sources:
             source_norm = source.get('pick', '').lower().strip()
             
-            # Simple substring check (e.g. "Seahawks ML" in "Seattle Seahawks ML -120")
+            # Fast Substring Check (O(1) relative to string length)
             if target_norm in source_norm or source_norm in target_norm:
                 ratio = 1.0
             else:
-                # Fuzzy match
+                # Expensive Fuzzy Match (only if substring fails)
                 ratio = difflib.SequenceMatcher(None, target_norm, source_norm).ratio()
             
             # Update best match if this is better and passes threshold
             if ratio > 0.85 and ratio > best_ratio:
                 best_ratio = ratio
                 best_match = source
+                if ratio == 1.0: break # Perfect match, stop searching
         
         # Apply the odds if we found a good match
         if best_match:
             target['odds'] = best_match['odds']
-            # logging.info(f"Fuzzy Matched Odds: {target['pick']} -> {best_match['pick']} ({best_match['odds']})")
             
     return picks
 
@@ -451,13 +462,19 @@ def api_ai_fill():
     data = request.json
     prompt = data.get('prompt')
     model = data.get('model', 'mistralai/devstral-2512:free') # Default to a free one
+    use_parallel = data.get('use_parallel', True) # Default to True for speed
     
     if not prompt: 
         return jsonify({'error': 'No prompt provided'}), 400
         
     try:
-        logging.info(f"Calling OpenRouter with model: {model}")
-        result_json_str = openrouter_completion(prompt, model)
+        if use_parallel:
+            logging.info(f"Calling OpenRouter PARALLEL execution")
+            result_json_str = openrouter_parallel_completion(prompt)
+        else:
+            logging.info(f"Calling OpenRouter with model: {model}")
+            result_json_str = openrouter_completion(prompt, model)
+            
         # Parse it here to ensure it's valid JSON before sending to frontend? 
         # Or just send string. Frontend expects Object or Array.
         # openrouter_completion returns a string (the content).
@@ -704,16 +721,35 @@ def api_grade_picks():
     target_date = data.get('date')
     if not picks: return jsonify([])
     
-    # 1. Fetch Scores (Cache or Live)
+    # 1. Fetch Scores (Smart Lazy Loading)
     if target_date in _score_cache:
-        scores = _score_cache[target_date]
+        current_scores = _score_cache[target_date]
     else:
-        try:
-            scores = get_score_fetcher()(target_date)
+        current_scores = []
+        
+    # Analyze requested leagues to avoid over-fetching
+    requested_leagues = set()
+    for p in picks:
+        if p.get('league'):
+            requested_leagues.add(str(p.get('league')).lower())
+            
+    # Always include 'nba', 'nfl' as defaults if list is small? No, strict lazy load.
+    # If list is empty (parsing failed), we might fetch nothing.
+    # Safe default: if empty, fetch major US sports.
+    if not requested_leagues:
+        requested_leagues = {'nba', 'nfl', 'ncaab', 'ncaaf', 'mlb', 'nhl'}
+        
+    try:
+        # Pass existing cache so we only fetch missing leagues
+        scores = get_score_fetcher()(target_date, requested_leagues=list(requested_leagues), current_scores=current_scores)
+        
+        # Update cache lock
+        with score_cache_lock:
             _score_cache[target_date] = scores
-        except Exception as e:
-            print(f"Score fetch failed: {e}")
-            return jsonify({'error': 'Score fetch failed'}), 500
+            
+    except Exception as e:
+        print(f"Score fetch failed: {e}")
+        return jsonify({'error': 'Score fetch failed'}), 500
             
     # 2. Traditional Grading (Regex/Fuzzy)
     graded_data = get_grader()(picks, scores)
@@ -794,7 +830,7 @@ def api_get_cappers():
 
 @app.route('/api/export_csv', methods=['POST'])
 def api_export_csv():
-    """Server-side CSV export - saves directly to Desktop for pywebview compatibility"""
+    """Server-side CSV export - saves directly to Downloads folder for pywebview compatibility"""
     import csv
     from pathlib import Path
     
@@ -805,11 +841,11 @@ def api_export_csv():
         return jsonify({'success': False, 'error': 'No picks to export'})
     
     try:
-        # Save to Desktop
-        desktop = Path.home() / "Desktop"
+        # Save to Downloads folder
+        downloads = Path.home() / "Downloads"
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"picks_export_{timestamp}.csv"
-        filepath = desktop / filename
+        filepath = downloads / filename
         
         with open(filepath, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)

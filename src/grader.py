@@ -332,7 +332,7 @@ def interpret_bet_result(bet_desc, team1_name, team2_name, score1, score2, sport
 
     # --- 1. TOTALS (Over/Under) ---
     # TENNIS EXCEPTION: Move Tennis logic BEFORE generic totals to capture "Games"
-    if sport in ['atp', 'wta', 'tennis'] and (("over" in desc or "under" in desc) or re.search(r'\bo/?u\b', desc)):
+    if sport in ['atp', 'wta', 'tennis'] and (re.search(r'\bover\b', desc) or re.search(r'\bunder\b', desc) or re.search(r'\bo/?u\b', desc)):
         total_match = re.search(r'(?:over|under|o/u)\s*(\d+(\.\d+)?)', desc) or \
                       re.search(r'(\d+(\.\d+)?)\s*(?:over|under|o/u)', desc)
         
@@ -364,7 +364,7 @@ def interpret_bet_result(bet_desc, team1_name, team2_name, score1, score2, sport
                     else: return "Win" if total_games < line else "Loss"
             except: pass
 
-    if "over" in desc or "under" in desc or re.search(r'\bo/?u\b', desc):
+    if re.search(r'\bover\b', desc) or re.search(r'\bunder\b', desc) or re.search(r'\bo/?u\b', desc):
         total_match = re.search(r'(?:over|under|o/u)\s*(\d+(\.\d+)?)', desc) or \
                       re.search(r'(\d+(\.\d+)?)\s*(?:over|under|o/u)', desc) or \
                       re.search(r'\b(\d{2,}(\.\d+)?)\b', desc)
@@ -378,8 +378,8 @@ def interpret_bet_result(bet_desc, team1_name, team2_name, score1, score2, sport
             return "Unknown (Line Parse Error)"
 
         total_score = s1 + s2
-        is_over = "over" in desc or "o " in desc or desc.startswith("o")
-        if "under" in desc or "u " in desc:
+        is_over = re.search(r'\bover\b', desc) or "o " in desc or desc.startswith("o")
+        if re.search(r'\bunder\b', desc) or "u " in desc:
             is_over = False
         
         if total_score == line: return "PUSH"
@@ -393,7 +393,7 @@ def interpret_bet_result(bet_desc, team1_name, team2_name, score1, score2, sport
     # Linescores in Tennis are Games per Set.
     # If line > 6.0, we sum all linescores.
     
-    if sport in ['atp', 'wta', 'tennis'] and (("over" in desc or "under" in desc) or re.search(r'\bo/?u\b', desc)):
+    if sport in ['atp', 'wta', 'tennis'] and (re.search(r'\bover\b', desc) or re.search(r'\bunder\b', desc) or re.search(r'\bo/?u\b', desc)):
         # Extract line again if not found above (re-use match if possible but simpler to re-parse specific to this block)
         total_match = re.search(r'(?:over|under|o/u)\s*(\d+(\.\d+)?)', desc) or \
                       re.search(r'(\d+(\.\d+)?)\s*(?:over|under|o/u)', desc)
@@ -459,6 +459,21 @@ def interpret_bet_result(bet_desc, team1_name, team2_name, score1, score2, sport
              team1_mentioned = True
          if check_direct(team2_name, desc): 
              team2_mentioned = True
+
+    # C. Fallback: Check for individual words (length > 2) matching
+    if not team1_mentioned and not team2_mentioned:
+        # Check Team 1 words
+        for word in team1_name.lower().split():
+            if len(word) > 2 and re.search(r'\b' + re.escape(word) + r'\b', desc):
+                team1_mentioned = True
+                break
+        
+        # Check Team 2 words
+        for word in team2_name.lower().split():
+            if len(word) > 2 and re.search(r'\b' + re.escape(word) + r'\b', desc):
+                # If T1 already matched via word, checks if T2 ALSO matches (Ambiguity)
+                team2_mentioned = True 
+                break
 
     picked_team_score = 0
     opponent_score = 0
@@ -608,6 +623,13 @@ def _find_matching_game(bet_text, potential_games):
                 league = game.get('league', '').lower()
                 if league in ['atp', 'wta', 'ufc', 'f1', 'pga', 'racing', 'golf', 'mma', 'tennis']:
                     if last_name_match(t1_name, bet_text): t1_match = True
+            
+            # General Word Match Fallback
+            if not t1_match:
+                for word in t1_name.lower().split():
+                    if len(word) > 2 and re.search(r'\b' + re.escape(word) + r'\b', desc_norm):
+                            t1_match = True
+                            break
 
         if not t2_match:
             # Re-use strict_match from above
@@ -618,6 +640,13 @@ def _find_matching_game(bet_text, potential_games):
                 league = game.get('league', '').lower()
                 if league in ['atp', 'wta', 'ufc', 'f1', 'pga', 'racing', 'golf', 'mma', 'tennis']:
                     if last_name_match(t2_name, bet_text): t2_match = True
+
+            # General Word Match Fallback
+            if not t2_match:
+                for word in t2_name.lower().split():
+                    if len(word) > 2 and re.search(r'\b' + re.escape(word) + r'\b', desc_norm):
+                            t2_match = True
+                            break
 
         # 3. Player Matching (if no team matched yet)
         # Only checks if NEITHER matched, but we want to score it.
@@ -903,7 +932,8 @@ def grade_picks(picks, scores, odds_data=None):
     """
     graded_results = []
     
-    # Optimization: Index scores by league first
+    # 1. OPTIMIZATION: PRE-INDEX SCORES BY LEAGUE FOR O(1) LOOKUP
+    # This prevents iterating through 300+ games for every single pick.
     scores_by_league = defaultdict(list)
     for g in scores:
         scores_by_league[g.get('league', '').lower()].append(g)
@@ -919,12 +949,14 @@ def grade_picks(picks, scores, odds_data=None):
         pick_obj = pick.copy()
         
         try:
-            bet_text = str(pick.get('pick', ''))
-            sport = str(pick.get('league', '')).lower()
+            # key mapping for abbreviated keys (p=pick, lg=league, etc)
+            bet_text = str(pick.get('pick') or pick.get('p') or '')
+            sport = str(pick.get('league') or pick.get('lg') or '').lower()
             
             matched_game = None
             
             # --- Attempt 1: Primary League ---
+            # Lookup relevant games instantly instead of filtering list
             target_leagues = LEAGUE_ALIASES.get(sport, [sport])
             potential_games = []
             for tl in target_leagues:

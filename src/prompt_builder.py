@@ -16,27 +16,16 @@ Use the following official uppercase abbreviations for the `league` column.
 | `NBA` | National Basketball Assoc. |
 | `NCAAB` | NCAA Basketball |
 | `WNBA` | Women's National Basketball |
-| `WNCAAB` | Women's NCAA Basketball |
 | `MLB` | Major League Baseball |
 | `NHL` | National Hockey League |
 | `EPL` | English Premier League |
 | `MLS` | Major League Soccer |
 | `UCL` | UEFA Champions League |
-| `LALIGA` | Spanish La Liga |
-| `BUNDESLIGA` | German Bundesliga |
-| `SERIEA` | Italian Serie A |
-| `LIGUE1` | French Ligue 1 |
-| `NWSL` | National Women's Soccer League |
-| `CHAMPIONSHIP` | English Championship |
 | `UFC` | Ultimate Fighting Championship |
 | `PFL` | Professional Fighters League |
 | `TENNIS` | ATP / WTA Tours |
 | `PGA` | PGA Tour |
-| `LPGA` | LPGA Tour |
 | `F1` | Formula 1 |
-| `NASCAR` | NASCAR Cup Series |
-| `INDYCAR` | IndyCar Series |
-| `PLL` | Premier Lacrosse League |
 | `Other` | Parlay with multiple leagues |
 | `Other` | League is not listed or is unknown |
 
@@ -56,8 +45,9 @@ Use the following official uppercase abbreviations for the `league` column.
 | `Unknown` | Used when the bet type cannot be determined from the source text. |
 
 ### **3. `pick_value` Format Specification**
+
 **Key Formatting Rules:**
-* **Pick vs. Odds:** The `pick_value` string describes *what* is being bet on. The price/payout (e.g., -110, +150) must **only** be stored in the `odds_american` column.
+* **Pick vs. Odds:** The `pick_value` string describes *what* is being bet on. The price/payout (e.g., -110, +150) must **only** be stored in the `odds` column. NEVER include odds in the pick!
 * **Number Formatting:** For all numerical values, omit trailing `.0` decimals. Use `48` instead of `48.0`, but retain decimals where necessary (e.g., `48.5`).
 * **Unknown Type Handling:** If the `type` is set to `Unknown`, the `pick_value` column must contain the **original, unformatted text** of the pick.
 
@@ -75,7 +65,7 @@ Use the following official uppercase abbreviations for the `league` column.
 * **Example:** `Lakers vs Celtics Over 215.5`, `Rutgers vs Unknown Under 143.5`
 
 #### `Player Prop`
-* **Format:** `Player Name: Stat Over/Under/Value`
+* **Format:** `Player Name: Stat Over/Under Value`
 * **Standard Stat Abbreviations:**
   * **Basketball:** `Pts`, `Reb`, `Ast`, `Blk`, `Stl`, `3PM`, `Pts+Reb+Ast` (or `PRA`)
   * **Football:** `PassYds`, `RushYds`, `RecYds`, `PassTD`, `Rec`, `Comp`
@@ -84,7 +74,7 @@ Use the following official uppercase abbreviations for the `league` column.
 * **Example:** `LeBron James: Pts Over 25.5`
 
 #### `Team Prop`
-* **Format:** `Team Name: Stat Over/Under/Value`
+* **Format:** `Team Name: Stat Over/Under Value`
 * **Example:** `Dallas Cowboys: Total Points Over 27.5`
 
 #### `Game Prop`
@@ -94,19 +84,35 @@ Use the following official uppercase abbreviations for the `league` column.
 #### `Period`
 * **Format:** `Period Identifier [Standard Bet Format]`
 * **Period Identifiers:** `1H`, `2H`, `1Q`, `2Q`, `3Q`, `4Q`, `P1`, `P2`, `P3`, `F5`, `F3`, `F1`, `Set 1`
-* **Example:** `1H NYK vs BOS Total Over 110.5`, `1Q Thunder -2`, `60 min Vegas ML`
+* **CRITICAL DETECTION RULE:** If pick text contains ANY of these phrases, type MUST be `Period`:
+  * "First Half", "Second Half", "1st Half", "2nd Half", "1H", "2H"
+  * "1Q", "2Q", "3Q", "4Q", "First Quarter", etc.
+  * "First 5", "F5", "First 3", "F3" (baseball)
+  * "P1", "P2", "P3" (hockey periods)
+* **Examples:** 
+  * `1H NYK vs BOS Total Over 110.5`
+  * `1Q Thunder -2`
+  * `1H George Mason -6` (NOT "George Mason First Half -6")
 
-#### `Parlay` / `Teaser` (UPDATED FORMAT)
+#### `Tennis` (TENNIS League - Special Rules)
+Tennis picks use different formats than team sports:
+* **Moneyline:** `Player Name ML` - Example: `Tommy Paul ML`, `Sinner ML`
+* **Set Spread:** `Player Name +/-X.X sets` - Example: `Giron +1.5 sets`, `Paul -1.5 sets`
+* **Game Spread (Match):** `Player Name +/-X.X games` - Example: `Rune +3.5 games`
+* **Game Spread (Set):** `Player Name Set X +/-X.X games` - Example: `Mpetshi S1 +1.5 games`
+* **Total Games:** `Player A vs Player B Over/Under X.X games` - Example: `Paul vs Rune Over 22.5 games`
+* **Set Winner:** `Player Name to win Set X` - Example: `Sinner to win Set 1`
+
+#### `Parlay` / `Teaser`
 * **Format:** `(Leg 1 League) Details / (Leg 2 League) Details / ...`
-* **Rule:** Each leg is described using its standard format (e.g., `Team -X.5`, `Team ML`) and separated by `/`. The bet type (Spread, ML, etc.) is **not** included in the leg description.
+* **Rule:** Each leg is described using its standard format (e.g., `Team -X.5`, `Team ML`) and separated by ` / `. The bet type (Spread, ML, etc.) is **not** included in the leg description.
 * **League Prefix:** Prefixing each leg with its league in parentheses (e.g., `(NFL)`) is **mandatory**.
 * **Teasers:** For Teasers, include the teaser points and the league: `(Teaser 6pt NFL) ...`
 * **Parlay Examples:**
   * `(NFL) Dallas Cowboys -10.5 / (NFL) San Francisco 49ers ML`
   * `(NFL) Jalen Hurts: RushYds Over 48.5 / (NFL) A.J. Brown: RecYds Over 80.5`
   * `(NFL) Cowboys -10.5 / (NBA) Lakers ML`
-* **Teaser Example (6-Point Football Teaser):**
-  * `(Teaser 6pt NFL) Kansas City Chiefs -2.5 / (Teaser 6pt NFL) Philadelphia Eagles +8.5`
+* **Teaser Example:** `(Teaser 6pt NFL) Kansas City Chiefs -2.5 / (Teaser 6pt NFL) Philadelphia Eagles +8.5`
 
 #### `Future`
 * **Format:** `Award or Event: Selection`
@@ -119,12 +125,17 @@ Use the following official uppercase abbreviations for the `league` column.
 | `NBA` | Moneyline | `Los Angeles Lakers ML` | 135 |
 | `NBA` | Player Prop | `Nikola Jokic: Pts+Reb+Ast Over 50.5` | -115 |
 | `NFL` | Period | `1H KC vs PHI Total Over 24` | -110 |
+| `NCAAB` | Period | `1H George Mason -6` | -110 |
 | `NFL` | Future | `NFC Champion: San Francisco 49ers` | 250 |
 | `Other` | Parlay | `(NFL) Cowboys -10.5 / (NBA) Lakers ML` | 264 |
 | `NCAAB` | Parlay | `(NCAAB) Nebraska ML / (NCAAB) Drake ML` | 122 |
 | `NBA` | Teaser | `(Teaser 4pt NBA) Celtics -3.5 / (Teaser 4pt NBA) Nuggets +5.5` | -120 |
-| `Other` | `Unknown` | `Tigers First Score Prop` | 150 |
+| `Other` | Unknown | `Tigers First Score Prop` | 150 |
 | `NCAAB` | Total | `Rutgers vs Unknown Under 143.5` | -110 |
+| `TENNIS` | Moneyline | `Tommy Paul ML` | -150 |
+| `TENNIS` | Spread | `Giron +1.5 sets` | -110 |
+| `TENNIS` | Spread | `Mpetshi S1 +1.5 games` | -120 |
+| `TENNIS` | Total | `Paul vs Rune Over 22.5 games` | -115 |
 """
 
 
@@ -162,7 +173,21 @@ You are an expert sports betting data parser. Extract betting picks.
 
 ### **CRITICAL INSTRUCTIONS**
 1.  **Capper:** Look in [T] (Text) first, then [O] (OCR).
-2.  **Odds:** Extract American odds (e.g., -110). If NOT visible, set "od": null. DO NOT GUESS.
+2.  **Odds MUST be SEPARATE from Pick:** 
+    - Extract American odds (e.g., -110, +150) into the \"od\" field ONLY.
+    - The \"p\" field must NOT contain odds - only the team/player and line.
+    - Example: \"Lakers -5 -110\" → \"p\": \"Lakers -5\", \"od\": -110
+    - Example: \"Chiefs ML +155\" → \"p\": \"Chiefs ML\", \"od\": 155
+    - If odds are NOT visible, set \"od\": null. DO NOT GUESS.
+3.  **Fragmented OCR:** OCR text may be split. Reconstruct context.
+    - "Lakers" (line 1) + "-5" (line 2) -> Pick: "Lakers -5"
+    - "NBA" (line 1) + "Celtics ML" (line 2) -> League: "NBA", Pick: "Celtics ML"
+    - Ignore isolated noise like "17:31", "5G", "LTE".
+
+### **FORBIDDEN PHRASES (NEGATIVE CONSTRAINTS)**
+- **NEVER** output "DM for picks" or "DM @cappersfree" as a pick. If no pick is found, output nothing for that message.
+- **NEVER** output marketing text like "Join the VIP", "Click Here", "Promo".
+- **NEVER** output "Unknown" as a pick text.
 
 ### **MULTI-CAPPER DETECTION (CRITICAL!)**
 **SITUATION:** A single image/message may show picks from MULTIPLE DIFFERENT CAPPERS (e.g., a screenshot mosaic or merged images).
@@ -171,7 +196,6 @@ You are an expert sports betting data parser. Extract betting picks.
 - Visual separations (lines, borders, background color changes)
 - Different formatting styles or emoji usage
 - Different profile pictures or avatars
-- Time/date stamps that differ
 
 **REQUIRED ACTION:**
 1. **DO NOT MERGE** picks from different cappers into one entry
@@ -179,6 +203,7 @@ You are an expert sports betting data parser. Extract betting picks.
 3. If "A11Bets" has 3 picks and "HammeringHank" has 2 picks in ONE image, output 5 SEPARATE pick objects:
    - 3 objects with "cn": "A11Bets"
    - 2 objects with "cn": "HammeringHank"
+4. **DO NOT** output a comma-separated list of names in "cn" (e.g., "A11Bets, TTW" is INVALID). Pick ONE name per object.
 
 **EXAMPLE:**
 Image shows: "[A11Bets] Eagles ML, Lakers -5" ... "[HammeringHank] Chiefs +3"
@@ -198,7 +223,12 @@ These are NOT valid picks - format them correctly or skip:
 - **Sportsbook names**: "Hard Rock", "DraftKings" → These are where to bet, not what to bet.
 - **Generic descriptions**: "Player Passing Yards O/U" → Include the player name AND number.
 
-- **Generic descriptions**: "Player Passing Yards O/U" → Include the player name AND number.
+### **BANKROLL ADVICE IS NOT A PICK - SKIP THESE:**
+These are betting strategy suggestions, NOT actual picks. DO NOT extract these:
+- "Whale play = 4%", "Straight bet = 2%", "Max bet = 5%"
+- "Bankroll management", "Unit sizing", "Bet 2% of bankroll"
+- "Risk 1u to win 2u", "Flat betting strategy"
+- Any text that talks about percentages of bankroll or betting strategy without a specific team/player
 
 **IF A TEXT SAYS "80K MAIN PLAY" or "VIP", IGNORE IT UNLESS THERE IS A TEAM AND LINE.**
 - "80K" = UNITS (u: 80000). It is NOT the pick.
@@ -220,22 +250,26 @@ Example: "HammeringHank CFB" = cn is "HammeringHank"
 {get_master_formatting_guide()}
 
 ### **REQUIRED OUTPUT FORMAT (JSON OBJECT)**
-Respond ONLY with a JSON Object with a "picks" key containing the array using SHORT KEYS to save tokens:
-- "id": message_id
-- "cn": capper_name
-- "lg": league (Standardized)
-- "ty": type
-- "p": pick
-- "od": odds (int or null)
-- "u": units (float, default 1.0)
-- "u": units (float, default 1.0)
+Respond ONLY with a JSON Object with a \"picks\" key containing the array using SHORT KEYS to save tokens:
+- \"id\": message_id
+- \"cn\": capper_name
+- \"lg\": league (Standardized)
+- \"ty\": type
+- \"p\": pick (NO ODDS HERE! Just team/player and line)
+- \"od\": odds (int or null - THIS is where odds go!)
+- \"u\": units (float, default 1.0)
 
-Example:
+**CORRECT Example (odds separated):**
 {{
-  "picks": [
-      {{ "id": 12345, "cn": "KingCap", "lg": "NBA", "ty": "Player Prop", "p": "LeBron James: Pts Over 25.5", "od": -110, "u": 1.0 }}
+  \"picks\": [
+      {{ \"id\": 12345, \"cn\": \"KingCap\", \"lg\": \"NBA\", \"ty\": \"Spread\", \"p\": \"Lakers -5\", \"od\": -110, \"u\": 1.0 }},
+      {{ \"id\": 12346, \"cn\": \"BetMaster\", \"lg\": \"NFL\", \"ty\": \"Moneyline\", \"p\": \"Chiefs ML\", \"od\": 155, \"u\": 2.0 }},
+      {{ \"id\": 12347, \"cn\": \"PropKing\", \"lg\": \"NBA\", \"ty\": \"Player Prop\", \"p\": \"LeBron James: Pts Over 25.5\", \"od\": -115, \"u\": 1.0 }}
   ]
 }}
+
+**WRONG Example (DO NOT DO THIS - odds in pick!):**
+{{ \"p\": \"Lakers -5 -110\" }} ← WRONG! Odds should be in \"od\" field!
 
 ### **RAW DATA**
 {full_raw_data}
@@ -447,6 +481,7 @@ Use BOTH the image visual data and the provided context text to extract the pick
 - **MARKETING HEADERS**: "80K MAIN PLAY", "VIP WHALE PLAY", "MAX BET" -> IGNORE.
 - **Sportsbook names**: "Hard Rock", "DraftKings" -> IGNORE.
 - **Watermarks**: "@cappersfree" is NOT the capper. Look for the real name.
+- **Typos**: If you see "MI" or "Money Line", convert it to "ML" (e.g. "Lightning MI" -> "Lightning ML").
 
 {get_master_formatting_guide()}
 
@@ -458,7 +493,6 @@ Respond ONLY with a JSON Object with a "picks" key containing the array using SH
 - "ty": type
 - "p": pick
 - "od": odds (int or null)
-- "u": units (float, default 1.0)
 - "u": units (float, default 1.0)
 
 Example:

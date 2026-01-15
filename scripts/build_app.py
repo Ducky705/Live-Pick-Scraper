@@ -58,9 +58,9 @@ def build():
     env_path = os.path.join(project_root, '.env')
     if os.path.exists(env_path):
         args.append(f'--add-data={env_path}{sep}.')
-        print("✅ Bundling .env file for API keys")
+        print("[OK] Bundling .env file for API keys")
     else:
-        print("⚠️  WARNING: .env file not found - API keys will not work in built app!")
+        print("[WARN] .env file not found - API keys will not work in built app!")
 
     # 3. OS Specific Binaries & Icons
     bin_win_path = os.path.join(project_root, 'bin', 'win')

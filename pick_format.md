@@ -96,7 +96,32 @@ The format of the `pick_value` string is strictly determined by the bet `type`.
 
 * **Format:** `Period Identifier [Standard Bet Format]`
 * **Period Identifiers:** `1H`, `2H`, `1Q`, `2Q`, `3Q`, `4Q`, `P1`, `P2`, `P3`, `F5`, `F3`, `F1`, `Set 1`
-* **Example:** `1H NYK vs BOS Total Over 110.5`, `1Q Thunder -2`, `60 min Vegas ML`
+* **CRITICAL DETECTION RULE:** If pick text contains ANY of these phrases, type MUST be `Period`:
+  * "First Half", "Second Half", "1st Half", "2nd Half", "1H", "2H"
+  * "1Q", "2Q", "3Q", "4Q", "First Quarter", etc.
+  * "First 5", "F5", "First 3", "F3" (baseball)
+  * "P1", "P2", "P3" (hockey periods)
+* **Examples:** 
+  * `1H NYK vs BOS Total Over 110.5`
+  * `1Q Thunder -2`
+  * `1H George Mason -6` (NOT "George Mason First Half -6")
+
+#### **`Tennis` (TENNIS League - Special Rules)**
+
+Tennis picks use different formats than team sports:
+
+* **Moneyline:** `Player Name ML`
+  * Example: `Tommy Paul ML`, `Sinner ML`
+* **Set Spread:** `Player Name +/-X.X sets`
+  * Example: `Giron +1.5 sets`, `Paul -1.5 sets`
+* **Game Spread (Match):** `Player Name +/-X.X games`
+  * Example: `Rune +3.5 games`
+* **Game Spread (Set):** `Player Name Set X +/-X.X games`
+  * Example: `Mpetshi S1 +1.5 games`
+* **Total Games:** `Player A vs Player B Over/Under X.X games`
+  * Example: `Paul vs Rune Over 22.5 games`
+* **Set Winner:** `Player Name to win Set X`
+  * Example: `Sinner to win Set 1`
 
 #### **`Parlay` / `Teaser` (UPDATED FORMAT)**
 
@@ -126,9 +151,14 @@ The following table demonstrates the correct formatting for a wide variety of pi
 | `NBA` | Moneyline | `Los Angeles Lakers ML` | 135 |
 | `NBA` | Player Prop | `Nikola Jokic: Pts+Reb+Ast Over 50.5` | -115 |
 | `NFL` | Period | `1H KC vs PHI Total Over 24` | -110 |
+| `NCAAB` | Period | `1H George Mason -6` | -110 |
 | `NFL` | Future | `NFC Champion: San Francisco 49ers` | 250 |
 | `Other` | Parlay | `(NFL) Cowboys -10.5 / (NBA) Lakers ML` | 264 |
 | `NCAAB` | Parlay | `(NCAAB) Nebraska ML / (NCAAB) Drake ML` | 122 |
 | `NBA` | Teaser | `(Teaser 4pt NBA) Celtics -3.5 / (Teaser 4pt NBA) Nuggets +5.5` | -120 |
 | `Other` | **`Unknown`** | `Tigers First Score Prop` | 150 |
 | `NCAAB` | Total | `Rutgers vs Unknown Under 143.5` | -110 |
+| `TENNIS` | Moneyline | `Tommy Paul ML` | -150 |
+| `TENNIS` | Spread | `Giron +1.5 sets` | -110 |
+| `TENNIS` | Spread | `Mpetshi S1 +1.5 games` | -120 |
+| `TENNIS` | Total | `Paul vs Rune Over 22.5 games` | -115 |

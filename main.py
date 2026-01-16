@@ -482,26 +482,41 @@ def api_ai_fill():
         try:
             result_obj = json.loads(result_json_str)
             logging.info(f"[AI Fill] Raw AI Response Keys: {result_obj.keys() if isinstance(result_obj, dict) else 'Array'}")
+            logging.info(f"[AI Fill] Raw Response Length: {len(result_json_str)} chars")
             logging.info(f"[AI Fill] Raw Response Preview: {result_json_str[:1000]}")
             # Unwrap if it's the new container format
             if isinstance(result_obj, dict) and 'picks' in result_obj:
                 raw_picks = result_obj['picks']
-                logging.info(f"[AI Fill] Number of raw picks from AI: {len(raw_picks)}")
-                # Remap Short Keys to Long Keys
-                remapped = []
-                for p in raw_picks:
-                    remapped.append({
-                        "message_id": p.get("id"),
-                        "capper_name": p.get("cn"),
-                        "league": p.get("lg"),
-                        "type": p.get("ty"),
-                        "pick": p.get("p"),
-                        "odds": p.get("od"),
-                        "units": p.get("u", 1.0)
-                    })
-                
-                # Apply Fuzzy Odds Matching
-                result_obj = smart_merge_odds(remapped)
+            elif isinstance(result_obj, list):
+                raw_picks = result_obj
+            else:
+                raw_picks = []
+            
+            logging.info(f"[AI Fill] Number of raw picks from AI: {len(raw_picks)}")
+            logging.info(f"[AI Fill] Unique cappers found: {set(p.get('cn', 'Unknown') for p in raw_picks)}")
+            logging.info(f"[AI Fill] Raw picks preview: {raw_picks[:5]}")
+            logging.info(f"[Validate] Starting validation with {len(raw_picks)} picks")
+            
+            # Remap Short Keys to Long Keys
+            remapped = []
+            for p in raw_picks:
+                remapped.append({
+                    "message_id": p.get("id"),
+                    "capper_name": p.get("cn"),
+                    "league": p.get("lg"),
+                    "type": p.get("ty"),
+                    "pick": p.get("p"),
+                    "odds": p.get("od"),
+                    "units": p.get("u", 1.0)
+                })
+            
+            # Apply Fuzzy Odds Matching
+            result_obj = smart_merge_odds(remapped)
+            
+            # DEBUG: Track pick flow
+            logging.info(f"[AI Fill] Final picks after processing: {len(result_obj)}")
+            unique_ids = set(p.get('message_id', 0) for p in result_obj)
+            logging.info(f"[AI Fill] Unique message IDs with picks: {len(unique_ids)}")
             
             return jsonify({'result': result_obj})
         except json.JSONDecodeError as e:
@@ -540,8 +555,14 @@ def api_validate_picks():
     ]
     
     import re
-    # Pattern: Valid pick should have a number (spread/total) or "ML"
-    has_number_or_ml = re.compile(r'(-?\d+\.?\d*|ML|ml|Over|Under|over|under)', re.IGNORECASE)
+    # Pattern: Valid pick should have a number (spread/total/prop value), "ML", OR period markers (1H, 2H, 1Q, 2Q, 3Q, 4Q, F5)
+    # Also accept common misspellings: Ov instead of Over, Un instead of Under
+    has_number_or_ml = re.compile(r'(-?\d+\.?\d*|ML|ml|Over|Under|over|under|Ov|Un|1H|2H|1Q|2Q|3Q|4Q|F5)', re.IGNORECASE)
+    
+    initial_count = len(picks)
+    logging.info(f"[Validate] Starting validation with {initial_count} picks")
+    
+    validation_rejections = {"no_number_or_ml": 0, "unknown_capper": 0, "unknown_league": 0, "invalid_pick": 0, "parlay_fail": 0, "parlay_mismatch": 0, "noise": 0}
     
     for pick in picks:
         capper = pick.get('capper_name', 'Unknown')
@@ -563,6 +584,7 @@ def api_validate_picks():
         # If it looks like a parlay but isn't marked as one -> FAIL
         potential_parlay_fail = has_slash and not is_parlay
         
+        # If ANY failure condition is true, mark as failed
         is_failed = (
             is_unknown_capper or 
             is_unknown_league or 
@@ -570,24 +592,28 @@ def api_validate_picks():
             potential_parlay_fail
         )
         
-            # Check for noise patterns in pick
-        if not is_failed and pick_value:
-            for noise in noise_patterns:
-                if noise in pick_lower:
-                    is_failed = True
+        # DEBUG: Log WHY each pick failed validation
+        if is_failed:
+            if is_unknown_capper:
+                validation_rejections["unknown_capper"] += 1
+            if is_unknown_league:
+                validation_rejections["unknown_league"] += 1
+            if is_invalid_pick:
+                validation_rejections["invalid_pick"] += 1
+            if potential_parlay_fail:
+                validation_rejections["parlay_fail"] += 1
+            
+            # Check for noise patterns
+            is_noise = False
+            for b in blacklist:
+                if b in pick_lower:
+                    is_noise = True
+                    validation_rejections["noise"] += 1
                     break
             
-            # Check if pick lacks proper formatting (no number or ML)
-            if not is_failed and not has_number_or_ml.search(pick_value):
-                is_failed = True
-
-        # FORCE REVISION FOR ULTIMATE AI FEATURES
-        # If the pick is "Clean" but lacks our new rich data (chem/tags), fail it to force the review prompt.
-        if not is_failed:
-            if not pick.get('chem') or not pick.get('tags'):
-                is_failed = True
-        
-        if is_failed:
+            if is_noise:
+                final_pick = "Unknown (Manual Review)" if is_noise else p_val
+            
             msg_id = pick.get('message_id')
             failed_items.append({
                 "message_id": msg_id,
@@ -596,8 +622,12 @@ def api_validate_picks():
                 "pick": pick_value,
                 "original_text": msg_map.get(msg_id, "")[:1500] 
             })
-
-    if not failed_items: 
+    
+    # DEBUG: Log validation stats
+    logging.info(f"[Validate] Validation rejections - no_number_or_ml: {validation_rejections['no_number_or_ml']}, unknown_capper: {validation_rejections['unknown_capper']}, unknown_league: {validation_rejections['unknown_league']}, invalid_pick: {validation_rejections['invalid_pick']}, parlay_fail: {validation_rejections['parlay_fail']}, noise: {validation_rejections['noise']}")
+    logging.info(f"[Validate] Passed: {initial_count - len(failed_items)}, Failed: {len(failed_items)}")
+    
+    if not failed_items:
         return jsonify({'status': 'clean'})
     
     # Collect Reference Picks (Good picks with odds)
@@ -801,7 +831,7 @@ If score not found, result="Unknown".
                 # Call AI with SHORT timeout (30s) and only 1 cycle to prevent hanging
                 # Grading is non-critical, so we fail fast instead of retrying forever
                 logging.info(f"[AI Grading] Calling AI for {len(ai_payload)} pending items...")
-                ai_resp_str = openrouter_completion(prompt, "tngtech/deepseek-r1t2-chimera:free", timeout=30, max_cycles=1)
+                ai_resp_str = openrouter_completion(prompt, "google/gemini-2.0-flash-exp:free", timeout=30, max_cycles=1)
                 ai_resp = json.loads(ai_resp_str)
                 
                 # Merge AI Grades
@@ -847,6 +877,8 @@ def api_export_csv():
         filename = f"picks_export_{timestamp}.csv"
         filepath = downloads / filename
         
+        logging.info(f"[Export] Writing {len(picks)} picks to {filename}")
+        
         with open(filepath, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             # Header
@@ -855,6 +887,7 @@ def api_export_csv():
             # Data rows
             blacklist = ['80k main play', 'vip whale', 'lock of the', 'max bet', 'hard rock', 'draftkings', 'fanduel']
             
+            filtered_count = 0
             for pick in picks:
                 # Final Safety Check: If pick matches noise exactly or contains noise, scrub it
                 p_val = pick.get('pick', '') or ''
@@ -867,6 +900,8 @@ def api_export_csv():
                         break
                 
                 final_pick = "Unknown (Manual Review)" if is_noise else p_val
+                if is_noise:
+                    filtered_count += 1
 
                 writer.writerow([
                     pick.get('message_id', ''),
@@ -879,6 +914,8 @@ def api_export_csv():
                     pick.get('date', ''),
                     pick.get('result', '')
                 ])
+        
+        logging.info(f"[Export] Wrote {len(picks) - filtered_count} picks (filtered {filtered_count} as noise)")
         
         return jsonify({'success': True, 'path': str(filepath), 'filename': filename})
     except Exception as e:
@@ -1172,7 +1209,7 @@ Use the Context (original message) to determine the correct values.
     try:
         # Call AI
         # Using the primary reasoning model (same as parser)
-        model = "tngtech/deepseek-r1t2-chimera:free"
+        model = "google/gemini-2.0-flash-exp:free"
         response_str = openrouter_completion(prompt, model)
         
         # Parse

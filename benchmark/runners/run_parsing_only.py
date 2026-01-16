@@ -10,7 +10,23 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt
-from benchmark.runners.run_benchmark import calculate_score, fuzzy_match # Use existing scoring logic
+def fuzzy_match(gt_pick, sys_pick, gt_type="", sys_type=""):
+    """Fuzzy match two pick strings."""
+    if not gt_pick or not sys_pick:
+        return False
+    gt_norm = gt_pick.lower().strip()
+    sys_norm = sys_pick.lower().strip()
+    if gt_norm == sys_norm:
+        return True
+    if gt_norm in sys_norm or sys_norm in gt_norm:
+        return True
+    gt_tokens = set(gt_norm.split())
+    sys_tokens = set(sys_norm.split())
+    overlap = len(gt_tokens & sys_tokens)
+    max_len = max(len(gt_tokens), len(sys_tokens))
+    if max_len > 0 and overlap / max_len >= 0.6:
+        return True
+    return False
 
 def calculate_f1(tp, fp, fn):
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
@@ -58,12 +74,13 @@ def run_parsing_benchmark(specific_model=None, limit=0):
         ground_truth_json = json.load(f)
 
     # Load existing results if available to allow resuming
+    overall_results = {}
     if os.path.exists(os.path.join(RESULTS_DIR, "parsing_benchmark_results.json")):
         try:
             with open(os.path.join(RESULTS_DIR, "parsing_benchmark_results.json"), 'r') as f:
                 overall_results = json.load(f)
         except:
-            overall_results = {}
+            pass
             
     models = [specific_model] if specific_model else MODELS_TO_TEST
     
@@ -168,12 +185,6 @@ def run_parsing_benchmark(specific_model=None, limit=0):
         except Exception as e:
              print(f"CRITICAL ERROR testing model {model}: {e}", flush=True)
              continue
-
-def calculate_f1(tp, fp, fn):
-    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
-    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-    if precision + recall == 0: return 0
-    return 2 * (precision * recall) / (precision + recall)
 
 def calculate_precision(tp, fp):
     return tp / (tp + fp) if (tp + fp) > 0 else 0

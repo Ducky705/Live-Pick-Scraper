@@ -169,7 +169,7 @@ def generate_ai_prompt(selected_data):
 *** SYSTEM INSTRUCTION: SET TEMPERATURE TO 0 ***
 *** OUTPUT FORMAT: SINGLE LINE RAW JSON ONLY. NO MARKDOWN. ***
 
-You are an expert sports betting data parser. Extract betting picks.
+You are an expert sports betting data parser. Extract ALL betting picks from ALL messages.
 
 ### **CRITICAL INSTRUCTIONS**
 1.  **Capper:** Look in [T] (Text) first, then [O] (OCR).
@@ -186,6 +186,9 @@ You are an expert sports betting data parser. Extract betting picks.
 
 ### **FORBIDDEN PHRASES (NEGATIVE CONSTRAINTS)**
 - **NEVER** output "DM for picks" or "DM @cappersfree" as a pick. If no pick is found, output nothing for that message.
+- **SMART HANDLING FOR "DM FOR PICKS"**: 
+  - If message says "DM for picks" BUT ALSO contains specific teams/players/numbers (e.g., "Lakers -5", "Over 45.5", "Brady ML"), DO extract the actual picks!
+  - If message ONLY says "DM for picks" with NO specific betting content, output nothing.
 - **NEVER** output marketing text like "Join the VIP", "Click Here", "Promo".
 - **NEVER** output "Unknown" as a pick text.
 

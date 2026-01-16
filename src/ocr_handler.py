@@ -11,7 +11,7 @@ import logging
 import time
 import base64
 import io
-from src.openrouter_client import openrouter_completion, openrouter_parallel_vision, VISION_MODELS
+from src.openrouter_client import openrouter_completion
 from config import TEMP_IMG_DIR
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -413,18 +413,31 @@ def extract_text_ai(image_path, model="google/gemma-3-12b-it:free"):
     """
     Extracts text using Vision AI models.
     This is generally slower but much more accurate for complex layouts.
+    Updated to enforce JSON output for resilience.
     """
     sys_path = _resolve_image_path(image_path)
     
     if not os.path.exists(sys_path):
         return f"[Error: Image not found at {sys_path}]"
 
-    prompt = "Extract all text from this image exactly as it appears. Do not add any markdown formatting or commentary. Just return the text."
+    prompt = (
+        "Extract all text from this image exactly as it appears. "
+        "Return a JSON object with a single key 'text' containing the extracted string. "
+        "Do not add any markdown formatting or commentary outside the JSON."
+    )
     
     try:
-        # Call OpenRouter with image
-        text = openrouter_completion(prompt, model=model, images=[sys_path])
-        return text
+        # Call OpenRouter with image - now validates JSON automatically
+        response_json = openrouter_completion(prompt, model=model, images=[sys_path])
+        
+        # Parse the JSON response
+        try:
+            data = json.loads(response_json)
+            return data.get("text", "")
+        except json.JSONDecodeError:
+            # Fallback if validation passed but structure is wrong (unlikely)
+            return response_json
+            
     except Exception as e:
         return f"[AI OCR Error: {str(e)}]"
 
@@ -510,13 +523,13 @@ def check_local_confidence(pil_image):
         return None
 
 
-def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", chunk_size=20):
+def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", chunk_size=10):
     """
     OPTIMIZED batch OCR with:
     - Hybrid Mode: Tries local Tesseract first (Fast Path)
     - In-Memory Processing: No temp files (Zero-Copy)
     - True Parallelism: Distributes chunks across different AI models
-    - Chunk Size: Increased to 30 for max efficiency (Gemini Flash has 1M+ context)
+    - Chunk Size: Reduced to 10 to prevent hallucination/mismatch errors.
     """
     import cv2
     import numpy as np
@@ -615,15 +628,22 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                 b64_images.append(img_str)
             
             prompt = (
-                f"You have {len(b64_images)} images. For EACH image, extract ALL visible text. "
-                f"Return a JSON array with EXACTLY {len(b64_images)} strings. "
-                "Format: [\"text1\", \"text2\"]"
+                f"You are processing {len(b64_images)} distinct images. "
+                f"Return a JSON array containing EXACTLY {len(b64_images)} strings. "
+                "Index 0 corresponds to the first image, Index 1 to the second, etc. "
+                "For each image, combine ALL text into a SINGLE string (use \\n for line breaks). "
+                "Do NOT split an image's text into multiple array elements. "
+                "Example Output: [\"Full text of image 1\", \"Full text of image 2\"]"
             )
             
             logging.info(f"[OCR] AI Chunk {chunk_idx+1}/{total_chunks} -> {assigned_model}")
             
             # Use specific model for this chunk (load balancing)
-            response = openrouter_completion(prompt, model=assigned_model, images=b64_images, timeout=120)
+            response = openrouter_completion(prompt, model=assigned_model, images=b64_images, timeout=180)  # Increased timeout to 180s
+            
+            if not response or len(response) < 50:
+                logging.error(f"[OCR] AI returned empty/short response for chunk {chunk_idx}: {len(response) if response else 0} chars")
+                raise Exception(f"Empty response from AI model")
             
             # Parse JSON
             clean_resp = response.strip()
@@ -660,47 +680,36 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
             logging.error(f"[OCR] Chunk {chunk_idx} failed: {e}")
             return []
 
-    # 4. Execute Parallel AI
-    # We allow more workers since we have more models now
-    # But limit to number of chunks or reasonable max
-    max_workers = min(len(chunks), 10)
-    if max_workers < 1: max_workers = 1
+    # 4. Execute SEQUENTIAL AI (NOT parallel - Semaphore(1) blocks anyway)
+    # Parallel execution with Semaphore(1) causes deadlocks because:
+    # - ThreadPoolExecutor submits all chunks at once
+    # - Each chunk tries to acquire Semaphore(1)
+    # - Only 1 can proceed, others block forever
+    # - future.result() waits forever for blocked threads
+    # SOLUTION: Process chunks sequentially with explicit timeouts
     
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = []
-        for i, chunk in enumerate(chunks):
-            # Round robin model assignment (mostly Gemini Flash since it's first)
-            # Actually, standardizing on Gemini Flash is best for batching
-            model = "google/gemini-2.0-flash-exp:free" 
-            futures.append(executor.submit(process_ai_chunk, i, chunk, model))
+    for i, chunk in enumerate(chunks):
+        logging.info(f"[OCR] Processing chunk {i+1}/{total_chunks}...")
+        try:
+            # Let the Router decide which provider to use (Groq/Gemini/OpenRouter)
+            # Pass None as model to trigger smart routing
+            chunk_results = process_ai_chunk(i, chunk, None)
             
-        for future in as_completed(futures):
-            try:
-                chunk_results = future.result()
-                
-                # Create a set of processed indices in this chunk
-                processed_indices = set()
-                
-                if chunk_results:
-                    for orig_idx, text in chunk_results:
-                        # Only use AI result if it looks valid
-                        if text and len(text) > 10 and "error" not in text.lower():
-                            final_results[orig_idx] = text
-                        else:
-                            # AI returned empty/garbage -> use fallback
-                             final_results[orig_idx] = fallback_texts.get(orig_idx, "")
-                             if final_results[orig_idx]:
-                                 logging.info(f"[OCR] AI failed for Msg {orig_idx}, using local fallback.")
-                        processed_indices.add(orig_idx)
-                
-                # Check for items in this chunk that got NO result (exception in process_ai_chunk)
-                # We need to map back which chunk this future belonged to, or just check what's missing?
-                # Simpler: We can't easily know which chunk failed here without changing structure.
-                # BUT, final_results are initialized to "".
-                # We can iterate through ai_queue after and fill in gaps.
-                
-            except Exception as e:
-                logging.error(f"[OCR] Future failed: {e}")
+            if chunk_results:
+                for orig_idx, text in chunk_results:
+                    if text and len(text) > 10 and "error" not in text.lower():
+                        final_results[orig_idx] = text
+                    else:
+                        # AI returned empty/garbage -> use fallback
+                        final_results[orig_idx] = fallback_texts.get(orig_idx, "")
+                        if final_results[orig_idx]:
+                            logging.info(f"[OCR] AI failed for Msg {orig_idx}, using local fallback.")
+        except Exception as e:
+            logging.error(f"[OCR] Chunk {i} failed with exception: {e}")
+            # Apply fallbacks for this chunk
+            for orig_idx, _ in chunk:
+                if not final_results[orig_idx] and orig_idx in fallback_texts:
+                    final_results[orig_idx] = fallback_texts[orig_idx]
 
     # Final Sweep: Apply fallback to any images that went to AI but have empty results
     for i, _ in ai_queue:

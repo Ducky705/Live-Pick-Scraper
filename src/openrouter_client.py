@@ -6,41 +6,50 @@ import time
 import base64
 import random
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
+from threading import Semaphore, Lock
+
+# Global Concurrency Limiter ("Traffic Cop")
+# FULLY SEQUENTIAL: Free tier is extremely rate-limited (~2 req/min for Gemini)
+# Using Lock instead of Semaphore - simpler and no blocking issues
+# We wrap requests in a timeout to prevent infinite hangs
+GLOBAL_REQUEST_LOCK = Lock()
+
+# Maximum time to wait for the lock (seconds)
+LOCK_ACQUIRE_TIMEOUT = 300  # 5 minutes max wait
 
 # Model fallback list (ordered by reliability)
-# Updated with faster, high-performance models for competitive racing
+# VERIFIED WORKING FREE LIST - Only models confirmed via API to exist
+# Note: Many "free" models are text-only or have limited availability
 DEFAULT_MODELS = [
-    "google/gemini-2.0-flash-exp:free",      # Fast & High Rate Limits (Primary)
-    "google/gemini-2.0-pro-exp-02-05:free",  # High Quality Fallback
-    "meta-llama/llama-3.3-70b-instruct:free", # Reliable
-    "mistralai/mistral-small-24b-instruct-2501:free",
-    "nousresearch/hermes-3-llama-3.1-405b:free",
+    "google/gemini-2.0-flash-exp:free",      # Primary - confirmed working
+    "mistralai/mistral-7b-instruct:free",    # Confirmed working for text
+    "deepseek/deepseek-r1-0528:free",        # Large context, text-only
+    "qwen/qwen3-coder:free",                 # Large context, text-only
 ]
 
-# Models specifically for "Racing" (Parallel Text Parsing)
+# Models specifically for "Racing" (Parallel Text Parsing) - TEXT ONLY
 FAST_PARSING_MODELS = [
     "google/gemini-2.0-flash-exp:free",
-    "google/gemini-2.0-pro-exp-02-05:free",
-    "meta-llama/llama-3.3-70b-instruct:free",
+    "mistralai/mistral-7b-instruct:free",
 ]
 
-# Vision-capable models for OCR
-# Removed unstable/404/400 models
+# Vision-capable models for OCR - VERIFIED VISION SUPPORT
+# Most free models are text-only. Gemini Flash is the only reliable free vision model.
 VISION_MODELS = [
-    "google/gemini-2.0-flash-exp:free",      # Primary workhorse (Huge Context)
-    "google/gemini-2.0-pro-exp-02-05:free",  # Secondary
-    "google/gemma-3-12b-it:free",            # Fallback
-    "qwen/qwen-2-vl-7b-instruct:free",       # Good alternative
+    "google/gemini-2.0-flash-exp:free",      # Primary - 1M context, confirmed vision
+    "qwen/qwen-2.5-vl-7b-instruct:free",     # Backup vision (Qwen VL)
+    "nvidia/nemotron-nano-12b-v2-vl:free",   # Backup vision (Nvidia)
+    "allenai/molmo-2-8b:free",               # Backup vision (AllenAI)
 ]
 
 # Retry configuration for free-tier resilience
 RETRY_CONFIG = {
     "max_cycles": 15,          # "Retry until it gets it" - significantly increased
-    "base_delay": 1,           # Faster retry
-    "cycle_delay": 2,          # Faster cycling
-    "max_delay": 15,           
-    "jitter": 0.1,             
+    "base_delay": 2,           # Increased from 1 - give API time to recover
+    "cycle_delay": 5,          # Increased from 2 - longer wait between full cycles
+    "max_delay": 30,           # Increased from 15 - allow longer waits when hammered
+    "jitter": 0.2,             # Slightly more jitter for randomization
 }
 
 def _get_backoff_delay(attempt, base=3, max_delay=60, jitter=0.3):
@@ -51,11 +60,114 @@ def _get_backoff_delay(attempt, base=3, max_delay=60, jitter=0.3):
     return max(1, delay)
 
 
-def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=None):
+def _extract_valid_json(text):
+    """
+    Robustly extracts the first valid JSON object or array from a string.
+    Ignores leading/trailing fluff and non-JSON blocks (like code snippets).
+    """
+    text = text.strip()
+    idx = 0
+    decoder = json.JSONDecoder()
+    
+    while idx < len(text):
+        # Find next opening character
+        next_open = -1
+        # Simple scan for next { or [
+        for i, c in enumerate(text[idx:]):
+            if c in '{[':
+                next_open = idx + i
+                break
+        
+        if next_open == -1:
+            return None # No JSON found
+            
+        try:
+            # Attempt to parse from this point
+            obj, end_pos = decoder.raw_decode(text[next_open:])
+            # Return the exact substring that formed valid JSON
+            return text[next_open : next_open + end_pos]
+        except json.JSONDecodeError:
+            # Not valid JSON starting here (e.g. "function() { ...")
+            # Advance index past this opening char to keep searching
+            idx = next_open + 1
+            
+    return None
+
+
+from src.cerebras_client import cerebras_completion
+from src.gemini_client import gemini_vision_completion
+from src.groq_client import groq_vision_completion
+
+def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=None, validate_json=True):
     """
     Calls OpenRouter API with aggressive retry logic for free-tier resilience.
     Implements a "Circuit Breaker" to temporarily avoid failing models.
+    
+    Update: 
+    1. Routes text-only requests to Cerebras (Llama 3.3) if CEREBRAS_TOKEN is present.
+    2. Routes vision requests to Gemini Direct (Flash) if GEMINI_TOKEN is present.
     """
+    # --- CEREBRAS ROUTING (Text Only) ---
+    if not images and os.getenv("CEREBRAS_TOKEN"):
+        try:
+            logging.info(f"[Router] Routing text request to Cerebras (Llama 3.3 70b)")
+            return cerebras_completion(
+                prompt, 
+                model="llama-3.3-70b", 
+                images=None, 
+                timeout=timeout, 
+                max_cycles=max_cycles, 
+                validate_json=validate_json
+            )
+        except Exception as e:
+            logging.error(f"[Router] Cerebras failed: {e}. Falling back to OpenRouter.")
+            pass
+
+    # --- VISION ROUTING ---
+    # Priority: Groq (Llama 4) -> Gemini (2.5-lite) -> OpenRouter
+    # Note: We override the 'model' parameter for vision requests to use Groq/Gemini if available
+    if images:
+        # 1. Try Groq (Llama 4) - Supports Base64 input now
+        if os.getenv("GROQ_TOKEN"):
+            try:
+                img_input = None
+                if isinstance(images, list) and len(images) > 0:
+                    img_input = images[0] # Base64 string or path
+                
+                if img_input:
+                    logging.info(f"[Router] Routing vision request to Groq (Llama 4)")
+                    json_prompt = "Extract text from image. Return JSON: {\"text\": \"<extracted_text>\"}"
+                    result = groq_vision_completion(json_prompt, img_input)
+                    if result:
+                        try:
+                            # Extract text from JSON if returned
+                            return json.loads(result).get("text", result)
+                        except:
+                            return result
+                    else:
+                        logging.warning("[Router] Groq returned None. Falling back.")
+            except Exception as e:
+                logging.error(f"[Router] Groq failed: {e}. Falling back.")
+                pass
+
+        # 2. Try Gemini Direct - Supports Base64 input now
+        if os.getenv("GEMINI_TOKEN"):
+            try:
+                img_input = None
+                if isinstance(images, list) and len(images) > 0:
+                    img_input = images[0] # Base64 string or path
+                
+                if img_input:
+                    logging.info(f"[Router] Routing vision request to Gemini (2.5 Flash Lite)")
+                    result = gemini_vision_completion("Extract all text from this image.", img_input)
+                    if result:
+                        return result
+                    else:
+                        logging.warning("[Router] Gemini returned None. Falling back.")
+            except Exception as e:
+                logging.error(f"[Router] Gemini Direct failed: {e}. Falling back.")
+                pass
+
     if max_cycles is None:
         max_cycles = RETRY_CONFIG["max_cycles"]
         
@@ -133,16 +245,29 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                     {"role": "user", "content": final_content}
                 ],
                 "temperature": 0.1,
-                "response_format": {"type": "json_object"}
+                "response_format": {"type": "json_object"},
+                "provider": {
+                    "sort": "throughput"  # Route to fastest available provider
+                }
             }
 
             try:
-                response = requests.post(
-                    "https://openrouter.ai/api/v1/chat/completions",
-                    headers=headers,
-                    json=payload,
-                    timeout=timeout
-                )
+                # TRAFFIC COP: Acquire lock with timeout to prevent deadlocks
+                lock_acquired = GLOBAL_REQUEST_LOCK.acquire(timeout=LOCK_ACQUIRE_TIMEOUT)
+                if not lock_acquired:
+                    logging.error(f"[OpenRouter] Failed to acquire lock after {LOCK_ACQUIRE_TIMEOUT}s. Skipping request.")
+                    model_failures[current_model] += 1
+                    continue
+                
+                try:
+                    response = requests.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        headers=headers,
+                        json=payload,
+                        timeout=timeout
+                    )
+                finally:
+                    GLOBAL_REQUEST_LOCK.release()
                 
                 # --- ERROR HANDLING & CIRCUIT BREAKER ---
                 
@@ -154,24 +279,32 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                     last_error = Exception(f"Model {current_model} error {response.status_code}")
                     continue
 
-                # 2. Rate Limits (429) -> Retry same model carefully
+                # 2. Rate Limits (429) -> Switch models immediately (Load Balancing)
                 if response.status_code == 429:
-                    retry_after = int(response.headers.get("Retry-After", 0))
-                    backoff = _get_backoff_delay(cycle, RETRY_CONFIG["base_delay"], RETRY_CONFIG["max_delay"])
-                    wait_time = max(retry_after, backoff)
-                    logging.warning(f"[OpenRouter] 429 Rate Limit from {current_model}. Waiting {wait_time:.1f}s...")
-                    time.sleep(wait_time)
+                    logging.warning(f"[OpenRouter] 429 Rate Limit from {current_model}. Waiting 10s then switching...")
                     
-                    # One immediate retry for 429
+                    # FREE TIER FIX: Wait longer before retry (10s instead of 2s)
+                    time.sleep(10)
                     try:
-                        response = requests.post(
-                            "https://openrouter.ai/api/v1/chat/completions",
-                            headers=headers,
-                            json=payload,
-                            timeout=timeout
-                        )
-                    except Exception:
-                        pass # Fail through to standard check
+                        lock_acquired = GLOBAL_REQUEST_LOCK.acquire(timeout=60)
+                        if lock_acquired:
+                            try:
+                                response = requests.post(
+                                    "https://openrouter.ai/api/v1/chat/completions",
+                                    headers=headers,
+                                    json=payload,
+                                    timeout=timeout
+                                )
+                            finally:
+                                GLOBAL_REQUEST_LOCK.release()
+                    except: pass
+                    
+                    if response.status_code == 429:
+                        logging.warning(f"[OpenRouter] {current_model} still 429 after 10s. Blacklisting for this cycle.")
+                        blacklisted_models.add(current_model)
+                        # Add extra delay before trying next model
+                        time.sleep(5)
+                        continue # Skip to next model immediately
                 
                 # 3. Server Errors (500, 502, 503) -> Count failure
                 if response.status_code >= 500:
@@ -184,6 +317,11 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                     if 'choices' in data and len(data['choices']) > 0:
                         content = data['choices'][0]['message']['content']
                         
+                        # Check for truncated response
+                        finish_reason = data['choices'][0].get('finish_reason', '')
+                        if finish_reason == 'length':
+                            logging.warning(f"[OpenRouter] Response truncated due to length limit. Some picks may be missing!")
+                        
                         # Clean DeepSeek R1 thinking blocks
                         import re
                         content = re.sub(r'<think>.*?</think>', '', content, flags=re.DOTALL)
@@ -194,18 +332,19 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                         elif "```" in content:
                             content = content.split("```")[1].split("```")[0].strip()
                         
-                        # Verify JSON structure loosely
-                        content = content.strip()
-                        if content and content[0] not in '{[':
-                             # Try to find JSON block manually
-                            json_start = None
-                            for i, c in enumerate(content):
-                                if c == '{' or c == '[':
-                                    json_start = i
-                                    break
-                            if json_start is not None:
-                                content = content[json_start:]
                         
+                        # --- BAD OUTPUT CIRCUIT BREAKER ---
+                        if validate_json:
+                            # Use robust extractor to find JSON amidst fluff
+                            extracted_json = _extract_valid_json(content)
+                            
+                            if extracted_json:
+                                content = extracted_json # Replace content with clean JSON
+                            else:
+                                logging.warning(f"[OpenRouter] Model {current_model} output contained no valid JSON. Treating as failure.")
+                                model_failures[current_model] += 1
+                                continue # Skip to next model
+
                         # Reset failures on success
                         model_failures[current_model] = 0
                         logging.info(f"[OpenRouter] Success with {current_model}")
@@ -277,7 +416,10 @@ def _single_model_request(model, prompt, images, headers, timeout):
         "model": model,
         "messages": [{"role": "user", "content": content_payload}],
         "temperature": 0.1,
-        "response_format": {"type": "json_object"}
+        "response_format": {"type": "json_object"},
+        "provider": {
+            "sort": "throughput"  # Route to fastest available provider
+        }
     }
     
     try:
@@ -288,6 +430,24 @@ def _single_model_request(model, prompt, images, headers, timeout):
             timeout=timeout
         )
         
+        if response.status_code == 429:
+            # Quick retry loop for rate limits
+            for retry_attempt in range(3):
+                retry_after = int(response.headers.get("Retry-After", 0))
+                wait_time = max(retry_after, 2 ** (retry_attempt + 1))
+                time.sleep(wait_time)
+                try:
+                    response = requests.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        headers=headers,
+                        json=payload,
+                        timeout=timeout
+                    )
+                    if response.status_code != 429:
+                        break
+                except Exception:
+                    break
+
         if response.status_code == 429:
             return (model, None, "rate_limited")
         

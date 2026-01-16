@@ -28,8 +28,8 @@ else:
 from src.openrouter_client import openrouter_completion
 from src.utils import clean_text_for_ai
 
-# Use the same default model as the main pipeline
-DEFAULT_CLASSIFIER_MODEL = "google/gemma-3-12b-it:free"  # Fast vision model for classification
+# Use the same default model as the main pipeline - VERIFIED WORKING
+DEFAULT_CLASSIFIER_MODEL = "google/gemini-2.0-flash-exp:free"  # Fast vision model for classification
 
 
 class PostClassification:
@@ -44,8 +44,9 @@ class PostClassification:
 
 # Heuristic patterns for FAST text-based classification (no AI needed)
 # CONSERVATIVE: Only filter when we're VERY confident (100% accuracy goal)
+# FIXED: Don't filter "dm for picks" - this might contain actual bets!
 PROMO_PATTERNS = [
-    r'join\s*(our)?\s*vip\s*(channel|group)',  # More specific
+    # r'join\s*(our)?\s*vip\s*(channel|group)',  # DISABLED - can filter actual picks
     r'subscribe\s*(to|for)\s*(our|the)\s*(channel|group)',
     r'limited\s*time\s*offer',
     r'\$\d+\s*(off|discount)',

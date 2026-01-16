@@ -721,8 +721,8 @@ async function runAutoPilot() {
         });
 
         const models = [
-            'mistralai/devstral-2512:free',
-            'tngtech/deepseek-r1t2-chimera:free'
+            'google/gemini-2.0-flash-exp:free',
+            'mistralai/mistral-7b-instruct:free'
         ];
 
         let success = false;
@@ -1436,15 +1436,12 @@ Includes only failed items.
 
 async function handleAutoFill() {
     const prompt = getEl('activePromptText').value;
-    // Primary + Backup Models
+    // Primary + Backup Models - VERIFIED WORKING FREE MODELS
     const models = [
-        'tngtech/deepseek-r1t2-chimera:free',
         'google/gemini-2.0-flash-exp:free',
-        'meta-llama/llama-3.3-70b-instruct:free',
-        'mistralai/devstral-2512:free',
-        'google/gemma-3-27b-it:free',
-        'nousresearch/hermes-3-llama-3.1-405b:free',
-        'z-ai/glm-4.5-air:free'
+        'mistralai/mistral-7b-instruct:free',
+        'deepseek/deepseek-r1-0528:free',
+        'qwen/qwen3-coder:free'
     ];
 
     if (!prompt) { showToast("No prompt generated yet"); return; }

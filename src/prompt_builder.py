@@ -172,7 +172,11 @@ def generate_ai_prompt(selected_data):
 You are an expert sports betting data parser. Extract ALL betting picks from ALL messages.
 
 ### **CRITICAL INSTRUCTIONS**
-1.  **Capper:** Look in [T] (Text) first, then [O] (OCR).
+1.  **CONFLICT RESOLUTION (MANDATORY):**
+    - If the Text/Header says "ML" but the Ticket/Image says "PK" or "Pick'em", **YOU MUST OUTPUT 'Spread' and '+0'**.
+    - **Trust the Ticket** over the Capper's typed text.
+    - Example: Text "Marquette ML", Ticket "Marquette PK". -> Result: "Marquette +0" (Spread).
+2.  **Capper:** Look in [T] (Text) first, then [O] (OCR).
 2.  **Odds MUST be SEPARATE from Pick:** 
     - Extract American odds (e.g., -110, +150) into the \"od\" field ONLY.
     - The \"p\" field must NOT contain odds - only the team/player and line.
@@ -246,6 +250,13 @@ These are CHANNEL WATERMARKS, not capper names. NEVER use these as "cn":
 The REAL capper name is a person/brand name that appears BEFORE/ABOVE the watermark.
 Example: "3 LEARLOCKS @cappersfree" = cn is "3 Learlocks" (NOT "cappersfree")
 Example: "HammeringHank CFB" = cn is "HammeringHank"
+
+### **5. Conflict Resolution & Special Cases**
+* **Ticket vs. Commentary:** If the capper's text/header says one thing (e.g., "Team ML") but the actual Ticket/Screenshot says another (e.g., "Team PK" or "Team +0"), **TRUST THE TICKET**.
+  * Example: Header "Marquette ML", Ticket "MARQUETTE PK-110". Result: "Marquette +0" (Spread).
+* **PK / Pick'em:** Treat "PK", "Pick", or "Pick'em" as Spread `+0` (or `+0.0`).
+  * Example: "Lakers PK" -> "Lakers +0" (Type: Spread).
+* **Conflicting Odds:** If text says "-110" and ticket says "-115", trust the ticket.
 
 {get_master_formatting_guide()}
 

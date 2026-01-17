@@ -12,7 +12,7 @@ GLOBAL_GROQ_LOCK = Lock()
 LOCK_ACQUIRE_TIMEOUT = 300
 
 # Groq Vision Models (Llama 4 supports vision)
-DEFAULT_MODEL = "meta-llama/llama-4-maverick-17b-128e-instruct" # High quality vision model
+DEFAULT_MODEL = "llama-3.2-11b-vision-preview" # High quality vision model
 
 def groq_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=60):
     """

@@ -22,16 +22,15 @@ LOCK_ACQUIRE_TIMEOUT = 300  # 5 minutes max wait
 # VERIFIED WORKING FREE LIST - Only models confirmed via API to exist
 # Note: Many "free" models are text-only or have limited availability
 DEFAULT_MODELS = [
-    "google/gemini-2.0-flash-exp:free",      # Primary - confirmed working
-    "mistralai/mistral-7b-instruct:free",    # Confirmed working for text
-    "deepseek/deepseek-r1-0528:free",        # Large context, text-only
-    "qwen/qwen3-coder:free",                 # Large context, text-only
+    "google/gemini-2.0-flash-exp:free",      # Primary
+    "google/gemini-2.0-pro-exp-02-05:free",  # Backup
+    "meta-llama/llama-3.3-70b-instruct:free", # Backup Text
 ]
 
 # Models specifically for "Racing" (Parallel Text Parsing) - TEXT ONLY
 FAST_PARSING_MODELS = [
     "google/gemini-2.0-flash-exp:free",
-    "mistralai/mistral-7b-instruct:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
 ]
 
 # Vision-capable models for OCR - VERIFIED VISION SUPPORT
@@ -128,14 +127,16 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
     # Note: We override the 'model' parameter for vision requests to use Groq/Gemini if available
     if images:
         # 1. Try Groq (Llama 4) - Supports Base64 input now
-        if os.getenv("GROQ_TOKEN"):
+        # DISABLE GROQ TEMPORARILY due to 404s
+        # if os.getenv("GROQ_TOKEN"):
+        if False: 
             try:
                 img_input = None
                 if isinstance(images, list) and len(images) > 0:
                     img_input = images[0] # Base64 string or path
                 
                 if img_input:
-                    logging.info(f"[Router] Routing vision request to Groq (Llama 4)")
+                    logging.info(f"[Router] Routing vision request to Groq (Llama 3.2 Vision)")
                     json_prompt = "Extract text from image. Return JSON: {\"text\": \"<extracted_text>\"}"
                     result = groq_vision_completion(json_prompt, img_input)
                     if result:

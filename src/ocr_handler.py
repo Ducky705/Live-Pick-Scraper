@@ -542,19 +542,59 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
     
     final_results = [""] * len(image_paths)
     
-    # Queue for AI processing
-    ai_queue = [] # list of (original_index, pil_image)
+    # --- CACHING LAYER ---
+    import hashlib
+    CACHE_DIR = os.path.join(BASE_DIR, 'cache', 'ocr_hashes')
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    
+    def get_image_hash(path):
+        """Fast SHA256 hash of image file"""
+        try:
+            with open(path, "rb") as f:
+                return hashlib.sha256(f.read()).hexdigest()
+        except:
+            return None
+
+    # Identify which images need processing
+    needs_processing = [] # list of (index, path, hash)
     
     logging.info(f"[OCR] Starting Hybrid Pipeline for {len(resolved_paths)} images...")
     
-    # 2. Pre-process and Try Local OCR
-    fallback_texts = {} # Store low-confidence local OCR as backup
-
     for i, p in enumerate(resolved_paths):
         if not os.path.exists(p):
             logging.warning(f"[OCR] Skipping missing file: {p}")
             continue
             
+        img_hash = get_image_hash(p)
+        if img_hash:
+            cache_path = os.path.join(CACHE_DIR, f"{img_hash}.txt")
+            if os.path.exists(cache_path):
+                try:
+                    with open(cache_path, "r", encoding="utf-8") as f:
+                        cached_text = f.read()
+                    if len(cached_text) > 5:
+                        final_results[i] = cached_text
+                        logging.debug(f"[OCR] Cache Hit for {os.path.basename(p)}")
+                        continue
+                except:
+                    pass # Ignore cache read errors
+        
+        # If no cache or invalid, add to processing list
+        needs_processing.append((i, p, img_hash))
+
+    if not needs_processing:
+        logging.info("[OCR] All images found in cache.")
+        return final_results
+        
+    logging.info(f"[OCR] {len(image_paths) - len(needs_processing)} cached. Processing {len(needs_processing)} new images.")
+
+    # Queue for AI processing
+    ai_queue = [] # list of (original_index, pil_image, hash)
+    
+    # 2. Pre-process and Try Local OCR
+    fallback_texts = {} # Store low-confidence local OCR as backup
+
+    for i, p, img_hash in needs_processing:
         try:
             # Read Image
             img_cv = cv2.imread(p)
@@ -585,13 +625,17 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
 
             if is_confident:
                 final_results[i] = local_text
+                # Save to cache logic (at end)
+                if img_hash:
+                    with open(os.path.join(CACHE_DIR, f"{img_hash}.txt"), "w", encoding="utf-8") as f:
+                        f.write(local_text)
             else:
                 # Store as fallback in case AI fails
                 fallback_texts[i] = local_text if local_text else ""
                 
                 # Prepare for AI (Use lightweight preprocessing for Vision Models)
                 pil_img = preprocess_for_ai(img_cv)
-                ai_queue.append((i, pil_img))
+                ai_queue.append((i, pil_img, img_hash))
                 
         except Exception as e:
             logging.error(f"[OCR] Pre-check failed for {p}: {e}")
@@ -615,13 +659,13 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
     
     def process_ai_chunk(chunk_idx, chunk_data, assigned_model):
         """
-        Process a chunk of (index, image) tuples.
+        Process a chunk of (index, image, hash) tuples.
         Returns: [(index, text), ...]
         """
         try:
             # Convert images to base64 strings in memory
             b64_images = []
-            for _, img in chunk_data:
+            for _, img, _ in chunk_data:
                 buffered = io.BytesIO()
                 img.save(buffered, format="JPEG", quality=85)
                 img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
@@ -686,7 +730,7 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
     # - Each chunk tries to acquire Semaphore(1)
     # - Only 1 can proceed, others block forever
     # - future.result() waits forever for blocked threads
-    # SOLUTION: Process chunks sequentially with explicit timeouts
+    # - SOLUTION: Process chunks sequentially with explicit timeouts
     
     for i, chunk in enumerate(chunks):
         logging.info(f"[OCR] Processing chunk {i+1}/{total_chunks}...")
@@ -699,6 +743,15 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                 for orig_idx, text in chunk_results:
                     if text and len(text) > 10 and "error" not in text.lower():
                         final_results[orig_idx] = text
+                        
+                        # SAVE TO CACHE
+                        # Find hash for this index
+                        # chunk contains (idx, img, hash)
+                        for c_idx, _, c_hash in chunk:
+                            if c_idx == orig_idx and c_hash:
+                                with open(os.path.join(CACHE_DIR, f"{c_hash}.txt"), "w", encoding="utf-8") as f:
+                                    f.write(text)
+                                break
                     else:
                         # AI returned empty/garbage -> use fallback
                         final_results[orig_idx] = fallback_texts.get(orig_idx, "")
@@ -707,12 +760,12 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
         except Exception as e:
             logging.error(f"[OCR] Chunk {i} failed with exception: {e}")
             # Apply fallbacks for this chunk
-            for orig_idx, _ in chunk:
+            for orig_idx, _, _ in chunk:
                 if not final_results[orig_idx] and orig_idx in fallback_texts:
                     final_results[orig_idx] = fallback_texts[orig_idx]
 
     # Final Sweep: Apply fallback to any images that went to AI but have empty results
-    for i, _ in ai_queue:
+    for i, _, _ in ai_queue:
         if not final_results[i] or len(final_results[i]) < 5:
             if i in fallback_texts and len(fallback_texts[i]) > 5:
                  final_results[i] = fallback_texts[i]

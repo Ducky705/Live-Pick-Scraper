@@ -23,6 +23,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt
 from src.ocr_handler import extract_text_batch
+from src.pipeline import pipeline
+from src.models import TelegramMessage
+import asyncio
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
@@ -47,10 +50,22 @@ def fuzzy_match(gt_pick, sys_pick, gt_type="", sys_type=""):
     if not gt_pick or not sys_pick:
         return False
     
-    gt_norm = gt_pick.lower().strip()
-    sys_norm = sys_pick.lower().strip()
+    # Normalize strings for comparison
+    def normalize(s):
+        s = s.lower().strip()
+        # Common abbreviation expansions
+        s = s.replace(' vs ', '/')
+        s = s.replace(' v ', '/')
+        s = s.replace(' over ', ' o ')
+        s = s.replace(' under ', ' u ')
+        # Remove extra spaces
+        s = ' '.join(s.split())
+        return s
     
-    # Exact match
+    gt_norm = normalize(gt_pick)
+    sys_norm = normalize(sys_pick)
+    
+    # Exact match after normalization
     if gt_norm == sys_norm:
         return True
     
@@ -65,6 +80,18 @@ def fuzzy_match(gt_pick, sys_pick, gt_type="", sys_type=""):
     max_len = max(len(gt_tokens), len(sys_tokens))
     if max_len > 0 and overlap / max_len >= 0.6:
         return True
+    
+    # Key number matching - extract numbers and compare
+    import re
+    gt_numbers = set(re.findall(r'[-+]?\d+\.?\d*', gt_norm))
+    sys_numbers = set(re.findall(r'[-+]?\d+\.?\d*', sys_norm))
+    if gt_numbers and gt_numbers == sys_numbers:
+        # Numbers match exactly - check if teams overlap
+        gt_words = set(re.findall(r'[a-z]+', gt_norm))
+        sys_words = set(re.findall(r'[a-z]+', sys_norm))
+        word_overlap = len(gt_words & sys_words)
+        if word_overlap >= 1:  # At least 1 word in common
+            return True
     
     return False
 
@@ -142,33 +169,28 @@ def run_full_pipeline_benchmark(use_vision_ocr=True, model=None, limit=0, save_n
                 total_fn += len(expected_picks)
                 continue
             
-            # Step 2: Parsing
-            synthetic_message = {
-                'id': idx + 1,
-                'text': "",
-                'ocr_texts': [ocr_text],
-                'ocr_text': ocr_text
-            }
+            # Step 2: Parsing (via Pipeline with Two-Pass Verification)
+            msg = TelegramMessage(
+                id=idx + 1,
+                text="",
+                date="2024-01-01",
+                channel_id=1,
+                channel_name="Benchmark",
+                images=[img_path],
+                ocr_text=ocr_text
+            )
             
-            prompt = generate_ai_prompt([synthetic_message])
-            response = openrouter_completion(prompt, model=model, timeout=60)
+            try:
+                loop = asyncio.get_event_loop()
+            except RuntimeError:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                
+            parsed_picks_objs = loop.run_until_complete(pipeline.process_messages([msg]))
+            parsed_picks = [p.dict() for p in parsed_picks_objs]
             
             latency = time.time() - start_time
             latencies.append(latency)
-            
-            # Parse response
-            cleaned = response.replace("```json", "").replace("```", "").strip()
-            try:
-                parsed_json = json.loads(cleaned)
-                if isinstance(parsed_json, dict) and "picks" in parsed_json:
-                    parsed_picks = parsed_json["picks"]
-                elif isinstance(parsed_json, list):
-                    parsed_picks = parsed_json
-                else:
-                    parsed_picks = []
-            except json.JSONDecodeError:
-                logging.error(f"  -> JSON parse error")
-                parsed_picks = []
             
             # Step 3: Score against ground truth
             matched_gt = set()

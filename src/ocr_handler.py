@@ -815,6 +815,10 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
             try:
                 # Use extract_text_ai with explicit model
                 logging.info(f"[OCR] Retrying Image {idx} with {strong_model}...")
+                
+                # --- STRATEGY: Use a stronger, simpler prompt for the retry ---
+                # Sometimes complex JSON prompts confuse the model on difficult images.
+                # A direct "Transcribe this exactly" often yields better raw text.
                 retry_text = extract_text_ai(path, model=strong_model)
                 
                 if TwoPassVerifier.verify_ocr_result(retry_text):

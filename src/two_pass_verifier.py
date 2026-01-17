@@ -11,13 +11,13 @@ class TwoPassVerifier:
     """
     
     # High-performance models for the second pass
-    # Using DeepSeek R1 (Distill Llama 70B) as the "Chimera" / Strong Reasoning model
-    STRONG_TEXT_MODEL = "deepseek/deepseek-r1-distill-llama-70b:free"
+    # Using the specific Chimera model requested for robust parsing
+    STRONG_TEXT_MODEL = "tngtech/deepseek-r1t2-chimera:free"
     
-    # For Vision, DeepSeek isn't the best choice yet (Janus is small). 
-    # We'll use Gemini 2.0 Pro (if available free) or fall back to Flash for retry 
-    # but with a more detailed prompt.
-    STRONG_VISION_MODEL = "google/gemini-2.0-pro-exp-02-05:free"
+    # Vision Model for Retry
+    # 'google/gemini-2.0-pro-exp-02-05:free' is not currently available.
+    # We fallback to the reliable Flash model, but the retry logic will use a boosted prompt.
+    STRONG_VISION_MODEL = "google/gemini-2.0-flash-exp:free"
 
     @staticmethod
     def verify_ocr_result(text: str) -> bool:

@@ -1,59 +1,65 @@
 
-import sys
 import os
+import requests
+import json
+from dotenv import load_dotenv
 
-# Add src folder to path
-sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src'))
+load_dotenv()
 
-from openrouter_client import DEFAULT_MODELS, VISION_MODELS
+api_key = os.getenv("OPENROUTER_API_KEY")
+if not api_key:
+    print("Error: OPENROUTER_API_KEY not found.")
+    exit(1)
 
-# VERIFIED WORKING FREE MODELS - Updated Jan 2026
-EXPECTED_DEFAULT = [
-    'google/gemini-2.0-flash-exp:free',      # Primary - confirmed working
-    'mistralai/mistral-7b-instruct:free',    # Confirmed working for text
-    'deepseek/deepseek-r1-0528:free',        # Large context, text-only
-    'qwen/qwen3-coder:free',                 # Large context, text-only
-]
-
-EXPECTED_VISION = [
-    'google/gemini-2.0-flash-exp:free',      # Primary - 1M context, confirmed vision
-    'qwen/qwen-2.5-vl-7b-instruct:free',     # Backup vision (Qwen VL)
-    'nvidia/nemotron-nano-12b-v2-vl:free',   # Backup vision (Nvidia)
-    'allenai/molmo-2-8b:free',               # Backup vision (AllenAI)
-]
-
-def verify():
-    print("Verifying Model Lists...")
-    
-    success = True
-    
-    # Check DEFAULT_MODELS
-    if DEFAULT_MODELS != EXPECTED_DEFAULT:
-        print(f"DEFAULT_MODELS mismatch:")
-        print(f"  Expected: {EXPECTED_DEFAULT}")
-        print(f"  Actual:   {DEFAULT_MODELS}")
-        success = False
-    else:
-        print("DEFAULT_MODELS: OK")
+def check_models():
+    print("Fetching OpenRouter model list...")
+    try:
+        response = requests.get(
+            "https://openrouter.ai/api/v1/models",
+            headers={"Authorization": f"Bearer {api_key}"},
+            timeout=30
+        )
         
-    # Check VISION_MODELS
-    if VISION_MODELS != EXPECTED_VISION:
-        print(f"VISION_MODELS mismatch:")
-        print(f"  Expected: {EXPECTED_VISION}")
-        print(f"  Actual:   {VISION_MODELS}")
-        success = False
-    else:
-        print("VISION_MODELS: OK")
-    
-    if success:
-        print("\nSUCCESS: All model lists match verified working free models.")
-    else:
-        print("\nFAILED: Model lists need updating.")
+        if response.status_code != 200:
+            print(f"Error: API returned {response.status_code}")
+            print(response.text)
+            return
+
+        data = response.json()
+        models = data.get('data', [])
         
-    return success
+        # Check for specific models
+        targets = [
+            "tngtech/deepseek-r1t2-chimera:free",
+            "google/gemini-2.0-pro-exp-02-05:free",
+            "google/gemini-2.0-flash-exp:free",
+            "deepseek/deepseek-r1-distill-llama-70b:free"
+        ]
+        
+        print(f"\nScanning {len(models)} available models for targets:")
+        
+        found = {t: False for t in targets}
+        
+        for m in models:
+            mid = m.get('id')
+            if mid in targets:
+                found[mid] = True
+                print(f"[FOUND] {mid}")
+            
+        print("\nMissing Models:")
+        for t, was_found in found.items():
+            if not was_found:
+                print(f"[MISSING] {t}")
+                
+        # List all google free models to find the right pro one
+        print("\nAvailable 'google' + 'free' models:")
+        for m in models:
+            mid = m.get('id', '')
+            if 'google' in mid and 'free' in mid:
+                print(f" - {mid}")
+
+    except Exception as e:
+        print(f"Exception: {e}")
 
 if __name__ == "__main__":
-    if verify():
-        sys.exit(0)
-    else:
-        sys.exit(1)
+    check_models()

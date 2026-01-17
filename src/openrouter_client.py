@@ -98,14 +98,7 @@ from src.cerebras_client import cerebras_completion
 from src.gemini_client import gemini_vision_completion
 from src.groq_client import groq_vision_completion
 
-# Try to import provider pool for enhanced routing
-try:
-    from src.provider_pool import get_pool, smart_vision_completion, smart_text_completion
-    POOL_ROUTING_ENABLED = True
-except ImportError:
-    POOL_ROUTING_ENABLED = False
-
-def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=None, validate_json=True, use_pool=True):
+def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=None, validate_json=True):
     """
     Calls OpenRouter API with aggressive retry logic for free-tier resilience.
     Implements a "Circuit Breaker" to temporarily avoid failing models.
@@ -113,30 +106,7 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
     Update: 
     1. Routes text-only requests to Cerebras (Llama 3.3) if CEREBRAS_TOKEN is present.
     2. Routes vision requests to Gemini Direct (Flash) if GEMINI_TOKEN is present.
-    3. NEW: Uses Provider Pool for parallel racing when use_pool=True
     """
-    
-    # --- NEW: PROVIDER POOL ROUTING (Parallel Racing) ---
-    # This is the fastest path - races multiple providers simultaneously
-    if use_pool and POOL_ROUTING_ENABLED:
-        try:
-            if images:
-                # Vision request - use smart routing with racing
-                img = images[0] if isinstance(images, list) else images
-                result = smart_vision_completion(prompt, img, use_racing=True, timeout=timeout)
-                if result:
-                    logging.info("[Router] Pool routing succeeded for vision request")
-                    return result
-            else:
-                # Text request - use smart routing
-                result = smart_text_completion(prompt, timeout=timeout)
-                if result:
-                    logging.info("[Router] Pool routing succeeded for text request")
-                    return result
-            logging.warning("[Router] Pool routing returned None, falling back to legacy routing")
-        except Exception as e:
-            logging.error(f"[Router] Pool routing failed: {e}. Falling back to legacy routing.")
-    
     # --- CEREBRAS ROUTING (Text Only) ---
     if not images and os.getenv("CEREBRAS_TOKEN"):
         try:

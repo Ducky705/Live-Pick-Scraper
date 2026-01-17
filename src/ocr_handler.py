@@ -15,13 +15,6 @@ from src.openrouter_client import openrouter_completion
 from config import TEMP_IMG_DIR
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# Import new provider pool for parallel processing
-try:
-    from src.provider_pool import get_pool, smart_vision_completion, classify_image_complexity
-    POOL_AVAILABLE = True
-except ImportError:
-    POOL_AVAILABLE = False
-
 # --- CONFIGURATION ---
 if getattr(sys, 'frozen', False):
     # Running as compiled APP
@@ -530,114 +523,6 @@ def check_local_confidence(pil_image):
         return None
 
 
-def _process_with_pool(ai_queue, fallback_texts, final_results, total_expected):
-    """
-    Process images using the new Provider Pool for PARALLEL execution across
-    Groq, Gemini, and OpenRouter simultaneously.
-    
-    Key Optimizations:
-    1. Classifies image complexity to choose routing strategy
-    2. Simple images -> single fast provider (no racing overhead)
-    3. Complex images -> race all providers (first wins)
-    4. Per-provider rate limiting (no global lock bottleneck)
-    """
-    from concurrent.futures import ThreadPoolExecutor, as_completed
-    
-    logging.info(f"[OCR Pool] Processing {len(ai_queue)} images with parallel provider pool...")
-    
-    # Convert images to base64 and classify complexity
-    image_tasks = []  # (orig_idx, img_b64, complexity)
-    
-    for orig_idx, pil_img in ai_queue:
-        buffered = io.BytesIO()
-        pil_img.save(buffered, format="JPEG", quality=85)
-        img_b64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
-        
-        complexity = classify_image_complexity(img_b64)
-        image_tasks.append((orig_idx, img_b64, complexity))
-    
-    # Log complexity distribution
-    simple_count = sum(1 for _, _, c in image_tasks if c == "simple")
-    complex_count = sum(1 for _, _, c in image_tasks if c == "complex")
-    medium_count = len(image_tasks) - simple_count - complex_count
-    logging.info(f"[OCR Pool] Complexity distribution: simple={simple_count}, medium={medium_count}, complex={complex_count}")
-    
-    # Process all images with appropriate strategy
-    def process_single_image(task):
-        orig_idx, img_b64, complexity = task
-        
-        # Enhanced OCR prompt for sports betting images - HIGHLY SPECIFIC
-        prompt = (
-            "You are an OCR expert. Extract ALL text from this sports betting image.\n\n"
-            "CRITICAL REQUIREMENTS:\n"
-            "1. Extract EVERY piece of text visible in the image\n"
-            "2. Include the capper/username at the top (e.g., 'Tbsportsbetting', 'CashKing')\n"
-            "3. Include ALL team names exactly as shown\n"
-            "4. Include ALL numbers: spreads (-5.5, +3), odds (-110, +150), units (4u, 2u)\n"
-            "5. Include bet types: Spread, Moneyline, ML, Total, Over, Under\n"
-            "6. Include matchups like 'Jazz vs Celtics' or 'TCU vs USC'\n"
-            "7. Preserve the EXACT format and line breaks\n\n"
-            "Return ONLY a JSON object: {\"text\": \"<all_text_here>\"}\n"
-            "Use \\n for line breaks. Do NOT summarize or interpret."
-        )
-        
-        try:
-            # ALWAYS use racing for OCR - quality matters more than speed here
-            # collect_best=True waits for all providers and picks the longest/best result
-            result = smart_vision_completion(prompt, img_b64, use_racing=True, collect_best=True, timeout=60)
-            
-            if result:
-                # Parse JSON response
-                try:
-                    clean_result = result.strip()
-                    if clean_result.startswith("```"):
-                        clean_result = clean_result.split("```")[1]
-                        if clean_result.startswith("json"):
-                            clean_result = clean_result[4:]
-                        clean_result = clean_result.split("```")[0].strip()
-                    
-                    parsed = json.loads(clean_result)
-                    text = parsed.get("text", clean_result)
-                    return (orig_idx, text)
-                except json.JSONDecodeError:
-                    # Return raw result if not JSON
-                    return (orig_idx, result)
-            else:
-                return (orig_idx, None)
-        except Exception as e:
-            logging.error(f"[OCR Pool] Image {orig_idx} failed: {e}")
-            return (orig_idx, None)
-    
-    # Execute in parallel with ThreadPoolExecutor
-    # The provider pool handles internal rate limiting per-provider
-    max_workers = min(len(image_tasks), 5)  # Cap concurrent requests
-    
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {executor.submit(process_single_image, task): task[0] for task in image_tasks}
-        
-        completed = 0
-        for future in as_completed(futures, timeout=300):
-            orig_idx = futures[future]
-            try:
-                idx, text = future.result()
-                completed += 1
-                
-                if text and len(text) > 10 and "error" not in text.lower():
-                    final_results[idx] = text
-                    logging.info(f"[OCR Pool] Image {idx} completed ({completed}/{len(image_tasks)})")
-                else:
-                    # Use fallback
-                    final_results[idx] = fallback_texts.get(idx, "")
-                    if final_results[idx]:
-                        logging.info(f"[OCR Pool] Image {idx} using fallback ({completed}/{len(image_tasks)})")
-            except Exception as e:
-                logging.error(f"[OCR Pool] Future for image {orig_idx} failed: {e}")
-                final_results[orig_idx] = fallback_texts.get(orig_idx, "")
-    
-    logging.info(f"[OCR Pool] Completed processing {len(image_tasks)} images")
-    return final_results
-
-
 def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", chunk_size=10):
     """
     OPTIMIZED batch OCR with:
@@ -795,33 +680,36 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
             logging.error(f"[OCR] Chunk {chunk_idx} failed: {e}")
             return []
 
-    # 4. Execute AI Processing - NOW WITH PARALLEL PROVIDER POOL
-    # Using the new provider pool for intelligent parallel routing across Groq/Gemini/OpenRouter
+    # 4. Execute SEQUENTIAL AI (NOT parallel - Semaphore(1) blocks anyway)
+    # Parallel execution with Semaphore(1) causes deadlocks because:
+    # - ThreadPoolExecutor submits all chunks at once
+    # - Each chunk tries to acquire Semaphore(1)
+    # - Only 1 can proceed, others block forever
+    # - future.result() waits forever for blocked threads
+    # SOLUTION: Process chunks sequentially with explicit timeouts
     
-    if POOL_AVAILABLE:
-        logging.info(f"[OCR] Using NEW Provider Pool for parallel processing...")
-        final_results = _process_with_pool(ai_queue, fallback_texts, final_results, total_chunks)
-    else:
-        # Fallback to legacy sequential processing
-        logging.info(f"[OCR] Provider Pool not available, using legacy sequential processing...")
-        for i, chunk in enumerate(chunks):
-            logging.info(f"[OCR] Processing chunk {i+1}/{total_chunks}...")
-            try:
-                chunk_results = process_ai_chunk(i, chunk, None)
-                
-                if chunk_results:
-                    for orig_idx, text in chunk_results:
-                        if text and len(text) > 10 and "error" not in text.lower():
-                            final_results[orig_idx] = text
-                        else:
-                            final_results[orig_idx] = fallback_texts.get(orig_idx, "")
-                            if final_results[orig_idx]:
-                                logging.info(f"[OCR] AI failed for Msg {orig_idx}, using local fallback.")
-            except Exception as e:
-                logging.error(f"[OCR] Chunk {i} failed with exception: {e}")
-                for orig_idx, _ in chunk:
-                    if not final_results[orig_idx] and orig_idx in fallback_texts:
-                        final_results[orig_idx] = fallback_texts[orig_idx]
+    for i, chunk in enumerate(chunks):
+        logging.info(f"[OCR] Processing chunk {i+1}/{total_chunks}...")
+        try:
+            # Let the Router decide which provider to use (Groq/Gemini/OpenRouter)
+            # Pass None as model to trigger smart routing
+            chunk_results = process_ai_chunk(i, chunk, None)
+            
+            if chunk_results:
+                for orig_idx, text in chunk_results:
+                    if text and len(text) > 10 and "error" not in text.lower():
+                        final_results[orig_idx] = text
+                    else:
+                        # AI returned empty/garbage -> use fallback
+                        final_results[orig_idx] = fallback_texts.get(orig_idx, "")
+                        if final_results[orig_idx]:
+                            logging.info(f"[OCR] AI failed for Msg {orig_idx}, using local fallback.")
+        except Exception as e:
+            logging.error(f"[OCR] Chunk {i} failed with exception: {e}")
+            # Apply fallbacks for this chunk
+            for orig_idx, _ in chunk:
+                if not final_results[orig_idx] and orig_idx in fallback_texts:
+                    final_results[orig_idx] = fallback_texts[orig_idx]
 
     # Final Sweep: Apply fallback to any images that went to AI but have empty results
     for i, _ in ai_queue:

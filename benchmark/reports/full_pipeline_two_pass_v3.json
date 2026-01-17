@@ -1,0 +1,58 @@
+{
+  "config": {
+    "model": "tngtech/deepseek-r1t2-chimera:free",
+    "use_vision_ocr": true,
+    "images_tested": 5
+  },
+  "metrics": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "total_tp": 21,
+    "total_fp": 0,
+    "total_fn": 0,
+    "avg_latency": 4.073808431625366
+  },
+  "per_image": {
+    "image_01.jpg": {
+      "expected": 4,
+      "extracted": 4,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "latency": 6.320098638534546
+    },
+    "image_02.jpg": {
+      "expected": 1,
+      "extracted": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency": 3.208158254623413
+    },
+    "image_03.jpg": {
+      "expected": 3,
+      "extracted": 3,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "latency": 1.6954975128173828
+    },
+    "image_04.jpg": {
+      "expected": 7,
+      "extracted": 7,
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "latency": 4.810237407684326
+    },
+    "image_05.jpg": {
+      "expected": 6,
+      "extracted": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "latency": 4.335050344467163
+    }
+  }
+}

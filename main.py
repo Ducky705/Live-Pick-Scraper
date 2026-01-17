@@ -24,11 +24,6 @@ from flask import Flask, render_template, request, jsonify
 from concurrent.futures import ThreadPoolExecutor
 from src.openrouter_client import openrouter_completion, openrouter_parallel_completion
 from src.utils import clean_text_for_ai
-from src.two_pass_verifier import verifier as two_pass_verifier
-from src.deduplicator import deduplicator
-from src.alias_manager import alias_manager
-from src.models import BetPick, TelegramMessage
-
 
 # ADDED: Production server import
 try:
@@ -492,31 +487,22 @@ def api_ai_fill():
             # Unwrap if it's the new container format
             if isinstance(result_obj, dict) and 'picks' in result_obj:
                 raw_picks = result_obj['picks']
-            elif isinstance(result_obj, list):
-                raw_picks = result_obj
-            else:
-                raw_picks = []
-            
-            logging.info(f"[AI Fill] Number of raw picks from AI: {len(raw_picks)}")
-            logging.info(f"[AI Fill] Unique cappers found: {set(p.get('cn', 'Unknown') for p in raw_picks)}")
-            logging.info(f"[AI Fill] Raw picks preview: {raw_picks[:5]}")
-            logging.info(f"[Validate] Starting validation with {len(raw_picks)} picks")
-            
-            # Remap Short Keys to Long Keys
-            remapped = []
-            for p in raw_picks:
-                remapped.append({
-                    "message_id": p.get("id"),
-                    "capper_name": p.get("cn"),
-                    "league": p.get("lg"),
-                    "type": p.get("ty"),
-                    "pick": p.get("p"),
-                    "odds": p.get("od"),
-                    "units": p.get("u", 1.0)
-                })
-            
-            # Apply Fuzzy Odds Matching
-            result_obj = smart_merge_odds(remapped)
+                logging.info(f"[AI Fill] Number of raw picks from AI: {len(raw_picks)}")
+                # Remap Short Keys to Long Keys
+                remapped = []
+                for p in raw_picks:
+                    remapped.append({
+                        "message_id": p.get("id"),
+                        "capper_name": p.get("cn"),
+                        "league": p.get("lg"),
+                        "type": p.get("ty"),
+                        "pick": p.get("p"),
+                        "odds": p.get("od"),
+                        "units": p.get("u", 1.0)
+                    })
+                
+                # Apply Fuzzy Odds Matching
+                result_obj = smart_merge_odds(remapped)
             
             # DEBUG: Track pick flow
             logging.info(f"[AI Fill] Final picks after processing: {len(result_obj)}")
@@ -537,101 +523,102 @@ def api_ai_fill():
 @app.route('/api/validate_picks', methods=['POST'])
 def api_validate_picks():
     data = request.json
-    picks_data = data.get('picks', [])
-    original_msgs_data = data.get('original_messages', [])
-    auto_fix = data.get('auto_fix', True) # Enable by default for now
+    picks = data.get('picks', [])
+    original_messages = data.get('original_messages', [])
     
-    # 1. Convert to Models
-    picks = []
-    for p in picks_data:
-        try:
-            # Ensure ID is handled correctly
-            if 'id' in p and 'message_id' not in p:
-                p['message_id'] = p['id']
-            picks.append(BetPick(**p))
-        except Exception as e:
-            logging.warning(f"Failed to convert pick to model: {e}")
-            pass
+    # AUTO-FIX: Try to deduce odds from siblings BEFORE validation
+    picks = smart_merge_odds(picks)
+    
+    msg_map = {m['id']: f"[CAPTION]: {m.get('text','')}\n[OCR]: {m.get('ocr_text','')}" for m in original_messages}
+    
+    failed_items = []
+    
+    # Noise patterns that indicate a bad pick extraction
+    noise_patterns = [
+        # Sportsbook names
+        'hard rock', 'draftkings', 'fanduel', 'betmgm', 'caesars', 'bet365', 'pointsbet',
+        # Record labels / promo text
+        'main play', 'potd', 'lock of the day', 'fire pick', 'max bet', 'bomb',
+        '5-', '4-', '3-', '2-', '1-', '0-',  # Record patterns like "5-2 Run"
+        # Generic descriptions (missing specifics)
+        'player passing yards', 'player rushing yards', 'player receiving yards',
+        'team totals', 'moneyline pick', 'spread pick'
+    ]
+    
+    import re
+    # Pattern: Valid pick should have a number (spread/total) or "ML"
+    has_number_or_ml = re.compile(r'(-?\d+\.?\d*|ML|ml|Over|Under|over|under)', re.IGNORECASE)
+    
+    initial_count = len(picks)
+    logging.info(f"[Validate] Starting validation with {initial_count} picks")
+    
+    for pick in picks:
+        capper = pick.get('capper_name', 'Unknown')
+        league = pick.get('league', 'Unknown')
+        pick_value = pick.get('pick', '')
+        pick_lower = pick_value.lower() if pick_value else ''
+        
+        # Check for any failure condition
+        # 1. Critical Missing Info
+        is_unknown_capper = capper in ["Unknown", "N/A", None, ""]
+        is_unknown_league = league in ["Unknown", "Other", None, ""]
+        is_invalid_pick = not pick_value or pick_value == "Unknown"
+        
+        # 2. Strict Parlay Logic: If '/' is present, Type MUST be 'Parlay'
+        # If not, it's a "Failed" extraction that needs AI review
+        has_slash = '/' in pick_value
+        is_parlay = pick.get('type') == 'Parlay'
+        
+        # If it looks like a parlay but isn't marked as one -> FAIL
+        potential_parlay_fail = has_slash and not is_parlay
+        
+        is_failed = (
+            is_unknown_capper or 
+            is_unknown_league or 
+            is_invalid_pick or
+            potential_parlay_fail
+        )
+        
+            # Check for noise patterns in pick
+        if not is_failed and pick_value:
+            for noise in noise_patterns:
+                if noise in pick_lower:
+                    is_failed = True
+                    break
             
-    # 2. Map Messages
-    msg_map = {}
-    for m in original_msgs_data:
-        try:
-            # Handle string vs int ID mismatch
-            mid = m.get('id')
-            if mid is not None:
-                # Create object (safely handling missing fields)
-                msg_obj = TelegramMessage(
-                    id=int(mid),
-                    text=m.get('text', ''),
-                    date=m.get('date', 'Unknown'),
-                    channel_id=m.get('channel_id', 0),
-                    channel_name=m.get('channel_name', 'Unknown'),
-                    images=m.get('images', []),
-                    video=m.get('video'),
-                    ocr_text=m.get('ocr_text', '')
-                )
-                msg_map[int(mid)] = msg_obj
-                msg_map[str(mid)] = msg_obj # Map both just in case
-        except Exception as e:
-            logging.warning(f"Failed to convert message to model: {e}")
-            pass
+            # Check if pick lacks proper formatting (no number or ML)
+            if not is_failed and not has_number_or_ml.search(pick_value):
+                is_failed = True
 
-    # 3. Two-Pass Verification (Auto-Fix)
-    if auto_fix:
-        logging.info(f"[Validate] Running Two-Pass Verification on {len(picks)} picks...")
-        try:
-            # Handle async execution safely
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            fixed_picks = loop.run_until_complete(two_pass_verifier.verify_picks(picks, msg_map))
-            loop.close()
-            
-            # Merge odds one last time
-            fixed_picks_dicts = [p.dict() for p in fixed_picks]
-            final_picks = smart_merge_odds(fixed_picks_dicts)
-            
-            # Resolve Aliases
-            for p in final_picks:
-                if 'capper_name' in p:
-                    p['capper_name'] = alias_manager.resolve_capper(p['capper_name'])
-            
-            # Deduplicate
-            check_dupes = data.get('check_dupes', True)
-            if check_dupes:
-                try:
-                    for p_dict in final_picks:
-                        try:
-                            # Re-construct object just for hashing (inefficient but safe)
-                            p_obj = BetPick(**p_dict)
-                            if deduplicator.check_and_add(p_obj):
-                                # Mark as duplicate
-                                existing_warning = p_dict.get('warning')
-                                if existing_warning:
-                                    p_dict['warning'] = f"{existing_warning} | Duplicate"
-                                else:
-                                    p_dict['warning'] = "Duplicate"
-                        except Exception: 
-                            pass
-                except Exception as e:
-                    logging.error(f"[Deduplicator] Error: {e}")
-
-            logging.info(f"[Validate] Verification complete. Returning {len(final_picks)} picks.")
-            
-            return jsonify({
-                'status': 'clean', 
-                'picks': final_picks, 
-                'fixed': True
+        # DON'T force revision for missing chem/tags - these are optional enhancements
+        # Only fail if critical data is missing
+        
+        if is_failed:
+            msg_id = pick.get('message_id')
+            failed_items.append({
+                "message_id": msg_id,
+                "capper_name": capper,
+                "league": league,
+                "pick": pick_value,
+                "original_text": msg_map.get(msg_id, "")[:1500] 
             })
-        except Exception as e:
-            logging.error(f"[Validate] Auto-fix failed: {e}")
-            import traceback
-            traceback.print_exc()
-            # If auto-fix fails, return original picks as clean to avoid blocking
-            return jsonify({'status': 'clean', 'picks': picks_data})
+    
+    logging.info(f"[Validate] Passed: {initial_count - len(failed_items)}, Failed: {len(failed_items)}")
 
-    return jsonify({'status': 'clean', 'picks': picks_data})
-
+    if not failed_items:
+        return jsonify({'status': 'clean'})
+    
+    # Collect Reference Picks (Good picks with odds)
+    reference_picks = [p for p in picks if p not in failed_items and p.get('odds')]
+    
+    generate_revision_prompt = get_prompt_funcs()[1]
+    revision_prompt = generate_revision_prompt(failed_items, reference_picks=reference_picks)
+    return jsonify({
+        'status': 'needs_revision', 
+        'failed_count': len(failed_items), 
+        'failed_items': failed_items,  # Return list for frontend
+        'revision_prompt': revision_prompt
+    })
 
 @app.route('/api/merge_revisions', methods=['POST'])
 def api_merge_revisions():

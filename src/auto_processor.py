@@ -44,9 +44,8 @@ class PostClassification:
 
 # Heuristic patterns for FAST text-based classification (no AI needed)
 # CONSERVATIVE: Only filter when we're VERY confident (100% accuracy goal)
-# FIXED: Don't filter "dm for picks" - this might contain actual bets!
 PROMO_PATTERNS = [
-    # r'join\s*(our)?\s*vip\s*(channel|group)',  # DISABLED - can filter actual picks
+    r'join\s*(our)?\s*vip\s*(channel|group)',  # More specific
     r'subscribe\s*(to|for)\s*(our|the)\s*(channel|group)',
     r'limited\s*time\s*offer',
     r'\$\d+\s*(off|discount)',

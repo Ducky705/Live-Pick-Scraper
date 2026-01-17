@@ -111,3 +111,17 @@ app_debug.log
 *.AppImage
 *.snap
 build_standalone/
+
+# Benchmarks and temp
+benchmark/reports/*.json
+!benchmark/reports/full_pipeline_baseline.json
+!benchmark/reports/full_pipeline_two_pass_v3.json
+cache/
+*.csv
+temp_images/
+debug_pipeline.py
+check_limits.py
+inspect_*.py
+test_*.py
+test_*.json
+test_*.txt

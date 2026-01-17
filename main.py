@@ -26,6 +26,7 @@ from src.openrouter_client import openrouter_completion, openrouter_parallel_com
 from src.utils import clean_text_for_ai
 from src.two_pass_verifier import verifier as two_pass_verifier
 from src.deduplicator import deduplicator
+from src.alias_manager import alias_manager
 from src.models import BetPick, TelegramMessage
 
 
@@ -589,6 +590,11 @@ def api_validate_picks():
             # Merge odds one last time
             fixed_picks_dicts = [p.dict() for p in fixed_picks]
             final_picks = smart_merge_odds(fixed_picks_dicts)
+            
+            # Resolve Aliases
+            for p in final_picks:
+                if 'capper_name' in p:
+                    p['capper_name'] = alias_manager.resolve_capper(p['capper_name'])
             
             # Deduplicate
             check_dupes = data.get('check_dupes', True)

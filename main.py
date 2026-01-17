@@ -25,6 +25,7 @@ from concurrent.futures import ThreadPoolExecutor
 from src.openrouter_client import openrouter_completion, openrouter_parallel_completion
 from src.utils import clean_text_for_ai
 from src.two_pass_verifier import verifier as two_pass_verifier
+from src.deduplicator import deduplicator
 from src.models import BetPick, TelegramMessage
 
 
@@ -589,6 +590,26 @@ def api_validate_picks():
             fixed_picks_dicts = [p.dict() for p in fixed_picks]
             final_picks = smart_merge_odds(fixed_picks_dicts)
             
+            # Deduplicate
+            check_dupes = data.get('check_dupes', True)
+            if check_dupes:
+                try:
+                    for p_dict in final_picks:
+                        try:
+                            # Re-construct object just for hashing (inefficient but safe)
+                            p_obj = BetPick(**p_dict)
+                            if deduplicator.check_and_add(p_obj):
+                                # Mark as duplicate
+                                existing_warning = p_dict.get('warning')
+                                if existing_warning:
+                                    p_dict['warning'] = f"{existing_warning} | Duplicate"
+                                else:
+                                    p_dict['warning'] = "Duplicate"
+                        except Exception: 
+                            pass
+                except Exception as e:
+                    logging.error(f"[Deduplicator] Error: {e}")
+
             logging.info(f"[Validate] Verification complete. Returning {len(final_picks)} picks.")
             
             return jsonify({

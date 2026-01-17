@@ -1,0 +1,157 @@
+{
+  "picks": [
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Moneyline",
+      "p": "Russell Henley",
+      "od": 1100,
+      "u": 1.16
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Moneyline",
+      "p": "JJ Spaun",
+      "od": 1800,
+      "u": 0.84
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Moneyline",
+      "p": "Collin Morikawa",
+      "od": 2000,
+      "u": 0.75
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Moneyline",
+      "p": "Corey Conners",
+      "od": 3000,
+      "u": 0.5
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Moneyline",
+      "p": "Ryan Gerard",
+      "od": 6000,
+      "u": 0.25
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Player Prop",
+      "p": "Russell Henley Top 20 Finish",
+      "od": -143,
+      "u": 3.0
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Player Prop",
+      "p": "Si Woo Kim Top 20 Finish",
+      "od": 110,
+      "u": 2.0
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Player Prop",
+      "p": "Michael Kim Top 20 Finish",
+      "od": 320,
+      "u": 1.0
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Game Prop",
+      "p": "Russell Henley > Ben Griffin",
+      "od": -145,
+      "u": 3.0
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Game Prop",
+      "p": "Ryan Gerard > Kirk/Singh",
+      "od": 125,
+      "u": 2.0
+    },
+    {
+      "id": 57496,
+      "cn": "PropJoe",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Kansas State -1.5",
+      "od": -110,
+      "u": 3.0
+    },
+    {
+      "id": 57495,
+      "cn": "HammeringHank",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Missouri +1.5",
+      "od": null,
+      "u": 3.0
+    },
+    {
+      "id": 57491,
+      "cn": "TMS",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "LSU +5",
+      "od": -130,
+      "u": 1.0
+    },
+    {
+      "id": 57490,
+      "cn": "TTW",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Arizona -21.5",
+      "od": -110,
+      "u": 0.75
+    },
+    {
+      "id": 57490,
+      "cn": "TTW",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "Mavericks ML",
+      "od": -138,
+      "u": 1.0
+    },
+    {
+      "id": 57490,
+      "cn": "TTW",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Darius Garland: Pts+Ast Over 24.5",
+      "od": -117,
+      "u": 0.75
+    },
+    {
+      "id": 57490,
+      "cn": "TTW",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Jalen Brunson: Pts Over 28.5",
+      "od": -125,
+      "u": 0.75
+    }
+  ]
+}

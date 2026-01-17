@@ -23,6 +23,8 @@ import webview # Requires: pip install pywebview
 from flask import Flask, render_template, request, jsonify
 from concurrent.futures import ThreadPoolExecutor
 from src.openrouter_client import openrouter_completion, openrouter_parallel_completion
+from src.provider_pool import pooled_completion
+from src.two_pass_verifier import TwoPassVerifier
 from src.utils import clean_text_for_ai
 
 # ADDED: Production server import
@@ -469,11 +471,20 @@ def api_ai_fill():
         
     try:
         if use_parallel:
-            logging.info(f"Calling OpenRouter PARALLEL execution")
-            result_json_str = openrouter_parallel_completion(prompt)
+            logging.info(f"Calling Provider Pool PARALLEL execution")
+            # Convert parallel call to pooled completion call (which handles parallel requests internally via semaphore)
+            # prompt is the text
+            result_json_str = pooled_completion(prompt, timeout=120)
+            
+            # Fallback to OpenRouter Parallel if pool fails
+            if not result_json_str:
+                result_json_str = openrouter_parallel_completion(prompt)
         else:
-            logging.info(f"Calling OpenRouter with model: {model}")
-            result_json_str = openrouter_completion(prompt, model)
+            logging.info(f"Calling Provider Pool execution")
+            result_json_str = pooled_completion(prompt, timeout=120)
+            
+            if not result_json_str:
+                result_json_str = openrouter_completion(prompt, model)
             
         # Parse it here to ensure it's valid JSON before sending to frontend? 
         # Or just send string. Frontend expects Object or Array.
@@ -509,6 +520,47 @@ def api_ai_fill():
             unique_ids = set(p.get('message_id', 0) for p in result_obj)
             logging.info(f"[AI Fill] Unique message IDs with picks: {len(unique_ids)}")
             
+            # --- TWO-PASS VERIFICATION (DeepSeek Chimera Logic) ---
+            if not TwoPassVerifier.verify_parsing_result(result_obj):
+                logging.warning("[AI Fill] Low confidence in parsing result. Triggering Second Pass (DeepSeek R1)...")
+                
+                strong_model = TwoPassVerifier.get_strong_text_model()
+                
+                # Retry with Strong Model
+                # Ensure we have the prompt
+                retry_response_str = openrouter_completion(prompt, model=strong_model, timeout=180)
+                
+                try:
+                    retry_obj = json.loads(retry_response_str)
+                    
+                    # Check if retry result is better
+                    if isinstance(retry_obj, dict) and 'picks' in retry_obj:
+                        retry_picks = retry_obj['picks']
+                        
+                        # Remap Short Keys (duplicate logic, could be refactored)
+                        remapped_retry = []
+                        for p in retry_picks:
+                            remapped_retry.append({
+                                "message_id": p.get("id"),
+                                "capper_name": p.get("cn"),
+                                "league": p.get("lg"),
+                                "type": p.get("ty"),
+                                "pick": p.get("p"),
+                                "odds": p.get("od"),
+                                "units": p.get("u", 1.0)
+                            })
+                        
+                        retry_obj = smart_merge_odds(remapped_retry)
+                        
+                        if TwoPassVerifier.verify_parsing_result(retry_obj):
+                            logging.info("[AI Fill] Second Pass Successful! Using DeepSeek result.")
+                            result_obj = retry_obj
+                        else:
+                            logging.warning("[AI Fill] Second Pass also low confidence. Keeping original.")
+                    
+                except Exception as e:
+                    logging.error(f"[AI Fill] Second Pass Failed: {e}")
+
             return jsonify({'result': result_obj})
         except json.JSONDecodeError as e:
             logging.error(f"[AI Fill] JSON Decode Error: {e}")
@@ -809,7 +861,11 @@ If score not found, result="Unknown".
                 # Call AI with SHORT timeout (30s) and only 1 cycle to prevent hanging
                 # Grading is non-critical, so we fail fast instead of retrying forever
                 logging.info(f"[AI Grading] Calling AI for {len(ai_payload)} pending items...")
-                ai_resp_str = openrouter_completion(prompt, "google/gemini-2.0-flash-exp:free", timeout=30, max_cycles=1)
+                # Use Pool for grading (text task)
+                ai_resp_str = pooled_completion(prompt, timeout=30)
+                if not ai_resp_str:
+                    ai_resp_str = openrouter_completion(prompt, "google/gemini-2.0-flash-exp:free", timeout=30, max_cycles=1)
+                
                 ai_resp = json.loads(ai_resp_str)
                 
                 # Merge AI Grades
@@ -1187,8 +1243,12 @@ Use the Context (original message) to determine the correct values.
     try:
         # Call AI
         # Using the primary reasoning model (same as parser)
-        model = "google/gemini-2.0-flash-exp:free"
-        response_str = openrouter_completion(prompt, model)
+        # Use pool for auto-review
+        response_str = pooled_completion(prompt, timeout=60)
+        
+        if not response_str:
+            model = "google/gemini-2.0-flash-exp:free"
+            response_str = openrouter_completion(prompt, model, timeout=60)
         
         # Parse
         # Build context map for enriching response

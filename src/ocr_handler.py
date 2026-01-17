@@ -12,6 +12,8 @@ import time
 import base64
 import io
 from src.openrouter_client import openrouter_completion
+from src.provider_pool import pooled_completion
+from src.two_pass_verifier import TwoPassVerifier
 from config import TEMP_IMG_DIR
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -427,8 +429,13 @@ def extract_text_ai(image_path, model="google/gemma-3-12b-it:free"):
     )
     
     try:
-        # Call OpenRouter with image - now validates JSON automatically
-        response_json = openrouter_completion(prompt, model=model, images=[sys_path])
+        # Call Provider Pool (handles Cerebras/Mistral/Groq/OpenRouter)
+        # Use single image
+        response_json = pooled_completion(prompt, images=[sys_path], timeout=180)
+        
+        if not response_json:
+            # Fallback to OpenRouter directly if pool fails
+            response_json = openrouter_completion(prompt, model=model, images=[sys_path], timeout=180)
         
         # Parse the JSON response
         try:
@@ -680,10 +687,22 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                 "Example Output: [\"Full text of image 1\", \"Full text of image 2\"]"
             )
             
-            logging.info(f"[OCR] AI Chunk {chunk_idx+1}/{total_chunks} -> {assigned_model}")
+            logging.info(f"[OCR] AI Chunk {chunk_idx+1}/{total_chunks} -> Pooled (Mistral/Groq/OpenRouter)")
             
-            # Use specific model for this chunk (load balancing)
-            response = openrouter_completion(prompt, model=assigned_model, images=b64_images, timeout=180)  # Increased timeout to 180s
+            # Use pooled completion for batch processing (if provider supports it)
+            # Currently our pool handles list of images by taking first one for single request
+            # BUT here we are sending a batch of images.
+            # Mistral/Groq client needs to support multiple images in one request?
+            # Most APIs only support 1 image per request or text + multiple images.
+            # Our prompt logic relies on OpenRouter's ability to handle multiple images.
+            
+            # For now, let's stick to OpenRouter for BATCHES because local providers often struggle with 10+ images.
+            # Or we iterate?
+            # Reverting to OpenRouter for safety on batches, OR we implement improved looping in pool.
+            
+            # Actually, standardizing on OpenRouter for massive batches is safer for now
+            # as Mistral/Groq might have stricter limits or different multi-image formats.
+            response = openrouter_completion(prompt, model=assigned_model, images=b64_images, timeout=180)
             
             if not response or len(response) < 50:
                 logging.error(f"[OCR] AI returned empty/short response for chunk {chunk_idx}: {len(response) if response else 0} chars")
@@ -770,6 +789,56 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
             if i in fallback_texts and len(fallback_texts[i]) > 5:
                  final_results[i] = fallback_texts[i]
                  logging.info(f"[OCR] Using local fallback for failed AI image {i}")
+
+    # --- TWO-PASS VERIFICATION (DeepSeek Chimera Logic) ---
+    # Check for low-confidence results and retry with stronger model
+    retry_indices = []
+    
+    for i, text in enumerate(final_results):
+        # Don't verify empty/skipped results
+        if not text: continue
+            
+        if not TwoPassVerifier.verify_ocr_result(text):
+            retry_indices.append(i)
+            
+    if retry_indices:
+        logging.info(f"[OCR] Two-Pass Verification: {len(retry_indices)} images flagged for retry with Strong Vision Model.")
+        
+        # Prepare retry batch
+        # We need the original paths
+        retry_paths = [resolved_paths[i] for i in retry_indices]
+        
+        # Use simple sequential processing for retry (it's usually small)
+        strong_model = TwoPassVerifier.get_strong_vision_model()
+        
+        for idx, path in zip(retry_indices, retry_paths):
+            try:
+                # Use extract_text_ai with explicit model
+                logging.info(f"[OCR] Retrying Image {idx} with {strong_model}...")
+                retry_text = extract_text_ai(path, model=strong_model)
+                
+                if TwoPassVerifier.verify_ocr_result(retry_text):
+                    final_results[idx] = retry_text
+                    logging.info(f"[OCR] Retry Success for Image {idx}")
+                    
+                    # Update Cache if possible
+                    try:
+                        # We need the hash again. We can re-calc or lookup.
+                        # We have 'needs_processing' but indices might not align if some were cached.
+                        # It's safer to just re-calc hash for this specific file
+                        import hashlib
+                        with open(path, "rb") as f:
+                            h = hashlib.sha256(f.read()).hexdigest()
+                        
+                        cache_path = os.path.join(CACHE_DIR, f"{h}.txt")
+                        with open(cache_path, "w", encoding="utf-8") as f:
+                            f.write(retry_text)
+                    except Exception as e:
+                        logging.warning(f"[OCR] Failed to update cache for retry: {e}")
+                else:
+                    logging.warning(f"[OCR] Retry Failed for Image {idx} (still low confidence)")
+            except Exception as e:
+                logging.error(f"[OCR] Retry Exception for Image {idx}: {e}")
 
     return final_results
 

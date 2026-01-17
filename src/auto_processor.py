@@ -26,6 +26,7 @@ else:
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 from src.openrouter_client import openrouter_completion
+from src.provider_pool import pooled_completion
 from src.utils import clean_text_for_ai
 
 # Use the same default model as the main pipeline - VERIFIED WORKING
@@ -259,9 +260,15 @@ Example: {"123":{"class":"PICK","reason":"Lakers -5 slip"}}"""
 
         try:
             # Enforce fast model for classification
-            # Using standard completion (which now uses our optimized sequential logic if parallel called, but here we call direct)
+            # Using pooled completion to distribute load across providers
             # We want the FASTEST model for this.
-            response = openrouter_completion(prompt, model="google/gemini-2.0-flash-exp:free", images=images_to_send, timeout=60)
+            
+            # Use pooled completion if available, falling back to OpenRouter if all pools fail
+            response = pooled_completion(prompt, images=images_to_send, timeout=60)
+            
+            if not response:
+                # Fallback to OpenRouter directly
+                response = openrouter_completion(prompt, model="google/gemini-2.0-flash-exp:free", images=images_to_send, timeout=60)
             
             # Parse response
             cleaned = response.strip()

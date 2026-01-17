@@ -1,0 +1,943 @@
+{
+  "picks": [
+    {
+      "id": 57500,
+      "cn": "KimsPicks",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "Dallas mavericks ML",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57500,
+      "cn": "KimsPicks",
+      "lg": "NBA",
+      "ty": "Spread",
+      "p": "Utah Jazz +4.5",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57500,
+      "cn": "KimsPicks",
+      "lg": "NHL",
+      "ty": "Moneyline",
+      "p": "New Jersey devils ML",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57500,
+      "cn": "KimsPicks",
+      "lg": "NHL",
+      "ty": "Moneyline",
+      "p": "Buffalo Sabres ML",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57499,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Total",
+      "p": "SC vs ARK Over 155.5",
+      "od": -125,
+      "u": 5.0
+    },
+    {
+      "id": 57499,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Team Prop",
+      "p": "SC: TTO 71.5",
+      "od": -120,
+      "u": 3.0
+    },
+    {
+      "id": 57499,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Team Prop",
+      "p": "ARK: TTO 83.5",
+      "od": -131,
+      "u": 3.0
+    },
+    {
+      "id": 57499,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Period",
+      "p": "1H SC vs ARK Over 73.5",
+      "od": -122,
+      "u": 3.0
+    },
+    {
+      "id": 57498,
+      "cn": "NickyCashin",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Pitt ML",
+      "od": -115,
+      "u": 1.5
+    },
+    {
+      "id": 57498,
+      "cn": "NickyCashin",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Kansas State ML",
+      "od": -145,
+      "u": 2.0
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Future",
+      "p": "Outright Winner: Russell Henley",
+      "od": 1100,
+      "u": 1.16
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Future",
+      "p": "Outright Winner: JJ Spaun",
+      "od": 1800,
+      "u": 0.84
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Future",
+      "p": "Outright Winner: Collin Morikawa",
+      "od": 2000,
+      "u": 0.75
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Future",
+      "p": "Outright Winner: Corey Conners",
+      "od": 3000,
+      "u": 0.5
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Future",
+      "p": "Outright Winner: Ryan Gerard",
+      "od": 6000,
+      "u": 0.25
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Future",
+      "p": "Top 20 Finish: Russell Henley",
+      "od": -143,
+      "u": 3.0
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Future",
+      "p": "Top 20 Finish: Si Woo Kim",
+      "od": 110,
+      "u": 2.0
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Future",
+      "p": "Top 20 Finish: Michael Kim",
+      "od": 320,
+      "u": 1.0
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Game Prop",
+      "p": "Russell Henley -145 > Ben Griffin",
+      "od": null,
+      "u": 3.0
+    },
+    {
+      "id": 57497,
+      "cn": "HammeringHank",
+      "lg": "PGA",
+      "ty": "Game Prop",
+      "p": "R. Gerard +125 > Kirk/Singh",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57496,
+      "cn": "PropJoe",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Kansas State -1.5",
+      "od": -110,
+      "u": 3.0
+    },
+    {
+      "id": 57495,
+      "cn": "HammeringHank",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Missouri +1.5",
+      "od": null,
+      "u": 3.0
+    },
+    {
+      "id": 57491,
+      "cn": "TMS",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "LSU +5",
+      "od": -130,
+      "u": 1.0
+    },
+    {
+      "id": 57490,
+      "cn": "TTW",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Arizona -21.5",
+      "od": -110,
+      "u": 0.75
+    },
+    {
+      "id": 57490,
+      "cn": "TTW",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "Mavericks ML",
+      "od": -138,
+      "u": 1.0
+    },
+    {
+      "id": 57490,
+      "cn": "TTW",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Darius Garland: Pts+Ast Over 24.5",
+      "od": -117,
+      "u": 0.75
+    },
+    {
+      "id": 57490,
+      "cn": "TTW",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Jalen Brunson: Pts Over 28.5",
+      "od": -125,
+      "u": 0.75
+    },
+    {
+      "id": 57489,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Total",
+      "p": "VCU vs URI Over 144.5",
+      "od": -115,
+      "u": 5.0
+    },
+    {
+      "id": 57489,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Team Prop",
+      "p": "VCU: TTO 74.5",
+      "od": -115,
+      "u": 3.0
+    },
+    {
+      "id": 57489,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Team Prop",
+      "p": "URI: TTO 70.5",
+      "od": -112,
+      "u": 3.0
+    },
+    {
+      "id": 57489,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Period",
+      "p": "1H VCU vs URI Over 69.5",
+      "od": -106,
+      "u": 3.0
+    },
+    {
+      "id": 57488,
+      "cn": "TheGamblingGawd",
+      "lg": "NHL",
+      "ty": "Moneyline",
+      "p": "Sabres ML",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57488,
+      "cn": "TheGamblingGawd",
+      "lg": "NHL",
+      "ty": "Moneyline",
+      "p": "Golden Knights ML",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57488,
+      "cn": "TheGamblingGawd",
+      "lg": "NHL",
+      "ty": "Total",
+      "p": "Golden Knights Over 5.5",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57488,
+      "cn": "TheGamblingGawd",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "St Bonaventure ML",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57488,
+      "cn": "TheGamblingGawd",
+      "lg": "NHL",
+      "ty": "Total",
+      "p": "Sabres Over 6.5",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57488,
+      "cn": "TheGamblingGawd",
+      "lg": "NHL",
+      "ty": "Total",
+      "p": "Kraken Over 5.5",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57488,
+      "cn": "TheGamblingGawd",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "Raptors ML",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57488,
+      "cn": "TheGamblingGawd",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "Nuggets ML",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57487,
+      "cn": "Mojo",
+      "lg": "TENNIS",
+      "ty": "Moneyline",
+      "p": "Jaume Munar ML",
+      "od": 115,
+      "u": 7.0
+    },
+    {
+      "id": 57487,
+      "cn": "Mojo",
+      "lg": "TENNIS",
+      "ty": "Spread",
+      "p": "Luciano Darderi +3.5",
+      "od": -120,
+      "u": 5.0
+    },
+    {
+      "id": 57487,
+      "cn": "Mojo",
+      "lg": "TENNIS",
+      "ty": "Parlay",
+      "p": "(TENNIS) Tommy Paul ML / (TENNIS) Seb Baez +5.0",
+      "od": -137,
+      "u": 5.0
+    },
+    {
+      "id": 57487,
+      "cn": "Mojo",
+      "lg": "TENNIS",
+      "ty": "Moneyline",
+      "p": "Fabian Maroszan ML",
+      "od": -130,
+      "u": 4.0
+    },
+    {
+      "id": 57486,
+      "cn": "BankrollBill",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Holy Cross -4",
+      "od": -115,
+      "u": 1.5
+    },
+    {
+      "id": 57486,
+      "cn": "BankrollBill",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Wyoming ML",
+      "od": 105,
+      "u": 1.0
+    },
+    {
+      "id": 57486,
+      "cn": "BankrollBill",
+      "lg": "NCAAB",
+      "ty": "Total",
+      "p": "UCLA vs Penn State Over 148.5",
+      "od": -110,
+      "u": 1.0
+    },
+    {
+      "id": 57485,
+      "cn": "A11Bets",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Auburn ML",
+      "od": 100,
+      "u": 2.0
+    },
+    {
+      "id": 57485,
+      "cn": "A11Bets",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Pittsburgh ML",
+      "od": -113,
+      "u": 2.0
+    },
+    {
+      "id": 57485,
+      "cn": "A11Bets",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Stanford +4",
+      "od": -115,
+      "u": 2.0
+    },
+    {
+      "id": 57485,
+      "cn": "A11Bets",
+      "lg": "Other",
+      "ty": "Parlay",
+      "p": "(NCAAB) Kansas State ML / (NCAAB) Michigan ML",
+      "od": -120,
+      "u": 2.0
+    },
+    {
+      "id": 57485,
+      "cn": "A11Bets",
+      "lg": "Other",
+      "ty": "Parlay",
+      "p": "(NCAAB) Kentucky ML / (NCAAB) Duke ML",
+      "od": -130,
+      "u": 1.5
+    },
+    {
+      "id": 57485,
+      "cn": "A11Bets",
+      "lg": "Other",
+      "ty": "Parlay",
+      "p": "(NCAAB) Cincinnati ML / (NCAAB) UCLA ML",
+      "od": -112,
+      "u": 1.0
+    },
+    {
+      "id": 57485,
+      "cn": "A11Bets",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Cincinnati -8",
+      "od": -110,
+      "u": 1.0
+    },
+    {
+      "id": 57485,
+      "cn": "A11Bets",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Cavaliers ML",
+      "od": -102,
+      "u": 1.0
+    },
+    {
+      "id": 57482,
+      "cn": "NewmarkTennis",
+      "lg": "TENNIS",
+      "ty": "Moneyline",
+      "p": "Machac ML",
+      "od": -128,
+      "u": 3.0
+    },
+    {
+      "id": 57482,
+      "cn": "NewmarkTennis",
+      "lg": "TENNIS",
+      "ty": "Moneyline",
+      "p": "Paul + Humbert MLP",
+      "od": -136,
+      "u": 3.0
+    },
+    {
+      "id": 57482,
+      "cn": "NewmarkTennis",
+      "lg": "TENNIS",
+      "ty": "Moneyline",
+      "p": "Marozsan ML",
+      "od": -125,
+      "u": 3.0
+    },
+    {
+      "id": 57482,
+      "cn": "NewmarkTennis",
+      "lg": "TENNIS",
+      "ty": "Moneyline",
+      "p": "Mensik ML",
+      "od": -150,
+      "u": 3.0
+    },
+    {
+      "id": 57481,
+      "cn": "DirtyBubbleBets",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Auburn ML",
+      "od": -115,
+      "u": 1.0
+    },
+    {
+      "id": 57481,
+      "cn": "DirtyBubbleBets",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Cincy -8",
+      "od": -120,
+      "u": 1.0
+    },
+    {
+      "id": 57481,
+      "cn": "DirtyBubbleBets",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Kansas State -2",
+      "od": -120,
+      "u": 1.0
+    },
+    {
+      "id": 57481,
+      "cn": "DirtyBubbleBets",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Pitt ML",
+      "od": -122,
+      "u": 1.0
+    },
+    {
+      "id": 57481,
+      "cn": "DirtyBubbleBets",
+      "lg": "NBA",
+      "ty": "Spread",
+      "p": "Mavs -2",
+      "od": -120,
+      "u": 1.0
+    },
+    {
+      "id": 57480,
+      "cn": "DarthFader",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Arizona St. +21.5",
+      "od": null,
+      "u": 3.0
+    },
+    {
+      "id": 57480,
+      "cn": "DarthFader",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Missouri ML",
+      "od": -105,
+      "u": 2.0
+    },
+    {
+      "id": 57480,
+      "cn": "DarthFader",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Colorado +8.5",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57480,
+      "cn": "DarthFader",
+      "lg": "NBA",
+      "ty": "Total",
+      "p": "Nets vs Pelicans Over 229.5",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57480,
+      "cn": "DarthFader",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "Kings ML",
+      "od": -105,
+      "u": 1.0
+    },
+    {
+      "id": 57479,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Total",
+      "p": "DAV vs GW Over 148.5",
+      "od": -110,
+      "u": 5.0
+    },
+    {
+      "id": 57479,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Team Prop",
+      "p": "DAV: TTO 68.5",
+      "od": -106,
+      "u": 3.0
+    },
+    {
+      "id": 57479,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Team Prop",
+      "p": "GW: TTO 80.5",
+      "od": -106,
+      "u": 3.0
+    },
+    {
+      "id": 57479,
+      "cn": "SeekingReturns",
+      "lg": "NCAAB",
+      "ty": "Period",
+      "p": "1H DAV vs GW Over 70.5",
+      "od": -110,
+      "u": 3.0
+    },
+    {
+      "id": 57475,
+      "cn": "PardonMyPick",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "NORTH CAROLINA -3",
+      "od": -118,
+      "u": 3.0
+    },
+    {
+      "id": 57475,
+      "cn": "PardonMyPick",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "BUTLER ML",
+      "od": -120,
+      "u": 2.0
+    },
+    {
+      "id": 57475,
+      "cn": "PardonMyPick",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "TEXAS +5",
+      "od": -108,
+      "u": 2.0
+    },
+    {
+      "id": 57475,
+      "cn": "PardonMyPick",
+      "lg": "NHL",
+      "ty": "Moneyline",
+      "p": "SENATORS ML",
+      "od": -118,
+      "u": 4.0
+    },
+    {
+      "id": 57474,
+      "cn": "BetSharper",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Butler Moneyline",
+      "od": -115,
+      "u": 1.0
+    },
+    {
+      "id": 57474,
+      "cn": "BetSharper",
+      "lg": "NCAAB",
+      "ty": "Total",
+      "p": "High Point vs Winthrop Over 162.5",
+      "od": -110,
+      "u": 1.0
+    },
+    {
+      "id": 57474,
+      "cn": "BetSharper",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Richmond -7.5",
+      "od": -110,
+      "u": 1.0
+    },
+    {
+      "id": 57474,
+      "cn": "BetSharper",
+      "lg": "NCAAB",
+      "ty": "Total",
+      "p": "Auburn vs Missouri Over 153",
+      "od": -110,
+      "u": 1.0
+    },
+    {
+      "id": 57474,
+      "cn": "BetSharper",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "North Carolina -3.5",
+      "od": -110,
+      "u": 1.0
+    },
+    {
+      "id": 57473,
+      "cn": "BankrollBill",
+      "lg": "Other",
+      "ty": "Spread",
+      "p": "Olympiakos -9.5",
+      "od": -110,
+      "u": 1.0
+    },
+    {
+      "id": 57471,
+      "cn": "BettingWithBush",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "MAVS ML",
+      "od": -107,
+      "u": 1.0
+    },
+    {
+      "id": 57470,
+      "cn": "ZachsBets",
+      "lg": "Other",
+      "ty": "Parlay",
+      "p": "(Other) Monchengladbach vs Hoffenheim BTTS / (NCAAB) Purdue ML",
+      "od": -130,
+      "u": 7.5
+    },
+    {
+      "id": 57469,
+      "cn": "A1Fantasy",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Michael Porter Jr: PRA Over 36.5",
+      "od": -115,
+      "u": 0.85
+    },
+    {
+      "id": 57468,
+      "cn": "LearLocks",
+      "lg": "EPL",
+      "ty": "Team Prop",
+      "p": "RB Leipzig TT OVER 1.5",
+      "od": -135,
+      "u": null
+    },
+    {
+      "id": 57467,
+      "cn": "Matthewp07",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Jarace Walker: Pts Under 9.5",
+      "od": null,
+      "u": null
+    },
+    {
+      "id": 57467,
+      "cn": "Matthewp07",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Scotty Barnes: Pts Over 20.5",
+      "od": null,
+      "u": null
+    },
+    {
+      "id": 57467,
+      "cn": "Matthewp07",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Nikola Vucevic: Pts+Asts Over 20.5",
+      "od": null,
+      "u": null
+    },
+    {
+      "id": 57467,
+      "cn": "Matthewp07",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Evan Mobley: Reb Over 8.5",
+      "od": null,
+      "u": null
+    },
+    {
+      "id": 57466,
+      "cn": "DormroomDegenerates",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "St. Bonaventure ML",
+      "od": null,
+      "u": null
+    },
+    {
+      "id": 57466,
+      "cn": "DormroomDegenerates",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "North Carolina -3.5",
+      "od": null,
+      "u": null
+    },
+    {
+      "id": 57466,
+      "cn": "DormroomDegenerates",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Michigan -11.5",
+      "od": null,
+      "u": null
+    },
+    {
+      "id": 57461,
+      "cn": "A1Fantasy",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Evan Mobley: PA Over 20.5",
+      "od": -112,
+      "u": 1.0
+    },
+    {
+      "id": 57461,
+      "cn": "A1Fantasy",
+      "lg": "NFL",
+      "ty": "Player Prop",
+      "p": "Christian McCaffrey: Rec Over 5.5",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57461,
+      "cn": "A1Fantasy",
+      "lg": "NFL",
+      "ty": "Player Prop",
+      "p": "Khalil Shakir: Rec Over 4.5",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57460,
+      "cn": "NickyCashin",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Winthrop +1.5",
+      "od": -105,
+      "u": 1.5
+    },
+    {
+      "id": 57460,
+      "cn": "NickyCashin",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Butler ML",
+      "od": -105,
+      "u": 2.0
+    },
+    {
+      "id": 57460,
+      "cn": "NickyCashin",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Cincinnati -8",
+      "od": -115,
+      "u": 2.0
+    },
+    {
+      "id": 57460,
+      "cn": "NickyCashin",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "George Washington -11.5",
+      "od": -105,
+      "u": 2.0
+    },
+    {
+      "id": 57460,
+      "cn": "NickyCashin",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Stanford +4",
+      "od": -110,
+      "u": 2.0
+    },
+    {
+      "id": 57460,
+      "cn": "NickyCashin",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Utah State -13.5",
+      "od": -110,
+      "u": 2.0
+    },
+    {
+      "id": 57459,
+      "cn": "PropJoe",
+      "lg": "NBA",
+      "ty": "Spread",
+      "p": "Brooklyn Nets -1.5",
+      "od": -110,
+      "u": 1.0
+    },
+    {
+      "id": 57459,
+      "cn": "PropJoe",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Northwestern +9",
+      "od": -110,
+      "u": 2.0
+    },
+    {
+      "id": 57459,
+      "cn": "PropJoe",
+      "lg": "NCAAB",
+      "ty": "Spread",

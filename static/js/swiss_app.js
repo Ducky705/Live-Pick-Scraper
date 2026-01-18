@@ -738,7 +738,8 @@ async function runAutoPilot() {
             try {
                 const resAI = await apiCall('/api/ai_fill', 'POST', {
                     prompt: prompt,
-                    model: model
+                    model: model,
+                    messages: state.selectedMessages // Pass for validation
                 });
 
                 console.log(`[AutoPilot] Model ${model} response:`, resAI);
@@ -1479,7 +1480,8 @@ async function handleAutoFill() {
             console.log(`Attempting AI generation with model: ${model}`);
             const res = await apiCall('/api/ai_fill', 'POST', {
                 prompt: prompt,
-                model: model
+                model: model,
+                messages: state.selectedMessages || [] // Pass for validation if available
             });
 
             if (res && (res.result || Array.isArray(res.result))) {

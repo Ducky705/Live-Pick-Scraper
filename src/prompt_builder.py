@@ -283,6 +283,12 @@ Example: "HammeringHank CFB" = cn is "HammeringHank"
   * Example: "Lakers PK" -> "Lakers +0" (Type: Spread).
 * **Conflicting Odds:** If text says "-110" and ticket says "-115", trust the ticket.
 
+### **6. SHORT NAME / ABBREVIATION DETECTION**
+* **Initials are Cappers**: If a caption starts with 2-4 Uppercase Letters followed by a play type or parentheses (e.g., "**BL (Diamond Play)**", "KOF Whale", "JMO"), the Initials ARE the Capper Name.
+  * Example: "**BL (Diamond Play)**" -> cn: "BL" (NOT Unknown)
+  * Example: "KOF 100k" -> cn: "KOF"
+  * Example: "SB - " -> cn: "SB"
+
 {get_master_formatting_guide()}
 
 ### **REQUIRED OUTPUT FORMAT (JSON OBJECT)**
@@ -519,6 +525,10 @@ Use BOTH the image visual data and the provided context text to extract the pick
 - **Sportsbook names**: "Hard Rock", "DraftKings" -> IGNORE.
 - **Watermarks**: "@cappersfree" is NOT the capper. Look for the real name.
 - **Typos**: If you see "MI" or "Money Line", convert it to "ML" (e.g. "Lightning MI" -> "Lightning ML").
+
+### **SHORT NAME / ABBREVIATION DETECTION**
+- **Initials are Cappers**: If a caption starts with 2-4 Uppercase Letters followed by a play type (e.g., "**BL (Diamond Play)**"), the Initials ARE the Capper Name.
+  - Example: "**BL (Diamond Play)**" -> cn: "BL"
 
 {get_master_formatting_guide()}
 

@@ -14,6 +14,7 @@ import io
 from src.openrouter_client import openrouter_completion
 from src.provider_pool import pooled_completion
 from src.two_pass_verifier import TwoPassVerifier
+from src.vision_one_shot import parse_image_direct
 from config import TEMP_IMG_DIR
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -816,10 +817,27 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                 # Use extract_text_ai with explicit model
                 logging.info(f"[OCR] Retrying Image {idx} with {strong_model}...")
                 
-                # --- STRATEGY: Use a stronger, simpler prompt for the retry ---
-                # Sometimes complex JSON prompts confuse the model on difficult images.
-                # A direct "Transcribe this exactly" often yields better raw text.
-                retry_text = extract_text_ai(path, model=strong_model)
+                # --- STRATEGY UPDATE: Use One-Shot Vision Parsing for Retry ---
+                # Instead of asking for raw text (which can still be messy), ask for JSON structure
+                # and then reconstruct the text. This forces the model to interpret the layout.
+                
+                structured_picks = parse_image_direct(path)
+                
+                if structured_picks:
+                    # Reconstruct text from JSON
+                    lines = []
+                    for p in structured_picks:
+                        # Format: "Lakers -5 -110 (1.0u)"
+                        line = f"{p.get('pick', '')} {p.get('odds', '')} ({p.get('units', '')}u)"
+                        if p.get('capper_name') != "Unknown":
+                            line = f"{p.get('capper_name')} " + line
+                        lines.append(line)
+                    
+                    retry_text = "\n".join(lines)
+                    logging.info(f"[OCR] One-Shot Retry generated {len(lines)} structured lines.")
+                else:
+                    # Fallback to standard raw text extraction if One-Shot fails
+                    retry_text = extract_text_ai(path, model=strong_model)
                 
                 if TwoPassVerifier.verify_ocr_result(retry_text):
                     final_results[idx] = retry_text

@@ -56,6 +56,15 @@ PROMO_PATTERNS = [
     r'click\s*(here|link)\s*to\s*(join|subscribe)',
     r'crypto\s*airdrop',
     r'nft\s*giveaway',
+    r'price\s*:\s*\$\d+',                # Price listing
+    r'dm\s*:?\s*@\w+',                   # Direct Message call to action
+    r'days\s+for\s+the\s+price\s+of',    # "2 days for the price of 1"
+    r'join\s*(the|my)?\s*[\w\s]*team',   # "Join the best team"
+    r'bonus\s+cappers',                  # "Bonus cappers included"
+    r'owner\'?s\s+personal\s+play',      # Hype phrase usually for selling
+    r'purchase\s*now',
+    r'link\s*in\s*bio',
+    r'check\s*comments\s*for\s*link',
 ]
 
 # RECAP patterns - VERY CONSERVATIVE to avoid false positives
@@ -252,7 +261,12 @@ def _batch_classify_with_ai(messages: List[Dict[str, Any]],
         
         # Build classification prompt
         prompt = """Classify sports betting images.
-CODES: PICK (Valid Bet), PROMO (Ad/VIP), RECAP (Results), DATA (Spreadsheet).
+CODES:
+- PICK: Valid bet slip or text pick.
+- PROMO: Advertisement, "Join VIP", "Price: $...", "DM for access", blurred content, "Package deal".
+- RECAP: Past results, green/red checkmarks, "Yesterday's Recap".
+- DATA: Spreadsheet rows, complex model outputs.
+
 CONTEXT:
 """ + "\n".join(context_parts) + """
 OUTPUT: Single-line JSON Object {"msg_id":{"class":"CODE","reason":"short reason"}}

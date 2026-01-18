@@ -289,6 +289,12 @@ Example: "HammeringHank CFB" = cn is "HammeringHank"
   * Example: "KOF 100k" -> cn: "KOF"
   * Example: "SB - " -> cn: "SB"
 
+### **7. LIST & COMPLETENESS CHECK**
+* **EXTRACT EVERY SINGLE LINE.** Do not stop after the first pick.
+* **Scan the entire image** (Top, Middle, Bottom).
+* **Lists:** If an image has a list of 5 bets, output 5 separate objects.
+* **Combined Lines:** "Bublik + Tiafoe" -> Treat as Parlay or multiple picks.
+
 {get_master_formatting_guide()}
 
 ### **REQUIRED OUTPUT FORMAT (JSON OBJECT)**

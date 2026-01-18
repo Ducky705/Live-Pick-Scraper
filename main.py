@@ -515,6 +515,24 @@ def api_ai_fill():
                     # Verify capper attribution
                     capper_results = verify_all_picks(original_messages, result_obj)
                     
+                    # AUTO-FIX: Split merged cappers
+                    fixed_picks = []
+                    for pick in result_obj:
+                        cname = pick.get('capper_name')
+                        if cname and MultiCapperVerifier.is_merged_name(cname):
+                            split_names = MultiCapperVerifier.split_merged_capper(cname)
+                            if len(split_names) > 1:
+                                logging.info(f"[AI Fill] Splitting merged capper '{cname}' into {split_names}")
+                                for new_name in split_names:
+                                    new_pick = pick.copy()
+                                    new_pick['capper_name'] = new_name
+                                    fixed_picks.append(new_pick)
+                                continue
+                        
+                        fixed_picks.append(pick)
+                    
+                    result_obj = fixed_picks
+
                     for mid, result in capper_results.items():
                         if not result.is_valid:
                             logging.warning(f"[AI Fill] Capper Verification: Message {mid} - {result.reason}")

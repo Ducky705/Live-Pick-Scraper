@@ -10,36 +10,35 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as
 from threading import Semaphore, Lock
 
 # Global Concurrency Limiter ("Traffic Cop")
-# FULLY SEQUENTIAL: Free tier is extremely rate-limited (~2 req/min for Gemini)
-# Using Lock instead of Semaphore - simpler and no blocking issues
-# We wrap requests in a timeout to prevent infinite hangs
-GLOBAL_REQUEST_LOCK = Lock()
+# PARALLELIZED: Allow up to 5 concurrent requests (free tier can handle this with backoff)
+# Using Semaphore instead of Lock to enable parallelism
+GLOBAL_REQUEST_SEMAPHORE = Semaphore(5)
 
-# Maximum time to wait for the lock (seconds)
-LOCK_ACQUIRE_TIMEOUT = 300  # 5 minutes max wait
+# Maximum time to wait for the semaphore (seconds)
+SEMAPHORE_ACQUIRE_TIMEOUT = 300  # 5 minutes max wait
 
 # Model fallback list (ordered by reliability)
 # VERIFIED WORKING FREE LIST - Only models confirmed via API to exist
 # Note: Many "free" models are text-only or have limited availability
 DEFAULT_MODELS = [
     "google/gemini-2.0-flash-exp:free",      # Primary
-    "google/gemini-2.0-pro-exp-02-05:free",  # Backup
+    "google/gemini-2.0-flash-lite-preview-02-05:free", # Backup (Lite)
     "meta-llama/llama-3.3-70b-instruct:free", # Backup Text
+    "microsoft/phi-3-medium-128k-instruct:free", # Backup
 ]
 
 # Models specifically for "Racing" (Parallel Text Parsing) - TEXT ONLY
 FAST_PARSING_MODELS = [
     "google/gemini-2.0-flash-exp:free",
-    "meta-llama/llama-3.3-70b-instruct:free",
+    "google/gemini-2.0-flash-lite-preview-02-05:free",
 ]
 
 # Vision-capable models for OCR - VERIFIED VISION SUPPORT
-# Most free models are text-only. Gemini Flash is the only reliable free vision model.
 VISION_MODELS = [
     "google/gemini-2.0-flash-exp:free",      # Primary - 1M context, confirmed vision
+    "google/gemini-2.0-flash-lite-preview-02-05:free", # Backup
+    "qwen/qwen-2.5-vl-72b-instruct:free",    # Backup vision (Qwen VL)
     "qwen/qwen-2.5-vl-7b-instruct:free",     # Backup vision (Qwen VL)
-    "nvidia/nemotron-nano-12b-v2-vl:free",   # Backup vision (Nvidia)
-    "allenai/molmo-2-8b:free",               # Backup vision (AllenAI)
 ]
 
 # Retry configuration for free-tier resilience
@@ -253,10 +252,10 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
             }
 
             try:
-                # TRAFFIC COP: Acquire lock with timeout to prevent deadlocks
-                lock_acquired = GLOBAL_REQUEST_LOCK.acquire(timeout=LOCK_ACQUIRE_TIMEOUT)
-                if not lock_acquired:
-                    logging.error(f"[OpenRouter] Failed to acquire lock after {LOCK_ACQUIRE_TIMEOUT}s. Skipping request.")
+                # TRAFFIC COP: Acquire semaphore with timeout to prevent deadlocks
+                semaphore_acquired = GLOBAL_REQUEST_SEMAPHORE.acquire(timeout=SEMAPHORE_ACQUIRE_TIMEOUT)
+                if not semaphore_acquired:
+                    logging.error(f"[OpenRouter] Failed to acquire semaphore after {SEMAPHORE_ACQUIRE_TIMEOUT}s. Skipping request.")
                     model_failures[current_model] += 1
                     continue
                 
@@ -268,7 +267,7 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                         timeout=timeout
                     )
                 finally:
-                    GLOBAL_REQUEST_LOCK.release()
+                    GLOBAL_REQUEST_SEMAPHORE.release()
                 
                 # --- ERROR HANDLING & CIRCUIT BREAKER ---
                 
@@ -287,8 +286,8 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                     # FREE TIER FIX: Wait longer before retry (10s instead of 2s)
                     time.sleep(10)
                     try:
-                        lock_acquired = GLOBAL_REQUEST_LOCK.acquire(timeout=60)
-                        if lock_acquired:
+                        semaphore_acquired = GLOBAL_REQUEST_SEMAPHORE.acquire(timeout=60)
+                        if semaphore_acquired:
                             try:
                                 response = requests.post(
                                     "https://openrouter.ai/api/v1/chat/completions",
@@ -297,7 +296,7 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                                     timeout=timeout
                                 )
                             finally:
-                                GLOBAL_REQUEST_LOCK.release()
+                                GLOBAL_REQUEST_SEMAPHORE.release()
                     except: pass
                     
                     if response.status_code == 429:

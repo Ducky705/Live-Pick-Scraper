@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 from src.utils import clean_text_for_ai
+from src.album_correlator import generate_album_context, AlbumCorrelator
 
 def get_master_formatting_guide():
     return """
@@ -142,11 +143,14 @@ Tennis picks use different formats than team sports:
 def generate_ai_prompt(selected_data):
     # COMPRESSED INPUT FORMAT
     raw_content_list = []
+    album_contexts = []  # Store album correlation contexts
+    
     for item in selected_data:
         entry = f"### {item['id']}"
         
         text_content = clean_text_for_ai(item.get('text', ''))
         ocr_texts = item.get('ocr_texts', [])
+        image_paths = item.get('images', [])
         
         # Fallback to legacy field if new list is empty but old field exists
         if not ocr_texts and item.get('ocr_text'):
@@ -160,10 +164,31 @@ def generate_ai_prompt(selected_data):
                 cleaned_ocr = clean_text_for_ai(ocr_block)
                 if cleaned_ocr:
                     entry += f" [OCR {i+1}] {cleaned_ocr}"
+        
+        # Generate album correlation context if this is a multi-image post
+        if len(image_paths) > 1 and len(ocr_texts) > 1:
+            album_ctx = generate_album_context(
+                caption=text_content,
+                ocr_texts=ocr_texts,
+                image_paths=image_paths,
+                channel_name=item.get('channel_name')
+            )
+            if album_ctx:
+                album_contexts.append(f"**Message {item['id']}:**\n{album_ctx}")
             
         raw_content_list.append(entry)
         
     full_raw_data = "\\n".join(raw_content_list)
+    
+    # Build album correlation section if any albums detected
+    album_section = ""
+    if album_contexts:
+        album_section = """
+### **ALBUM IMAGE-TO-CAPPER MAPPING (CRITICAL!)**
+The following messages contain MULTIPLE IMAGES with capper names listed in the caption.
+USE THIS MAPPING to correctly attribute picks to cappers.
+
+""" + "\n\n".join(album_contexts) + "\n"
 
     prompt = f"""
 *** SYSTEM INSTRUCTION: SET TEMPERATURE TO 0 ***
@@ -280,8 +305,9 @@ Respond ONLY with a JSON Object with a \"picks\" key containing the array using 
 }}
 
 **WRONG Example (DO NOT DO THIS - odds in pick!):**
-{{ \"p\": \"Lakers -5 -110\" }} ← WRONG! Odds should be in \"od\" field!
+{{ \\\"p\\\": \\\"Lakers -5 -110\\\" }} ← WRONG! Odds should be in \\\"od\\\" field!
 
+{album_section}
 ### **RAW DATA**
 {full_raw_data}
 """

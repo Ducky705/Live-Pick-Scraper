@@ -5,14 +5,16 @@ import json
 import logging
 import time
 import base64
-from threading import Lock
+from threading import Semaphore
 
 # Global Concurrency Limiter for Groq
-GLOBAL_GROQ_LOCK = Lock()
-LOCK_ACQUIRE_TIMEOUT = 300
+# PARALLELIZED: Allow up to 2 concurrent requests
+GLOBAL_GROQ_SEMAPHORE = Semaphore(2)
+SEMAPHORE_ACQUIRE_TIMEOUT = 300
 
 # Groq Vision Models (Llama 4 supports vision)
-DEFAULT_MODEL = "llama-3.2-11b-vision-preview" # High quality vision model
+# Updated to 90b as 11b is decommissioned
+DEFAULT_MODEL = "llama-3.2-90b-vision-preview" # High quality vision model
 
 def groq_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=60):
     """
@@ -75,14 +77,14 @@ def groq_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=60)
 
     for attempt in range(3):
         try:
-            if not GLOBAL_GROQ_LOCK.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error("[Groq] Failed to acquire lock.")
+            if not GLOBAL_GROQ_SEMAPHORE.acquire(timeout=SEMAPHORE_ACQUIRE_TIMEOUT):
+                logging.error("[Groq] Failed to acquire semaphore.")
                 return None
             
             try:
                 response = requests.post(url, headers=headers, json=payload, timeout=timeout)
             finally:
-                GLOBAL_GROQ_LOCK.release()
+                GLOBAL_GROQ_SEMAPHORE.release()
 
             if response.status_code == 200:
                 data = response.json()

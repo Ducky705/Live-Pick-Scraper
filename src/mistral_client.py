@@ -5,14 +5,15 @@ import logging
 import time
 import random
 import base64
-from threading import Lock
+from threading import Semaphore
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # Global Concurrency Limiter for Mistral
-GLOBAL_MISTRAL_LOCK = Lock()
-LOCK_ACQUIRE_TIMEOUT = 300
+# PARALLELIZED: Allow up to 3 concurrent requests
+GLOBAL_MISTRAL_SEMAPHORE = Semaphore(3)
+SEMAPHORE_ACQUIRE_TIMEOUT = 300
 
 # Models
 # Text / Reasoning
@@ -133,9 +134,9 @@ def mistral_completion(prompt, model=MISTRAL_SMALL, image_input=None, timeout=60
 
     for cycle in range(max_cycles):
         try:
-            # Acquire lock
-            if not GLOBAL_MISTRAL_LOCK.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error(f"[Mistral] Failed to acquire lock. Skipping.")
+            # Acquire semaphore
+            if not GLOBAL_MISTRAL_SEMAPHORE.acquire(timeout=SEMAPHORE_ACQUIRE_TIMEOUT):
+                logging.error(f"[Mistral] Failed to acquire semaphore. Skipping.")
                 continue
 
             try:
@@ -146,7 +147,7 @@ def mistral_completion(prompt, model=MISTRAL_SMALL, image_input=None, timeout=60
                     timeout=timeout
                 )
             finally:
-                GLOBAL_MISTRAL_LOCK.release()
+                GLOBAL_MISTRAL_SEMAPHORE.release()
 
             if response.status_code == 200:
                 data = response.json()

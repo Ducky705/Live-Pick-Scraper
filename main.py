@@ -26,6 +26,8 @@ from src.openrouter_client import openrouter_completion, openrouter_parallel_com
 from src.provider_pool import pooled_completion
 from src.two_pass_verifier import TwoPassVerifier
 from src.utils import clean_text_for_ai, smart_merge_odds
+from src.multi_pick_validator import MultiPickValidator, validate_and_flag_missing
+from src.multi_capper_verifier import MultiCapperVerifier, verify_all_picks
 
 # ADDED: Production server import
 try:
@@ -492,6 +494,41 @@ def api_ai_fill():
                     
                 except Exception as e:
                     logging.error(f"[AI Fill] Second Pass Failed: {e}")
+
+            # --- MULTI-PICK VALIDATION ---
+            # Store original messages for validation (passed from frontend in data)
+            original_messages = data.get('messages', [])
+            
+            if original_messages and result_obj:
+                try:
+                    # Validate pick counts per message
+                    _, reparse_msg_ids = validate_and_flag_missing(original_messages, result_obj)
+                    
+                    if reparse_msg_ids:
+                        logging.warning(f"[AI Fill] Multi-Pick Validation: {len(reparse_msg_ids)} messages may have missing picks")
+                        
+                        # Add validation metadata to response
+                        for pick in result_obj:
+                            if pick.get('message_id') in reparse_msg_ids:
+                                pick['validation_warning'] = 'Potential missing picks detected'
+                    
+                    # Verify capper attribution
+                    capper_results = verify_all_picks(original_messages, result_obj)
+                    
+                    for mid, result in capper_results.items():
+                        if not result.is_valid:
+                            logging.warning(f"[AI Fill] Capper Verification: Message {mid} - {result.reason}")
+                            
+                            # Tag picks with warnings
+                            for pick in result_obj:
+                                if pick.get('message_id') == mid:
+                                    if result.merged_cappers:
+                                        pick['capper_warning'] = f"Merged names: {result.merged_cappers}"
+                                    elif result.missing_cappers:
+                                        pick['capper_warning'] = f"Missing cappers: {result.missing_cappers}"
+                                        
+                except Exception as e:
+                    logging.error(f"[AI Fill] Validation Error (non-critical): {e}")
 
             return jsonify({'result': result_obj})
         except json.JSONDecodeError as e:

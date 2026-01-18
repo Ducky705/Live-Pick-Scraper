@@ -15,6 +15,7 @@ from src.openrouter_client import openrouter_completion
 from src.provider_pool import pooled_completion
 from src.two_pass_verifier import TwoPassVerifier
 from src.vision_one_shot import parse_image_direct
+from src.image_classifier import ImageClassifier, OCRStrategy
 from config import TEMP_IMG_DIR
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -531,13 +532,13 @@ def check_local_confidence(pil_image):
         return None
 
 
-def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", chunk_size=10):
+def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", chunk_size=1):
     """
     OPTIMIZED batch OCR with:
     - Hybrid Mode: Tries local Tesseract first (Fast Path)
     - In-Memory Processing: No temp files (Zero-Copy)
     - True Parallelism: Distributes chunks across different AI models
-    - Chunk Size: Reduced to 10 to prevent hallucination/mismatch errors.
+    - Chunk Size: Reduced to 1 for Maximum Parallelism across providers (Gemini/Mistral/Groq).
     """
     import cv2
     import numpy as np
@@ -599,7 +600,7 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
     # Queue for AI processing
     ai_queue = [] # list of (original_index, pil_image, hash)
     
-    # 2. Pre-process and Try Local OCR
+    # 2. SMART ROUTING: Use ImageClassifier to determine OCR strategy
     fallback_texts = {} # Store low-confidence local OCR as backup
 
     for i, p, img_hash in needs_processing:
@@ -608,14 +609,31 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
             img_cv = cv2.imread(p)
             if img_cv is None: continue
             
-            # --- IMPROVEMENT: Use Heavy Preprocessing for Tesseract ---
-            # Tesseract needs high contrast/binarization
+            # --- SMART CLASSIFIER: Analyze image to determine best OCR strategy ---
+            analysis = ImageClassifier.classify_from_array(img_cv)
+            
+            if analysis.strategy == OCRStrategy.VISION_AI_REQUIRED:
+                # Skip Tesseract entirely for complex/styled images
+                logging.info(f"[Smart OCR] Vision AI required for {os.path.basename(p)}: {', '.join(analysis.reasons[:2])}")
+                
+                # Store empty fallback (no local OCR attempted)
+                fallback_texts[i] = ""
+                
+                # Prepare for AI (Use lightweight preprocessing for Vision Models)
+                pil_img = preprocess_for_ai(img_cv)
+                ai_queue.append((i, pil_img, img_hash))
+                continue
+            
+            # TESSERACT PATH: For clean, document-style images
+            logging.info(f"[Smart OCR] Tesseract likely for {os.path.basename(p)} (confidence={analysis.confidence:.0%})")
+            
+            # Use Heavy Preprocessing for Tesseract
             heavy_img = preprocess_image_v3(img_cv)
             
             # Run Local OCR
             local_text = pytesseract.image_to_string(heavy_img, config='--psm 6').strip()
             
-            # Check Confidence
+            # IMPROVED CONFIDENCE CHECK: Use classifier + keyword validation
             is_confident = False
             if local_text and len(local_text) > 10:
                 keywords = [
@@ -627,18 +645,22 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                 ]
                 text_lower = local_text.lower()
                 hits = sum(1 for k in keywords if k in text_lower)
-                if hits >= 2 and len(local_text) > 40:
+                
+                # RELAXED: Since classifier already said Tesseract is likely, trust it more
+                # Only need 1 keyword instead of 2
+                if hits >= 1 and len(local_text) > 30:
                     is_confident = True
-                    logging.info(f"[Hybrid OCR] Local OCR Confident: {hits} keywords found")
+                    logging.info(f"[Hybrid OCR] Local OCR Confident: {hits} keywords, classifier approved")
 
             if is_confident:
                 final_results[i] = local_text
-                # Save to cache logic (at end)
+                # Save to cache
                 if img_hash:
                     with open(os.path.join(CACHE_DIR, f"{img_hash}.txt"), "w", encoding="utf-8") as f:
                         f.write(local_text)
             else:
-                # Store as fallback in case AI fails
+                # Tesseract failed despite classifier prediction - fall back to AI
+                logging.info(f"[Hybrid OCR] Tesseract output low quality, falling back to AI for {os.path.basename(p)}")
                 fallback_texts[i] = local_text if local_text else ""
                 
                 # Prepare for AI (Use lightweight preprocessing for Vision Models)
@@ -703,7 +725,12 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
             
             # Actually, standardizing on OpenRouter for massive batches is safer for now
             # as Mistral/Groq might have stricter limits or different multi-image formats.
-            response = openrouter_completion(prompt, model=assigned_model, images=b64_images, timeout=180)
+            if len(b64_images) == 1:
+                # Use pooled completion for single image (enables routing to Mistral/Groq)
+                # Note: pooled_completion returns raw string, likely JSON
+                response = pooled_completion(prompt, images=[b64_images[0]], timeout=180)
+            else:
+                response = openrouter_completion(prompt, model=assigned_model, images=b64_images, timeout=180)
             
             if not response or len(response) < 50:
                 logging.error(f"[OCR] AI returned empty/short response for chunk {chunk_idx}: {len(response) if response else 0} chars")
@@ -744,45 +771,58 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
             logging.error(f"[OCR] Chunk {chunk_idx} failed: {e}")
             return []
 
-    # 4. Execute SEQUENTIAL AI (NOT parallel - Semaphore(1) blocks anyway)
-    # Parallel execution with Semaphore(1) causes deadlocks because:
-    # - ThreadPoolExecutor submits all chunks at once
-    # - Each chunk tries to acquire Semaphore(1)
-    # - Only 1 can proceed, others block forever
-    # - future.result() waits forever for blocked threads
-    # - SOLUTION: Process chunks sequentially with explicit timeouts
+    # 4. Execute PARALLEL AI Processing
+    # Now that we've unlocked semaphores (Semaphore(N) instead of Lock), 
+    # parallel execution is safe and efficient.
     
-    for i, chunk in enumerate(chunks):
-        logging.info(f"[OCR] Processing chunk {i+1}/{total_chunks}...")
-        try:
-            # Let the Router decide which provider to use (Groq/Gemini/OpenRouter)
-            # Pass None as model to trigger smart routing
-            chunk_results = process_ai_chunk(i, chunk, None)
-            
-            if chunk_results:
-                for orig_idx, text in chunk_results:
-                    if text and len(text) > 10 and "error" not in text.lower():
-                        final_results[orig_idx] = text
-                        
-                        # SAVE TO CACHE
-                        # Find hash for this index
-                        # chunk contains (idx, img, hash)
-                        for c_idx, _, c_hash in chunk:
-                            if c_idx == orig_idx and c_hash:
-                                with open(os.path.join(CACHE_DIR, f"{c_hash}.txt"), "w", encoding="utf-8") as f:
-                                    f.write(text)
-                                break
-                    else:
-                        # AI returned empty/garbage -> use fallback
-                        final_results[orig_idx] = fallback_texts.get(orig_idx, "")
-                        if final_results[orig_idx]:
-                            logging.info(f"[OCR] AI failed for Msg {orig_idx}, using local fallback.")
-        except Exception as e:
-            logging.error(f"[OCR] Chunk {i} failed with exception: {e}")
-            # Apply fallbacks for this chunk
-            for orig_idx, _, _ in chunk:
-                if not final_results[orig_idx] and orig_idx in fallback_texts:
-                    final_results[orig_idx] = fallback_texts[orig_idx]
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    
+    def process_chunk_wrapper(args):
+        """Wrapper for parallel execution"""
+        chunk_idx, chunk_data = args
+        return chunk_idx, process_ai_chunk(chunk_idx, chunk_data, None)
+    
+    # Use ThreadPoolExecutor for parallel chunk processing
+    max_workers = min(len(chunks), 3)  # Limit to 3 parallel chunks
+    
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all chunks
+        future_to_chunk = {
+            executor.submit(process_chunk_wrapper, (i, chunk)): (i, chunk)
+            for i, chunk in enumerate(chunks)
+        }
+        
+        # Process results as they complete
+        for future in as_completed(future_to_chunk):
+            chunk_idx, chunk = future_to_chunk[future]
+            try:
+                _, chunk_results = future.result(timeout=180)
+                
+                if chunk_results:
+                    for orig_idx, text in chunk_results:
+                        if text and len(text) > 10 and "error" not in text.lower():
+                            final_results[orig_idx] = text
+                            
+                            # SAVE TO CACHE
+                            for c_idx, _, c_hash in chunk:
+                                if c_idx == orig_idx and c_hash:
+                                    with open(os.path.join(CACHE_DIR, f"{c_hash}.txt"), "w", encoding="utf-8") as f:
+                                        f.write(text)
+                                    break
+                        else:
+                            # AI returned empty/garbage -> use fallback
+                            final_results[orig_idx] = fallback_texts.get(orig_idx, "")
+                            if final_results[orig_idx]:
+                                logging.info(f"[OCR] AI failed for Msg {orig_idx}, using local fallback.")
+                                
+                logging.info(f"[OCR] Chunk {chunk_idx+1}/{total_chunks} completed.")
+                
+            except Exception as e:
+                logging.error(f"[OCR] Chunk {chunk_idx} failed with exception: {e}")
+                # Apply fallbacks for this chunk
+                for orig_idx, _, _ in chunk:
+                    if not final_results[orig_idx] and orig_idx in fallback_texts:
+                        final_results[orig_idx] = fallback_texts[orig_idx]
 
     # Final Sweep: Apply fallback to any images that went to AI but have empty results
     for i, _, _ in ai_queue:

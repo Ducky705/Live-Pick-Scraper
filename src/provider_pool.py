@@ -14,11 +14,11 @@ from src.mistral_client import mistral_completion
 # --- CONFIGURATION ---
 
 # Rate Limits (Conservative estimates for free tiers)
-# We limit CONCURRENT requests to avoid 429s
+# PARALLELIZED: Increased concurrency limits
 LIMITS = {
-    "cerebras": Semaphore(2), # 2 concurrent requests
-    "groq": Semaphore(1),     # 1 concurrent request (very strict)
-    "mistral": Semaphore(2),  # 2 concurrent requests
+    "cerebras": Semaphore(3), # 3 concurrent requests
+    "groq": Semaphore(2),     # 2 concurrent requests
+    "mistral": Semaphore(3),  # 3 concurrent requests
 }
 
 # Provider Availability Flags (can be toggled at runtime if 429s occur)
@@ -124,14 +124,14 @@ def pooled_completion(prompt: str, images: Optional[List[str]] = None, timeout: 
         
     # Try candidates in order
     for provider in candidates:
-        # Acquire semaphore for this provider
+        # Acquire semaphore for this provider (BLOCKING with timeout)
         sem = LIMITS.get(provider)
         if not sem: continue
         
-        acquired = sem.acquire(blocking=False)
+        # BLOCKING ACQUISITION: Wait up to 60s instead of skipping
+        acquired = sem.acquire(blocking=True, timeout=60)
         if not acquired:
-            # Provider is busy, skip to next (Load Balancing by skipping busy ones)
-            logging.info(f"[ProviderPool] {provider} is busy (Max Concurrent). Skipping.")
+            logging.warning(f"[ProviderPool] {provider} timed out after 60s. Trying next.")
             continue
             
         try:

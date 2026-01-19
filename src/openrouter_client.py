@@ -21,24 +21,22 @@ SEMAPHORE_ACQUIRE_TIMEOUT = 300  # 5 minutes max wait
 # VERIFIED WORKING FREE LIST - Only models confirmed via API to exist
 # Note: Many "free" models are text-only or have limited availability
 DEFAULT_MODELS = [
-    "google/gemini-2.0-flash-exp:free",      # Primary
-    "google/gemini-2.0-flash-lite-preview-02-05:free", # Backup (Lite)
-    "meta-llama/llama-3.3-70b-instruct:free", # Backup Text
-    "microsoft/phi-3-medium-128k-instruct:free", # Backup
+    "google/gemini-2.0-flash-exp:free",      # Primary - reliable vision
+    "google/gemma-3-12b-it:free",            # Google Gemma 3 12B
+    "deepseek/deepseek-r1-distill-llama-70b:free", # DeepSeek R1 Distill - text fallback
 ]
 
 # Models specifically for "Racing" (Parallel Text Parsing) - TEXT ONLY
 FAST_PARSING_MODELS = [
     "google/gemini-2.0-flash-exp:free",
-    "google/gemini-2.0-flash-lite-preview-02-05:free",
+    "deepseek/deepseek-r1-distill-llama-70b:free",
+    "google/gemma-3-12b-it:free",
 ]
 
-# Vision-capable models for OCR - VERIFIED VISION SUPPORT
+# Vision-capable models for OCR - VERIFIED VISION SUPPORT (2025)
 VISION_MODELS = [
     "google/gemini-2.0-flash-exp:free",      # Primary - 1M context, confirmed vision
-    "google/gemini-2.0-flash-lite-preview-02-05:free", # Backup
-    "qwen/qwen-2.5-vl-72b-instruct:free",    # Backup vision (Qwen VL)
-    "qwen/qwen-2.5-vl-7b-instruct:free",     # Backup vision (Qwen VL)
+    "google/gemma-3-12b-it:free",            # Gemma 3 12B
 ]
 
 # Retry configuration for free-tier resilience
@@ -151,7 +149,8 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                 pass
 
         # 2. Try Gemini Direct - Supports Base64 input now
-        if os.getenv("GEMINI_TOKEN"):
+        # NOTE: Disabled for now - using OpenRouter fallbacks instead for better model variety
+        if False and os.getenv("GEMINI_TOKEN"):
             try:
                 img_input = None
                 if isinstance(images, list) and len(images) > 0:
@@ -159,7 +158,7 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                 
                 if img_input:
                     logging.info(f"[Router] Routing vision request to Gemini (2.5 Flash Lite)")
-                    result = gemini_vision_completion("Extract all text from this image.", img_input)
+                    result = gemini_vision_completion(prompt, img_input)  # Use the actual prompt
                     if result:
                         return result
                     else:

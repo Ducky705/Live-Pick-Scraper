@@ -12,9 +12,9 @@ from threading import Semaphore
 GLOBAL_GROQ_SEMAPHORE = Semaphore(2)
 SEMAPHORE_ACQUIRE_TIMEOUT = 300
 
-# Groq Vision Models (Llama 4 supports vision)
-# Updated to 90b as 11b is decommissioned
-DEFAULT_MODEL = "llama-3.2-90b-vision-preview" # High quality vision model
+# Groq Vision Models
+# llama-3.2-90b-vision-preview is available
+DEFAULT_MODEL = "llama-3.2-90b-vision-preview" 
 
 def groq_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=60):
     """

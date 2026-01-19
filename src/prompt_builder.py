@@ -105,15 +105,16 @@ Tennis picks use different formats than team sports:
 * **Set Winner:** `Player Name to win Set X` - Example: `Sinner to win Set 1`
 
 #### `Parlay` / `Teaser`
-* **Format:** `(Leg 1 League) Details / (Leg 2 League) Details / ...`
-* **Rule:** Each leg is described using its standard format (e.g., `Team -X.5`, `Team ML`) and separated by ` / `. The bet type (Spread, ML, etc.) is **not** included in the leg description.
-* **League Prefix:** Prefixing each leg with its league in parentheses (e.g., `(NFL)`) is **mandatory**.
-* **Teasers:** For Teasers, include the teaser points and the league: `(Teaser 6pt NFL) ...`
+* **Format:** `Leg 1 / Leg 2 / ...`
+* **CRITICAL RULE:** A Parlay (single ticket with multiple legs) must be output as **ONE SINGLE PICK**. DO NOT split legs into separate objects.
+* **Rule:** Each leg uses its standard format (e.g., `Team -X.5`, `Team ML`) separated by ` / `.
+* **NO LEAGUE PREFIX:** Do NOT include league in the pick string - it's in the `league` field.
+* **Teasers:** Include teaser points: `Teaser 6pt: Chiefs -2.5 / Eagles +8.5`
 * **Parlay Examples:**
-  * `(NFL) Dallas Cowboys -10.5 / (NFL) San Francisco 49ers ML`
-  * `(NFL) Jalen Hurts: RushYds Over 48.5 / (NFL) A.J. Brown: RecYds Over 80.5`
-  * `(NFL) Cowboys -10.5 / (NBA) Lakers ML`
-* **Teaser Example:** `(Teaser 6pt NFL) Kansas City Chiefs -2.5 / (Teaser 6pt NFL) Philadelphia Eagles +8.5`
+  * `Cowboys -10.5 / 49ers ML`
+  * `Hurts: RushYds Over 48.5 / Brown: RecYds Over 80.5`
+  * `Cowboys -10.5 / Lakers ML / Over 42.5 / Chiefs ML` (Long parlay = 1 pick)
+* **Teaser Example:** `Teaser 6pt: Chiefs -2.5 / Eagles +8.5`
 
 #### `Future`
 * **Format:** `Award or Event: Selection`
@@ -128,9 +129,9 @@ Tennis picks use different formats than team sports:
 | `NFL` | Period | `1H KC vs PHI Total Over 24` | -110 |
 | `NCAAB` | Period | `1H George Mason -6` | -110 |
 | `NFL` | Future | `NFC Champion: San Francisco 49ers` | 250 |
-| `Other` | Parlay | `(NFL) Cowboys -10.5 / (NBA) Lakers ML` | 264 |
-| `NCAAB` | Parlay | `(NCAAB) Nebraska ML / (NCAAB) Drake ML` | 122 |
-| `NBA` | Teaser | `(Teaser 4pt NBA) Celtics -3.5 / (Teaser 4pt NBA) Nuggets +5.5` | -120 |
+| `Other` | Parlay | `Cowboys -10.5 / Lakers ML` | 264 |
+| `NCAAB` | Parlay | `Nebraska ML / Drake ML` | 122 |
+| `NBA` | Teaser | `Teaser 4pt: Celtics -3.5 / Nuggets +5.5` | -120 |
 | `Other` | Unknown | `Tigers First Score Prop` | 150 |
 | `NCAAB` | Total | `Rutgers vs Unknown Under 143.5` | -110 |
 | `TENNIS` | Moneyline | `Tommy Paul ML` | -150 |
@@ -201,17 +202,49 @@ You are an expert sports betting data parser. Extract ALL betting picks from ALL
     - If the Text/Header says "ML" but the Ticket/Image says "PK" or "Pick'em", **YOU MUST OUTPUT 'Spread' and '+0'**.
     - **Trust the Ticket** over the Capper's typed text.
     - Example: Text "Marquette ML", Ticket "Marquette PK". -> Result: "Marquette +0" (Spread).
-2.  **Capper:** Look in [T] (Text) first, then [O] (OCR).
-2.  **Odds MUST be SEPARATE from Pick:** 
+2.  **PARLAY DETECTION (MOST IMPORTANT):**
+    - If a single ticket/image lists multiple bets (legs) with ONE total odds/wager, it is a **PARLAY**.
+    - **DO NOT SPLIT PARLAYS** into separate picks. Output as **ONE SINGLE PICK** with type "Parlay".
+    - Join all legs with " / ". Example: "Leg 1 / Leg 2 / Leg 3".
+3.  **Capper:** Look in [T] (Text) first, then [O] (OCR).
+4.  **Odds MUST be SEPARATE from Pick:** 
     - Extract American odds (e.g., -110, +150) into the \"od\" field ONLY.
     - The \"p\" field must NOT contain odds - only the team/player and line.
     - Example: \"Lakers -5 -110\" → \"p\": \"Lakers -5\", \"od\": -110
     - Example: \"Chiefs ML +155\" → \"p\": \"Chiefs ML\", \"od\": 155
     - If odds are NOT visible, set \"od\": null. DO NOT GUESS.
-3.  **Fragmented OCR:** OCR text may be split. Reconstruct context.
+5.  **Fragmented OCR:** OCR text may be split. Reconstruct context.
     - "Lakers" (line 1) + "-5" (line 2) -> Pick: "Lakers -5"
     - "NBA" (line 1) + "Celtics ML" (line 2) -> League: "NBA", Pick: "Celtics ML"
     - Ignore isolated noise like "17:31", "5G", "LTE".
+
+### **SPANISH BETTING TERMS (CRITICAL!)**
+| Spanish | English |
+|---------|---------|
+| Ambos equipos marcan | BTTS Yes |
+| Ambos anotan | BTTS Yes |
+| Más de X.X | Over X.X |
+| Menos de X.X | Under X.X |
+| Doble oportunidad | Double Chance |
+| 1x2 | Moneyline (ML) |
+| Línea de dinero | ML |
+| Total córneres | Total Corners |
+| Goles | Goals |
+| Empate | Draw |
+| Partido (sin prórrogas) | Match (Regular Time) |
+| Apuesta Total | Total Wager |
+| Ganancia Total | Total Payout |
+
+### **GERMAN BETTING TERMS**
+| German | English |
+|--------|---------|
+| Beide Teams treffen | BTTS Yes |
+| Über X.X | Over X.X |
+| Unter X.X | Under X.X |
+| Doppelte Chance | Double Chance |
+| Sieg | ML (Win) |
+
+**ALWAYS OUTPUT IN ENGLISH FORMAT**
 
 ### **FORBIDDEN PHRASES (NEGATIVE CONSTRAINTS)**
 - **NEVER** output "DM for picks" or "DM @cappersfree" as a pick. If no pick is found, output nothing for that message.
@@ -298,26 +331,46 @@ Example: "HammeringHank CFB" = cn is "HammeringHank"
 {get_master_formatting_guide()}
 
 ### **REQUIRED OUTPUT FORMAT (JSON OBJECT)**
-Respond ONLY with a JSON Object with a \"picks\" key containing the array using SHORT KEYS to save tokens:
-- \"id\": message_id
-- \"cn\": capper_name
-- \"lg\": league (Standardized)
-- \"ty\": type
-- \"p\": pick (NO ODDS HERE! Just team/player and line)
-- \"od\": odds (int or null - THIS is where odds go!)
-- \"u\": units (float, default 1.0)
+Respond ONLY with a JSON Object with a \\\"picks\\\" key containing the array using SHORT KEYS to save tokens:
 
-**CORRECT Example (odds separated):**
+**Core Fields (REQUIRED):**
+- \\\"id\\\": message_id
+- \\\"cn\\\": capper_name
+- \\\"lg\\\": league (Standardized code: NBA, NFL, MLB, etc.)
+- \\\"ty\\\": type (Moneyline, Spread, Total, Player Prop, Team Prop, Period, Parlay, Future)
+- \\\"p\\\": pick (NO ODDS! Human-readable: \\\"Lakers -5.5\\\", \\\"LeBron James: Pts Over 25.5\\\")
+- \\\"od\\\": odds (int or null)
+- \\\"u\\\": units (float, default 1.0)
+
+**Structured Fields (REQUIRED for non-parlays):**
+- \\\"sub\\\": subject - The team or player name (\\\"Los Angeles Lakers\\\", \\\"LeBron James\\\")
+- \\\"mkt\\\": market - The stat/market type (\\\"Spread\\\", \\\"ML\\\", \\\"Pts\\\", \\\"PassYds\\\", \\\"Total\\\")
+- \\\"ln\\\": line - The numerical line/total (float: -5.5, 25.5, 220) or null for ML
+- \\\"side\\\": prop_side - For O/U bets only (\\\"Over\\\", \\\"Under\\\") or null
+
+**Structured Field Mapping:**
+| type | sub | mkt | ln | side |
+|------|-----|-----|-----|------|
+| Moneyline | Team/Player | \\\"ML\\\" | null | null |
+| Spread | Team | \\\"Spread\\\" | -7.5 | null |
+| Total | \\\"Away vs Home\\\" | \\\"Total\\\" | 220.5 | \\\"Over\\\"/\\\"Under\\\" |
+| Player Prop | Player Name | Stat (\\\"Pts\\\") | 25.5 | \\\"Over\\\"/\\\"Under\\\" |
+| Team Prop | Team Name | Stat | 24.5 | \\\"Over\\\"/\\\"Under\\\" |
+| Period | Team or matchup | \\\"Spread\\\"/\\\"Total\\\" | value | side if O/U |
+| Parlay | null | null | null | null |
+
+**CORRECT Example:**
 {{
-  \"picks\": [
-      {{ \"id\": 12345, \"cn\": \"KingCap\", \"lg\": \"NBA\", \"ty\": \"Spread\", \"p\": \"Lakers -5\", \"od\": -110, \"u\": 1.0 }},
-      {{ \"id\": 12346, \"cn\": \"BetMaster\", \"lg\": \"NFL\", \"ty\": \"Moneyline\", \"p\": \"Chiefs ML\", \"od\": 155, \"u\": 2.0 }},
-      {{ \"id\": 12347, \"cn\": \"PropKing\", \"lg\": \"NBA\", \"ty\": \"Player Prop\", \"p\": \"LeBron James: Pts Over 25.5\", \"od\": -115, \"u\": 1.0 }}
+  \\\"picks\\\": [
+      {{ \\\"id\\\": 12345, \\\"cn\\\": \\\"KingCap\\\", \\\"lg\\\": \\\"NBA\\\", \\\"ty\\\": \\\"Spread\\\", \\\"p\\\": \\\"Lakers -5\\\", \\\"od\\\": -110, \\\"u\\\": 1.0, \\\"sub\\\": \\\"Los Angeles Lakers\\\", \\\"mkt\\\": \\\"Spread\\\", \\\"ln\\\": -5.0, \\\"side\\\": null }},
+      {{ \\\"id\\\": 12346, \\\"cn\\\": \\\"BetMaster\\\", \\\"lg\\\": \\\"NFL\\\", \\\"ty\\\": \\\"Moneyline\\\", \\\"p\\\": \\\"Chiefs ML\\\", \\\"od\\\": 155, \\\"u\\\": 2.0, \\\"sub\\\": \\\"Kansas City Chiefs\\\", \\\"mkt\\\": \\\"ML\\\", \\\"ln\\\": null, \\\"side\\\": null }},
+      {{ \\\"id\\\": 12347, \\\"cn\\\": \\\"PropKing\\\", \\\"lg\\\": \\\"NBA\\\", \\\"ty\\\": \\\"Player Prop\\\", \\\"p\\\": \\\"LeBron James: Pts Over 25.5\\\", \\\"od\\\": -115, \\\"u\\\": 1.0, \\\"sub\\\": \\\"LeBron James\\\", \\\"mkt\\\": \\\"Pts\\\", \\\"ln\\\": 25.5, \\\"side\\\": \\\"Over\\\" }},
+      {{ \\\"id\\\": 12348, \\\"cn\\\": \\\"TotalGuru\\\", \\\"lg\\\": \\\"NFL\\\", \\\"ty\\\": \\\"Total\\\", \\\"p\\\": \\\"Chiefs vs Eagles Over 48.5\\\", \\\"od\\\": -110, \\\"u\\\": 1.0, \\\"sub\\\": \\\"Chiefs vs Eagles\\\", \\\"mkt\\\": \\\"Total\\\", \\\"ln\\\": 48.5, \\\"side\\\": \\\"Over\\\" }}
   ]
 }}
 
 **WRONG Example (DO NOT DO THIS - odds in pick!):**
-{{ \\\"p\\\": \\\"Lakers -5 -110\\\" }} ← WRONG! Odds should be in \\\"od\\\" field!
+{{ \\\\\\\"p\\\\\\\": \\\\\\\"Lakers -5 -110\\\\\\\" }} ← WRONG! Odds should be in \\\\\\\"od\\\\\\\" field!
 
 {album_section}
 ### **RAW DATA**
@@ -526,6 +579,56 @@ Use BOTH the image visual data and the provided context text to extract the pick
 3.  **Combine Data**: Visuals give you the pick/odds, Context gives you the Capper/Sport often.
 4.  **Odds**: Extract American odds (e.g., -110). If NOT visible, set "od": null.
 
+### **CRITICAL RULE: PARLAY DETECTION (READ CAREFULLY!)**
+**A PARLAY is a SINGLE BET combining multiple selections on ONE TICKET:**
+- Look for ONE ticket/slip with MULTIPLE selections listed together
+- Usually has ONE total "Apuesta Total" (Total Wager) and ONE "Ganancia Total" (Total Payout)
+- Selections are connected/listed sequentially within the same box/card
+- Combined odds shown for the whole ticket
+
+**IF MULTIPLE SELECTIONS ARE ON THE SAME TICKET → OUTPUT AS ONE PARLAY:**
+- Type: "Parlay"
+- Combine ALL legs with " / " separator
+- Example: "Dortmund ML / Hamburg Over 2.5 / Mainz Under 3.5"
+
+### **SPANISH BETTING TERMS (CRITICAL!)**
+| Spanish | English |
+|---------|---------|
+| Ambos equipos marcan | BTTS Yes |
+| Ambos anotan | BTTS Yes |
+| Más de X.X | Over X.X |
+| Menos de X.X | Under X.X |
+| Doble oportunidad | Double Chance |
+| 1x2 | Moneyline (ML) |
+| Línea de dinero | ML |
+| Total córneres | Total Corners |
+| Goles | Goals |
+| Empate | Draw |
+| Partido (sin prórrogas) | Match (Regular Time) |
+| Apuesta Total | Total Wager |
+| Ganancia Total | Total Payout |
+
+### **GERMAN BETTING TERMS**
+| German | English |
+|--------|---------|
+| Beide Teams treffen | BTTS Yes |
+| Über X.X | Over X.X |
+| Unter X.X | Under X.X |
+| Doppelte Chance | Double Chance |
+| Sieg | ML (Win) |
+
+**ALWAYS OUTPUT IN ENGLISH FORMAT**
+
+### **EXAMPLE: SPANISH 3-LEG PARLAY (ONE TICKET)**
+Image shows ONE LAS VEGAS ticket with:
+- Borussia Dortmund (1x2) @ -256
+- Más de 2.5 - Hamburgo vs Leverkusen @ -141
+- Menos de 3.5 - FSV Mainz vs Heidenheim @ -233
+- Apuesta Total: $5,000 / Ganancia Total: $16,995
+
+**OUTPUT 1 PARLAY (combined legs):**
+{{ "picks": [ {{ "lg": "Other", "ty": "Parlay", "p": "Borussia Dortmund ML / Hamburg vs Bayer Leverkusen Over 2.5 / FSV Mainz vs 1. FC Heidenheim 1846 Under 3.5", "od": 541 }} ] }}
+
 ### **AVOID THESE COMMON MISTAKES:**
 - **MARKETING HEADERS**: "80K MAIN PLAY", "VIP WHALE PLAY", "MAX BET" -> IGNORE.
 - **Sportsbook names**: "Hard Rock", "DraftKings" -> IGNORE.
@@ -540,18 +643,26 @@ Use BOTH the image visual data and the provided context text to extract the pick
 
 ### **REQUIRED OUTPUT FORMAT (JSON OBJECT)**
 Respond ONLY with a JSON Object with a "picks" key containing the array using SHORT KEYS:
+
+**Core Fields:**
 - "id": message_id (FROM CONTEXT)
 - "cn": capper_name
 - "lg": league
 - "ty": type
-- "p": pick
+- "p": pick (human-readable, NO ODDS)
 - "od": odds (int or null)
 - "u": units (float, default 1.0)
+
+**Structured Fields (non-parlays):**
+- "sub": subject (team/player full name)
+- "mkt": market ("Spread", "ML", "Pts", "Total", etc.)
+- "ln": line (float or null)
+- "side": prop_side ("Over"/"Under" or null)
 
 Example:
 {{
   "picks": [
-      {{ "id": 12345, "cn": "KingCap", "lg": "NBA", "ty": "Player Prop", "p": "LeBron James: Pts Over 25.5", "od": -110, "u": 1.0 }}
+      {{ "id": 12345, "cn": "KingCap", "lg": "NBA", "ty": "Player Prop", "p": "LeBron James: Pts Over 25.5", "od": -110, "u": 1.0, "sub": "LeBron James", "mkt": "Pts", "ln": 25.5, "side": "Over" }}
   ]
 }}
 

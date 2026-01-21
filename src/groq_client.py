@@ -11,13 +11,8 @@ from threading import Lock
 GLOBAL_GROQ_LOCK = Lock()
 LOCK_ACQUIRE_TIMEOUT = 300
 
-# Groq Vision Models - Llama 4 Scout/Maverick (2025)
-# See: https://console.groq.com/docs/vision
-VISION_MODELS = [
-    "meta-llama/llama-4-scout-17b-16e-instruct",    # Fast, good quality
-    "meta-llama/llama-4-maverick-17b-128e-instruct", # Higher quality, slower
-]
-DEFAULT_MODEL = VISION_MODELS[0]  # Use Scout as default (faster)
+# Groq Vision Models (Llama 4 supports vision)
+DEFAULT_MODEL = "llama-3.2-11b-vision-preview" # High quality vision model
 
 def groq_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=60):
     """
@@ -104,20 +99,6 @@ def groq_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=60)
                 logging.warning(f"[Groq] Rate limit (429). Waiting {retry_after}s...")
                 time.sleep(retry_after)
                 continue
-            
-            elif response.status_code == 503:
-                # Service unavailable - Llama 4 models can be at capacity
-                # Try fallback to Maverick if on Scout, or retry with backoff
-                wait_time = 5 * (attempt + 1)
-                logging.warning(f"[Groq] Service unavailable (503). Attempt {attempt+1}/3. Waiting {wait_time}s...")
-                time.sleep(wait_time)
-                
-                # On second attempt, try the other model
-                if attempt == 1 and model == VISION_MODELS[0] and len(VISION_MODELS) > 1:
-                    logging.info(f"[Groq] Switching to fallback model: {VISION_MODELS[1]}")
-                    payload["model"] = VISION_MODELS[1]
-                continue
-            
             else:
                 logging.error(f"[Groq] Error {response.status_code}: {response.text}")
                 return None

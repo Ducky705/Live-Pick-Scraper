@@ -111,3 +111,10 @@ app_debug.log
 *.AppImage
 *.snap
 build_standalone/cache/
+
+# CLI Tool Generated Files
+picks_*.json
+manual_cookies.json
+twitter_cookies.json
+cli_scraper.log
+benchmark_results*.json

@@ -1,4 +1,3 @@
-
 import os
 import logging
 import time
@@ -110,12 +109,48 @@ def _execute_request(provider: str, prompt: str, images: Optional[List[str]] = N
         logging.error(f"[ProviderPool] Error executing {provider}: {e}")
         return None
 
-def pooled_completion(prompt: str, images: Optional[List[str]] = None, timeout: int = 60) -> Optional[str]:
+def pooled_completion(prompt: str, images: Optional[List[str]] = None, timeout: int = 60, model: Optional[str] = None, provider: Optional[str] = None) -> Optional[str]:
     """
     Main entry point. Dispatches to best available provider.
     Retries on other providers if one fails.
+    If 'model' is provided, bypasses local pool and routes directly to OpenRouter.
+    If 'provider' is provided, forces that specific local provider (bypassing load balancing logic).
     """
     task_type = "vision" if images else "text"
+    
+    # Bypass logic if specific model requested
+    if model:
+        try:
+            from src.openrouter_client import openrouter_completion
+            logging.info(f"[ProviderPool] Bypassing pool for specific model: {model}")
+            return openrouter_completion(prompt, model=model, images=images, timeout=timeout)
+        except Exception as e:
+            logging.error(f"[ProviderPool] Failed to route to OpenRouter: {e}")
+            return None
+
+    # FORCE PROVIDER LOGIC
+    if provider:
+        if provider not in LIMITS:
+             logging.error(f"[ProviderPool] Forced provider '{provider}' not known.")
+             return None
+             
+        logging.info(f"[ProviderPool] Forcing execution on {provider}...")
+        
+        # We still use semaphore to respect rate limits, but we block differently?
+        # Or we just try to acquire and block for a bit?
+        sem = LIMITS[provider]
+        
+        # Try to acquire with a timeout (wait for slot)
+        acquired = sem.acquire(timeout=5)
+        if not acquired:
+            logging.warning(f"[ProviderPool] Forced provider {provider} is busy (timeout).")
+            return None
+            
+        try:
+            return _execute_request(provider, prompt, images, timeout)
+        finally:
+            sem.release()
+
     candidates = _get_provider_for_task(task_type)
     
     if not candidates:
@@ -156,4 +191,3 @@ def pooled_completion(prompt: str, images: Optional[List[str]] = None, timeout: 
             
     logging.warning("[ProviderPool] All local providers failed or were busy.")
     return None
-

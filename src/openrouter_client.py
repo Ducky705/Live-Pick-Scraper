@@ -36,10 +36,10 @@ FAST_PARSING_MODELS = [
 # Vision-capable models for OCR - VERIFIED VISION SUPPORT
 # Most free models are text-only. Gemini Flash is the only reliable free vision model.
 VISION_MODELS = [
-    "nvidia/nemotron-nano-12b-v2-vl:free",   # Primary - Fast & Working
-    "google/gemini-2.0-flash-exp:free",      # Backup - Good but rate limited (429)
-    "qwen/qwen-2.5-vl-7b-instruct:free",     # Backup - Sometimes 400 error
-    "allenai/molmo-2-8b:free",               # Backup
+    "google/gemini-2.0-flash-exp:free",      # Primary - 1M context, confirmed vision
+    "qwen/qwen-2.5-vl-7b-instruct:free",     # Backup vision (Qwen VL)
+    "nvidia/nemotron-nano-12b-v2-vl:free",   # Backup vision (Nvidia)
+    "allenai/molmo-2-8b:free",               # Backup vision (AllenAI)
 ]
 
 # Retry configuration for free-tier resilience
@@ -152,9 +152,7 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                 pass
 
         # 2. Try Gemini Direct - Supports Base64 input now
-        # DISABLE GEMINI DIRECT due to severe rate limits (429)
-        # if os.getenv("GEMINI_TOKEN"):
-        if False:
+        if os.getenv("GEMINI_TOKEN"):
             try:
                 img_input = None
                 if isinstance(images, list) and len(images) > 0:
@@ -189,11 +187,7 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
     models = []
     if model:
         models.append(model)
-    
-    # Select appropriate fallback list
-    fallback_list = VISION_MODELS if images else DEFAULT_MODELS
-    
-    for m in fallback_list:
+    for m in DEFAULT_MODELS:
         if m not in models:
             models.append(m)
 

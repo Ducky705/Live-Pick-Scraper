@@ -67,3 +67,23 @@ SESSION_FILE_PATH = os.path.join(EXEC_DIR, 'user_session')
 APP_VERSION = "3.1.0"
 GITHUB_REPO = "Ducky705/Telegram-Scraper"  # Format: "owner/repo"
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '')  # Set in .env file
+
+# --- CLI CONFIGURATION ---
+TARGET_TELEGRAM_CHANNEL_ID = -1001598078987
+TWITTER_USERNAME = os.environ.get('TWITTER_USERNAME')
+TWITTER_EMAIL = os.environ.get('TWITTER_EMAIL')
+TWITTER_PASSWORD = os.environ.get('TWITTER_PASSWORD')
+TWITTER_TARGET_ACCOUNTS = [
+    'leakedcaps', 'MrLeaked_', 'Capperleaked', 'Allinonecappers', 'allpicksarefree',
+    'cappers_daily', 'allcappersfree', 'allcappersfreee', 'ExclusiveCapper', 'EZMSports'
+]
+
+# --- CLI CONFIGURATION ---
+TARGET_TELEGRAM_CHANNEL_ID = -1001598078987
+TWITTER_USERNAME = os.environ.get('TWITTER_USERNAME')
+TWITTER_EMAIL = os.environ.get('TWITTER_EMAIL')
+TWITTER_PASSWORD = os.environ.get('TWITTER_PASSWORD')
+TWITTER_TARGET_ACCOUNTS = [
+    'leakedcaps', 'MrLeaked_', 'Capperleaked', 'Allinonecappers', 'allpicksarefree',
+    'cappers_daily', 'allcappersfree', 'allcappersfreee', 'ExclusiveCapper', 'EZMSports'
+]

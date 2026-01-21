@@ -9,4 +9,5 @@ requests
 supabase
 openai
 packaging
-pythonnet
+pythonnettwikit
+twikit

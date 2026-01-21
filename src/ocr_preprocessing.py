@@ -139,3 +139,7 @@ def preprocess_image_v3(img, use_deskew=False, use_sharpen=True, use_nlm_denoise
     
     # Convert back to PIL
     return Image.fromarray(binary)
+
+# Alias for backward compatibility
+preprocess_image = preprocess_image_v3
+preprocess_image_v2 = preprocess_image_v3

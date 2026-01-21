@@ -93,9 +93,7 @@ def _extract_valid_json(text):
     return None
 
 
-from src.cerebras_client import cerebras_completion
 from src.gemini_client import gemini_vision_completion
-from src.groq_client import groq_vision_completion
 
 def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=None, validate_json=True):
     """
@@ -106,68 +104,29 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
     1. Routes text-only requests to Cerebras (Llama 3.3) if CEREBRAS_TOKEN is present.
     2. Routes vision requests to Gemini Direct (Flash) if GEMINI_TOKEN is present.
     """
-    # --- CEREBRAS ROUTING (Text Only) ---
-    if not images and os.getenv("CEREBRAS_TOKEN"):
-        try:
-            logging.info(f"[Router] Routing text request to Cerebras (Llama 3.3 70b)")
-            return cerebras_completion(
-                prompt, 
-                model="llama-3.3-70b", 
-                images=None, 
-                timeout=timeout, 
-                max_cycles=max_cycles, 
-                validate_json=validate_json
-            )
-        except Exception as e:
-            logging.error(f"[Router] Cerebras failed: {e}. Falling back to OpenRouter.")
-            pass
+    # --- CEREBRAS ROUTING REMOVED ---
+    # Hybrid routing is now handled by provider_pool.py
+    # This client should ONLY talk to OpenRouter API
 
     # --- VISION ROUTING ---
-    # Priority: Groq (Llama 4) -> Gemini (2.5-lite) -> OpenRouter
-    # Note: We override the 'model' parameter for vision requests to use Groq/Gemini if available
-    if images:
-        # 1. Try Groq (Llama 4) - Supports Base64 input now
-        # DISABLE GROQ TEMPORARILY due to 404s
-        # if os.getenv("GROQ_TOKEN"):
-        if False: 
-            try:
-                img_input = None
-                if isinstance(images, list) and len(images) > 0:
-                    img_input = images[0] # Base64 string or path
-                
-                if img_input:
-                    logging.info(f"[Router] Routing vision request to Groq (Llama 3.2 Vision)")
-                    json_prompt = "Extract text from image. Return JSON: {\"text\": \"<extracted_text>\"}"
-                    result = groq_vision_completion(json_prompt, img_input)
-                    if result:
-                        try:
-                            # Extract text from JSON if returned
-                            return json.loads(result).get("text", result)
-                        except:
-                            return result
-                    else:
-                        logging.warning("[Router] Groq returned None. Falling back.")
-            except Exception as e:
-                logging.error(f"[Router] Groq failed: {e}. Falling back.")
-                pass
-
-        # 2. Try Gemini Direct - Supports Base64 input now
-        if os.getenv("GEMINI_TOKEN"):
-            try:
-                img_input = None
-                if isinstance(images, list) and len(images) > 0:
-                    img_input = images[0] # Base64 string or path
-                
-                if img_input:
-                    logging.info(f"[Router] Routing vision request to Gemini (2.5 Flash Lite)")
-                    result = gemini_vision_completion("Extract all text from this image.", img_input)
-                    if result:
-                        return result
-                    else:
-                        logging.warning("[Router] Gemini returned None. Falling back.")
-            except Exception as e:
-                logging.error(f"[Router] Gemini Direct failed: {e}. Falling back.")
-                pass
+    # Priority: Gemini Direct -> OpenRouter
+    # Note: Groq routing removed - handled by provider_pool.py for hybrid logic
+    if images and os.getenv("GEMINI_TOKEN"):
+        try:
+            img_input = None
+            if isinstance(images, list) and len(images) > 0:
+                img_input = images[0] # Base64 string or path
+            
+            if img_input:
+                logging.info(f"[Router] Routing vision request to Gemini (2.5 Flash Lite)")
+                result = gemini_vision_completion("Extract all text from this image.", img_input)
+                if result:
+                    return result
+                else:
+                    logging.warning("[Router] Gemini returned None. Falling back.")
+        except Exception as e:
+            logging.error(f"[Router] Gemini Direct failed: {e}. Falling back.")
+            pass
 
     if max_cycles is None:
         max_cycles = RETRY_CONFIG["max_cycles"]

@@ -15,9 +15,12 @@ load_dotenv()
 GLOBAL_CEREBRAS_LOCK = Lock()
 LOCK_ACQUIRE_TIMEOUT = 300
 
+# Model Configuration - User-specified high-performance model
+DEFAULT_TEXT_MODEL = "llama-3.3-70b"
+
 CEREBRAS_MODELS = [
-    "llama-3.3-70b",
-    "llama3.1-8b",
+    "llama-3.3-70b",  # Primary - Best for complex JSON parsing
+    "llama3.1-8b",    # Fallback - Faster but less accurate
 ]
 
 RETRY_CONFIG = {
@@ -61,7 +64,7 @@ def _extract_valid_json(text):
             
     return None
 
-def cerebras_completion(prompt, model="llama-3.3-70b", images=None, timeout=60, max_cycles=None, validate_json=True):
+def cerebras_completion(prompt, model=DEFAULT_TEXT_MODEL, images=None, timeout=60, max_cycles=None, validate_json=True):
     """
     Calls Cerebras API.
     Note: Cerebras currently supports text-only for these models. 

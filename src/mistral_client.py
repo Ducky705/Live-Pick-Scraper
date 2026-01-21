@@ -14,16 +14,20 @@ load_dotenv()
 GLOBAL_MISTRAL_LOCK = Lock()
 LOCK_ACQUIRE_TIMEOUT = 300
 
-# Models
+# Models - User-specified high-performance configuration
 # Text / Reasoning
-MISTRAL_LARGE = "mistral-large-latest" 
+MISTRAL_LARGE = "mistral-large-latest"  # Mistral Large 3 - Best for complex JSON parsing
 MISTRAL_SMALL = "mistral-small-latest"
 MISTRAL_NEMO = "open-mistral-nemo"
 CODESTRAL = "codestral-latest"
 
 # Vision
-PIXTRAL_LARGE = "pixtral-large-latest"
+PIXTRAL_LARGE = "pixtral-large-latest"  # Best vision model on Mistral
 PIXTRAL_12B = "pixtral-12b-2409"
+
+# Default models for this client
+DEFAULT_TEXT_MODEL = MISTRAL_LARGE
+DEFAULT_VISION_MODEL = PIXTRAL_LARGE
 
 RETRY_CONFIG = {
     "max_cycles": 5,
@@ -62,7 +66,7 @@ def _extract_valid_json(text):
             
     return None
 
-def mistral_completion(prompt, model=MISTRAL_SMALL, image_input=None, timeout=60, max_cycles=None, validate_json=True):
+def mistral_completion(prompt, model=DEFAULT_TEXT_MODEL, image_input=None, timeout=60, max_cycles=None, validate_json=True):
     """
     Calls Mistral API.
     Supports both text and vision (if model supports it and image_input is provided).

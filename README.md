@@ -1,6 +1,6 @@
 # CapperSuite CLI v3.2
 
-![Version](https://img.shields.io/badge/version-3.2.0-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Version](https://img.shields.io/badge/version-3.2.1-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 A professional-grade CLI tool for sports bettors. Scrapes, parses, and structures betting picks from Telegram channels and Twitter accounts using **Vision AI** and **Large Language Models**.
 
@@ -342,6 +342,13 @@ python cli_tool.py 2>&1 | tee debug.log
 ---
 
 ## Changelog
+
+### v3.2.1 (January 21, 2026)
+- **Strict Formatting Enforcement** - Prompt builder now rigorously adheres to `pick_format.md`
+  - Added specific support for Tennis markets (Set/Game spreads, Set Winner)
+  - Improved Period/Half detection logic
+  - Enforced standardized Parlay/Teaser formatting
+- **Bug Fixes** - Fixed import issues in CLI tool
 
 ### v3.2.0 (January 21, 2026)
 - **RapidOCR replaces Tesseract** - Deep learning OCR (ONNX Runtime)

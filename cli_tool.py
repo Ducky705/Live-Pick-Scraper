@@ -19,7 +19,7 @@ from src.twitter_client import TwitterManager
 from src.deduplicator import Deduplicator
 from src.ocr_handler import extract_text_batch
 from src.auto_processor import auto_select_messages
-from src.prompt_builder import generate_ai_prompt
+from src.prompt_builder import generate_ai_prompt, generate_compact_prompt
 from src.provider_pool import pooled_completion
 from src.utils import clean_text_for_ai, smart_merge_odds
 from src.two_pass_verifier import TwoPassVerifier
@@ -48,8 +48,19 @@ async def main():
     tg = TelegramManager()
     tg_connected = await tg.connect_client()
     if not tg_connected:
-        logging.error("Telegram Auth Failed! Please run the GUI first to authenticate.")
-        return
+        logging.info("Session not found or expired. Starting interactive authentication...")
+        try:
+            client = await tg.get_client()
+            # Interactive login in the terminal
+            await client.start()
+            
+            if not await client.is_user_authorized():
+                logging.error("Authentication failed. Please try again.")
+                return
+            logging.info("Authentication successful!")
+        except Exception as e:
+            logging.error(f"Authentication Error: {e}")
+            return
 
     # Twitter
     tw = TwitterManager()
@@ -130,45 +141,79 @@ async def main():
         logging.warning("No picks detected after classification.")
         return
 
-    # 6. PARSING (AI FILL)
-    logging.info("Generating AI Prompts and Parsing...")
+    # 6. PARSING (AI FILL) - HYBRID PARALLEL STRATEGY
+    logging.info("Generating AI Prompts and Parsing (Hybrid Mode)...")
     
-    # Generate Prompt
-    master_prompt = generate_ai_prompt(selected_msgs)
+    # Configuration
+    BATCH_SIZE = 10  # Messages per batch (reduced for better accuracy)
+    MAX_WORKERS = 3  # Parallel threads (respects rate limits)
     
-    # Call AI
-    logging.info("Sending to AI Provider Pool...")
+    def process_batch(batch_msgs, batch_idx):
+        """Process a single batch of messages using hybrid strategy."""
+        try:
+            # Use compact prompt for fast models
+            compact_prompt = generate_compact_prompt(batch_msgs)
+            
+            # Call Hybrid Pool (tries fast models first, then DeepSeek R1)
+            result_str = pooled_completion(compact_prompt, timeout=120)
+            
+            if not result_str:
+                logging.warning(f"Batch {batch_idx}: No result from pool.")
+                return []
+            
+            result_obj = json.loads(result_str)
+            
+            if isinstance(result_obj, dict) and 'picks' in result_obj:
+                return result_obj['picks']
+            elif isinstance(result_obj, list):
+                return result_obj
+            else:
+                return []
+                
+        except json.JSONDecodeError as e:
+            logging.error(f"Batch {batch_idx}: Invalid JSON - {e}")
+            return []
+        except Exception as e:
+            logging.error(f"Batch {batch_idx}: Error - {e}")
+            return []
+    
+    # Split into batches
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    
+    batches = [selected_msgs[i:i+BATCH_SIZE] for i in range(0, len(selected_msgs), BATCH_SIZE)]
+    logging.info(f"Processing {len(batches)} batches ({BATCH_SIZE} msgs each) with {MAX_WORKERS} workers...")
+    
+    all_raw_picks = []
+    
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = {executor.submit(process_batch, batch, idx): idx for idx, batch in enumerate(batches)}
+        
+        for future in as_completed(futures):
+            batch_idx = futures[future]
+            try:
+                batch_picks = future.result()
+                all_raw_picks.extend(batch_picks)
+                logging.info(f"Batch {batch_idx}: Extracted {len(batch_picks)} picks.")
+            except Exception as e:
+                logging.error(f"Batch {batch_idx}: Failed - {e}")
+    
+    # Remap minified keys to full keys
     result_json_str = None
     try:
-        # Enforce a stronger model for the complex parsing task
-        # Mistral-tiny often fails with large JSONs. Gemini Flash is better.
-        result_json_str = pooled_completion(master_prompt, model="google/gemini-2.0-flash-exp:free", timeout=120)
-        
-        if not result_json_str:
-            logging.error("AI Provider Pool failed to return data.")
-            return
+        remapped = []
+        for p in all_raw_picks:
+            remapped.append({
+                "message_id": p.get("id"),
+                "capper_name": p.get("cn"),
+                "league": p.get("lg"),
+                "type": p.get("ty"),
+                "pick": p.get("p"),
+                "odds": p.get("od"),
+                "units": p.get("u", 1.0)
+            })
+        picks = smart_merge_odds(remapped)
 
-        result_obj = json.loads(result_json_str)
-        
-        # Post-Process: Unwrap if needed
-        if isinstance(result_obj, dict) and 'picks' in result_obj:
-            raw_picks = result_obj['picks']
-            remapped = []
-            for p in raw_picks:
-                remapped.append({
-                    "message_id": p.get("id"),
-                    "capper_name": p.get("cn"),
-                    "league": p.get("lg"),
-                    "type": p.get("ty"),
-                    "pick": p.get("p"),
-                    "odds": p.get("od"),
-                    "units": p.get("u", 1.0)
-                })
-            picks = smart_merge_odds(remapped)
-        else:
-            picks = result_obj if isinstance(result_obj, list) else []
-
-        logging.info(f"Extracted {len(picks)} raw picks.")
+        logging.info(f"Extracted {len(picks)} total picks.")
         
         # 7. VALIDATION
         logging.info("Validating picks...")

@@ -3,6 +3,23 @@ from datetime import datetime
 from src.utils import clean_text_for_ai
 from src.album_correlator import generate_album_context, AlbumCorrelator
 
+# Minified key mapping for compact output
+MINIFIED_KEYS = {
+    "id": "id",           # message_id
+    "cn": "cn",           # capper_name
+    "lg": "lg",           # league
+    "ty": "ty",           # type
+    "p": "p",             # pick
+    "od": "od",           # odds
+    "u": "u"              # units
+}
+
+# Valid leagues (compact list for prompt)
+VALID_LEAGUES = ["NFL", "NCAAF", "NBA", "NCAAB", "WNBA", "MLB", "NHL", "EPL", "MLS", "UCL", "UFC", "PFL", "TENNIS", "PGA", "F1", "Other"]
+
+# Valid bet types (compact list for prompt)
+VALID_TYPES = ["Moneyline", "Spread", "Total", "Player Prop", "Team Prop", "Game Prop", "Period", "Parlay", "Teaser", "Future", "Unknown"]
+
 def get_master_formatting_guide():
     return """
 ### **Sports Pick Data Formatting Guide**
@@ -312,6 +329,80 @@ Respond ONLY with a JSON Object with a \"picks\" key containing the array using 
 {full_raw_data}
 """
     return prompt
+
+def generate_compact_prompt(selected_data):
+    """
+    OPTIMIZED prompt for fast models (Cerebras, Groq, Mistral).
+    
+    Key optimizations:
+    1. Minified JSON keys (id, cn, lg, ty, p, od, u)
+    2. Single-line JSON output
+    3. Critical rules only (fast models handle simple prompts better)
+    4. No verbose examples or markdown
+    """
+    # Build compact input data
+    raw_content_list = []
+    
+    for item in selected_data:
+        entry = f"#{item['id']}"
+        
+        text_content = clean_text_for_ai(item.get('text', ''))
+        ocr_texts = item.get('ocr_texts', [])
+        
+        if not ocr_texts and item.get('ocr_text'):
+            ocr_texts = [item.get('ocr_text')]
+
+        if text_content:
+            entry += f" T:{text_content}"
+        
+        if ocr_texts:
+            for i, ocr_block in enumerate(ocr_texts):
+                cleaned_ocr = clean_text_for_ai(ocr_block)
+                if cleaned_ocr:
+                    entry += f" O{i+1}:{cleaned_ocr}"
+                    
+        raw_content_list.append(entry)
+        
+    full_raw_data = " | ".join(raw_content_list)
+    
+    prompt = f"""You are an expert sports betting parser. Extract ALL picks from messages below.
+
+CRITICAL RULES:
+1. CAPPER NAME (cn): Find the real person/brand name. NEVER use watermarks like "@cappersfree", "WHALE PLAYS", "VIP". Look for names like "KingCap", "BetMaster", "A11Bets" etc.
+2. ODDS SEPARATION: "Lakers -5 -110" → p:"Lakers -5", od:-110. Odds go in "od" field ONLY.
+3. VALID LEAGUES: {','.join(VALID_LEAGUES)}
+4. VALID TYPES: {','.join(VALID_TYPES)}
+5. PERIOD DETECTION: If pick contains "1H", "2H", "1Q", "F5", "P1" etc → ty:"Period"
+6. PARLAY DETECTION: Multiple legs separated by "/" → ty:"Parlay". If multi-sport → lg:"Other"
+7. SKIP: Marketing text ("VIP", "MAX BET", "DM for picks"), records ("5-2 run"), sportsbook names ("DraftKings")
+8. MULTI-CAPPER: If one image shows picks from different cappers, create SEPARATE objects per capper
+9. PK/PICK'EM: Treat as Spread with line +0 (e.g., "Lakers PK" → p:"Lakers +0", ty:"Spread")
+10. TRUST THE TICKET: If text says "ML" but ticket shows "PK", use PK (+0 Spread)
+
+PICK FORMAT RULES:
+- Moneyline: "Team ML" (e.g., "Lakers ML")
+- Spread: "Team -/+X.X" (e.g., "Chiefs -7.5")
+- Total: "Team A vs Team B Over/Under X" (e.g., "Lakers vs Celtics Over 215.5")
+- Player Prop: "Player Name: Stat Over/Under X" (e.g., "LeBron James: Pts Over 25.5")
+- Parlay: "(League) Leg1 / (League) Leg2" (e.g., "(NFL) Chiefs -7 / (NBA) Lakers ML")
+
+OUTPUT: Single-line JSON only, no markdown:
+{{"picks":[{{"id":123,"cn":"CapperName","lg":"NBA","ty":"Spread","p":"Lakers -5","od":-110,"u":1}}]}}
+
+DATA:
+{full_raw_data}"""
+
+    return prompt
+
+
+def generate_compact_vision_prompt():
+    """
+    OPTIMIZED prompt for vision OCR extraction.
+    Returns only the text extraction instruction.
+    """
+    return """Extract ALL text from this betting image exactly as it appears.
+Return JSON: {"text": "<all_extracted_text_here>"}
+Preserve line breaks with \\n. Include team names, odds, amounts, usernames."""
 
 def generate_revision_prompt(failed_items, reference_picks=None):
     """

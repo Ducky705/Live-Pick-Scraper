@@ -21,7 +21,8 @@ import argparse
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from src.openrouter_client import openrouter_completion
-from src.prompt_builder import generate_ai_prompt
+from src.prompt_builder import generate_ai_prompt, generate_compact_prompt
+from src.provider_pool import pooled_completion
 from src.ocr_handler import extract_text_batch
 
 # Setup logging
@@ -142,7 +143,7 @@ def run_full_pipeline_benchmark(use_vision_ocr=True, model=None, limit=0, save_n
                 total_fn += len(expected_picks)
                 continue
             
-            # Step 2: Parsing
+            # Step 2: Parsing - Use Hybrid Pool with compact prompt
             synthetic_message = {
                 'id': idx + 1,
                 'text': "",
@@ -150,11 +151,19 @@ def run_full_pipeline_benchmark(use_vision_ocr=True, model=None, limit=0, save_n
                 'ocr_text': ocr_text
             }
             
-            prompt = generate_ai_prompt([synthetic_message])
-            response = openrouter_completion(prompt, model=model, timeout=60)
+            # Use compact prompt for faster parsing
+            prompt = generate_compact_prompt([synthetic_message])
+            
+            # Use pooled_completion for hybrid strategy (fast first, then fallback)
+            response = pooled_completion(prompt, timeout=60)
             
             latency = time.time() - start_time
             latencies.append(latency)
+            
+            if not response:
+                logging.error(f"  -> No response from pool")
+                total_fn += len(expected_picks)
+                continue
             
             # Parse response
             cleaned = response.replace("```json", "").replace("```", "").strip()

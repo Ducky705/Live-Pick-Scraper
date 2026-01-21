@@ -1,26 +1,26 @@
 {
   "config": {
     "model": "tngtech/deepseek-r1t2-chimera:free",
-    "use_vision_ocr": false,
-    "images_tested": 10
+    "use_vision_ocr": true,
+    "images_tested": 20
   },
   "metrics": {
-    "precision": 0.9705882352941176,
-    "recall": 0.9705882352941176,
-    "f1": 0.9705882352941176,
-    "total_tp": 33,
-    "total_fp": 1,
-    "total_fn": 1,
-    "avg_latency": 31.947382402420043
+    "precision": 0.9285714285714286,
+    "recall": 0.9629629629629629,
+    "f1": 0.9454545454545454,
+    "total_tp": 52,
+    "total_fp": 4,
+    "total_fn": 2,
+    "avg_latency": 2.8723628401756285
   },
   "per_image": {
     "image_01.jpg": {
       "expected": 4,
-      "extracted": 4,
+      "extracted": 5,
       "tp": 4,
-      "fp": 0,
+      "fp": 1,
       "fn": 0,
-      "latency": 29.81322956085205
+      "latency": 4.558718919754028
     },
     "image_02.jpg": {
       "expected": 1,
@@ -28,7 +28,7 @@
       "tp": 1,
       "fp": 0,
       "fn": 0,
-      "latency": 8.847607135772705
+      "latency": 0.9087405204772949
     },
     "image_03.jpg": {
       "expected": 3,
@@ -36,15 +36,15 @@
       "tp": 3,
       "fp": 0,
       "fn": 0,
-      "latency": 38.399779081344604
+      "latency": 3.0951225757598877
     },
     "image_04.jpg": {
       "expected": 7,
-      "extracted": 7,
-      "tp": 7,
+      "extracted": 6,
+      "tp": 6,
       "fp": 0,
-      "fn": 0,
-      "latency": 26.1240873336792
+      "fn": 1,
+      "latency": 4.896455764770508
     },
     "image_05.jpg": {
       "expected": 6,
@@ -52,7 +52,7 @@
       "tp": 6,
       "fp": 0,
       "fn": 0,
-      "latency": 34.65025782585144
+      "latency": 4.518665313720703
     },
     "image_06.jpg": {
       "expected": 4,
@@ -60,7 +60,7 @@
       "tp": 4,
       "fp": 0,
       "fn": 0,
-      "latency": 28.527793884277344
+      "latency": 5.057401418685913
     },
     "image_07.jpg": {
       "expected": 3,
@@ -68,7 +68,7 @@
       "tp": 3,
       "fp": 0,
       "fn": 0,
-      "latency": 48.13069820404053
+      "latency": 0.7768445014953613
     },
     "image_08.jpg": {
       "expected": 1,
@@ -76,7 +76,7 @@
       "tp": 0,
       "fp": 1,
       "fn": 1,
-      "latency": 31.334116458892822
+      "latency": 0.8127362728118896
     },
     "image_09.jpg": {
       "expected": 1,
@@ -84,7 +84,7 @@
       "tp": 1,
       "fp": 0,
       "fn": 0,
-      "latency": 31.841593503952026
+      "latency": 0.8784689903259277
     },
     "image_10.jpg": {
       "expected": 4,
@@ -92,7 +92,87 @@
       "tp": 4,
       "fp": 0,
       "fn": 0,
-      "latency": 41.80466103553772
+      "latency": 3.4596378803253174
+    },
+    "image_11.jpg": {
+      "expected": 5,
+      "extracted": 5,
+      "tp": 5,
+      "fp": 0,
+      "fn": 0,
+      "latency": 1.0576000213623047
+    },
+    "image_12.jpg": {
+      "expected": 1,
+      "extracted": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency": 2.817880630493164
+    },
+    "image_13.jpg": {
+      "expected": 2,
+      "extracted": 2,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency": 2.764539957046509
+    },
+    "image_14.jpg": {
+      "expected": 1,
+      "extracted": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency": 1.7258074283599854
+    },
+    "image_15.jpg": {
+      "expected": 1,
+      "extracted": 3,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency": 4.178919792175293
+    },
+    "image_16.jpg": {
+      "expected": 1,
+      "extracted": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency": 6.704466104507446
+    },
+    "image_17.jpg": {
+      "expected": 1,
+      "extracted": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency": 0.7350935935974121
+    },
+    "image_18.jpg": {
+      "expected": 1,
+      "extracted": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency": 1.7036728858947754
+    },
+    "image_19.jpg": {
+      "expected": 3,
+      "extracted": 3,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "latency": 2.8472635746002197
+    },
+    "image_20.jpg": {
+      "expected": 4,
+      "extracted": 4,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "latency": 3.949220657348633
     }
   }
 }

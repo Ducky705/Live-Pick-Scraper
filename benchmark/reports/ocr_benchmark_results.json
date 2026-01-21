@@ -1,0 +1,255 @@
+{
+  "total_images": 10,
+  "total_time_seconds": 73.8,
+  "ground_truth_model": "none",
+  "provider_summary": {
+    "tesseract_local": {
+      "accuracy": 64.3,
+      "avg_time_ms": 775,
+      "error_rate": 0.0,
+      "total_matched": 9,
+      "total_missed": 5
+    }
+  },
+  "recommendations": [
+    "Best overall: tesseract_local (64.3% accuracy, 775ms avg)",
+    "Tesseract viable for fast path: 64.3% accuracy"
+  ],
+  "image_results": [
+    {
+      "image": "-1001598078987_31243.jpg",
+      "ground_truth_picks": [],
+      "best_provider": "none",
+      "best_accuracy": 0.0,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": "JAN 11, 2026\nSE\nOe ite#ét\nPUPHIC PLAYS SHARP PLAYS SHARP LUYS\n\nai) mea) Ti To chargers ven 1 Chargers are the only clean shap buy we\n+m eee) tae | oe tee om 2 have seen that set off alerts today and the\nous (NCAAR) toe Totes Sac Urater PLAY ) line held 013.8. There was buy through\n+ Orw me (NCAAD) FMT Perens Pen ‘ on the ML which we lhe to see\n+ Patvoty (NFL) mn\n£ Chargers +38\nthesharpaheeta.com\nreo aa j oN om “eer oy of\nco Sa rer ae) . La\n Charsore sXe j INTERESTING\nth Sepenrceeee) z Pe Veet ay",
+          "confidence": 0.7499999999999999,
+          "time_ms": 1427,
+          "picks_found": [
+            "Chargers +38",
+            "Avadtrespected sharp payut ae TT ERB y Lanett Ottery wy ee ccitys yt\nplayed Josh Allen Over 30",
+            "Over 30"
+          ],
+          "picks_matched": 0,
+          "picks_missed": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "image": "-1001900292133_55713.jpg",
+      "ground_truth_picks": [
+        "Heat +4.5"
+      ],
+      "best_provider": "tesseract_local",
+      "best_accuracy": 1.0,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": "Mond Whe rlayps __—_—_-\nHeat +4.5 (NBA;\nStraight Bet: 1 Unit\n1 Unit = 10% Bankroll\ncy\n&\nThis is a read only chat",
+          "confidence": 0.8499999999999999,
+          "time_ms": 373,
+          "picks_found": [
+            "Heat +4.5"
+          ],
+          "picks_matched": 1,
+          "picks_missed": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "image": "-1001900292133_55714.jpg",
+      "ground_truth_picks": [
+        "DAL -142",
+        "POR Moneyline -142",
+        "Trail Blazers ML"
+      ],
+      "best_provider": "tesseract_local",
+      "best_accuracy": 0.3333333333333333,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": "02:05 pm\nNOVIG\nMoneyline\n4,500.00 -> '& 7677.53\nAmount To Pay\n= DAL\nie 10:35PM\nm POR\nit, Share\nID: 69e2a238313a Placed: 11:07AM\n@ Upcoming Mon, Dec 29, 7:30pm\n® Trail Blazers ML -142\n© POR-# DAL 4500U",
+          "confidence": 0.7499999999999999,
+          "time_ms": 718,
+          "picks_found": [
+            "Trail Blazers ML -142",
+            "Trail Blazers ML"
+          ],
+          "picks_matched": 1,
+          "picks_missed": 2,
+          "error": null
+        }
+      ]
+    },
+    {
+      "image": "-1001900292133_55715.jpg",
+      "ground_truth_picks": [
+        "Rams -7",
+        "Cavs +3.5"
+      ],
+      "best_provider": "tesseract_local",
+      "best_accuracy": 1.0,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": "[NFL] Rams -7 (-115)\n[NBA] Cavs +3.5 (-120) %",
+          "confidence": 0.8500000000000001,
+          "time_ms": 252,
+          "picks_found": [
+            "Rams -7",
+            "Cavs +3.5"
+          ],
+          "picks_matched": 2,
+          "picks_missed": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "image": "-1001900292133_55716.jpg",
+      "ground_truth_picks": [
+        "Way Moneyline\nFalcons +7.5"
+      ],
+      "best_provider": "tesseract_local",
+      "best_accuracy": 1.0,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": "yourdailycapper @\n@yourdailycapper « 20m ago\nNHL: 1 Unit (7:00 PM EST )\nSenators 3 Way Moneyline\nNFL: 1 Unit (8:15 PM EST ) @a’\nFalcons +7.5 JY\nNHL: 1 Unit (10:00 PM EST ) JV\nCanucks Moneyline\nTake them straight. 1 unit is supposed to be 1-3% of your betting\nbankroll.",
+          "confidence": 0.8499999999999999,
+          "time_ms": 443,
+          "picks_found": [
+            "Falcons +7.5"
+          ],
+          "picks_matched": 1,
+          "picks_missed": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "image": "-1001900292133_55717.jpg",
+      "ground_truth_picks": [
+        "Mary ML",
+        "Mary ML\nFalcons +7.5"
+      ],
+      "best_provider": "tesseract_local",
+      "best_accuracy": 0.5,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": "College hoops —\nWilliam & Mary iE /\n1U\n\n3500 bet\n\nNfl play ——\n\nFalcons +7.5 -110\n1U\n\n3300 bet",
+          "confidence": 0.75,
+          "time_ms": 575,
+          "picks_found": [
+            "Falcons +7.5"
+          ],
+          "picks_matched": 1,
+          "picks_missed": 1,
+          "error": null
+        }
+      ]
+    },
+    {
+      "image": "-1001900292133_55718.jpg",
+      "ground_truth_picks": [
+        "Warriors ML"
+      ],
+      "best_provider": "tesseract_local",
+      "best_accuracy": 1.0,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": "DIAMOND 4 VIP PACKAGE now\n®, \"a Photo\n@ NBA:\n4% each a.\necapperr==se\nWarriors ML Vv",
+          "confidence": 0.6,
+          "time_ms": 372,
+          "picks_found": [
+            "Warriors ML"
+          ],
+          "picks_matched": 1,
+          "picks_missed": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "image": "-1001900292133_55719.jpg",
+      "ground_truth_picks": [
+        "Bucks ML\nNuggets ML"
+      ],
+      "best_provider": "tesseract_local",
+      "best_accuracy": 1.0,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": ") DIAMOND © VIP PACKAGE now\n®. fe) Photo\n\n@ NBA:\n\n4% each\n\necapperstree\n\nBucks ML Y\n\nNuggets ML xX",
+          "confidence": 0.6,
+          "time_ms": 499,
+          "picks_found": [
+            "Bucks ML Y\n\nNuggets ML"
+          ],
+          "picks_matched": 1,
+          "picks_missed": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "image": "-1001900292133_55721.jpg",
+      "ground_truth_picks": [
+        "Over 61.5"
+      ],
+      "best_provider": "tesseract_local",
+      "best_accuracy": 1.0,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": "< Ff - | ncaaf> Q\n, * PorterPicks Yesterday at 10:00PM\nBOWL GAME SELECTION for TUESDAY 12/30\nMUSIC Ctr ¢ BOWL\nTENNESSEE/ILLINOIS\nOVER 41.5 (-105)\n(4-UNITS) @ BOG\n2:30pm PST - ESPN\nTENNESSEE is 6-2 to the OVER/UNDER as a\nFAVORITE and ILLINOIS is 3-1 to the OVER/UNDER as\nan UNDERDOG! Both defenses were very weak\nagainst the pass and on third down this season and\nthese two quarterbacks in Altmyer and Aguilar were\nvery successful this season passing the football.\nTo make it even more worse for these",
+          "confidence": 0.7499999999999999,
+          "time_ms": 1518,
+          "picks_found": [
+            "over 75"
+          ],
+          "picks_matched": 1,
+          "picks_missed": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "image": "-1001900292133_55722.jpg",
+      "ground_truth_picks": [
+        "Over 3",
+        "USC Over 3"
+      ],
+      "best_provider": "none",
+      "best_accuracy": 0.0,
+      "results": [
+        {
+          "provider": "tesseract",
+          "prompt_type": "local",
+          "text": "€& Ff .2 | ncaaf > Q\n| @ PorterPicks BOWL GAME SELECTION for TUESDAY\n[ 12/30 @everyone ~: MUSIC CITY BOWL TENNESSEE/...\niy PorterPicks Yesterday at 10:29PM\nBOWL GAME SELECTION for TUESDAY 12/30\n(continued)\nALAMC BUWL\nTCU (+7) good to (+6.5) over USC\n(3-UNITS) @ & ©\n6:00pm PST - ESPN\nUSC has their three top receivers and Tight End all\nOUT for this game and even though TCU won't have\nHoover at quarterback, HC Sonny Dykes has had\nplenty of time to get his quarterbacks ready for this\ngame in which h",
+          "confidence": 0.7499999999999999,
+          "time_ms": 1573,
+          "picks_found": [],
+          "picks_matched": 0,
+          "picks_missed": 2,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

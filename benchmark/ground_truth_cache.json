@@ -1,0 +1,55 @@
+{
+  "-1001598078987_31243.jpg": {
+    "picks": [
+      "Under 44.5",
+      "Chargers +3.5",
+      "H ML\nPenguins -120",
+      "Oregon +4",
+      "Sac Under 221.5",
+      "Miami Fla -3",
+      "PHI Under 44.5",
+      "Packers ML",
+      "Packers ML\nSteelers +3.5",
+      "Under 221.5"
+    ],
+    "model": "openrouter"
+  },
+  "-1001900292133_55713.jpg": {
+    "picks": [
+      "Heat +4.5"
+    ],
+    "model": "mistral"
+  },
+  "-1001900292133_55714.jpg": {
+    "picks": [
+      "Trail Blazers ML"
+    ],
+    "model": "mistral"
+  },
+  "-1001900292133_55715.jpg": {
+    "picks": [
+      "Cavs +3.5",
+      "Rams -7"
+    ],
+    "model": "mistral"
+  },
+  "-1001900292133_55716.jpg": {
+    "picks": [
+      "Way Moneyline\nFalcons +7.5"
+    ],
+    "model": "mistral"
+  },
+  "-1001900292133_55717.jpg": {
+    "picks": [
+      "Mary ML\nFalcons +7.5",
+      "Mary ML"
+    ],
+    "model": "mistral"
+  },
+  "-1001900292133_55718.jpg": {
+    "picks": [
+      "Warriors ML"
+    ],
+    "model": "groq"
+  }
+}

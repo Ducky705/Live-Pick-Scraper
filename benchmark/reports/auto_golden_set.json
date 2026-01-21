@@ -1,0 +1,121 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-21 16:16:12",
+    "judge_model": "tngtech/deepseek-r1t2-chimera:free",
+    "total_messages": 10,
+    "messages_with_picks": 6,
+    "unknown_failures": 0
+  },
+  "judgments": [
+    {
+      "message_id": 57428,
+      "has_picks": true,
+      "picks": [
+        "GOLDEN STATE WARRIORS (-10.5) over Portland Trail Blazers"
+      ],
+      "capper": "PorterPicks",
+      "confidence": 10,
+      "raw_response": "{\n    \"has_picks\": true,\n    \"picks\": [\"GOLDEN STATE WARRIORS (-10.5) over Portland Trail Blazers\"],\n    \"capper\": \"PorterPicks\",\n    \"confidence\": 10\n}"
+    },
+    {
+      "message_id": 57427,
+      "has_picks": false,
+      "picks": [],
+      "capper": "",
+      "confidence": 1,
+      "raw_response": "```json\n{\n    \"has_picks\": false,\n    \"picks\": [],\n    \"capper\": \"\",\n    \"confidence\": 1\n}\n```"
+    },
+    {
+      "message_id": 57421,
+      "has_picks": true,
+      "picks": [
+        "VIRGINIA / LOUISVILLE UNDER 153",
+        "GEORGE MASON / LOYOLA CHICAGO UNDER 137.5",
+        "GEORGE MASON FIRST HALF -6",
+        "KANSAS +5.5",
+        "PROVIDENCE +4",
+        "MICHIGAN STATE -5"
+      ],
+      "capper": "@cappersfree",
+      "confidence": 10,
+      "raw_response": "{\n    \"has_picks\": true,\n    \"picks\": [\n        \"VIRGINIA / LOUISVILLE UNDER 153\",\n        \"GEORGE MASON / LOYOLA CHICAGO UNDER 137.5\",\n        \"GEORGE MASON FIRST HALF -6\",\n        \"KANSAS +5.5\",\n        \"PROVIDENCE +4\",\n        \"MICHIGAN STATE -5\"\n    ],\n    \"capper\": \"@cappersfree\",\n    \"confidence\": 10\n}"
+    },
+    {
+      "message_id": 57420,
+      "has_picks": true,
+      "picks": [
+        "UAB Moneyline",
+        "Cincinnati -7.5",
+        "Butler Moneyline"
+      ],
+      "capper": "TPD",
+      "confidence": 10,
+      "raw_response": "```json\n{\n    \"has_picks\": true,\n    \"picks\": [\n        \"UAB Moneyline\",\n        \"Cincinnati -7.5\",\n        \"Butler Moneyline\"\n    ],\n    \"capper\": \"TPD\",\n    \"confidence\": 10\n}\n```"
+    },
+    {
+      "message_id": 57419,
+      "has_picks": true,
+      "picks": [
+        "New Orleans Pelicans +2.5",
+        "Oklahoma City Thunder -7.5",
+        "Oklahoma City ML",
+        "Golden State ML"
+      ],
+      "capper": "provenwinner",
+      "confidence": 10,
+      "raw_response": "```json\n{\n    \"has_picks\": true,\n    \"picks\": [\n        \"New Orleans Pelicans +2.5\",\n        \"Oklahoma City Thunder -7.5\",\n        \"Oklahoma City ML\",\n        \"Golden State ML\"\n    ],\n    \"capper\": \"provenwinner\",\n    \"confidence\": 10\n}\n```"
+    },
+    {
+      "message_id": 57418,
+      "has_picks": true,
+      "picks": [
+        "Bruins Over 5.5",
+        "Lightning MI",
+        "Stars MI",
+        "Maple Leafs Over 5.5",
+        "Oilers MI",
+        "Oilers Over 6.5",
+        "Spurs +8",
+        "Nuggets MI"
+      ],
+      "capper": "TheGamblingGawd",
+      "confidence": 10,
+      "raw_response": "{\n    \"has_picks\": true,\n    \"picks\": [\n        \"Bruins Over 5.5\",\n        \"Lightning MI\",\n        \"Stars MI\",\n        \"Maple Leafs Over 5.5\",\n        \"Oilers MI\",\n        \"Oilers Over 6.5\",\n        \"Spurs +8\",\n        \"Nuggets MI\"\n    ],\n    \"capper\": \"TheGamblingGawd\",\n    \"confidence\": 10\n}"
+    },
+    {
+      "message_id": 57417,
+      "has_picks": false,
+      "picks": [],
+      "capper": "",
+      "confidence": 1,
+      "raw_response": "{\n    \"has_picks\": false,\n    \"picks\": [],\n    \"capper\": \"\",\n    \"confidence\": 1\n}"
+    },
+    {
+      "message_id": 57414,
+      "has_picks": true,
+      "picks": [
+        "Miami -4.5 5U MAX BET",
+        "Louisville -4 2U"
+      ],
+      "capper": "HammeringHank",
+      "confidence": 10,
+      "raw_response": "{\n    \"has_picks\": true,\n    \"picks\": [\"Miami -4.5 5U MAX BET\", \"Louisville -4 2U\"],\n    \"capper\": \"HammeringHank\",\n    \"confidence\": 10\n}"
+    },
+    {
+      "message_id": 57411,
+      "has_picks": false,
+      "picks": [],
+      "capper": "BeezoWins",
+      "confidence": 2,
+      "raw_response": "```json\n{\n    \"has_picks\": false,\n    \"picks\": [],\n    \"capper\": \"BeezoWins\",\n    \"confidence\": 2\n}\n```"
+    },
+    {
+      "message_id": 57410,
+      "has_picks": false,
+      "picks": [],
+      "capper": "PlatinumLocks",
+      "confidence": 10,
+      "raw_response": "```json\n{\n    \"has_picks\": false,\n    \"picks\": [],\n    \"capper\": \"PlatinumLocks\",\n    \"confidence\": 10\n}\n```"
+    }
+  ]
+}

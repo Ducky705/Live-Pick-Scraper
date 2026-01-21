@@ -1,0 +1,344 @@
+{
+  "total_messages": 10,
+  "comparisons": [
+    {
+      "message_id": 57428,
+      "judge_has_picks": true,
+      "judge_picks": [
+        "GOLDEN STATE WARRIORS (-10.5) over Portland Trail Blazers"
+      ],
+      "judge_capper": "PorterPicks",
+      "scraper_picks": [
+        "Golden State Warriors -10.5"
+      ],
+      "scraper_cappers": [
+        "PorterPicks"
+      ],
+      "matched_picks": [
+        {
+          "judge": "GOLDEN STATE WARRIORS (-10.5) over Portland Trail Blazers",
+          "scraper": "Golden State Warriors -10.5",
+          "similarity": 0.6428571428571429
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": 57427,
+      "judge_has_picks": false,
+      "judge_picks": [],
+      "judge_capper": "",
+      "scraper_picks": [],
+      "scraper_cappers": [],
+      "matched_picks": [],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "true_negative"
+    },
+    {
+      "message_id": 57421,
+      "judge_has_picks": true,
+      "judge_picks": [
+        "VIRGINIA / LOUISVILLE UNDER 153",
+        "GEORGE MASON / LOYOLA CHICAGO UNDER 137.5",
+        "GEORGE MASON FIRST HALF -6",
+        "KANSAS +5.5",
+        "PROVIDENCE +4",
+        "MICHIGAN STATE -5"
+      ],
+      "judge_capper": "@cappersfree",
+      "scraper_picks": [
+        "Virginia vs Louisville Under 153",
+        "George Mason vs Loyola Chicago Under 137.5",
+        "1H George Mason -6",
+        "Kansas +5.5",
+        "Providence +4",
+        "Michigan State -5"
+      ],
+      "scraper_cappers": [
+        "monumental"
+      ],
+      "matched_picks": [
+        {
+          "judge": "VIRGINIA / LOUISVILLE UNDER 153",
+          "scraper": "Virginia vs Louisville Under 153",
+          "similarity": 0.9523809523809523
+        },
+        {
+          "judge": "GEORGE MASON / LOYOLA CHICAGO UNDER 137.5",
+          "scraper": "George Mason vs Loyola Chicago Under 137.5",
+          "similarity": 0.963855421686747
+        },
+        {
+          "judge": "GEORGE MASON FIRST HALF -6",
+          "scraper": "1H George Mason -6",
+          "similarity": 0.6818181818181818
+        },
+        {
+          "judge": "KANSAS +5.5",
+          "scraper": "Kansas +5.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "PROVIDENCE +4",
+          "scraper": "Providence +4",
+          "similarity": 1.0
+        },
+        {
+          "judge": "MICHIGAN STATE -5",
+          "scraper": "Michigan State -5",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": 57420,
+      "judge_has_picks": true,
+      "judge_picks": [
+        "UAB Moneyline",
+        "Cincinnati -7.5",
+        "Butler Moneyline"
+      ],
+      "judge_capper": "TPD",
+      "scraper_picks": [
+        "UAB ML",
+        "Cincinnati -7.5",
+        "Butler ML"
+      ],
+      "scraper_cappers": [
+        "TPD"
+      ],
+      "matched_picks": [
+        {
+          "judge": "UAB Moneyline",
+          "scraper": "UAB ML",
+          "similarity": 0.631578947368421
+        },
+        {
+          "judge": "Cincinnati -7.5",
+          "scraper": "Cincinnati -7.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Butler Moneyline",
+          "scraper": "Butler ML",
+          "similarity": 0.72
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": 57419,
+      "judge_has_picks": true,
+      "judge_picks": [
+        "New Orleans Pelicans +2.5",
+        "Oklahoma City Thunder -7.5",
+        "Oklahoma City ML",
+        "Golden State ML"
+      ],
+      "judge_capper": "provenwinner",
+      "scraper_picks": [
+        "New Orleans Pelicans +2.5",
+        "Oklahoma City Thunder -7.5",
+        "Oklahoma City ML",
+        "Golden State ML"
+      ],
+      "scraper_cappers": [
+        "provenwinner"
+      ],
+      "matched_picks": [
+        {
+          "judge": "New Orleans Pelicans +2.5",
+          "scraper": "New Orleans Pelicans +2.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Oklahoma City Thunder -7.5",
+          "scraper": "Oklahoma City Thunder -7.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Oklahoma City ML",
+          "scraper": "Oklahoma City ML",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Golden State ML",
+          "scraper": "Golden State ML",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": 57418,
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Bruins Over 5.5",
+        "Lightning MI",
+        "Stars MI",
+        "Maple Leafs Over 5.5",
+        "Oilers MI",
+        "Oilers Over 6.5",
+        "Spurs +8",
+        "Nuggets MI"
+      ],
+      "judge_capper": "TheGamblingGawd",
+      "scraper_picks": [
+        "Bruins Over 5.5",
+        "Lightning MI",
+        "Stars MI",
+        "Maple Leafs Over 5.5",
+        "Oilers MI",
+        "Oilers Over 6.5",
+        "Spurs +8",
+        "Nuggets MI"
+      ],
+      "scraper_cappers": [
+        "TheGamblingGawd"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Bruins Over 5.5",
+          "scraper": "Bruins Over 5.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Lightning MI",
+          "scraper": "Lightning MI",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Stars MI",
+          "scraper": "Stars MI",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Maple Leafs Over 5.5",
+          "scraper": "Maple Leafs Over 5.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Oilers MI",
+          "scraper": "Oilers MI",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Oilers Over 6.5",
+          "scraper": "Oilers Over 6.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Spurs +8",
+          "scraper": "Spurs +8",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Nuggets MI",
+          "scraper": "Nuggets MI",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": 57417,
+      "judge_has_picks": false,
+      "judge_picks": [],
+      "judge_capper": "",
+      "scraper_picks": [],
+      "scraper_cappers": [],
+      "matched_picks": [],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "true_negative"
+    },
+    {
+      "message_id": 57414,
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Miami -4.5 5U MAX BET",
+        "Louisville -4 2U"
+      ],
+      "judge_capper": "HammeringHank",
+      "scraper_picks": [
+        "Miami -4.5",
+        "Louisville -4"
+      ],
+      "scraper_cappers": [
+        "HammeringHank"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Miami -4.5 5U MAX BET",
+          "scraper": "Miami -4.5",
+          "similarity": 0.6451612903225806
+        },
+        {
+          "judge": "Louisville -4 2U",
+          "scraper": "Louisville -4",
+          "similarity": 0.896551724137931
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": 57411,
+      "judge_has_picks": false,
+      "judge_picks": [],
+      "judge_capper": "BeezoWins",
+      "scraper_picks": [],
+      "scraper_cappers": [],
+      "matched_picks": [],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "true_negative"
+    },
+    {
+      "message_id": 57410,
+      "judge_has_picks": false,
+      "judge_picks": [],
+      "judge_capper": "PlatinumLocks",
+      "scraper_picks": [],
+      "scraper_cappers": [],
+      "matched_picks": [],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "true_negative"
+    }
+  ],
+  "summary": {
+    "perfect_match": 6,
+    "partial_match": 0,
+    "missed_picks": 0,
+    "extra_picks": 0,
+    "false_negative": 0,
+    "false_positive": 0,
+    "true_negative": 4,
+    "judge_failed": 0
+  },
+  "all_false_negatives": [],
+  "all_false_positives": [],
+  "metrics": {
+    "accuracy": 100.0,
+    "recall": 100.0,
+    "precision": 100.0,
+    "total_picks_expected": 24,
+    "total_picks_found": 24,
+    "total_missed": 0,
+    "total_false_positives": 0
+  }
+}

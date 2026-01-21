@@ -10,33 +10,36 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as
 from threading import Semaphore, Lock
 
 # Global Concurrency Limiter ("Traffic Cop")
-# PARALLELIZED: Allow up to 5 concurrent requests (free tier can handle this with backoff)
-# Using Semaphore instead of Lock to enable parallelism
-GLOBAL_REQUEST_SEMAPHORE = Semaphore(5)
+# FULLY SEQUENTIAL: Free tier is extremely rate-limited (~2 req/min for Gemini)
+# Using Lock instead of Semaphore - simpler and no blocking issues
+# We wrap requests in a timeout to prevent infinite hangs
+GLOBAL_REQUEST_LOCK = Lock()
 
-# Maximum time to wait for the semaphore (seconds)
-SEMAPHORE_ACQUIRE_TIMEOUT = 300  # 5 minutes max wait
+# Maximum time to wait for the lock (seconds)
+LOCK_ACQUIRE_TIMEOUT = 300  # 5 minutes max wait
 
 # Model fallback list (ordered by reliability)
 # VERIFIED WORKING FREE LIST - Only models confirmed via API to exist
 # Note: Many "free" models are text-only or have limited availability
 DEFAULT_MODELS = [
-    "google/gemini-2.0-flash-exp:free",      # Primary - reliable vision
-    "google/gemma-3-12b-it:free",            # Google Gemma 3 12B
-    "deepseek/deepseek-r1-distill-llama-70b:free", # DeepSeek R1 Distill - text fallback
+    "google/gemini-2.0-flash-exp:free",      # Primary
+    "google/gemini-2.0-pro-exp-02-05:free",  # Backup
+    "meta-llama/llama-3.3-70b-instruct:free", # Backup Text
 ]
 
 # Models specifically for "Racing" (Parallel Text Parsing) - TEXT ONLY
 FAST_PARSING_MODELS = [
     "google/gemini-2.0-flash-exp:free",
-    "deepseek/deepseek-r1-distill-llama-70b:free",
-    "google/gemma-3-12b-it:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
 ]
 
-# Vision-capable models for OCR - VERIFIED VISION SUPPORT (2025)
+# Vision-capable models for OCR - VERIFIED VISION SUPPORT
+# Most free models are text-only. Gemini Flash is the only reliable free vision model.
 VISION_MODELS = [
-    "google/gemini-2.0-flash-exp:free",      # Primary - 1M context, confirmed vision
-    "google/gemma-3-12b-it:free",            # Gemma 3 12B
+    "nvidia/nemotron-nano-12b-v2-vl:free",   # Primary - Fast & Working
+    "google/gemini-2.0-flash-exp:free",      # Backup - Good but rate limited (429)
+    "qwen/qwen-2.5-vl-7b-instruct:free",     # Backup - Sometimes 400 error
+    "allenai/molmo-2-8b:free",               # Backup
 ]
 
 # Retry configuration for free-tier resilience
@@ -149,8 +152,9 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                 pass
 
         # 2. Try Gemini Direct - Supports Base64 input now
-        # NOTE: Disabled for now - using OpenRouter fallbacks instead for better model variety
-        if False and os.getenv("GEMINI_TOKEN"):
+        # DISABLE GEMINI DIRECT due to severe rate limits (429)
+        # if os.getenv("GEMINI_TOKEN"):
+        if False:
             try:
                 img_input = None
                 if isinstance(images, list) and len(images) > 0:
@@ -158,7 +162,7 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                 
                 if img_input:
                     logging.info(f"[Router] Routing vision request to Gemini (2.5 Flash Lite)")
-                    result = gemini_vision_completion(prompt, img_input)  # Use the actual prompt
+                    result = gemini_vision_completion("Extract all text from this image.", img_input)
                     if result:
                         return result
                     else:
@@ -185,7 +189,11 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
     models = []
     if model:
         models.append(model)
-    for m in DEFAULT_MODELS:
+    
+    # Select appropriate fallback list
+    fallback_list = VISION_MODELS if images else DEFAULT_MODELS
+    
+    for m in fallback_list:
         if m not in models:
             models.append(m)
 
@@ -251,10 +259,10 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
             }
 
             try:
-                # TRAFFIC COP: Acquire semaphore with timeout to prevent deadlocks
-                semaphore_acquired = GLOBAL_REQUEST_SEMAPHORE.acquire(timeout=SEMAPHORE_ACQUIRE_TIMEOUT)
-                if not semaphore_acquired:
-                    logging.error(f"[OpenRouter] Failed to acquire semaphore after {SEMAPHORE_ACQUIRE_TIMEOUT}s. Skipping request.")
+                # TRAFFIC COP: Acquire lock with timeout to prevent deadlocks
+                lock_acquired = GLOBAL_REQUEST_LOCK.acquire(timeout=LOCK_ACQUIRE_TIMEOUT)
+                if not lock_acquired:
+                    logging.error(f"[OpenRouter] Failed to acquire lock after {LOCK_ACQUIRE_TIMEOUT}s. Skipping request.")
                     model_failures[current_model] += 1
                     continue
                 
@@ -266,7 +274,7 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                         timeout=timeout
                     )
                 finally:
-                    GLOBAL_REQUEST_SEMAPHORE.release()
+                    GLOBAL_REQUEST_LOCK.release()
                 
                 # --- ERROR HANDLING & CIRCUIT BREAKER ---
                 
@@ -285,8 +293,8 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                     # FREE TIER FIX: Wait longer before retry (10s instead of 2s)
                     time.sleep(10)
                     try:
-                        semaphore_acquired = GLOBAL_REQUEST_SEMAPHORE.acquire(timeout=60)
-                        if semaphore_acquired:
+                        lock_acquired = GLOBAL_REQUEST_LOCK.acquire(timeout=60)
+                        if lock_acquired:
                             try:
                                 response = requests.post(
                                     "https://openrouter.ai/api/v1/chat/completions",
@@ -295,7 +303,7 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
                                     timeout=timeout
                                 )
                             finally:
-                                GLOBAL_REQUEST_SEMAPHORE.release()
+                                GLOBAL_REQUEST_LOCK.release()
                     except: pass
                     
                     if response.status_code == 429:

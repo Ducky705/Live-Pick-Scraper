@@ -56,15 +56,6 @@ PROMO_PATTERNS = [
     r'click\s*(here|link)\s*to\s*(join|subscribe)',
     r'crypto\s*airdrop',
     r'nft\s*giveaway',
-    r'price\s*:\s*\$\d+',                # Price listing
-    r'dm\s*:?\s*@\w+',                   # Direct Message call to action
-    r'days\s+for\s+the\s+price\s+of',    # "2 days for the price of 1"
-    r'join\s*(the|my)?\s*[\w\s]*team',   # "Join the best team"
-    r'bonus\s+cappers',                  # "Bonus cappers included"
-    r'owner\'?s\s+personal\s+play',      # Hype phrase usually for selling
-    r'purchase\s*now',
-    r'link\s*in\s*bio',
-    r'check\s*comments\s*for\s*link',
 ]
 
 # RECAP patterns - VERY CONSERVATIVE to avoid false positives
@@ -217,17 +208,17 @@ def classify_messages_with_ai(messages: List[Dict[str, Any]],
 
 def _batch_classify_with_ai(messages: List[Dict[str, Any]], 
                             model: str,
-                            batch_size: int = 1) -> Dict[str, Dict]:
+                            batch_size: int = 20) -> Dict[str, Dict]:
     """
     Internal function to classify messages with images using VLM.
-    OPTIMIZED: Using batch_size=1 + ThreadPoolExecutor for massive parallelism.
+    OPTIMIZED: Increased batch size to 20 for efficient AI usage.
     """
-    from concurrent.futures import ThreadPoolExecutor, as_completed
     results = {}
     
-    # Helper for processing one message (or small batch if we kept batching)
-    def process_batch(batch):
-        batch_results = {}
+    # Process in batches
+    for i in range(0, len(messages), batch_size):
+        batch = messages[i:i+batch_size]
+        
         # Collect images and build context
         images_to_send = []
         context_parts = []
@@ -257,26 +248,26 @@ def _batch_classify_with_ai(messages: List[Dict[str, Any]],
             context_parts.append(f"[Message {msg_id}] Caption: {text[:200]}")
         
         if not images_to_send:
-            return {}
+            continue
         
-        # Build classification prompt
+        # Build classification prompt - MINIFIED for efficiency
         prompt = """Classify sports betting images.
-CODES:
-- PICK: Valid bet slip or text pick.
-- PROMO: Advertisement, "Join VIP", "Price: $...", "DM for access", blurred content, "Package deal".
-- RECAP: Past results, green/red checkmarks, "Yesterday's Recap".
-- DATA: Spreadsheet rows, complex model outputs.
-
+CODES: PICK (Valid Bet), PROMO (Ad/VIP), RECAP (Results), DATA (Spreadsheet).
 CONTEXT:
 """ + "\n".join(context_parts) + """
 OUTPUT: Single-line JSON Object {"msg_id":{"class":"CODE","reason":"short reason"}}
 Example: {"123":{"class":"PICK","reason":"Lakers -5 slip"}}"""
 
         try:
-            # Use pooled completion (handles routing to Mistral/Groq/OpenRouter)
+            # Enforce fast model for classification
+            # Using pooled completion to distribute load across providers
+            # We want the FASTEST model for this.
+            
+            # Use pooled completion if available, falling back to OpenRouter if all pools fail
             response = pooled_completion(prompt, images=images_to_send, timeout=60)
             
             if not response:
+                # Fallback to OpenRouter directly
                 response = openrouter_completion(prompt, model="google/gemini-2.0-flash-exp:free", images=images_to_send, timeout=60)
             
             # Parse response
@@ -294,46 +285,40 @@ Example: {"123":{"class":"PICK","reason":"Lakers -5 slip"}}"""
                 msg_id = str(msg.get('id'))
                 if msg_id in parsed:
                     ai_result = parsed[msg_id]
-                    batch_results[msg.get('id')] = {
+                    results[msg.get('id')] = {
                         "class": ai_result.get("class", PostClassification.PICK),
                         "confidence": 0.9,
                         "reason": ai_result.get("reason", "AI classified"),
                         "method": "ai_vision"
                     }
                 else:
-                    batch_results[msg.get('id')] = {
+                    # Not in response - default to PICK
+                    results[msg.get('id')] = {
                         "class": PostClassification.PICK,
                         "confidence": 0.6,
                         "reason": "Default",
                         "method": "ai_default"
                     }
                     
+        except json.JSONDecodeError as e:
+            logging.error(f"[AutoProcessor] JSON parse error: {e}")
+            # Default all to PICK
+            for msg in batch:
+                results[msg.get('id')] = {
+                    "class": PostClassification.PICK,
+                    "confidence": 0.5,
+                    "reason": "JSON error",
+                    "method": "fallback"
+                }
         except Exception as e:
             logging.error(f"[AutoProcessor] Batch AI error: {e}")
             for msg in batch:
-                batch_results[msg.get('id')] = {
+                results[msg.get('id')] = {
                     "class": PostClassification.PICK,
                     "confidence": 0.5,
                     "reason": "Error",
                     "method": "fallback"
                 }
-        return batch_results
-
-    # Use ThreadPoolExecutor
-    # 5 workers is safe given our semaphore limits (3+3+2 = 8 total capacity)
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        # Create batches of 1
-        futures = []
-        for i in range(0, len(messages), batch_size):
-            batch = messages[i:i+batch_size]
-            futures.append(executor.submit(process_batch, batch))
-            
-        for future in as_completed(futures):
-            try:
-                batch_res = future.result()
-                results.update(batch_res)
-            except Exception as e:
-                logging.error(f"[AutoProcessor] Future failed: {e}")
     
     return results
 

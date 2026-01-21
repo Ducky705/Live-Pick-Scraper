@@ -52,22 +52,6 @@ class MultiCapperVerifier:
     ]
     
     @classmethod
-    def is_merged_name(cls, name: str) -> bool:
-        """Check if a capper name looks like multiple names merged together."""
-        for pattern in cls.MERGED_NAME_PATTERNS:
-            if re.match(pattern, name, re.IGNORECASE):
-                return True
-        
-        # Also check for suspiciously long names with multiple capital letters
-        # e.g., "KingCapBetMasterPropKing"
-        capital_count = sum(1 for c in name if c.isupper())
-        if capital_count > 3 and len(name) > 20:
-            # Might be concatenated names
-            return True
-        
-        return False
-    
-    @classmethod
     def verify_picks(
         cls,
         picks: List[Dict[str, Any]],
@@ -100,7 +84,7 @@ class MultiCapperVerifier:
                 actual_cappers.append(capper_name)
                 
                 # Check if this looks like a merged name
-                if cls.is_merged_name(capper_name):
+                if cls._is_merged_name(capper_name):
                     merged_cappers.append(capper_name)
         
         unique_cappers = list(set(actual_cappers))
@@ -149,15 +133,6 @@ class MultiCapperVerifier:
             reason=f"Capper attribution looks correct: {len(unique_cappers)} unique capper(s)"
         )
     
-    @classmethod
-    def split_merged_capper(cls, capper_name: str) -> List[str]:
-        """Split a merged capper name into individual names."""
-        # Use regex to split by delimiters
-        # Comma, ampersand, 'and', slash, 'vs' (sometimes used incorrectly)
-        # Pattern: \s*(?:,|&|and|/)\s*
-        parts = re.split(r'\s*(?:,|&|\band\b|/|\bvs\b)\s*', capper_name, flags=re.IGNORECASE)
-        return [p.strip() for p in parts if p.strip()]
-
     @classmethod
     def _is_merged_name(cls, name: str) -> bool:
         """Check if a capper name looks like multiple names merged together."""

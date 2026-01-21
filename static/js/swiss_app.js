@@ -738,8 +738,7 @@ async function runAutoPilot() {
             try {
                 const resAI = await apiCall('/api/ai_fill', 'POST', {
                     prompt: prompt,
-                    model: model,
-                    messages: state.selectedMessages // Pass for validation
+                    model: model
                 });
 
                 console.log(`[AutoPilot] Model ${model} response:`, resAI);
@@ -1480,8 +1479,7 @@ async function handleAutoFill() {
             console.log(`Attempting AI generation with model: ${model}`);
             const res = await apiCall('/api/ai_fill', 'POST', {
                 prompt: prompt,
-                model: model,
-                messages: state.selectedMessages || [] // Pass for validation if available
+                model: model
             });
 
             if (res && (res.result || Array.isArray(res.result))) {
@@ -1987,7 +1985,7 @@ function renderTable() {
             <td class="p-4 border-r border-gray-100 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:z-10 relative font-bold text-black truncate max-w-[200px] text-xs group/pick">
                 <div contenteditable="true" 
                      onkeydown="handleCellKeydown(event, this)"
-                     onblur="updateRowData('${msg.id}', ${idx}, 'pick', this.textContent)">${row.pick || ''}</div>
+                     onblur="updateRowData('${msg.id}', ${idx}, 'pick', this.innerText)">${row.pick || ''}</div>
                 
                 ${row.tags && row.tags.length ?
                 `<div class="flex gap-1 mt-1 flex-wrap">
@@ -2023,7 +2021,7 @@ function renderTable() {
                 title="${safeText(row.score_summary)}"
                 contenteditable="true" 
                 onkeydown="handleCellKeydown(event, this)"
-                onblur="updateRowData('${msg.id}', ${idx}, 'result', this.textContent)">
+                onblur="updateRowData('${msg.id}', ${idx}, 'result', this.innerText)">
                 ${row.result || "Pending"}
             </td>
         `;
@@ -2040,7 +2038,7 @@ function generateEditableTd(id, idx, field, val, classes) {
     return `<td class="p-4 border-r border-gray-100 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:z-10 relative ${classes}" 
             contenteditable="true" 
             onkeydown="handleCellKeydown(event, this)"
-            onblur="updateRowData('${id}', ${idx}, '${field}', this.textContent)">${val || ''}</td>`;
+            onblur="updateRowData('${id}', ${idx}, '${field}', this.innerText)">${val || ''}</td>`;
 }
 
 // POLISH: Add keyboard navigation for editable cells
@@ -2088,8 +2086,8 @@ function generateCapperHtml(msg, idx, row) {
     const safeName = (capperVal || '').replace(/'/g, "\\'");
 
     let html = `<div class="flex items-center gap-1">
-        <span contenteditable="true" class="outline-none focus:bg-white focus:ring-1 focus:ring-blue-300 rounded px-1 min-w-[50px]"
-              onblur="updateRowData('${msg.id}', ${idx}, 'capper_name', this.textContent)">${capperVal}</span>`;
+        <span contenteditable="true" class="outline-none focus:bg-white focus:ring-1 focus:ring-blue-300 rounded px-1 min-w-[50px] truncate"
+              onblur="updateRowData('${msg.id}', ${idx}, 'capper_name', this.innerText)">${capperVal}</span>`;
 
     if (!row.capper_verified) {
         let label = "New?";

@@ -1,11 +1,11 @@
-# CapperSuite CLI v3.2
+# CapperSuite CLI v3.3
 
-![Version](https://img.shields.io/badge/version-3.2.1-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Version](https://img.shields.io/badge/version-3.3.0-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-A professional-grade CLI tool for sports bettors. Scrapes, parses, and structures betting picks from Telegram channels and Twitter accounts using **Vision AI** and **Large Language Models**.
+A professional-grade CLI tool for sports bettors. Scrapes, parses, **grades**, and uploads betting picks from Telegram channels and Twitter accounts using **Vision AI**, **Large Language Models**, and **ESPN real-time scores**.
 
 ```
-$ python cli_tool.py
+$ python cli_tool.py --dry-run
 
 ==================================================
    TELEGRAM & TWITTER SCRAPER CLI   
@@ -16,12 +16,15 @@ Processing 23 images...
 OCR Complete.
 Selected 18 likely pick messages.
 Extracted 42 picks.
+Grading picks against ESPN scores...
+Fetched 494 game scores
+Grading complete: 28 Wins, 12 Losses, 2 Pending
 
-CAPPER               | SPORT      | PICK                                     | ODDS  
--------------------------------------------------------------------------------------
-SharpAction          | NBA        | Lakers -4.5                              | -110  
-VegasInsider         | NFL        | Chiefs ML                                | -150  
-CapperKing           | MLB        | Yankees/Red Sox OVER 8.5                 | -105  
+CAPPER               | SPORT      | PICK                                | ODDS  | RESULT  
+-----------------------------------------------------------------------------------------------
+SharpAction          | NBA        | Lakers -4.5                         | -110  | Win     
+VegasInsider         | NFL        | Chiefs ML                           | -150  | Pending 
+CapperKing           | NCAAB      | Kansas +3.5                         | -105  | Loss    
 ...
 ```
 
@@ -68,7 +71,16 @@ Text → Classification → LLM Parser → Structured JSON
 - Hybrid provider pool: fast models first, strong fallback.
 - Two-pass verification for parsing confidence.
 
-### 4. Structured Output
+### 4. Automated Grading (NEW in v3.3)
+```
+Pick + ESPN Scores → Grading Engine V3 → Win/Loss/Push/Pending
+```
+- **Real-time ESPN data** - Fetches scores from 57 endpoints in parallel
+- **Smart team matching** - Uses 500+ team aliases for accurate matching
+- **All bet types** - Spreads, Moneylines, Totals, Player Props, Parlays
+- **3x faster** than legacy grader with higher accuracy
+
+### 5. Structured Output
 ```json
 {
   "capper_name": "SharpAction",
@@ -76,7 +88,9 @@ Text → Classification → LLM Parser → Structured JSON
   "type": "spread",
   "pick": "Lakers -4.5",
   "odds": "-110",
-  "units": 1.0
+  "units": 1.0,
+  "result": "Win",
+  "score_summary": "Los Angeles Lakers 115 (+4.5=119.5) vs Phoenix Suns 112"
 }
 ```
 
@@ -85,22 +99,28 @@ Text → Classification → LLM Parser → Structured JSON
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           CLI PIPELINE                                  │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐           │
-│  │ TELEGRAM │    │ TWITTER  │    │  DEDUPE  │    │  AUTO    │           │
-│  │ SCRAPER  │──▶│ SCRAPER  │───▶│  MERGE   │──▶│ CLASSIFY │           │
-│  └──────────┘    └──────────┘    └──────────┘    └──────────┘           │
-│                                                        │                │
-│                                                        ▼                │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐           │
-│  │  OUTPUT  │◀──│ VALIDATE │◀───│  PARSE   │◀──│   OCR    │           │
-│  │   JSON   │    │ 2-PASS   │    │  HYBRID  │    │ CASCADE  │           │
-│  └──────────┘    └──────────┘    └──────────┘    └──────────┘           │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              CLI PIPELINE                                        │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                  │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
+│  │ TELEGRAM │    │ TWITTER  │    │  DEDUPE  │    │  AUTO    │    │   OCR    │   │
+│  │ SCRAPER  │──▶│ SCRAPER  │───▶│  MERGE   │──▶│ CLASSIFY │──▶│ CASCADE  │   │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
+│                                                                       │          │
+│                                                                       ▼          │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
+│  │ SUPABASE │◀──│  OUTPUT  │◀───│  GRADER  │◀──│ VALIDATE │◀──│  PARSE   │   │
+│  │  UPLOAD  │    │   JSON   │    │    V3    │    │ 2-PASS   │    │  HYBRID  │   │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
+│                                        │                                         │
+│                                        ▼                                         │
+│                               ┌──────────────┐                                   │
+│                               │  ESPN SCORES │                                   │
+│                               │  (57 APIs)   │                                   │
+│                               └──────────────┘                                   │
+│                                                                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### OCR Cascade
@@ -153,14 +173,17 @@ TWITTER_PASSWORD=your_pass
 
 ### Basic Run
 ```bash
-# Scrape yesterday's picks (default)
+# Scrape yesterday's picks (default) - with Supabase upload
 python cli_tool.py
+
+# Dry run - scrape, parse, grade but DON'T upload to Supabase
+python cli_tool.py --dry-run
 ```
 
 ### Output Files
 | File | Description |
 |------|-------------|
-| `picks_YYYY-MM-DD.json` | Structured pick data |
+| `picks_YYYY-MM-DD.json` | Structured pick data with grades |
 | `cli_scraper.log` | Debug logs |
 | `cache/ocr_hashes/` | OCR result cache |
 
@@ -174,7 +197,9 @@ python cli_tool.py
     "type": "spread",
     "pick": "Lakers -4.5",
     "odds": "-110",
-    "units": 1.0
+    "units": 1.0,
+    "result": "Win",
+    "score_summary": "Los Angeles Lakers 115 (+4.5=119.5) vs Phoenix Suns 112"
   }
 ]
 ```
@@ -216,6 +241,27 @@ It handles dark backgrounds, stylized fonts, and complex layouts natively.
 | Devstral | OpenRouter | 4.1s | 100% | GOOD |
 | DeepSeek R1 | OpenRouter | 14.5s | 100% | STRONG FALLBACK |
 
+### Grading Engine V3 (January 22, 2026)
+
+| Metric | Old Grader | New Grader V3 | Improvement |
+|--------|------------|---------------|-------------|
+| **Processing Time** | 40.6s | 11.3s | **3.6x faster** |
+| **Coverage** | 90.5% | 85.1% | More accurate* |
+| **Architecture** | Monolithic | Modular | Maintainable |
+| **False Positives** | Yes | No | **Eliminated** |
+
+*The old grader had higher "coverage" due to false positive matches (e.g., matching "Kent State" to "Iowa State"). The new grader correctly returns PENDING when games don't exist.
+
+**Supported Bet Types:**
+- Spreads, Moneylines, Totals
+- Player Props (with boxscore lookup)
+- Parlays & Teasers (recursive leg grading)
+- Period bets (1H, 1Q, F5, etc.)
+
+**Data Sources:**
+- ESPN API (57 parallel endpoints)
+- All major leagues: NFL, NBA, NHL, MLB, NCAAF, NCAAB, Soccer, Tennis, UFC, Golf
+
 ### Run Benchmarks
 ```bash
 # Vision benchmark
@@ -245,14 +291,30 @@ python -m benchmark.parser_benchmark --samples 5
 │   ├── provider_pool.py     # Hybrid LLM provider pool
 │   ├── prompt_builder.py    # AI prompt generation
 │   ├── two_pass_verifier.py # Parsing verification
+│   ├── grader.py            # Grading wrapper (uses V3)
+│   ├── grading/             # Grading Engine V3
+│   │   ├── engine.py        # Core grading engine
+│   │   ├── parser.py        # Pick text parser
+│   │   ├── matcher.py       # Team/player matching
+│   │   ├── schema.py        # Data structures
+│   │   ├── constants.py     # League mappings
+│   │   └── loader.py        # ESPN data loader
+│   ├── score_fetcher.py     # ESPN score fetcher
+│   ├── team_aliases.py      # 500+ team name aliases
+│   ├── supabase_client.py   # Supabase database client
 │   ├── cerebras_client.py   # Cerebras API client
 │   ├── mistral_client.py    # Mistral API client
 │   ├── openrouter_client.py # OpenRouter API client
 │   ├── groq_client.py       # Groq API client
 │   └── gemini_client.py     # Gemini API client
+├── scripts/
+│   └── regrade_picks.py     # Bulk regrade Supabase picks
 ├── benchmark/
 │   ├── ocr_benchmark.py     # Vision model benchmark
 │   ├── parser_benchmark.py  # Parser model benchmark
+│   ├── runners/
+│   │   ├── grading_benchmark.py    # Grading parser test
+│   │   └── grading_comparison.py   # Old vs new grader
 │   └── reports/             # Benchmark results
 └── requirements.txt         # Dependencies
 ```
@@ -299,10 +361,23 @@ result = pooled_completion(prompt)
 # Tries: Cerebras → Groq → Mistral → OpenRouter (DeepSeek R1)
 ```
 
-### 6. Verify & Output
+### 6. Grade Picks
+```python
+from src.grader import grade_picks
+from src.score_fetcher import fetch_scores_for_date
+
+scores = fetch_scores_for_date("2026-01-20")
+graded = grade_picks(picks, scores)
+# Each pick now has: result="Win"/"Loss"/"Push"/"Pending", score_summary="..."
+```
+
+### 7. Verify & Upload
 ```python
 from src.two_pass_verifier import TwoPassVerifier
 TwoPassVerifier.verify_parsing_result(picks)
+
+from src.supabase_client import upload_picks
+upload_picks(graded, target_date)
 ```
 
 ---
@@ -334,6 +409,8 @@ python cli_tool.py 2>&1 | tee debug.log
 | Local OCR Accuracy | 93% (RapidOCR) |
 | Vision AI Accuracy | 100% (Mistral) |
 | Parsing Accuracy | 100% |
+| **Grading Speed** | 11.3s / 74 picks |
+| **Grading Coverage** | 85.1% |
 | Avg Local OCR Time | 1.2s (RapidOCR) |
 | Avg Vision OCR Time | 16.2s (Mistral) |
 | Avg Parse Time | 0.9s (Cerebras) |
@@ -342,6 +419,26 @@ python cli_tool.py 2>&1 | tee debug.log
 ---
 
 ## Changelog
+
+### v3.3.0 (January 22, 2026)
+- **Grading Engine V3** - Complete rewrite of pick grading system
+  - 3.6x faster than legacy grader (11.3s vs 40.6s for 74 picks)
+  - Modular architecture: `src/grading/` package
+  - Eliminated false positive matches (old grader matched "Kent State" to "Iowa State")
+  - Smart team matching with 500+ aliases
+  - Support for all bet types: Spreads, Moneylines, Totals, Props, Parlays
+- **CLI Integration** - Full pipeline now includes grading
+  - Picks are graded against ESPN scores before output
+  - Results shown in table: CAPPER | SPORT | PICK | ODDS | RESULT
+  - `--dry-run` flag to skip Supabase upload
+- **Supabase Upload** - Graded picks uploaded to database
+  - Auto-creates new cappers
+  - Maps leagues and bet types to IDs
+  - Stores result and score_summary
+- **Bulk Regrade Script** - `scripts/regrade_picks.py`
+  - Regrades historical picks in Supabase
+  - Pagination for >1000 picks
+  - Dry-run mode for preview
 
 ### v3.2.1 (January 21, 2026)
 - **Strict Formatting Enforcement** - Prompt builder now rigorously adheres to `pick_format.md`

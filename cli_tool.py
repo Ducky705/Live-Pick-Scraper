@@ -231,6 +231,26 @@ async def main():
         # capper_results = verify_all_picks(selected_msgs, picks)
         # (Logging detail omitted for brevity)
 
+        # 7.5 GRADING
+        logging.info("Grading picks against ESPN scores...")
+        try:
+            from src.grader import grade_picks
+            from src.score_fetcher import fetch_scores_for_date
+            
+            scores = fetch_scores_for_date(target_date)
+            logging.info(f"Fetched {len(scores)} game scores")
+            
+            picks = grade_picks(picks, scores)
+            
+            # Count results
+            wins = sum(1 for p in picks if p.get('result') == 'Win')
+            losses = sum(1 for p in picks if p.get('result') == 'Loss')
+            pending = sum(1 for p in picks if p.get('result') in ['Pending', 'Pending/Unknown', None, ''])
+            
+            logging.info(f"Grading complete: {wins} Wins, {losses} Losses, {pending} Pending")
+        except Exception as e:
+            logging.error(f"Grading failed: {e}")
+
     except json.JSONDecodeError:
         logging.error("AI returned invalid JSON.")
         logging.debug(result_json_str)
@@ -253,15 +273,41 @@ async def main():
     print(f"Saved to: {output_file}")
     
     # Simple Table Output
-    print(f"{'CAPPER':<20} | {'SPORT':<10} | {'PICK':<40} | {'ODDS':<6}")
-    print("-" * 85)
+    print(f"{'CAPPER':<20} | {'SPORT':<10} | {'PICK':<35} | {'ODDS':<6} | {'RESULT':<8}")
+    print("-" * 95)
     for p in picks:
         capper = (p.get('capper_name') or "Unknown")[:19]
         sport = (p.get('league') or "Unknown")[:9]
-        pick_val = (p.get('pick') or "Unknown")[:39]
-        odds = str(p.get('odds') or "")
-        print(f"{capper:<20} | {sport:<10} | {pick_val:<40} | {odds:<6}")
-    print("-" * 85)
+        pick_val = (p.get('pick') or "Unknown")[:34]
+        odds = str(p.get('odds') or "")[:5]
+        result = (p.get('result') or "")[:7]
+        print(f"{capper:<20} | {sport:<10} | {pick_val:<35} | {odds:<6} | {result:<8}")
+    print("-" * 95)
+    
+    # 9. SUPABASE UPLOAD
+    # Check for --dry-run or --no-upload flag
+    dry_run = '--dry-run' in sys.argv or '--no-upload' in sys.argv
+    
+    if dry_run:
+        logging.info("Skipping Supabase upload (--dry-run mode)")
+        print("\n[DRY RUN] Supabase upload skipped. Review picks above and run without --dry-run to upload.")
+    else:
+        logging.info("Uploading picks to Supabase...")
+        try:
+            from src.supabase_client import upload_picks
+            
+            result = upload_picks(picks, target_date)
+            
+            if result.get('success'):
+                logging.info(f"Successfully uploaded {result.get('count', 0)} picks to Supabase")
+                print(f"\n[SUPABASE] Uploaded {result.get('count', 0)} picks successfully!")
+            else:
+                logging.error(f"Supabase upload failed: {result.get('error')}")
+                if result.get('details'):
+                    for detail in result['details'][:5]:
+                        logging.warning(f"  {detail}")
+        except Exception as e:
+            logging.error(f"Supabase upload error: {e}")
     
 if __name__ == "__main__":
     try:

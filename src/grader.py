@@ -919,142 +919,63 @@ def _infer_odds_for_pick(bet_text: str, espn_odds: dict, matched_game: dict, lea
 
 def grade_picks(picks, scores, odds_data=None):
     """
-    Grades picks against scores and optionally fills in missing odds from ESPN.
+    Grades picks against scores using the new V3 grading system.
+    
+    This is a backward-compatible wrapper that internally uses src.grading.
     
     Args:
         picks: List of pick dictionaries
-        scores: List of game score dictionaries
-        odds_data: Optional dict from fetch_odds_for_date(). If None and picks have
-                   blank odds, will attempt to fetch odds automatically.
+        scores: List of game score dictionaries  
+        odds_data: Optional dict from fetch_odds_for_date() (currently unused by V3)
     
     Returns:
-        List of graded pick dictionaries with results and optionally filled odds
+        List of graded pick dictionaries with results
     """
-    graded_results = []
+    from src.grading.engine import GraderEngine
+    from src.grading.parser import PickParser
     
-    # 1. OPTIMIZATION: PRE-INDEX SCORES BY LEAGUE FOR O(1) LOOKUP
-    # This prevents iterating through 300+ games for every single pick.
-    scores_by_league = defaultdict(list)
-    for g in scores:
-        scores_by_league[g.get('league', '').lower()].append(g)
-
-    # Cross-League Map
-    CROSS_LEAGUE_MAP = {
-        'ncaaf': 'ncaab',
-        'ncaab': 'ncaaf',
-        'cfb': 'ncaab'
+    graded_results = []
+    engine = GraderEngine(scores)
+    
+    # Map V3 grades to legacy format
+    GRADE_MAP = {
+        'WIN': 'Win',
+        'LOSS': 'Loss',
+        'PUSH': 'Push',
+        'PENDING': 'Pending',
+        'ERROR': 'Error'
     }
-
+    
     for pick in picks:
         pick_obj = pick.copy()
         
         try:
-            # key mapping for abbreviated keys (p=pick, lg=league, etc)
+            # Extract pick text and league
             bet_text = str(pick.get('pick') or pick.get('p') or '')
-            sport = str(pick.get('league') or pick.get('lg') or '').lower()
+            league = str(pick.get('league') or pick.get('lg') or 'other')
+            pick_date = pick.get('date') or pick.get('pick_date')
             
-            matched_game = None
+            # Parse and grade using V3 system
+            parsed = PickParser.parse(bet_text, league, pick_date)
+            graded = engine.grade(parsed)
             
-            # --- Attempt 1: Primary League ---
-            # Lookup relevant games instantly instead of filtering list
-            target_leagues = LEAGUE_ALIASES.get(sport, [sport])
-            potential_games = []
-            for tl in target_leagues:
-                potential_games.extend(scores_by_league.get(tl, []))
+            # Convert to legacy format
+            pick_obj['result'] = GRADE_MAP.get(graded.grade.value, 'Pending')
+            pick_obj['score_summary'] = graded.score_summary or graded.details or ''
             
-            matched_game = _find_matching_game(bet_text, potential_games)
-            
-            # --- Attempt 2: Cross-League Fallback ---
-            if not matched_game and sport in CROSS_LEAGUE_MAP:
-                alt_sport = CROSS_LEAGUE_MAP[sport]
-                # logging.info(f"Fallback check: {sport} -> {alt_sport} for '{bet_text}'")
+            # Keep game_id if available
+            if graded.game_id:
+                pick_obj['game_id'] = graded.game_id
                 
-                alt_leagues = LEAGUE_ALIASES.get(alt_sport, [alt_sport])
-                alt_games = []
-                for tl in alt_leagues:
-                    alt_games.extend(scores_by_league.get(tl, []))
-                
-                matched_game = _find_matching_game(bet_text, alt_games)
-                
-                if matched_game:
-                    # Found in other league! Update the pick object
-                    pick_obj['league'] = alt_sport.upper()
-                    # logging.info(f"Corrected League: {sport} -> {alt_sport}")
-                    sport = alt_sport # Update local var for interpret logic if needed
-
-            if matched_game:
-                # Handle Multi-Competitor arguments safely
-                if matched_game.get('type') == 'multi_competitor':
-                    # Pass dummy values for team/score as they are handled inside interpret via game_obj
-                    t1_arg, t2_arg, s1_arg, s2_arg = "", "", 0, 0
-                else:
-                    t1_arg = matched_game.get('team1', '')
-                    t2_arg = matched_game.get('team2', '')
-                    s1_arg = matched_game.get('score1', 0)
-                    s2_arg = matched_game.get('score2', 0)
-
-                result = interpret_bet_result(
-                    bet_text,
-                    t1_arg,
-                    t2_arg,
-                    s1_arg,
-                    s2_arg,
-                    sport,
-                    game_obj=matched_game
-                )
-
-                # --- ON-DEMAND BOXSCORE FETCH ---
-                if "Unknown (Player" in str(result) and matched_game.get('id'):
-                    # Check if we already fetched boxscore for this game
-                    if 'full_boxscore' not in matched_game:
-                        box_stats = fetch_full_boxscore(matched_game['id'], matched_game['league'])
-                        if box_stats:
-                            matched_game['full_boxscore'] = box_stats
-                    
-                    # Retry grading with full boxscore context
-                    if 'full_boxscore' in matched_game:
-                        # Re-run interpret
-                        result = interpret_bet_result(
-                            bet_text,
-                            t1_arg,
-                            t2_arg,
-                            s1_arg,
-                            s2_arg,
-                            sport,
-                            game_obj=matched_game
-                        )
-
-                pick_obj['result'] = result
-                
-                # --- ODDS LOOKUP: Fill in blank odds from ESPN ---
-                if _pick_has_blank_odds(pick_obj) and odds_data:
-                    espn_odds = _lookup_espn_odds_for_game(
-                        matched_game, 
-                        odds_data, 
-                        sport
-                    )
-                    if espn_odds:
-                        inferred_odds = _infer_odds_for_pick(
-                            bet_text, 
-                            espn_odds, 
-                            matched_game,
-                            sport
-                        )
-                        if inferred_odds is not None:
-                            pick_obj['odds'] = inferred_odds
-                
-                if matched_game.get('type') == 'multi_competitor':
-                     pick_obj['score_summary'] = f"Event: {matched_game.get('name', 'Unknown')}"
-                else:
-                     pick_obj['score_summary'] = f"{matched_game.get('team1')} {matched_game.get('score1')} - {matched_game.get('score2')} {matched_game.get('team2')}"
-            else:
-                pick_obj['result'] = "Pending/Unknown"
-                pick_obj['score_summary'] = ""
-        
         except Exception as e:
-            pick_obj['result'] = "Error"
+            pick_obj['result'] = 'Error'
             pick_obj['score_summary'] = str(e)
             
         graded_results.append(pick_obj)
         
     return graded_results
+
+
+# =============================================================================
+# LEGACY FUNCTIONS (kept for backward compatibility, but grade_picks uses V3)
+# =============================================================================

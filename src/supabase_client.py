@@ -4,8 +4,19 @@ from datetime import datetime
 # Lazy import: supabase module is loaded on first use
 # from supabase import create_client, Client  # Moved to get_supabase()
 
-# Import directly from config (bundled in EXE) instead of .env
-from config import SUPABASE_URL, SUPABASE_KEY
+# Try to import from config first (for bundled EXE), fallback to .env
+try:
+    from config import SUPABASE_URL, SUPABASE_KEY
+except ImportError:
+    SUPABASE_URL = None
+    SUPABASE_KEY = None
+
+# Fallback to environment variables if config doesn't have them
+if not SUPABASE_URL or not SUPABASE_KEY:
+    from dotenv import load_dotenv
+    load_dotenv()
+    SUPABASE_URL = os.getenv('SUPABASE_URL')
+    SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 
 # --- HARDCODED ALIASES ---
 MANUAL_ALIASES = {

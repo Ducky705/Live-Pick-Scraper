@@ -740,7 +740,9 @@ def stage_grade(args) -> dict:
     start_time = time.time()
     
     try:
-        from src.grader import grade_picks
+        # NEW GRADING SYSTEM V3
+        from src.grading.engine import GraderEngine
+        from src.grading.parser import PickParser
         from src.score_fetcher import fetch_scores_for_date
         
         # Fetch scores
@@ -754,9 +756,23 @@ def stage_grade(args) -> dict:
         scores = fetch_scores_for_date(args.date, requested_leagues=list(relevant_leagues))
         log_info(f"Fetched {len(scores)} game scores")
         
-        # Grade
-        log_info("Grading picks...")
-        graded = grade_picks(picks, scores)
+        # Grade using new system
+        log_info("Grading picks with V3 engine...")
+        engine = GraderEngine(scores)
+        graded = []
+        
+        for p in picks:
+            pick_text = p.get('pick', p.get('p', ''))
+            league = p.get('league', p.get('lg', 'other'))
+            
+            parsed = PickParser.parse(pick_text, league, args.date)
+            result = engine.grade(parsed)
+            
+            # Convert to legacy format for compatibility
+            graded_pick = p.copy()
+            graded_pick['result'] = result.grade.value
+            graded_pick['score_summary'] = result.score_summary or result.details or ''
+            graded.append(graded_pick)
         
         elapsed = time.time() - start_time
         

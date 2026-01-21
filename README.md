@@ -1,115 +1,367 @@
-# Telegram & Twitter Scraper (CapperSuite v3.0 CLI)
+# CapperSuite CLI v3.1
 
-![Version](https://img.shields.io/badge/version-3.0.0-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg)
+![Version](https://img.shields.io/badge/version-3.1.1-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-**CapperSuite CLI** is a professional-grade intelligence tool for sports bettors. It aggregates, parses, and analyzes betting picks from Telegram channels and Twitter accounts using advanced **Vision AI** and **Large Language Models**.
+A professional-grade CLI tool for sports bettors. Scrapes, parses, and structures betting picks from Telegram channels and Twitter accounts using **Vision AI** and **Large Language Models**.
 
-> **New in v3.0:** A complete rewrite of the OCR extraction engine. We've replaced the legacy Tesseract system with state-of-the-art **Cloud Vision AI (Gemma 3 & Qwen 2.5)**, enabling 96%+ accuracy on handwritten notes and complex slips.
+```
+$ python cli_tool.py
 
----
+==================================================
+   TELEGRAM & TWITTER SCRAPER CLI   
+==================================================
+Fetching Telegram messages...
+Fetched 47 messages.
+Processing 23 images...
+OCR Complete.
+Selected 18 likely pick messages.
+Extracted 42 picks.
 
-## 🚀 Key Features
-
-*   **🤖 Vision AI Engine**: Uses **Google's Gemma-3-12b** and **Qwen-2.5-VL**. Capable of reading handwritten notes, complex tables, and low-res screenshots with **96%+ accuracy**.
-*   **⚡ Smart Batching**: Processes up to **32 images per batch**, reducing API overhead.
-*   **🧠 AI Parsing**: Automatically extracts structured picks (Capper, Sport, Odds, Units) using LLMs.
-*   **🐦 Twitter & Telegram**: Simultaneous scraping from multiple sources.
-*   **🔍 Deduplication**: Intelligent merging of duplicate picks across platforms.
-*   **💾 JSON Output**: Saves structured data for analysis to `picks_YYYY-MM-DD.json`.
-
----
-
-## 🛠️ Installation
-
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/Ducky705/Telegram-Scraper.git
-    cd Telegram-Scraper
-    ```
-
-2.  **Install dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3.  **Configure Environment**:
-    Create a `.env` file in the root directory:
-    ```env
-    # Telegram Credentials (my.telegram.org)
-    API_ID=your_api_id
-    API_HASH=your_api_hash
-    
-    # AI Provider (OpenRouter)
-    OPENROUTER_API_KEY=your_key
-    
-    # Twitter (Optional)
-    TWITTER_USERNAME=your_user
-    TWITTER_EMAIL=your_email
-    TWITTER_PASSWORD=your_pass
-    ```
-
-4.  **Edit Config**:
-    Check `config.py` to add target Telegram Channel IDs and Twitter accounts.
+CAPPER               | SPORT      | PICK                                     | ODDS  
+-------------------------------------------------------------------------------------
+SharpAction          | NBA        | Lakers -4.5                              | -110  
+VegasInsider         | NFL        | Chiefs ML                                | -150  
+CapperKing           | MLB        | Yankees/Red Sox OVER 8.5                 | -105  
+...
+```
 
 ---
 
-## 📖 Usage
+## Quick Start
 
-### Run the Scraper
 ```bash
+# Install
+git clone https://github.com/Ducky705/Telegram-Scraper.git
+cd Telegram-Scraper
+pip install -r requirements.txt
+
+# Configure
+cp .env.example .env
+# Add your API keys (see Environment Variables below)
+
+# Run
 python cli_tool.py
 ```
 
-- **First Run**: The tool will prompt you to log in to Telegram via the terminal (Phone Number -> Code).
-- **Subsequent Runs**: Authentication is cached in `user_session.session`.
-- **Date Range**: Defaults to "Yesterday" (Eastern Time) to capture the full previous day's picks.
+---
 
-### Output
-- **Console**: Live progress and summary table.
-- **File**: `picks_YYYY-MM-DD.json` (Structured data).
-- **Logs**: `cli_scraper.log` (Debug info).
+## Features
+
+### 1. Multi-Source Aggregation
+- **Telegram** - Scrapes configured channels for betting picks
+- **Twitter** - Fetches tweets from followed cappers
+- **Deduplication** - Merges cross-posted content automatically
+
+### 2. Smart OCR Pipeline
+```
+Image → Tesseract (fast) → Vision AI (fallback) → Structured Text
+```
+- Tesseract runs first (~0.5s). If confidence >= 60%, done.
+- Vision AI races multiple providers in parallel for reliability.
+- Automatic image preprocessing for better accuracy.
+
+### 3. AI-Powered Parsing
+```
+Text → Classification → LLM Parser → Structured JSON
+```
+- Auto-filters promotional posts, recaps, and data dumps.
+- Hybrid provider pool: fast models first, strong fallback.
+- Two-pass verification for parsing confidence.
+
+### 4. Structured Output
+```json
+{
+  "capper_name": "SharpAction",
+  "league": "NBA",
+  "type": "spread",
+  "pick": "Lakers -4.5",
+  "odds": "-110",
+  "units": 1.0
+}
+```
 
 ---
 
-## 📈 Performance Benchmarks (v3.0)
+## Architecture
 
-### Pick Extraction Accuracy (January 2026)
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           CLI PIPELINE                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐          │
+│  │ TELEGRAM │    │ TWITTER  │    │  DEDUPE  │    │  AUTO    │          │
+│  │ SCRAPER  │───▶│ SCRAPER  │───▶│  MERGE   │───▶│ CLASSIFY │          │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘          │
+│                                                        │                 │
+│                                                        ▼                 │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐          │
+│  │  OUTPUT  │◀───│ VALIDATE │◀───│  PARSE   │◀───│   OCR    │          │
+│  │   JSON   │    │ 2-PASS   │    │  HYBRID  │    │ CASCADE  │          │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘          │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
 
-We benchmarked 4 OCR/parsing pipelines against a **Golden Set** of 30 real betting slip images (132 picks) validated by multimodal AI.
+### OCR Cascade
+| Stage | Provider | Time | Success |
+|-------|----------|------|---------|
+| 1. Fast | Tesseract (local) | ~0.5s | 60% |
+| 2. Vision | Mistral Pixtral Large | ~16s | 100% |
+| 3. Fallback | OpenRouter Gemma 3 27B | ~16s | 100% |
 
-### Results (5 Image Subset)
+### Parser Pool
+| Tier | Provider | Model | Time | Accuracy |
+|------|----------|-------|------|----------|
+| Fast | Cerebras | Llama 3.3 70B | 0.9s | 100% |
+| Fast | Mistral | Mistral Large | 1.9s | 100% |
+| Strong | OpenRouter | DeepSeek R1 | 14s | 100% |
 
-#### 1. OCR Accuracy (CER/WER) - 4 Engines Benchmarked
-![OCR Comparison Chart](benchmark/charts/ocr_comparison.png)
+---
 
-| Engine | CER (Lower is better) | WER (Lower is better) |
-| :--- | :---: | :---: |
-| **Manual/Online AI** | **6.8%** 🏆 | **28.9%** |
-| AI Vision | 8.5% | 12.4% 🏆 |
-| Tesseract V3 | 19.3% | 31.0% |
-| Tesseract Simple | 26.3% | 33.9% |
+## Environment Variables
 
-#### 2. Parsing Accuracy (F1 Score) - 13 Models Benchmarked
-![Pipeline Comparison Chart](benchmark/charts/pipeline_comparison.png)
+```env
+# ─────────────────────────────────────────────────
+# REQUIRED - Telegram API (get from my.telegram.org)
+# ─────────────────────────────────────────────────
+API_ID=your_api_id
+API_HASH=your_api_hash
 
-| Model | Precision | Recall | F1 Score | Latency |
-| :--- | :---: | :---: | :---: | :---: |
-| **DeepSeek R1T2 Chimera** | **100.0%** | **95.2%** | **97.6%** 🏆 | 27.7s |
-| Gemini 2.0 Flash | 90.5% | 90.5% | 90.5% | 6.4s (fastest) |
-| Mistral Devstral | 90.5% | 90.5% | 90.5% | 21.2s |
-| GLM 4.5 Air | 90.5% | 90.5% | 90.5% | 58.4s |
-| Gemma 3 27B | 90.5% | 90.5% | 90.5% | 20.8s |
-| Llama 3.3 70B | 90.5% | 90.5% | 90.5% | 10.2s |
-| Hermes 3 405B | 90.5% | 90.5% | 90.5% | 30.6s |
-| Xiaomi MiMo v2 | 85.7% | 85.7% | 85.7% | 8.0s |
-| GPT-OSS 120B | 85.7% | 85.7% | 85.7% | 13.0s |
-| Nemotron 3 Nano 30B | 88.9% | 76.2% | 82.1% | 12.0s |
-| Nemotron Nano 12B VL | 88.9% | 76.2% | 82.1% | 35.9s |
-| DeepSeek V3.1 Nex | 76.2% | 76.2% | 76.2% | 32.2s |
-| DeepSeek R1 0528 | 57.1% | 19.0% | 28.6% | 54.1s |
+# ─────────────────────────────────────────────────
+# RECOMMENDED - AI Providers
+# ─────────────────────────────────────────────────
+CEREBRAS_TOKEN=your_key      # Fastest parser (0.9s)
+MISTRAL_TOKEN=your_key       # Best vision + good parser
+OPENROUTER_API_KEY=your_key  # Strong fallback
 
-### Key Findings
+# ─────────────────────────────────────────────────
+# OPTIONAL
+# ─────────────────────────────────────────────────
+GROQ_TOKEN=your_key          # Currently has 403 issues
+GEMINI_TOKEN=your_key        # Direct Gemini API
 
-1.  **DeepSeek R1T2 Chimera Excellence**: Achieved 97.6% F1 with **100% precision** (zero false positives), making it the clear winner for parsing accuracy.
-2.  **Gemini 2.0 Flash Best Value**: Tied for 2nd place (90.5% F1) with the **fastest latency** (6.4s), making it the best balance of speed and accuracy.
-3.  **Large Models Underperform**: DeepSeek R1 0528 (28.6% F1) performed poorly despite its size, likely due to overly verbose reasoning.
+# Twitter (if using Twitter scraping)
+TWITTER_USERNAME=your_user
+TWITTER_EMAIL=your_email
+TWITTER_PASSWORD=your_pass
+```
+
+---
+
+## CLI Usage
+
+### Basic Run
+```bash
+# Scrape yesterday's picks (default)
+python cli_tool.py
+```
+
+### Output Files
+| File | Description |
+|------|-------------|
+| `picks_YYYY-MM-DD.json` | Structured pick data |
+| `cli_scraper.log` | Debug logs |
+| `cache/ocr_hashes/` | OCR result cache |
+
+### Sample Output
+```json
+[
+  {
+    "message_id": 12345,
+    "capper_name": "SharpAction",
+    "league": "NBA",
+    "type": "spread",
+    "pick": "Lakers -4.5",
+    "odds": "-110",
+    "units": 1.0
+  }
+]
+```
+
+---
+
+## Benchmarks
+
+### Vision Models (January 21, 2026)
+
+| Model | Provider | Avg Time | Picks/Img | Success | Status |
+|-------|----------|----------|-----------|---------|--------|
+| **Mistral Pixtral Large** | Mistral | 16.2s | 4.2 | 100% | **PRIMARY** |
+| Gemma 3 27B | OpenRouter | 16.5s | 4.4 | 100% | FALLBACK |
+| Gemma 3 12B | OpenRouter | 19.2s | 4.2 | 100% | FALLBACK |
+| Gemini 2.0 Flash | OpenRouter | 58s | 2.2 | 100% | RATE-LIMITED |
+| All Groq models | Groq | - | 0 | 0% | NO VISION |
+| All Cerebras models | Cerebras | - | 0 | 0% | NO VISION |
+
+### Parser Models (January 21, 2026)
+
+| Model | Provider | Avg Time | Accuracy | Status |
+|-------|----------|----------|----------|--------|
+| **Cerebras Llama 3.3 70B** | Cerebras | 901ms | 100% | **PRIMARY** |
+| Mistral Large | Mistral | 1.9s | 100% | FAST |
+| Devstral | OpenRouter | 4.1s | 100% | GOOD |
+| DeepSeek R1 | OpenRouter | 14.5s | 100% | STRONG FALLBACK |
+
+### Run Benchmarks
+```bash
+# Vision benchmark
+python -m benchmark.ocr_benchmark --limit 10 --parallel
+
+# Parser benchmark
+python -m benchmark.parser_benchmark --samples 5
+```
+
+---
+
+## Project Structure
+
+```
+├── cli_tool.py              # Main CLI entry point
+├── config.py                # Configuration
+├── src/
+│   ├── telegram_client.py   # Telegram scraper
+│   ├── twitter_client.py    # Twitter scraper
+│   ├── deduplicator.py      # Cross-source deduplication
+│   ├── auto_processor.py    # Smart message classification
+│   ├── ocr_cascade.py       # Vision AI OCR engine
+│   ├── ocr_handler.py       # OCR orchestration
+│   ├── ocr_preprocessing.py # Image preprocessing
+│   ├── ocr_validator.py     # OCR quality validation
+│   ├── provider_pool.py     # Hybrid LLM provider pool
+│   ├── prompt_builder.py    # AI prompt generation
+│   ├── two_pass_verifier.py # Parsing verification
+│   ├── cerebras_client.py   # Cerebras API client
+│   ├── mistral_client.py    # Mistral API client
+│   ├── openrouter_client.py # OpenRouter API client
+│   ├── groq_client.py       # Groq API client
+│   └── gemini_client.py     # Gemini API client
+├── benchmark/
+│   ├── ocr_benchmark.py     # Vision model benchmark
+│   ├── parser_benchmark.py  # Parser model benchmark
+│   └── reports/             # Benchmark results
+└── requirements.txt         # Dependencies
+```
+
+---
+
+## How It Works
+
+### 1. Fetch Messages
+```python
+# Telegram
+tg = TelegramManager()
+messages = await tg.fetch_messages([channel_id], target_date)
+
+# Twitter  
+tw = TwitterManager()
+tweets = await tw.fetch_tweets(target_date)
+```
+
+### 2. Deduplicate
+```python
+from src.deduplicator import Deduplicator
+unique = Deduplicator.merge_messages(all_messages)
+```
+
+### 3. OCR Images
+```python
+from src.ocr_handler import extract_text_batch
+results = extract_text_batch(image_paths)
+```
+
+### 4. Classify Messages
+```python
+from src.auto_processor import auto_select_messages
+selected = auto_select_messages(messages, use_ai=True)
+# Filters: PROMO, RECAP, DATA, NOISE
+# Keeps: PICK, UNKNOWN
+```
+
+### 5. Parse Picks
+```python
+from src.provider_pool import pooled_completion
+result = pooled_completion(prompt)
+# Tries: Cerebras → Groq → Mistral → OpenRouter (DeepSeek R1)
+```
+
+### 6. Verify & Output
+```python
+from src.two_pass_verifier import TwoPassVerifier
+TwoPassVerifier.verify_parsing_result(picks)
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| `CEREBRAS_TOKEN not set` | Add token to `.env` file |
+| `Groq 403 Access Denied` | Network/auth issue, use other providers |
+| `Rate limited (429)` | Wait 1-2 minutes, reduce batch size |
+| `Tesseract not found` | Install: `choco install tesseract` (Windows) |
+| `No picks extracted` | Check if messages contain valid betting content |
+
+### Debug Mode
+```bash
+# Enable verbose logging
+python cli_tool.py 2>&1 | tee debug.log
+```
+
+---
+
+## Performance Summary
+
+| Metric | Value |
+|--------|-------|
+| OCR Accuracy | 96%+ (Vision AI) |
+| Parsing Accuracy | 100% |
+| Avg OCR Time | 16.2s (Mistral) |
+| Avg Parse Time | 0.9s (Cerebras) |
+| Batch Throughput | 10 msgs/batch, 3 workers |
+
+---
+
+## Changelog
+
+### v3.1.1 (January 21, 2026)
+- **Parser benchmark added** - Cerebras is fastest (901ms, 100% accuracy)
+- **Vision benchmark updated** - 14 models tested across 4 providers
+- **Mistral Pixtral Large** now primary vision model
+- **Cerebras Llama 3.3 70B** now primary parser
+- Confirmed Groq/Cerebras have NO vision support
+- Added `parser_benchmark.py` script
+
+### v3.1.0 (January 2026)
+- Complete OCR cascade rewrite
+- Added comprehensive vision model benchmarking
+- Disabled Groq (broken) and Cerebras (text-only) for vision
+- Improved error handling and fallback logic
+
+### v3.0.0
+- Initial Vision AI implementation
+- Replaced legacy Tesseract-only OCR
+- Added multi-provider support
+
+---
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing`)
+5. Open a Pull Request
+
+---
+
+**Built with AI. Optimized for sports bettors.**

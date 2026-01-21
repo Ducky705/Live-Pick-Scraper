@@ -3,13 +3,28 @@ OCR Cascade Engine
 ==================
 Smart OCR with Tesseract fast-path and parallel Vision API fallback.
 
+BENCHMARK RESULTS (Jan 21, 2026):
+| Model                | Avg Time | Picks/Img | Success | Status      |
+|----------------------|----------|-----------|---------|-------------|
+| Mistral Pixtral Large| 16,242ms | 4.2       | 100%    | BEST        |
+| OR Gemma 3 27B       | 16,475ms | 4.4       | 100%    | GOOD        |
+| OR Gemma 3 12B       | 19,189ms | 4.2       | 100%    | GOOD        |
+| OR Gemini 2.0 Flash  | 58,029ms | 2.2       | 100%    | RATE-LIMITED|
+| Groq (all models)    | <500ms   | 0.0       | 0%      | NO VISION   |
+| Cerebras (all models)| <500ms   | 0.0       | 0%      | NO VISION   |
+
+FINDINGS:
+- Groq: HTTP 400 "content must be a string" - does NOT support vision
+- Cerebras: HTTP 422 "image content type not supported" - NO vision
+- Gemini 2.0 Flash: Heavily rate-limited on free tier (429 errors)
+- Mistral Pixtral Large: Most reliable, best pick extraction
+
 Architecture:
 1. TESSERACT (local, ~0.5s) - Uses preprocess_v3, validates with ocr_validator
 2. VISION RACE (parallel providers) - First success wins
-   - Gemini Direct
-   - Groq (Llama 4 Scout)
-   - Mistral (Pixtral)
-   - OpenRouter fallback
+   - Mistral (Pixtral Large) - MOST RELIABLE
+   - OpenRouter (Gemma 3 models) - Good fallback
+   - Gemini Direct (if configured)
 
 Usage:
     from src.ocr_cascade import OCRCascade, extract_text_cascade
@@ -45,7 +60,6 @@ class OCRMethod(Enum):
     """OCR method used."""
     TESSERACT = "tesseract"
     GEMINI = "gemini"
-    GROQ = "groq"
     MISTRAL = "mistral"
     OPENROUTER = "openrouter"
     FAILED = "failed"
@@ -201,61 +215,14 @@ def _call_gemini(image_path: str, prompt: str, prompt_type: str) -> OCRResult:
         )
 
 
-def _call_groq(image_path: str, prompt: str, prompt_type: str) -> OCRResult:
-    """Call Groq API with Llama 4 Vision."""
-    start = time.time()
-    
-    try:
-        from src.groq_client import groq_vision_completion, VISION_MODELS
-        
-        # Use Llama 4 Scout (faster)
-        model = VISION_MODELS[0] if VISION_MODELS else "meta-llama/llama-4-scout-17b-16e-instruct"
-        
-        response = groq_vision_completion(prompt, image_path, model=model)
-        elapsed = int((time.time() - start) * 1000)
-        
-        if response:
-            text = _extract_text_from_response(response, prompt_type)
-            is_good, confidence, _ = is_usable_ocr(text)
-            
-            return OCRResult(
-                text=text,
-                method=OCRMethod.GROQ,
-                confidence=confidence,
-                time_ms=elapsed,
-                prompt_type=prompt_type
-            )
-        else:
-            return OCRResult(
-                text="",
-                method=OCRMethod.GROQ,
-                confidence=0.0,
-                time_ms=elapsed,
-                prompt_type=prompt_type,
-                error="No response from Groq"
-            )
-            
-    except Exception as e:
-        elapsed = int((time.time() - start) * 1000)
-        logging.error(f"[OCR Cascade] Groq error: {e}")
-        return OCRResult(
-            text="",
-            method=OCRMethod.GROQ,
-            confidence=0.0,
-            time_ms=elapsed,
-            prompt_type=prompt_type,
-            error=str(e)
-        )
-
-
 def _call_mistral(image_path: str, prompt: str, prompt_type: str) -> OCRResult:
-    """Call Mistral API with Pixtral."""
+    """Call Mistral API with Pixtral Large (best vision model)."""
     start = time.time()
     
     try:
-        from src.mistral_client import mistral_completion, PIXTRAL_12B
+        from src.mistral_client import mistral_completion, PIXTRAL_LARGE
         
-        response = mistral_completion(prompt, model=PIXTRAL_12B, image_input=image_path, validate_json=False)
+        response = mistral_completion(prompt, model=PIXTRAL_LARGE, image_input=image_path, validate_json=False)
         elapsed = int((time.time() - start) * 1000)
         
         if response:
@@ -293,15 +260,22 @@ def _call_mistral(image_path: str, prompt: str, prompt_type: str) -> OCRResult:
 
 
 def _call_openrouter(image_path: str, prompt: str, prompt_type: str) -> OCRResult:
-    """Call OpenRouter as fallback."""
+    """
+    Call OpenRouter with Gemma 3 27B (reliable vision model).
+    
+    Benchmark (Jan 21, 2026):
+    - Gemma 3 27B: 16.5s avg, 4.4 picks/image, 100% success
+    - Gemini 2.0 Flash: Rate-limited on free tier (429 errors)
+    """
     start = time.time()
     
     try:
-        from src.openrouter_client import openrouter_completion, VISION_MODELS
+        from src.openrouter_client import openrouter_completion
         
-        model = VISION_MODELS[0] if VISION_MODELS else "google/gemini-2.0-flash-exp:free"
+        # Gemma 3 27B is reliable - Gemini 2.0 Flash is rate-limited on free tier
+        model = "google/gemma-3-27b-it:free"
+        
         b64 = _encode_image(image_path)
-        
         if not b64:
             return OCRResult(
                 text="",
@@ -403,6 +377,17 @@ def _extract_text_from_response(response: str, prompt_type: str) -> str:
 class OCRCascade:
     """
     Smart OCR engine with Tesseract fast-path and parallel Vision fallback.
+    
+    Based on benchmarks (Jan 21, 2026), the provider priority is:
+    1. Mistral (Pixtral Large) - 16.2s, 100% success, 4.2 picks/image - MOST RELIABLE
+    2. OpenRouter (Gemma 3 models) - 16-19s, 100% success, 4.2-4.4 picks/image
+    3. Gemini Direct (if available)
+    
+    NOTE: OpenRouter Gemini 2.0 Flash is rate-limited on free tier (429 errors)
+    
+    DISABLED providers (confirmed via API testing):
+    - Groq: HTTP 400 - content must be a string (NO multimodal support)
+    - Cerebras: HTTP 422 - image content type not supported (NO vision)
     """
     
     def __init__(self, tesseract_threshold: float = 0.6):
@@ -414,13 +399,17 @@ class OCRCascade:
         
         # Check which providers are available
         self.gemini_available = bool(os.getenv("GEMINI_TOKEN"))
-        self.groq_available = bool(os.getenv("GROQ_TOKEN"))
         self.mistral_available = bool(os.getenv("MISTRAL_TOKEN"))
         self.openrouter_available = bool(os.getenv("OPENROUTER_API_KEY"))
         
-        logging.info(f"[OCR Cascade] Initialized. Providers: "
-                     f"Gemini={self.gemini_available}, Groq={self.groq_available}, "
-                     f"Mistral={self.mistral_available}, OpenRouter={self.openrouter_available}")
+        # NOTE: Groq and Cerebras are DISABLED based on benchmarks
+        # Groq: All vision models failed or are decommissioned
+        # Cerebras: Text-only, cannot see images
+        
+        logging.info(f"[OCR Cascade] Initialized. Vision Providers: "
+                     f"OpenRouter={self.openrouter_available}, "
+                     f"Mistral={self.mistral_available}, "
+                     f"Gemini={self.gemini_available}")
     
     def extract(self, image_path: str, prompt_type: str = "structured") -> OCRResult:
         """
@@ -477,17 +466,29 @@ class OCRCascade:
     def _race_vision_providers(self, image_path: str, prompt: str, prompt_type: str) -> OCRResult:
         """
         Race vision providers in parallel. First good result wins.
+        
+        Provider priority (based on Jan 21, 2026 benchmarks):
+        1. Mistral (Pixtral Large) - 16.2s, 100% success - MOST RELIABLE
+        2. OpenRouter (Gemma 3 models) - 16-19s, 100% success - Good fallback
+        3. Gemini Direct - if available
+        
+        NOTE: Gemini 2.0 Flash is rate-limited on free tier (429 errors)
         """
-        # Build list of available providers
+        # Build list of available providers (ordered by reliability)
         providers = []
-        if self.gemini_available:
-            providers.append(("gemini", _call_gemini))
-        if self.groq_available:
-            providers.append(("groq", _call_groq))
+        
+        # Mistral Pixtral Large - MOST RELIABLE (16.2s, 100% success, 4.2 picks)
         if self.mistral_available:
             providers.append(("mistral", _call_mistral))
+        
+        # OpenRouter with Gemma 3 models - Good fallback (16-19s, 100% success)
+        # Note: Gemini 2.0 Flash is rate-limited, Gemma models are more reliable
         if self.openrouter_available:
             providers.append(("openrouter", _call_openrouter))
+        
+        # Gemini Direct - Only if others unavailable
+        if self.gemini_available:
+            providers.append(("gemini", _call_gemini))
         
         if not providers:
             return OCRResult(
@@ -554,7 +555,7 @@ class OCRCascade:
         1. Run Tesseract on ALL images in parallel (fast)
         2. Distribute Vision API calls across providers (parallel across providers, sequential within)
         """
-        results = [None] * len(image_paths)
+        results: List[Optional[OCRResult]] = [None] * len(image_paths)
         needs_vision = []  # (index, path) tuples
         
         logging.info(f"[OCR Cascade] Batch processing {len(image_paths)} images...")
@@ -584,42 +585,40 @@ class OCRCascade:
         logging.info(f"[OCR Cascade] Tesseract: {tess_success}/{len(image_paths)} success, {len(needs_vision)} need Vision")
         
         if not needs_vision:
-            return results
+            return [r for r in results if r is not None]
         
         # Step 2: Distribute Vision calls across providers
         prompt = STRUCTURED_PROMPT if prompt_type == "structured" else RAW_PROMPT
         
-        # Build provider list
+        # Build provider list (ordered by reliability from benchmarks)
         providers = []
-        if self.gemini_available:
-            providers.append(("gemini", _call_gemini))
-        if self.groq_available:
-            providers.append(("groq", _call_groq))
         if self.mistral_available:
             providers.append(("mistral", _call_mistral))
         if self.openrouter_available:
             providers.append(("openrouter", _call_openrouter))
+        if self.gemini_available:
+            providers.append(("gemini", _call_gemini))
         
         if not providers:
             logging.warning("[OCR Cascade] No vision providers available for batch")
-            return results
+            return [r if r is not None else OCRResult(text="", method=OCRMethod.FAILED, confidence=0.0, time_ms=0, prompt_type=prompt_type, error="No provider") for r in results]
         
         # Distribute images across providers (round-robin)
-        provider_queues = {name: [] for name, _ in providers}
+        provider_queues: Dict[str, List[Tuple[int, str]]] = {name: [] for name, _ in providers}
         for i, (idx, path) in enumerate(needs_vision):
             provider_name = providers[i % len(providers)][0]
             provider_queues[provider_name].append((idx, path))
         
         # Process each provider's queue in parallel (providers parallel, within sequential)
         def process_queue(provider_name: str, func, queue: List[Tuple[int, str]]) -> List[Tuple[int, OCRResult]]:
-            results = []
+            queue_results = []
             for idx, path in queue:
                 try:
                     result = func(path, prompt, prompt_type)
-                    results.append((idx, result))
+                    queue_results.append((idx, result))
                 except Exception as e:
                     logging.error(f"[OCR Cascade] {provider_name} failed for {path}: {e}")
-                    results.append((idx, OCRResult(
+                    queue_results.append((idx, OCRResult(
                         text="",
                         method=OCRMethod.FAILED,
                         confidence=0.0,
@@ -627,7 +626,7 @@ class OCRCascade:
                         prompt_type=prompt_type,
                         error=str(e)
                     )))
-            return results
+            return queue_results
         
         with ThreadPoolExecutor(max_workers=len(providers)) as executor:
             futures = []
@@ -640,12 +639,14 @@ class OCRCascade:
                     queue_results = future.result()
                     for idx, result in queue_results:
                         # Use vision result if better than tesseract fallback
-                        if results[idx] is None or result.confidence > results[idx].confidence:
+                        current = results[idx]
+                        if current is None or result.confidence > current.confidence:
                             results[idx] = result
                 except Exception as e:
                     logging.error(f"[OCR Cascade] Provider queue error: {e}")
         
-        return results
+        # Ensure no None values
+        return [r if r is not None else OCRResult(text="", method=OCRMethod.FAILED, confidence=0.0, time_ms=0, prompt_type=prompt_type, error="Not processed") for r in results]
 
 
 # --- CONVENIENCE FUNCTIONS ---

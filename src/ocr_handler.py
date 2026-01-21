@@ -1,6 +1,18 @@
 
 # src/ocr_handler.py
-import pytesseract
+"""
+OCR Handler - Primary OCR interface for the TelegramScraper.
+
+This module has been updated to use RapidOCR (ONNX-based PaddleOCR) instead of Tesseract.
+RapidOCR provides significantly better accuracy on complex betting slip images.
+
+Key changes from Tesseract version:
+- Uses deep learning models instead of traditional OCR
+- Handles dark backgrounds and stylized text natively
+- No need for heavy binarization preprocessing
+- Better layout understanding (detector + recognizer architecture)
+"""
+
 from PIL import Image
 import os
 import sys
@@ -11,11 +23,15 @@ import logging
 import time
 import base64
 import io
+import cv2
+import numpy as np
 from src.openrouter_client import openrouter_completion
 from src.provider_pool import pooled_completion
 from src.two_pass_verifier import TwoPassVerifier
 from src.vision_one_shot import parse_image_direct
 from src.image_classifier import ImageClassifier, OCRStrategy
+from src.ocr_engine import RapidOCREngine, get_ocr_engine
+from src.ocr_preprocessing import preprocess_for_rapidocr, preprocess_for_rapidocr_color
 from config import TEMP_IMG_DIR
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -27,172 +43,21 @@ else:
     # Running as script
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-TESSDATA_DIR = os.path.join(BASE_DIR, 'tessdata')
-
-# --- OS SPECIFIC PATHS ---
-if sys.platform == 'win32':
-    TESSERACT_BIN = os.path.join(BASE_DIR, 'bin', 'win', 'tesseract.exe')
-else:
-    # Mac / Linux
-    TESSERACT_BIN = os.path.join(BASE_DIR, 'bin', 'mac', 'tesseract')
-
-# --- CRITICAL MAC SETUP ---
-# To make Tesseract portable, we must tell it where to find the bundled .dylib files.
-# We do this by setting the DYLD_LIBRARY_PATH environment variable for the process.
-if sys.platform == 'darwin':
-    mac_bin_folder = os.path.dirname(TESSERACT_BIN)
-    
-    # 1. Update Environment Variable
-    # This tells the dynamic linker: "Look in bin/mac for shared libraries"
-    current_path = os.environ.get('DYLD_LIBRARY_PATH', '')
-    os.environ['DYLD_LIBRARY_PATH'] = f"{mac_bin_folder}:{current_path}"
-    
-    # 2. Ensure Executable Permissions
-    # PyInstaller sometimes strips execution rights from bundled binaries.
-    if os.path.exists(mac_bin_folder):
-        for filename in os.listdir(mac_bin_folder):
-            filepath = os.path.join(mac_bin_folder, filename)
-            try:
-                st = os.stat(filepath)
-                os.chmod(filepath, st.st_mode | stat.S_IEXEC)
-            except Exception:
-                pass
-
-# Set Tesseract Data Path Env Var
-# First check local tessdata, then fallback to Homebrew's tessdata
-if os.path.exists(TESSDATA_DIR):
-    os.environ['TESSDATA_PREFIX'] = TESSDATA_DIR
-elif os.path.exists('/opt/homebrew/share/tessdata'):
-    # Homebrew on Apple Silicon
-    TESSDATA_DIR = '/opt/homebrew/share/tessdata'
-    os.environ['TESSDATA_PREFIX'] = TESSDATA_DIR
-elif os.path.exists('/usr/local/share/tessdata'):
-    # Homebrew on Intel Mac
-    TESSDATA_DIR = '/usr/local/share/tessdata'
-    os.environ['TESSDATA_PREFIX'] = TESSDATA_DIR
-
-# Configure Pytesseract Command
-if os.path.exists(TESSERACT_BIN):
-    pytesseract.pytesseract.tesseract_cmd = TESSERACT_BIN
-else:
-    # Fallback for dev environment - use system tesseract
-    pytesseract.pytesseract.tesseract_cmd = 'tesseract'
-
 def preprocess_image(img):
     """
-    Advanced image preprocessing for OCR using OpenCV.
-    Optimized for sports betting images with:
-    - Dark backgrounds, light text
-    - Gradients and watermarks
-    - Stylized fonts
+    Advanced image preprocessing for OCR.
+    Now delegates to the RapidOCR-optimized preprocessing pipeline.
+    Kept for backward compatibility.
     """
-    import cv2
-    import numpy as np
-    from PIL import Image
-    
-    # Convert PIL to OpenCV format
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
-    cv_img = np.array(img)
-    cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2BGR)
-    
-    # 1. UPSCALE if too small (OCR needs ~300 DPI equivalent)
-    min_width = 1200
-    if cv_img.shape[1] < min_width:
-        scale = min_width / cv_img.shape[1]
-        cv_img = cv2.resize(cv_img, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
-    
-    # 2. Convert to Grayscale
-    gray = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
-    
-    # 3. CLAHE (Contrast Limited Adaptive Histogram Equalization)
-    # Much better than simple contrast for uneven lighting
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-    gray = clahe.apply(gray)
-    
-    # 4. DENOISE using median filter (removes salt-and-pepper noise)
-    gray = cv2.medianBlur(gray, 3)
-    
-    # 5. ADAPTIVE THRESHOLDING (Otsu's method)
-    # Better than global threshold for images with shadows/gradients
-    _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    
-    # 6. Optional: Invert if background is dark (more white pixels = light bg)
-    # Sports betting images often have dark backgrounds
-    white_ratio = np.sum(binary == 255) / binary.size
-    if white_ratio < 0.3:  # Mostly dark, invert
-        binary = cv2.bitwise_not(binary)
-    
-    # 7. Slight morphological cleanup (remove tiny noise)
-    kernel = np.ones((1, 1), np.uint8)
-    binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
-    
-    # Convert back to PIL
-    return Image.fromarray(binary)
+    return Image.fromarray(preprocess_for_rapidocr(img))
 
 
 def preprocess_image_v2(img):
     """
-    IMPROVED image preprocessing for OCR.
-    Enhancements over v1:
-    - Lanczos4 upscaling (sharper than Cubic)
-    - Gamma correction for contrast
-    - Bilateral filter (preserves edges better)
-    - Padding to help Tesseract with edge text
+    V2 preprocessing - now delegates to RapidOCR pipeline.
+    Kept for backward compatibility.
     """
-    import cv2
-    import numpy as np
-    from PIL import Image
-    
-    # Convert PIL to OpenCV format
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
-    cv_img = np.array(img)
-    cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2BGR)
-    
-    # 1. UPSCALE using Lanczos4 (higher quality than Cubic)
-    # Target: minimum 1600px width for better OCR
-    min_width = 1600
-    if cv_img.shape[1] < min_width:
-        scale = min_width / cv_img.shape[1]
-        cv_img = cv2.resize(cv_img, None, fx=scale, fy=scale, interpolation=cv2.INTER_LANCZOS4)
-    
-    # 2. Add PADDING (50px white border) - helps Tesseract with edge text
-    pad = 50
-    cv_img = cv2.copyMakeBorder(cv_img, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[255, 255, 255])
-    
-    # 3. Convert to Grayscale
-    gray = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
-    
-    # 4. GAMMA CORRECTION - enhance contrast for dark backgrounds
-    # Gamma < 1 brightens, Gamma > 1 darkens
-    gamma = 1.2  # Slightly darken to increase contrast
-    inv_gamma = 1.0 / gamma
-    table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in np.arange(256)]).astype("uint8")
-    gray = cv2.LUT(gray, table)
-    
-    # 5. CLAHE (Contrast Limited Adaptive Histogram Equalization)
-    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
-    gray = clahe.apply(gray)
-    
-    # 6. BILATERAL FILTER - removes noise while preserving edges
-    # Better than median blur for text
-    gray = cv2.bilateralFilter(gray, 9, 75, 75)
-    
-    # 7. ADAPTIVE THRESHOLDING (Otsu's method)
-    _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    
-    # 8. Invert if background is dark
-    white_ratio = np.sum(binary == 255) / binary.size
-    if white_ratio < 0.3:
-        binary = cv2.bitwise_not(binary)
-    
-    # 9. Morphological cleanup
-    kernel = np.ones((1, 1), np.uint8)
-    binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
-    
-    # Convert back to PIL
-    return Image.fromarray(binary)
+    return Image.fromarray(preprocess_for_rapidocr(img))
 
 
 def deskew_image(gray):
@@ -200,9 +65,6 @@ def deskew_image(gray):
     Detect and correct image rotation/skew.
     Uses minAreaRect on contours to find the dominant angle.
     """
-    import cv2
-    import numpy as np
-    
     # Find all contours
     coords = np.column_stack(np.where(gray > 0))
     if len(coords) < 10:
@@ -232,118 +94,16 @@ def deskew_image(gray):
 
 def preprocess_image_v3(img, use_deskew=False, use_sharpen=True, use_nlm_denoise=True, remove_watermark=True, use_red_channel=True):
     """
-    BEST preprocessing pipeline with:
-    - RED CHANNEL extraction (best for sports betting images - +10.7% improvement)
-    - Red watermark removal (@cappersfree)
-    - Unsharp Masking (sharpen edges)
-    - Non-Local Means Denoising (better noise removal)
-    - Deskewing DISABLED by default (images are always straight)
+    V3 preprocessing pipeline - now optimized for RapidOCR.
     
-    Plus all v2 improvements (Lanczos4, padding, gamma, CLAHE).
+    NOTE: RapidOCR does NOT need binary/thresholded images like Tesseract.
+    This function now returns a grayscale image with contrast enhancement
+    instead of a binary image.
+    
+    Kept for backward compatibility with existing code that calls this.
     """
-    import cv2
-    import numpy as np
-    from PIL import Image
-    
-    # Convert Input to OpenCV format (BGR)
-    if isinstance(img, np.ndarray):
-        # Already numpy, assume BGR if 3 channels, or Grayscale
-        cv_img = img.copy()
-    else:
-        # Assume PIL Image
-        if img.mode != 'RGB':
-            img = img.convert('RGB')
-        cv_img = np.array(img)
-        cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2BGR)
-    
-    # 0. REMOVE RED WATERMARK (@cappersfree) - do this FIRST before any processing
-    if remove_watermark:
-        # Convert to HSV for better color detection
-        hsv = cv2.cvtColor(cv_img, cv2.COLOR_BGR2HSV)
-        
-        # Red spans across hue 0 and 180 in HSV, need two masks
-        # Target: RGB(233, 9, 3) which is pure red
-        # HSV red is around hue 0-10 and 170-180
-        lower_red1 = np.array([0, 100, 100])
-        upper_red1 = np.array([10, 255, 255])
-        lower_red2 = np.array([170, 100, 100])
-        upper_red2 = np.array([180, 255, 255])
-        
-        mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
-        mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
-        red_mask = cv2.bitwise_or(mask1, mask2)
-        
-        # Dilate mask slightly to catch edges
-        kernel = np.ones((3, 3), np.uint8)
-        red_mask = cv2.dilate(red_mask, kernel, iterations=1)
-        
-        # Replace red pixels with white (or could use inpainting)
-        cv_img[red_mask > 0] = [255, 255, 255]
-    
-    # 1. UPSCALE using Lanczos4
-    min_width = 1600
-    if cv_img.shape[1] < min_width:
-        scale = min_width / cv_img.shape[1]
-        cv_img = cv2.resize(cv_img, None, fx=scale, fy=scale, interpolation=cv2.INTER_LANCZOS4)
-    
-    # 2. Add PADDING
-    pad = 50
-    cv_img = cv2.copyMakeBorder(cv_img, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[255, 255, 255])
-    
-    # 3. Convert to Grayscale - USE RED CHANNEL for best results
-    if use_red_channel:
-        # Red channel is index 2 in BGR format
-        gray = cv_img[:, :, 2]
-    else:
-        gray = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
-
-    
-    # 4. SHARPENING (Unsharp Mask) - before other processing
-    if use_sharpen:
-        blurred = cv2.GaussianBlur(gray, (0, 0), 3)
-        gray = cv2.addWeighted(gray, 1.5, blurred, -0.5, 0)
-    
-    # 5. GAMMA CORRECTION
-    gamma = 1.2
-    inv_gamma = 1.0 / gamma
-    table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in np.arange(256)]).astype("uint8")
-    gray = cv2.LUT(gray, table)
-    
-    # 6. CLAHE
-    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
-    gray = clahe.apply(gray)
-    
-    # 7. DENOISING - Non-Local Means (better but slower) or Bilateral
-    if use_nlm_denoise:
-        gray = cv2.fastNlMeansDenoising(gray, h=10, templateWindowSize=7, searchWindowSize=21)
-    else:
-        gray = cv2.bilateralFilter(gray, 9, 75, 75)
-    
-    # 8. DESKEW - correct rotation
-    if use_deskew:
-        gray = deskew_image(gray)
-    
-    # 9. ADAPTIVE THRESHOLDING (Otsu's method)
-    _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    
-    # 10. Invert if background is dark
-    white_ratio = np.sum(binary == 255) / binary.size
-    if white_ratio < 0.3:
-        binary = cv2.bitwise_not(binary)
-    
-    # 11. Morphological cleanup
-    kernel = np.ones((1, 1), np.uint8)
-    binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
-    
-    # Convert back to PIL
-    return Image.fromarray(binary)
-
-
-# --- TESSERACT USER DATA ---
-USER_WORDS_PATH = os.path.join(TESSDATA_DIR, 'eng.user-words')
-USER_PATTERNS_PATH = os.path.join(TESSDATA_DIR, 'eng.user-patterns')
-
-
+    # Use the new RapidOCR-optimized preprocessing
+    return Image.fromarray(preprocess_for_rapidocr(img, remove_watermark=remove_watermark))
 
 
 # --- AI OCR IMPLEMENTATION ---
@@ -497,13 +257,21 @@ def preprocess_for_ai(img):
 
 def check_local_confidence(pil_image):
     """
-    Hybrid OCR: Run local Tesseract first.
+    Hybrid OCR: Run local RapidOCR first.
     If it finds high-confidence betting keywords, return the text.
     Otherwise return None to trigger AI fallback.
+    
+    Updated to use RapidOCR instead of Tesseract for better accuracy.
     """
     try:
-        # Fast local OCR
-        text = pytesseract.image_to_string(pil_image, config='--psm 6').strip()
+        # Fast local OCR with RapidOCR
+        ocr_engine = get_ocr_engine()
+        if not ocr_engine.is_available():
+            logging.warning("[Hybrid OCR] RapidOCR not available, skipping local check")
+            return None
+            
+        text, confidence = ocr_engine.extract_text_with_confidence(pil_image)
+        text = text.strip()
         
         if not text or len(text) < 10:
             return None
@@ -521,9 +289,10 @@ def check_local_confidence(pil_image):
         hits = sum(1 for k in keywords if k in text_lower)
         
         # Heuristic: If we have 2+ betting keywords and reasonable length, trust it.
-        # This saves 5-10s per image for "easy" clean screenshots.
-        if hits >= 2 and len(text) > 40:
-            logging.info(f"[Hybrid OCR] Local OCR Confident: {hits} keywords found")
+        # RapidOCR is more accurate than Tesseract, so we can be more confident.
+        # Also check confidence score from RapidOCR (typically > 0.7 is good)
+        if hits >= 2 and len(text) > 40 and confidence > 0.6:
+            logging.info(f"[Hybrid OCR] Local OCR Confident: {hits} keywords, conf={confidence:.2f}")
             return text
             
         return None
@@ -613,7 +382,7 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
             analysis = ImageClassifier.classify_from_array(img_cv)
             
             if analysis.strategy == OCRStrategy.VISION_AI_REQUIRED:
-                # Skip Tesseract entirely for complex/styled images
+                # Skip local OCR entirely for complex/styled images
                 logging.info(f"[Smart OCR] Vision AI required for {os.path.basename(p)}: {', '.join(analysis.reasons[:2])}")
                 
                 # Store empty fallback (no local OCR attempted)
@@ -624,14 +393,21 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                 ai_queue.append((i, pil_img, img_hash))
                 continue
             
-            # TESSERACT PATH: For clean, document-style images
-            logging.info(f"[Smart OCR] Tesseract likely for {os.path.basename(p)} (confidence={analysis.confidence:.0%})")
+            # LOCAL OCR PATH: For clean, document-style images (using RapidOCR)
+            logging.info(f"[Smart OCR] Local OCR likely for {os.path.basename(p)} (confidence={analysis.confidence:.0%})")
             
-            # Use Heavy Preprocessing for Tesseract
-            heavy_img = preprocess_image_v3(img_cv)
+            # Use RapidOCR-optimized preprocessing (grayscale with contrast, NOT binary)
+            preprocessed = preprocess_for_rapidocr(img_cv)
             
-            # Run Local OCR
-            local_text = pytesseract.image_to_string(heavy_img, config='--psm 6').strip()
+            # Run Local OCR with RapidOCR
+            ocr_engine = get_ocr_engine()
+            if ocr_engine.is_available():
+                local_text, local_conf = ocr_engine.extract_text_with_confidence(preprocessed)
+                local_text = local_text.strip()
+            else:
+                logging.warning("[OCR] RapidOCR not available, falling back to AI")
+                local_text = ""
+                local_conf = 0.0
             
             # IMPROVED CONFIDENCE CHECK: Use classifier + keyword validation
             is_confident = False
@@ -646,11 +422,10 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                 text_lower = local_text.lower()
                 hits = sum(1 for k in keywords if k in text_lower)
                 
-                # RELAXED: Since classifier already said Tesseract is likely, trust it more
-                # Only need 1 keyword instead of 2
-                if hits >= 1 and len(local_text) > 30:
+                # Trust RapidOCR more than Tesseract - check confidence too
+                if hits >= 1 and len(local_text) > 30 and local_conf > 0.5:
                     is_confident = True
-                    logging.info(f"[Hybrid OCR] Local OCR Confident: {hits} keywords, classifier approved")
+                    logging.info(f"[Hybrid OCR] Local OCR Confident: {hits} keywords, conf={local_conf:.2f}")
 
             if is_confident:
                 final_results[i] = local_text
@@ -659,8 +434,8 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                     with open(os.path.join(CACHE_DIR, f"{img_hash}.txt"), "w", encoding="utf-8") as f:
                         f.write(local_text)
             else:
-                # Tesseract failed despite classifier prediction - fall back to AI
-                logging.info(f"[Hybrid OCR] Tesseract output low quality, falling back to AI for {os.path.basename(p)}")
+                # Local OCR failed despite classifier prediction - fall back to AI
+                logging.info(f"[Hybrid OCR] Local OCR output low quality, falling back to AI for {os.path.basename(p)}")
                 fallback_texts[i] = local_text if local_text else ""
                 
                 # Prepare for AI (Use lightweight preprocessing for Vision Models)
@@ -977,52 +752,61 @@ def extract_text(image_relative_path):
     return extract_text_ai(image_relative_path)
 
 
-# --- LOCAL TESSERACT FUNCTIONS (for benchmarking) ---
+# --- LOCAL OCR FUNCTIONS (for benchmarking) ---
 
-def extract_text_simple_tesseract(image_path):
+def extract_text_simple(image_path):
     """
-    Simple local Tesseract OCR with NO preprocessing.
+    Simple local RapidOCR with NO preprocessing.
     Used for baseline benchmark comparison.
+    
+    Replaces the old extract_text_simple_tesseract function.
     """
     try:
+        ocr_engine = get_ocr_engine()
+        if not ocr_engine.is_available():
+            return "[Error: RapidOCR not available]"
+            
         img = Image.open(image_path)
-        # Direct OCR with default settings
-        text = pytesseract.image_to_string(img, config='--psm 6')
+        text = ocr_engine.extract_text(img)
         return text.strip()
     except Exception as e:
-        logging.error(f"[Simple Tesseract] Error: {e}")
+        logging.error(f"[Simple RapidOCR] Error: {e}")
         return f"[Error: {str(e)}]"
+
+
+# Keep old name for backward compatibility
+extract_text_simple_tesseract = extract_text_simple
 
 
 def extract_text_v3(image_path):
     """
-    Local Tesseract OCR with V3 preprocessing (best preprocessing pipeline).
+    Local RapidOCR with optimized preprocessing pipeline.
     Used for benchmark comparison.
-    """
-    import cv2
-    import numpy as np
     
+    Updated to use RapidOCR instead of Tesseract.
+    """
     try:
         # Read image
         img = cv2.imread(image_path)
         if img is None:
             return "[Error: Could not read image]"
         
-        # Apply V3 preprocessing
-        processed = preprocess_image_v3(img)
+        # Apply RapidOCR-optimized preprocessing
+        processed = preprocess_for_rapidocr(img)
         
-        # OCR with user words if available
-        config = '--psm 6'
-        if os.path.exists(USER_WORDS_PATH):
-            config += f' --user-words {USER_WORDS_PATH}'
-        if os.path.exists(USER_PATTERNS_PATH):
-            config += f' --user-patterns {USER_PATTERNS_PATH}'
-        
-        text = pytesseract.image_to_string(processed, config=config)
+        # Run OCR with RapidOCR
+        ocr_engine = get_ocr_engine()
+        if not ocr_engine.is_available():
+            return "[Error: RapidOCR not available]"
+            
+        text = ocr_engine.extract_text(processed)
         return text.strip()
     except Exception as e:
-        logging.error(f"[Tesseract V3] Error: {e}")
+        logging.error(f"[RapidOCR V3] Error: {e}")
         return f"[Error: {str(e)}]"
 
+
+# Alias for backward compatibility
+extract_text_local = extract_text_v3
 
 

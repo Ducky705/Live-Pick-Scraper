@@ -10,7 +10,11 @@ from concurrent.futures import ThreadPoolExecutor
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from src.ocr_handler import extract_text_simple_tesseract, extract_text_v3, extract_text_ai, extract_text_batch_v3_ai
+from src.ocr_handler import extract_text_simple_tesseract, extract_text_v3, extract_text_ai, extract_text_batch
+
+# Rename for clarity - these now use RapidOCR
+extract_text_simple_rapidocr = extract_text_simple_tesseract
+extract_text_rapidocr_v3 = extract_text_v3
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -109,17 +113,16 @@ def run_ocr_benchmark(engine="tesseract_v3"):
             continue
 
         try:
-            # Run OCR
-            if engine == "tesseract_simple":
+            # Run OCR (tesseract_* names kept for backward compatibility - now use RapidOCR)
+            if engine == "tesseract_simple" or engine == "rapidocr_simple":
                 output_text = extract_text_simple_tesseract(img_path)
-            elif engine == "tesseract_v3":
+            elif engine == "tesseract_v3" or engine == "rapidocr_v3":
                 output_text = extract_text_v3(img_path)
             elif engine == "ai_vision":
                 output_text = extract_text_ai(img_path) # Default Gemini
             elif engine == "pipeline_d":
-                # For single image, we can adapt batch function or extraction function
-                # Or just call extract_text_batch_v3_ai with one image
-                out = extract_text_batch_v3_ai([img_path])
+                # For single image, call extract_text_batch with one image
+                out = extract_text_batch([img_path])
                 output_text = out[0]
             else:
                 print(f"Unknown engine: {engine}")

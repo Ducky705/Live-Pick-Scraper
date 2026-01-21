@@ -1,7 +1,10 @@
 """
 OCR Cascade Engine
 ==================
-Smart OCR with Tesseract fast-path and parallel Vision API fallback.
+Smart OCR with RapidOCR fast-path and parallel Vision API fallback.
+
+UPDATED: Now uses RapidOCR (ONNX-based PaddleOCR) instead of Tesseract
+for significantly better local OCR accuracy on complex betting images.
 
 BENCHMARK RESULTS (Jan 21, 2026):
 | Model                | Avg Time | Picks/Img | Success | Status      |
@@ -20,7 +23,7 @@ FINDINGS:
 - Mistral Pixtral Large: Most reliable, best pick extraction
 
 Architecture:
-1. TESSERACT (local, ~0.5s) - Uses preprocess_v3, validates with ocr_validator
+1. RAPIDOCR (local, ~0.5-2s) - Uses preprocess_for_rapidocr, validates with ocr_validator
 2. VISION RACE (parallel providers) - First success wins
    - Mistral (Pixtral Large) - MOST RELIABLE
    - OpenRouter (Gemma 3 models) - Good fallback
@@ -58,7 +61,8 @@ from src.ocr_validator import is_usable_ocr, validate_ocr_detailed, OCRQuality
 
 class OCRMethod(Enum):
     """OCR method used."""
-    TESSERACT = "tesseract"
+    RAPIDOCR = "rapidocr"
+    TESSERACT = "tesseract"  # Kept for backward compatibility (now aliases RAPIDOCR)
     GEMINI = "gemini"
     MISTRAL = "mistral"
     OPENROUTER = "openrouter"
@@ -98,48 +102,64 @@ Return only the text content, preserve line breaks.
 Do not add any commentary or explanation."""
 
 
-# --- TESSERACT ---
+# --- LOCAL OCR (RapidOCR) ---
 
-def _run_tesseract(image_path: str) -> OCRResult:
-    """Run Tesseract OCR with v3 preprocessing."""
-    import pytesseract
-    from PIL import Image
+def _run_local_ocr(image_path: str) -> OCRResult:
+    """
+    Run local OCR using RapidOCR with optimized preprocessing.
+    
+    RapidOCR is a ONNX-based implementation of PaddleOCR that provides
+    significantly better accuracy than Tesseract on complex images.
+    """
     import cv2
-    import numpy as np
+    from src.ocr_engine import get_ocr_engine
+    from src.ocr_preprocessing import preprocess_for_rapidocr
     
     start = time.time()
     
     try:
-        # Import preprocessing from new utility module
-        from src.ocr_preprocessing import preprocess_image_v3
-        
         # Read image
         img = cv2.imread(image_path)
         if img is None:
             return OCRResult(
                 text="",
-                method=OCRMethod.TESSERACT,
+                method=OCRMethod.RAPIDOCR,
                 confidence=0.0,
                 time_ms=int((time.time() - start) * 1000),
                 prompt_type="local",
                 error="Could not read image"
             )
         
-        # Preprocess
-        processed = preprocess_image_v3(img)
+        # Preprocess for RapidOCR (grayscale with contrast, NOT binary)
+        processed = preprocess_for_rapidocr(img)
         
-        # Run Tesseract
-        text = pytesseract.image_to_string(processed, config='--psm 6').strip()
+        # Run RapidOCR
+        ocr_engine = get_ocr_engine()
+        if not ocr_engine.is_available():
+            return OCRResult(
+                text="",
+                method=OCRMethod.RAPIDOCR,
+                confidence=0.0,
+                time_ms=int((time.time() - start) * 1000),
+                prompt_type="local",
+                error="RapidOCR not available"
+            )
         
-        # Validate
-        is_good, confidence, reasons = is_usable_ocr(text)
+        text, confidence = ocr_engine.extract_text_with_confidence(processed)
+        text = text.strip()
+        
+        # Validate with our OCR validator
+        is_good, val_confidence, reasons = is_usable_ocr(text)
+        
+        # Use the lower of RapidOCR confidence and validator confidence
+        final_confidence = min(confidence, val_confidence)
         
         elapsed = int((time.time() - start) * 1000)
         
         return OCRResult(
             text=text,
-            method=OCRMethod.TESSERACT,
-            confidence=confidence,
+            method=OCRMethod.RAPIDOCR,
+            confidence=final_confidence,
             time_ms=elapsed,
             prompt_type="local",
             error=None if is_good else "; ".join(reasons)
@@ -147,15 +167,19 @@ def _run_tesseract(image_path: str) -> OCRResult:
         
     except Exception as e:
         elapsed = int((time.time() - start) * 1000)
-        logging.error(f"[OCR Cascade] Tesseract error: {e}")
+        logging.error(f"[OCR Cascade] RapidOCR error: {e}")
         return OCRResult(
             text="",
-            method=OCRMethod.TESSERACT,
+            method=OCRMethod.RAPIDOCR,
             confidence=0.0,
             time_ms=elapsed,
             prompt_type="local",
             error=str(e)
         )
+
+
+# Alias for backward compatibility
+_run_tesseract = _run_local_ocr
 
 
 # --- VISION PROVIDERS ---
@@ -376,7 +400,7 @@ def _extract_text_from_response(response: str, prompt_type: str) -> str:
 
 class OCRCascade:
     """
-    Smart OCR engine with Tesseract fast-path and parallel Vision fallback.
+    Smart OCR engine with RapidOCR fast-path and parallel Vision fallback.
     
     Based on benchmarks (Jan 21, 2026), the provider priority is:
     1. Mistral (Pixtral Large) - 16.2s, 100% success, 4.2 picks/image - MOST RELIABLE
@@ -390,12 +414,14 @@ class OCRCascade:
     - Cerebras: HTTP 422 - image content type not supported (NO vision)
     """
     
-    def __init__(self, tesseract_threshold: float = 0.6):
+    def __init__(self, local_threshold: float = 0.6):
         """
         Args:
-            tesseract_threshold: Minimum confidence to accept Tesseract result (0.0-1.0)
+            local_threshold: Minimum confidence to accept local OCR result (0.0-1.0)
         """
-        self.tesseract_threshold = tesseract_threshold
+        self.local_threshold = local_threshold
+        # Keep old name for backward compatibility
+        self.tesseract_threshold = local_threshold
         
         # Check which providers are available
         self.gemini_available = bool(os.getenv("GEMINI_TOKEN"))
@@ -432,33 +458,33 @@ class OCRCascade:
                 error=f"Image not found: {image_path}"
             )
         
-        # Step 1: Try Tesseract (fast path)
-        logging.debug(f"[OCR Cascade] Step 1: Tesseract for {os.path.basename(image_path)}")
-        tess_result = _run_tesseract(image_path)
+        # Step 1: Try RapidOCR (fast path)
+        logging.debug(f"[OCR Cascade] Step 1: RapidOCR for {os.path.basename(image_path)}")
+        local_result = _run_local_ocr(image_path)
         
-        if tess_result.confidence >= self.tesseract_threshold:
-            logging.info(f"[OCR Cascade] Tesseract success (confidence={tess_result.confidence:.2f})")
-            return tess_result
+        if local_result.confidence >= self.local_threshold:
+            logging.info(f"[OCR Cascade] RapidOCR success (confidence={local_result.confidence:.2f})")
+            return local_result
         
-        logging.debug(f"[OCR Cascade] Tesseract low confidence ({tess_result.confidence:.2f}), trying Vision APIs")
+        logging.debug(f"[OCR Cascade] RapidOCR low confidence ({local_result.confidence:.2f}), trying Vision APIs")
         
         # Step 2: Race Vision providers in parallel
         prompt = STRUCTURED_PROMPT if prompt_type == "structured" else RAW_PROMPT
         vision_result = self._race_vision_providers(image_path, prompt, prompt_type)
         
         # Step 3: Return best result
-        if vision_result.confidence > tess_result.confidence:
+        if vision_result.confidence > local_result.confidence:
             return vision_result
-        elif tess_result.confidence > 0.3:  # Tesseract has something
-            return tess_result
+        elif local_result.confidence > 0.3:  # Local OCR has something
+            return local_result
         elif vision_result.text:  # Vision has something
             return vision_result
         else:
             return OCRResult(
-                text=tess_result.text or vision_result.text or "",
+                text=local_result.text or vision_result.text or "",
                 method=OCRMethod.FAILED,
                 confidence=0.0,
-                time_ms=tess_result.time_ms + vision_result.time_ms,
+                time_ms=local_result.time_ms + vision_result.time_ms,
                 prompt_type=prompt_type,
                 error="All OCR methods failed"
             )
@@ -552,7 +578,7 @@ class OCRCascade:
         Extract text from multiple images with smart provider distribution.
         
         Strategy:
-        1. Run Tesseract on ALL images in parallel (fast)
+        1. Run RapidOCR on ALL images in parallel (fast)
         2. Distribute Vision API calls across providers (parallel across providers, sequential within)
         """
         results: List[Optional[OCRResult]] = [None] * len(image_paths)
@@ -560,10 +586,10 @@ class OCRCascade:
         
         logging.info(f"[OCR Cascade] Batch processing {len(image_paths)} images...")
         
-        # Step 1: Parallel Tesseract
+        # Step 1: Parallel RapidOCR
         with ThreadPoolExecutor(max_workers=4) as executor:
             futures = {
-                executor.submit(_run_tesseract, path): i
+                executor.submit(_run_local_ocr, path): i
                 for i, path in enumerate(image_paths)
             }
             
@@ -572,17 +598,17 @@ class OCRCascade:
                 try:
                     result = future.result()
                     
-                    if result.confidence >= self.tesseract_threshold:
+                    if result.confidence >= self.local_threshold:
                         results[idx] = result
                     else:
                         needs_vision.append((idx, image_paths[idx]))
                         results[idx] = result  # Store as fallback
                 except Exception as e:
-                    logging.error(f"[OCR Cascade] Tesseract batch error: {e}")
+                    logging.error(f"[OCR Cascade] RapidOCR batch error: {e}")
                     needs_vision.append((idx, image_paths[idx]))
         
-        tess_success = len(image_paths) - len(needs_vision)
-        logging.info(f"[OCR Cascade] Tesseract: {tess_success}/{len(image_paths)} success, {len(needs_vision)} need Vision")
+        local_success = len(image_paths) - len(needs_vision)
+        logging.info(f"[OCR Cascade] RapidOCR: {local_success}/{len(image_paths)} success, {len(needs_vision)} need Vision")
         
         if not needs_vision:
             return [r for r in results if r is not None]

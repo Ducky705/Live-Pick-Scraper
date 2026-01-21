@@ -3,9 +3,12 @@ waitress
 python-dotenv
 telethon
 pywebview
-pytesseract
+rapidocr-onnxruntime
 pillow
 requests
 supabase
 openai
 packaging
+opencv-python
+numpy
+

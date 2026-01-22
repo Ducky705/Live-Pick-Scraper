@@ -4,13 +4,13 @@ import json
 import random
 from datetime import datetime, timedelta, timezone
 from twikit import Client
-from config import TEMP_IMG_DIR
+from config import TEMP_IMG_DIR, SESSIONS_DIR
 
 # Check for credentials in env
 TWITTER_USERNAME = os.getenv("TWITTER_USERNAME")
 TWITTER_EMAIL = os.getenv("TWITTER_EMAIL")
 TWITTER_PASSWORD = os.getenv("TWITTER_PASSWORD")
-COOKIES_PATH = "twitter_cookies.json"
+COOKIES_PATH = os.path.join(SESSIONS_DIR, "twitter_cookies.json")
 
 class TwitterManager:
     def __init__(self):

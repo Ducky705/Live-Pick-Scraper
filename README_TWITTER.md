@@ -25,6 +25,20 @@ This tool scrapes picks from Twitter accounts (specifically @EZMSports by defaul
    - This saves `twitter_cookies.json` which is used by the scraper.
 
 ## Usage
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                            TWITTER SCRAPER FLOW                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
+│  │ AUTHENT- │───▶│  FETCH   │───▶│  PARSE   │───▶│  PRINT   │───▶│  SAVE    │   │
+│  │ ICATION  │    │  TWEETS  │    │  PICKS   │    │  RESULT  │    │  JSON    │   │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
 Run the scraper:
 ```bash
 python run_twitter_scraper.py

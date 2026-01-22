@@ -53,8 +53,8 @@ if sys.platform == "win32":
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 # --- CONFIGURATION ---
-CACHE_DIR = PROJECT_ROOT / "cache"
-CACHE_DIR.mkdir(exist_ok=True)
+CACHE_DIR = PROJECT_ROOT / "data" / "cache"
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Hard-coded channel from last run (from logs: -1001900292133)
 DEBUG_CHANNEL_ID = -1001900292133

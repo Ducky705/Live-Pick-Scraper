@@ -251,14 +251,22 @@ The system automatically detects bet type from pick text:
 ## Example Data Flow
 
 ```
-1. User scrapes Telegram picks for "2026-01-12"
-2. System calls fetch_odds_for_date("2026-01-12")
-3. System fetches all NBA/NFL/NBA games from ESPN
-4. System queries odds API for each game ID
-5. System parses all available odds types
-6. For each pick, system looks up matching game
-7. System returns appropriate odds based on bet type
-8. Pick odds are available for display/use
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           ODDS FETCHING PIPELINE                                │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
+│  │ USER CLI │───▶│  SCORE   │───▶│   ESPN   │───▶│   GAME   │───▶│   ODDS   │   │
+│  │ REQUEST  │    │ FETCHER  │    │ SCOREBD  │    │ LISTING  │    │   API    │   │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
+│                                                                       │         │
+│                                                                       ▼         │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
+│  │  FINAL   │◀───│  ODDS    │◀───│  PICK    │◀───│  ODDS    │◀───│  ODDS    │   │
+│  │  RESULT  │    │ LOOKUP   │    │ MATCHING │    │  CACHE   │    │ PARSER   │   │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Error Handling

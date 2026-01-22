@@ -46,6 +46,8 @@ cp .env.example .env
 python cli_tool.py
 ```
 
+All data, logs, and sessions are stored in the `data/` directory.
+
 ---
 
 ## Features

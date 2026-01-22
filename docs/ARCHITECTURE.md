@@ -4,17 +4,23 @@ CapperSuite is a pipeline-based application designed for high throughput and rel
 
 ## Data Flow
 
-```mermaid
-graph TD
-    Sources[Sources: Telegram, Twitter] --> Dedupe[Deduplicator]
-    Dedupe --> OCR[OCR Pipeline]
-    OCR --> Classify[Classifier]
-    Classify --> Filter{Is Pick?}
-    Filter -- No --> Discard
-    Filter -- Yes --> Parser[Parallel Parser]
-    Parser --> Verify[Verifier]
-    Verify --> Grading[Grading Engine]
-    Grading --> DB[Supabase]
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              DATA PIPELINE                                      │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
+│  │ TELEGRAM │    │ TWITTER  │    │  DEDUPE  │    │  AUTO    │    │   OCR    │   │
+│  │ SCRAPER  │───▶│ SCRAPER  │───▶│  MERGE   │───▶│ CLASSIFY │───▶│ PIPELINE │   │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
+│                                                                       │         │
+│                                                                       ▼         │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
+│  │ SUPABASE │◀───│ GRADING  │◀───│ VALIDATE │◀───│ PARALLEL │◀───│ FILTER   │   │
+│  │    DB    │    │ ENGINE   │    │ VERIFIER │    │  PARSER  │    │ IS PICK? │   │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Module Overview

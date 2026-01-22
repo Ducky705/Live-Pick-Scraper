@@ -13,7 +13,7 @@ load_dotenv()
 # Ensure src is in path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from config import TARGET_TELEGRAM_CHANNEL_ID
+from config import TARGET_TELEGRAM_CHANNEL_ID, OUTPUT_DIR, LOG_DIR
 from src.telegram_client import TelegramManager
 from src.twitter_client import TwitterManager
 from src.deduplicator import Deduplicator
@@ -32,7 +32,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("cli_scraper.log"),
+        logging.FileHandler(os.path.join(LOG_DIR, "cli_scraper.log")),
         logging.StreamHandler(sys.stdout)
     ]
 )
@@ -243,7 +243,7 @@ async def main():
         return
 
     # 8. OUTPUT
-    output_file = f"picks_{target_date}.json"
+    output_file = os.path.join(OUTPUT_DIR, f"picks_{target_date}.json")
     with open(output_file, 'w') as f:
         json.dump(picks, f, indent=2)
         
@@ -269,7 +269,8 @@ async def main():
     
     # 9. SUPABASE UPLOAD
     # Check for --dry-run or --no-upload flag
-    dry_run = '--dry-run' in sys.argv or '--no-upload' in sys.argv
+    # FORCE DRY RUN per user instruction
+    dry_run = True # '--dry-run' in sys.argv or '--no-upload' in sys.argv
     
     if dry_run:
         logging.info("Skipping Supabase upload (--dry-run mode)")

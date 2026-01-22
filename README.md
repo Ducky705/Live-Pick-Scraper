@@ -1,6 +1,6 @@
-# CapperSuite CLI v3.6
+# CapperSuite CLI v3.6.1
 
-![Version](https://img.shields.io/badge/version-3.6.0-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Version](https://img.shields.io/badge/version-3.6.1-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 A professional-grade CLI tool for sports bettors. Scrapes, parses, **grades**, and uploads betting picks from Telegram channels and Twitter accounts using **Vision AI**, **Large Language Models**, and **ESPN real-time scores**.
 

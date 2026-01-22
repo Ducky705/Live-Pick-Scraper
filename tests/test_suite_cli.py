@@ -14,15 +14,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Add src to path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
-
-# Mock config if needed, or rely on src.config
-from config import SESSION_FILE_PATH, TEMP_IMG_DIR
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.telegram_client import TelegramManager
 from src.auto_processor import auto_select_messages
 from src.ocr_handler import extract_text_batch, extract_text_ai
 from src.prompt_builder import generate_ai_prompt
 from src.openrouter_client import openrouter_completion
+# Mock config if needed, or rely on src.config
+from config import SESSION_FILE_PATH, TEMP_IMG_DIR
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

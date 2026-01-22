@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Add src to path
-sys.path.append(os.getcwd())
+sys.path.append(os.path.join(os.getcwd(), '..')) # Append parent dir if running from scripts/
 
 from src.discord_client import discord_manager
 from src.openrouter_client import openrouter_completion

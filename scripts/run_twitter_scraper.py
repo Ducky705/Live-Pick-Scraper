@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Add src to path if needed (it is in root, so should be fine)
-sys.path.append(os.getcwd())
+sys.path.append(os.path.join(os.getcwd(), '..')) # Append parent dir if running from scripts/
 
 from src.twitter_client import twitter_manager
 from src.openrouter_client import openrouter_completion

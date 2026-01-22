@@ -2,7 +2,3 @@ requests
 python-dotenv
 twikit
 playwright
-rapidocr-onnxruntime
-opencv-python
-pillow
-numpy

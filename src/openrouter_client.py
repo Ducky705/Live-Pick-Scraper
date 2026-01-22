@@ -10,27 +10,18 @@ DEFAULT_MODELS = [
     'tngtech/deepseek-r1t2-chimera:free'
 ]
 
-# Vision-capable models
-VISION_MODELS = [
-    "google/gemini-2.0-flash-exp:free",
-    "google/gemma-3-27b-it:free",
-    "google/gemma-3-12b-it:free"
-]
-
-def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=2, validate_json=True):
+def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2):
     """
     Calls OpenRouter API with retry logic and model fallback.
     
     Args:
         prompt: The prompt to send
         model: Primary model to use (will be first in fallback list)
-        images: List of base64 encoded images (for vision models)
         timeout: Timeout in seconds per request (default 3 minutes)
         max_cycles: Number of times to cycle through all models before giving up
-        validate_json: If True, require JSON response format
     
     Returns:
-        The content string or None if all retries fail.
+        The JSON content string or raises an Exception after all retries fail.
     """
     api_key = os.getenv("OPENROUTER_API_KEY")
     if not api_key:
@@ -47,16 +38,9 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
     models = []
     if model:
         models.append(model)
-    
-    # Add fallbacks based on whether we have images
-    if images:
-        for m in VISION_MODELS:
-            if m not in models:
-                models.append(m)
-    else:
-        for m in DEFAULT_MODELS:
-            if m not in models:
-                models.append(m)
+    for m in DEFAULT_MODELS:
+        if m not in models:
+            models.append(m)
 
     last_error = None
     
@@ -64,40 +48,21 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
         for current_model in models:
             logging.info(f"[OpenRouter] Cycle {cycle+1}/{max_cycles}, Model: {current_model}")
             
-            # Build message content
-            if images and len(images) > 0:
-                # Vision request - multimodal content
-                content_parts = [{"type": "text", "text": prompt}]
-                
-                for img_b64 in images:
-                    content_parts.append({
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpeg;base64,{img_b64}"
-                        }
-                    })
-                
-                messages = [{"role": "user", "content": content_parts}]
-            else:
-                # Text-only request
-                messages = [{"role": "user", "content": prompt}]
-            
             payload = {
                 "model": current_model,
-                "messages": messages,
+                "messages": [
+                    {"role": "user", "content": prompt}
+                ],
                 "temperature": 0.1,
+                "response_format": {"type": "json_object"}
             }
-            
-            # Only add response_format for JSON if requested and model supports it
-            if validate_json and "gemma" not in current_model.lower():
-                payload["response_format"] = {"type": "json_object"}
 
             try:
                 response = requests.post(
                     "https://openrouter.ai/api/v1/chat/completions",
                     headers=headers,
                     json=payload,
-                    timeout=timeout
+                    timeout=timeout  # 3 minute timeout
                 )
                 response.raise_for_status()
                 
@@ -138,4 +103,5 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
     
     # All cycles exhausted
     logging.error(f"[OpenRouter] All {max_cycles} cycles failed. Last error: {last_error}")
-    return None  # Return None instead of raising to match other clients
+    raise last_error if last_error else Exception("All API attempts failed")
+

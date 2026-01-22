@@ -4,7 +4,7 @@ import os
 import sys
 import json
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
 # Load .env file explicitly
@@ -25,6 +25,7 @@ from src.utils import clean_text_for_ai, smart_merge_odds
 from src.two_pass_verifier import TwoPassVerifier
 from src.multi_pick_validator import validate_and_flag_missing
 from src.multi_capper_verifier import verify_all_picks
+from src.pick_deduplicator import deduplicate_by_capper
 
 # Setup Logging
 logging.basicConfig(
@@ -65,9 +66,12 @@ async def main():
     # Twitter
     tw = TwitterManager()
     
-    # 2. FETCH DATA (Yesterday by default)
-    target_date = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-    logging.info(f"Target Date: {target_date} (Eastern Time)")
+    # 2. FETCH DATA (Yesterday in Eastern Time)
+    ET = timezone(timedelta(hours=-5))  # EST (use -4 for EDT if needed)
+    now_et = datetime.now(ET)
+    yesterday_et = now_et - timedelta(days=1)
+    target_date = yesterday_et.strftime("%Y-%m-%d")
+    logging.info(f"Target Date: {target_date} (Eastern Time, now ET: {now_et.strftime('%Y-%m-%d %H:%M')})")
     
     # Fetch Telegram
     logging.info(f"Fetching Telegram messages from {TARGET_TELEGRAM_CHANNEL_ID}...")
@@ -213,7 +217,14 @@ async def main():
             })
         picks = smart_merge_odds(remapped)
 
-        logging.info(f"Extracted {len(picks)} total picks.")
+        logging.info(f"Extracted {len(picks)} raw picks.")
+        
+        # 6.5 POST-PARSE DEDUPLICATION
+        # Different leakers often repost the same capper's picks with different formatting
+        # Deduplicate by normalized (capper_name, pick) after parsing
+        logging.info("Deduplicating parsed picks...")
+        picks = deduplicate_by_capper(picks)
+        logging.info(f"After dedup: {len(picks)} unique picks.")
         
         # 7. VALIDATION
         logging.info("Validating picks...")

@@ -162,4 +162,3 @@ def clean_text_for_ai(text):
     text = re.sub(r'\s+', ' ', text).strip()
     
     return text[:2500] # Safe clamp
-smart_merge_odds = backfill_odds

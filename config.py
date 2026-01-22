@@ -1,10 +1,7 @@
+# config.py
 import os
 import sys
 import platform
-from dotenv import load_dotenv
-
-# Load .env file explicitly
-load_dotenv()
 
 # --- PATH HANDLING FOR FROZEN APP vs PYTHON SCRIPT ---
 if getattr(sys, 'frozen', False):
@@ -29,10 +26,3 @@ if not os.path.exists(TEMP_IMG_DIR):
     os.makedirs(TEMP_IMG_DIR)
 
 SESSION_FILE_PATH = os.path.join(EXEC_DIR, 'twitter_session.json') 
-
-# Environment Variables
-TARGET_TELEGRAM_CHANNEL_ID = os.getenv('TARGET_TELEGRAM_CHANNEL_ID')
-API_ID = os.getenv('TELEGRAM_API_ID')
-API_HASH = os.getenv('TELEGRAM_API_HASH')
-SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_KEY')

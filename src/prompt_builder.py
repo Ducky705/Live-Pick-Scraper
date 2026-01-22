@@ -271,4 +271,3 @@ INPUT:
 OUTPUT (JSON Array):
 [ {{ "id": 123, "cn": "FoundName" }} ]
 """
-generate_compact_prompt = generate_ai_prompt

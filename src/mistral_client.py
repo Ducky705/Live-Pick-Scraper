@@ -5,14 +5,16 @@ import logging
 import time
 import random
 import base64
-from threading import Lock
+from threading import Semaphore
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Global Concurrency Limiter for Mistral
-GLOBAL_MISTRAL_LOCK = Lock()
-LOCK_ACQUIRE_TIMEOUT = 300
+# MAXIMUM SPEED: Mistral allows 60 RPM, 500K TPM = 4 concurrent requests
+# Replace Lock with Semaphore for parallel execution
+MISTRAL_CONCURRENCY_LIMIT = 4
+GLOBAL_MISTRAL_SEMAPHORE = Semaphore(MISTRAL_CONCURRENCY_LIMIT)
+LOCK_ACQUIRE_TIMEOUT = 30  # Reduced for faster failure
 
 # Models - User-specified high-performance configuration
 # Text / Reasoning
@@ -28,6 +30,13 @@ PIXTRAL_12B = "pixtral-12b-2409"
 # Default models for this client
 DEFAULT_TEXT_MODEL = MISTRAL_LARGE
 DEFAULT_VISION_MODEL = PIXTRAL_LARGE
+
+# Rate limits: 60 RPM, 500K TPM - can batch 5-10 messages per call!
+MISTRAL_RATE_LIMITS = {
+    "rpm": 60,
+    "tpm": 500000,
+    "batch_size": 10,  # Bundle up to 10 messages per call
+}
 
 RETRY_CONFIG = {
     "max_cycles": 5,
@@ -137,9 +146,9 @@ def mistral_completion(prompt, model=DEFAULT_TEXT_MODEL, image_input=None, timeo
 
     for cycle in range(max_cycles):
         try:
-            # Acquire lock
-            if not GLOBAL_MISTRAL_LOCK.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error(f"[Mistral] Failed to acquire lock. Skipping.")
+            # Use Semaphore for 4 concurrent requests (60 RPM = 1/sec)
+            if not GLOBAL_MISTRAL_SEMAPHORE.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
+                logging.error(f"[Mistral] Failed to acquire semaphore slot. Skipping.")
                 continue
 
             try:
@@ -150,7 +159,7 @@ def mistral_completion(prompt, model=DEFAULT_TEXT_MODEL, image_input=None, timeo
                     timeout=timeout
                 )
             finally:
-                GLOBAL_MISTRAL_LOCK.release()
+                GLOBAL_MISTRAL_SEMAPHORE.release()
 
             if response.status_code == 200:
                 data = response.json()

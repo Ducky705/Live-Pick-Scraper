@@ -1,14 +1,17 @@
 """
-Hybrid Provider Pool - Fast-First, Accurate-Fallback Strategy
+Hybrid Provider Pool - MAXIMUM SPEED Strategy
 
 This module orchestrates API calls across multiple providers:
-- Tier 1 (Fast): Cerebras, Groq, Mistral - Low latency, good accuracy
-- Tier 2 (Strong): OpenRouter (DeepSeek R1) - High latency, highest accuracy
+- Tier 1 (PRIMARY): Groq - 1000 RPM, 16 concurrent workers
+- Tier 2 (SECONDARY): Mistral - 60 RPM, 4 workers, batch 10 msgs/call
+- Tier 3 (TERTIARY): Gemini - 15 RPM, 3 workers, batch 5 msgs/call
+- Tier 4 (OVERFLOW): Cerebras - 30 RPM, 2 workers
+- Tier 5 (FALLBACK ONLY): OpenRouter - 3-120s latency, NOT recommended
 
 Logic:
-1. Try Fast providers in round-robin order
-2. Validate JSON response
-3. If validation fails or all Fast providers fail, fallback to OpenRouter
+1. Route 80%+ of load to Groq (fastest, highest RPM)
+2. Use Mistral/Gemini/Cerebras for overflow
+3. OpenRouter ONLY if ALL fast providers fail
 """
 
 import os
@@ -25,28 +28,32 @@ from src.mistral_client import mistral_completion, DEFAULT_TEXT_MODEL as MISTRAL
 
 # --- CONFIGURATION ---
 
-# Strong fallback model (OpenRouter)
+# Strong fallback model (OpenRouter) - ONLY used when all fast providers fail
 STRONG_FALLBACK_MODEL = "tngtech/deepseek-r1t2-chimera:free"
 
-# Rate Limits (Conservative estimates for free tiers)
+# Rate Limits - MAXIMUM SPEED configuration (Updated 2026-01-22)
+# Based on actual provider rate limits from user data
 LIMITS = {
-    "cerebras": Semaphore(2),  # 2 concurrent requests
-    "groq": Semaphore(1),      # 1 concurrent request (very strict)
-    "mistral": Semaphore(2),   # 2 concurrent requests
+    "groq": Semaphore(16),      # 1000 RPM = 16 concurrent (PRIMARY)
+    "mistral": Semaphore(4),    # 60 RPM = 4 concurrent
+    "gemini": Semaphore(3),     # 15 RPM = 3 concurrent
+    "cerebras": Semaphore(2),   # 30 RPM = 2 concurrent
 }
 
 # Provider Availability Flags
 AVAILABILITY = {
-    "cerebras": True,
-    "groq": True,
-    "mistral": True
+    "groq": True,       # PRIMARY - 1000 RPM
+    "mistral": True,    # SECONDARY - 60 RPM
+    "gemini": True,     # TERTIARY - 15 RPM
+    "cerebras": True    # OVERFLOW - 30 RPM
 }
 
 # Backoff timers for when a provider hits 429
 COOLDOWN = {
-    "cerebras": 0,
     "groq": 0,
-    "mistral": 0
+    "mistral": 0,
+    "gemini": 0,
+    "cerebras": 0,
 }
 
 PROVIDER_LOCK = Lock()
@@ -203,28 +210,29 @@ QUALITY_THRESHOLD = 0.7  # If score < 70%, trigger fallback
 def _get_fast_providers(task_type: str = "text") -> List[Dict[str, Any]]:
     """
     Get list of available fast providers for a task.
+    PRIORITY ORDER: Groq (PRIMARY) > Mistral > Cerebras (text only)
     Returns list of dicts with provider name and model.
     """
     candidates = []
     
     if task_type == "text":
-        # Text Providers: Cerebras, Groq, Mistral
-        if os.getenv("CEREBRAS_TOKEN") and _is_available("cerebras"):
-            candidates.append({"name": "cerebras", "model": CEREBRAS_MODEL})
+        # Text Providers: Groq FIRST (1000 RPM), then Mistral, then Cerebras
         if os.getenv("GROQ_TOKEN") and _is_available("groq"):
-            candidates.append({"name": "groq", "model": GROQ_TEXT_MODEL})
+            candidates.append({"name": "groq", "model": GROQ_TEXT_MODEL, "priority": 1})
         if os.getenv("MISTRAL_TOKEN") and _is_available("mistral"):
-            candidates.append({"name": "mistral", "model": MISTRAL_TEXT_MODEL})
+            candidates.append({"name": "mistral", "model": MISTRAL_TEXT_MODEL, "priority": 2})
+        if os.getenv("CEREBRAS_TOKEN") and _is_available("cerebras"):
+            candidates.append({"name": "cerebras", "model": CEREBRAS_MODEL, "priority": 3})
             
     elif task_type == "vision":
         # Vision Providers: Groq, Mistral (Cerebras is text-only)
         if os.getenv("GROQ_TOKEN") and _is_available("groq"):
-            candidates.append({"name": "groq", "model": GROQ_VISION_MODEL})
+            candidates.append({"name": "groq", "model": GROQ_VISION_MODEL, "priority": 1})
         if os.getenv("MISTRAL_TOKEN") and _is_available("mistral"):
-            candidates.append({"name": "mistral", "model": MISTRAL_VISION_MODEL})
-            
-    # Shuffle for load balancing
-    random.shuffle(candidates)
+            candidates.append({"name": "mistral", "model": MISTRAL_VISION_MODEL, "priority": 2})
+    
+    # Sort by priority (Groq first), NO random shuffle for MAXIMUM SPEED
+    candidates.sort(key=lambda x: x.get("priority", 99))
     
     return candidates
 

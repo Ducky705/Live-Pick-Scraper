@@ -5,23 +5,27 @@ import json
 import logging
 import time
 import random
-from threading import Lock
+from threading import Semaphore
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Global Concurrency Limiter for Cerebras
-# Cerebras is very fast, but we should still be polite and handle rate limits
-GLOBAL_CEREBRAS_LOCK = Lock()
-LOCK_ACQUIRE_TIMEOUT = 300
+# MAXIMUM SPEED: Cerebras allows 30 RPM = 2 concurrent requests
+# Replace Lock with Semaphore for parallel execution
+CEREBRAS_CONCURRENCY_LIMIT = 2
+GLOBAL_CEREBRAS_SEMAPHORE = Semaphore(CEREBRAS_CONCURRENCY_LIMIT)
+LOCK_ACQUIRE_TIMEOUT = 30  # Reduced for faster failure
 
 # Model Configuration - User-specified high-performance model
 DEFAULT_TEXT_MODEL = "llama-3.3-70b"
 
-CEREBRAS_MODELS = [
-    "llama-3.3-70b",  # Primary - Best for complex JSON parsing
-    "llama3.1-8b",    # Fallback - Faster but less accurate
-]
+# Available models with rate limits (30 RPM, 60K TPM each)
+CEREBRAS_MODELS = {
+    "llama-3.3-70b": {"rpm": 30, "tpm": 60000},
+    "llama3.1-8b": {"rpm": 30, "tpm": 60000},
+    "qwen-3-32b": {"rpm": 30, "tpm": 60000},
+    "gpt-oss-120b": {"rpm": 30, "tpm": 60000},
+}
 
 RETRY_CONFIG = {
     "max_cycles": 5,           # Cerebras is usually reliable, so fewer retries needed
@@ -105,9 +109,9 @@ def cerebras_completion(prompt, model=DEFAULT_TEXT_MODEL, images=None, timeout=6
 
     for cycle in range(max_cycles):
         try:
-            # Acquire lock
-            if not GLOBAL_CEREBRAS_LOCK.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error(f"[Cerebras] Failed to acquire lock. Skipping.")
+            # Use Semaphore for 2 concurrent requests (30 RPM = 0.5/sec)
+            if not GLOBAL_CEREBRAS_SEMAPHORE.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
+                logging.error(f"[Cerebras] Failed to acquire semaphore slot. Skipping.")
                 continue
 
             try:
@@ -118,7 +122,7 @@ def cerebras_completion(prompt, model=DEFAULT_TEXT_MODEL, images=None, timeout=6
                     timeout=timeout
                 )
             finally:
-                GLOBAL_CEREBRAS_LOCK.release()
+                GLOBAL_CEREBRAS_SEMAPHORE.release()
 
             if response.status_code == 200:
                 data = response.json()

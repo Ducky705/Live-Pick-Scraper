@@ -4,15 +4,25 @@ import json
 import logging
 import time
 import base64
-from threading import Lock
+from threading import Semaphore
 
-# Global Concurrency Limiter for Groq
-GLOBAL_GROQ_LOCK = Lock()
-LOCK_ACQUIRE_TIMEOUT = 300
+# MAXIMUM SPEED: Groq allows 1000 RPM = 16 concurrent requests
+# Replace single Lock with Semaphore for parallel execution
+GROQ_CONCURRENCY_LIMIT = 16
+GLOBAL_GROQ_SEMAPHORE = Semaphore(GROQ_CONCURRENCY_LIMIT)
+LOCK_ACQUIRE_TIMEOUT = 30  # Reduced from 300s for faster failure
 
 # Model Configuration - User-specified high-performance models
-DEFAULT_TEXT_MODEL = "llama-3.3-70b-versatile"  # Best for complex JSON parsing
+DEFAULT_TEXT_MODEL = "llama-3.3-70b-versatile"  # User's choice - best quality
 DEFAULT_VISION_MODEL = "llama-3.2-11b-vision-preview"  # Best vision model on Groq
+
+# Available models with rate limits (1000 RPM each)
+GROQ_MODELS = {
+    "llama-3.1-8b-instant": {"rpm": 1000, "tpm": 250000, "speed": 560},
+    "llama-3.3-70b-versatile": {"rpm": 1000, "tpm": 300000, "speed": 280},
+    "openai/gpt-oss-120b": {"rpm": 1000, "tpm": 250000, "speed": 500},
+    "openai/gpt-oss-20b": {"rpm": 1000, "tpm": 250000, "speed": 1000},
+}
 
 
 def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, timeout=60):
@@ -68,14 +78,15 @@ def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, time
 
     for attempt in range(3):
         try:
-            if not GLOBAL_GROQ_LOCK.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error("[Groq] Failed to acquire lock.")
+            # Use Semaphore for 16 concurrent requests (not Lock which blocks all)
+            if not GLOBAL_GROQ_SEMAPHORE.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
+                logging.error("[Groq] Failed to acquire semaphore slot.")
                 return None
             
             try:
                 response = requests.post(url, headers=headers, json=payload, timeout=timeout)
             finally:
-                GLOBAL_GROQ_LOCK.release()
+                GLOBAL_GROQ_SEMAPHORE.release()
 
             if response.status_code == 200:
                 data = response.json()
@@ -86,7 +97,7 @@ def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, time
                     logging.error(f"[Groq] Unexpected response format: {data}")
                     return None
             elif response.status_code == 429:
-                retry_after = int(response.headers.get("Retry-After", 5))
+                retry_after = int(response.headers.get("Retry-After", 2))
                 logging.warning(f"[Groq] Rate limit (429). Waiting {retry_after}s...")
                 time.sleep(retry_after)
                 continue
@@ -104,7 +115,7 @@ def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, time
 def groq_text_completion(prompt, model=DEFAULT_TEXT_MODEL, timeout=60, validate_json=True):
     """
     Calls Groq API for text-only tasks (parsing).
-    Uses the high-performance llama-3.3-70b-versatile model.
+    MAXIMUM SPEED: 16 concurrent requests allowed (1000 RPM).
     """
     api_key = os.getenv("GROQ_TOKEN")
     if not api_key:
@@ -128,14 +139,15 @@ def groq_text_completion(prompt, model=DEFAULT_TEXT_MODEL, timeout=60, validate_
 
     for attempt in range(3):
         try:
-            if not GLOBAL_GROQ_LOCK.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error("[Groq] Failed to acquire lock.")
+            # Use Semaphore for 16 concurrent requests (not Lock which blocks all)
+            if not GLOBAL_GROQ_SEMAPHORE.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
+                logging.error("[Groq] Failed to acquire semaphore slot.")
                 return None
             
             try:
                 response = requests.post(url, headers=headers, json=payload, timeout=timeout)
             finally:
-                GLOBAL_GROQ_LOCK.release()
+                GLOBAL_GROQ_SEMAPHORE.release()
 
             if response.status_code == 200:
                 data = response.json()
@@ -153,7 +165,7 @@ def groq_text_completion(prompt, model=DEFAULT_TEXT_MODEL, timeout=60, validate_
                     logging.error(f"[Groq] Unexpected response format: {data}")
                     return None
             elif response.status_code == 429:
-                retry_after = int(response.headers.get("Retry-After", 5))
+                retry_after = int(response.headers.get("Retry-After", 2))
                 logging.warning(f"[Groq] Rate limit (429). Waiting {retry_after}s...")
                 time.sleep(retry_after)
                 continue

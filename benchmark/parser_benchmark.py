@@ -125,32 +125,24 @@ Record: 42-18 (+24.5u)
     },
 ]
 
-# --- PARSING PROMPT ---
+# --- PARSING PROMPT (Optimized for token efficiency) ---
 
-PARSING_PROMPT = """You are an expert sports betting data parser. Extract betting picks from this text.
+PARSING_PROMPT = """Extract betting picks from text. Return JSON only.
+
+KEYS:c=capper,l=league,t=type,p=pick,o=odds
+TYPES:ML,SP,TL,PP,TP,GP,PD,PL,TS,FT,UK
+LEAGUES:NFL,NBA,MLB,NHL,NCAAF,NCAAB,UFC,TENNIS,SOCCER,Other
+
+RULES:
+1.Extract ALL picks
+2.null for unknown fields
+3.Ignore promos,watermarks,records
+4.SP=+/-X.X|TL=O/U X
 
 TEXT:
 {text}
 
-Return ONLY valid JSON in this exact format:
-{{
-  "picks": [
-    {{
-      "cn": "capper name or null",
-      "lg": "league (NBA, NFL, MLB, NHL, etc)",
-      "p": "the pick (team, spread, total, etc)",
-      "ty": "type (moneyline, spread, total, player prop)",
-      "od": "odds as string or null"
-    }}
-  ]
-}}
-
-RULES:
-- Extract ALL picks from the text
-- Use null for unknown fields
-- Ignore promotional text, watermarks, records
-- Be precise with spreads (+/-X.X) and totals (over/under)
-"""
+OUTPUT:{{"picks":[{{"c":null,"l":"NBA","p":"GSW -3.5","t":"SP","o":"-110"}}]}}"""
 
 
 def call_cerebras(prompt: str, model: str) -> Optional[str]:

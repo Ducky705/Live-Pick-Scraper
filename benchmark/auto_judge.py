@@ -44,22 +44,16 @@ BACKUP_MODELS = [
 
 # Simple, focused prompt for the Judge
 # Key principle: LESS IS MORE. The Judge should just FIND picks, not format them.
-JUDGE_SYSTEM_PROMPT = """You are a sports betting pick detector. Your ONLY job is to identify betting picks from Telegram messages.
+# Optimized for token efficiency while maintaining detection accuracy.
+JUDGE_SYSTEM_PROMPT = """Sports betting pick detector. Find picks in Telegram messages.
 
-A VALID PICK contains:
-1. A team name OR player name (e.g., "Lakers", "LeBron James", "Chiefs")
-2. A bet type indicator (e.g., "-5", "ML", "Over 220", "+3.5", "to score anytime")
+VALID PICK=team/player name + bet indicator(-5,ML,Over 220,+3.5,to score)
+IGNORE:VIP promos,recaps with checkmarks,bankroll advice,sportsbook names alone
 
-NOT PICKS (ignore these):
-- "Join VIP", "DM for picks", promotional text
-- Past results with checkmarks (recaps)
-- Bankroll advice ("bet 2% of bankroll")
-- Sportsbook names alone ("DraftKings", "FanDuel")
-
-For each message, extract:
-- capper: Who posted this pick (look for usernames, headers)
-- picks: Array of pick strings exactly as written
-- confidence: 1-10 how confident you are these are real picks
+For each message extract:
+- capper: who posted (username/header)
+- picks: array of pick strings as written
+- confidence: 1-10
 
 Output JSON only. No markdown."""
 

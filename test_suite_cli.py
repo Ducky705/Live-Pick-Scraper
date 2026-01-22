@@ -274,16 +274,11 @@ async def run_pipeline(channel_id, limit=5, date=None):
             
         print("\n--- AI Response Received ---")
         
-        # Try parse
+        # Parse using decoder for compact format support
+        from src.prompts.decoder import normalize_response
         try:
-            # Handle potential markdown wrapping
-            clean_res = response.strip()
-            if "```json" in clean_res:
-                clean_res = clean_res.split("```json")[1].split("```")[0].strip()
-            elif "```" in clean_res:
-                clean_res = clean_res.split("```")[1].split("```")[0].strip()
-                
-            parsed = json.loads(clean_res)
+            picks = normalize_response(response, expand=True)
+            parsed = {"picks": picks}
             
             # Save structured results
             with open('test_results.json', 'w', encoding='utf-8') as f:

@@ -476,14 +476,8 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                 img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
                 b64_images.append(img_str)
             
-            prompt = (
-                f"You are processing {len(b64_images)} distinct images. "
-                f"Return a JSON array containing EXACTLY {len(b64_images)} strings. "
-                "Index 0 corresponds to the first image, Index 1 to the second, etc. "
-                "For each image, combine ALL text into a SINGLE string (use \\n for line breaks). "
-                "Do NOT split an image's text into multiple array elements. "
-                "Example Output: [\"Full text of image 1\", \"Full text of image 2\"]"
-            )
+            # Ultra-compact OCR batch prompt (~70% token reduction)
+            prompt = f"Extract text from {len(b64_images)} images. Return JSON array of {len(b64_images)} strings. Combine each image's text into 1 string with \\n. No markdown."
             
             logging.info(f"[OCR] AI Chunk {chunk_idx+1}/{total_chunks} -> Pooled (Mistral/Groq/OpenRouter)")
             
@@ -570,14 +564,8 @@ def extract_text_batch(image_paths, model="google/gemini-2.0-flash-exp:free", ch
                 img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
                 b64_images.append(img_str)
             
-            prompt = (
-                f"You are processing {len(b64_images)} distinct images. "
-                f"Return a JSON array containing EXACTLY {len(b64_images)} strings. "
-                "Index 0 corresponds to the first image, Index 1 to the second, etc. "
-                "For each image, combine ALL text into a SINGLE string (use \\n for line breaks). "
-                "Do NOT split an image's text into multiple array elements. "
-                "Example Output: [\"Full text of image 1\", \"Full text of image 2\"]"
-            )
+            # Ultra-compact OCR batch prompt (~70% token reduction)
+            prompt = f"Extract text from {len(b64_images)} images. Return JSON array of {len(b64_images)} strings. Combine each image's text into 1 string with \\n. No markdown."
             
             # Dispatch based on type
             response = None

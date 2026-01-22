@@ -1,6 +1,6 @@
-# CapperSuite CLI v3.5
+# CapperSuite CLI v3.6
 
-![Version](https://img.shields.io/badge/version-3.5.0-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Version](https://img.shields.io/badge/version-3.6.0-blue.svg) ![Python](https://img.shields.io/badge/python-3.10%2B-green.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 A professional-grade CLI tool for sports bettors. Scrapes, parses, **grades**, and uploads betting picks from Telegram channels and Twitter accounts using **Vision AI**, **Large Language Models**, and **ESPN real-time scores**.
 
@@ -70,6 +70,18 @@ Text → Classification → LLM Parser → Structured JSON
 - Auto-filters promotional posts, recaps, and data dumps.
 - Hybrid provider pool: fast models first, strong fallback.
 - Two-pass verification for parsing confidence.
+- **Ultra-compact prompts** - 67% token reduction for faster batches.
+
+### 4. Prompt Optimization (NEW in v3.6)
+```
+Before: {"capper_name": "King", "league": "NBA", "type": "Player Prop", ...}
+After:  {"c": "King", "l": "NBA", "t": "PP", ...}
+```
+- **1-char JSON keys** reduce output tokens by 50%
+- **Type abbreviations** (ML, SP, PP, PL, etc.) save additional tokens
+- **Centralized prompt module** (`src/prompts/`) for maintainability
+- **Automatic decoder** expands compact responses to full field names
+- **Backward compatible** - handles both old and new formats
 
 ### 4. Automated Grading (NEW in v3.3)
 ```
@@ -141,6 +153,72 @@ Pick + ESPN Scores → Grading Engine V3 → Win/Loss/Push/Pending
 | FALLBACK | OpenRouter | deepseek-r1 | 0 | N/A | N/A | 3-120s |
 
 **Total: 25 concurrent workers (was 14 = +79% improvement)**
+
+---
+
+## Prompt Optimization (v3.6)
+
+The prompt system has been completely rewritten for **maximum token efficiency**. This enables larger batch sizes and faster processing.
+
+### Compact Schema
+
+| Compact Key | Full Name | Example |
+|-------------|-----------|---------|
+| `i` | message_id | `123` |
+| `c` | capper_name | `"KingCap"` |
+| `l` | league | `"NBA"` |
+| `t` | type | `"PP"` (Player Prop) |
+| `p` | pick | `"LeBron: Pts O 25.5"` |
+| `o` | odds | `-110` |
+| `u` | units | `1.0` |
+
+### Type Abbreviations
+
+| Abbrev | Full Type |
+|--------|-----------|
+| `ML` | Moneyline |
+| `SP` | Spread |
+| `TL` | Total |
+| `PP` | Player Prop |
+| `TP` | Team Prop |
+| `GP` | Game Prop |
+| `PD` | Period |
+| `PL` | Parlay |
+| `TS` | Teaser |
+| `FT` | Future |
+| `UK` | Unknown |
+
+### Token Savings
+
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| Output tokens per pick | ~50 | ~25 | **50% reduction** |
+| Main extraction prompt | ~1200 tokens | ~400 tokens | **67% reduction** |
+| OCR batch prompt | ~100 tokens | ~30 tokens | **70% reduction** |
+
+### Usage
+
+The decoder automatically expands compact responses:
+
+```python
+from src.prompts.decoder import normalize_response, expand_picks_list
+
+# AI returns compact format
+response = '{"picks":[{"i":1,"c":"Cap","l":"NBA","t":"SP","p":"Lakers -5","o":-110}]}'
+
+# Decoder expands to full field names
+picks = normalize_response(response)
+# Result: [{"message_id": 1, "capper_name": "Cap", "league": "NBA", "type": "Spread", ...}]
+```
+
+### Module Structure
+
+```
+src/prompts/
+├── __init__.py      # Module exports
+├── core.py          # Schema definitions, prompt builders
+└── decoder.py       # Response expansion utilities
+```
 
 ---
 
@@ -374,7 +452,11 @@ python -m benchmark.parser_benchmark --samples 5
 │   ├── ocr_preprocessing.py # Image preprocessing (RapidOCR-optimized)
 │   ├── ocr_validator.py     # OCR quality validation
 │   ├── provider_pool.py     # Hybrid LLM provider pool
-│   ├── prompt_builder.py    # AI prompt generation
+│   ├── prompt_builder.py    # AI prompt generation (optimized v3.6)
+│   ├── prompts/             # Prompt Optimization Module (v3.6)
+│   │   ├── __init__.py      # Module exports
+│   │   ├── core.py          # Compact schema, prompt builders
+│   │   └── decoder.py       # Response expansion utilities
 │   ├── two_pass_verifier.py # Parsing verification
 │   ├── grader.py            # Grading wrapper (uses V3)
 │   ├── grading/             # Grading Engine V3
@@ -513,6 +595,25 @@ python cli_tool.py 2>&1 | tee debug.log
 ---
 
 ## Changelog
+
+### v3.6.0 (January 22, 2026)
+- **Prompt Optimization** - Maximum token efficiency for AI prompts
+  - Created `src/prompts/` module with centralized prompt management
+  - **1-char JSON keys** reduce output tokens by 50% (`c` instead of `capper_name`)
+  - **Type abbreviations** save tokens (`PP` instead of `Player Prop`)
+  - Main extraction prompt reduced from ~1200 to ~400 tokens (**67% reduction**)
+  - OCR batch prompt reduced from ~100 to ~30 tokens (**70% reduction**)
+- **Automatic Decoder** - Expands compact AI responses to full field names
+  - `normalize_response()` handles JSON extraction + expansion
+  - `expand_picks_list()` expands list of compact picks
+  - Backward compatible with old 2-char key format
+- **Updated Scrapers** - All scrapers now use the decoder
+  - `cli_tool.py`, `run_discord_scraper.py`, `run_twitter_scraper.py`
+  - Downstream code receives full field names (no changes required)
+- **Compressed Secondary Prompts**
+  - Vision one-shot parsing prompt optimized
+  - Benchmark parsing prompt optimized
+  - Golden set auditor prompt optimized
 
 ### v3.5.0 (January 22, 2026)
 - **Rate Limit Optimization** - Maximum speed configuration

@@ -19,9 +19,9 @@ from src.twitter_client import TwitterManager
 from src.deduplicator import Deduplicator
 from src.ocr_handler import extract_text_batch
 from src.auto_processor import auto_select_messages
-from src.prompt_builder import generate_ai_prompt, generate_compact_prompt
+from src.prompt_builder import generate_ai_prompt
 from src.provider_pool import pooled_completion
-from src.utils import clean_text_for_ai, smart_merge_odds
+from src.utils import clean_text_for_ai, backfill_odds
 from src.two_pass_verifier import TwoPassVerifier
 from src.multi_pick_validator import validate_and_flag_missing
 from src.multi_capper_verifier import verify_all_picks
@@ -146,76 +146,46 @@ async def main():
         return
 
     # 6. PARSING (AI FILL) - HYBRID PARALLEL STRATEGY
-    logging.info("Generating AI Prompts and Parsing (Hybrid Mode)...")
+    logging.info("Generating AI Prompts and Parsing (Parallel Multi-Provider Mode)...")
     
     # Configuration
-    BATCH_SIZE = 10  # Messages per batch (reduced for better accuracy)
-    MAX_WORKERS = 3  # Parallel threads (respects rate limits)
-    
-    def process_batch(batch_msgs, batch_idx):
-        """Process a single batch of messages using hybrid strategy."""
-        try:
-            # Use compact prompt for fast models
-            compact_prompt = generate_compact_prompt(batch_msgs)
-            
-            # Call Hybrid Pool (tries fast models first, then DeepSeek R1)
-            result_str = pooled_completion(compact_prompt, timeout=120)
-            
-            if not result_str:
-                logging.warning(f"Batch {batch_idx}: No result from pool.")
-                return []
-            
-            result_obj = json.loads(result_str)
-            
-            if isinstance(result_obj, dict) and 'picks' in result_obj:
-                return result_obj['picks']
-            elif isinstance(result_obj, list):
-                return result_obj
-            else:
-                return []
-                
-        except json.JSONDecodeError as e:
-            logging.error(f"Batch {batch_idx}: Invalid JSON - {e}")
-            return []
-        except Exception as e:
-            logging.error(f"Batch {batch_idx}: Error - {e}")
-            return []
+    BATCH_SIZE = 10  # Messages per batch
     
     # Split into batches
-    from concurrent.futures import ThreadPoolExecutor, as_completed
-    
     batches = [selected_msgs[i:i+BATCH_SIZE] for i in range(0, len(selected_msgs), BATCH_SIZE)]
-    logging.info(f"Processing {len(batches)} batches ({BATCH_SIZE} msgs each) with {MAX_WORKERS} workers...")
+    logging.info(f"Processing {len(batches)} batches ({BATCH_SIZE} msgs each) across all available providers...")
     
-    all_raw_picks = []
+    # Use the new Parallel Batch Processor
+    from src.parallel_batch_processor import parallel_processor
     
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        futures = {executor.submit(process_batch, batch, idx): idx for idx, batch in enumerate(batches)}
+    try:
+        # This handles distribution across Cerebras, Groq, Mistral, Gemini, OpenRouter
+        all_raw_picks = parallel_processor.process_batches(batches)
         
-        for future in as_completed(futures):
-            batch_idx = futures[future]
-            try:
-                batch_picks = future.result()
-                all_raw_picks.extend(batch_picks)
-                logging.info(f"Batch {batch_idx}: Extracted {len(batch_picks)} picks.")
-            except Exception as e:
-                logging.error(f"Batch {batch_idx}: Failed - {e}")
+        # Flatten results (results are list of lists of picks)
+        # Some batches return dict {'picks': []} or list of picks
+        flat_picks = []
+        for batch_res in all_raw_picks:
+            if isinstance(batch_res, list):
+                flat_picks.extend(batch_res)
+            elif isinstance(batch_res, dict) and 'picks' in batch_res:
+                flat_picks.extend(batch_res['picks'])
+                
+        all_raw_picks = flat_picks
+        logging.info(f"Total extracted picks: {len(all_raw_picks)}")
+        
+    except Exception as e:
+        logging.error(f"Parallel processing failed: {e}")
+        all_raw_picks = []
     
-    # Remap minified keys to full keys
+    # Remap compact keys to full keys using the decoder module
+    from src.prompts.decoder import expand_picks_list
+
     result_json_str = None
     try:
-        remapped = []
-        for p in all_raw_picks:
-            remapped.append({
-                "message_id": p.get("id"),
-                "capper_name": p.get("cn"),
-                "league": p.get("lg"),
-                "type": p.get("ty"),
-                "pick": p.get("p"),
-                "odds": p.get("od"),
-                "units": p.get("u", 1.0)
-            })
-        picks = smart_merge_odds(remapped)
+        # Use decoder to expand compact format (1-char keys, type abbrevs)
+        picks = expand_picks_list(all_raw_picks)
+        picks = backfill_odds(picks)
 
         logging.info(f"Extracted {len(picks)} raw picks.")
         

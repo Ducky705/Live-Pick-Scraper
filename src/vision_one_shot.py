@@ -1,3 +1,13 @@
+"""
+Vision One-Shot - Direct image parsing with vision models.
+
+This module has been optimized for maximum token efficiency:
+- 1-char JSON keys (i, c, l, t, p, o, u)
+- Type abbreviations (ML, SP, PP, etc.)
+- Compressed instructions
+
+The decoder module expands compact responses back to full field names.
+"""
 
 import os
 import json
@@ -6,41 +16,48 @@ import logging
 from typing import List, Dict, Any, Optional
 
 from src.openrouter_client import openrouter_completion
-from src.utils import smart_merge_odds
+from src.prompts.decoder import expand_picks_list
 
-# We use Gemini 2.0 Flash for this because it has excellent vision capabilities
-# and is currently free/fast. DeepSeek R1 is text-only.
+# Vision model for direct image parsing
 VISION_MODEL = "google/gemini-2.0-flash-exp:free"
+
 
 def parse_image_direct(image_path: str) -> List[Dict[str, Any]]:
     """
     One-Shot Vision Parsing: Sends image directly to LLM and asks for JSON.
     Bypasses OCR text generation.
+    
+    Returns picks with FULL field names (expanded from compact format).
+    
+    Args:
+        image_path: Path to the image file
+        
+    Returns:
+        List of pick dicts with full field names
     """
     if not os.path.exists(image_path):
         logging.error(f"[OneShot] Image not found: {image_path}")
         return []
 
-    prompt = """
-    Analyze this sports betting slip image. Extract all betting picks into a JSON structure.
-    
-    Return a JSON object with a key "picks" containing a list of objects.
-    Each object must have:
-    - "sport": (String) "NBA", "NFL", "NHL", "MLB", "NCAAF", "NCAAB", "UFC", "Tennis", "Soccer" or "Other".
-    - "league": (String) The specific league (e.g. "NBA", "Premier League").
-    - "capper_name": (String) The name of the person/channel posting (often at top/bottom). If unknown, use "Unknown".
-    - "matchup": (String) "Team A vs Team B".
-    - "type": (String) "Moneyline", "Spread", "Total", "Prop", "Parlay".
-    - "pick": (String) The specific bet (e.g. "Lakers -5", "Over 210.5").
-    - "odds": (String or Number) The odds (e.g. -110, +200, 1.91). If American, use string (e.g. "-110").
-    - "units": (Number) Bet size in units (e.g. 1.0, 2.5). Default to 1.0 if not found.
-    
-    Rules:
-    1. If a parlay is shown, list each leg as a separate pick if possible, or the whole parlay as one if legs aren't detailed.
-    2. infer the Sport/League from team names if not explicitly stated.
-    3. Ignore advertisements, watermarks (@cappersfree), or generic text.
-    4. Return ONLY valid JSON. No markdown formatting.
-    """
+    # Ultra-compact prompt (~60% token reduction)
+    prompt = """Extract betting picks from this image. Return JSON only, no markdown.
+
+KEYS:i=id,c=capper,l=league,t=type,p=pick,o=odds,u=units
+TYPES:ML=Moneyline,SP=Spread,TL=Total,PP=Player Prop,TP=Team Prop,GP=Game Prop,PD=Period,PL=Parlay,TS=Teaser,FT=Future
+LEAGUES:NFL,NCAAF,NBA,NCAAB,WNBA,MLB,NHL,EPL,MLS,UCL,UFC,TENNIS,SOCCER,Other
+
+PICK FORMATS:
+ML=Team ML|SP=Team -7.5|TL=Team A vs B O/U X
+PP=Name: Stat O/U X|PD=1H/1Q/F5 + bet|PL=(LG) Leg1 / (LG) Leg2
+
+RULES:
+1.l=infer league from team/player names
+2.Ignore watermarks(@cappersfree),ads
+3.c=capper name if visible,else "Unknown"
+4.o=American odds int or null
+5.u=units float,default 1
+
+OUTPUT:{"picks":[{"i":0,"c":"Name","l":"NBA","t":"SP","p":"Lakers -5","o":-110,"u":1}]}"""
     
     try:
         # Encode image
@@ -62,32 +79,31 @@ def parse_image_direct(image_path: str) -> List[Dict[str, Any]]:
             
         # Parse JSON
         try:
-            data = json.loads(response_str)
+            # Clean markdown if present
+            clean_resp = response_str.strip()
+            if clean_resp.startswith("```json"):
+                clean_resp = clean_resp.split("```json")[1].split("```")[0].strip()
+            elif clean_resp.startswith("```"):
+                clean_resp = clean_resp.split("```")[1].split("```")[0].strip()
+            
+            data = json.loads(clean_resp)
             
             # Handle list vs dict response
             if isinstance(data, list):
-                picks = data
+                compact_picks = data
             elif isinstance(data, dict):
-                picks = data.get("picks", [])
+                compact_picks = data.get("picks", [])
             else:
-                picks = []
+                compact_picks = []
             
-            # Post-process/Normalize keys to match our internal standard
-            normalized_picks = []
-            for p in picks:
-                norm = {
-                    "capper_name": p.get("capper_name", "Unknown"),
-                    "league": p.get("league", "Other"),
-                    "sport": p.get("sport", "Other"),
-                    "type": p.get("type", "Straight"),
-                    "pick": p.get("pick", "Unknown"),
-                    "odds": p.get("odds", None),
-                    "units": p.get("units", 1.0),
-                    "message_id": 0 # Placeholder
-                }
-                normalized_picks.append(norm)
+            # Expand compact format to full field names
+            expanded_picks = expand_picks_list(compact_picks)
+            
+            # Set message_id to 0 (placeholder) if not present
+            for p in expanded_picks:
+                p.setdefault("message_id", 0)
                 
-            return normalized_picks
+            return expanded_picks
             
         except json.JSONDecodeError:
             logging.error(f"[OneShot] Invalid JSON returned: {response_str[:100]}...")

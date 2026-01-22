@@ -10,7 +10,7 @@ The CapperSuite OCR Pipeline is a multi-stage system designed to extract text fr
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │  ┌──────────┐    ┌──────────┐    ┌──────────┐                   ┌──────────┐    │
-│  │  INPUT   │───▶│ PRE-PROC │───▶│ RAPIDOCR │───(>60% CONF)────▶│ SUCCESS  │    │
+│  │  INPUT   │──▶│ PRE-PROC │───▶│ RAPIDOCR │───(>60% CONF)───▶│ SUCCESS  │    │
 │  │  IMAGE   │    │ ESSING   │    │  (LOCAL) │                   │  RESULT  │    │
 │  └──────────┘    └──────────┘    └──────────┘                   └──────────┘    │
 │                                        │                                        │

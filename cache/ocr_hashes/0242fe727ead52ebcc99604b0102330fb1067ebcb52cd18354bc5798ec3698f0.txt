@@ -1,0 +1,1 @@
+{'box_2d': [227, 85, 260, 305], 'text_content': 'Happy Saturday'}

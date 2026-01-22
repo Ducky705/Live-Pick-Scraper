@@ -3,27 +3,22 @@ import requests
 import json
 import logging
 import time
-import base64
 
 # Model fallback list (ordered by reliability)
-# NOTE: OpenRouter is FALLBACK ONLY (3-120s latency, not recommended for speed)
 DEFAULT_MODELS = [
     'mistralai/devstral-2512:free',
     'tngtech/deepseek-r1t2-chimera:free'
 ]
 
-def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycles=2, validate_json=True):
+def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2):
     """
     Calls OpenRouter API with retry logic and model fallback.
-    WARNING: OpenRouter has 3-120s latency - use as FALLBACK ONLY.
     
     Args:
         prompt: The prompt to send
         model: Primary model to use (will be first in fallback list)
-        images: Optional list of image paths or base64 strings for vision
         timeout: Timeout in seconds per request (default 3 minutes)
         max_cycles: Number of times to cycle through all models before giving up
-        validate_json: Whether to validate JSON response
     
     Returns:
         The JSON content string or raises an Exception after all retries fail.
@@ -53,35 +48,11 @@ def openrouter_completion(prompt, model=None, images=None, timeout=180, max_cycl
         for current_model in models:
             logging.info(f"[OpenRouter] Cycle {cycle+1}/{max_cycles}, Model: {current_model}")
             
-            # Build message content (text or multimodal)
-            if images:
-                # Multimodal request with images
-                content_parts = [{"type": "text", "text": prompt}]
-                for img in images:
-                    # Check if it's a file path or base64
-                    if isinstance(img, str) and (len(img) < 1000 or os.path.exists(img)):
-                        try:
-                            with open(img, "rb") as f:
-                                img_data = base64.b64encode(f.read()).decode("utf-8")
-                        except Exception as e:
-                            logging.error(f"[OpenRouter] Failed to read image: {e}")
-                            continue
-                    else:
-                        img_data = img
-                    
-                    content_parts.append({
-                        "type": "image_url",
-                        "image_url": {"url": f"data:image/jpeg;base64,{img_data}"}
-                    })
-                
-                messages = [{"role": "user", "content": content_parts}]
-            else:
-                # Text-only request
-                messages = [{"role": "user", "content": prompt}]
-            
             payload = {
                 "model": current_model,
-                "messages": messages,
+                "messages": [
+                    {"role": "user", "content": prompt}
+                ],
                 "temperature": 0.1,
                 "response_format": {"type": "json_object"}
             }

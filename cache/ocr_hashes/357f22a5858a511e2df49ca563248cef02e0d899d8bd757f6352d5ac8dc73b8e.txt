@@ -1,0 +1,60 @@
+GameTime: 1/19/26
+League: CFB
+Signal: RLM
+Play: MIA-FL 8.5 -112
+Win%: 63%
+Units: 23.2
+Score: 7.8
+SameSideCount: 4
+Verdict: 🟢 Follow
+Tier: A-Tier
+GameTime: 1/19/26
+League: CFB
+Signal: RLM
+Play: MIA-FL 8.5 -110
+Win%: 68%
+Units: 14.9
+Score: 6.8
+SameSideCount: 4
+Verdict: 🟢 Follow
+Tier: A-Tier
+GameTime: 1/19/26
+League: CFB
+Signal: RLM
+Play: MIA-FL 8.5 -110
+Win%: 57%
+Units: 14.4
+Score: 6.8
+SameSideCount: 4
+Verdict: 🟢 Follow
+Tier: A-Tier
+GameTime: 1/19/26
+League: CFB
+Signal: RLM
+Play: IND Under 47.5 -115
+Win%: 58%
+Units: 18.3
+Score: 5.5
+SameSideCount: 2
+Verdict: 🟡 Lean Follow
+Tier: 
+GameTime: 1/19/26
+League: CFB
+Signal: Steam
+Play: IND Under 48.5 -110
+Win%: 65%
+Units: 16.1
+Score: 4.9
+SameSideCount: 2
+Verdict: 🟡 Lean Follow
+Tier: 
+GameTime: 1/19/26
+League: CFB
+Signal: RLM
+Play: MIA-FL 9 -115
+Win%: 55%
+Units: 6.1
+Score: 3.8
+SameSideCount: 4
+Verdict: ⚪ Neutral
+Tier: 

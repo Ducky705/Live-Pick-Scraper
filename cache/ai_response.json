@@ -1,0 +1,316 @@
+{
+  "parse_time": 17.835445642471313,
+  "model": "mistralai/devstral-2512:free",
+  "prompt_length": 16381,
+  "response_length": 5371,
+  "raw_response": "{\n  \"picks\": [\n    {\n      \"id\": 57428,\n      \"cn\": \"PorterPicks\",\n      \"lg\": \"NBA\",\n      \"ty\": \"Spread\",\n      \"p\": \"Golden State Warriors -10.5\",\n      \"od\": null,\n      \"u\": 4.0\n    },\n    {\n      \"id\": 57421,\n      \"cn\": \"monumental\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Total\",\n      \"p\": \"Virginia vs Louisville Under 153\",\n      \"od\": null,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57421,\n      \"cn\": \"monumental\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Total\",\n      \"p\": \"George Mason vs Loyola Chicago Under 137.5\",\n      \"od\": null,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57421,\n      \"cn\": \"monumental\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Period\",\n      \"p\": \"1H George Mason -6\",\n      \"od\": null,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57421,\n      \"cn\": \"monumental\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Kansas +5.5\",\n      \"od\": null,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57421,\n      \"cn\": \"monumental\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Providence +4\",\n      \"od\": null,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57421,\n      \"cn\": \"monumental\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Michigan State -5\",\n      \"od\": null,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57420,\n      \"cn\": \"TPD\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Moneyline\",\n      \"p\": \"UAB ML\",\n      \"od\": -120,\n      \"u\": 1.5\n    },\n    {\n      \"id\": 57420,\n      \"cn\": \"TPD\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Cincinnati -7.5\",\n      \"od\": -105,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57420,\n      \"cn\": \"TPD\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Moneyline\",\n      \"p\": \"Butler ML\",\n      \"od\": -112,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57419,\n      \"cn\": \"provenwinner\",\n      \"lg\": \"NBA\",\n      \"ty\": \"Spread\",\n      \"p\": \"New Orleans Pelicans +2.5\",\n      \"od\": -110,\n      \"u\": 2.2\n    },\n    {\n      \"id\": 57419,\n      \"cn\": \"provenwinner\",\n      \"lg\": \"NBA\",\n      \"ty\": \"Spread\",\n      \"p\": \"Oklahoma City Thunder -7.5\",\n      \"od\": -115,\n      \"u\": 1.5\n    },\n    {\n      \"id\": 57419,\n      \"cn\": \"provenwinner\",\n      \"lg\": \"NBA\",\n      \"ty\": \"Moneyline\",\n      \"p\": \"Oklahoma City ML\",\n      \"od\": -275,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57419,\n      \"cn\": \"provenwinner\",\n      \"lg\": \"NBA\",\n      \"ty\": \"Moneyline\",\n      \"p\": \"Golden State ML\",\n      \"od\": -440,\n      \"u\": 6.0\n    },\n    {\n      \"id\": 57418,\n      \"cn\": \"TheGamblingGawd\",\n      \"lg\": \"NHL\",\n      \"ty\": \"Total\",\n      \"p\": \"Bruins Over 5.5\",\n      \"od\": null,\n      \"u\": 5.0\n    },\n    {\n      \"id\": 57418,\n      \"cn\": \"TheGamblingGawd\",\n      \"lg\": \"NHL\",\n      \"ty\": \"Total\",\n      \"p\": \"Maple Leafs Over 5.5\",\n      \"od\": null,\n      \"u\": 5.0\n    },\n    {\n      \"id\": 57418,\n      \"cn\": \"TheGamblingGawd\",\n      \"lg\": \"NHL\",\n      \"ty\": \"Total\",\n      \"p\": \"Oilers Over 6.5\",\n      \"od\": null,\n      \"u\": 5.0\n    },\n    {\n      \"id\": 57418,\n      \"cn\": \"TheGamblingGawd\",\n      \"lg\": \"NBA\",\n      \"ty\": \"Spread\",\n      \"p\": \"Spurs +8\",\n      \"od\": null,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57414,\n      \"cn\": \"HammeringHank\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Miami -4.5\",\n      \"od\": null,\n      \"u\": 5.0\n    },\n    {\n      \"id\": 57414,\n      \"cn\": \"HammeringHank\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Louisville -4\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57406,\n      \"cn\": \"CashCing\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Florida -4.5\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57405,\n      \"cn\": \"SetPointBets\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"UCONN -4.5\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57404,\n      \"cn\": \"PardonMyPick\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Nebraska -10.5\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57403,\n      \"cn\": \"duckinvestments\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Texas A&M +9.5\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57402,\n      \"cn\": \"TUESDAY EXCLUSIVE PACKAGE\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Michigan State -6.5\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57401,\n      \"cn\": \"MatchPointBets\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Spread\",\n      \"p\": \"Oklahoma State +1.5\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57400,\n      \"cn\": \"SetPointBets\",\n      \"lg\": \"NCAAB\",\n      \"ty\": \"Total\",\n      \"p\": \"Texas A&M vs Tennessee Over 158.5\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57398,\n      \"cn\": \"PropJoe\",\n      \"lg\": \"NBA\",\n      \"ty\": \"Spread\",\n      \"p\": \"Thunder -7.5\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57397,\n      \"cn\": \"NickyCashin\",\n      \"lg\": \"NBA\",\n      \"ty\": \"Moneyline\",\n      \"p\": \"Hawks ML\",\n      \"od\": null,\n      \"u\": 2.0\n    },\n    {\n      \"id\": 57395,\n      \"cn\": \"TheSharpSheets\",\n      \"lg\": \"NBA\",\n      \"ty\": \"Player Prop\",\n      \"p\": \"Holmgren: Pts+Reb+Ast Over 26.5\",\n      \"od\": null,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57393,\n      \"cn\": \"CalebPicks\",\n      \"lg\": \"NHL\",\n      \"ty\": \"Moneyline\",\n      \"p\": \"Bruins ML\",\n      \"od\": null,\n      \"u\": 1.0\n    },\n    {\n      \"id\": 57385,\n      \"cn\": \"BulliesPicks\",\n      \"lg\": \"NHL\",\n      \"ty\": \"Moneyline\",\n      \"p\": \"Lightning ML\",\n      \"od\": null,\n      \"u\": 1.0\n    }\n  ]\n}",
+  "picks": [
+    {
+      "id": 57428,
+      "cn": "PorterPicks",
+      "lg": "NBA",
+      "ty": "Spread",
+      "p": "Golden State Warriors -10.5",
+      "od": null,
+      "u": 4.0
+    },
+    {
+      "id": 57421,
+      "cn": "monumental",
+      "lg": "NCAAB",
+      "ty": "Total",
+      "p": "Virginia vs Louisville Under 153",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57421,
+      "cn": "monumental",
+      "lg": "NCAAB",
+      "ty": "Total",
+      "p": "George Mason vs Loyola Chicago Under 137.5",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57421,
+      "cn": "monumental",
+      "lg": "NCAAB",
+      "ty": "Period",
+      "p": "1H George Mason -6",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57421,
+      "cn": "monumental",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Kansas +5.5",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57421,
+      "cn": "monumental",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Providence +4",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57421,
+      "cn": "monumental",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Michigan State -5",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57420,
+      "cn": "TPD",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "UAB ML",
+      "od": -120,
+      "u": 1.5
+    },
+    {
+      "id": 57420,
+      "cn": "TPD",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Cincinnati -7.5",
+      "od": -105,
+      "u": 1.0
+    },
+    {
+      "id": 57420,
+      "cn": "TPD",
+      "lg": "NCAAB",
+      "ty": "Moneyline",
+      "p": "Butler ML",
+      "od": -112,
+      "u": 1.0
+    },
+    {
+      "id": 57419,
+      "cn": "provenwinner",
+      "lg": "NBA",
+      "ty": "Spread",
+      "p": "New Orleans Pelicans +2.5",
+      "od": -110,
+      "u": 2.2
+    },
+    {
+      "id": 57419,
+      "cn": "provenwinner",
+      "lg": "NBA",
+      "ty": "Spread",
+      "p": "Oklahoma City Thunder -7.5",
+      "od": -115,
+      "u": 1.5
+    },
+    {
+      "id": 57419,
+      "cn": "provenwinner",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "Oklahoma City ML",
+      "od": -275,
+      "u": 1.0
+    },
+    {
+      "id": 57419,
+      "cn": "provenwinner",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "Golden State ML",
+      "od": -440,
+      "u": 6.0
+    },
+    {
+      "id": 57418,
+      "cn": "TheGamblingGawd",
+      "lg": "NHL",
+      "ty": "Total",
+      "p": "Bruins Over 5.5",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57418,
+      "cn": "TheGamblingGawd",
+      "lg": "NHL",
+      "ty": "Total",
+      "p": "Maple Leafs Over 5.5",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57418,
+      "cn": "TheGamblingGawd",
+      "lg": "NHL",
+      "ty": "Total",
+      "p": "Oilers Over 6.5",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57418,
+      "cn": "TheGamblingGawd",
+      "lg": "NBA",
+      "ty": "Spread",
+      "p": "Spurs +8",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57414,
+      "cn": "HammeringHank",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Miami -4.5",
+      "od": null,
+      "u": 5.0
+    },
+    {
+      "id": 57414,
+      "cn": "HammeringHank",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Louisville -4",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57406,
+      "cn": "CashCing",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Florida -4.5",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57405,
+      "cn": "SetPointBets",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "UCONN -4.5",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57404,
+      "cn": "PardonMyPick",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Nebraska -10.5",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57403,
+      "cn": "duckinvestments",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Texas A&M +9.5",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57402,
+      "cn": "TUESDAY EXCLUSIVE PACKAGE",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Michigan State -6.5",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57401,
+      "cn": "MatchPointBets",
+      "lg": "NCAAB",
+      "ty": "Spread",
+      "p": "Oklahoma State +1.5",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57400,
+      "cn": "SetPointBets",
+      "lg": "NCAAB",
+      "ty": "Total",
+      "p": "Texas A&M vs Tennessee Over 158.5",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57398,
+      "cn": "PropJoe",
+      "lg": "NBA",
+      "ty": "Spread",
+      "p": "Thunder -7.5",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57397,
+      "cn": "NickyCashin",
+      "lg": "NBA",
+      "ty": "Moneyline",
+      "p": "Hawks ML",
+      "od": null,
+      "u": 2.0
+    },
+    {
+      "id": 57395,
+      "cn": "TheSharpSheets",
+      "lg": "NBA",
+      "ty": "Player Prop",
+      "p": "Holmgren: Pts+Reb+Ast Over 26.5",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57393,
+      "cn": "CalebPicks",
+      "lg": "NHL",
+      "ty": "Moneyline",
+      "p": "Bruins ML",
+      "od": null,
+      "u": 1.0
+    },
+    {
+      "id": 57385,
+      "cn": "BulliesPicks",
+      "lg": "NHL",
+      "ty": "Moneyline",
+      "p": "Lightning ML",
+      "od": null,
+      "u": 1.0
+    }
+  ],
+  "pick_count": 32,
+  "format_issues": {
+    "invalid_league": [],
+    "invalid_type": [],
+    "format_errors": [],
+    "period_misclassified": [],
+    "moneyline_missing_ml": [],
+    "spread_bad_format": [],
+    "total_bad_format": [],
+    "summary": {
+      "total_picks": 32,
+      "invalid_league_count": 0,
+      "invalid_type_count": 0,
+      "period_misclassified_count": 0,
+      "moneyline_missing_ml_count": 0,
+      "spread_bad_format_count": 0,
+      "total_bad_format_count": 0
+    }
+  }
+}

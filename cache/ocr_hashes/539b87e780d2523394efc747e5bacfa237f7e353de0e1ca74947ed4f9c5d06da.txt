@@ -1,0 +1,1 @@
+{'box_2d': [580, 145, 670, 585], 'text_content': 'Seattle Seahawks -7 (1.5U)'}

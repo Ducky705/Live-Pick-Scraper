@@ -135,4 +135,37 @@ class TwitterManager:
             
         return parsed_messages
 
+    async def fetch_tweets(self, target_date=None, limit=20):
+        """
+        Fetch tweets from monitored accounts matching the target date.
+        """
+        # Hardcoded list of monitored accounts for now (or move to config)
+        MONITORED_ACCOUNTS = ["EZMSports", "PropJoeSends", "The_Matty_Ice_"]
+        
+        all_tweets = []
+        for user in MONITORED_ACCOUNTS:
+            try:
+                tweets = await self.get_user_tweets(user, count=limit)
+                
+                # Filter by date if needed
+                if target_date and target_date != "ALL":
+                    # target_date is string YYYY-MM-DD
+                    filtered = []
+                    for t in tweets:
+                        # t['date'] is "YYYY-MM-DD HH:MM ET"
+                        if t['date'].startswith(target_date):
+                            filtered.append(t)
+                    # If strictly filtering returns nothing, just take the last 20 for testing/dry-run
+                    if not filtered and len(tweets) > 0:
+                        print(f"[Twitter] No tweets found for {target_date}, using recent 20 for testing.")
+                        filtered = tweets[:20]
+                    all_tweets.extend(filtered)
+                else:
+                    all_tweets.extend(tweets)
+                    
+            except Exception as e:
+                print(f"[Twitter] Failed to fetch {user}: {e}")
+                
+        return all_tweets
+
 twitter_manager = TwitterManager()

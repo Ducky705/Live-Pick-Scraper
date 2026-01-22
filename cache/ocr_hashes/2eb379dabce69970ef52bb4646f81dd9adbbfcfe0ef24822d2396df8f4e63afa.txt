@@ -1,0 +1,1 @@
+{'box_2d': [329, 171, 360, 496], 'text_content': '2u, Washington +4 -115'}

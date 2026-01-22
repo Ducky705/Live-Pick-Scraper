@@ -1,0 +1,50 @@
+{
+  "date": "2026-01-22",
+  "dataset_size": 20,
+  "results": [
+    {
+      "provider": "cerebras",
+      "model": "llama-3.3-70b",
+      "f1": 0.9206349206349206,
+      "precision": 0.8923076923076924,
+      "recall": 0.9508196721311475,
+      "avg_latency": 897.1026420593262,
+      "errors": 0,
+      "total_picks": 65,
+      "correct_picks": 58
+    },
+    {
+      "provider": "cerebras",
+      "model": "llama3.1-8b",
+      "f1": 0.9344262295081968,
+      "precision": 0.9344262295081968,
+      "recall": 0.9344262295081968,
+      "avg_latency": 933.9993834495544,
+      "errors": 0,
+      "total_picks": 61,
+      "correct_picks": 57
+    },
+    {
+      "provider": "cerebras",
+      "model": "qwen-3-32b",
+      "f1": 0.9279999999999999,
+      "precision": 0.90625,
+      "recall": 0.9508196721311475,
+      "avg_latency": 2793.328070640564,
+      "errors": 0,
+      "total_picks": 64,
+      "correct_picks": 58
+    },
+    {
+      "provider": "cerebras",
+      "model": "gpt-oss-120b",
+      "f1": 0.8976377952755905,
+      "precision": 0.8636363636363636,
+      "recall": 0.9344262295081968,
+      "avg_latency": 1336.9217991828918,
+      "errors": 0,
+      "total_picks": 66,
+      "correct_picks": 57
+    }
+  ]
+}

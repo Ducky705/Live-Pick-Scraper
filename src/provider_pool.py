@@ -25,6 +25,7 @@ from typing import Optional, List, Dict, Any
 from src.cerebras_client import cerebras_completion, DEFAULT_TEXT_MODEL as CEREBRAS_MODEL
 from src.groq_client import groq_vision_completion, groq_text_completion, DEFAULT_TEXT_MODEL as GROQ_TEXT_MODEL, DEFAULT_VISION_MODEL as GROQ_VISION_MODEL
 from src.mistral_client import mistral_completion, DEFAULT_TEXT_MODEL as MISTRAL_TEXT_MODEL, DEFAULT_VISION_MODEL as MISTRAL_VISION_MODEL
+from src.prompts.decoder import expand_compact_pick
 
 # --- CONFIGURATION ---
 
@@ -148,30 +149,34 @@ def _calculate_quality_score(response: str) -> tuple[float, list[str]]:
     ]
     
     for pick in picks:
-        # Check capper name (cn)
-        cn = str(pick.get("cn", "") or "").strip().lower()
+        # Expand compact keys (c->capper_name, etc.) for validation
+        full_pick = expand_compact_pick(pick)
+        
+        # Check capper name (capper_name)
+        cn = str(full_pick.get("capper_name", "") or "").strip().lower()
         if not cn or cn in ["unknown", "n/a", "none", ""]:
             quality_issues["unknown_capper"] += 1
         elif cn in SUSPICIOUS_CAPPERS:
             quality_issues["suspicious_capper"] += 1
         
-        # Check league (lg)
-        lg = str(pick.get("lg", "") or "").strip().lower()
-        if not lg or lg in ["unknown", "n/a", "none", ""]:
+        # Check league (league)
+        lg = str(full_pick.get("league", "") or "").strip().lower()
+        if not lg or lg in ["unknown", "n/a", "none", "", "other"]:
             quality_issues["unknown_league"] += 1
         
-        # Check pick value (p)
-        p = str(pick.get("p", "") or "").strip().lower()
+        # Check pick value (pick)
+        p = str(full_pick.get("pick", "") or "").strip().lower()
         if not p or p in ["unknown", "n/a", "none", ""]:
             quality_issues["unknown_pick"] += 1
         
-        # Check type (ty)
-        ty = str(pick.get("ty", "") or "").strip().lower()
+        # Check type (type)
+        ty = str(full_pick.get("type", "") or "").strip().lower()
         if ty and ty not in VALID_TYPES:
+            # Check if it matches abbreviations (though expand_compact_pick handles this)
             quality_issues["invalid_type"] += 1
         
         # Track missing odds (not penalized heavily)
-        if pick.get("od") is None:
+        if full_pick.get("odds") is None:
             quality_issues["missing_odds"] += 1
     
     # Calculate score (weighted)

@@ -1,0 +1,1 @@
+{'box_2d': [818, 29, 911, 856], 'text_content': 'Georgia -2.5 (-110) v. Arkansas 5u'}

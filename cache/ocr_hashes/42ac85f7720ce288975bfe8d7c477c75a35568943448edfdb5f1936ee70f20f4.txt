@@ -1,0 +1,1 @@
+{'box_2d': [790, 145, 870, 595], 'text_content': 'Zach Charbonnet anytime TD (1U)'}

@@ -1,0 +1,282 @@
+{
+  "total_images": 20,
+  "total_expected": 22,
+  "total_actual": 69,
+  "precision": 0.18840579710144928,
+  "recall": 0.5909090909090909,
+  "f1": 0.2857142857142857,
+  "field_accuracy": {
+    "league": 1.0,
+    "type": 0.7692307692307693,
+    "pick": 0.23076923076923078,
+    "odds": 1.0,
+    "subject": 0.23076923076923078,
+    "market": 0.23076923076923078,
+    "line": 0.6153846153846154,
+    "prop_side": 0.46153846153846156
+  },
+  "missed_picks": [
+    {
+      "image": "-1001206097796_18403.jpg",
+      "pick": "Hamburgo vs Bayer Leverkusen: BTTS Yes"
+    },
+    {
+      "image": "-1001206097796_18403.jpg",
+      "pick": "Borussia Dortmund Double Chance / Borussia Dortmund vs Werder Bremen Total Corners Over 8.5"
+    },
+    {
+      "image": "-1001206097796_18404.jpg",
+      "pick": "Borussia Dortmund ML / Hamburgo vs Bayer Leverkusen Over 2.5 / FSV Mainz vs 1. FC Heidenheim 1846 Under 3.5"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "Puebla +0.5 / America ML / Indiana Hoosiers ML / SF 49ers +19.5 / SEA Seahawks +4.5 / CHI Bears +15.5 / LA Rams +7.5 / LA Rams vs CHI Bears Over 39.5 / BUF Bills +13.5 / DEN Broncos +10.5 / Borussia Dortmund +0.5 / Borussia Dortmund vs SV Werder Bremen Over 1.5"
+    },
+    {
+      "image": "-1001206097796_18412.jpg",
+      "pick": "Utrecht vs FC Twente: BTTS Yes"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "BUF Bills +1.0 / BUF Bills vs DEN Broncos Over 46.5 / SF 49ers +7.5 / SF 49ers vs SEA Seahawks Under 45.5 / HOU Texans +3.0 / HOU Texans vs NE Patriots Under 41.5 / LA Rams vs CHI Bears Over 51.0 / CHI Bears +4.0 / Puebla ML / Cruz Azul ML / America ML / Deportivo Toluca ML"
+    },
+    {
+      "image": "-1001206097796_18414.jpg",
+      "pick": "Puebla to win either half"
+    },
+    {
+      "image": "-1001206097796_18414.jpg",
+      "pick": "Necaxa vs Monterrey Over 1.5 / Necaxa vs Monterrey 2H Over 0.5"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "HOU Texans ML / Tomateros de Culiacan ML / Puebla +0.5 / Monterrey +0.5 / Guadalajara Chivas +0.5 / Cruz Azul ML / America ML / Deportivo Toluca ML / Senegal to qualify / Morocco to qualify / Monterrey +0.5 / BUF Bills ML / SEA Seahawks ML / LA Rams ML / Indiana Hoosiers ML"
+    }
+  ],
+  "extra_picks": [
+    {
+      "image": "-1001206097796_18403.jpg",
+      "pick": "Ambos equipos marcan - Partido (sin pr\u00f3rrogas)"
+    },
+    {
+      "image": "-1001206097796_18403.jpg",
+      "pick": "Borussia Dortmund / Empate - Doble oportunidad - Partido (sin pr\u00f3rrogas)"
+    },
+    {
+      "image": "-1001206097796_18403.jpg",
+      "pick": "Total c\u00f3rners - Partido M\u00e1s de 8.5"
+    },
+    {
+      "image": "-1001206097796_18404.jpg",
+      "pick": "Borussia Dortmund ML"
+    },
+    {
+      "image": "-1001206097796_18404.jpg",
+      "pick": "Hamburgo vs Bayer Leverkusen Over 2.5"
+    },
+    {
+      "image": "-1001206097796_18404.jpg",
+      "pick": "FSV Mainz vs 1. FC Heidenheim Under 3.5"
+    },
+    {
+      "image": "-1001206097796_18406.jpg",
+      "pick": "FSV Mainz vs 1. FC Heidenheim: Total Over 1.5"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "Puebla +0.5"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "Puebla vs Mazatlan America"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "America vs. Atletico San Luis"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "Miami Hurricanes @ Indiana Hoosiers"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "SF 49ers @ SEA Seahawks"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "SEA Seahawks +4.5"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "LA Rams @ CHI Bears"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "CHI Bears +1.5"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "BUF Bills @ DEN Broncos"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "DEN Broncos +10.5"
+    },
+    {
+      "image": "-1001206097796_18411.jpg",
+      "pick": "Borussia Dortmund vs. SV Werder Bremen"
+    },
+    {
+      "image": "-1001206097796_18412.jpg",
+      "pick": "Ambos equipos marcan: S\u00ed"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "BUF Bills +1.0"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "BUF Bills @ DEN Broncos Over 46.5"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "BUF Bills @ DEN Broncos"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "SF 49ers +7.5"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "SF 49ers @ SEA Seahawks Under 45.5"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "HOU Texans +3.0"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "HOU Texans @ NE Patriots Under 41.5"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "HOU Texans @ NE Patriots Over 51.0"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "LA Rams +4.0"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "Puebla 1x2"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "Cruz Azul 1x2"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "America 1x2"
+    },
+    {
+      "image": "-1001206097796_18413.jpg",
+      "pick": "Deportivo Toluca 1x2"
+    },
+    {
+      "image": "-1001206097796_18414.jpg",
+      "pick": "Puebla gana cualquier mitad"
+    },
+    {
+      "image": "-1001206097796_18414.jpg",
+      "pick": "Puebla vs. Mazatl\u00e1n Over 1.5"
+    },
+    {
+      "image": "-1001206097796_18414.jpg",
+      "pick": "2\u00aa Mitad total M\u00e1s de 0.5"
+    },
+    {
+      "image": "-1001206097796_18414.jpg",
+      "pick": "Necaxa vs. Monterrey"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "HOU Texans ML"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "HOU Texans incl. prorroga ML"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Tomateros de Culiacan ML"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Tomateros de Culiacan incl. extra innings ML"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Tomateros de Culiacan vs. Algodoneros de Guasave -0.5"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Puebla vs. Mazatlan +0.5"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Necaxa vs. Monterrey"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Guadalajara Chivas +0.5"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Juarez vs. Guadalajara Chivas"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Cruz Azul vs. Atlas"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "America vs. Atletico San Luis"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Deportivo Toluca vs. Santos Laguna"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Senegal vs. Egipto"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Nigeria vs. Morocco"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "BUF Bills incl. prorroga ML"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "BUF Bills vs DEN Broncos"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "SF 49ers vs SEA Seahawks"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "LA Rams vs CHI Bears"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Indiana Hoosiers incl. prorroga ML"
+    },
+    {
+      "image": "-1001206097796_18417.jpg",
+      "pick": "Miami Hurricanes @ Indiana Hoosiers"
+    }
+  ]
+}

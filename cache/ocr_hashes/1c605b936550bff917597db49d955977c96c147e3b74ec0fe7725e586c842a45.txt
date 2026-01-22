@@ -1,0 +1,1 @@
+{'box_2d': [467, 171, 498, 500], 'text_content': 'move all are good within 1.'}

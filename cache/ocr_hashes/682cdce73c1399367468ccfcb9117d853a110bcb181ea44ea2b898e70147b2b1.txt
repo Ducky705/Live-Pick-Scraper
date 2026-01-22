@@ -1,0 +1,19 @@
+Line	Proj	Name	Projection	Projection - Line
+8.5	Points	Ausar Thompson	6.67	-1.83
+11.5	Points	Dyson Daniels	9.42	-2.08
+8.5	Points	Davion Mitchell	6.39	-2.11
+19.5	Points	Nickell Alexander-Walker	17.38	-2.12
+18.5	Points	Andrew Nembhard	16.15	-2.35
+13.5	Points	Grayson Allen	11.00	-2.50
+15.5	Points	Jalen Duren	12.89	-2.61
+10.5	Points	Sam Hauser	7.87	-2.63
+21.5	Points	Jalen Johnson	18.83	-2.67
+12.5	Points	Tobias Harris	9.82	-2.68
+9.5	Points	Egor Koulechov	6.81	-2.69
+12.5	Points	Jusuf Nurkić	9.74	-2.76
+7.5	Points	Drake Powell	4.46	-3.04
+13.5	Points	Anfernee Simons	10.13	-3.37
+17.5	Points	Alex Sarr	13.54	-3.96
+25.5	Points	Michael Porter Jr.	21.48	-4.02
+12.5	Points	Collin Gillespie	7.29	-
+26.5	Points	Cade Cunningham	20.12	-

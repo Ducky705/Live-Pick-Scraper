@@ -1,0 +1,1 @@
+{'box_2d': [145, 244, 245, 753], 'text_content': 'GREEN LIGHT PLAY'}

@@ -1,0 +1,1 @@
+{'box_2d': [116, 202, 154, 408], 'text_content': 'LEARLOCKS'}

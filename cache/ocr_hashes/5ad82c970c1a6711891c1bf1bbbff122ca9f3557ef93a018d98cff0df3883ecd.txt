@@ -1,0 +1,1 @@
+{'box_2d': [254, 89, 320, 929], 'text_content': 'NCAAB EXCLUSIVE PLAY'}

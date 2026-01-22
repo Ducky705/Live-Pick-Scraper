@@ -1,0 +1,1 @@
+{'box_2d': [256, 146, 295, 235], 'text_content': 'Caleb'}

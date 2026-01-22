@@ -1,0 +1,1 @@
+{'box_2d': [355, 85, 382, 275], 'text_content': '5U Plays:'}

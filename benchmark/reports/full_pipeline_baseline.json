@@ -2,25 +2,25 @@
   "config": {
     "model": "tngtech/deepseek-r1t2-chimera:free",
     "use_vision_ocr": true,
-    "images_tested": 20
+    "images_tested": 3
   },
   "metrics": {
-    "precision": 0.9285714285714286,
-    "recall": 0.9629629629629629,
-    "f1": 0.9454545454545454,
-    "total_tp": 52,
-    "total_fp": 4,
-    "total_fn": 2,
-    "avg_latency": 2.8723628401756285
+    "precision": 0.6,
+    "recall": 0.375,
+    "f1": 0.4615384615384615,
+    "total_tp": 3,
+    "total_fp": 2,
+    "total_fn": 5,
+    "avg_latency": 4.835685173670451
   },
   "per_image": {
     "image_01.jpg": {
       "expected": 4,
-      "extracted": 5,
-      "tp": 4,
-      "fp": 1,
-      "fn": 0,
-      "latency": 4.558718919754028
+      "extracted": 4,
+      "tp": 2,
+      "fp": 2,
+      "fn": 2,
+      "latency": 8.281280517578125
     },
     "image_02.jpg": {
       "expected": 1,
@@ -28,151 +28,7 @@
       "tp": 1,
       "fp": 0,
       "fn": 0,
-      "latency": 0.9087405204772949
-    },
-    "image_03.jpg": {
-      "expected": 3,
-      "extracted": 3,
-      "tp": 3,
-      "fp": 0,
-      "fn": 0,
-      "latency": 3.0951225757598877
-    },
-    "image_04.jpg": {
-      "expected": 7,
-      "extracted": 6,
-      "tp": 6,
-      "fp": 0,
-      "fn": 1,
-      "latency": 4.896455764770508
-    },
-    "image_05.jpg": {
-      "expected": 6,
-      "extracted": 6,
-      "tp": 6,
-      "fp": 0,
-      "fn": 0,
-      "latency": 4.518665313720703
-    },
-    "image_06.jpg": {
-      "expected": 4,
-      "extracted": 4,
-      "tp": 4,
-      "fp": 0,
-      "fn": 0,
-      "latency": 5.057401418685913
-    },
-    "image_07.jpg": {
-      "expected": 3,
-      "extracted": 3,
-      "tp": 3,
-      "fp": 0,
-      "fn": 0,
-      "latency": 0.7768445014953613
-    },
-    "image_08.jpg": {
-      "expected": 1,
-      "extracted": 1,
-      "tp": 0,
-      "fp": 1,
-      "fn": 1,
-      "latency": 0.8127362728118896
-    },
-    "image_09.jpg": {
-      "expected": 1,
-      "extracted": 1,
-      "tp": 1,
-      "fp": 0,
-      "fn": 0,
-      "latency": 0.8784689903259277
-    },
-    "image_10.jpg": {
-      "expected": 4,
-      "extracted": 4,
-      "tp": 4,
-      "fp": 0,
-      "fn": 0,
-      "latency": 3.4596378803253174
-    },
-    "image_11.jpg": {
-      "expected": 5,
-      "extracted": 5,
-      "tp": 5,
-      "fp": 0,
-      "fn": 0,
-      "latency": 1.0576000213623047
-    },
-    "image_12.jpg": {
-      "expected": 1,
-      "extracted": 1,
-      "tp": 1,
-      "fp": 0,
-      "fn": 0,
-      "latency": 2.817880630493164
-    },
-    "image_13.jpg": {
-      "expected": 2,
-      "extracted": 2,
-      "tp": 2,
-      "fp": 0,
-      "fn": 0,
-      "latency": 2.764539957046509
-    },
-    "image_14.jpg": {
-      "expected": 1,
-      "extracted": 1,
-      "tp": 1,
-      "fp": 0,
-      "fn": 0,
-      "latency": 1.7258074283599854
-    },
-    "image_15.jpg": {
-      "expected": 1,
-      "extracted": 3,
-      "tp": 1,
-      "fp": 2,
-      "fn": 0,
-      "latency": 4.178919792175293
-    },
-    "image_16.jpg": {
-      "expected": 1,
-      "extracted": 1,
-      "tp": 1,
-      "fp": 0,
-      "fn": 0,
-      "latency": 6.704466104507446
-    },
-    "image_17.jpg": {
-      "expected": 1,
-      "extracted": 1,
-      "tp": 1,
-      "fp": 0,
-      "fn": 0,
-      "latency": 0.7350935935974121
-    },
-    "image_18.jpg": {
-      "expected": 1,
-      "extracted": 1,
-      "tp": 1,
-      "fp": 0,
-      "fn": 0,
-      "latency": 1.7036728858947754
-    },
-    "image_19.jpg": {
-      "expected": 3,
-      "extracted": 3,
-      "tp": 3,
-      "fp": 0,
-      "fn": 0,
-      "latency": 2.8472635746002197
-    },
-    "image_20.jpg": {
-      "expected": 4,
-      "extracted": 4,
-      "tp": 4,
-      "fp": 0,
-      "fn": 0,
-      "latency": 3.949220657348633
+      "latency": 0.8124980926513672
     }
   }
 }

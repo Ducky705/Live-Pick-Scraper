@@ -1,0 +1,1 @@
+{'box_2d': [685, 85, 710, 320], 'text_content': 'Hurricanes Ovr 5.5'}

@@ -1,0 +1,1 @@
+{'box_2d': [78, 46, 185, 750], 'text_content': 'EXCLUSIVE MAX POTD :'}

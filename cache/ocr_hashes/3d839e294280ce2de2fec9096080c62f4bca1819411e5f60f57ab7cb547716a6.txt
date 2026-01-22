@@ -1,0 +1,1 @@
+{'box_2d': [835, 77, 875, 137], 'text_content': 'DATSO9'}

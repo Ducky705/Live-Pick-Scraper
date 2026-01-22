@@ -1,0 +1,1 @@
+{'box_2d': [141, 190, 153, 303], 'text_content': 'Fordham'}

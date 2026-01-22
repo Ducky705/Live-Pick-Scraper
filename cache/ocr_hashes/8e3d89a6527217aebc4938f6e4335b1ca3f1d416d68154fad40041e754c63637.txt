@@ -1,0 +1,1 @@
+{'box_2d': [236, 171, 267, 473], 'text_content': "2u, St John's ML -135"}

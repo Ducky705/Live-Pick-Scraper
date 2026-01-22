@@ -1,0 +1,1 @@
+{'box_2d': [771, 84, 810, 393], 'text_content': 'Virginia ML 1.5u -145'}

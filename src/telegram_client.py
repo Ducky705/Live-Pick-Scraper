@@ -242,7 +242,7 @@ class TelegramManager:
                         # Base Message Dict
                         msg_dict = {
                             'id': message.id,
-                            'channel_name': channel_name,
+                            'channel_name': "Telegram",  # Anonymized as per user request
                             'date': msg_et.strftime("%Y-%m-%d %H:%M ET"),
                             'text': message.text or "",
                             'images': [], # NEW: List of all images

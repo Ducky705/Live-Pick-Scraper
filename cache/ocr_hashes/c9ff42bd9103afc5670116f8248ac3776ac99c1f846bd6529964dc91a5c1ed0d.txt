@@ -1,0 +1,1 @@
+{'box_2d': [370, 335, 430, 662], 'text_content': 'Saturday, January 17'}

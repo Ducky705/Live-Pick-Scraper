@@ -1,0 +1,1 @@
+{'box_2d': [41, 228, 55, 782], 'text_content': 'Picks for January 17, 2026'}

@@ -1,0 +1,1 @@
+{'box_2d': [747, 54, 786, 367], 'text_content': 'Done reading? Check out #'}

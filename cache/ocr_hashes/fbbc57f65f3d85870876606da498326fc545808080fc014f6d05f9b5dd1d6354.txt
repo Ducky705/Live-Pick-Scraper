@@ -1,0 +1,1 @@
+{'box_2d': [295, 85, 322, 520], 'text_content': '5U POD: Hurricanes Over 5.5'}

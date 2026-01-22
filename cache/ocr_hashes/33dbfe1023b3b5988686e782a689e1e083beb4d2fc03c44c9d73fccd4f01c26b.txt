@@ -1,0 +1,33 @@
+Line	Proj	Name	Projection	Projection-Line
+32.5 Points	Shai Gilgeous-Alexander	41.25	8.75
+27.5 Points	Stephen Curry	35.32	7.82
+13.5 Points	Ryan Rollins	21.21	7.71
+12.5 Points	Julian Champagnie	20.01	7.51
+28.5 Points	James Harden	35.42	6.92
+25.5 Points	Victor Wembanyama	31.70	6.20
+16.5 Points	Kevin Porter Jr.	21.98	5.48
+13.5 Points	Keldon Johnson	18.69	5.19
+9.5 Points	AJ Green	14.24	4.74
+19.5 Points	De'Aaron Fox	24.10	4.60
+29.5 Points	Giannis Antetokounmpo	34.01	4.51
+17 Points	CJ McCollum	21.46	4.46
+13.5 Points	Ace Bailey	17.32	3.82
+10.5 Points	Harrison Barnes	13.49	2.99
+6.5 Points	Brook Lopez	9.42	2.92
+7.5 Points	Isaiah Joe	10.20	2.70
+26.5 Points	Joel Embiid	29.07	2.57
+23.5 Points	Devin Booker	25.83	2.33
+12.5 Points	Jarrett Allen	14.76	2.26
+10.5 Points	Mark Williams	12.75	2.25
+6.5 Points	Johnny Furphy	8.73	2.23
+20.5 Points	Cooper Flagg	22.70	2.20
+11.5 Points	Aaron Wiggins	13.68	2.18
+12.5 Points	Max Christie	14.54	2.04
+13.5 Points	Tre Johnson	15.47	1.97
+23.5 Points	Norman Powell	25.42	1.92
+7.5 Points	Vít Krejčí	9.38	1.88
+17 Points	Ivica Zubac	18.86	1.86
+16.5 Points	Mikal Bridges	18.35	1.85
+11.5 Points	Brandin Podziemski	13.35	1.85
+10.5 Points	Pelle Larsson	12.29	1.79
+9.5 Points	Kyle Kuzma	11.27	1.77

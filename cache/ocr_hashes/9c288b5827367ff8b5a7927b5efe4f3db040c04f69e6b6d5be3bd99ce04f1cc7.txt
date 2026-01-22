@@ -1,0 +1,1 @@
+{'box_2d': [537, 46, 613, 404], 'text_content': 'ccappersfree'}

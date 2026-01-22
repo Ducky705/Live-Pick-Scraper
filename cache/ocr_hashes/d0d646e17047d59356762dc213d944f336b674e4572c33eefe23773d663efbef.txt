@@ -1,0 +1,1 @@
+{'box_2d': [462, 85, 490, 635], 'text_content': 'Khalil Shakir Over 50+ Recv Yards'}

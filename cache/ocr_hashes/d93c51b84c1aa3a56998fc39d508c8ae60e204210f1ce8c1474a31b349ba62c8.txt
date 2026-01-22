@@ -1,0 +1,1 @@
+{'box_2d': [622, 46, 662, 151], 'text_content': 'NCAAB:'}

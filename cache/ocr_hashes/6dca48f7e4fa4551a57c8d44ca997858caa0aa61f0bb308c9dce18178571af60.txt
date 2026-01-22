@@ -1,0 +1,1 @@
+{'box_2d': [677, 29, 770, 906], 'text_content': 'Broncos v. Bills under 45.5 (-110) 5u'}

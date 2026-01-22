@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-01-14T17:26:47.799404",
+  "stages": {
+    "messages": {
+      "count": 61,
+      "images_found": 105,
+      "images_missing": 0
+    },
+    "ocr": {
+      "count": 30,
+      "stats": {
+        "empty": 0,
+        "short": 8,
+        "success": 30
+      },
+      "total_chars": 2939
+    },
+    "parse": {
+      "pick_count": 36,
+      "format_issues": {
+        "total_picks": 36,
+        "invalid_league_count": 0,
+        "invalid_type_count": 0,
+        "period_misclassified_count": 0,
+        "moneyline_missing_ml_count": 0,
+        "spread_bad_format_count": 0,
+        "total_bad_format_count": 4
+      }
+    },
+    "grade": {
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "pending": 0
+    }
+  },
+  "issues": []
+}

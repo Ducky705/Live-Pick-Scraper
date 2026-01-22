@@ -32,6 +32,7 @@ COMPACT_TO_FULL = {
     "o": "odds",
     "u": "units",
     "d": "date",
+    "r": "reasoning",
     # Also support existing 2-char keys for backward compatibility
     "id": "message_id",
     "cn": "capper_name",

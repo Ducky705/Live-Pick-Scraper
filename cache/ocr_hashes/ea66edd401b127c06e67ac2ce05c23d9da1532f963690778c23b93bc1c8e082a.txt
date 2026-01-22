@@ -1,0 +1,1 @@
+{'box_2d': [787, 145, 830, 437], 'text_content': '2u, Florida ML -110'}

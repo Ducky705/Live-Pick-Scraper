@@ -1,0 +1,1 @@
+{'box_2d': [111, 55, 187, 593], 'text_content': '1/17 VIP PREDICTIONS'}

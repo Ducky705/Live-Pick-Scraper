@@ -1,0 +1,1 @@
+{'box_2d': [444, 46, 551, 965], 'text_content': 'BILLS/BRONCOS UNDER 46.5'}

@@ -1,0 +1,1 @@
+{'box_2d': [375, 171, 406, 542], 'text_content': '2u, Northwestern +6.5 -110'}

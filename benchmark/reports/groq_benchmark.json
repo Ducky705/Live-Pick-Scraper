@@ -1,0 +1,50 @@
+{
+  "date": "2026-01-22",
+  "dataset_size": 3,
+  "results": [
+    {
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "avg_latency": 1019.1748142242432,
+      "errors": 0,
+      "total_picks": 10,
+      "correct_picks": 10
+    },
+    {
+      "provider": "groq",
+      "model": "llama-3.1-8b-instant",
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "avg_latency": 929.8098087310791,
+      "errors": 0,
+      "total_picks": 10,
+      "correct_picks": 10
+    },
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "avg_latency": 2370.6063429514566,
+      "errors": 0,
+      "total_picks": 10,
+      "correct_picks": 10
+    },
+    {
+      "provider": "groq",
+      "model": "openai/gpt-oss-20b",
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "avg_latency": 1597.9332129160564,
+      "errors": 0,
+      "total_picks": 10,
+      "correct_picks": 10
+    }
+  ]
+}

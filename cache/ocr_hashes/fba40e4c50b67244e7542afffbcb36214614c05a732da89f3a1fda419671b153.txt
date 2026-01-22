@@ -1,0 +1,1 @@
+{'box_2d': [935, 84, 972, 391], 'text_content': 'Vanderbilt ML 1.5u -115'}

@@ -1,0 +1,1 @@
+{'box_2d': [346, 84, 393, 276], 'text_content': 'Early Card'}

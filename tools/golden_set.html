@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoldenSet AI | Professional Annotation Suite</title>
+
+  <!-- Preload fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      /* Shadcn/Tailwind-inspired zinc palette */
+      --background: #09090b;
+      --surface: #121214;
+      --surface-hover: #1c1c1f;
+      --card: #18181b;
+      --border: #27272a;
+      --border-light: #3f3f46;
+
+      --text-main: #fafafa;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
+
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-foreground: #ffffff;
+
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.1);
+
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --danger-bg: rgba(239, 68, 68, 0.1);
+
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset & Base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      outline: none;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border-light);
+    }
+
+    /* Layout Grid */
+    .app-container {
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      flex: 1;
+      height: calc(100vh - 64px);
+      /* Subtract header height */
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      height: 64px;
+      background: rgba(9, 9, 11, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .controls-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all 0.2s var(--ease-out);
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+      background: var(--surface-hover);
+      color: var(--text-main);
+      border-color: var(--border-light);
+    }
+
+    .btn-icon:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-light);
+    }
+
+    /* Left Panel: Image Canvas */
+    .image-stage {
+      background-color: #050505;
+      background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
+      background-size: 24px 24px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 40px;
+    }
+
+    .image-wrapper {
+      position: relative;
+      box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+      border-radius: var(--radius-lg);
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .image-wrapper img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(100vh - 144px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+
+    .image-meta-badge {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .filename-text {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Right Panel: Workspace */
+    .workspace {
+      background: var(--background);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .workspace-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .input-field {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    .input-field::placeholder {
+      color: var(--text-dim);
+    }
+
+    textarea.input-field {
+      font-family: var(--font-mono);
+      line-height: 1.6;
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Card System for Picks */
+    .picks-container {
+      margin-bottom: 24px;
+    }
+
+    .picks-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .pick-count-badge {
+      background: var(--surface-hover);
+      color: var(--text-main);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+    }
+
+    .pick-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pick-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-1px);
+    }
+
+    .pick-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--primary);
+      opacity: 0.5;
+    }
+
+    .pick-content h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .pick-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--surface-hover);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-weight: 500;
+    }
+
+    .tag.odds {
+      color: var(--success);
+      border-color: rgba(16, 185, 129, 0.2);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .btn-remove {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-remove:hover {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    /* New Pick Area */
+    .new-pick-area {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      position: relative;
+    }
+
+    .new-pick-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .new-pick-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .action-bar {
+      border-top: 1px solid var(--border);
+      padding: 20px 24px;
+      background: rgba(9, 9, 11, 0.95);
+      display: flex;
+      gap: 12px;
+    }
+
+    .link-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: none;
+    }
+
+    .link-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* Progress Bar */
+    .progress-track {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: transparent;
+      z-index: 100;
+    }
+
+    .progress-value {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      width: 90%;
+      max-width: 600px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.95);
+      transition: transform 0.2s var(--ease-out);
+    }
+
+    .modal-backdrop.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      background: var(--surface);
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    }
+
+    .code-block {
+      background: var(--surface);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2000;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 12px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s var(--ease-out);
+    }
+
+    .toast.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      border-color: var(--success);
+    }
+
+    .toast.error {
+      border-color: var(--danger);
+    }
+
+    .kbd-shortcut {
+      display: inline-flex;
+      align-items: center;
+      background: var(--surface-hover);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+      </div>
+      <span>GoldenSet<span style="color:var(--text-dim)">.AI</span></span>
+    </div>
+
+    <div class="controls-group">
+      <div class="nav-pill">
+        <span id="currentIdx">1</span>
+        <span style="color:var(--border-light)">/</span>
+        <span id="totalCount">...</span>
+      </div>
+
+      <button class="btn-icon" id="prevBtn" onclick="navigate(-1)" title="Previous Image (Left Arrow)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+
+      <button class="btn-icon" id="nextBtn" onclick="navigate(1)" title="Next Image (Right Arrow)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
+
+      <div style="width: 1px; height: 24px; background: var(--border); margin: 0 8px;"></div>
+
+      <button class="btn-secondary" onclick="showPromptModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          style="margin-right:8px">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 16v-4" />
+          <path d="M12 8h.01" />
+        </svg>
+        Guide
+      </button>
+
+      <button class="btn-secondary" onclick="exportData()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          style="margin-right:8px">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        Export
+      </button>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-track">
+    <div class="progress-value" id="progressFill"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Left: Image Canvas -->
+    <div class="image-stage">
+      <div class="image-wrapper" id="imageWrapper">
+        <div class="no-image" id="loadingState">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+          <div style="margin-top:12px; color: #555; font-size: 13px;">Waiting for images...</div>
+        </div>
+      </div>
+
+      <div class="image-meta-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        <span class="filename-text" id="filename">filename.jpg</span>
+      </div>
+    </div>
+
+    <!-- Right: Workspace -->
+    <div class="workspace">
+      <div class="workspace-content">
+
+        <!-- OCR Section -->
+        <div class="form-group">
+          <div class="form-header">
+            <span class="label">Raw Content (OCR)</span>
+            <button class="link-btn" onclick="showPasteModal()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="display:inline; vertical-align:middle; margin-right:4px;">
+                <path d="M8 4h10" />
+                <path d="M8 8h10" />
+                <path d="M8 12h10" />
+              </svg>
+              Paste JSON
+            </button>
+          </div>
+          <textarea id="ocrText" class="input-field" placeholder="Transcribe text seen in the image..."></textarea>
+        </div>
+
+        <!-- Picks List -->
+        <div class="picks-container">
+          <div class="picks-header">
+            <span class="label">Extracted Picks</span>
+            <span class="pick-count-badge" id="pickCount">0</span>
+          </div>
+          <div id="picksList">
+            <!-- Picks injected here -->
+          </div>
+        </div>
+
+        <!-- Add New Pick -->
+        <div class="new-pick-area">
+          <div class="new-pick-title">Add New Pick</div>
+
+          <div class="grid-2" style="margin-bottom:12px">
+            <div>
+              <label class="label" style="display:block; margin-bottom:6px">League</label>
+              <select id="league" class="input-field">
+                <option value="">Select...</option>
+                <option value="NFL">NFL</option>
+                <option value="NBA">NBA</option>
+                <option value="NCAAF">NCAAF</option>
+                <option value="NCAAB">NCAAB</option>
+                <option value="MLB">MLB</option>
+                <option value="NHL">NHL</option>
+                <option value="WNBA">WNBA</option>
+                <option value="EPL">EPL</option>
+                <option value="MLS">MLS</option>
+                <option value="UCL">UCL</option>
+                <option value="UFC">UFC</option>
+                <option value="TENNIS">TENNIS</option>
+                <option value="PGA">PGA</option>
+                <option value="F1">F1</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="label" style="display:block; margin-bottom:6px">Type</label>
+              <select id="betType" class="input-field">
+                <option value="">Select...</option>
+                <option value="Moneyline">Moneyline</option>
+                <option value="Spread">Spread</option>
+                <option value="Total">Total</option>
+                <option value="Player Prop">Player Prop</option>
+                <option value="Team Prop">Team Prop</option>
+                <option value="Game Prop">Game Prop</option>
+                <option value="Period">Period</option>
+                <option value="Parlay">Parlay</option>
+                <option value="Teaser">Teaser</option>
+                <option value="Future">Future</option>
+                <option value="Unknown">Unknown</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <label class="label" style="display:block; margin-bottom:6px">Pick Detail</label>
+            <input type="text" id="pickValue" class="input-field" placeholder="e.g. Lakers -5.5">
+          </div>
+
+          <div class="grid-3" style="margin-bottom:12px">
+            <div>
+              <label class="label" style="display:block; margin-bottom:6px">Odds</label>
+              <input type="number" id="odds" class="input-field" placeholder="-110">
+            </div>
+            <div>
+              <label class="label" style="display:block; margin-bottom:6px">Units</label>
+              <input type="number" id="units" class="input-field" step="0.5" value="1">
+            </div>
+            <div>
+              <label class="label" style="display:block; margin-bottom:6px">Side</label>
+              <select id="propSide" class="input-field">
+                <option value="">None</option>
+                <option value="Over">Over</option>
+                <option value="Under">Under</option>
+              </select>
+            </div>
+          </div>
+
+          <details style="margin-bottom:16px">
+            <summary style="cursor:pointer; font-size:12px; color:var(--text-muted); margin-bottom:8px">Structured
+              Fields (optional)</summary>
+            <div class="grid-3" style="margin-top:8px">
+              <div>
+                <label class="label" style="display:block; margin-bottom:6px">Subject</label>
+                <input type="text" id="subject" class="input-field" placeholder="LeBron James">
+              </div>
+              <div>
+                <label class="label" style="display:block; margin-bottom:6px">Market</label>
+                <input type="text" id="market" class="input-field" placeholder="Pts, Spread, ML">
+              </div>
+              <div>
+                <label class="label" style="display:block; margin-bottom:6px">Line</label>
+                <input type="number" id="line" class="input-field" step="0.5" placeholder="25.5">
+              </div>
+            </div>
+          </details>
+
+          <button class="btn-primary" style="width:100%; justify-content:center" onclick="addPick()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Add Pick
+          </button>
+
+          <div style="text-align:right">
+            <button class="link-btn" style="color:var(--danger); font-size:11px" onclick="clearCurrentPicks()">Clear
+              List</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="action-bar">
+        <button class="btn-secondary" onclick="skip()" style="flex:1">Skip</button>
+        <button class="btn-primary" onclick="saveAndNext()" style="flex:2; font-size:14px">
+          Save & Next Image
+          <span class="kbd-shortcut">Ctrl+S</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- MODALS -->
+
+  <!-- Prompt Modal -->
+  <div class="modal-backdrop" id="promptModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>AI Formatting Guide</h3>
+        <button class="btn-icon" style="border:none" onclick="closePromptModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre id="promptContent" class="code-block"></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closePromptModal()">Close</button>
+        <button class="btn-primary" onclick="copyPrompt()">Copy to Clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paste Modal -->
+  <div class="modal-backdrop" id="pasteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Import JSON Data</h3>
+        <button class="btn-icon" style="border:none" onclick="closePasteModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px">Paste a JSON object or array of picks.
+          Auto-detects keys (lg/league, p/pick, etc).</p>
+        <textarea id="jsonInput" class="input-field" style="height:200px; font-family:var(--font-mono)"
+          placeholder='[{"lg": "NBA", "p": "Lakers -5"}, {"lg": "NFL", "p": "Chiefs ML"}]'></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closePasteModal()">Cancel</button>
+        <button class="btn-primary" onclick="applyPastedJson()">Import Picks</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- STATE & DATA ---
+    let images = [];
+    let currentIndex = 0;
+    let annotations = {};
+    let currentPicks = [];
+
+    // --- INIT ---
+    window.onload = function () {
+      loadState();
+      fetchImages();
+      setupShortcuts();
+    };
+
+    // --- CORE FUNCTIONS ---
+    function loadState() {
+      try {
+        const saved = localStorage.getItem('goldenSetAnnotationsV2');
+        if (saved) annotations = JSON.parse(saved);
+      } catch (e) { console.error(e); }
+    }
+
+    function saveState() {
+      localStorage.setItem('goldenSetAnnotationsV2', JSON.stringify(annotations));
+    }
+
+    async function fetchImages() {
+      try {
+        const res = await fetch('/api/images');
+        const data = await res.json();
+        images = data.images || [];
+        document.getElementById('totalCount').textContent = images.length;
+
+        if (images.length > 0) {
+          const firstUnannotated = images.findIndex(img => !annotations[img.path]);
+          currentIndex = firstUnannotated >= 0 ? firstUnannotated : 0;
+          renderImage();
+        } else {
+          showToast('No images found', 'error');
+        }
+      } catch (e) {
+        showToast('Server connection failed', 'error');
+      }
+    }
+
+    function renderImage() {
+      if (images.length === 0) return;
+      const img = images[currentIndex];
+      const annotation = annotations[img.path];
+
+      // Update Image
+      const wrapper = document.getElementById('imageWrapper');
+      wrapper.innerHTML = `<img src="/${img.path}" alt="${img.filename}">`;
+
+      document.getElementById('filename').textContent = img.filename;
+
+      // Update Controls
+      document.getElementById('currentIdx').textContent = currentIndex + 1;
+      document.getElementById('prevBtn').disabled = currentIndex === 0;
+      document.getElementById('nextBtn').disabled = currentIndex === images.length - 1;
+
+      // Update Progress
+      const annotatedCount = Object.values(annotations).filter(a => a.expected_picks?.length > 0).length;
+      const pct = (annotatedCount / images.length) * 100;
+      document.getElementById('progressFill').style.width = `${pct}%`;
+
+      // Hydrate Data
+      if (annotation) {
+        document.getElementById('ocrText').value = annotation.ocr_text || '';
+        currentPicks = [...(annotation.expected_picks || [])];
+      } else {
+        document.getElementById('ocrText').value = '';
+        currentPicks = [];
+      }
+
+      clearForm();
+      renderPicksList();
+    }
+
+    function renderPicksList() {
+      const listEl = document.getElementById('picksList');
+      document.getElementById('pickCount').textContent = currentPicks.length;
+
+      if (currentPicks.length === 0) {
+        listEl.innerHTML = `<div style="text-align:center; padding:32px; color:var(--text-dim); border:2px dashed var(--border); border-radius:var(--radius-md)">
+          <div style="font-size:13px">No picks added</div>
+          <div style="font-size:11px; margin-top:4px">Use the form or paste JSON</div>
+        </div>`;
+        return;
+      }
+
+      listEl.innerHTML = currentPicks.map((pick, i) => `
+        <div class="pick-card">
+          <div class="pick-content">
+            <h4>${escapeHtml(pick.pick)}</h4>
+            <div class="pick-tags">
+              <span class="tag">${pick.league}</span>
+              <span class="tag">${pick.type}</span>
+              ${pick.odds ? `<span class="tag odds">${pick.odds > 0 ? '+' : ''}${pick.odds}</span>` : ''}
+              ${pick.units !== 1 ? `<span class="tag">${pick.units}u</span>` : ''}
+              ${pick.prop_side ? `<span class="tag">${pick.prop_side}</span>` : ''}
+            </div>
+            ${pick.subject || pick.market ? `<div style="font-size:10px; color:var(--text-dim); margin-top:4px">${pick.subject || ''} ${pick.market ? '| ' + pick.market : ''} ${pick.line != null ? '| ' + pick.line : ''}</div>` : ''}
+          </div>
+          <button class="btn-remove" onclick="removePick(${i})">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // --- ACTIONS ---
+
+    function addPick() {
+      const league = document.getElementById('league').value;
+      const type = document.getElementById('betType').value;
+      const pick = document.getElementById('pickValue').value.trim();
+      const odds = document.getElementById('odds').value;
+      const units = document.getElementById('units').value;
+      const subject = document.getElementById('subject')?.value?.trim() || null;
+      const market = document.getElementById('market')?.value?.trim() || null;
+      const line = document.getElementById('line')?.value;
+      const propSide = document.getElementById('propSide')?.value || null;
+
+      if (!league || !type || !pick) {
+        showToast('League, Type, and Pick are required', 'error');
+        return;
+      }
+
+      currentPicks.push({
+        league, type, pick,
+        odds: odds ? parseInt(odds) : null,
+        units: units ? parseFloat(units) : 1.0,
+        subject: subject || null,
+        market: market || null,
+        line: line ? parseFloat(line) : null,
+        prop_side: propSide || null
+      });
+
+      clearForm();
+      renderPicksList();
+      showToast('Pick added', 'success');
+      document.getElementById('pickValue').focus();
+    }
+
+    function removePick(i) {
+      currentPicks.splice(i, 1);
+      renderPicksList();
+    }
+
+    function clearCurrentPicks() {
+      if (confirm('Clear all picks?')) {
+        currentPicks = [];
+        renderPicksList();
+      }
+    }
+
+    function saveAndNext() {
+      const ocr = document.getElementById('ocrText').value.trim();
+      if (!ocr) return showToast('OCR text required', 'error');
+      if (currentPicks.length === 0) return showToast('Add at least one pick', 'error');
+
+      const img = images[currentIndex];
+      annotations[img.path] = { ocr_text: ocr, expected_picks: [...currentPicks] };
+      saveState();
+
+      showToast('Saved!', 'success');
+      if (currentIndex < images.length - 1) navigate(1);
+    }
+
+    function skip() {
+      navigate(1);
+    }
+
+    function navigate(d) {
+      const next = currentIndex + d;
+      if (next >= 0 && next < images.length) {
+        currentIndex = next;
+        renderImage();
+      }
+    }
+
+    function exportData() {
+      const valid = Object.entries(annotations).filter(([_, v]) => v.expected_picks?.length > 0);
+      if (valid.length === 0) return showToast('Nothing to export', 'error');
+
+      const lines = valid.map(([path, data]) => JSON.stringify({
+        image_path: path,
+        ocr_text: data.ocr_text,
+        expected_picks: data.expected_picks
+      }));
+
+      const blob = new Blob([lines.join('\n')], { type: 'application/jsonl' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `golden_set_${new Date().toISOString().slice(0, 10)}.jsonl`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(`Exported ${valid.length} items`, 'success');
+    }
+
+    // --- JSON PARSER ---
+    function applyPastedJson() {
+      try {
+        const raw = document.getElementById('jsonInput').value;
+        const data = JSON.parse(raw);
+        const list = Array.isArray(data) ? data : [data];
+
+        let count = 0;
+        list.forEach(item => {
+          const p = {
+            league: item.lg || item.league || 'Other',
+            type: item.ty || item.type || 'Unknown',
+            pick: item.p || item.pick || item.pick_value || '',
+            odds: item.od ?? item.odds ?? item.odds_american ?? null,
+            units: item.u ?? item.units ?? 1.0,
+            // Structured fields (v3.0 spec)
+            subject: item.sub || item.subject || null,
+            market: item.mkt || item.market || null,
+            line: item.ln ?? item.line ?? null,
+            prop_side: item.side || item.prop_side || null
+          };
+          if (p.pick) {
+            currentPicks.push(p);
+            count++;
+          }
+        });
+
+        if (count > 0) {
+          renderPicksList();
+          closePasteModal();
+          showToast(`Imported ${count} picks`, 'success');
+        } else {
+          showToast('No valid picks found', 'error');
+        }
+      } catch (e) {
+        showToast('Invalid JSON', 'error');
+      }
+    }
+
+    // --- HELPERS ---
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function clearForm() {
+      document.getElementById('pickValue').value = '';
+      document.getElementById('odds').value = '';
+      document.getElementById('units').value = '1';
+      document.getElementById('propSide').value = '';
+      if (document.getElementById('subject')) document.getElementById('subject').value = '';
+      if (document.getElementById('market')) document.getElementById('market').value = '';
+      if (document.getElementById('line')) document.getElementById('line').value = '';
+    }
+
+    function showToast(msg, type = 'info') {
+      const el = document.createElement('div');
+      el.className = `toast visible ${type}`;
+      el.innerHTML = type === 'success'
+        ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ${msg}`
+        : msg;
+
+      document.getElementById('toastContainer').appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        setTimeout(() => el.remove(), 300);
+      }, 3000);
+    }
+
+    function setupShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+          if (e.ctrlKey && e.key === 'Enter') {
+            // If in json input, apply
+            if (e.target.id === 'jsonInput') applyPastedJson();
+            // If in form, add pick
+            else addPick();
+          }
+          if (e.key === 'Escape') {
+            closePasteModal();
+            closePromptModal();
+            e.target.blur();
+          }
+          if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveAndNext(); }
+          return;
+        }
+
+        if (e.key === 'ArrowLeft') navigate(-1);
+        if (e.key === 'ArrowRight') navigate(1);
+        if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveAndNext(); }
+      });
+    }
+
+    // --- MODALS ---
+    const promptModal = document.getElementById('promptModal');
+    const pasteModal = document.getElementById('pasteModal');
+
+    function showPromptModal() {
+      document.getElementById('promptContent').textContent = AI_PROMPT;
+      promptModal.classList.add('active');
+    }
+    function closePromptModal() { promptModal.classList.remove('active'); }
+
+    function showPasteModal() {
+      document.getElementById('jsonInput').value = '';
+      pasteModal.classList.add('active');
+      setTimeout(() => document.getElementById('jsonInput').focus(), 50);
+    }
+    function closePasteModal() { pasteModal.classList.remove('active'); }
+
+    function copyPrompt() {
+      navigator.clipboard.writeText(AI_PROMPT);
+      showToast('Copied to clipboard', 'success');
+      closePromptModal();
+    }
+
+    // AI PROMPT CONSTANT
+    const AI_PROMPT = `### Sports Pick Data Formatting Guide
+
+### 1. Standardized league Values
+| league | Description |
+| NFL | National Football League |
+| NCAAF | NCAA Football |
+| NBA | National Basketball Assoc. |
+| NCAAB | NCAA Basketball |
+| WNBA | Women's National Basketball |
+| MLB | Major League Baseball |
+| NHL | National Hockey League |
+| EPL | English Premier League |
+| MLS | Major League Soccer |
+| UCL | UEFA Champions League |
+| UFC | Ultimate Fighting Championship |
+| TENNIS | ATP / WTA Tours |
+| PGA | PGA Tour |
+| F1 | Formula 1 |
+| Other | Parlay with multiple leagues OR unknown |
+
+### 2. Standardized type Values
+| type | Description |
+| Moneyline | Bet on which team/competitor wins outright |
+| Spread | Bet on margin of victory (Point Spread, Run Line, Puck Line) |
+| Total | Bet on combined score (Over/Under) |
+| Player Prop | Bet on specific player's statistical performance |
+| Team Prop | Bet on specific team's statistical performance |
+| Game Prop | Bet on specific game event |
+| Period | Bet specific to a game segment (Quarter, Half, Period) |
+| Parlay | Single bet linking 2+ wagers |
+| Teaser | Parlay with adjusted spreads/totals |
+| Future | Long-term bet on future event |
+| Unknown | Cannot determine bet type |
+
+### 3. pick_value Format by Type
+
+**CRITICAL: Odds go in "odds" field ONLY, never in pick!**
+
+#### Moneyline
+Format: Team or Competitor Name ML
+Example: Los Angeles Lakers ML
+
+#### Spread
+Format: Team Name [space] Point Spread
+Example: Green Bay Packers -7.5
+
+#### Total
+Format: Team A vs Team B Over/Under Number
+Example: Lakers vs Celtics Over 215.5
+
+#### Player Prop
+Format: Player Name: Stat Over/Under Value
+Stats: Pts, Reb, Ast, Blk, Stl, 3PM, PRA, PassYds, RushYds, RecYds, K, HR
+Example: LeBron James: Pts Over 25.5
+
+#### Team Prop
+Format: Team Name: Stat Over/Under Value
+Example: Dallas Cowboys: Total Points Over 27.5
+
+#### Period (CRITICAL: Any half/quarter/period bet!)
+Format: Period Identifier [Standard Bet Format]
+Identifiers: 1H, 2H, 1Q, 2Q, 3Q, 4Q, P1, P2, P3, F5, F3
+Examples:
+  - 1H NYK vs BOS Total Over 110.5
+  - 1Q Thunder -2
+  - 1H George Mason -6
+
+#### Tennis (Special Rules)
+- Moneyline: Tommy Paul ML
+- Set Spread: Giron +1.5 sets
+- Game Spread: Rune +3.5 games
+- Total Games: Paul vs Rune Over 22.5 games
+
+#### Parlay / Teaser
+Format: Leg 1 / Leg 2 / ...
+NO LEAGUE PREFIX - league is in the "league" field
+Examples:
+  - Cowboys -10.5 / Lakers ML
+  - Teaser 6pt: Chiefs -2.5 / Eagles +8.5`;
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+{
+  "date": "2026-01-22",
+  "dataset_size": 5,
+  "results": [
+    {
+      "provider": "openrouter",
+      "model": "tngtech/deepseek-r1t2-chimera:free",
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "avg_latency": 116474.06296730042,
+      "errors": 0,
+      "total_picks": 16,
+      "correct_picks": 16
+    }
+  ]
+}

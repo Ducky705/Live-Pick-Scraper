@@ -1,0 +1,1 @@
+{'box_2d': [627, 85, 655, 635], 'text_content': 'Jaxson Smith Njigba Ovr 90+ Recv yds'}

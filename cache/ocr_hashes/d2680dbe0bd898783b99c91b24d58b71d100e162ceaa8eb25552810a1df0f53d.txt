@@ -1,0 +1,1 @@
+{'box_2d': [180, 145, 257, 567], 'text_content': 'KimsVIP @KimsVip · 1m'}

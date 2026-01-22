@@ -1,0 +1,1 @@
+{'box_2d': [228, 204, 278, 441], 'text_content': 'OutOfLineBets'}

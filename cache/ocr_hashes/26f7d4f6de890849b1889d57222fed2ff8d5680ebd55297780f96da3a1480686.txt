@@ -1,0 +1,1 @@
+{'box_2d': [675, 244, 815, 927], 'text_content': '10:05 EST (15UNIT) (NHL)'}

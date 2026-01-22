@@ -15,6 +15,7 @@ sys.path.append(os.getcwd())
 from src.discord_client import discord_manager
 from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt
+from src.prompts.decoder import normalize_response
 from src.utils import clean_text_for_ai
 
 # Setup basic logging
@@ -73,7 +74,6 @@ async def main():
         result_str = openrouter_completion(master_prompt, model=model)
         
         # 5. Parse Result using decoder for compact format support
-        from src.prompts.decoder import normalize_response
         try:
             # Use decoder to handle both compact and full format
             picks = normalize_response(result_str, expand=True)

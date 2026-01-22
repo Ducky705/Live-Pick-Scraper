@@ -1,0 +1,1 @@
+{'box_2d': [737, 85, 765, 455], 'text_content': 'Blue Jackets Over 6.5'}

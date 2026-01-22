@@ -1,0 +1,1 @@
+{'box_2d': [39, 396, 87, 603], 'text_content': 'NEW MESSAGES'}

@@ -1,0 +1,1 @@
+{'box_2d': [73, 205, 97, 450], 'text_content': 'TheGamblingGawd'}

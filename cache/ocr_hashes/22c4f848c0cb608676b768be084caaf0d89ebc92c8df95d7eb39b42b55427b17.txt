@@ -1,0 +1,1 @@
+{'box_2d': [104, 29, 185, 732], 'text_content': 'Midday Card: NFL & NCAAB'}

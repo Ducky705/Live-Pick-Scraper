@@ -1,0 +1,1 @@
+{'box_2d': [450, 84, 483, 154], 'text_content': 'Card'}

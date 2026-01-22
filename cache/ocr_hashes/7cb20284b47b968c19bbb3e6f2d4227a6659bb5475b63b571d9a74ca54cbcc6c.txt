@@ -1,0 +1,24 @@
+GameTime,League,Signal,Play,Win%,Units,Score,SameSideCount,Verdict,Tier
+1/19/26,NHL,RLM,MIN +100,58%,25.7,7.0,3,✅,Follow,A-Tier
+1/19/26,NHL,Steam,MIN +110,52%,29.4,6.0,3,✅,Follow,A-Tier
+1/19/26,NHL,Steam,MIN +114,52%,29.4,6.0,3,✅,Follow,A-Tier
+1/19/26,NHL,Steam,COL -215,52%,29.4,5.5,2,▲,Lean Follow,
+1/19/26,NHL,Steam,SJS +165,52%,29.4,5.5,2,▲,Lean Follow,
+1/19/26,NHL,Steam,ANA -110,52%,29.4,5.5,2,▲,Lean Follow,
+1/19/26,NHL,Steam,SJS +180,52%,29.4,5.5,2,▲,Lean Follow,
+1/19/26,NHL,RLM,VAN +125,50%,15.6,4.8,1,⚖️,Neutral,
+1/19/26,NHL,Steam,WAS +190,52%,29.4,4.8,1,⚖️,Neutral,
+1/19/26,NHL,Steam,NYI -122,52%,29.4,4.8,1,⚖️,Neutral,
+1/19/26,NHL,Steam,SJS Over 6.5 +100,55%,15.3,4.5,2,⚖️,Neutral,
+1/19/26,NHL,Steam,VAN Under 6 -107,55%,15.3,4.5,2,⚖️,Neutral,
+1/19/26,NHL,Steam,SJS Over 6 -124,55%,15.3,4.5,2,⚖️,Neutral,
+1/19/26,NHL,Steam,BUF Over 6 -122,55%,15.3,3.8,1,⚖️,Neutral,
+1/19/26,NHL,RLM,VAN Under 6 -107,56%,3.7,2.5,2,⚖️,Neutral,
+1/19/26,NHL,RLM,CHI Under 6 -115,53%,2.1,2.5,2,⚖️,Neutral,
+1/19/26,NHL,Steam,CHI Under 6 -107,54%,6.5,2.5,2,⚖️,Neutral,
+1/19/26,NHL,RLM,SEA Under 6 -115,53%,2.1,1.8,1,🔻,Fade,
+1/19/26,NHL,RLM,CGY Under 6 -115,53%,2.1,1.8,1,🔻,Fade,
+1/19/26,NHL,Steam,ANA -125,50%,0.8,1.5,2,🔻,Fade,
+1/19/26,NHL,Steam,COL -250,52%,2.0,1.5,2,🔻,Fade,
+1/19/26,NHL,Steam,NJD -127,52%,2.0,0.8,1,🔻,Fade,
+1/19/26,NHL,Steam,PIT -114,52%,2.0,0.8,1,🔻,Fade

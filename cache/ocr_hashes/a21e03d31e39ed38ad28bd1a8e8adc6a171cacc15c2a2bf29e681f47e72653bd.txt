@@ -1,0 +1,11 @@
+DAILY TOP SIGNALS (JAN 19)
+
+GameTime	League	Signal	Play	Look Win %	Units	RankScore	SameSideCount	Verdict	Display	Tier
+1/19/26	NBA	RLM	NYK -10 -110	61%	14.4	6.0	3	Follow	A-Tier
+1/19/26	CFB	RLM	MIA-FL B 5 -112	68%	23.2	7.8	4	Follow	A-Tier
+1/19/26	NBA	RLM	BKN -8.5 -114	65%	11.3	6.0	3	Follow	A-Tier
+1/19/26	NBA	RLM	BKN Under 218.5 -110	62%	13.5	6.0	3	Follow	A-Tier
+1/19/26	NBA	Steam	BKN Under 218.5 -110	54%	35.6	6.8	3	Follow	A-Tier
+1/19/26	NHL	RLM	MIN +100	58%	25.7	7.0	3	Follow	A-Tier
+1/19/26	NHL	Steam	MIN +114	52%	29.4	6.0	3	Follow	A-Tier
+1/19/26	NBA	Steam	MIA Over 238.5 -110	54%	35.6	6.3	2	Follow	A-Tier

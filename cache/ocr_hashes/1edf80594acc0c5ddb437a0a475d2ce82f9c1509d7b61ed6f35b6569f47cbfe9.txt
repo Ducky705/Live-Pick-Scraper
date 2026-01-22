@@ -1,0 +1,1 @@
+{'box_2d': [12, 89, 85, 259], 'text_content': 'MAZI'}

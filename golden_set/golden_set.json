@@ -1,0 +1,4104 @@
+[
+  {
+    "id": "57480",
+    "source": "Telegram",
+    "original_text": "**DarthFader\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57480.jpg"
+    ],
+    "ocr_texts": [
+      "DarthFader\n\n@cappersfree\nWet Wednesday Nuke Whales\n\n3-Unit Fades:\n\nArizona St. +21.5\nMissouri ML (-105)\n\n2-Unit Fades:\n\nColorado +8.5\nNets/Pelicans O229.5\n\n1-Unit Fade:\n\nKings ML (-105)"
+    ],
+    "expected_picks": [
+      {
+        "id": 57480,
+        "cn": "DarthFader",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Arizona St. +21.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57480,
+        "cn": "DarthFader",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Missouri ML",
+        "od": -105,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57480,
+        "cn": "DarthFader",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Colorado +8.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57480,
+        "cn": "DarthFader",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Nets vs Pelicans Over 229.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57480,
+        "cn": "DarthFader",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Kings ML",
+        "od": -105,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57495",
+    "source": "Telegram",
+    "original_text": "**HammeringHank\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57495.jpg"
+    ],
+    "ocr_texts": [
+      "HammeringHank\n\n@cappersfree\nCBB X POD\ud83c\udfc0\n\nMissouri +1.5 3U\ud83d\udee0\ufe0f"
+    ],
+    "expected_picks": [
+      {
+        "id": 57495,
+        "cn": "HammeringHank",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Missouri +1.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57475",
+    "source": "Telegram",
+    "original_text": "**PardonMyPick \n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57475.jpg"
+    ],
+    "ocr_texts": [
+      "10U CBB MAX WHALEPLAY\nNORTH CAROLINA -3 -118\n\n3U CBB P@cappersfree\nBUTLER ML -120\n\n2U ON EACH\nCBB TEXAS +5 -108\nNHL SENATORS ML -118 4 \u25c9 13:08"
+    ],
+    "expected_picks": [
+      {
+        "id": 57475,
+        "cn": "PardonMyPick",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "North Carolina -3",
+        "od": -118,
+        "u": 10.0,
+        "dt": null
+      },
+      {
+        "id": 57475,
+        "cn": "PardonMyPick",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Butler ML",
+        "od": -120,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57475,
+        "cn": "PardonMyPick",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Texas +5",
+        "od": -108,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57475,
+        "cn": "PardonMyPick",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Senators ML",
+        "od": -118,
+        "u": 4.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57491",
+    "source": "Telegram",
+    "original_text": "**TMS\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57491.jpg"
+    ],
+    "ocr_texts": [
+      "CBB VIP Selection (1 unit)\n@cappersfree\n\nLSU +5\n\n1 unit = 3-5% of weekly bankroll\n\nTicket #206621312 Jan 14th 1:49 PM\n\n\nJan 14th 7:00 PM\nSTRAIGHT BET\n[CBB] (704) LSU +5-130 (B+1)\n\n\n704\nKentucky\nU - 6\n\nSCHEDULED\n0 - 0\n\n703\nLSU\n12 - 4\n\nJan 14th 6:00 PM\n\nHALVES\nUK Wildcats\nLSU Tigers\n\nSTATS\nGENERAL\n1\n\n2\n\nT\nD\nD"
+    ],
+    "expected_picks": [
+      {
+        "id": 57491,
+        "cn": "TMS",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "LSU +5",
+        "od": -130,
+        "u": 1.0,
+        "dt": "2024-01-14"
+      }
+    ]
+  },
+  {
+    "id": "57481",
+    "source": "Telegram",
+    "original_text": "**DirtyBubbleBets\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57481.jpg"
+    ],
+    "ocr_texts": [
+      "DirtyBubbleBets\n@cappersfree\nCBB + NBA\n\n Auburn ML (-115) 1U\n\n Cincy -8 (-120) 1U\n\n Kansas State -2 (-120) 1U\n\n Pitt ML (-122) 1U\n\n Mavericks -2 (-120) 1U"
+    ],
+    "expected_picks": [
+      {
+        "id": 57481,
+        "cn": "DirtyBubbleBets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Auburn ML",
+        "od": -115,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57481,
+        "cn": "DirtyBubbleBets",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Cincy -8",
+        "od": -120,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57481,
+        "cn": "DirtyBubbleBets",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Kansas State -2",
+        "od": -120,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57481,
+        "cn": "DirtyBubbleBets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Pitt ML",
+        "od": -122,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57481,
+        "cn": "DirtyBubbleBets",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Mavericks -2",
+        "od": -120,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57461",
+    "source": "Telegram",
+    "original_text": "**A1Fantasy\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57461.jpg"
+    ],
+    "ocr_texts": [
+      "A1Fantasy APP Yesterday at 10:05 PM\n\n@cappersfree\n1u Evan Mobley o20.5 PA (-112 365/-114 FD/-115 HR/\nTS/-117 CZR/-120 DK/-125 Fliff)\n\nCavaliers.\n\n@cappersfree\n\nA1 Card for Saturday, 1/17\n\n1u Christian McCaffrey \ud83c\udfc8 o5.5 receptions\n\u2022 Not playing any bumps\n\n1u Khalil Shakir \ud83c\udff3\ufe0f\u200d\ud83c\udf08 o4.5 receptions"
+    ],
+    "expected_picks": [
+      {
+        "id": 57461,
+        "cn": "A1Fantasy",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Evan Mobley: Pts Over 20.5",
+        "od": -112,
+        "u": 1.0,
+        "dt": "2026-01-17"
+      },
+      {
+        "id": 57461,
+        "cn": "A1Fantasy",
+        "lg": "NFL",
+        "ty": "Player Prop",
+        "p": "Christian McCaffrey: Rec Over 5.5",
+        "od": null,
+        "u": 1.0,
+        "dt": "2026-01-17"
+      },
+      {
+        "id": 57461,
+        "cn": "A1Fantasy",
+        "lg": "NFL",
+        "ty": "Player Prop",
+        "p": "Khalil Shakir: Rec Over 4.5",
+        "od": null,
+        "u": 1.0,
+        "dt": "2026-01-17"
+      }
+    ]
+  },
+  {
+    "id": "57498",
+    "source": "Telegram",
+    "original_text": "**NickyCashin\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57498.jpg"
+    ],
+    "ocr_texts": [
+      "NickyCashin APP 1:26 PM 6pm @cappersfree Pitt ML -115 1.5U 7pm Kansas State IL -145 2U"
+    ],
+    "expected_picks": [
+      {
+        "id": 57498,
+        "cn": "NickyCashin",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Pitt ML",
+        "od": -115,
+        "u": 1.5,
+        "dt": null
+      },
+      {
+        "id": 57498,
+        "cn": "NickyCashin",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Kansas State ML",
+        "od": -145,
+        "u": 2.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57490",
+    "source": "Telegram",
+    "original_text": "**TTW\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57490.jpg"
+    ],
+    "ocr_texts": [
+      "@cappersfree\nCollege Basketball \ud83c\udfc0 (1/14/26)\n0.75U - Arizona -21.5 -110 (DK)\n\nTailToWin\nNBA Plays \ud83c\udfc0 (1/14/26)\n1U - Mavericks ML -138 (FD)\n0.75U - Darius Garland O24.5 pts + ast -117 (DK)\n0.75U - Jalen Brunson O28.5 pts -125 (FD)"
+    ],
+    "expected_picks": [
+      {
+        "id": 57490,
+        "cn": "TTW",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Arizona -21.5",
+        "od": -110,
+        "u": 0.75,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57490,
+        "cn": "TTW",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Mavericks ML",
+        "od": -138,
+        "u": 1.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57490,
+        "cn": "TTW",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Darius Garland: Pts + Ast Over 24.5",
+        "od": -117,
+        "u": 0.75,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57490,
+        "cn": "TTW",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Jalen Brunson: Pts Over 28.5",
+        "od": -125,
+        "u": 0.75,
+        "dt": "2026-01-14"
+      }
+    ]
+  },
+  {
+    "id": "57489",
+    "source": "Telegram",
+    "original_text": "**SeekingReturns\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57489.jpg"
+    ],
+    "ocr_texts": [
+      "SRC Group\n@srcgroup \u00b7 8m ago\n\n6PM CBB: VCU vs. Rhode Island\n\n@cappersfree\n\nPicks:\nVCU URI Over 144.5 -115 5U (FD)\nVCU TTO 74.5 -115 3U (DK)\nURI TTO 70.5 -112 3U (FD)\nVCU URI 1H Over 69.5 -106 3U (FD)\n\n6PM CBB: VCU vs. Rhode Island\n\nAs VCU and Rhode Island get set to meet for the first time this season in intra-Atlantic 10 action, these teams enter playing drastically different styles of basketball. VCU has played at an up-tempo pace, posting an overall record of 10-7 to the over on the season and 3-1 to the over in conference play. On the other side, Rhode Island has taken a far more methodical approach, resulting in an over-under record of 6-11 to the under overall and 1-3 to the under in conference action. Tonight, we should see the superior VCU squad go on the road and get the tempo.\n\nVCU has managed to score 81 points per game in conference play despite shooting just 45% from the field and 30% from three-point range. They now face a Rhode Island defense allowing 46% from the field and 40% from three-point range in conference play. Rhode Island is surrendering just 62 points per game, but they are doing so while allowing 14 field goal attempts and 6 made three-point field goals per game, numbers that are set to rise against a VCU offense averaging 17 field goal attempts and 7.5 made three-point field goals per game in conference play.\n\nOn the other side, while Rhode Island has managed to score just 63 points per game in conference action, that output is set for a rise. They have shot only 41% from the field and 30% from three-point range, while attempting just 54 field goal attempts per game. They are, however, taking on a VCU defense allowing 57% from the field, 35% from three-point range, and 58 field goal attempts per game in conference play. VCU is surrendering 80 points per game while allowing 5.8 made three-point field goals per game, facing a Rhode Island offense averaging 8.5 made three-point field goals per game in conference action.\n\nRhode Island is playing at just the 273rd-slowest pace in the country, dishing out assists on 55.7% of their possessions. VCU is playing at the 152nd-slowest pace, assisting on just 48% of their possessions. VCU is getting 16.8 points per game from the bench while allowing 16.5 points. Rhode Island is getting only 7.8 points per game from the bench while allowing 16.8 points.\n\nVCU: Quentin Hill (illness)\nRhode Island: Ishmael El-Amin (suspension)"
+    ],
+    "expected_picks": [
+      {
+        "id": 57489,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "VCU vs URI Over 144.5",
+        "od": -115,
+        "u": 5.0,
+        "dt": null
+      },
+      {
+        "id": 57489,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Team Prop",
+        "p": "VCU TTO 74.5",
+        "od": -115,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57489,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Team Prop",
+        "p": "URI TTO 70.5",
+        "od": -112,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57489,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Period",
+        "p": "1H VCU vs URI Over 69.5",
+        "od": -106,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57500",
+    "source": "Telegram",
+    "original_text": "**KimsPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57500.jpg"
+    ],
+    "ocr_texts": [
+      "KimsVIP \u272a @KimsVip \u00b7 13m\nTodays Card\n@cappersfree\nDallas mavericks ml (1U)\n\nUtah Jazz +4.5 (1U)\n\nNew Jersey devils ml (1U)\n\nBuffalo Sabres ml (1U)\n\nLet\u2019s sweep before Wake N Cash"
+    ],
+    "expected_picks": [
+      {
+        "id": 57500,
+        "cn": "KimsPicks",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Dallas Mavericks ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57500,
+        "cn": "KimsPicks",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Utah Jazz +4.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57500,
+        "cn": "KimsPicks",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "New Jersey Devils ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57500,
+        "cn": "KimsPicks",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Buffalo Sabres ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57432",
+    "source": "Telegram",
+    "original_text": "**TRAVY (Whale Play)**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57432.jpg"
+    ],
+    "ocr_texts": [
+      "Tuesday Whale Plays\n@capp free\nUNLV +4.5 (NCAAB)\n\u2713\nStraight Bet: 1 Unit\n1 Unit = 10% Bankroll\nThis is a read only chat"
+    ],
+    "expected_picks": [
+      {
+        "id": 57432,
+        "cn": "TRAVY",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "UNLV +4.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57473",
+    "source": "Telegram",
+    "original_text": "**BankrollBill\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57473.jpg"
+    ],
+    "ocr_texts": [
+      "14 January 2026\n\nBankrollBill APP 9:54 AM\n\nEuroLeague \ud83c\udfc0\n\n@cappersfree\nOlympiakos -9.5 -110 (1U)"
+    ],
+    "expected_picks": [
+      {
+        "id": 57473,
+        "cn": "BankrollBill",
+        "lg": "EUROLEAGUE",
+        "ty": "Spread",
+        "p": "Olympiakos -9.5",
+        "od": -110,
+        "u": 1.0,
+        "dt": "2026-01-14"
+      }
+    ]
+  },
+  {
+    "id": "57433",
+    "source": "Telegram",
+    "original_text": "**TMS**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57433.jpg"
+    ],
+    "ocr_texts": [
+      "NBA Premium Selection (2 units)\n\nHeat -1 \u2705\n@capperstree\n\nSee you at the window\n\nPlaced \u25bd Description Risk / Win\nGame Date\n\nTicket #20658811 Jan 13th 11:26 AM\n\n10800/\n10000\n\nJan 13th 7:40 PM\nSTRAIGHT BET\n[NBA] [546] MIA HEAT -1.5\n\nSuns\n\n0 - 0\n\nHeat\n\n24 - 15\n\nJan 13th 8:30 PM\n\n20 - 18\n\nPERIODS\nSTATS\nGENERAL\n1\n2\n3\n4\nT\nPHX\n- \n- \n- \n- \n- \nMIA\n- \n- \n- \n- \n-"
+    ],
+    "expected_picks": [
+      {
+        "id": 57433,
+        "cn": "TMS",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Heat -1.5",
+        "od": null,
+        "u": 2.0,
+        "dt": "2026-01-13"
+      }
+    ]
+  },
+  {
+    "id": "57429",
+    "source": "Telegram",
+    "original_text": "**FIVE**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57430.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57429.jpg"
+    ],
+    "ocr_texts": [
+      "JANUARY 13TH, 2026\n02:56 pm\nEarly games:\n*Golden Whale Parlay (1)\nTennessee money line\nOKC Thunder money line\n(College Basketball/NBA)\n\u2713 carifree\n*Golden Whale Parlay (2)\nTennessee money line\nProvidence +4.5 alternate\n(College Basketball)\n\u2717\n*Whale Bet (3)\nKent State money line\n(College Basketball) see less\n\ud83d\udfe1 Upcoming\nStarts in 54:43",
+      "JANUARY 13TH, 2026\n03:19 pm\nNight games:\n*Whale Parlay (4)\nTennessee money line @captainfree\nFlorida Gators money line\n(College Basketball)\n*Whale Parlay (5)\nTennessee money line\nSeton Hall alternate +9.5\n(College Basketball)\nKeep alerts on for other possible addition(s). see less"
+    ],
+    "expected_picks": [
+      {
+        "id": 57429,
+        "cn": "FIVE",
+        "lg": "NCAAB",
+        "ty": "Parlay",
+        "p": "(NCAAB) Tennessee ML / (NBA) OKC Thunder ML",
+        "od": null,
+        "u": 1.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57429,
+        "cn": "FIVE",
+        "lg": "NCAAB",
+        "ty": "Parlay",
+        "p": "(NCAAB) Tennessee ML / (NCAAB) Providence +4.5",
+        "od": null,
+        "u": 1.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57429,
+        "cn": "FIVE",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Kent State ML",
+        "od": null,
+        "u": 1.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57429,
+        "cn": "FIVE",
+        "lg": "NCAAB",
+        "ty": "Parlay",
+        "p": "(NCAAB) Tennessee ML / (NCAAB) Florida Gators ML",
+        "od": null,
+        "u": 1.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57429,
+        "cn": "FIVE",
+        "lg": "NCAAB",
+        "ty": "Parlay",
+        "p": "(NCAAB) Tennessee ML / (NCAAB) Seton Hall +9.5",
+        "od": null,
+        "u": 1.0,
+        "dt": "2026-01-13"
+      }
+    ]
+  },
+  {
+    "id": "57468",
+    "source": "Telegram",
+    "original_text": "**LearLocks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57468.jpg"
+    ],
+    "ocr_texts": [
+      "LEARLOCKS @cappersfree Soccer Germany bundesliga RB Leipzig TT OVER 1.5 1.5u -135"
+    ],
+    "expected_picks": [
+      {
+        "id": 57468,
+        "cn": "LearLocks",
+        "lg": "SOCCER",
+        "ty": "Total",
+        "p": "RB Leipzig TT Over 1.5",
+        "od": -135,
+        "u": 1.5,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57479",
+    "source": "Telegram",
+    "original_text": "**SeekingReturns\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57479.jpg"
+    ],
+    "ocr_texts": [
+      "SRC Group \u2022 15m ago\n\n7PM CBB: Davidson Vs. George Washington\n\n@srcgroup\n\nPicks:\n\n@cappersfree\n\nDAV GW Over 148.5 -110 5U (DK)\n\nDAV TTO 68.5 -106 3U (FD)\n\nGW TTO 80.5 -106 3U (TTO)\n\nDAV GW 1H Over 70.5 -110 3U (DK)\n\n7PM CBB: Davidson Vs. George Washington\n\nThrough the last seven meetings played between Davidson\nand George Washington on the hardwood, these teams have\ncombined for an over-under record of 5-1-1 favoring the over.\nTonight, as these Atlantic 10 rivals meet for the first time this\nseason, we should see another tight final score as George\nWashington forces Davidson to play up to their pace.\n\nThrough four conference games, Davidson has managed to\nscore 67.2 points per game, shooting just 41% from the field\nwhile attempting only 56 field goal attempts per game. Tonight,\nthey take on a George Washington defense surrendering 43%\nfrom the field and 58 field goal attempts per game in\nconference play. George Washington has allowed 71.2 points\nper game in conference action despite holding opponents to\njust 30% from three-point range and 7.5 made three-point field\ngoals per game, numbers that are set to rise against a\nDavidson offense hitting 33% from three-point range and 9\nmade three-point field goals per game in conference play.\n\nOn the other side of the ball, Davidson is surrendering 70.0\npoints per game in conference action, and those numbers are\nset to climb. They have allowed 43% from the field, 32% from\nthree-point range, 56 field goal attempts per game, and 8\nmade three-point field goals per game thus far. Tonight, they\nface a George Washington offense posting 51% from the field,\n39% from three-point field, 61 field goal attempts per game,\nand 13 made three-point field goals per game in conference\nplay, translating to 87.2 points per game.\n\nEven while playing at the 332nd-ranked pace of play\nnationally (bottom 9%), Davidson has scored 72.3 points per\ngame and surrendered 69.2 points per game, producing an\naverage game total of 141.5 points. Tonight, as they go on the\nroad to face a superior George Washington team playing at the\n61st-fastest pace in the country (top 17%), the game total is\nset to accelerate significantly, covering a number that\nis\nput thus to three-point superiority over a total."
+    ],
+    "expected_picks": [
+      {
+        "id": 57479,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "DAV GW Over 148.5",
+        "od": -110,
+        "u": 5.0,
+        "dt": null
+      },
+      {
+        "id": 57479,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Team Prop",
+        "p": "DAV TTO 68.5",
+        "od": -106,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57479,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Team Prop",
+        "p": "GW TTO 80.5",
+        "od": -106,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57479,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Period",
+        "p": "1H DAV GW Over 70.5",
+        "od": -110,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57471",
+    "source": "Telegram",
+    "original_text": "**BettingWithBush\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57471.jpg"
+    ],
+    "ocr_texts": [
+      "BettingWithBush\n@cappersfree\nNBA\n\nMAVS ML -107 1u\n\nRiding with our boy Cooper on ESPN."
+    ],
+    "expected_picks": [
+      {
+        "id": 57471,
+        "cn": "BettingWithBush",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "MAVS ML",
+        "od": -107,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57460",
+    "source": "Telegram",
+    "original_text": "**NickyCashin\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57460.jpg"
+    ],
+    "ocr_texts": [
+      "NickyCashin APP 8:21 AM\n5:30pm\nWinthrop +1.5 -105 1.5U\n\n@cappersfree\n5:30pm\nButler ML -105 2U\n\n6pm\nCincinnati -8 -115 2U\n\n6pm\nGeorge Washington -11.5 -105 2U\n\n8pm\nStanford +4 -110 2U\n\nNickyCashin APP 8:29 AM\n9pm\nUtah State -13.5 -110 2U"
+    ],
+    "expected_picks": [
+      {
+        "id": 57460,
+        "cn": "NickyCashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Winthrop +1.5",
+        "od": -105,
+        "u": 1.5,
+        "dt": "2024-01-22"
+      },
+      {
+        "id": 57460,
+        "cn": "NickyCashin",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Butler ML",
+        "od": -105,
+        "u": 2.0,
+        "dt": "2024-01-22"
+      },
+      {
+        "id": 57460,
+        "cn": "NickyCashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Cincinnati -8",
+        "od": -115,
+        "u": 2.0,
+        "dt": "2024-01-22"
+      },
+      {
+        "id": 57460,
+        "cn": "NickyCashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "George Washington -11.5",
+        "od": -105,
+        "u": 2.0,
+        "dt": "2024-01-22"
+      },
+      {
+        "id": 57460,
+        "cn": "NickyCashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Stanford +4",
+        "od": -110,
+        "u": 2.0,
+        "dt": "2024-01-22"
+      },
+      {
+        "id": 57460,
+        "cn": "NickyCashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Utah State -13.5",
+        "od": -110,
+        "u": 2.0,
+        "dt": "2024-01-22"
+      }
+    ]
+  },
+  {
+    "id": "57431",
+    "source": "Telegram",
+    "original_text": "**ISW**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57431.jpg"
+    ],
+    "ocr_texts": [
+      "College hoops\nToledo -130\n1U\n3500 bet\n cappersfree\n\nISW\n\nIsellwinners ISW 5:30 PM\n\nCollege hoops\nBama-Miss st Ov 173.5 -110\n1U\n3300 bet 30\n\nISW\nOv 170.5 typo 11\n\nThis is a read only chat"
+    ],
+    "expected_picks": [
+      {
+        "id": 57431,
+        "cn": "ISW",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Toledo ML",
+        "od": -130,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57431,
+        "cn": "ISW",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Bama vs Miss St Over 173.5",
+        "od": -110,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57483",
+    "source": "Telegram",
+    "original_text": "**CashItBaby\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57484.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57483.jpg"
+    ],
+    "ocr_texts": [
+      "NHL PLAYS\n\n(5U) GOLDEN KNIGHTS /KINGS O5.5\nGOALS -120\nBoth teams can score and this\nmatchup has been an Over machine\n\u2014 the last 5 meetings averaged 9\ngoals. Vegas is hot offensively and\nshaky in net, and the Kings have\nscored 5+ in four straight vs VGK.\nOver is the play.\n\nWHALE PLAYS\n\nMICHAEL PORTER JR (BKN) 24.5\nPOINTS -138\nMichael Porter Jr. has exceeded 24.5\npoints in 8 straight games on the road\n(30.2 points/game average). 100% in\nthe last 8 games.\n\nTREY MURPHY III (NOP) O30.5 PRA\n-104\nTrey Murphy III has exceeded 30.5\npts + reb + ast in 5 straight games\n(41.8 pts + reb + ast/game average).\n100% in the last 5 games.\n\nJONATHAN QUICK (NYR) O2.5\nGOALS AGAINST -155\nJonathan Quick has exceeded 2.5\ngoals against in 4 of his last 5 games\nat home (3.0 goals against/game\naverage). 80% in the last 5 games.",
+      "@cappersfree\nALL PLAYS 1/14/2025\n\nNBA PLAYS\n\n(SU) CAVALIERS ML -105\nIn a true coin-flip matchup, the value sits with the discounted side \u2014 and that\u2019s Cleveland. The Cavs have been a brutal ATS team all season (12-29) while Philly is one of the best (23-14-1), which naturally inflates this line toward the Sixers and creates value on the dog. Cleveland already beat Philly once, has the shooting recipe to repeat it, and they\u2019ve shown they won\u2019t shy away from hostile, playoff-style environments. Simply put, the wrong side is favored. Cavs ML.\n\nNCAAB PLAYS\n\n(SU) VANDERBILT -3.5 -110\nVandy is rolling and Texas can\u2019t guard. The Longhorns are dead last in the SEC in defensive efficiency and have allowed 85+ in every conference game \u2014 a brutal matchup against an elite Vandy offense. Texas has also gone 0-4 vs top-20 defenses, losing by double digits."
+    ],
+    "expected_picks": [
+      {
+        "id": 57483,
+        "cn": "CashItBaby",
+        "lg": "NHL",
+        "ty": "Total",
+        "p": "Golden Knights vs Kings Over 5.5 Goals",
+        "od": -120,
+        "u": 5.0,
+        "dt": "2025-01-14"
+      },
+      {
+        "id": 57483,
+        "cn": "CashItBaby",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Michael Porter Jr: Pts Over 24.5",
+        "od": -138,
+        "u": 1.0,
+        "dt": "2025-01-14"
+      },
+      {
+        "id": 57483,
+        "cn": "CashItBaby",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Trey Murphy III: PRA Over 30.5",
+        "od": -104,
+        "u": 1.0,
+        "dt": "2025-01-14"
+      },
+      {
+        "id": 57483,
+        "cn": "CashItBaby",
+        "lg": "NHL",
+        "ty": "Player Prop",
+        "p": "Jonathan Quick: Goals Against Over 2.5",
+        "od": -155,
+        "u": 1.0,
+        "dt": "2025-01-14"
+      },
+      {
+        "id": 57483,
+        "cn": "CashItBaby",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Cavaliers ML",
+        "od": -105,
+        "u": 1.0,
+        "dt": "2025-01-14"
+      },
+      {
+        "id": 57483,
+        "cn": "CashItBaby",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Vanderbilt -3.5",
+        "od": -110,
+        "u": 1.0,
+        "dt": "2025-01-14"
+      }
+    ]
+  },
+  {
+    "id": "57482",
+    "source": "Telegram",
+    "original_text": "**NewmarkTennis\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57482.jpg"
+    ],
+    "ocr_texts": [
+      "NewmarkTennis\n@cappersfree\nATP Adelaide + ATP Auckland\nWednesday-Thursday\n\nATP Adelaide\n\nMachac ML -128 (3u)\n\nPaul + Humbet MLP -136 (3u)\n\nATP Auckland\n\nMarozsan ML -125 (3u)\nMensik ML -150 (3u)"
+    ],
+    "expected_picks": [
+      {
+        "id": 57482,
+        "cn": "NewmarkTennis",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "Machac ML",
+        "od": -128,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57482,
+        "cn": "NewmarkTennis",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "Paul + Humbet MLP",
+        "od": -136,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57482,
+        "cn": "NewmarkTennis",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "Marozsan ML",
+        "od": -125,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57482,
+        "cn": "NewmarkTennis",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "Mensik ML",
+        "od": -150,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57467",
+    "source": "Telegram",
+    "original_text": "**Matthewp07\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57467.jpg"
+    ],
+    "ocr_texts": [
+      "@cappersfree\nNBA Plays\n\nMix and Match:\n\nJarace Walker under 9.5 points\n\nScottie Barnes over 20.5 points\n\nNikola Vucevic over 20.5 pts+asts\n\nEvan Mobley over 8.5 rebounds\n\nLet's get it! \ud83d\udcb0"
+    ],
+    "expected_picks": [
+      {
+        "id": 57467,
+        "cn": "Matthewp07",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Jarace Walker: Pts Under 9.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57467,
+        "cn": "Matthewp07",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Scottie Barnes: Pts Over 20.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57467,
+        "cn": "Matthewp07",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Nikola Vucevic: Pts+Ast Over 20.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57467,
+        "cn": "Matthewp07",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Evan Mobley: Reb Over 8.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57454",
+    "source": "Telegram",
+    "original_text": "\u23fa**MAIN PLAY - \u2705**\n\n\u23fa**THE OWNER\u2019S SMALL PERSONAL PLAY - \u2705\n\nMain Play cashed but everyone who was on board is getting today\u2019s VIP package for FREE **\ud83e\udd1d**\n\n**\u23fa**REALLY THE** **CHEAPEST PRICES IN THE INDUSTRY **(just hit me and we will always figure something out)\n\n**Join The BEST Team**\n**\u270d\ufe0f For any questions reach out to: ****@cappersfree**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57455.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57454.jpg"
+    ],
+    "ocr_texts": [
+      "7:55\n\nS\n\n Settled Bets \u25bd\n\n119-98\n\nStake\n\nOdds\nStake\nPayout\n\n-120\n$5,000.00 \u24c9\n$9,150.00 \u24c9\n\nWin 1:54 PM 1/13/2026\n@cappersfree\n\u2713 Pittsburgh Penguins - Tampa Bay Lightning\nTue, Jan 13 4:00 PM\nWinner (Incl. Overtime and Penalties)\n\u2713 Tampa Bay Lightning\n\n-139\n1-2\n\nStake\n\nOdds\nStake\nPayout\n\n-139\n$80,000.00 \u24c9\n$137,600.00 \u24c9\n\nWin 2:20 PM 1/13/2026\n\nView All\n\n\u2261 Browse\n\u2786 Casino\n\ud83d\uded2 Bet Slip\n\u2797 Sports\n\ud83d\udcac Chat\n\n<  stake.com\n",
+      "7:54\n\nS\n\n$   T   \u2335\n\nSettled Bets \u2335\n\nWin 2:01 PM 1/13/2026 @cappersfree\nOklahoma City Thunder - San Antonio Spurs\nTue, Jan 13 5:00 PM\nHandicap (Incl. Overtime)\n\u2713 Oklahoma City Thunder (-8.5)\n119-98\n\nStake\n\nOdds -120\nStake $5,000.00 \u20b8\nPayout $9,150.00 \u20b8\n\nWin 1:54 PM 1/13/2026\n\u2713 Pittsburgh Penguins - Tampa Bay Lightning\nTue, Jan 13 4:00 PM\nWinner (Incl. Overtime and Penalties)\n\u2713 Tampa Bay Lightning\n1-2\n\n...\n\nView All\n\n\u2261 Browse   \u27ac Casino   \u2812 Bet Slip   \u27b6 Sports   \u2812 Chat\n\n<  \u2317  stake.com"
+    ],
+    "expected_picks": [
+      {
+        "id": 57454,
+        "cn": "The Owner",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Tampa Bay Lightning ML",
+        "od": -139,
+        "u": 80000.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57454,
+        "cn": "The Owner",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Oklahoma City Thunder -8.5",
+        "od": -120,
+        "u": 5000.0,
+        "dt": "2026-01-13"
+      }
+    ]
+  },
+  {
+    "id": "57470",
+    "source": "Telegram",
+    "original_text": "**ZachsBets\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57470.jpg"
+    ],
+    "ocr_texts": [
+      "SOCCER/NCAAB MAX PARLAY -130 (7.5u)\n\n@cappersfree\nMonchengladbach/Hoffenheim BTTS +\nPurdue ML"
+    ],
+    "expected_picks": [
+      {
+        "id": 57470,
+        "cn": "ZachsBets",
+        "lg": "Other",
+        "ty": "Parlay",
+        "p": "(SOCCER) Monchengladbach/Hoffenheim BTTS + (NCAAB) Purdue ML",
+        "od": -130,
+        "u": 7.5,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57486",
+    "source": "Telegram",
+    "original_text": "**BankrollBill\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57486.jpg"
+    ],
+    "ocr_texts": [
+      "BankrollBill APP 11:59 AM CBB \ud83c\udfc0 Part 1/2 - Wednesday @cappersfree Holy Cross -4 -115 (1.5U) Wyoming ML +105 (1U) UCLA/Penn State over 148.5 -110 (1U) \u2022 Huge day yesterday of winners! Let\u2019s do it again tonight folks \ud83c\udf40"
+    ],
+    "expected_picks": [
+      {
+        "id": 57486,
+        "cn": "BankrollBill",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Holy Cross -4",
+        "od": -115,
+        "u": 1.5,
+        "dt": null
+      },
+      {
+        "id": 57486,
+        "cn": "BankrollBill",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Wyoming ML",
+        "od": 105,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57486,
+        "cn": "BankrollBill",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "UCLA vs Penn State Over 148.5",
+        "od": -110,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57485",
+    "source": "Telegram",
+    "original_text": "**A11Bets\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57485.jpg"
+    ],
+    "ocr_texts": [
+      "A11Bets\n@cappersfree\nCBB\n\nAuburn ML (+100) 2U\n\nPittsburgh ML (-113) 2U\n\nStanford +4 (-115) 2U\n\nKansas State + Michigan (-120) 2U\n\nKentucky + Duke (-130) 1.5U\n\nCincinnati + UCLA (-112) 1U\n\nCincinnati -8 (-110) 1U\n\nCavaliers ML (-102) 1U"
+    ],
+    "expected_picks": [
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Auburn ML",
+        "od": 100,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Pittsburgh ML",
+        "od": -113,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Stanford +4",
+        "od": -115,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Kansas State ML",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Michigan ML",
+        "od": -120,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Duke ML",
+        "od": -130,
+        "u": 1.5,
+        "dt": null
+      },
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Cincinnati ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "UCLA ML",
+        "od": -112,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Cincinnati -8",
+        "od": -110,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57485,
+        "cn": "A11Bets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Cavaliers ML",
+        "od": -102,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006441390612619641",
+    "source": "Twitter",
+    "original_text": "Bill \"Krackman\" Krackomberger\n\n4% Texas -5.5 (-105)\n5% Duke -122 ML",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006441390612619641,
+        "cn": "Bill \"Krackman\" Krackomberger",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Texas -5.5",
+        "od": -105,
+        "u": 4.0,
+        "dt": null
+      },
+      {
+        "id": 2006441390612619641,
+        "cn": "Bill \"Krackman\" Krackomberger",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Duke ML",
+        "od": -122,
+        "u": 5.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57459",
+    "source": "Telegram",
+    "original_text": "**PropJoe\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57459.jpg"
+    ],
+    "ocr_texts": [
+      "14 January 2026\n\nPropJoe 6:35 AM\nNBA\n1U Brooklyn Nets -1.5 -110\n\n@cappersfree\nCB\n2U Northwestern +9 -110\n2U Kentucky -3.5 -110\n2U St. Bonaventure -1 -105\n1U Kansas State -1 -110\n\n@everyone\n\n\u2705 9 \ud83d\udd25 3 \ud83d\ude80 4 \ud83e\udd47 2 \ud83d\ude21 2\n\nDone reading? Check out #chat.\n\u2192"
+    ],
+    "expected_picks": [
+      {
+        "id": 57459,
+        "cn": "PropJoe",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Northwestern +9",
+        "od": -110,
+        "u": 2.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57459,
+        "cn": "PropJoe",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Kentucky -3.5",
+        "od": -110,
+        "u": 2.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57459,
+        "cn": "PropJoe",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "St. Bonaventure -1",
+        "od": -105,
+        "u": 2.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57459,
+        "cn": "PropJoe",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Kansas State -1",
+        "od": -110,
+        "u": 1.0,
+        "dt": "2026-01-14"
+      }
+    ]
+  },
+  {
+    "id": "2006432350113275956",
+    "source": "Twitter",
+    "original_text": "Cash Cing\n\nCFB\n2u - Duke -2.5 \n1.5u - Utah -14",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006432350113275956,
+        "cn": "Cash Cing",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Duke -2.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006432350113275956,
+        "cn": "Cash Cing",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Utah -14",
+        "od": null,
+        "u": 1.5,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57499",
+    "source": "Telegram",
+    "original_text": "**SeekingReturns\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57499.jpg"
+    ],
+    "ocr_texts": [
+      "SRC Group\n@srcgroup \u2022 18m ago\n\n9PM CBB: South Carolina Vs. Arkansas\n\nPicks:\nSC ARK Over 155.5 -125 SU (DK)\nSC TTO 71.5 -120 3U (FD)\nARK TTO 83.5 -131 3U (DK)\nSC ARK 1H Over 73.5 -122 3U (FD)\n\n9PM CBB: South Carolina Vs. Arkansas\n\nThrough the last ten meetings between South Carolina and Arkansas, these teams have split the over-under 5-5. Tonight, however, this matchup sets up very differently as two teams with drastically opposing tempo collide. South Carolina has operated at one of the slowest paces in the country, while Arkansas has consistently pushed tempo every time they have taken the floor. With Arkansas at home and clearly the superior side, their pace is set to dictate the flow of this game.\n\nThrough three conference games, South Carolina is scoring 73 points per game while shooting 43% from the field and 35% from three-point range on just 56 field goal attempts per game. Tonight, they face Arkansas defense allowing 53% from the field and 38% from three-point range while giving up 60 field goal attempts per game in conference play. Arkansas has surrendered 86 points per game in conference on 77 made three-point field goals per game, a profile that lines up poorly against a South Carolina offense averaging 9 made three-point field goals per game.\n\nOn the other side, South Carolina is surrendering 75.5 points per game in conference action. They have allowed 43% from the field, 32% from three-point range, and 8 made three-point field goals per game. Tonight, they face an Arkansas offense shooting 46% from the field and 37% from three-point range while averaging 8.5 made three-point field goals per game. Arkansas is scoring 85 points per game in conference play on 59 field goal attempts, a matched up against a South Carolina defense allowing 61 field goal attempts per game.\n\nEven while playing at the 307th-ranked pace nationally (bottom 15%), South Carolina is still scoring 80 points per game and surrendering 70 points per game, producing an average game total of 150. Tonight, as they go up and down at a much higher tempo, we expect the scoring to rise. We\u2019re also keying in on South Carolina\u2019s ability to shoot three-pointers at a 35% clip, which is 11% better than their season average. \n\n@cappersfree"
+    ],
+    "expected_picks": [
+      {
+        "id": 57499,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "South Carolina vs Arkansas Over 155.5",
+        "od": -125,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 57499,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Team Prop",
+        "p": "South Carolina: Total Points Over 71.5",
+        "od": -120,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57499,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Team Prop",
+        "p": "Arkansas: Total Points Over 83.5",
+        "od": -131,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57499,
+        "cn": "SeekingReturns",
+        "lg": "NCAAB",
+        "ty": "Period",
+        "p": "1H South Carolina vs Arkansas Over 73.5",
+        "od": -122,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006430912951763277",
+    "source": "Twitter",
+    "original_text": "Dormroom Degenerates\n\nCFB\nArizona State/Duke o47",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006430912951763277,
+        "cn": "Dormroom Degenerates",
+        "lg": "NCAAF",
+        "ty": "Total",
+        "p": "Arizona State vs Duke Over 47",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006475040884396508",
+    "source": "Twitter",
+    "original_text": "August Young\n\nNHL\n4* Jets +100",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006475040884396508,
+        "cn": "August Young",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Jets ML",
+        "od": 100,
+        "u": 4.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006441188690375073",
+    "source": "Twitter",
+    "original_text": "Gianni the Greek\n\nCFB \n4% Michigan +7.5 (-120)",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006441188690375073,
+        "cn": "Gianni the Greek",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Michigan +7.5",
+        "od": -120,
+        "u": 1.0,
+        "dt": "2026-01-22"
+      }
+    ]
+  },
+  {
+    "id": "2006475263878770711",
+    "source": "Twitter",
+    "original_text": "Ross Benjamin\n\n2% Troy -8.5 (-110)\n2% Connecticut -11.5 (-110)\n2% High Point -10.5 (-108)\n3% Duke -3 (-118)\n3% Miami Florida/Ohio State u41.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006475263878770711,
+        "cn": "Ross Benjamin",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Troy -8.5",
+        "od": -110,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006475263878770711,
+        "cn": "Ross Benjamin",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Connecticut -11.5",
+        "od": -110,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006475263878770711,
+        "cn": "Ross Benjamin",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "High Point -10.5",
+        "od": -108,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006475263878770711,
+        "cn": "Ross Benjamin",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Duke -3",
+        "od": -118,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 2006475263878770711,
+        "cn": "Ross Benjamin",
+        "lg": "NCAAF",
+        "ty": "Total",
+        "p": "Miami Florida/Ohio State Under 41.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57462",
+    "source": "Telegram",
+    "original_text": "**MrBigBets, Picks4Dayzzz & AndersPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57464.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57463.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57462.jpg"
+    ],
+    "ocr_texts": [
+      "@cappersfree\n1 More CBB ADD TMRW\nSt Bonaventure -1.5 -110 1U(Caesars)\nI know i said smaller volume and ik we\u2019ve been colder but i actually have to bet this. Almost certainly our final add for tmrw\n\nAndersPicks\nWednesday Card\nWow, thats a 5-0 Card\nCBB:\nUAB ML -120 1.5U\nCincy -6.5 -110 1.25U\nButler ML -112 1U\nADD:\nBoston University ML +108 1U(this line makes no sense to me everything i look at has them over a 4 point favorite. Prolly worth a bigger bet but in just sketched out to just 1U)\nPepperdine +2 -110 1U(Caesars, 365... 2.5 118 at DK)",
+      "@cappersfree\nFull Card w/ 5U \u2b50\nCBB\nVanderbilt -5 -120 5U \u2b50\nOle Miss +10.5 -110 2U\nSMU -7.5 -110 2U\nArizona -21.5 -115 2U",
+      "@cappersfree\n1/14 cbb plays\n\nTexas +5.5 -110 1u\nTexas Tech -17.5 -110 1u\nButler ML -120 1u\n\nHere we go. Another great college slate tonight! Lets profit again!\n\nTexas +5.5 over Vandy is a good read in my opinion. Vandy has played out of their minds this season offensively so far. But this is not as good of a team as the record shows. There are holes in this team defensively that have yet to be exposed significantly. I think they\u2019ll have trouble here on the road tonight.\n\nTexas Tech by 20+ tonight vs Utah. Really just banking on the better team showing up and running them out the gym. Texas Tech is very capable of that\n\nButler ML is a good buy low spot after they\u2019ve dropped a few straight to begin conference play. But Xavier will be the easiest opponent they\u2019ve faced in conference play so far"
+    ],
+    "expected_picks": [
+      {
+        "id": 57462,
+        "cn": "MrBigBets",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "St Bonaventure -1.5",
+        "od": -110,
+        "u": 1.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "AndersPicks",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "UAB ML",
+        "od": -120,
+        "u": 1.5,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "AndersPicks",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Cincy -6.5",
+        "od": -110,
+        "u": 1.25,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "AndersPicks",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Butler ML",
+        "od": -112,
+        "u": 1.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "AndersPicks",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Boston University ML",
+        "od": 108,
+        "u": 1.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "AndersPicks",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Pepperdine +2",
+        "od": -110,
+        "u": 1.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "MrBigBets",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Vanderbilt -5",
+        "od": -120,
+        "u": 5.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "MrBigBets",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Ole Miss +10.5",
+        "od": -110,
+        "u": 2.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "MrBigBets",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "SMU -7.5",
+        "od": -110,
+        "u": 2.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "MrBigBets",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Arizona -21.5",
+        "od": -115,
+        "u": 2.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "Picks4Dayzzz",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Texas +5.5",
+        "od": -110,
+        "u": 1.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "Picks4Dayzzz",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Texas Tech -17.5",
+        "od": -110,
+        "u": 1.0,
+        "dt": "2026-01-22"
+      },
+      {
+        "id": 57462,
+        "cn": "Picks4Dayzzz",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Butler ML",
+        "od": -120,
+        "u": 1.0,
+        "dt": "2026-01-22"
+      }
+    ]
+  },
+  {
+    "id": "2006426775287710126",
+    "source": "Twitter",
+    "original_text": "Picks 4 Dayzzz\n\nNBA\n5u - Cavaliers -6\n\nCFB\n2u - Michigan +7.5 \n2u - Ohio State -9.5 \n\nCBB\n2u - UConn -11.5 \n2u - Villanova -13",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006426775287710126,
+        "cn": "Picks 4 Dayzzz",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Cavaliers -6",
+        "od": null,
+        "u": 5.0,
+        "dt": null
+      },
+      {
+        "id": 2006426775287710126,
+        "cn": "Picks 4 Dayzzz",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Michigan +7.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006426775287710126,
+        "cn": "Picks 4 Dayzzz",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Ohio State -9.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006426775287710126,
+        "cn": "Picks 4 Dayzzz",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "UConn -11.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006426775287710126,
+        "cn": "Picks 4 Dayzzz",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Villanova -13",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57476",
+    "source": "Telegram",
+    "original_text": "**CalebPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57478.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57477.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57476.jpg"
+    ],
+    "ocr_texts": [
+      "14 January 2026\n\nCaleb \u270d CPIK 11:40 AM\nAussie Open@cappersfree\nJaime Faria -160 3U\nYibing Wu 2-0 -110 3U\n\nATP:\nMpetshi/Mensik 025.5 -110 4U\nTomas Machac -135 4U\n\n@VIP\n\nNEW MESSAGES\n\nCaleb \u270d CPIK 12:22 PM\nAustralian Open Futures\n\nMen's Winner:\nAlexander Zverev +2800 1U\n\nWomen's Winner:\nAmanda Anisimova +1000 1U\n\n@VIP\n\nThis is a threads only channel.\n\nCreate Thread",
+      "14 January 2026\nCaleb \ud83c\udf40 CPIK 11:47 AM\nNHL@cappersfree\nBuffalo Sabres -130 4U\n@VIP\nThis is a threads only channel.\nCreate Thread",
+      "14 January 2026\nCaleb \ud83d\udd25 CPIK 11:58 AM\nCBB @cappersfree\nKansas State -155 3U\n@VIP\nDone reading? Check out #\ud83d\udcac CHAT-ROOM."
+    ],
+    "expected_picks": [
+      {
+        "id": 57476,
+        "cn": "CalebPicks",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "Jaime Faria ML",
+        "od": -160,
+        "u": 3.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57476,
+        "cn": "CalebPicks",
+        "lg": "TENNIS",
+        "ty": "Spread",
+        "p": "Yibing Wu 2-0",
+        "od": -110,
+        "u": 3.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57476,
+        "cn": "CalebPicks",
+        "lg": "TENNIS",
+        "ty": "Total",
+        "p": "ATP: Mpetshi/Mensik Over 25.5",
+        "od": -110,
+        "u": 4.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57476,
+        "cn": "CalebPicks",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "Tomas Machac ML",
+        "od": -135,
+        "u": 4.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57476,
+        "cn": "CalebPicks",
+        "lg": "TENNIS",
+        "ty": "Future",
+        "p": "Australian Open Men's Winner: Alexander Zverev",
+        "od": 2800,
+        "u": 1.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57476,
+        "cn": "CalebPicks",
+        "lg": "TENNIS",
+        "ty": "Future",
+        "p": "Australian Open Women's Winner: Amanda Anisimova",
+        "od": 1000,
+        "u": 1.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57476,
+        "cn": "CalebPicks",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Buffalo Sabres ML",
+        "od": -130,
+        "u": 4.0,
+        "dt": "2026-01-14"
+      },
+      {
+        "id": 57476,
+        "cn": "CalebPicks",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Kansas State ML",
+        "od": -155,
+        "u": 3.0,
+        "dt": "2026-01-14"
+      }
+    ]
+  },
+  {
+    "id": "2006424769336586627",
+    "source": "Twitter",
+    "original_text": "Hammering Hank\n\nCFB\n3u - Michigan +7",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006424769336586627,
+        "cn": "Hammering Hank",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Michigan +7",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006431350556156008",
+    "source": "Twitter",
+    "original_text": "Anders Picks\n\n1u - Ohio State/Miami u41.5 \n1u - Duke -2 \n1u - Michigan +7.5 \n1u - Michigan TT o20.5 \n1u - Utah -15.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006431350556156008,
+        "cn": "Anders Picks",
+        "lg": "NCAAF",
+        "ty": "Total",
+        "p": "Ohio State vs Miami Under 41.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006431350556156008,
+        "cn": "Anders Picks",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Duke -2",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006431350556156008,
+        "cn": "Anders Picks",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Michigan +7.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006431350556156008,
+        "cn": "Anders Picks",
+        "lg": "NCAAF",
+        "ty": "Team Prop",
+        "p": "Michigan: Total Points Over 20.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006431350556156008,
+        "cn": "Anders Picks",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Utah -15.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006476272436981805",
+    "source": "Twitter",
+    "original_text": "Big Al McMordie\n\nNHL\n1* Stars -155, 8:05 pm\n\nNBA\n1* Nuggets +6.5, 7:40 pm\n\nCFB\n4* Ohio St. - 9.5\n1* Ohio State/Miami Florida o40",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006476272436981805,
+        "cn": "Big Al McMordie",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Stars ML",
+        "od": -155,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006476272436981805,
+        "cn": "Big Al McMordie",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Nuggets +6.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006476272436981805,
+        "cn": "Big Al McMordie",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Ohio St. -9.5",
+        "od": null,
+        "u": 4.0,
+        "dt": null
+      },
+      {
+        "id": 2006476272436981805,
+        "cn": "Big Al McMordie",
+        "lg": "NCAAF",
+        "ty": "Total",
+        "p": "Ohio State vs Miami Florida Over 40",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57469",
+    "source": "Telegram",
+    "original_text": "**A1Fantasy\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57469.jpg"
+    ],
+    "ocr_texts": [
+      "NEW MESSAGES\nA1Fantasy APP 9:21AM\n\n@cappersfree\n0.85u Michael Porter Jr o36.5 PRA (-115 HR/-118 MGM/-122 FD/-125 CZR/-130 Fliff)\n\nNets. 33.5 PR best alt for .8u. 37.5 PRA is .7u."
+    ],
+    "expected_picks": [
+      {
+        "id": 57469,
+        "cn": "A1Fantasy",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Michael Porter Jr: PRA Over 36.5",
+        "od": -115,
+        "u": 0.85,
+        "dt": null
+      },
+      {
+        "id": 57469,
+        "cn": "A1Fantasy",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Nets: PR Over 33.5",
+        "od": null,
+        "u": 0.8,
+        "dt": null
+      },
+      {
+        "id": 57469,
+        "cn": "A1Fantasy",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Michael Porter Jr: PRA Over 37.5",
+        "od": null,
+        "u": 0.7,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006426948340428933",
+    "source": "Twitter",
+    "original_text": "Ben Burns\n\n4% Stars -160\n4% Nebraska/Utah 1Q o10.0\n3% UMKC +11",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006426948340428933,
+        "cn": "Ben Burns",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Stars -160",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006426948340428933,
+        "cn": "Ben Burns",
+        "lg": "NCAAF",
+        "ty": "Total",
+        "p": "Nebraska vs Utah 1Q Over 10.0",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006426948340428933,
+        "cn": "Ben Burns",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "UMKC +11",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006427036588585160",
+    "source": "Twitter",
+    "original_text": "Don Buster\n\nNHL\n3% Stars -155",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006427036588585160,
+        "cn": "Don Buster",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Stars ML",
+        "od": -155,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006431591095218354",
+    "source": "Twitter",
+    "original_text": "Bet Sharper\n\nCFB\nMichigan/Texas u48.5\nOhio State -9.5\n\nCBB\nTowson -5.5\nSt Johns -9",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006431591095218354,
+        "cn": "Bet Sharper",
+        "lg": "NCAAF",
+        "ty": "Total",
+        "p": "Michigan vs Texas Under 48.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006431591095218354,
+        "cn": "Bet Sharper",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Ohio State -9.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006431591095218354,
+        "cn": "Bet Sharper",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Towson -5.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 2006431591095218354,
+        "cn": "Bet Sharper",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "St Johns -9",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006432192432570564",
+    "source": "Twitter",
+    "original_text": "Parlay Safari\n\nCFB\n2u - Utah/Nebraska o50.5 \n4u - Miami +9.5 \n\nCBB\n2u - Charleston +3.5 \n2u - Duke -27.5 \n\nNBA Player Prop\n2u - Paolo Banchero (ORL) o24.5 points\n1u - Paolo Banchero (ORL) o24.5 points + Ryan Rollins (MIL) o24.5 PRA",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006432192432570564,
+        "cn": "Safari",
+        "lg": "NCAAF",
+        "ty": "Parlay",
+        "p": "(NCAAF) Utah/Nebraska Over 50.5 / (NCAAF) Miami +9.5",
+        "od": null,
+        "u": 6.0,
+        "dt": null
+      },
+      {
+        "id": 2006432192432570564,
+        "cn": "Safari",
+        "lg": "NCAAB",
+        "ty": "Parlay",
+        "p": "(NCAAB) Charleston +3.5 / (NCAAB) Duke -27.5",
+        "od": null,
+        "u": 4.0,
+        "dt": null
+      },
+      {
+        "id": 2006432192432570564,
+        "cn": "Safari",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Paolo Banchero: Pts Over 24.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006432192432570564,
+        "cn": "Safari",
+        "lg": "NBA",
+        "ty": "Player Prop",
+        "p": "Paolo Banchero: Pts Over 24.5 + Ryan Rollins: PRA Over 24.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006427156784787588",
+    "source": "Twitter",
+    "original_text": "Gianni the Greek\n\n1% Michigan ML +220",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006427156784787588,
+        "cn": "Gianni the Greek",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Michigan ML",
+        "od": 220,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006427828716450307",
+    "source": "Twitter",
+    "original_text": "Porter Picks\n\nNBA\n5u - Spurs ML \n\nCFB\n4u - Michigan +7",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006427828716450307,
+        "cn": "Porter Picks",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Spurs ML",
+        "od": null,
+        "u": 5.0,
+        "dt": null
+      },
+      {
+        "id": 2006427828716450307,
+        "cn": "Porter Picks",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Michigan +7",
+        "od": null,
+        "u": 4.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006427446959288567",
+    "source": "Twitter",
+    "original_text": "Marc Lawrence\n\n3* Arizona State +3",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006427446959288567,
+        "cn": "Marc Lawrence",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Arizona State +3",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006475639365448073",
+    "source": "Twitter",
+    "original_text": "Jack Jones\n\n20* Pelicans -110\n20* Nuggets/Raptors o157.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006475639365448073,
+        "cn": "Jack Jones",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Pelicans ML",
+        "od": -110,
+        "u": 20.0,
+        "dt": null
+      },
+      {
+        "id": 2006475639365448073,
+        "cn": "Jack Jones",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Nuggets vs Raptors Over 157.5",
+        "od": null,
+        "u": 20.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463684555142860947",
+    "source": "Discord",
+    "original_text": "====\n\nProven winner \n6u Pistons over 230.5\n\n\n======\n\nPlatinumLocks\n\nPlatinum Locks 25U VIP\nPLAY\nToronto Maple Leafs ML\n\n\n====\n\nHh",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463684555142860947,
+        "cn": "Platinum Locks",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Pistons vs Opponent Over 230.5",
+        "od": null,
+        "u": 6.0,
+        "dt": null
+      },
+      {
+        "id": 1463684555142860947,
+        "cn": "Platinum Locks",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Toronto Maple Leafs ML",
+        "od": null,
+        "u": 25.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1461500724285542494",
+    "source": "Discord",
+    "original_text": "\ud83d\udc4d Griffin Murphy:\n8U GOY\nVermont -13.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1461500724285542494,
+        "cn": "Griffin Murphy",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Vermont -13.5",
+        "od": null,
+        "u": 8.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463661994962849792",
+    "source": "Discord",
+    "original_text": "Mainplay \n\nCavs -3.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463661994962849792,
+        "cn": "Mainplay",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Cavs -3.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006427643051388944",
+    "source": "Twitter",
+    "original_text": "SmartMoneySports \n\n2u - Dayton -16.5 \n2u - Michigan  +7.5 \n2u - Utah Utes -14 \n2u - St. Louis -21.5 \n2u - Ohio State  -9.5 -110",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006427643051388944,
+        "cn": "SmartMoneySports",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Dayton -16.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006427643051388944,
+        "cn": "SmartMoneySports",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Michigan +7.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006427643051388944,
+        "cn": "SmartMoneySports",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Utah Utes -14",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006427643051388944,
+        "cn": "SmartMoneySports",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "St. Louis -21.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 2006427643051388944,
+        "cn": "SmartMoneySports",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Ohio State -9.5",
+        "od": -110,
+        "u": 2.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "2006427399635017939",
+    "source": "Twitter",
+    "original_text": "Teddy Covers \n\n3% Miami/Ohio State u41 (-110)\n3% Duke -3.0 (-110)",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 2006427399635017939,
+        "cn": "Teddy Covers",
+        "lg": "NCAAF",
+        "ty": "Total",
+        "p": "Miami/Ohio State Under 41",
+        "od": -110,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 2006427399635017939,
+        "cn": "Teddy Covers",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Duke -3.0",
+        "od": -110,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463649816562241709",
+    "source": "Discord",
+    "original_text": "Ben Burns\nAdded \n4% Youngstown St -5.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463649816562241709,
+        "cn": "Ben Burns",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Youngstown St -5.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1461133116197437542",
+    "source": "Discord",
+    "original_text": "\ud83c\udf1f Miguel Conneeke (346-206 POD, marketed) (14-9 CFB) (59-30) (19-9 nfl ) (5-2 nhl) (45-25 nba) (15-9 CBB) (6-3 nhl) (12-7 CFB) (2-0 max) (54-36 MLB)(19-15 NFL 24\u2019)(13-9 NHL 24\u2019)(20-9 CBB)(54-32 MLB)(21-14 NFL)(10-5 NBA)(3-2 CBB)(1-1 NHL)(6-3 CFB)\nPelicans",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1461133116197437542,
+        "cn": "Miguel Conneeke",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Pelicans ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57496",
+    "source": "Telegram",
+    "original_text": "**PropJoe\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57496.jpg"
+    ],
+    "ocr_texts": [
+      "NEW MESSAGES\n\nPropJoe 12:56 PM\n\nUpgrading Kansas State -1.5 -110 from a 1U play to 3U POTW\n@cappersfree\nAnalysis \ud83d\udccd\n\nUCF comes in hot at 9-1 in their last 10, while Kansas\nState sits on a three-game skid, but this is a classic\nbuy-low spot. K-State\u2019s shooting profile stands out,\nranking top 30 in both threes made and three-point\npercentage, and they also have the best player on the\nfloor in PJ Haggerty, an All-American caliber guard.\nBoth teams can be sloppy with the ball, but talent\nand shot-making tend to win these spots, especially\nat home. With UCF\u2019s recent form inflating the line and\ntheir underlying metrics less impressive, I\u2019ll buy low\non Kansas State at the shortest price point.\n\n@everyone\n\n\u2705 2 \ud83d\udcaa 1 \ud83d\ude80 1 \ud83d\ude21 1 \u2764\ufe0f 1\n\nDone reading? Check out #chat. \u2192\n@cappersfree"
+    ],
+    "expected_picks": [
+      {
+        "id": 57496,
+        "cn": "PropJoe",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Kansas State -1.5",
+        "od": -110,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463682953635954849",
+    "source": "Discord",
+    "original_text": "\u2705Dave Price\n\nMaryland +19\n\n\u2705Big Al McMordie\n\nNHL \n1* Maple Leafs -115\n\nNBA \n3* Knicks - 11\n\nCBB \n4* Drake +5.5\n3* W. Carolina +9.5\n3* W. Kentucky +2.5\n3* Grand Canyon -1\n1* N. Alabama +12.5\n1* E. Carolina +12\n1* Texas-San Antonio +16",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463682953635954849,
+        "cn": "Dave Price",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Maryland +19",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463682953635954849,
+        "cn": "Big Al McMordie",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Maple Leafs -115",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463682953635954849,
+        "cn": "Big Al McMordie",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Knicks -11",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463682953635954849,
+        "cn": "Big Al McMordie",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Drake +5.5",
+        "od": null,
+        "u": 4.0,
+        "dt": null
+      },
+      {
+        "id": 1463682953635954849,
+        "cn": "Big Al McMordie",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "W. Carolina +9.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463682953635954849,
+        "cn": "Big Al McMordie",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "W. Kentucky +2.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463682953635954849,
+        "cn": "Big Al McMordie",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Grand Canyon -1",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463682953635954849,
+        "cn": "Big Al McMordie",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "N. Alabama +12.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463682953635954849,
+        "cn": "Big Al McMordie",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "E. Carolina +12",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463682953635954849,
+        "cn": "Big Al McMordie",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Texas-San Antonio +16",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463297519323840564",
+    "source": "Discord",
+    "original_text": "\ud83d\udc8e NewYorkSharps 10% Exclusive: stats all 2024 (98-58 nhl) (10-7 20%)  (1-1 WNBA)\nStats all 2023 (118-64 NHL)(0-1 GOY)\n48-25 NHL\n2-0 20%\nSenators o 6.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463297519323840564,
+        "cn": "NewYorkSharps",
+        "lg": "NHL",
+        "ty": "Total",
+        "p": "Senators Over 6.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463652476308684800",
+    "source": "Discord",
+    "original_text": "=====\n\n\n\nRobert Ferrigno \n8 unit CBB\nUNC -12\nLine has moved \n\nHis 5U & higher are usually pretty good \n\n====\n\nMarco D\u2019Angelo \n4% Northwestern +6\n\n======\n\nGoodfella \n3* NBA \nGrizzlies TT over 118.5\n\n=====",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463652476308684800,
+        "cn": "Robert Ferrigno",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "UNC -12",
+        "od": null,
+        "u": 8.0,
+        "dt": null
+      },
+      {
+        "id": 1463652476308684800,
+        "cn": "Marco D\u2019Angelo",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Northwestern +6",
+        "od": null,
+        "u": 4.0,
+        "dt": null
+      },
+      {
+        "id": 1463652476308684800,
+        "cn": "Goodfella",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Grizzlies TT over 118.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1462524476418691173",
+    "source": "Discord",
+    "original_text": "COMMUNITY LEAKS EXIST FOR A REASON",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1462524476418691173,
+        "cn": "Community Leaks",
+        "lg": "Other",
+        "ty": "Unknown",
+        "p": "COMMUNITY LEAKS EXIST FOR A REASON",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463589446950584583",
+    "source": "Discord",
+    "original_text": "Zach's Bets Soccer:\n\n\u2022Qarabag/Eintracht Frankfurt over 3 -135 (7.5u)\n\n\u2022Juventus/Benfica under 2.5 -115 (1u)",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463589446950584583,
+        "cn": "Zach's Bets",
+        "lg": "SOCCER",
+        "ty": "Total",
+        "p": "Qarabag vs Eintracht Frankfurt Over 3",
+        "od": -135,
+        "u": 7.5,
+        "dt": null
+      },
+      {
+        "id": 1463589446950584583,
+        "cn": "Zach's Bets",
+        "lg": "SOCCER",
+        "ty": "Total",
+        "p": "Juventus vs Benfica Under 2.5",
+        "od": -115,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463679406173061254",
+    "source": "Discord",
+    "original_text": "===\n\nNewYorkSharps \n10% Exclusive: \nMaple Leafs ML",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463679406173061254,
+        "cn": "NewYorkSharps",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Maple Leafs ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57492",
+    "source": "Telegram",
+    "original_text": "**ThisGirlBetz\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57494.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57493.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57492.jpg"
+    ],
+    "ocr_texts": [
+      "ThisGirlBetz\n@cappersfree\nWEDNESDAY NCAAB\n\nGeorgia Tech +1.5 -110 (2u)\n\nMissouri +100 (3u)\n\nLSU +4 -110 (2u)\n\nWestern Kentucky -6.5 -110 (2u)\n\nVanderbilt -5 -110 (3u)",
+      "@cappersfree\nWEDNESDAY NBA\n\ud83c\udfc0 Raptors -130 (3u)\n\ud83c\udfc0 76ers -110 (3u)\n\nWEDNESDAY NHL\n\ud83c\udfd2 Sabres -135 (3u)\n\ud83c\udfd2 Senators -115 (2u)",
+      "@cappersfree\nWEDNESDAY TENNIS\n\nATP ADELAIDE\n\ud83c\udf40 T.Machac -130 (2u)\n\ud83c\udf40 U.Humbert -3.5 -140 (3u)\n\ud83c\udf40 V.Vacherot +2.5 -110 (3u)\n\nATP AUCKLAND\n\ud83c\udf40 E.Spizzirri +120 (2u)\n\ud83c\udf40 G.Perricard +140 (2u)\n\nWTA ADELAIDE\n\ud83c\udf40 K.Birrell +145 (2u)\n\nWTA HOBART\n\ud83c\udf40 I.Jovic -1.5 (set) -125 (2u)"
+    ],
+    "expected_picks": [
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Georgia Tech +1.5",
+        "od": -110,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Missouri ML",
+        "od": 100,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "LSU +4",
+        "od": -110,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Western Kentucky -6.5",
+        "od": -110,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Vanderbilt -5",
+        "od": -110,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Raptors ML",
+        "od": -130,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "76ers ML",
+        "od": -110,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Sabres ML",
+        "od": -135,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Senators ML",
+        "od": -115,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "T.Machac ML",
+        "od": -130,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "TENNIS",
+        "ty": "Spread",
+        "p": "U.Humbert -3.5",
+        "od": -140,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "TENNIS",
+        "ty": "Spread",
+        "p": "V.Vacherot +2.5",
+        "od": -110,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "E.Spizzirri ML",
+        "od": 120,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "G.Perricard ML",
+        "od": 140,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "K.Birrell ML",
+        "od": 145,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 57492,
+        "cn": "ThisGirlBetz",
+        "lg": "TENNIS",
+        "ty": "Spread",
+        "p": "I.Jovic -1.5 (set)",
+        "od": -125,
+        "u": 2.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463668561984753665",
+    "source": "Discord",
+    "original_text": "====\n\nYour daily Capper \nAll 1 unit plays\nMaple Leafs ML\nUtah 3way in regulation \nSyracuse -3",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463668561984753665,
+        "cn": "Your daily Capper",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Maple Leafs ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463668561984753665,
+        "cn": "Your daily Capper",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Utah 3way in regulation",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463668561984753665,
+        "cn": "Your daily Capper",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Syracuse -3",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1462525334678278324",
+    "source": "Discord",
+    "original_text": "\ud83c\udf1f Marshall (56-38 NFL ATS)\nPats -3\nBears 4",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1462525334678278324,
+        "cn": "Marshall",
+        "lg": "NFL",
+        "ty": "Spread",
+        "p": "Pats -3",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463682740221120657",
+    "source": "Discord",
+    "original_text": "\u2705Your Daily Capper \n\n1u - Maple Leafs ML\n1u - Mammoth - 3 Way in Regulation \n1u - Syracuse -3",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463682740221120657,
+        "cn": "Your Daily Capper",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Maple Leafs ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463682740221120657,
+        "cn": "Your Daily Capper",
+        "lg": "Other",
+        "ty": "Game Prop",
+        "p": "Mammoth - 3 Way in Regulation",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463682740221120657,
+        "cn": "Your Daily Capper",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Syracuse -3",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463672466567331953",
+    "source": "Discord",
+    "original_text": "====\n\n===\n\nGuess & Pray \n\nNets +11.5 4u\n\nBoston College ML 3u\nFlames ML 3u\nDrake +5.5 3u\nRaptors -4.5 3u\n\nNorth Alabama +11.5 2u\nECU +11.5 2u\nWashington St -2.5 2u",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463672466567331953,
+        "cn": "Guess & Pray",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Nets +11.5",
+        "od": null,
+        "u": 4.0,
+        "dt": null
+      },
+      {
+        "id": 1463672466567331953,
+        "cn": "Guess & Pray",
+        "lg": "NCAAF",
+        "ty": "Moneyline",
+        "p": "Boston College ML",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463672466567331953,
+        "cn": "Guess & Pray",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Flames ML",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463672466567331953,
+        "cn": "Guess & Pray",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Drake +5.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463672466567331953,
+        "cn": "Guess & Pray",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Raptors -4.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463672466567331953,
+        "cn": "Guess & Pray",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "North Alabama +11.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463672466567331953,
+        "cn": "Guess & Pray",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "ECU +11.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463672466567331953,
+        "cn": "Guess & Pray",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Washington St -2.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463671631552712917",
+    "source": "Discord",
+    "original_text": "",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\discord_1463671631552712917_1463671631355449364.jpg"
+    ],
+    "ocr_texts": [
+      "IlllicitPicks\n\nATP Australian Open \ud83c\udde6\ud83c\uddfa\n\n(1U) Vacherot ML + Jodar +2.5 sets +103\n\n(1U) Jodar +4 -125\n\n18-2 Run (+17.92U) Let\u2019s cash these both in the early\nm\u0b9fatches."
+    ],
+    "expected_picks": [
+      {
+        "id": 1463671631552712917,
+        "cn": "IlllicitPicks",
+        "lg": "TENNIS",
+        "ty": "Moneyline",
+        "p": "Vacherot ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463671631552712917,
+        "cn": "IlllicitPicks",
+        "lg": "TENNIS",
+        "ty": "Spread",
+        "p": "Jodar +2.5 sets",
+        "od": 103,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463671631552712917,
+        "cn": "IlllicitPicks",
+        "lg": "TENNIS",
+        "ty": "Spread",
+        "p": "Jodar +4",
+        "od": -125,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463656527004176518",
+    "source": "Discord",
+    "original_text": "\u2705Bill \"Krackman\" Krackomberger\n2%[CBB] La Salle +10.5 (-115)  \n2%[CBB] Chattanooga +5.0 (-110)  \n2%[CBB] Memphis +5.5 (-108)  \n3%[CBB] Washington +10.5 (-108)",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463656527004176518,
+        "cn": "Bill \"Krackman\" Krackomberger",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "La Salle +10.5",
+        "od": -115,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463656527004176518,
+        "cn": "Bill \"Krackman\" Krackomberger",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Chattanooga +5.0",
+        "od": -110,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463656527004176518,
+        "cn": "Bill \"Krackman\" Krackomberger",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Memphis +5.5",
+        "od": -108,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463656527004176518,
+        "cn": "Bill \"Krackman\" Krackomberger",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Washington +10.5",
+        "od": -108,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "57443",
+    "source": "Telegram",
+    "original_text": "",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57443.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57442.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57441.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57440.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57439.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57438.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57437.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57436.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57435.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\-1001900292133_57434.jpg"
+    ],
+    "ocr_texts": [
+      "Last 24 Hours \u25bc\nDATE RANGE\nStraight\nWin \u00b7 $470.00\n\ud83d\udfe2 TB Lightning\nMoneyline\n-135\nFinal\n\ud83c\udfd2 TB Lightning\nPIT Penguins\nView\n2\n1\nToday at 7:00 PM\n$270.00\nBET\n$470.00\nPAYOUT\n\ud83d\udce4 Share\nSettled: Jan 13, 2026 at 9:48 PM\nID: MpJXLGSyT2bwDUKaUKQvAIZHi=\n6:58 PM\nPlease play responsibly. 18+. ON only. If you or someone you know has a gambling problem and wants help, please call 1-800-522-4700.\nMessage",
+      "7:51\n$184.40 +\nMy Bets  Betting Groups  My Pools\nLive  Settled  Upcoming  Lost\nDayton  -148\nWage: $25.00  Payout: $41.89\nFinished\nDayton  33 38 37\nDuquesne  24 44 65\nShare\nDraft Kings  THE CROWN IS YOURS\nTB Lightning  -142\nWage: $25.00  Paid: $42.60\nFinished\nTB Lightning  P1 P2 P3 OT T\n8 0 1 1 2\nPIT Penguins\nImage  Live  My Bets  All Sports  Sweepstakes\nDayton from Mazi exclusive 6:51 PM\n\ud83d\udcf7\nFrom Von lol 6:53 PM\nUnread Messages\nYea my bad lol 6:53 PM\nMessage",
+      "6:53\nMY BETS\n$323.75\nOpen Bets Settled Bets\nCAESARS\nSPORTSBOOK\n\ud83c\udfd2 Dayton Flyers\nMoney Line | Dayton Flyers at Duquesne Dukes | JAN 13 4 PM\nCash Wagered:\t$200.00\nPaid:\t$337.93\n#10775180 10b6-11f0-67fc-980f17a4d33\nJAN 13 2026 09:59PM ET\nCAESARS\nSPORTSBOOK\n\ud83c\udfd2 Tampa Bay Lightning\nMoney Line | Tampa Bay Lightning at Pittsburgh Penguins | JAN 13 4:07 PM\nCash Wagered:\t$100.00\nPaid:\t$164.52\n#7f6d386d 10b6-11f0-644f-9f9897876d23\nJAN 13 2026 09:53PM ET\nCAESARS\nSPORTSBOOK\n\ud83c\udfd2 Tampa Bay Lightning\nMoney Line | Tampa Bay Lightning at Pittsburgh Penguins | JAN 13 4:07 PM\nCash Wagered:\t$50.00\nPaid:\t$83.32\n#a279f760 10d7-11f0-644e-9f9897876d23\nJAN 13 2026 09:39PM ET\nHome My Promos 6:54 PM",
+      "Hard Rock BET WINNER WINNER WINNER WINNER WINNER WINNER WINNER Lightning TO WIN -140 Wager $150 Paid $257.14 TB 1 Final Score 1 PIT \ud83c\udfd2 ID: 1029901227099160855 Share 6:54 PM Message",
+      "Transaction Single PLACED TO WIN $117.61 Tampa Bay Lightning (-142) Tampa Bay Lightning @ Pittsburgh Penguins Date Jan 13, 2026 Time 02:32 PM Reward Points Earned Total Reward Points Amount -$167.00 Total Balance $0.52 View details > 6:55 PM Message",
+      "9:54\n\nMy Bets\n\nUpcoming Live 1 Finished\n\n\u24c9 HARD ROCK BET SPORTSBOOK HARD ROCK BET SPORTSBOOK\nWINNER WINNER WINNER WINNER WINNER\n\u24c9 ROCK BET SPORTSBOOK HARD ROCK BET SPORTSBOOK HAR\n\nLightning\nTO WIN\n\n-135\nWager\n$150\nPaid\n$261.11\n\n\u26a1\ufe0f TB 1\nFinal Score\n1 PIT \u26a1\ufe0f\n\nID: 8860831444744194838\nShare \u27f3\n6:55 PM\n\nMessage",
+      "6:51\nADA $506.90 DEPOSIT\n\nX\nction\nSingle\nWIN\nTampa Bay Lightning (-145) Win\nTampa Bay Lightning @ Pittsburgh\nPenguins\nJan 13, 2026\n06:47 PM\nPoints Earned\n413.80\nward Points\n415.79\n+ $506.90\n> ce\n$506.90\nView details\n>\nction\nSingle\nPLACED\n bnvada.lv\n6:56 PM\nGlad to be able to send my slip lol I always see everyone else's slips now I\u2019m on the winning team let\u2019s go \ud83d\udcb0 \ud83e\udd11\n\u2764\ufe0f\n6:57 PM\nMessage",
+      "7:56\nMy Bets\nOpen Settled Saved\nAZ\nFANDUEL SPORTSBOOK\nTampa Bay Lightning\nMONEYLINE\nTampa Bay Lightning 0 - 0 2\nPittsburgh Penguins 0 - 0 1\nFinished\n-$140\n$50.00\nTOTAL WAGER\nWON OR FARBACK\n$55.71\nBET ID: 0-09360302-0001534 PLACED: 1/13/2026 3:19PM MST\nFANDUEL SPORTSBOOK\nDallas Stars\nMONEYLINE\nDallas Stars 1 - 0 3\nLos Angeles Kings 0 - 0 1\nFinished\n-$118\n$50.00\nTOTAL WAGER\nWON OR FARBACK\n$92.37\nBET ID: 0-09360302-0001532 PLACED: 1/12/2026 4:32PM MST\nFANDUEL SPORTSBOOK\nHouston Texans (2.5)\nINTERNATE SPREAD\n\ud83c\udfe0 Home All Sports My Bets\n6:56 PM\n6:56\nHouston Texans +2.5\n$140\n$50\n$163.79",
+      "Your position TB Lighting @ PIT Penguins Yes : TB Lightning Kalshi Jan 13 $99.71 > $-- > $167.00 -144 odds Not available At close Max payout Buy more --> Cash out 6:56 PM Message",
+      "Accepted Date: 1/13/26\nGraded Date: 1/14/26\nAmount: $20.00\tStatus:\tWon\nTo win: $14.39\tType: Moneyline\nReturn: $34.39\nDescription:\nHockey - NHL - Tampa Bay Lightning vs Pittsburgh Penguins - Moneyline | 61 Tampa Bay Lightning -139 for GAME 01/13/2026 07:07:00 PM (EST) | Won\n6:55 PM\nI knew I should\u2019ve loaded up my account today"
+    ],
+    "expected_picks": [
+      {
+        "id": 57443,
+        "cn": "Mazi",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "TB Lightning ML",
+        "od": -135,
+        "u": 470.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "Von",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Dayton ML",
+        "od": -148,
+        "u": 25.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "Von",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "TB Lightning ML",
+        "od": -142,
+        "u": 25.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "Caesars Sportsbook",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Dayton Flyers ML",
+        "od": null,
+        "u": 200.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "Caesars Sportsbook",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Tampa Bay Lightning ML",
+        "od": null,
+        "u": 100.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "Caesars Sportsbook",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Tampa Bay Lightning ML",
+        "od": null,
+        "u": 50.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "Hard Rock",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "TB Lightning ML",
+        "od": -140,
+        "u": 150.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "Hard Rock",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "TB Lightning ML",
+        "od": -135,
+        "u": 150.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "FanDuel",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Tampa Bay Lightning ML",
+        "od": null,
+        "u": 50.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "FanDuel",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Dallas Stars ML",
+        "od": null,
+        "u": 50.0,
+        "dt": "2026-01-12"
+      },
+      {
+        "id": 57443,
+        "cn": "FanDuel",
+        "lg": "NFL",
+        "ty": "Spread",
+        "p": "Houston Texans +2.5",
+        "od": null,
+        "u": 50.0,
+        "dt": "2026-01-13"
+      },
+      {
+        "id": 57443,
+        "cn": "Kalshi",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "TB Lightning ML",
+        "od": -144,
+        "u": 99.71,
+        "dt": "2026-01-13"
+      }
+    ]
+  },
+  {
+    "id": "1461500893055946762",
+    "source": "Discord",
+    "original_text": "\ud83d\udc8e Scott Sprizer (21-4 NBA Tops)\nTop plays\nCeltics -2.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1461500893055946762,
+        "cn": "Scott Sprizer",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Celtics -2.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1461499744764559465",
+    "source": "Discord",
+    "original_text": "\ud83d\udd25 Spreadkiller (215-151Run)\n() 18-12 CBB 25-14 nba 2-7 nfl \n12-4 NHL ||||  New: 96-57 MLB 2-0 WNBA 3-5 NFL 2-2NHL 5-1 CFB 23-10 NBA\n57-33\n19-8\nCeltics o 232.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1461499744764559465,
+        "cn": "Spreadkiller",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Celtics Over 232.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463571335107317962",
+    "source": "Discord",
+    "original_text": "\ud83d\udc8eBen Burns\n4%  Bradley -7.5 (-120)\n\n\u2705The  Prez\n5% Maple Leafs -120\n\n\u2705Football Jesus LV\nUSC -5\u00bd \n\n\u2705Aaa\nGoy\nNets +11.5",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463571335107317962,
+        "cn": "Ben Burns",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Bradley -7.5",
+        "od": -120,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463571335107317962,
+        "cn": "The Prez",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Maple Leafs ML",
+        "od": -120,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463571335107317962,
+        "cn": "Football Jesus",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "USC -5.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463571335107317962,
+        "cn": "Aaa Goy",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Nets +11.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1462524787342704711",
+    "source": "Discord",
+    "original_text": "\ud83c\udf1f BataBingBets: (87-39 MLB) (41-26 CFB 23\u2019)(13-5 CFB)(1-0 max)(1-2 NHL)(4-3 nfl)(9-6 CBB) (2-1 NFL)(46-26 NBA)|||(7-8 MLB)(13-6 CFB)(10-5 NFL)(36-21 NHL)(1-2 NBA)(0-1 CBB)\n66-39\nLightning \n*great CFB tail LYs",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1462524787342704711,
+        "cn": "BataBingBets",
+        "lg": "Other",
+        "ty": "Unknown",
+        "p": "66-39 Lightning",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463666956145000628",
+    "source": "Discord",
+    "original_text": "Bet Labs\n\nCBB: \nCIN +13.5 (0.75u)\nWASHINGTON +11.5 (0.5u)\n\nNBA: \nHAWKS ML (0.75u)",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463666956145000628,
+        "cn": "Bet Labs",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "CIN +13.5",
+        "od": null,
+        "u": 0.75,
+        "dt": null
+      },
+      {
+        "id": 1463666956145000628,
+        "cn": "Bet Labs",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "WASHINGTON +11.5",
+        "od": null,
+        "u": 0.5,
+        "dt": null
+      },
+      {
+        "id": 1463666956145000628,
+        "cn": "Bet Labs",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "HAWKS ML",
+        "od": null,
+        "u": 0.75,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463660702500782205",
+    "source": "Discord",
+    "original_text": "\u2705BulliesPicks\n\nNCAAB:\nPittsburgh ML (Risking 3 Units) (Pick of the Day)\n\nCharleston Southern ML (Risking 2 Units)\n\n\u2705BRANDON THE PROFIT\n\nCBB Play\nSyracuse -2.5 -130 (2U)\n\n\u2705Porter Picks\n\nNCAAB\nIllinois 1H -9.5 (3u)\nWashington +11.5 (3u)\n\nNBA\nHawks ML (5u)\nPelicans under 231.5 (3u)\n\nNHL\nMaple Leafs ML (3u)\nCapitals 60 min ML (2u)\nArizona State ML (Risking 2 Units)\n\n\u2705Nicky Cashin\n\nCBB\nIllinois State -7.5 (2u)\nArizona State ML (2u)\nRhode Island +2.5 (2u)\nIllinois -18.5 (2u)\nSamford +4 (1.5u)\nSaint Mary\u2019s -19 (2u)\nRice ML (1.5u)\nDrake +5.5 (1.5u)",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463660702500782205,
+        "cn": "BulliesPicks",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Pittsburgh ML",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "BulliesPicks",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Charleston Southern ML",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "BRANDON THE PROFIT",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Syracuse -2.5",
+        "od": -130,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Porter Picks",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Illinois 1H -9.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Porter Picks",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Washington +11.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Porter Picks",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Hawks ML",
+        "od": null,
+        "u": 5.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Porter Picks",
+        "lg": "NBA",
+        "ty": "Total",
+        "p": "Pelicans under 231.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Porter Picks",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Maple Leafs ML",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Porter Picks",
+        "lg": "NHL",
+        "ty": "Moneyline",
+        "p": "Capitals 60 min ML",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Porter Picks",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Arizona State ML",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Nicky Cashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Illinois State -7.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Nicky Cashin",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Arizona State ML",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Nicky Cashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Rhode Island +2.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Nicky Cashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Illinois -18.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Nicky Cashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Samford +4",
+        "od": null,
+        "u": 1.5,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Nicky Cashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Saint Mary\u2019s -19",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Nicky Cashin",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Rice ML",
+        "od": null,
+        "u": 1.5,
+        "dt": null
+      },
+      {
+        "id": 1463660702500782205,
+        "cn": "Nicky Cashin",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Drake +5.5",
+        "od": null,
+        "u": 1.5,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463673006222999695",
+    "source": "Discord",
+    "original_text": "",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\discord_1463673006222999695_1463673006021804042.jpg"
+    ],
+    "ocr_texts": [
+      "6:12\nX image.png \ud83d\udcde \u2630 \ud835\udfde\ud835\udfdf\nSHARP SHEETS\nthesharpsheets.com\nJAN 21, 2026\nPUBLIC PLAYS\n+ USC (NCAAB)\n+ Temple (NCAAB)\n+ Houston (mbb)\n+ Nebraska (NCAAB)\n+ Utah (mbb)\nSHARP PLAYS\n+ Rice (NCAAB) 72%\n+ Tulane (NCAAB) 71%\n+ Hornets (NBA) 70%\n+ Grizzlies U20s (NBA2K)\nSHARP BUYS\nWe have seen a huge sharp group buy on Rice in the NCAAB. While the public is all over Tulsa tonight at 2 in a road making this a great spot to take Rice as the favorite.\nRice -115\nWEDNESDAY EDITION\nPLAY OF THE DAY\nRice -115 @ Tulsa 7pm\nRice had a tough schedule to start this season and while they took a beating, they are now battle tested and better than their record shows. It appears the sharps see this as well as Rice is the strongest group buy of the day and we agree with the groups here. The public on the other hand is all over Tulsa tonight as 2 in a road making this a great spot to take Rice. Although January bar belonged to the seniors, we has this spot for Rice\nKraken -115 Over 64.5 9pm\nHawks +1.5 -115 8pm\nHornets +3 -110 7pm\n2026 TOTALS\nPlay of the Day -1-3 (all)\nSharp Plays -1-3\nInteresting Moves 34-44\nSharp Buys 16-21\nBook Benefits 17-23\n2026 STATS\n1 Star 1-3 25%\n2 Star 1-2 33%\n3 Star 0-0 --\n4 Star 0-0 --\n5 Star 0-0 --\nNCAA\n2028/2028\nNBA\n2028/2028\n1.5 L\nJan 2026\nJoey B's Locks\nGray Box Units\nNCAAB\nFootball Info\nWe ran an interesting Group Buy on our friends when Jets were asses as the line opened at -3.5 and is now a high 6.5 to a Flat 10 wager. The once they locked in was +220\nWe expect more sharp money as the line of the game shifts from Jets asses to the Bills taking the Seahawks.\nINTERESTING MOVES\nWe found a spot in the NBA that shows the Cavs coming off of a big game into the Thunder where they got our played pretty bad tonight. This is a spot where you can lose the same game.\nNow they travel to Charlotte for a game against a team they\u2019ve already beaten and expect to beat again. But our guys are getting the grizzlies at a spot where you can lose the same game.\nWe like the Hornets to cover the small number tonight and have a chance to win the game outright.\nHornets +3\nBOOK BENEFITS\nThe Books will benefit most if these teams cover and really benefit if they win outright\nNorthwestern (NCAAB)\nWashington (NCAAB)\nTheSharpSheets.com"
+    ],
+    "expected_picks": [
+      {
+        "id": 1463673006222999695,
+        "cn": "Sharp Sheets",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Rice ML",
+        "od": -115,
+        "u": 1.0,
+        "dt": "2026-01-21"
+      },
+      {
+        "id": 1463673006222999695,
+        "cn": "Sharp Sheets",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Rice vs Tulsa Over 64.5",
+        "od": null,
+        "u": 1.0,
+        "dt": "2026-01-21"
+      },
+      {
+        "id": 1463673006222999695,
+        "cn": "Sharp Sheets",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Hawks +1.5",
+        "od": -115,
+        "u": 1.0,
+        "dt": "2026-01-21"
+      },
+      {
+        "id": 1463673006222999695,
+        "cn": "Sharp Sheets",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Hornets +3",
+        "od": -110,
+        "u": 1.0,
+        "dt": "2026-01-21"
+      }
+    ]
+  },
+  {
+    "id": "1463297354571452612",
+    "source": "Discord",
+    "original_text": "\u2014\u2014\u2014\u2014\u2014\u2014\u2014-",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": []
+  },
+  {
+    "id": "1463574035064426549",
+    "source": "Discord",
+    "original_text": "Austin Young \n\n3U North Alabama/Queens over 159 (-110)\n4U Mississippi State/Texas A&M under 163.5 -110",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1463574035064426549,
+        "cn": "Austin Young",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "North Alabama vs Queens Over 159",
+        "od": -110,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463574035064426549,
+        "cn": "Austin Young",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Mississippi State vs Texas A&M Under 163.5",
+        "od": -110,
+        "u": 4.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463681831999111260",
+    "source": "Discord",
+    "original_text": "",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\discord_1463681831999111260_1463681831101534444.jpg",
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\discord_1463681831999111260_1463681831953109097.jpg"
+    ],
+    "ocr_texts": [
+      "Premier Picks @premier_pick \u00b7 1m\nCBB: PLAYS OF THE NIGHT \ud83d\udc9c\n\n\ud83c\udf1f 5U: SUPER MAX\nPick: Northwestern +8.5\n\n\ud83d\udc0e 3U: Pittsburg ML\n\ud83d\udc64 2U: North Carolina -12.5\n\nPremier Max Run: 23-14\n\n\ud83d\udc9c LIKE IF TAILING!",
+      "Premier Picks @premier_pick \u00b7 29s\n\nX\nNBA: PLAY OF THE NIGHT \ud83d\udd2e\n\n3U: Charlotte Hornets +4.5\n\nLIKE IF TALING\n\n#NBA | #NBABets | #SportsBettingX | #CharlotteHornets | #HiveMentality \ud83d\udd2e"
+    ],
+    "expected_picks": [
+      {
+        "id": 1463681831999111260,
+        "cn": "Premier Picks",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Northwestern +8.5",
+        "od": null,
+        "u": 5.0,
+        "dt": null
+      },
+      {
+        "id": 1463681831999111260,
+        "cn": "Premier Picks",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Pittsburg ML",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      },
+      {
+        "id": 1463681831999111260,
+        "cn": "Premier Picks",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "North Carolina -12.5",
+        "od": null,
+        "u": 2.0,
+        "dt": null
+      },
+      {
+        "id": 1463681831999111260,
+        "cn": "Premier Picks",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Charlotte Hornets +4.5",
+        "od": null,
+        "u": 3.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463609823865344050",
+    "source": "Discord",
+    "original_text": "Robert Ferringo",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\discord_1463609823865344050_1463609823554834452.jpg"
+    ],
+    "ocr_texts": [
+      "8-Unit Play. Take #694 North Carolina (-12) over Notre Dame (7 p.m., Wednesday, Jan. 21)\n\nI think that Notre Dame is a dead stick. Their season went in the tank the minute that Markus Burton went down for the year. Even with Burton, I had my doubts about this as an NCAA tournament team. Without him they are sunk. Micah Shrewsbury may not make it to the end of the year on the Notre Dame bench. He has been an embarrassment. Whether it was calling out the Irish fans last year, attacking the refs after a Cal loss this year, or just being a dick at the end of the Virginia Tech game last Saturday, he looks like a dead man walking. I think he is losing the locker room as well. They have lost four straight and the losses are getting worse, not better, coming by 15, 12 and 13 points. They are facing a North Carolina team that is in a foul mood. The Tar Heels got swept on their West Coast trip last weekend, falling at Cal and Stanford. Now they are at home and they need a win to get things going. Notre Dame has not played well at Chapel Hill at all, losing by 20, 23, 17, and 42 points in their last four trips. They have only lost by fewer than 11 points here once since the end of 2018. I don't think that Notre Dame is going to be able to handle the size and athleticism of the Tar Heels. I also think the home team is going to be able to set the tempo and that means an up and down game. North Carolina hasn't trucked anyone in a while. This feels like a game where they can empty the tanks and run a tired, worn out Notre Dame team off the court.\n\n1-Unit Play. Take #720 Wichita State (-11.5) over East Carolina (7:30 p.m., Wednesday, Jan. 21)"
+    ],
+    "expected_picks": [
+      {
+        "id": 1463609823865344050,
+        "cn": "Robert Ferringo",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "North Carolina -12",
+        "od": null,
+        "u": 8.0,
+        "dt": "2026-01-21"
+      },
+      {
+        "id": 1463609823865344050,
+        "cn": "Robert Ferringo",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Wichita State -11.5",
+        "od": null,
+        "u": 1.0,
+        "dt": "2026-01-21"
+      }
+    ]
+  },
+  {
+    "id": "1463683588745728083",
+    "source": "Discord",
+    "original_text": "",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\discord_1463683588745728083_1463683588502327423.jpg"
+    ],
+    "ocr_texts": [
+      "Thomas Casale\n3h ago \u2022 Last 30d: 3-4-0 (-2.07u)\n\nKansas City Royals 081.5 - 110\n2026 MLB Regular Season - Total Wins\n2.75u\nLike the Royals to push the Tigers in the AL Central.\n\ud83c\udfc0 3 \u2764\ufe0f 0 Bet Now"
+    ],
+    "expected_picks": [
+      {
+        "id": 1463683588745728083,
+        "cn": "Thomas Casale",
+        "lg": "MLB",
+        "ty": "Total",
+        "p": "Kansas City Royals: Total Wins Over 81.5",
+        "od": -110,
+        "u": 2.75,
+        "dt": "2026-01-22"
+      }
+    ]
+  },
+  {
+    "id": "1462956461507219614",
+    "source": "Discord",
+    "original_text": "\ud83d\udd25 PorterPicks (31-15 CFB ATS)\n10U POY\nIndiana -7",
+    "image_paths": [],
+    "ocr_texts": [],
+    "expected_picks": [
+      {
+        "id": 1462956461507219614,
+        "cn": "PorterPicks",
+        "lg": "NCAAF",
+        "ty": "Spread",
+        "p": "Indiana -7",
+        "od": null,
+        "u": 10.0,
+        "dt": null
+      }
+    ]
+  },
+  {
+    "id": "1463640994443427952",
+    "source": "Discord",
+    "original_text": "",
+    "image_paths": [
+      "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15\\temp_images\\discord_1463640994443427952_1463640994233979185.jpg"
+    ],
+    "ocr_texts": [
+      "College Basketball\n\nBETMGM\n\nTeams\tOpening\tCurrent\t% Bets\t% Handle\tOpening\tCurrent\t% Bets\t% Handle\tOpening\tCurrent\t% Bets\t% Handle\nNotre Dame at\t+11.5\t+13.5\t33%\t17%\tO\t148.5\t67%\t88%\t+500\t+725\t37%\t2%\n*North Carolina\t-11.5\t-13.5\t67%\t83%\tU\t148.5\t33%\t12%\t-725\t-1200\t63%\t98%\nMaryland at\t+19.5\t+19.5\t64%\t38%\tO\t148.5\t72%\t61%\t+1250\t+1250\t63%\t25%\n*Illinois\t-19.5\t-19.5\t36%\t62%\tU\t149.5\t28%\t39%\t-3000\t-3000\t37%\t75%\nWashington U at\t+11.5\t+10.5\t17%\t52%\tO\t150.5\t29%\t94%\t+525\t+450\t45%\t16%\n*Nebraska\t-11.5\t-10.5\t83%\t48%\tU\t150.5\t71%\t6%\t-775\t-625\t55%\t84%\nCincinnati at\t+13.5\t+13.5\t20%\t61%\tO\t153.5\t50%\t47%\t+700\t+700\t39%\t20%\n*Arizona\t-13.5\t-13.5\t80%\t39%\tU\t151.5\t50%\t53%\t-1100\t-1100\t61%\t80%\nPepperdine at\t+29.5\t+28.5\t31%\t12%\tO\t148.5\t34%\t85%\n*Gonzaga\t-29.5\t-28.5\t69%\t88%\tU\t150.5\t66%\t15%\nOff the board\n\nSportsbook Data Insights by BetMGM\n\nGambling problem? Call 1-800-GAMBLER (Available in the US), 877-8-HOPENY or text HOPENY (467369) (NY), 1-800-327-5050 (MA), 1-800-NEXT-STEP (AZ), 1-800-BETS-OFF (IA), 21+ only. Please Gamble Responsibly. See BetMGM.com for Terms. Subject to eligibility requirements. In partnership with Kansas\n\nBetMGM Casino and Hotel"
+    ],
+    "expected_picks": [
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Notre Dame +13.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "North Carolina -13.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Notre Dame vs North Carolina Over 148.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Notre Dame vs North Carolina Under 148.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Notre Dame ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "North Carolina ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Maryland +19.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Illinois -19.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Maryland vs Illinois Over 148.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Maryland vs Illinois Under 149.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Maryland ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Illinois ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Washington U +10.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Nebraska -10.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Washington U vs Nebraska Over 150.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Washington U vs Nebraska Under 150.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Washington U ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Nebraska ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Cincinnati +13.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Arizona -13.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Cincinnati vs Arizona Over 153.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Cincinnati vs Arizona Under 151.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Cincinnati ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Moneyline",
+        "p": "Arizona ML",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Pepperdine +28.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Spread",
+        "p": "Gonzaga -28.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Pepperdine vs Gonzaga Over 148.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      },
+      {
+        "id": 1463640994443427952,
+        "cn": "BetMGM",
+        "lg": "NCAAB",
+        "ty": "Total",
+        "p": "Pepperdine vs Gonzaga Under 150.5",
+        "od": null,
+        "u": 1.0,
+        "dt": null
+      }
+    ]
+  }
+]

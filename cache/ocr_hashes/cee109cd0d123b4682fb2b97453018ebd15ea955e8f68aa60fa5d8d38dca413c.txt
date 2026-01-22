@@ -1,0 +1,1 @@
+{'box_2d': [867, 46, 927, 316], 'text_content': 'NC State -14.5 3U'}

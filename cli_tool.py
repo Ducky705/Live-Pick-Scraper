@@ -46,22 +46,29 @@ async def main():
     logging.info("Initializing Clients...")
     
     # Telegram
+    from config import API_ID, API_HASH
     tg = TelegramManager()
-    tg_connected = await tg.connect_client()
-    if not tg_connected:
-        logging.info("Session not found or expired. Starting interactive authentication...")
-        try:
-            client = await tg.get_client()
-            # Interactive login in the terminal
-            await client.start()
-            
-            if not await client.is_user_authorized():
-                logging.error("Authentication failed. Please try again.")
+    
+    if not API_ID or not API_HASH:
+        logging.warning("Telegram credentials missing (API_ID/API_HASH). Skipping Telegram fetch.")
+        tg_msgs = []
+    else:
+        tg_connected = await tg.connect_client()
+        if not tg_connected:
+            logging.info("Session not found or expired. Starting interactive authentication...")
+            try:
+                client = await tg.get_client()
+                # Interactive login in the terminal
+                await client.start()
+                
+                if not await client.is_user_authorized():
+                    logging.error("Authentication failed. Please try again.")
+                    return
+                logging.info("Authentication successful!")
+            except Exception as e:
+                logging.error(f"Authentication Error: {e}")
                 return
-            logging.info("Authentication successful!")
-        except Exception as e:
-            logging.error(f"Authentication Error: {e}")
-            return
+
 
     # Twitter
     tw = TwitterManager()
@@ -74,9 +81,13 @@ async def main():
     logging.info(f"Target Date: {target_date} (Eastern Time, now ET: {now_et.strftime('%Y-%m-%d %H:%M')})")
     
     # Fetch Telegram
-    logging.info(f"Fetching Telegram messages from {TARGET_TELEGRAM_CHANNEL_ID}...")
-    tg_msgs = await tg.fetch_messages([TARGET_TELEGRAM_CHANNEL_ID], target_date)
-    logging.info(f"Fetched {len(tg_msgs)} Telegram messages.")
+    if not API_ID or not API_HASH:
+        logging.info("Skipping Telegram fetch (Missing Credentials).")
+        tg_msgs = []
+    else:
+        logging.info(f"Fetching Telegram messages from {TARGET_TELEGRAM_CHANNEL_ID}...")
+        tg_msgs = await tg.fetch_messages([TARGET_TELEGRAM_CHANNEL_ID], target_date)
+        logging.info(f"Fetched {len(tg_msgs)} Telegram messages.")
     
     # Fetch Twitter
     logging.info("Fetching Tweets...")
@@ -161,30 +172,25 @@ async def main():
     try:
         # This handles distribution across Cerebras, Groq, Mistral, Gemini, OpenRouter
         all_raw_picks = parallel_processor.process_batches(batches)
-        
-        # Flatten results (results are list of lists of picks)
-        # Some batches return dict {'picks': []} or list of picks
-        flat_picks = []
-        for batch_res in all_raw_picks:
-            if isinstance(batch_res, list):
-                flat_picks.extend(batch_res)
-            elif isinstance(batch_res, dict) and 'picks' in batch_res:
-                flat_picks.extend(batch_res['picks'])
-                
-        all_raw_picks = flat_picks
-        logging.info(f"Total extracted picks: {len(all_raw_picks)}")
+        logging.info(f"Total extracted batches: {len(all_raw_picks)}")
         
     except Exception as e:
         logging.error(f"Parallel processing failed: {e}")
         all_raw_picks = []
     
     # Remap compact keys to full keys using the decoder module
-    from src.prompts.decoder import expand_picks_list
+    from src.prompts.decoder import normalize_response
 
-    result_json_str = None
     try:
-        # Use decoder to expand compact format (1-char keys, type abbrevs)
-        picks = expand_picks_list(all_raw_picks)
+        # Process raw AI response strings into expanded pick objects
+        picks = []
+        for raw_response_str in all_raw_picks:
+            # normalize_response handles:
+            # 1. JSON extraction from string (removing <think> blocks, markdown)
+            # 2. Compact key expansion (p -> pick, l -> league) via expand=True
+            batch_picks = normalize_response(raw_response_str, expand=True)
+            picks.extend(batch_picks)
+
         picks = backfill_odds(picks)
 
         logging.info(f"Extracted {len(picks)} raw picks.")
@@ -232,12 +238,8 @@ async def main():
         except Exception as e:
             logging.error(f"Grading failed: {e}")
 
-    except json.JSONDecodeError:
-        logging.error("AI returned invalid JSON.")
-        logging.debug(result_json_str)
-        return
     except Exception as e:
-        logging.error(f"Parsing failed: {e}")
+        logging.error(f"Parsing/Grading failed: {e}", exc_info=True)
         return
 
     # 8. OUTPUT

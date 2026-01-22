@@ -1,0 +1,1 @@
+{'box_2d': [387, 146, 426, 497], 'text_content': 'Denver Broncos -110 2U'}

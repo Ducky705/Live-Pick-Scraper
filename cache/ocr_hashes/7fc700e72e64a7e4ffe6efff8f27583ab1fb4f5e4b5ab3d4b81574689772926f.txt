@@ -1,0 +1,1 @@
+{'box_2d': [144, 400, 183, 600], 'text_content': '16 January 2026'}

@@ -15,6 +15,7 @@ sys.path.append(os.getcwd())
 from src.twitter_client import twitter_manager
 from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt
+from src.prompts.decoder import normalize_response
 from src.utils import clean_text_for_ai
 
 # Setup basic logging
@@ -80,31 +81,26 @@ async def main():
             f.write(result_str)
         print("Saved raw AI response to debug_ai_response.txt")
         
-        # 5. Parse Result using decoder for compact format support
-        from src.prompts.decoder import normalize_response
-        try:
-            # Use decoder to handle both compact and full format
-            picks = normalize_response(result_str, expand=True)
+        # 5. Parse Result
+        picks = normalize_response(result_str)
             
-            if picks:
-                print(f"\n--- Found {len(picks)} Picks ---")
-                
-                # Sort by date desc
-                picks.sort(key=lambda x: x.get('date', ''), reverse=True)
-                
-                for p in picks:
-                    # Format: [DATE] LEAGUE - Capper: Pick (Odds)
-                    print(f"[{p.get('date')}] {p.get('league')} - {p.get('capper_name')}: {p.get('pick')} ({p.get('odds') or 'No Odds'})")
-                
-                # Save to file (with full field names)
-                with open("twitter_picks.json", "w") as f:
-                    json.dump({"picks": picks}, f, indent=2)
-                print("\nSaved picks to twitter_picks.json")
-            else:
-                print("\nAI returned no picks.")
-                
-        except Exception as parse_err:
-            print(f"\nParsing error: {parse_err}")
+        # Print Result nicely
+        if picks:
+            print(f"\n--- Found {len(picks)} Picks ---")
+            
+            # Sort by date desc
+            picks.sort(key=lambda x: x.get('date', ''), reverse=True)
+            
+            for p in picks:
+                # Format: [DATE] LEAGUE - Capper: Pick (Odds)
+                print(f"[{p.get('date')}] {p.get('league')} - {p.get('capper_name')}: {p.get('pick')} ({p.get('odds') or 'No Odds'})")
+            
+            # Save to file
+            with open("twitter_picks.json", "w") as f:
+                json.dump({"picks": picks}, f, indent=2)
+            print("\nSaved picks to twitter_picks.json")
+        else:
+            print("\nAI returned no valid picks.")
 
     except Exception as e:
         print(f"\nAI Error: {e}")

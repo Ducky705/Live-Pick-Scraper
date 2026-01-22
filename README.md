@@ -583,7 +583,8 @@ python cli_tool.py 2>&1 | tee debug.log
 | Local OCR Accuracy | 93% (RapidOCR) |
 | Vision AI Accuracy | 100% (Mistral Pixtral) |
 | Parsing Accuracy | 100% (Groq llama-3.3-70b-versatile) |
-| **Best Parse Time** | **930ms** (Groq) |
+| **Best Parse Time** | **870ms** (Groq + Compact Prompts) |
+| **Parsing F1 Score** | **75.0%** (Full Pipeline Benchmark) |
 | **Max Throughput** | **25 concurrent workers** (16 Groq + 4 Mistral + 3 Gemini + 2 Cerebras) |
 | **Groq Rate Limit** | 1000 RPM, 300K TPM (16 concurrent) |
 | **Mistral Batching** | 10 msgs/call (500K TPM) |

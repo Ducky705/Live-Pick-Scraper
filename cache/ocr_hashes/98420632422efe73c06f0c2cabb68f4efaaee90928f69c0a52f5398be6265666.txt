@@ -1,0 +1,1 @@
+{'box_2d': [878, 85, 942, 370], 'text_content': 'Broncos ML -116'}

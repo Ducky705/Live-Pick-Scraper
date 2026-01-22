@@ -84,7 +84,7 @@ STAT_ABBREVS = {
 # =============================================================================
 
 # Ultra-compact schema doc for prompts (~150 chars vs ~800 original)
-SCHEMA_DOC = """KEYS:i=id,c=capper,l=league,t=type,p=pick,o=odds,u=units
+SCHEMA_DOC = """KEYS:i=id,c=capper(Use text header/username first),l=league,t=type,p=pick,o=odds(int,e.g.-110),u=units(float)
 TYPES:ML,SP,TL,PP,TP,GP,PD,PL,TS,FT,UK
 LEAGUES:NFL,NCAAF,NBA,NCAAB,WNBA,MLB,NHL,EPL,MLS,UCL,UFC,PFL,TENNIS,SOCCER,PGA,F1,Other"""
 
@@ -99,6 +99,13 @@ STATS:Pts,Reb,Ast,PRA,PassYds,RushYds,RecYds,PassTD,Rec,K,H,HR,RBI,SOG,G,A"""
 
 # Noise filter instruction
 NOISE_FILTER = """SKIP:VIP,WHALE,MAX BET,LOCK,80K,GUARANTEED,@watermarks,records,sportsbook names,recaps with checkmarks"""
+
+# Negative constraints (new)
+NEGATIVE_CONSTRAINTS = """CONSTRAINTS:
+1.DO NOT use "80K", "VIP", "MAX" as picks. These are noise.
+2.DO NOT use "@cappersfree" or watermarks as capper name.
+3.If "80K" is present, u=80000.
+4.If no clear bet, p=null."""
 
 # =============================================================================
 # PROMPT BUILDER FUNCTIONS
@@ -126,6 +133,7 @@ Extract betting picks from data below.
 {SCHEMA_DOC}
 {PICK_FORMAT_RULES}
 {NOISE_FILTER}
+{NEGATIVE_CONSTRAINTS}
 
 RULES:
 1.c=capper from header/username,NOT watermarks(@cappersfree,capperstree)
@@ -134,8 +142,9 @@ RULES:
 4.Separate picks per capper
 5.Period bets:if text has 1H/1Q/F5/etc,t=PD
 6.Parlay:each leg prefixed with (LEAGUE)
+7.Reasoning:Add 1 sentence "r" field explaining why it is a valid pick.
 
-OUTPUT:{{"picks":[{{"i":123,"c":"Name","l":"NBA","t":"PP","p":"LeBron: Pts O 25.5","o":-110,"u":1}}]}}
+OUTPUT:{{"picks":[{{"i":123,"c":"Name","l":"NBA","t":"PP","p":"LeBron: Pts O 25.5","o":-110,"u":1,"r":"Found LeBron prop in OCR text"}}]}}
 
 DATA:
 {raw_data}"""

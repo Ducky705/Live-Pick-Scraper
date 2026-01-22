@@ -1,0 +1,1 @@
+{'box_2d': [853, 84, 892, 806], 'text_content': 'Virginia Tech ML/ Tennessee ML 1.5u -125'}

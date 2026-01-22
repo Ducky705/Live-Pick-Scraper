@@ -1,0 +1,1 @@
+{'box_2d': [177, 145, 214, 293], 'text_content': 'CashCing'}

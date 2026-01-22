@@ -1,0 +1,1 @@
+{'box_2d': [421, 171, 452, 929], 'text_content': 'Huge Card tomorrow. 10-2 last 2 days. Expect lines to'}

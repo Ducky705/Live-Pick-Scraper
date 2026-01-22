@@ -26,3 +26,11 @@ if not os.path.exists(TEMP_IMG_DIR):
     os.makedirs(TEMP_IMG_DIR)
 
 SESSION_FILE_PATH = os.path.join(EXEC_DIR, 'twitter_session.json') 
+
+# Load env vars
+from dotenv import load_dotenv
+load_dotenv()
+
+TARGET_TELEGRAM_CHANNEL_ID = os.getenv("TARGET_TELEGRAM_CHANNEL_ID")
+API_ID = os.getenv("API_ID")
+API_HASH = os.getenv("API_HASH") 

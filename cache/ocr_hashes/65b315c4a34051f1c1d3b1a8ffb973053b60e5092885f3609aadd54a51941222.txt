@@ -1,0 +1,1 @@
+{'box_2d': [572, 85, 600, 635], 'text_content': 'Christan McCaffrey Ovr 110+ Rush/rec yds'}

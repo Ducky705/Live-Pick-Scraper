@@ -1,8 +1,65 @@
 # src/utils.py
+"""
+Utility functions for the TelegramScraper.
+
+This module provides shared helpers for:
+- Text normalization and cleaning
+- File operations
+- Content detection
+"""
+
 from collections import Counter
 import re
 import os
 import glob
+import unicodedata
+from typing import Optional
+
+
+def normalize_string(text: Optional[str], remove_spaces: bool = False) -> str:
+    """
+    Normalize a string for comparison purposes.
+    
+    This is the canonical normalization function - use this instead of
+    creating new normalize_name/normalize_text functions elsewhere.
+    
+    Args:
+        text: Input string to normalize
+        remove_spaces: If True, removes all spaces (useful for name matching)
+    
+    Returns:
+        Normalized lowercase string with special chars removed
+    
+    Examples:
+        >>> normalize_string("Los Angeles Lakers")
+        'los angeles lakers'
+        >>> normalize_string("Los Angeles Lakers", remove_spaces=True)
+        'losangeleslakers'
+        >>> normalize_string("Café André")
+        'cafe andre'
+    """
+    if not text:
+        return ""
+    
+    # Normalize unicode (NFKC handles accents, ligatures, etc.)
+    text = unicodedata.normalize("NFKC", str(text))
+    
+    # Replace special whitespace with regular space
+    text = text.replace("\u00A0", " ").replace("\u202F", " ")
+    
+    # Lowercase
+    text = text.lower()
+    
+    # Remove special characters but keep alphanumeric and spaces
+    text = re.sub(r'[^a-z0-9\s]', '', text)
+    
+    # Collapse multiple spaces
+    text = re.sub(r'\s+', ' ', text).strip()
+    
+    if remove_spaces:
+        text = text.replace(" ", "")
+    
+    return text
 
 def cleanup_temp_images(directory):
     """Deletes only .jpg files in the specified directory to save space."""

@@ -218,8 +218,8 @@ class GraderEngine:
                 if p in periods:
                     try:
                         total += float(ls.get('value', 0))
-                    except:
-                        pass
+                    except (ValueError, TypeError):
+                        pass  # Skip invalid period scores
             return total
         
         return sum_periods(t1_lines, target_periods), sum_periods(t2_lines, target_periods)
@@ -315,7 +315,7 @@ class GraderEngine:
                 reb = float(player.get('rebounds', player.get('reb', player.get('totalrebounds', 0))))
                 ast = float(player.get('assists', player.get('ast', 0)))
                 return pts + reb + ast
-            except:
+            except (ValueError, TypeError):
                 return None
         
         # Look up possible keys
@@ -325,14 +325,14 @@ class GraderEngine:
             if key in player:
                 try:
                     return float(player[key])
-                except:
-                    pass
+                except (ValueError, TypeError):
+                    pass  # Try next key
             # Also check lowercase
             if key.lower() in player:
                 try:
                     return float(player[key.lower()])
-                except:
-                    pass
+                except (ValueError, TypeError):
+                    pass  # Try next key
         
         return None
 

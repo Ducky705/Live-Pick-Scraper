@@ -108,6 +108,18 @@ Pick + ESPN Scores → Grading Engine V3 → Win/Loss/Push/Pending
 
 ---
 
+## 📚 Documentation
+
+Detailed documentation for each subsystem:
+
+- **[Architecture Overview](docs/ARCHITECTURE.md)** - System design and data flow.
+- **[Grading System](docs/GRADING.md)** - V3 Engine, rules, and logic.
+- **[OCR Pipeline](docs/OCR.md)** - RapidOCR and Vision AI cascade.
+- **[Prompt System](docs/PROMPTS.md)** - Token optimization and compact schema.
+- **[AI Providers](docs/PROVIDERS.md)** - Parallel processing and rate limits.
+
+---
+
 ## Architecture
 
 ```

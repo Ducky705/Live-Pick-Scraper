@@ -611,6 +611,14 @@ python cli_tool.py 2>&1 | tee debug.log
 
 ## Changelog
 
+### v3.6.1 (January 23, 2026)
+- **Project Restructuring** - Major cleanup of file organization
+  - Consolidated runtime data (logs, cache, images, sessions) into `data/` directory
+  - Moved documentation to `docs/`
+  - Moved utility scripts to `tools/` and runners to `scripts/`
+  - Removed root directory clutter
+  - Updated all import paths and configuration to support new structure
+
 ### v3.6.0 (January 22, 2026)
 - **Prompt Optimization** - Maximum token efficiency for AI prompts
   - Created `src/prompts/` module with centralized prompt management

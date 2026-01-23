@@ -49,12 +49,12 @@ if not os.path.exists(DEBUG_REPORTS_DIR):
     os.makedirs(DEBUG_REPORTS_DIR)
 
 # App settings
-SESSION_FILE_PATH = os.path.join(SESSIONS_DIR, 'twitter_session.json') 
+SESSION_FILE_PATH = os.path.join(SESSIONS_DIR, 'user_session') 
 
 # Load env vars
 from dotenv import load_dotenv
 load_dotenv()
 
 TARGET_TELEGRAM_CHANNEL_ID = os.getenv("TARGET_TELEGRAM_CHANNEL_ID")
-API_ID = os.getenv("API_ID")
-API_HASH = os.getenv("API_HASH") 
+API_ID = os.getenv("TELEGRAM_API_ID") or os.getenv("API_ID")
+API_HASH = os.getenv("TELEGRAM_API_HASH") or os.getenv("API_HASH") 

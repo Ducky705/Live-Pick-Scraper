@@ -95,7 +95,14 @@ PP=Name: Stat O/U X|TP=Team: Stat O/U X|GP=Desc: Value
 PD=1H/1Q/F5 + bet format|PL=(LG) Leg1 / (LG) Leg2|FT=Event: Selection
 TENNIS:Name ML|Name +/-X sets|Name +/-X games|A vs B O/U X games
 PERIOD TRIGGERS:1H,2H,1Q,2Q,3Q,4Q,F5,F3,P1,P2,P3,"First Half","First 5"
-STATS:Pts,Reb,Ast,PRA,PassYds,RushYds,RecYds,PassTD,Rec,K,H,HR,RBI,SOG,G,A"""
+STATS:Pts,Reb,Ast,PRA,PassYds,RushYds,RecYds,PassTD,Rec,K,H,HR,RBI,SOG,G,A
+
+CRITICAL TYPE RULES:
+-If pick has "Team -7" or "Team +3.5" (number after team): t=SP (Spread), NOT ML
+-If pick has "ML" explicitly: t=ML
+-If pick has "Team A / Team B" or "+" between teams: t=PL (Parlay)
+-If pick has "Over X" or "Under X" with two teams: t=TL (Total)
+-Parlay 1, Parlay 2, etc. are SEPARATE picks with t=PL"""
 
 # Noise filter instruction
 NOISE_FILTER = """SKIP:VIP,WHALE,MAX BET,LOCK,80K,GUARANTEED,@watermarks,records,sportsbook names,recaps with checkmarks"""
@@ -105,7 +112,9 @@ NEGATIVE_CONSTRAINTS = """CONSTRAINTS:
 1.DO NOT use "80K", "VIP", "MAX" as picks. These are noise.
 2.DO NOT use "@cappersfree" or watermarks as capper name.
 3.If "80K" is present, u=80000.
-4.If no clear bet, p=null."""
+4.If no clear bet, p=null.
+5.CRITICAL: Each pick MUST use the exact "i" (message_id) from its source message.
+  DO NOT mix picks between messages. Only output picks found in each specific message."""
 
 # =============================================================================
 # PROMPT BUILDER FUNCTIONS

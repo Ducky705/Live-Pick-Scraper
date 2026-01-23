@@ -72,7 +72,7 @@ class GraderEngine:
 
     def grade_batch(self, picks: List[Dict[str, Any]]) -> List[GradedPick]:
         """
-        Grade a batch of picks.
+        Grade a batch of picks with optimized boxscore pre-fetching.
         
         Args:
             picks: List of dicts with 'pick' and 'league' keys
@@ -80,6 +80,9 @@ class GraderEngine:
         Returns:
             List of GradedPick objects
         """
+        # Pre-fetch boxscores for player props to avoid sequential API calls
+        self._prefetch_boxscores_for_props(picks)
+        
         results = []
         for p in picks:
             text = p.get('pick', p.get('p', ''))
@@ -91,6 +94,74 @@ class GraderEngine:
             results.append(graded)
         
         return results
+    
+    def _prefetch_boxscores_for_props(self, picks: List[Dict[str, Any]]):
+        """
+        Pre-fetch boxscores in parallel for all player prop picks.
+        This avoids sequential API calls during grading.
+        """
+        import concurrent.futures
+        from src.score_cache import get_cache
+        
+        cache = get_cache()
+        games_to_fetch = {}  # game_id -> game dict
+        
+        # Identify all player props and their games
+        for p in picks:
+            text = p.get('pick', p.get('p', ''))
+            league = p.get('league', p.get('lg', 'other'))
+            
+            # Quick heuristic check for player props (has ":" in text or common stat keywords)
+            is_likely_prop = ':' in text or any(kw in text.lower() for kw in [
+                'pts', 'reb', 'ast', 'over', 'under', 'yds', 'td', 'rec'
+            ])
+            
+            if not is_likely_prop:
+                continue
+            
+            # Find matching game
+            game = Matcher.find_game(text, league, self.scores)
+            if not game:
+                continue
+            
+            game_id = game.get('id')
+            if not game_id:
+                continue
+            
+            # Skip if already in memory cache
+            if game_id in self._boxscore_cache:
+                continue
+            
+            # Check persistent cache
+            cached_boxscore = cache.get_boxscore(game_id)
+            if cached_boxscore:
+                self._boxscore_cache[game_id] = cached_boxscore
+                continue
+            
+            # Need to fetch
+            games_to_fetch[game_id] = game
+        
+        if not games_to_fetch:
+            return
+        
+        logger.info(f"Pre-fetching {len(games_to_fetch)} boxscores for player props...")
+        
+        # Fetch in parallel
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            futures = {
+                executor.submit(DataLoader.fetch_boxscore, game): game_id
+                for game_id, game in games_to_fetch.items()
+            }
+            
+            for future in concurrent.futures.as_completed(futures):
+                game_id = futures[future]
+                try:
+                    boxscore = future.result()
+                    if boxscore:
+                        self._boxscore_cache[game_id] = boxscore
+                        cache.set_boxscore(game_id, boxscore)
+                except Exception as e:
+                    logger.debug(f"Failed to fetch boxscore for {game_id}: {e}")
 
     # -------------------------------------------------------------------------
     # Parlay Grading
@@ -282,22 +353,35 @@ class GraderEngine:
         return GradedPick(pick, GradeResult.PUSH, summary, game_id=game_id)
 
     def _get_boxscore(self, game: Dict) -> Optional[List[Dict]]:
-        """Get boxscore for a game, with caching."""
+        """Get boxscore for a game, with memory and persistent caching."""
+        from src.score_cache import get_cache
+        
         game_id = game.get('id')
         if not game_id:
             return None
         
+        # 1. Check memory cache
         if game_id in self._boxscore_cache:
             return self._boxscore_cache[game_id]
         
+        # 2. Check game object
         if 'full_boxscore' in game:
             self._boxscore_cache[game_id] = game['full_boxscore']
             return game['full_boxscore']
         
+        # 3. Check persistent cache
+        cache = get_cache()
+        cached = cache.get_boxscore(game_id)
+        if cached:
+            self._boxscore_cache[game_id] = cached
+            return cached
+        
+        # 4. Fetch from API
         boxscore = DataLoader.fetch_boxscore(game)
         if boxscore:
             self._boxscore_cache[game_id] = boxscore
             game['full_boxscore'] = boxscore
+            cache.set_boxscore(game_id, boxscore)
         
         return boxscore
 

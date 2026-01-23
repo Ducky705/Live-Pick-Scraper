@@ -3,7 +3,7 @@ Prompts Module - Centralized prompt management for maximum efficiency.
 
 This module provides:
 - core.py: Compact schema definitions and prompt builders
-- decoder.py: Response expansion utilities
+- decoder.py: Response expansion and post-processing validation utilities
 """
 
 from .core import (
@@ -24,6 +24,12 @@ from .decoder import (
     expand_compact_pick,
     expand_picks_list,
     normalize_response,
+    # Post-processing validation (v0.0.16)
+    validate_and_correct_pick,
+    validate_and_correct_batch,
+    infer_type_from_pick,
+    normalize_pick_format,
+    extract_structured_fields,
 )
 
 __all__ = [
@@ -43,4 +49,10 @@ __all__ = [
     "expand_compact_pick",
     "expand_picks_list",
     "normalize_response",
+    # Post-processing validation
+    "validate_and_correct_pick",
+    "validate_and_correct_batch",
+    "infer_type_from_pick",
+    "normalize_pick_format",
+    "extract_structured_fields",
 ]

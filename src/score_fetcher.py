@@ -1,10 +1,12 @@
 
 import requests
+from requests.adapters import HTTPAdapter
 import datetime
 import time
 import logging
 import concurrent.futures
 import urllib3
+from typing import List, Dict, Any, Optional, Set
 
 # Suppress insecure request warnings if we disable SSL verify
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -12,6 +14,27 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# =============================================================================
+# CONNECTION POOLING - Reuse TCP connections for faster requests
+# =============================================================================
+_session: Optional[requests.Session] = None
+
+def get_session() -> requests.Session:
+    """Get a reusable session with connection pooling."""
+    global _session
+    if _session is None:
+        _session = requests.Session()
+        _session.verify = False
+        # Increase pool size for parallel requests
+        adapter = HTTPAdapter(
+            pool_connections=20,
+            pool_maxsize=20,
+            max_retries=2
+        )
+        _session.mount('https://', adapter)
+        _session.mount('http://', adapter)
+    return _session
 
 # ESPN API endpoints and their corresponding league names
 LEAGUES_TO_SCRAPE = {
@@ -70,12 +93,12 @@ NCAAB_CONFERENCE_GROUPS = [
     "31", "32", "59", "100",
 ]
 
-def fetch_url(url, league_name, retries=2):
-    """Helper function for threaded fetching"""
+def fetch_url(url, league_name, retries=2, session=None):
+    """Helper function for threaded fetching with connection pooling."""
+    sess = session or get_session()
     for i in range(retries):
         try:
-            # FIX: verify=False added to prevent SSL crashes in EXE
-            response = requests.get(url, timeout=5, verify=False)
+            response = sess.get(url, timeout=5)
             response.raise_for_status()
             data = response.json()
             return data.get("events", [])
@@ -85,10 +108,11 @@ def fetch_url(url, league_name, retries=2):
             time.sleep(0.2)
     return []
 
-def fetch_scores_for_date(date_str, requested_leagues=None, current_scores=None):
+def fetch_scores_for_date(date_str, requested_leagues=None, current_scores=None, 
+                          force_refresh=False, final_only=True):
     """
     Scrapes scores for all configured leagues for a given date string.
-    Uses ThreadPoolExecutor for parallel fetching.
+    Uses ThreadPoolExecutor for parallel fetching with caching.
     
     Args:
         date_str: "YYYY-MM-DD" or "MM/DD/YYYY"
@@ -96,7 +120,15 @@ def fetch_scores_for_date(date_str, requested_leagues=None, current_scores=None)
                            If None, fetches all.
         current_scores: Optional list of existing game objects. If provided, we skip fetching
                         leagues that are already present in this list.
+        force_refresh: If True, bypass cache and fetch fresh data.
+        final_only: If True (default), only return games with status 'post' (final).
+                    Live/in-progress games are excluded for grading accuracy.
+    
+    Returns:
+        List of game dictionaries with scores.
     """
+    from src.score_cache import get_cache
+    cache = get_cache()
     
     # Normalize requested leagues
     if requested_leagues:
@@ -125,21 +157,35 @@ def fetch_scores_for_date(date_str, requested_leagues=None, current_scores=None)
     processed_game_ids = {g['id'] for g in all_scores}
     
     urls_to_fetch = []
+    leagues_from_cache = []
+    
+    # Get session for connection pooling
+    session = get_session()
 
-    # Prepare URL list
+    # Prepare URL list, checking cache first
     for sport_key, leagues in LEAGUES_TO_SCRAPE.items():
         for league_key_url, sheet_league_name in leagues.items():
             norm_league = sheet_league_name.lower()
             
             # Optimization: Skip if we already have this league
             if norm_league in existing_leagues:
-                # Unless explicitly requested? No, implicit lazy loading.
-                # If user wants to force refresh, they should pass current_scores=None
                 continue
 
             # Filter by requested leagues if provided
             if requested_leagues and norm_league not in requested_leagues:
                 continue
+            
+            # Check cache first (unless force_refresh)
+            if not force_refresh:
+                cached_games = cache.get_scores(api_date, norm_league)
+                if cached_games is not None:
+                    # Filter by final_only if needed (cached games are already final)
+                    for game in cached_games:
+                        if game.get('id') not in processed_game_ids:
+                            all_scores.append(game)
+                            processed_game_ids.add(game['id'])
+                    leagues_from_cache.append(norm_league)
+                    continue
 
             # --- SPECIAL HANDLING FOR NCAAB ---
             if league_key_url == "mens-college-basketball":
@@ -152,11 +198,24 @@ def fetch_scores_for_date(date_str, requested_leagues=None, current_scores=None)
                 url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_key}/{league_key_url}/scoreboard?dates={api_date}&limit=300"
                 urls_to_fetch.append((url, sheet_league_name, sport_key, league_key_url))
 
+    if leagues_from_cache:
+        logger.info(f"Cache HIT for {len(leagues_from_cache)} leagues: {', '.join(leagues_from_cache[:5])}{'...' if len(leagues_from_cache) > 5 else ''}")
+    
+    if not urls_to_fetch:
+        logger.info(f"All leagues served from cache. Total: {len(all_scores)} games")
+        return all_scores
+        
     logger.info(f"Fetching scores from {len(urls_to_fetch)} endpoints in parallel...")
 
-    # Execute in parallel
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        future_to_league = {executor.submit(fetch_url, url, lname): (lname, skey, lkey) for url, lname, skey, lkey in urls_to_fetch}
+    # Track games by league for caching
+    games_by_league: Dict[str, List[Dict]] = {}
+
+    # Execute in parallel with connection pooling
+    with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
+        future_to_league = {
+            executor.submit(fetch_url, url, lname, 2, session): (lname, skey, lkey) 
+            for url, lname, skey, lkey in urls_to_fetch
+        }
         
         for future in concurrent.futures.as_completed(future_to_league):
             league_name, sport_key, league_key = future_to_league[future]
@@ -164,34 +223,55 @@ def fetch_scores_for_date(date_str, requested_leagues=None, current_scores=None)
                 events = future.result()
                 for game in events:
                     if game['id'] not in processed_game_ids:
-                        game_objs = _parse_espn_event(game, league_name)
+                        game_objs = _parse_espn_event(game, league_name, final_only=final_only)
                         if game_objs:
                             if isinstance(game_objs, list):
                                 all_scores.extend(game_objs)
+                                # Track for caching
+                                if league_name.lower() not in games_by_league:
+                                    games_by_league[league_name.lower()] = []
+                                games_by_league[league_name.lower()].extend(game_objs)
                             else:
                                 all_scores.append(game_objs)
+                                if league_name.lower() not in games_by_league:
+                                    games_by_league[league_name.lower()] = []
+                                games_by_league[league_name.lower()].append(game_objs)
                             processed_game_ids.add(game['id'])
             except Exception as e:
                 logger.error(f"Error processing {league_name}: {e}")
 
+    # Cache the fetched scores by league
+    for league, games in games_by_league.items():
+        if games:  # Only cache if we got games
+            cache.set_scores(api_date, league, games)
+
     return all_scores
 
-def _parse_espn_event(game_data, league_name):
+def _parse_espn_event(game_data, league_name, final_only=True):
     """
     Parses a raw ESPN event JSON object into a list of standardized dictionaries.
     Handles Team vs Team (NFL, NBA, Soccer, Tennis, UFC) and Multi-Competitor (F1, Golf).
     Returns a LIST of game objects (one event might have multiple competitions/fights).
+    
+    Args:
+        game_data: Raw ESPN event JSON
+        league_name: League identifier
+        final_only: If True, only return games with status 'post' (final).
+                    If False, return both 'in' (live) and 'post' games.
     """
     try:
         # Determine format based on league or structure
         is_multi_competitor = league_name.lower() in ['f1', 'pga', 'racing', 'golf']
         
-        # Check if event is started/finished
-        
-        # Check if event is started/finished
+        # Check game status
         status_state = game_data.get('status', {}).get('type', {}).get('state', '')
+        
+        # Skip pre-game (not started)
         if status_state == 'pre':
-            # print(f"Skipping {league_name} {game_data.get('id')} due to pre state")
+            return []
+        
+        # Skip in-progress games if final_only is True
+        if final_only and status_state == 'in':
             return []
 
         parsed_games = []
@@ -440,6 +520,103 @@ def fetch_odds_for_date(date_str: str) -> dict:
             continue
     
     logger.info(f"Fetched odds for {len(odds_by_game)} games on {date_str}")
+    return odds_by_game
+
+
+def fetch_odds_for_leagues(date_str: str, leagues: List[str]) -> Dict[str, Dict]:
+    """
+    Fetches odds for specific leagues only (optimized for smart backfilling).
+    Uses parallel fetching for speed.
+    
+    Args:
+        date_str: Date in "YYYY-MM-DD" or "MM/DD/YYYY" format
+        leagues: List of league codes to fetch (e.g., ['nba', 'nfl'])
+        
+    Returns:
+        Dictionary mapping game keys to odds data
+    """
+    # Standardize date format
+    try:
+        if "-" in date_str:
+            d = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+        else:
+            d = datetime.datetime.strptime(date_str, "%m/%d/%Y")
+        api_date = d.strftime("%Y%m%d")
+    except ValueError:
+        logger.error(f"Invalid date format for odds: {date_str}")
+        return {}
+    
+    leagues_set = {l.lower() for l in leagues}
+    odds_by_game = {}
+    session = get_session()
+    
+    # Build list of (league_name, sport, league_key) to fetch
+    leagues_to_fetch = []
+    for league_name, (sport, league_key) in ODDS_LEAGUE_MAPPING.items():
+        if league_name.lower() in leagues_set:
+            leagues_to_fetch.append((league_name, sport, league_key))
+    
+    if not leagues_to_fetch:
+        return {}
+    
+    logger.info(f"Fetching odds for {len(leagues_to_fetch)} leagues in parallel...")
+    
+    def fetch_league_odds(args):
+        """Fetch odds for a single league."""
+        league_name, sport, league_key = args
+        league_odds = {}
+        
+        try:
+            # Fetch scoreboard for this league
+            scoreboard_url = f"https://site.api.espn.com/apis/site/v2/sports/{sport}/{league_key}/scoreboard?dates={api_date}&limit=300"
+            resp = session.get(scoreboard_url, timeout=10)
+            if resp.status_code != 200:
+                return league_odds
+                
+            data = resp.json()
+            events = data.get("events", [])
+            
+            # For each event, fetch odds
+            for event in events:
+                event_id = event.get("id")
+                if not event_id:
+                    continue
+                
+                competitions = event.get("competitions", [])
+                if not competitions and "groupings" in event:
+                    for group in event.get("groupings", []):
+                        competitions.extend(group.get("competitions", []))
+                
+                for comp in competitions:
+                    comp_id = comp.get("id", event_id)
+                    odds_data = _fetch_competition_odds(sport, league_key, event_id, comp_id, league_name)
+                    
+                    if odds_data:
+                        competitors = comp.get("competitors", [])
+                        home_name, away_name = _extract_competitor_names(competitors, league_name)
+                        
+                        game_key = f"{league_name}:{event_id}:{comp_id}"
+                        odds_data["home_team"] = home_name
+                        odds_data["away_team"] = away_name
+                        league_odds[game_key] = odds_data
+                        
+        except Exception as e:
+            logger.debug(f"Error fetching odds for {league_name}: {e}")
+        
+        return league_odds
+    
+    # Fetch all leagues in parallel
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(fetch_league_odds, args) for args in leagues_to_fetch]
+        
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                league_odds = future.result()
+                odds_by_game.update(league_odds)
+            except Exception as e:
+                logger.debug(f"Error in parallel odds fetch: {e}")
+    
+    logger.info(f"Fetched odds for {len(odds_by_game)} games")
     return odds_by_game
 
 

@@ -86,8 +86,16 @@ tmp/
 .coverage
 htmlcov/
 
-# Jupyter notebooks output
-.ipynb_checkpoints
+# Application Data
+data/cache/
+data/temp_images/
+data/sessions/
+cache/
+*.db
+benchmark_results.json
+grading_prompt.md
+nul
+
 
 # Environment files (keep .env.example if you have one)
 .env.local

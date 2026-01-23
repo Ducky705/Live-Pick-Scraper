@@ -223,8 +223,21 @@ async def main():
         try:
             from src.grader import grade_picks
             from src.score_fetcher import fetch_scores_for_date
+            from src.grading.constants import LEAGUE_ALIASES_MAP
             
-            scores = fetch_scores_for_date(target_date)
+            # OPTIMIZATION: Extract leagues from picks to fetch only what's needed
+            relevant_leagues = set()
+            for p in picks:
+                lg = (p.get('league') or p.get('lg') or '').lower()
+                if lg:
+                    # Normalize to canonical league name
+                    relevant_leagues.add(LEAGUE_ALIASES_MAP.get(lg, lg))
+            
+            logging.info(f"Fetching scores for leagues: {', '.join(sorted(relevant_leagues)) or 'all'}")
+            scores = fetch_scores_for_date(
+                target_date, 
+                requested_leagues=list(relevant_leagues) if relevant_leagues else None
+            )
             logging.info(f"Fetched {len(scores)} game scores")
             
             picks = grade_picks(picks, scores)

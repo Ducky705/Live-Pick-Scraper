@@ -182,6 +182,165 @@ def backfill_odds(picks):
                 
     return picks
 
+
+def smart_backfill_odds(picks, target_date):
+    """
+    Smart odds backfilling that fetches from ESPN only for picks still missing odds.
+    
+    Strategy:
+    1. First pass: Cross-reference within batch (existing backfill_odds logic)
+    2. Identify picks still missing odds and their leagues
+    3. Fetch ESPN odds only for needed leagues (parallel, cached)
+    4. Match fetched odds to picks
+    
+    Args:
+        picks: List of pick dictionaries
+        target_date: Date string (YYYY-MM-DD or MM/DD/YYYY)
+        
+    Returns:
+        Updated picks list with odds backfilled where possible
+    """
+    import concurrent.futures
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    
+    # Pass 1: Cross-reference within batch
+    picks = backfill_odds(picks)
+    
+    # Identify picks still missing odds
+    missing_odds_picks = []
+    leagues_needed = set()
+    
+    for p in picks:
+        current_odds = p.get('odds')
+        is_missing = current_odds is None or str(current_odds).strip() == "" or str(current_odds).lower() == "none"
+        
+        if is_missing:
+            league = (p.get('league') or p.get('lg') or '').lower()
+            if league and league != 'other':
+                missing_odds_picks.append(p)
+                leagues_needed.add(league)
+    
+    if not missing_odds_picks:
+        logger.debug("All picks have odds, no ESPN fetch needed")
+        return picks
+    
+    logger.info(f"Fetching ESPN odds for {len(leagues_needed)} leagues: {', '.join(sorted(leagues_needed))}")
+    
+    try:
+        from src.score_fetcher import fetch_odds_for_leagues
+        from src.score_cache import get_cache
+        
+        cache = get_cache()
+        
+        # Normalize date
+        import datetime
+        if "-" in target_date:
+            d = datetime.datetime.strptime(target_date, "%Y-%m-%d")
+        else:
+            d = datetime.datetime.strptime(target_date, "%m/%d/%Y")
+        api_date = d.strftime("%Y%m%d")
+        
+        # Check cache first, then fetch missing
+        all_odds = {}
+        leagues_to_fetch = []
+        
+        for league in leagues_needed:
+            cached_odds = cache.get_odds(api_date, league)
+            if cached_odds:
+                all_odds.update(cached_odds)
+            else:
+                leagues_to_fetch.append(league)
+        
+        # Fetch missing leagues in parallel
+        if leagues_to_fetch:
+            fetched_odds = fetch_odds_for_leagues(target_date, leagues_to_fetch)
+            all_odds.update(fetched_odds)
+            
+            # Cache the fetched odds by league
+            for league in leagues_to_fetch:
+                league_odds = {k: v for k, v in fetched_odds.items() if k.startswith(f"{league}:")}
+                if league_odds:
+                    cache.set_odds(api_date, league, league_odds)
+        
+        # Pass 2: Match fetched odds to picks
+        matched_count = 0
+        for p in missing_odds_picks:
+            pick_text = (p.get('pick') or '').lower()
+            league = (p.get('league') or p.get('lg') or '').lower()
+            
+            for game_key, odds_data in all_odds.items():
+                if not game_key.startswith(f"{league}:"):
+                    continue
+                    
+                home = (odds_data.get('home_team') or '').lower()
+                away = (odds_data.get('away_team') or '').lower()
+                
+                # Check if pick mentions either team
+                if _pick_mentions_team(pick_text, home) or _pick_mentions_team(pick_text, away):
+                    # Determine which odds to use based on pick type
+                    p['odds'] = _extract_appropriate_odds(p, odds_data)
+                    if p['odds']:
+                        matched_count += 1
+                    break
+        
+        logger.info(f"Backfilled odds for {matched_count}/{len(missing_odds_picks)} picks from ESPN")
+        
+    except Exception as e:
+        logger.warning(f"Smart odds backfill failed: {e}")
+    
+    return picks
+
+
+def _pick_mentions_team(pick_text, team_name):
+    """Check if a pick text mentions a team name."""
+    if not team_name or not pick_text:
+        return False
+    
+    # Direct match
+    if team_name in pick_text:
+        return True
+    
+    # Last word match (e.g., "lakers" from "los angeles lakers")
+    words = team_name.split()
+    if len(words) > 1:
+        last_word = words[-1]
+        if len(last_word) > 2 and last_word in pick_text:
+            return True
+    
+    return False
+
+
+def _extract_appropriate_odds(pick, odds_data):
+    """Extract the appropriate odds based on pick type."""
+    pick_text = (pick.get('pick') or '').lower()
+    pick_type = (pick.get('type') or '').lower()
+    
+    # Spread
+    if pick_type == 'spread' or re.search(r'[+-]\d+\.?\d*', pick_text):
+        # Try to determine home/away
+        home = (odds_data.get('home_team') or '').lower()
+        if _pick_mentions_team(pick_text, home):
+            return odds_data.get('spread_home_odds')
+        return odds_data.get('spread_away_odds')
+    
+    # Moneyline
+    if pick_type == 'moneyline' or 'ml' in pick_text:
+        home = (odds_data.get('home_team') or '').lower()
+        if _pick_mentions_team(pick_text, home):
+            return odds_data.get('moneyline_home')
+        return odds_data.get('moneyline_away')
+    
+    # Total
+    if pick_type == 'total' or 'over' in pick_text or 'under' in pick_text:
+        if 'over' in pick_text:
+            return odds_data.get('over_odds')
+        return odds_data.get('under_odds')
+    
+    # Default: try moneyline
+    return odds_data.get('moneyline_home') or odds_data.get('moneyline_away')
+
 def clean_text_for_ai(text):
     """
     Retrieval-Augmented compression: Removes high-entropy noise to save tokens.

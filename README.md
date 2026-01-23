@@ -93,6 +93,9 @@ Pick + ESPN Scores → Grading Engine V3 → Win/Loss/Push/Pending
 - **Smart team matching** - Uses 500+ team aliases for accurate matching
 - **All bet types** - Spreads, Moneylines, Totals, Player Props, Parlays
 - **3x faster** than legacy grader with higher accuracy
+- **Persistent caching** - SQLite cache for scores/boxscores (24hr/7day TTL)
+- **Connection pooling** - Reusable TCP connections for faster API calls
+- **League-aware fetching** - Only fetches leagues present in picks (up to 15x faster)
 
 ### 5. Structured Output
 ```json
@@ -427,6 +430,26 @@ python tools/benchmark_all_models.py --retry-failed --limit 20
 | **Architecture** | Monolithic | Modular | Maintainable |
 | **False Positives** | Yes | No | **Eliminated** |
 
+### Performance Optimizations (January 23, 2026)
+
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| **All leagues (fresh)** | 5.12s | 3.63s | **29% faster** |
+| **All leagues (cached)** | N/A | 0.29s | **12x vs fresh** |
+| **NBA + NFL only** | 0.28s | 0.19s | **32% faster** |
+| **NCAAB (32 conf, fresh)** | 1.15s | 0.72s | **37% faster** |
+| **NCAAB (cached)** | N/A | 0.003s | **265x vs fresh** |
+| **Grading 12 picks** | 5.19s | 0.82s | **6.3x faster** |
+| **Grading 3 picks (cached)** | N/A | 0.038s | **Instant** |
+
+**Key Features Added:**
+- **Persistent SQLite Cache** - Scores (24hr), Boxscores (7day), Odds (24hr)
+- **Connection Pooling** - Reusable TCP connections (20-connection pool)
+- **Live Game Filtering** - Only `status='post'` (final) games returned
+- **League-Aware Fetching** - Extract leagues from picks, fetch only needed
+- **Batch Boxscore Pre-fetching** - Parallel fetching for player props
+- **Smart Odds Backfilling** - Targeted ESPN odds fetching for missing odds
+
 *The old grader had higher "coverage" due to false positive matches (e.g., matching "Kent State" to "Iowa State"). The new grader correctly returns PENDING when games don't exist.
 
 **Supported Bet Types:**
@@ -610,6 +633,18 @@ python cli_tool.py 2>&1 | tee debug.log
 ---
 
 ## Changelog
+
+### v3.6.2 (January 23, 2026)
+- **ESPN Grader Performance Optimization** - Major speed improvements
+  - **Persistent SQLite Cache** - Scores (24hr), Boxscores (7day), Odds (24hr)
+  - **Connection Pooling** - Reusable TCP connections (20-connection pool)
+  - **Live Game Filtering** - Only `status='post'` (final) games returned for grading
+  - **League-Aware Fetching** - Extract leagues from picks, fetch only needed (up to 15x faster)
+  - **Batch Boxscore Pre-fetching** - Parallel fetching for player props
+  - **Smart Odds Backfilling** - Targeted ESPN odds fetching for missing odds
+  - **Benchmark Tool** - `tools/benchmark_grader.py` for performance testing
+  - **Performance Results**: 6.3x faster grading, 265x faster cached NCAAB fetches
+  - **Zero Accuracy Loss** - All optimizations maintain 100% grading accuracy
 
 ### v3.6.1 (January 23, 2026)
 - **Project Restructuring** - Major cleanup of file organization

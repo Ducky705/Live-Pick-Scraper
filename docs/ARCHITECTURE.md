@@ -40,7 +40,8 @@ CapperSuite is a pipeline-based application designed for high throughput and rel
 1.  **Fail-Fast & Fallback**: Systems like OCR and Parsing have primary (fast/cheap) methods and secondary (slow/powerful) fallbacks.
 2.  **Parallelism**: Network-bound operations (API calls) are parallelized using `ThreadPoolExecutor`.
 3.  **Token Efficiency**: Prompts are optimized to minimize cost and latency.
-4.  **Modularity**: Components (Grading, OCR) are isolated to allow independent upgrades.
+4.  **Persistent Caching**: Time-intensive network data (scores, boxscores) is cached locally in SQLite to ensure repeated runs are near-instant.
+5.  **Modularity**: Components (Grading, OCR) are isolated to allow independent upgrades.
 
 ## Key Workflows
 

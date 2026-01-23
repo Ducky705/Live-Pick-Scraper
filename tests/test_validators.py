@@ -196,6 +196,140 @@ def test_multi_capper_verifier():
     return True
 
 
+def test_decoder_type_inference():
+    """Test the decoder type inference and correction logic."""
+    print("\n" + "="*60)
+    print("TEST 5: Decoder Type Inference")
+    print("="*60)
+    
+    from src.prompts.decoder import (
+        infer_type_from_pick,
+        normalize_pick_format,
+        validate_and_correct_pick,
+    )
+    
+    # Test cases for type inference
+    test_cases = [
+        # (pick_string, current_type, expected_type)
+        ("New Hampshire -9", "Moneyline", "Spread"),  # Critical bug fix
+        ("St Thomas -7", "Moneyline", "Spread"),  # Critical bug fix
+        ("Chiefs -7.5", "Unknown", "Spread"),
+        ("Lakers ML", "Unknown", "Moneyline"),
+        ("Lakers ML", "Spread", "Moneyline"),  # ML explicit should win
+        ("Lakers vs Celtics Over 220.5", "Spread", "Total"),
+        ("De Minaur/Warriors MLP", "Moneyline", "Parlay"),  # MLP detection
+        ("Youngstown St. / St. Thomas", "Moneyline", "Parlay"),  # Multi-team detection with /
+        ("Chiefs & Bills", "Moneyline", "Parlay"),  # Multi-team detection with &
+        ("1H Chiefs -3.5", "Spread", "Period"),
+        ("Rams Super Bowl +225", "Moneyline", "Future"),  # Future detection
+        ("LeBron: Pts Over 25.5", "Unknown", "Player Prop"),
+        ("Luka Doncic 23+ PTS", "Unknown", "Player Prop"),  # Player prop with + format
+    ]
+    
+    print("Type inference tests:")
+    all_passed = True
+    for pick_str, current_type, expected_type in test_cases:
+        result = infer_type_from_pick(pick_str, current_type)
+        passed = result == expected_type
+        status = "PASS" if passed else "FAIL"
+        print(f"  [{status}] '{pick_str}' ({current_type}) -> {result} (expected: {expected_type})")
+        if not passed:
+            all_passed = False
+    
+    assert all_passed, "Some type inference tests failed"
+    print("  PASSED: All type inference tests passed")
+    
+    return True
+
+
+def test_decoder_format_normalization():
+    """Test the decoder format normalization logic."""
+    print("\n" + "="*60)
+    print("TEST 6: Decoder Format Normalization")
+    print("="*60)
+    
+    from src.prompts.decoder import normalize_pick_format
+    
+    # Test cases for format normalization
+    test_cases = [
+        # (pick_string, bet_type, expected_output)
+        ("U 221.5", "Total", "Under 221.5"),
+        ("O 220", "Total", "Over 220"),
+        ("LAKERS/CLIPPERS", "Total", "Lakers vs Clippers"),
+        ("LAKERS&CELTICS", "Total", "Lakers vs Celtics"),
+        ("Luka Doncic 23+ PTS", "Player Prop", "Luka Doncic: Pts Over 22.5"),
+        ("De Minaur/Warriors MLP", "Parlay", "De Minaur ML / Warriors ML"),
+        ("CHIEFS", "Moneyline", "Chiefs"),  # Title case
+    ]
+    
+    print("Format normalization tests:")
+    all_passed = True
+    for pick_str, bet_type, expected in test_cases:
+        result = normalize_pick_format(pick_str, bet_type)
+        passed = result == expected
+        status = "PASS" if passed else "FAIL"
+        print(f"  [{status}] '{pick_str}' ({bet_type}) -> '{result}' (expected: '{expected}')")
+        if not passed:
+            all_passed = False
+    
+    assert all_passed, "Some format normalization tests failed"
+    print("  PASSED: All format normalization tests passed")
+    
+    return True
+
+
+def test_decoder_full_pipeline():
+    """Test the full decoder pipeline with validate_and_correct_pick."""
+    print("\n" + "="*60)
+    print("TEST 7: Decoder Full Pipeline")
+    print("="*60)
+    
+    from src.prompts.decoder import validate_and_correct_pick
+    
+    # Test: Spread misclassified as ML (critical bug)
+    pick = {
+        "message_id": 31551,
+        "capper_name": "TestCapper",
+        "league": "NCAAB",
+        "type": "Moneyline",  # WRONG - should be Spread
+        "pick": "New Hampshire -9",
+        "odds": -110,
+        "units": 1.0,
+    }
+    
+    result = validate_and_correct_pick(pick)
+    print(f"Spread misclassification fix:")
+    print(f"  Input type: {pick['type']}")
+    print(f"  Output type: {result['type']}")
+    print(f"  Output line: {result.get('line')}")
+    
+    assert result["type"] == "Spread", f"Should correct to Spread, got {result['type']}"
+    assert result.get("line") == -9.0, f"Should extract line=-9.0, got {result.get('line')}"
+    print("  PASSED: Spread misclassification corrected with line extracted")
+    
+    # Test: Player prop format normalization
+    pick2 = {
+        "message_id": 31540,
+        "capper_name": "TestCapper",
+        "league": "NBA",
+        "type": "Player Prop",
+        "pick": "Luka Doncic 23+ PTS",
+        "odds": -110,
+        "units": 1.0,
+    }
+    
+    result2 = validate_and_correct_pick(pick2)
+    print(f"\nPlayer prop format normalization:")
+    print(f"  Input pick: {pick2['pick']}")
+    print(f"  Output pick: {result2['pick']}")
+    
+    assert ":" in result2["pick"], "Should add colon format"
+    assert "Over 22.5" in result2["pick"], f"Should convert 23+ to Over 22.5, got {result2['pick']}"
+    print("  PASSED: Player prop formatted correctly")
+    
+    return True
+
+
 def run_all_tests():
     """Run all tests."""
     print("\n" + "#"*60)
@@ -206,7 +340,10 @@ def run_all_tests():
         "ImageClassifier": test_image_classifier(),
         "AlbumCorrelator": test_album_correlator(),
         "MultiPickValidator": test_multi_pick_validator(),
-        "MultiCapperVerifier": test_multi_capper_verifier()
+        "MultiCapperVerifier": test_multi_capper_verifier(),
+        "DecoderTypeInference": test_decoder_type_inference(),
+        "DecoderFormatNormalization": test_decoder_format_normalization(),
+        "DecoderFullPipeline": test_decoder_full_pipeline(),
     }
     
     print("\n" + "="*60)

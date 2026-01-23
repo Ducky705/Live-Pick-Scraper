@@ -10,7 +10,7 @@ The CapperSuite v3.6 Prompt System is designed for **maximum token efficiency** 
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
-│  │   RAW    │───▶│   LLM    │───▶│ COMPACT  │───▶│ DECODER  │───▶│ EXPANDED │   │
+│  │   RAW    │──▶│   LLM    │───▶│ COMPACT  │──▶│ DECODER  │───▶│ EXPANDED │   │
 │  │  PROMPT  │    │ PROVIDER │    │   JSON   │    │  MODULE  │    │  OBJECT  │   │
 │  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
 │                                        │                                        │

@@ -22,7 +22,7 @@ The `ParallelBatchProcessor` (`src/parallel_batch_processor.py`) orchestrates th
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
-│  │ INCOMING │───▶│  BATCH   │───▶│   LOAD   │───▶│ WORKER   │───▶│ PROVIDER │   │
+│  │ INCOMING │──▶│  BATCH   │───▶│   LOAD   │──▶│ WORKER   │───▶│ PROVIDER │   │
 │  │ MESSAGES │    │ SPLITTER │    │ BALANCER │    │  POOL    │    │   API    │   │
 │  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
 │                                        │               │                        │

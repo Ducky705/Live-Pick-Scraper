@@ -1,94 +1,95 @@
-import difflib
-from src.supabase_client import get_capper_cache, get_or_create_capper_id
+import rapidfuzz
+from rapidfuzz import process, fuzz
+
 
 class CapperMatcher:
     def __init__(self):
         pass
 
-    def match_name(self, raw_name, limit=5):
+    def match_name(self, raw_name, candidates, limit=5, threshold=90):
         """
-        Returns a list of matches:
-        [
-            {'name': 'Canonical Name', 'score': 100, 'type': 'exact', 'id': 1},
-            {'name': 'Canonical Name', 'score': 85, 'type': 'fuzzy_variant', 'id': 1}
-        ]
+        Returns a list of matches based on strict fuzzy matching rules.
+
+        Args:
+            raw_name (str): The name to match.
+            candidates (list): List of dicts [{'name': 'Canonical', 'id': 1, 'type': 'canonical'|'variant', 'is_active': bool}].
+            limit (int): Max number of results.
+            threshold (int): Minimum score (0-100) to consider a match.
+
+        Returns:
+            list: List of dicts.
         """
-        if not raw_name: return []
-        
+        if not raw_name or not candidates:
+            return []
+
         raw_lower = str(raw_name).lower().strip()
-        capper_map, variant_map = get_capper_cache()
-        
         matches = []
-        
-        # 1. Exact Match (Canonical)
-        if raw_lower in capper_map:
-            # Reconstruct original case if possible, but map only has ID.
-            # We'll return title case for display
-            matches.append({
-                'name': raw_lower.title(),
-                'score': 100,
-                'type': 'exact_canonical',
-                'id': capper_map[raw_lower]
-            })
+
+        # Optimize: Create name map for quick lookup
+        # We process candidates to ensure keys are lowercase
+        name_to_candidate = {}
+        for c in candidates:
+            k = c["name"].lower().strip()
+            # Prioritize canonical if duplicates exist in list (shouldn't happen if list is well formed)
+            if k not in name_to_candidate:
+                name_to_candidate[k] = c
+            elif c.get("type") == "canonical":
+                name_to_candidate[k] = c
+
+        # 1. Exact Match
+        if raw_lower in name_to_candidate:
+            cand = name_to_candidate[raw_lower]
+            matches.append(
+                {
+                    "name": cand["name"],
+                    "score": 100,
+                    "type": f"exact_{cand.get('type', 'canonical')}",
+                    "id": cand["id"],
+                    "is_active": cand.get("is_active", False),
+                }
+            )
             return matches
 
-        # 2. Exact Match (Variant)
-        if raw_lower in variant_map:
-            capper_id = variant_map[raw_lower]
-            # Find canonical name for this ID
-            canonical = next((k for k, v in capper_map.items() if v == capper_id), "Unknown")
-            matches.append({
-                'name': canonical.title(),
-                'score': 100,
-                'type': 'exact_variant',
-                'id': capper_id
-            })
-            return matches
+        # 2. Fuzzy Match
+        choices = list(name_to_candidate.keys())
 
-        # 3. Fuzzy Match
-        # We search against both canonical names and variants
-        candidates = list(capper_map.keys()) + list(variant_map.keys())
-        
-        # Difflib get_close_matches is good but doesn't return scores easily.
-        # We will iterate and map ratio.
-        
-        scored = []
-        for cand in candidates:
-            ratio = difflib.SequenceMatcher(None, raw_lower, cand).ratio()
-            if ratio > 0.4: # Filter garbage
-                score = int(ratio * 100)
-                
-                # Resolve ID
-                if cand in capper_map:
-                    cid = capper_map[cand]
-                    cname = cand
-                else:
-                    cid = variant_map[cand]
-                    cname = next((k for k, v in capper_map.items() if v == cid), cand)
-                
-                # Check if we already have this capper in list (deduplicate by ID, keep highest score)
-                existing = next((x for x in scored if x['id'] == cid), None)
-                if existing:
-                    if score > existing['score']:
-                        existing['score'] = score
-                else:
-                    scored.append({
-                        'name': cname.title(),
-                        'score': score,
-                        'type': 'fuzzy',
-                        'id': cid
-                    })
-        
-        # Sort by score desc, then name
-        scored.sort(key=lambda x: (-x['score'], x['name']))
-        
-        return scored[:limit]
+        # Use WRatio as it handles partial matches and case well
+        raw_matches = process.extract(
+            raw_lower, choices, scorer=fuzz.WRatio, limit=limit, score_cutoff=threshold
+        )
 
-    def match_names_bulk(self, names):
+        for match_name, score, _ in raw_matches:
+            cand = name_to_candidate[match_name]
+
+            # Deduplicate by ID (keep highest score)
+            existing = next((x for x in matches if x["id"] == cand["id"]), None)
+
+            if existing:
+                if score > existing["score"]:
+                    existing["score"] = score
+                    existing["name"] = cand["name"]
+            else:
+                matches.append(
+                    {
+                        "name": cand["name"],
+                        "score": score,
+                        "type": "fuzzy",
+                        "id": cand["id"],
+                        "is_active": cand.get("is_active", False),
+                    }
+                )
+
+        # Sort by score desc
+        matches.sort(key=lambda x: -x["score"])
+
+        return matches
+
+    def match_names_bulk(self, names, candidates):
         results = {}
         unique_names = set(str(n).strip() for n in names if n)
         for name in unique_names:
-            results[name] = self.match_name(name)
+            results[name] = self.match_name(name, candidates)
         return results
+
 
 capper_matcher = CapperMatcher()

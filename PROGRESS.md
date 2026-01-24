@@ -1,5 +1,14 @@
 # Progress Tracker
 
+## Phase 5: Smart Capper Matching
+- [x] Integrate `rapidfuzz` for high-performance fuzzy matching.
+- [x] Implement "Smart Active Priority" matching:
+    1.  Exact Match.
+    2.  Fuzzy Match (Score > 90) against **Active Cappers** (those with picks).
+    3.  Fuzzy Match (Score > 90) against **All Cappers**.
+    4.  Auto-Create new capper if no match found.
+- [x] Verified logic with unit tests (Active vs Inactive prioritization).
+
 ## Phase 4: Debugging & Evaluation Tools
 - [x] Run `tools/debug_grader.py`, analyze results manually, and grade the performance (2025-01-25)
     - **Initial Score**: 20/60 (User Reported) vs 53/60 (Debug Run).

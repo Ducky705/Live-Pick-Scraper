@@ -122,7 +122,7 @@ STAT_ABBREVS = {
 # =============================================================================
 
 # Ultra-compact schema doc for prompts (~150 chars vs ~800 original)
-SCHEMA_DOC = """KEYS:i=id,c=capper(Use text header/username first),l=league,t=type,p=pick,o=odds(int,e.g.-110),u=units(float),q=confidence(1-10)
+SCHEMA_DOC = """KEYS:i=id,c=capper(First line of text/header. If unknown use 'Unknown'),l=league,t=type,p=pick,o=odds(int,e.g.-110),u=units(float),q=confidence(1-10)
 TYPES:ML,SP,TL,PP,TP,GP,PD,PL,TS,FT,UK
 LEAGUES:NFL,NCAAF,NBA,NCAAB,WNBA,MLB,NHL,EPL,MLS,UCL,UFC,PFL,TENNIS,SOCCER,PGA,F1,Other"""
 
@@ -216,7 +216,8 @@ NEGATIVE_CONSTRAINTS = """CONSTRAINTS:
   -Do NOT treat futures as Moneyline. t=FT.
   -Extract odds (e.g. +225) into "o" field.
 11.PERIOD FORMAT: "1H Team -X". Prefix 1H/1Q is MANDATORY in pick string.
-12.CAPPER NAME: DO NOT use 'Text', 'Caption', 'OCR', 'T' as capper name. Use 'Unknown' if capper name is not clearly found."""
+12.CAPPER NAME: DO NOT use 'Text', 'Caption', 'OCR', 'Content', 'T' as capper name. Look at the FIRST LINE of [CONTENT]."""
+
 
 # =============================================================================
 # PROMPT BUILDER FUNCTIONS
@@ -250,14 +251,16 @@ Extract betting picks from data below.
 {NEGATIVE_CONSTRAINTS}
 
 RULES:
-1.c=capper from header/username/CAPPER: tag. NOT watermarks(@cappersfree). DO NOT use 'Caption'/'Text'/'OCR'.
+1.c=capper from header/username/CAPPER: tag. Check FIRST LINE of [CONTENT] for name. Ignore "Content"/"Caption".
 2.o=American odds int(-110,+150) or null if not visible. DO NOT GUESS -110.
+
 3.u=units float. CHECK HEADERS (e.g."10U MAX"). Default 1.
 4.Separate picks per capper.
 5.Period bets:if text has 1H/1Q/F5/P1, t=PD.
 6.Parlay:each leg prefixed with (LEAGUE).
 7.Reasoning:Add 1 sentence "r".
-8.LISTS: Scan FULL message. Extract items 1 to N. Do NOT combine straight bets into a Parlay. Output separate rows.
+8.LISTS: Scan FULL message. Extract items 1 to N. EACH LINE IS A SEPARATE PICK. Do NOT parlay them unless it says "Parlay".
+
 9.SPLIT PICKS: "Team +8 & ML" = 2 picks.
 10.Tennis: NO "ML" on sets/games.
 11.PARLAY PROPS: Expand "Player 23+ Pts" inside parlay legs.
@@ -317,9 +320,13 @@ OUTPUT:[{{"i":123,"c":"Name","l":"NBA","p":"Team -5"}}]"""
 
 def get_dsl_extraction_prompt(raw_data: str, current_date: Optional[str] = None) -> str:
     """
-    Generate DSL extraction prompt (Pipe-Delimited).
+    Generate DSL extraction prompt (Pipe-Delimited) with Chain-of-Thought.
 
-    Format: id|c|l|t|p|o|u|r
+    Format:
+    <analysis>
+    ... reasoning ...
+    </analysis>
+    id|capper|league|type|pick|odds|units|reasoning
 
     Args:
         raw_data: The formatted raw message data
@@ -331,27 +338,47 @@ def get_dsl_extraction_prompt(raw_data: str, current_date: Optional[str] = None)
     if not current_date:
         current_date = datetime.now().strftime("%Y-%m-%d")
 
-    return f"""TEMP:0 OUTPUT:TEXT
-Extract picks. Output STRICTLY in this pipe-separated format (one pick per line):
+    return f"""TEMP:0.1 OUTPUT:TEXT
+Extract betting picks.
+STEP 1: Analyze the message in an <analysis> block.
+- Identify the SPORT (College vs Pro). "William & Mary" is a College Team, NOT a parlay.
+- Identify the BET TYPE. "Team Total" != "Game Total". "Team -7" = Spread. "Team ML" = Moneyline.
+- Check for LISTS. Extract ALL items (Parlay 1, Parlay 2...).
+- Check for "Team1 + Team2" (Parlay) vs "Team1 vs Team2" (Game).
+
+STEP 2: Output picks in strict pipe-separated format (one per line).
 id|capper|league|type|pick|odds|units|reasoning
 
 {SCHEMA_DOC}
 {PICK_FORMAT_RULES}
 
-CRITICAL FORMATTING RULES:
-1. MONEYLINE: You MUST append "ML" to the team name. (e.g., "Lakers ML", NOT "Lakers")
-2. PERIODS: 1st Half/Quarter bets MUST start with "1H" or "1Q". Type="Period". (e.g., "1H Lakers -5")
-3. PROPS: Format as "Player: Stat Over/Under X". (e.g., "LeBron: Pts Over 25.5")
-4. LISTS: Extract ALL picks in the message. Do not stop after the first few.
-5. NOISE: Ignore "DM for picks", "VIP", "Whale".
-6. IDS: Use the EXACT ID from the "### ID" header. Do not invent IDs.
+CRITICAL RULES:
+1. LEAGUE:
+   - "William & Mary", "Charleston", "Hofstra" -> NCAAB (College Basketball).
+   - "Lakers", "Celtics" -> NBA.
+2. TYPE:
+   - "Team Total Over X" -> TP (Team Prop).
+   - "Team A vs Team B Over X" -> TL (Game Total).
+   - "Team -7" -> SP (Spread). "Team ML" -> ML.
+3. PARLAYS:
+   - "Team A + Team B" -> Parlay.
+   - "Team A / Team B" -> Parlay.
+   - Output as: (LEAGUE) Leg 1 / (LEAGUE) Leg 2
+4. FORMAT:
+   - 1H/1Q bets MUST start with "1H" or "1Q".
+   - Props: "Player: Stat Over/Under X".
 
 EXAMPLES:
-Input: "### 12345 [Dave] Lakers -5"
+Input: "### 12345 [Dave] William & Mary +4.5 and Hofstra -3. Also Lakers Over 220."
 Output:
-12345|Dave|NBA|SP|Lakers -5|-110|1.0|Spread bet
-123|Dave|NBA|PP|LeBron: Pts Over 25.5|-115|1.0|Player prop
-123|Dave|NBA|PD|1H Warriors ML|-110|1.0|First half moneyline
+<analysis>
+1. "William & Mary" is a single college team (NCAAB). +4.5 is a spread.
+2. "Hofstra" is NCAAB. -3 is a spread.
+3. "Lakers Over 220" implies Lakers vs Opponent Game Total (NBA).
+</analysis>
+12345|Dave|NCAAB|SP|William & Mary +4.5|-110|1.0|Spread bet
+12345|Dave|NCAAB|SP|Hofstra -3|-110|1.0|Spread bet
+12345|Dave|NBA|TL|Lakers vs Opponent Over 220|-110|1.0|Game Total
 
 DATA:
 {raw_data}"""
@@ -473,7 +500,7 @@ def compress_raw_data(selected_data: List[Dict[str, Any]]) -> str:
             ocr_texts = [item.get("ocr_text")]
 
         if text:
-            entry += f" [CONTENT] {text}"
+            entry += f"\n{text}"
 
         for i, ocr in enumerate(ocr_texts):
             cleaned = clean_text_for_ai(ocr)

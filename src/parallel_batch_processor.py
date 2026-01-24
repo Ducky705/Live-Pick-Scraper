@@ -27,6 +27,7 @@ from src.cerebras_client import cerebras_completion
 from src.groq_client import groq_text_completion
 from src.mistral_client import mistral_completion
 from src.gemini_client import gemini_text_completion
+from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt
 
 logger = logging.getLogger(__name__)
@@ -37,48 +38,74 @@ logger = logging.getLogger(__name__)
 PROVIDER_CONFIG = {
     "groq": {
         "model": "llama-3.3-70b-versatile",  # User's choice - best quality
-        "rpm": 1000,                          # 1000 requests per minute
-        "tpm": 300000,                        # 300K tokens per minute
-        "max_concurrent": 16,                 # 1000 RPM / 60s = 16.7/sec
-        "min_delay": 0.06,                    # 60ms between requests
-        "priority": 1,                        # PRIMARY provider
+        "rpm": 100,  # Lower RPM to match TPM constraints
+        "tpm": 15000,  # REFLECT ACTUAL LIMIT (12k observed)
+        "max_concurrent": 2,  # Reduce to 2 to prevent TPM blowout
+        "min_delay": 2.0,  # Slower pacing
+        "priority": 1,  # PRIMARY provider
     },
     "mistral": {
-        "model": "codestral-latest",          # 100% F1
-        "rpm": 60,                            # 60 requests per minute
-        "tpm": 500000,                        # 500K TPM - can batch heavily!
-        "max_concurrent": 4,                  # 60 RPM = 1/sec, 4 concurrent staggered
-        "min_delay": 1.0,                     # 1 req/sec
-        "batch_size": 10,                     # Bundle 10 messages per call
-        "priority": 2,
+        "model": "mistral-large-latest",  # Updated model name
+        "rpm": 60,  # 60 requests per minute
+        "tpm": 500000,  # 500K TPM - can batch heavily!
+        "max_concurrent": 4,  # 60 RPM = 1/sec, 4 concurrent staggered
+        "min_delay": 1.0,  # 1 req/sec
+        "batch_size": 10,  # Bundle 10 messages per call
+        "priority": 2,  # SECONDARY (Preferred Backup)
     },
-    "gemini": {
-        "model": "gemini-2.5-flash-lite",     # Highest RPM on Gemini
-        "rpm": 15,                            # 15 requests per minute
-        "tpm": 250000,                        # 250K TPM
-        "max_concurrent": 3,                  # 15 RPM / 60 = 0.25/sec
-        "min_delay": 4.0,                     # 4s between requests
-        "batch_size": 5,                      # Bundle 5 messages per call
+    "openrouter": {
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "rpm": 100,
+        "tpm": 100000,
+        "max_concurrent": 5,
+        "min_delay": 0.5,
+        "priority": 3,  # TERTIARY (Fallback)
+    },
+    "openrouter": {
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "rpm": 100,
+        "tpm": 100000,
+        "max_concurrent": 5,
+        "min_delay": 0.5,
+        "priority": 2,  # SECONDARY (Reliable Free)
+    },
+    "mistral": {
+        "model": "mistral-large-latest",  # Updated model name
+        "rpm": 60,  # 60 requests per minute
+        "tpm": 500000,  # 500K TPM - can batch heavily!
+        "max_concurrent": 4,  # 60 RPM = 1/sec, 4 concurrent staggered
+        "min_delay": 1.0,  # 1 req/sec
+        "batch_size": 10,  # Bundle 10 messages per call
         "priority": 3,
     },
-    "cerebras": {
-        "model": "llama3.1-8b",               # Fast
-        "rpm": 30,                            # 30 requests per minute
-        "tpm": 60000,                         # 60K TPM (lower)
-        "max_concurrent": 2,                  # 30 RPM = 0.5/sec
-        "min_delay": 2.0,                     # 2s between requests
+    "gemini": {
+        "model": "gemini-2.0-flash-lite-preview-02-05",  # Updated model
+        "rpm": 15,  # 15 requests per minute
+        "tpm": 250000,  # 250K TPM
+        "max_concurrent": 3,  # 15 RPM / 60 = 0.25/sec
+        "min_delay": 4.0,  # 4s between requests
+        "batch_size": 5,  # Bundle 5 messages per call
         "priority": 4,
+    },
+    "cerebras": {
+        "model": "llama3.1-8b",  # Fast
+        "rpm": 30,  # 30 requests per minute
+        "tpm": 60000,  # 60K TPM (lower)
+        "max_concurrent": 2,  # 30 RPM = 0.5/sec
+        "min_delay": 2.0,  # 2s between requests
+        "priority": 5,
     },
 }
 
 
 class RateLimiter:
     """Thread-safe rate limiter per provider."""
+
     def __init__(self, min_delay: float):
         self.min_delay = min_delay
         self.last_request = 0.0
         self.lock = Lock()
-    
+
     def wait(self):
         """Wait until we can make the next request."""
         with self.lock:
@@ -95,115 +122,224 @@ class ParallelBatchProcessor:
         Initialize processor with MAXIMUM SPEED configuration.
         Priority: Groq (16) > Mistral (4) > Gemini (3) > Cerebras (2) = 25 workers
         """
-        self.providers = providers or ["groq", "mistral", "gemini", "cerebras"]
+        self.providers = providers or [
+            "groq",
+            "openrouter",
+            "mistral",
+            "gemini",
+            "cerebras",
+        ]
         self.rate_limiters = {
-            p: RateLimiter(PROVIDER_CONFIG[p]["min_delay"]) 
-            for p in self.providers if p in PROVIDER_CONFIG
+            p: RateLimiter(PROVIDER_CONFIG[p]["min_delay"])
+            for p in self.providers
+            if p in PROVIDER_CONFIG
         }
-        self.stats = {p: {"count": 0, "errors": 0, "total_time": 0.0} for p in self.providers}
+        self.stats = {
+            p: {"count": 0, "errors": 0, "total_time": 0.0} for p in self.providers
+        }
         self.stats_lock = Lock()
+        self.provider_status = {p: "active" for p in self.providers}
+        self.status_lock = Lock()
 
     def _execute_request(self, provider: str, messages: List[dict]) -> str:
         """Execute a single request to a provider with rate limiting."""
+        # Check fast-fail status
+        with self.status_lock:
+            status = self.provider_status.get(provider)
+            if isinstance(status, (int, float)) and time.time() < status:
+                raise Exception(
+                    f"Provider {provider} is rate limited (cooldown until {status})"
+                )
+
         config = PROVIDER_CONFIG.get(provider)
         if not config:
             raise ValueError(f"Unknown provider: {provider}")
-        
+
         # Rate limit
         self.rate_limiters[provider].wait()
-        
+
         # Build prompt
         prompt = generate_ai_prompt(messages)
         model = config["model"]
-        
-        # Execute
-        if provider == "groq":
-            return groq_text_completion(prompt, model=model, timeout=30)
-        elif provider == "mistral":
-            return mistral_completion(prompt, model=model, timeout=30)
-        elif provider == "cerebras":
-            return cerebras_completion(prompt, model=model, timeout=30)
-        elif provider == "gemini":
-            return gemini_text_completion(prompt, model=model, timeout=60)
-        else:
-            raise ValueError(f"Unknown provider: {provider}")
 
-    def _process_batch(self, batch_id: int, messages: List[dict], provider: str) -> Dict:
+        try:
+            # Execute
+            if provider == "groq":
+                return groq_text_completion(prompt, model=model, timeout=30)
+            elif provider == "openrouter":
+                return openrouter_completion(prompt, model=model, timeout=45)
+            elif provider == "mistral":
+                return mistral_completion(prompt, model=model, timeout=30)
+            elif provider == "cerebras":
+                return cerebras_completion(prompt, model=model, timeout=30)
+            elif provider == "gemini":
+                return gemini_text_completion(prompt, model=model, timeout=60)
+            else:
+                raise ValueError(f"Unknown provider: {provider}")
+        except Exception as e:
+            if "429" in str(e):
+                with self.status_lock:
+                    # Set 60s cooldown for rate limits
+                    self.provider_status[provider] = time.time() + 60
+                logger.warning(
+                    f"[{provider}] MARKED RATE LIMITED (Fast Fail Enabled - 60s Cooldown)"
+                )
+            raise e
+
+    def _process_batch(
+        self, batch_id: int, messages: List[dict], provider: str
+    ) -> Dict:
         """Process a single batch with a specific provider."""
         start = time.time()
         try:
             result = self._execute_request(provider, messages)
             duration = time.time() - start
-            
+
+            # CRITICAL: Treat None result as an error (API returned nothing)
+            if result is None:
+                with self.stats_lock:
+                    self.stats[provider]["errors"] += 1
+                logger.error(f"[{provider}] Batch {batch_id} returned None (API error)")
+                return {
+                    "batch_id": batch_id,
+                    "status": "error",
+                    "error": "API returned None",
+                    "provider": provider,
+                }
+
             with self.stats_lock:
                 self.stats[provider]["count"] += 1
                 self.stats[provider]["total_time"] += duration
-            
+
             logger.info(f"[{provider}] Batch {batch_id} done in {duration:.2f}s")
-            return {"batch_id": batch_id, "status": "success", "data": result, "provider": provider}
-        
+            return {
+                "batch_id": batch_id,
+                "status": "success",
+                "data": result,
+                "provider": provider,
+            }
+
         except Exception as e:
             duration = time.time() - start
             with self.stats_lock:
                 self.stats[provider]["errors"] += 1
-            
+
             logger.error(f"[{provider}] Batch {batch_id} failed: {e}")
-            return {"batch_id": batch_id, "status": "error", "error": str(e), "provider": provider}
+            return {
+                "batch_id": batch_id,
+                "status": "error",
+                "error": str(e),
+                "provider": provider,
+            }
 
     def process_batches(self, batches: List[List[dict]]) -> List[Any]:
         """
-        Process batches with MAXIMUM parallelism based on rate limits.
-        
-        Strategy (25 total workers):
-        - Groq: 16 workers (64%) - PRIMARY
-        - Mistral: 4 workers (16%) - SECONDARY
-        - Gemini: 3 workers (12%) - TERTIARY
-        - Cerebras: 2 workers (8%) - OVERFLOW
+        Process batches with MAXIMUM parallelism and AUTO-FALLBACK.
+
+        Strategy:
+        1. Round-robin across all providers based on their capacity
+        2. Retry failed batches with fallback providers
         """
         total = len(batches)
-        logger.info(f"Processing {total} batches with MAXIMUM SPEED (25 workers)...")
-        
+        logger.info(f"Processing {total} batches with auto-fallback enabled...")
+
         # Calculate worker allocation: Groq(16) + Mistral(4) + Gemini(3) + Cerebras(2) = 25
         workers = []
         for p in self.providers:
             if p in PROVIDER_CONFIG:
                 workers.extend([p] * PROVIDER_CONFIG[p]["max_concurrent"])
-        
+
         max_workers = len(workers)
-        logger.info(f"Using {max_workers} workers: {workers}")
-        
-        results = []
+        logger.info(f"Using {max_workers} workers: {list(set(workers))}")
+
+        results = [None] * total  # Use list for indexed access
+        failed_batches = []
         batch_queue = list(enumerate(batches))  # [(id, batch), ...]
-        
-        # Round-robin assignment with preference for Groq
+
+        # Round-robin assignment
         def get_next_provider(idx: int) -> str:
             return workers[idx % len(workers)]
-        
+
+        # Phase 1: Initial pass with round-robin
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {}
-            
+
             for i, (batch_id, batch) in enumerate(batch_queue):
                 provider = get_next_provider(i)
                 future = executor.submit(self._process_batch, batch_id, batch, provider)
-                futures[future] = batch_id
-            
+                futures[future] = (batch_id, batch, provider)
+
             # Collect results
             for future in as_completed(futures):
+                batch_id, batch, provider = futures[future]
                 result = future.result()
-                results.append(result)
-                
+
+                if result["status"] == "success":
+                    results[batch_id] = result
+                else:
+                    failed_batches.append((batch_id, batch, provider))
+
                 # Progress
-                done = len(results)
+                done = sum(1 for r in results if r is not None)
                 if done % 5 == 0 or done == total:
                     logger.info(f"Progress: {done}/{total} batches complete")
-        
-        # Sort by batch_id
-        results.sort(key=lambda x: x["batch_id"])
-        
+
+        # Phase 2: Retry failed batches with fallback providers
+        if failed_batches:
+            logger.warning(
+                f"Retrying {len(failed_batches)} failed batches with fallback providers..."
+            )
+
+            # Get list of providers that worked (have successful results)
+            working_providers = set()
+            for r in results:
+                if r and r.get("status") == "success":
+                    working_providers.add(r.get("provider"))
+
+            # Determine fallback order (prioritize working providers)
+            fallback_order = [
+                p
+                for p in ["openrouter", "mistral", "cerebras", "gemini", "groq"]
+                if p in self.providers and p != "groq"
+            ]  # Groq already failed
+
+            # Add working providers to front
+            for wp in working_providers:
+                if wp in fallback_order:
+                    fallback_order.remove(wp)
+                    fallback_order.insert(0, wp)
+
+            logger.info(f"Fallback order: {fallback_order}")
+
+            for batch_id, batch, failed_provider in failed_batches:
+                success = False
+                for provider in fallback_order:
+                    if provider == failed_provider:
+                        continue  # Skip the one that already failed
+
+                    result = self._process_batch(batch_id, batch, provider)
+                    if result["status"] == "success":
+                        results[batch_id] = result
+                        success = True
+                        logger.info(f"Batch {batch_id} recovered via {provider}")
+                        break
+
+                if not success:
+                    logger.error(f"Batch {batch_id} failed on all providers")
+                    results[batch_id] = {
+                        "batch_id": batch_id,
+                        "status": "error",
+                        "data": None,
+                    }
+
         self._print_summary()
-        
-        # Return successful results only
-        return [r["data"] for r in results if r["status"] == "success"]
+
+        # Return successful results only (filter None and errors)
+        return [
+            r["data"]
+            for r in results
+            if r and r.get("status") == "success" and r.get("data")
+        ]
 
     def process_batches_groq_priority(self, batches: List[List[dict]]) -> List[Any]:
         """
@@ -212,32 +348,34 @@ class ParallelBatchProcessor:
         """
         total = len(batches)
         logger.info(f"Processing {total} batches (GROQ-PRIORITY, 16 concurrent)...")
-        
+
         results = [None] * total
         failed_batches = []
-        
+
         # Phase 1: Blast through with Groq (16 concurrent workers)
         groq_config = PROVIDER_CONFIG["groq"]
         with ThreadPoolExecutor(max_workers=groq_config["max_concurrent"]) as executor:
             futures = {
-                executor.submit(self._process_batch, i, batch, "groq"): i 
+                executor.submit(self._process_batch, i, batch, "groq"): i
                 for i, batch in enumerate(batches)
             }
-            
+
             for future in as_completed(futures):
                 batch_id = futures[future]
                 result = future.result()
-                
+
                 if result["status"] == "success":
                     results[batch_id] = result
                 else:
                     failed_batches.append((batch_id, batches[batch_id]))
-        
+
         # Phase 2: Retry failures with fallback providers (Mistral > Gemini > Cerebras)
         if failed_batches:
-            logger.info(f"Retrying {len(failed_batches)} failed batches with fallbacks...")
+            logger.info(
+                f"Retrying {len(failed_batches)} failed batches with fallbacks..."
+            )
             fallback_providers = ["mistral", "gemini", "cerebras"]
-            
+
             for batch_id, batch in failed_batches:
                 for provider in fallback_providers:
                     result = self._process_batch(batch_id, batch, provider)
@@ -245,8 +383,12 @@ class ParallelBatchProcessor:
                         results[batch_id] = result
                         break
                 else:
-                    results[batch_id] = {"batch_id": batch_id, "status": "error", "data": None}
-        
+                    results[batch_id] = {
+                        "batch_id": batch_id,
+                        "status": "error",
+                        "data": None,
+                    }
+
         self._print_summary()
         return [r["data"] for r in results if r and r.get("status") == "success"]
 
@@ -255,14 +397,18 @@ class ParallelBatchProcessor:
         print("\n" + "=" * 60)
         print("PARALLEL BATCH PROCESSING SUMMARY")
         print("=" * 60)
-        print(f"{'Provider':<12} | {'Batches':>8} | {'Errors':>7} | {'Avg Time':>10} | {'RPM Used':>10}")
+        print(
+            f"{'Provider':<12} | {'Batches':>8} | {'Errors':>7} | {'Avg Time':>10} | {'RPM Used':>10}"
+        )
         print("-" * 60)
-        
+
         for p in self.providers:
             s = self.stats.get(p, {"count": 0, "errors": 0, "total_time": 0})
             avg_time = s["total_time"] / s["count"] if s["count"] > 0 else 0
             rpm = PROVIDER_CONFIG.get(p, {}).get("rpm", 0)
-            print(f"{p:<12} | {s['count']:>8} | {s['errors']:>7} | {avg_time:>8.2f}s | {rpm:>10}")
+            print(
+                f"{p:<12} | {s['count']:>8} | {s['errors']:>7} | {avg_time:>8.2f}s | {rpm:>10}"
+            )
         print("=" * 60 + "\n")
 
 

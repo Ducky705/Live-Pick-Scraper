@@ -7,7 +7,7 @@ import os
 import sys
 
 # Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def test_image_classifier():
     """Test the ImageClassifier module."""
@@ -258,7 +258,8 @@ def test_decoder_format_normalization():
         ("LAKERS/CLIPPERS", "Total", "Lakers vs Clippers"),
         ("LAKERS&CELTICS", "Total", "Lakers vs Celtics"),
         ("Luka Doncic 23+ PTS", "Player Prop", "Luka Doncic: Pts Over 22.5"),
-        ("De Minaur/Warriors MLP", "Parlay", "De Minaur ML / Warriors ML"),
+        # MLP parlays now get league prefixes (fix for grading errors)
+        ("De Minaur/Warriors MLP", "Parlay", "(TENNIS) De Minaur ML / (NBA) Warriors ML"),
         ("CHIEFS", "Moneyline", "Chiefs"),  # Title case
     ]
     

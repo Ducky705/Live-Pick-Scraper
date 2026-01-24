@@ -377,4 +377,9 @@ def clean_text_for_ai(text):
     # 6. Collapse whitespace
     text = re.sub(r'\s+', ' ', text).strip()
     
+    # 7. Normalize fractions (½ -> .5)
+    # This prevents precision loss where ½ becomes .0 or is dropped
+    text = text.replace('½', '.5')
+    text = text.replace('1/2', '.5') # Simple fraction replacement
+    
     return text[:2500] # Safe clamp

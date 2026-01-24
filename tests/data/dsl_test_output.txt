@@ -1,0 +1,88 @@
+NBA | Spread | Milwaukee Bucks -8.5 | null | null
+NBA | Spread | Brooklyn Nets +8.5 | null | null
+NBA | Spread | Suns -3 | null | null
+NBA | Spread | Pelicans +6 | null | null
+NCAAB | Spread | Indiana -7 | null | null
+NCAAB | Spread | Tulane +3.5 | null | null
+NBA | Total | Rockets vs Pistons Under 218 | null | null
+TENNIS | Parlay | (TENNIS) Khachanov ML / (TENNIS) Quinn +2.5 sets | -140 | 1.0
+TENNIS | Parlay | (TENNIS) Khachanov ML / (TENNIS) Musetti ML | -110 | 1.0
+TENNIS | Total | Shelton vs Vacherot Over 3.5 sets | -150 | 1.0
+NHL | Moneyline | Blues ML | +140 | 2.0
+NCAAB | Spread | St Bonaventure +7.5 | -111 | 0.75
+NCAAB | Moneyline | St Bonaventure ML | +312 | 0.25
+NCAAB | Spread | Rutgers +7.5 | -102 | 0.75
+NCAAB | Moneyline | Rutgers ML | +282 | 0.25
+NCAAB | Spread | Colorado State +5.5 | -107 | 0.75
+NCAAB | Spread | Michigan -16.5 | -111 | 3.0
+NBA | Spread | Pistons -4 | -110 | 2.0
+NHL | Spread | Lightning -1.5 | -112 | 2.0
+NHL | Total | Ducks vs Kraken Under 6.5 | -120 | 2.0
+NBA | Total | Toronto vs Portland Under 226.5 | null | 2.0
+NCAAB | Moneyline | Middle Tennessee ML | -120 | 2.4
+NBA | Spread | Milwaukee Bucks -6 | null | 2.0
+NBA | Spread | New Orleans Pelicans +6.5 | null | 2.0
+NCAAB | Spread | Indiana -7 | null | 5.0
+NCAAB | Spread | Furman -4 | null | 4.0
+NCAAB | Spread | Utah State -4.5 | null | 3.0
+NCAAB | Spread | St. Bonaventure +8 | null | 2.0
+NCAAB | Moneyline | Chicago State ML | null | null
+NCAAB | Spread | Utah State -4 | null | null
+NBA | Spread | Bucks -5.5 | null | null
+NBA | Spread | Cavaliers -11.5 | null | 2.0
+NBA | Spread | Blazers +3.5 | null | 2.0
+NCAAB | Total | Ohio State vs Michigan Over 164.5 | null | 2.0
+NCAAB | Moneyline | Utah State ML | null | 2.0
+NHL | Moneyline | Maple Leafs ML | null | null
+NBA | Moneyline | Pistons ML | null | null
+NBA | Spread | Pelicans +5.5 | null | null
+NBA | Moneyline | Suns ML | null | null
+NBA | Total | Pacers vs Thunder Over 226.5 | null | null
+NBA | Parlay | (NBA) Pistons ML / (NBA) Pelicans +5.5 | null | null
+NBA | Parlay | (NBA) Suns ML / (NBA) Pacers vs Thunder Over 226.5 | null | null
+NCAAB | Spread | Kansas State +5.5 | null | null
+NCAAB | Moneyline | Texas ML | null | null
+NCAAB | Spread | St Bonaventure +8.5 | -110 | 1.0
+NBA | Spread | Pelicans +6 | -110 | 1.0
+NBA | Moneyline | Pelicans ML | +190 | 0.3
+NCAAB | Total | Indiana vs Rutgers Under 147.5 | null | 0.75
+NFL | Spread | Broncos +5.5 | null | 4.0
+NFL | Spread | Rams +3 | null | 4.0
+NFL | Parlay | (NFL) Rams +8.5 / (NFL) Broncos +10.5 | null | 4.0
+NCAAB | Total | St Louis vs St Bonaventure Over 158.5 | null | 3.0
+NCAAB | Spread | Purdue -2.5 | null | 4.0
+NCAAB | Moneyline | Texas ML | null | 3.0
+NHL | Moneyline | Capitals ML | null | 4.0
+NHL | Moneyline | Sharks ML | null | 3.0
+NHL | Total | Blues vs Stars Under 6 | null | 3.0
+NBA | Spread | Pelicans +6 | null | 3.0
+TENNIS | Parlay | (TENNIS) Khachanov ML / (TENNIS) Shelton ML | null | 4.5
+TENNIS | Spread | Machac +3.5 | null | 3.0
+NCAAB | Spread | Longwood +1.5 | null | null
+NCAAB | Total | Western Illinois vs Southern Indiana Over 134 | null | null
+NCAAB | Total | Wagner vs Le Moyne Under 145 | null | null
+NCAAB | Spread | Furman -2.5 | null | 3.0
+NCAAB | Moneyline | Umass ML | null | 3.0
+NCAAB | Spread | Michigan -12.5 | null | 3.0
+NBA | Spread | Kings +12.5 | null | 3.0
+NBA | Spread | Bucks -6.5 | null | 3.0
+NCAAB | Spread | Saint Louis -7.5 | null | 2.0
+NCAAB | Spread | Indiana -6.5 | null | 2.0
+NCAAB | Spread | Michigan -14.5 | null | 2.0
+TENNIS | Moneyline | De Minaur ML | null | 5.0
+NBA | Spread | Pistons -3 | null | 1.0
+NBA | Spread | Nuggets +6.5 | null | 1.0
+NCAAB | Spread | Ohio +9 | null | 2.0
+NCAAB | Spread | Middle Tennessee St -1 | null | 1.0
+NCAAB | Spread | NC Greensboro +5 | null | 1.0
+NCAAB | Spread | Chicago State +2.5 | null | 1.5
+NCAAB | Moneyline | Mercyhurst ML | null | 1.5
+NCAAB | Spread | Akron Zips -8.5 | -105 | 2.0
+NCAAB | Spread | Michigan Wolverines -15.5 | -110 | 3.0
+NBA | Spread | Milwaukee Bucks -6.5 | -110 | 2.0
+NBA | Spread | Bulls +8.5 | null | null
+NBA | Moneyline | Rockets ML | +155 | 1.0
+NCAAB | Total | St Louis vs St Bonnies Under 158.5 | -110 | 1.0
+NCAAB | Total | Indiana vs Rutgers Under 148 | -110 | 1.0
+NCAAB | Spread | Utah St -5 | -110 | 1.0
+NCAAB | Spread | Florida GC +7.5 | -110 | 1.0

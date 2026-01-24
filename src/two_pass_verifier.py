@@ -4,6 +4,8 @@ import logging
 import re
 from typing import List, Dict, Any, Optional
 
+from src.semantic_validator import SemanticValidator
+
 class TwoPassVerifier:
     """
     Handles verification of OCR and Parsing results.
@@ -68,6 +70,9 @@ class TwoPassVerifier:
         unknown_count = 0
         total_picks = len(picks)
         
+        # New: Semantic Validation Check
+        semantic_issues = 0
+        
         for pick in picks:
             # Critical fields missing
             capper = pick.get('capper_name', 'Unknown')
@@ -81,6 +86,12 @@ class TwoPassVerifier:
             
             if is_bad_capper or is_bad_league or is_bad_pick:
                 unknown_count += 1
+            
+            # Check semantic validity
+            is_valid, reason = SemanticValidator.validate(pick)
+            if not is_valid:
+                semantic_issues += 1
+                logging.warning(f"[TwoPassVerifier] Semantic Issue: {reason} in {pick_val}")
                 
         # Threshold: If > 30% of picks are bad, fail.
         if total_picks == 0:
@@ -88,6 +99,11 @@ class TwoPassVerifier:
             
         if (unknown_count / total_picks) > 0.3:
             logging.info(f"[TwoPassVerifier] Low confidence parsing: {unknown_count}/{total_picks} picks contain Unknown fields.")
+            return False
+            
+        # If significant semantic issues found (> 20%), consider it a failure
+        if (semantic_issues / total_picks) > 0.2:
+            logging.info(f"[TwoPassVerifier] Low confidence parsing: {semantic_issues}/{total_picks} picks have semantic errors.")
             return False
             
         return True

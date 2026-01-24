@@ -142,13 +142,15 @@ def cerebras_completion(prompt, model=DEFAULT_TEXT_MODEL, images=None, timeout=6
                 else:
                     logging.warning(f"[Cerebras] No choices returned.")
             elif response.status_code == 429:
-                logging.warning(f"[Cerebras] Rate limit (429). Retrying...")
-                time.sleep(2) # Simple wait
+                logging.warning(f"[Cerebras] Rate limit (429). Failing fast.")
+                raise Exception("Cerebras Rate limit 429")
             else:
                 logging.error(f"[Cerebras] Error {response.status_code}: {response.text}")
                 last_error = f"Error {response.status_code}"
 
         except Exception as e:
+            if "429" in str(e):
+                raise e
             logging.error(f"[Cerebras] Exception: {e}")
             last_error = str(e)
 

@@ -2,16 +2,16 @@
   "config": {
     "model": "tngtech/deepseek-r1t2-chimera:free",
     "enhanced": true,
-    "images_tested": 20
+    "images_tested": 30
   },
   "metrics": {
-    "precision": 0.9811320754716981,
-    "recall": 0.9629629629629629,
-    "f1": 0.9719626168224299,
-    "total_tp": 52,
-    "total_fp": 1,
-    "total_fn": 2,
-    "avg_latency": 22.818330907821654
+    "precision": 0.7407407407407407,
+    "recall": 0.7407407407407407,
+    "f1": 0.7407407407407407,
+    "total_tp": 40,
+    "total_fp": 14,
+    "total_fn": 14,
+    "avg_latency": 4.1165509700775145
   },
   "classification_stats": {
     "PICK": 0,

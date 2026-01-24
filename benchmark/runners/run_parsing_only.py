@@ -10,9 +10,39 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt
-from benchmark.runners.run_benchmark import calculate_score, fuzzy_match # Use existing scoring logic
+from src.prompts.decoder import normalize_response
+
+def fuzzy_match(gt_pick, sys_pick, gt_type="", sys_type=""):
+    """
+    Fuzzy match two pick strings.
+    Returns True if they are semantically similar.
+    """
+    if not gt_pick or not sys_pick:
+        return False
+    
+    gt_norm = gt_pick.lower().strip()
+    sys_norm = sys_pick.lower().strip()
+    
+    # Exact match
+    if gt_norm == sys_norm:
+        return True
+    
+    # Substring match (one contains the other)
+    if gt_norm in sys_norm or sys_norm in gt_norm:
+        return True
+    
+    # Token overlap (e.g., "Lakers +3" vs "Los Angeles Lakers +3")
+    gt_tokens = set(gt_norm.split())
+    sys_tokens = set(sys_norm.split())
+    overlap = len(gt_tokens & sys_tokens)
+    max_len = max(len(gt_tokens), len(sys_tokens))
+    if max_len > 0 and overlap / max_len >= 0.6:
+        return True
+    
+    return False
 
 def calculate_f1(tp, fp, fn):
+
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
     return 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
@@ -58,6 +88,7 @@ def run_parsing_benchmark(specific_model=None, limit=0):
         ground_truth_json = json.load(f)
 
     # Load existing results if available to allow resuming
+    overall_results = {}
     if os.path.exists(os.path.join(RESULTS_DIR, "parsing_benchmark_results.json")):
         try:
             with open(os.path.join(RESULTS_DIR, "parsing_benchmark_results.json"), 'r') as f:
@@ -66,6 +97,7 @@ def run_parsing_benchmark(specific_model=None, limit=0):
             overall_results = {}
             
     models = [specific_model] if specific_model else MODELS_TO_TEST
+
     
     for model in models:
         if model in overall_results and specific_model is None:
@@ -106,21 +138,16 @@ def run_parsing_benchmark(specific_model=None, limit=0):
                     response = openrouter_completion(final_prompt, model=model, timeout=45) 
                     latency = time.time() - start_time
                     model_metrics["latency"].append(latency)
+
+                    # Parse using the central decoder (handles DSL and JSON)
+                    parsed_picks = normalize_response(response)
                     
-                    # Parse JSON
-                    cleaned = response.replace("```json", "").replace("```", "").strip()
-                    try:
-                        parsed_json = json.loads(cleaned)
-                        if isinstance(parsed_json, dict) and "picks" in parsed_json:
-                            parsed_picks = parsed_json["picks"]
-                        elif isinstance(parsed_json, list):
-                            parsed_picks = parsed_json
-                        else:
-                            parsed_picks = []
-                    except:
-                        parsed_picks = []
+                    # DEBUG: Print response if low count
+                    if i < 3:
+                        print(f"DEBUG: Response for {filename}:\n{response}\nParsed: {parsed_picks}", flush=True)
 
                     # Score Locally
+
                     matched_gt = set()
                     matched_sys = set()
                     tp_local = 0
@@ -164,18 +191,13 @@ def run_parsing_benchmark(specific_model=None, limit=0):
             # SAVE INCREMENTALLY
             with open(os.path.join(RESULTS_DIR, "parsing_benchmark_results.json"), 'w') as f:
                 json.dump(overall_results, f, indent=2)
-            
+
         except Exception as e:
              print(f"CRITICAL ERROR testing model {model}: {e}", flush=True)
              continue
 
-def calculate_f1(tp, fp, fn):
-    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
-    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-    if precision + recall == 0: return 0
-    return 2 * (precision * recall) / (precision + recall)
-
 def calculate_precision(tp, fp):
+
     return tp / (tp + fp) if (tp + fp) > 0 else 0
 
 def calculate_recall(tp, fn):

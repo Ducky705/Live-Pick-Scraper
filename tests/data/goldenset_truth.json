@@ -1,0 +1,884 @@
+{
+  "picks": [
+    {
+      "message_id": 31597,
+      "capper_name": "Vezino",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Milwaukee Bucks -8.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31597,
+      "capper_name": "Vezino",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Brooklyn Nets +8.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31596,
+      "capper_name": "Tbsportsbetting",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Phoenix Suns -3",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31596,
+      "capper_name": "Tbsportsbetting",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "New Orleans Pelicans +6",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31596,
+      "capper_name": "Tbsportsbetting",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Indiana -7",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31596,
+      "capper_name": "Tbsportsbetting",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Tulane +3.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31595,
+      "capper_name": "SeanPerryWins",
+      "league": "NBA",
+      "type": "Total",
+      "pick": "Rockets vs Pistons Under 218",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31594,
+      "capper_name": "IllicitPicks",
+      "league": "TENNIS",
+      "type": "Parlay",
+      "pick": "(TENNIS) Khachanov ML / (TENNIS) Quinn +2.5 sets",
+      "odds": -140,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31594,
+      "capper_name": "IllicitPicks",
+      "league": "TENNIS",
+      "type": "Parlay",
+      "pick": "(TENNIS) Khachanov ML / (TENNIS) Musetti ML",
+      "odds": -110,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31594,
+      "capper_name": "IllicitPicks",
+      "league": "TENNIS",
+      "type": "Total",
+      "pick": "Shelton vs Vacherot Over 3.5 sets",
+      "odds": -150,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31593,
+      "capper_name": "HammeringHank",
+      "league": "NHL",
+      "type": "Moneyline",
+      "pick": "St. Louis Blues ML",
+      "odds": 140,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31592,
+      "capper_name": "A11Bets",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "St Bonaventure +7.5",
+      "odds": -111,
+      "units": 0.75,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31592,
+      "capper_name": "A11Bets",
+      "league": "NCAAB",
+      "type": "Moneyline",
+      "pick": "St Bonaventure ML",
+      "odds": 312,
+      "units": 0.25,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31592,
+      "capper_name": "A11Bets",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Rutgers +7.5",
+      "odds": -102,
+      "units": 0.75,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31592,
+      "capper_name": "A11Bets",
+      "league": "NCAAB",
+      "type": "Moneyline",
+      "pick": "Rutgers ML",
+      "odds": 282,
+      "units": 0.25,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31592,
+      "capper_name": "A11Bets",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Colorado State +5.5",
+      "odds": -107,
+      "units": 0.75,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31591,
+      "capper_name": "Pardonmypick",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Michigan -16.5",
+      "odds": -111,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31591,
+      "capper_name": "Pardonmypick",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Detroit Pistons -4",
+      "odds": -110,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31591,
+      "capper_name": "Pardonmypick",
+      "league": "NHL",
+      "type": "Spread",
+      "pick": "Tampa Bay Lightning -1.5",
+      "odds": -112,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31591,
+      "capper_name": "Pardonmypick",
+      "league": "NHL",
+      "type": "Total",
+      "pick": "Ducks vs Kraken Under 6.5",
+      "odds": -120,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31590,
+      "capper_name": "ProvenWinner",
+      "league": "NBA",
+      "type": "Total",
+      "pick": "Toronto vs Portland Under 226.5",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31590,
+      "capper_name": "ProvenWinner",
+      "league": "NCAAB",
+      "type": "Moneyline",
+      "pick": "Middle Tennessee ML",
+      "odds": -120,
+      "units": 2.4,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31590,
+      "capper_name": "ProvenWinner",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Milwaukee Bucks -6",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31590,
+      "capper_name": "ProvenWinner",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "New Orleans Pelicans +6.5",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31588,
+      "capper_name": "Hammering Hank",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Indiana -7",
+      "odds": null,
+      "units": 5.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31588,
+      "capper_name": "Hammering Hank",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Furman -4",
+      "odds": null,
+      "units": 4.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31588,
+      "capper_name": "Hammering Hank",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Utah State -4.5",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31588,
+      "capper_name": "Hammering Hank",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "St. Bonaventure +8",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31587,
+      "capper_name": "AlgoPicks",
+      "league": "NCAAB",
+      "type": "Moneyline",
+      "pick": "Chicago State ML",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31587,
+      "capper_name": "AlgoPicks",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Utah State -4",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31587,
+      "capper_name": "AlgoPicks",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Milwaukee Bucks -5.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31586,
+      "capper_name": "Vinny",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Cleveland Cavaliers -11.5",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31586,
+      "capper_name": "Vinny",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Portland Trail Blazers +3.5",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31586,
+      "capper_name": "Vinny",
+      "league": "NCAAB",
+      "type": "Total",
+      "pick": "Ohio State vs Michigan Over 164.5",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31586,
+      "capper_name": "Vinny",
+      "league": "NCAAB",
+      "type": "Moneyline",
+      "pick": "Utah State ML",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31585,
+      "capper_name": "Duckinvestments",
+      "league": "NHL",
+      "type": "Moneyline",
+      "pick": "Toronto Maple Leafs ML",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31585,
+      "capper_name": "Duckinvestments",
+      "league": "NBA",
+      "type": "Moneyline",
+      "pick": "Detroit Pistons ML",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31585,
+      "capper_name": "Duckinvestments",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "New Orleans Pelicans +5.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31585,
+      "capper_name": "Duckinvestments",
+      "league": "NBA",
+      "type": "Moneyline",
+      "pick": "Phoenix Suns ML",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31585,
+      "capper_name": "Duckinvestments",
+      "league": "NBA",
+      "type": "Total",
+      "pick": "Pacers vs Thunder Over 226.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31585,
+      "capper_name": "Duckinvestments",
+      "league": "NBA",
+      "type": "Parlay",
+      "pick": "(NBA) Detroit Pistons ML / (NBA) New Orleans Pelicans +5.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31585,
+      "capper_name": "Duckinvestments",
+      "league": "NBA",
+      "type": "Parlay",
+      "pick": "(NBA) Phoenix Suns ML / (NBA) Pacers vs Thunder Over 226.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31584,
+      "capper_name": "TPD",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Kansas State +5.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31584,
+      "capper_name": "TPD",
+      "league": "NCAAB",
+      "type": "Moneyline",
+      "pick": "Texas ML",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31583,
+      "capper_name": "Bet Labs",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "St Bonaventure +8.5",
+      "odds": -110,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31583,
+      "capper_name": "Bet Labs",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "New Orleans Pelicans +6",
+      "odds": -110,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31583,
+      "capper_name": "Bet Labs",
+      "league": "NBA",
+      "type": "Moneyline",
+      "pick": "New Orleans Pelicans ML",
+      "odds": 190,
+      "units": 0.3,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31583,
+      "capper_name": "Bet Labs",
+      "league": "NCAAB",
+      "type": "Total",
+      "pick": "Indiana vs Rutgers Under 147.5",
+      "odds": null,
+      "units": 0.75,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NFL",
+      "type": "Spread",
+      "pick": "Denver Broncos +5.5",
+      "odds": null,
+      "units": 4.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NFL",
+      "type": "Spread",
+      "pick": "Los Angeles Rams +3",
+      "odds": null,
+      "units": 4.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NFL",
+      "type": "Parlay",
+      "pick": "(NFL) Los Angeles Rams +8.5 / (NFL) Denver Broncos +10.5",
+      "odds": null,
+      "units": 4.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NCAAB",
+      "type": "Total",
+      "pick": "St Louis vs St Bonaventure Over 158.5",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Purdue -2.5",
+      "odds": null,
+      "units": 4.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NCAAB",
+      "type": "Moneyline",
+      "pick": "Texas ML",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NHL",
+      "type": "Moneyline",
+      "pick": "Washington Capitals ML",
+      "odds": null,
+      "units": 4.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NHL",
+      "type": "Moneyline",
+      "pick": "San Jose Sharks ML",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NHL",
+      "type": "Total",
+      "pick": "Blues vs Stars Under 6",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31582,
+      "capper_name": "Porter Picks",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "New Orleans Pelicans +6",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Newmark",
+      "league": "TENNIS",
+      "type": "Parlay",
+      "pick": "(TENNIS) Khachanov ML / (TENNIS) Shelton ML",
+      "odds": null,
+      "units": 4.5,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Newmark",
+      "league": "TENNIS",
+      "type": "Spread",
+      "pick": "Machac +3.5 games",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Bet Sharper",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Longwood +1.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Bet Sharper",
+      "league": "NCAAB",
+      "type": "Total",
+      "pick": "Western Illinois vs Southern Indiana Over 134",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Bet Sharper",
+      "league": "NCAAB",
+      "type": "Total",
+      "pick": "Wagner vs Le Moyne Under 145",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Bullies Picks",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Furman -2.5",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Bullies Picks",
+      "league": "NCAAB",
+      "type": "Moneyline",
+      "pick": "UMass ML",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Bullies Picks",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Michigan -12.5",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Picks 4 Dayzzz",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Sacramento Kings +12.5",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Picks 4 Dayzzz",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Milwaukee Bucks -6.5",
+      "odds": null,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Picks 4 Dayzzz",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Saint Louis -7.5",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Picks 4 Dayzzz",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Indiana -6.5",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Picks 4 Dayzzz",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Michigan -14.5",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Match Point Bets",
+      "league": "TENNIS",
+      "type": "Moneyline",
+      "pick": "De Minaur ML",
+      "odds": null,
+      "units": 5.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Prop Joe",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Detroit Pistons -3",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Prop Joe",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Denver Nuggets +6.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Prop Joe",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Ohio +9",
+      "odds": null,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Prop Joe",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Middle Tennessee State -1",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Prop Joe",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "UNC Greensboro +5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Nicky Cashin",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Chicago State +2.5",
+      "odds": null,
+      "units": 1.5,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31581,
+      "capper_name": "Nicky Cashin",
+      "league": "NCAAB",
+      "type": "Moneyline",
+      "pick": "Mercyhurst ML",
+      "odds": null,
+      "units": 1.5,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31580,
+      "capper_name": "SmartMoneySports",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Akron Zips -8.5",
+      "odds": -105,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31580,
+      "capper_name": "SmartMoneySports",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Michigan Wolverines -15.5",
+      "odds": -110,
+      "units": 3.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31580,
+      "capper_name": "SmartMoneySports",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Milwaukee Bucks -6.5",
+      "odds": -110,
+      "units": 2.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31579,
+      "capper_name": "Mazi",
+      "league": "NBA",
+      "type": "Spread",
+      "pick": "Chicago Bulls +8.5",
+      "odds": null,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31578,
+      "capper_name": "Cblez",
+      "league": "NBA",
+      "type": "Moneyline",
+      "pick": "Houston Rockets ML",
+      "odds": 155,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31578,
+      "capper_name": "Cblez",
+      "league": "NCAAB",
+      "type": "Total",
+      "pick": "St. Louis vs St. Bonaventure Under 158.5",
+      "odds": -110,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31578,
+      "capper_name": "Cblez",
+      "league": "NCAAB",
+      "type": "Total",
+      "pick": "Indiana vs Rutgers Under 148",
+      "odds": -110,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31578,
+      "capper_name": "Cblez",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Utah State -5",
+      "odds": -110,
+      "units": 1.0,
+      "result": "Pending"
+    },
+    {
+      "message_id": 31578,
+      "capper_name": "Cblez",
+      "league": "NCAAB",
+      "type": "Spread",
+      "pick": "Florida Gulf Coast +7.5",
+      "odds": -110,
+      "units": 1.0,
+      "result": "Pending"
+    }
+  ]
+}

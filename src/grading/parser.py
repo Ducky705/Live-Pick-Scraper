@@ -61,11 +61,55 @@ class PickParser:
     @staticmethod
     def _is_parlay(text: str) -> bool:
         """Check if text is a parlay."""
+        # Check for explicit Parlay marker
+        if "parlay" in text.lower() and ":" in text:
+            return True
+            
         # Slash separator with multiple legs
         if "/" in text:
+            # FIRST: Check if it's actually a total (e.g., "Lakers/Clippers Under 222.5")
+            # If it has Over/Under AND a number, it's likely a total, not a parlay
+            total_match = re.search(r'\b(over|under|o/u)\s*\d', text, re.IGNORECASE)
+            if total_match:
+                # Unless it's a parlay of totals (e.g. "Over 222.5 / Under 210")
+                legs = text.split('/')
+                # If both legs look like separate bets (have numbers/ML), it's a parlay
+                is_parlay_of_totals = True
+                for leg in legs:
+                    if not re.search(r'\d|ML', leg):
+                        is_parlay_of_totals = False
+                        break
+                if not is_parlay_of_totals:
+                    return False
+            
+            # Check for compound team names (William & Mary)
+            # Simple check: if splitting by / yields "William & Mary", don't treat as parlay
+            # But usually compound names use "&", not "/". 
+            # If text is "William & Mary ML", it won't have "/" so this block is skipped.
+            # If text is "William / Mary ML", we should catch it.
+            if "William / Mary" in text or "A / M" in text:
+                return False
+
             legs = [l.strip() for l in text.split('/') if l.strip()]
             if len(legs) >= 2:
                 return True
+        
+        # Ampersand separator (less common for parlays, usually use /)
+        if " & " in text:
+             # Check for compound names first
+             if any(name in text.lower() for name in ["william & mary", "texas a&m", "a & m", "w & m"]):
+                 return False
+                 
+             legs = [l.strip() for l in text.split('&') if l.strip()]
+             # Only treat as parlay if legs look like bets (have numbers or ML)
+             valid_legs = 0
+             for leg in legs:
+                 if re.search(r'\d|ML|Over|Under', leg, re.IGNORECASE):
+                     valid_legs += 1
+             
+             if valid_legs >= 2:
+                 return True
+
         return False
 
     @staticmethod

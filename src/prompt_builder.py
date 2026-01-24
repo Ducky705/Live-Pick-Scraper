@@ -3,7 +3,8 @@ from datetime import datetime
 from typing import List, Dict, Any
 
 from src.prompts.core import (
-    get_compact_extraction_prompt, 
+    get_compact_extraction_prompt,
+    get_dsl_extraction_prompt,
     get_compact_revision_prompt,
     compress_raw_data
 )
@@ -25,8 +26,8 @@ def generate_ai_prompt(selected_data: List[Dict[str, Any]]) -> str:
     # 1. Compress the data into the compact format (### id [T] text...)
     compressed_data = compress_raw_data(selected_data)
     
-    # 2. Build the prompt using the core module
-    return get_compact_extraction_prompt(compressed_data)
+    # 2. Build the prompt using the DSL module
+    return get_dsl_extraction_prompt(compressed_data)
 
 
 def generate_revision_prompt(failed_items: List[Dict[str, Any]]) -> str:

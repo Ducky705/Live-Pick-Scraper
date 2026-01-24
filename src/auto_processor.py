@@ -1,7 +1,7 @@
 """
 Auto Processor Module
 =====================
-Intelligent pre-processing layer that classifies Telegram messages BEFORE 
+Intelligent pre-processing layer that classifies Telegram messages BEFORE
 the main OCR/parsing pipeline. This solves the user's core problems:
 
 1. Auto-deselect promotional posts ("Join VIP", ads)
@@ -20,7 +20,7 @@ import re
 from typing import List, Dict, Any, Optional
 
 # Add project root to path if needed
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     BASE_DIR = sys._MEIPASS
 else:
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,53 +28,70 @@ else:
 from src.openrouter_client import openrouter_completion
 from src.provider_pool import pooled_completion
 from src.utils import clean_text_for_ai
+from src.ocr_engine import get_ocr_engine
+from src.ocr_preprocessing import preprocess_for_rapidocr
+import cv2
+import numpy as np
 
 # Use the same default model as the main pipeline - VERIFIED WORKING
-DEFAULT_CLASSIFIER_MODEL = "google/gemini-2.0-flash-exp:free"  # Fast vision model for classification
+DEFAULT_CLASSIFIER_MODEL = (
+    "google/gemini-2.0-flash-exp:free"  # Fast vision model for classification
+)
 
 
 class PostClassification:
     """Enum-like class for post classifications"""
-    PICK = "PICK"           # Valid betting pick - should be selected
-    PROMO = "PROMO"         # Advertisement/promotional - should be deselected
-    RECAP = "RECAP"         # Yesterday's results recap - should be deselected  
-    DATA = "DATA"           # Spreadsheet/model output dump - should be deselected
-    NOISE = "NOISE"         # Irrelevant content - should be deselected
-    UNKNOWN = "UNKNOWN"     # Could not classify - keep selected for manual review
+
+    PICK = "PICK"  # Valid betting pick - should be selected
+    PROMO = "PROMO"  # Advertisement/promotional - should be deselected
+    RECAP = "RECAP"  # Yesterday's results recap - should be deselected
+    DATA = "DATA"  # Spreadsheet/model output dump - should be deselected
+    NOISE = "NOISE"  # Irrelevant content - should be deselected
+    UNKNOWN = "UNKNOWN"  # Could not classify - keep selected for manual review
 
 
 # Heuristic patterns for FAST text-based classification (no AI needed)
 # CONSERVATIVE: Only filter when we're VERY confident (100% accuracy goal)
 PROMO_PATTERNS = [
-    r'join\s*(our)?\s*vip\s*(channel|group)',  # More specific
-    r'subscribe\s*(to|for)\s*(our|the)\s*(channel|group)',
-    r'limited\s*time\s*offer',
-    r'\$\d+\s*(off|discount)',
-    r'use\s*code\s*[A-Z0-9]+\s*for',  # More specific
-    r'free\s*trial\s*(available|now)',
-    r'sign\s*up\s*(now|today)\s*(for|to)',
-    r'click\s*(here|link)\s*to\s*(join|subscribe)',
-    r'crypto\s*airdrop',
-    r'nft\s*giveaway',
+    r"join\s*(our)?\s*vip\s*(channel|group)",  # More specific
+    r"subscribe\s*(to|for)\s*(our|the)\s*(channel|group)",
+    r"limited\s*time\s*offer",
+    r"\$\d+\s*(off|discount)",
+    r"use\s*code\s*[A-Z0-9]+\s*for",  # More specific
+    r"free\s*trial\s*(available|now)",
+    r"sign\s*up\s*(now|today)\s*(for|to)",
+    r"click\s*(here|link)\s*to\s*(join|subscribe)",
+    r"crypto\s*airdrop",
+    r"nft\s*giveaway",
+]
+
+# SAFEGUARD patterns - If these exist, it is likely a PICK (overrides weak promo signals)
+BETTING_SIGNAL_PATTERNS = [
+    r"[+-]\d{1,2}\.?\d*",  # Spreads like -7.5, +3
+    r"\b(over|under|o|u)\s*\d{2,3}\.?\d*",  # Totals like Over 220.5
+    r"\b(moneyline|ml)\b",
+    r"\d+u\s*max\s*bet",  # "5U MAX BET" is a pick, not a promo
+    r"\d+u\s*play",
+    r"\bunits?\b",
 ]
 
 # RECAP patterns - VERY CONSERVATIVE to avoid false positives
 # Only trigger on explicit past-tense recap indicators
 RECAP_PATTERNS = [
-    r'yesterday[\']?s?\s+results?\s*:',  # Explicit "yesterday's results:"
-    r'last\s+night[\']?s?\s+results?\s*:',
-    r'^recap\s*:',  # Must start with "Recap:" 
-    r'final\s+results?\s+for\s+(yesterday|last\s+night)',
-    r'[✅❌]{5,}',  # 5+ consecutive result indicators = definitely recap
+    r"yesterday[\']?s?\s+results?\s*:",  # Explicit "yesterday's results:"
+    r"last\s+night[\']?s?\s+results?\s*:",
+    r"^recap\s*:",  # Must start with "Recap:"
+    r"final\s+results?\s+for\s+(yesterday|last\s+night)",
+    r"[✅❌]{5,}",  # 5+ consecutive result indicators = definitely recap
 ]
 
 # DATA DUMP patterns - for spreadsheet/model output detection
 DATA_DUMP_PATTERNS = [
-    r'model\s+output\s*:',
-    r'ai\s+model\s+results?\s*:',
-    r'spreadsheet\s+data',
-    r'expected\s+value\s+analysis',
-    r'ev\s*:\s*[\+\-]?\d+.*\n.*ev\s*:',  # Multiple EV lines = data dump
+    r"model\s+output\s*:",
+    r"ai\s+model\s+results?\s*:",
+    r"spreadsheet\s+data",
+    r"expected\s+value\s+analysis",
+    r"ev\s*:\s*[\+\-]?\d+.*\n.*ev\s*:",  # Multiple EV lines = data dump
 ]
 
 
@@ -85,30 +102,44 @@ def classify_by_text_heuristics(text: str) -> Optional[str]:
     """
     if not text:
         return None
-    
+
     text_lower = text.lower()
-    
+
     # Check for PROMO patterns
+    # But first, check for strong betting signals that might look like promos (e.g. "MAX BET")
+    has_betting_signal = False
+    for pattern in BETTING_SIGNAL_PATTERNS:
+        if re.search(pattern, text_lower):
+            has_betting_signal = True
+            break
+
     for pattern in PROMO_PATTERNS:
         if re.search(pattern, text_lower):
+            # If it has strong betting signals, ignore weak promo signals
+            if (
+                has_betting_signal
+                and "join" not in pattern
+                and "subscribe" not in pattern
+            ):
+                continue
             return PostClassification.PROMO
-    
-    # Check for RECAP patterns  
+
+    # Check for RECAP patterns
     for pattern in RECAP_PATTERNS:
         if re.search(pattern, text_lower):
             return PostClassification.RECAP
-    
+
     # Check for DATA DUMP patterns
     for pattern in DATA_DUMP_PATTERNS:
         if re.search(pattern, text_lower):
             return PostClassification.DATA
-    
+
     return None
 
 
 def count_result_indicators(text: str) -> int:
     """Count checkmarks/crosses that indicate a recap."""
-    indicators = re.findall(r'[✅❌✓✗☑️🔴🟢]', text)
+    indicators = re.findall(r"[✅❌✓✗☑️🔴🟢]", text)
     return len(indicators)
 
 
@@ -117,19 +148,19 @@ def classify_message_fast(message: Dict[str, Any]) -> Dict[str, Any]:
     Fast classification using text heuristics only (no AI call).
     Returns a classification result dict.
     """
-    text = message.get('text', '') or ''
-    
+    text = message.get("text", "") or ""
+
     # First try text heuristics
     classification = classify_by_text_heuristics(text)
-    
+
     if classification:
         return {
             "class": classification,
             "confidence": 0.8,
             "reason": f"Text pattern match",
-            "method": "heuristic"
+            "method": "heuristic",
         }
-    
+
     # Check for high number of result indicators (likely recap)
     # CONSERVATIVE: Require 5+ indicators to avoid false positives
     indicator_count = count_result_indicators(text)
@@ -138,44 +169,100 @@ def classify_message_fast(message: Dict[str, Any]) -> Dict[str, Any]:
             "class": PostClassification.RECAP,
             "confidence": 0.7,
             "reason": f"Found {indicator_count} result indicators",
-            "method": "heuristic"
+            "method": "heuristic",
         }
-    
+
     # If no clear pattern, return UNKNOWN (needs AI or manual review)
     return {
         "class": PostClassification.UNKNOWN,
         "confidence": 0.5,
         "reason": "No clear pattern detected",
-        "method": "heuristic"
+        "method": "heuristic",
     }
 
 
-def classify_messages_with_ai(messages: List[Dict[str, Any]], 
-                               model: str = DEFAULT_CLASSIFIER_MODEL) -> Dict[str, Dict]:
+def classify_image_with_local_ocr(image_path: str) -> Optional[Dict[str, Any]]:
+    """
+    Classify an image using local RapidOCR + Text Heuristics.
+    Returns result dict if classification is confident, else None.
+    """
+    try:
+        # Load engine
+        engine = get_ocr_engine()
+        if not engine.is_available():
+            return None
+
+        # Preprocess
+        # We use simple preprocessing for speed
+        import cv2
+
+        img = cv2.imread(image_path)
+        if img is None:
+            return None
+
+        processed = preprocess_for_rapidocr(img)
+
+        # Run OCR
+        text, confidence = engine.extract_text_with_confidence(processed)
+
+        if not text or confidence < 0.6:
+            return None
+
+        # Apply Text Heuristics to OCR output
+        classification = classify_by_text_heuristics(text)
+
+        if classification:
+            return {
+                "class": classification,
+                "confidence": 0.85,  # Higher confidence than pure text heuristic
+                "reason": f"Local OCR pattern match: {classification}",
+                "method": "local_ocr_heuristic",
+            }
+
+        # Also check for result indicators in OCR text (Recap detection)
+        indicator_count = count_result_indicators(text)
+        if indicator_count >= 5:
+            return {
+                "class": PostClassification.RECAP,
+                "confidence": 0.8,
+                "reason": f"Local OCR found {indicator_count} result indicators",
+                "method": "local_ocr_heuristic",
+            }
+
+        return None
+
+    except Exception as e:
+        logging.error(f"[AutoProcessor] Local OCR classification error: {e}")
+        return None
+
+
+def classify_messages_with_ai(
+    messages: List[Dict[str, Any]], model: str = DEFAULT_CLASSIFIER_MODEL
+) -> Dict[str, Dict]:
     """
     Classify messages using Vision AI for images that couldn't be classified by heuristics.
     Batches messages for efficiency.
-    
+
     Args:
         messages: List of message dicts with 'id', 'text', 'images' keys
         model: Model to use for classification
-        
+
     Returns:
         Dict mapping message_id -> classification result
     """
     results = {}
-    
+
     # First pass: fast heuristic classification
     needs_ai = []
     for msg in messages:
-        msg_id = msg.get('id')
+        msg_id = msg.get("id")
         fast_result = classify_message_fast(msg)
-        
+
         if fast_result["class"] != PostClassification.UNKNOWN:
             results[msg_id] = fast_result
         else:
             # Check if has images - only use AI for messages with images
-            has_images = msg.get('images') or msg.get('image')
+            has_images = msg.get("images") or msg.get("image")
             if has_images:
                 needs_ai.append(msg)
             else:
@@ -184,92 +271,135 @@ def classify_messages_with_ai(messages: List[Dict[str, Any]],
                     "class": PostClassification.PICK,
                     "confidence": 0.6,
                     "reason": "Text message with no negative indicators",
-                    "method": "heuristic_default"
+                    "method": "heuristic_default",
                 }
-    
-    # Second pass: AI classification for remaining messages with images
-    if needs_ai:
+
+    # Second pass: Local OCR classification for messages with images
+    # This filters out obvious promos/recaps without expensive AI calls
+    still_needs_ai = []
+
+    for msg in needs_ai:
+        msg_id = msg.get("id")
+
+        # Get image paths
+        imgs = []
+        if msg.get("images"):
+            imgs = msg["images"]
+        elif msg.get("image"):
+            imgs = [msg["image"]]
+
+        local_result = None
+        for img_path in imgs:
+            # Resolve path
+            if img_path.startswith("/static/"):
+                clean_path = img_path.lstrip("/").replace("/", os.sep)
+                abs_path = os.path.join(BASE_DIR, clean_path)
+            else:
+                abs_path = img_path
+
+            if os.path.exists(abs_path):
+                # Try local OCR classification
+                local_result = classify_image_with_local_ocr(abs_path)
+                if local_result:
+                    break  # Found a classification, stop checking other images
+
+        if local_result:
+            results[msg_id] = local_result
+        else:
+            still_needs_ai.append(msg)
+
+    # Third pass: AI classification for remaining messages with images
+    if still_needs_ai:
         try:
-            ai_results = _batch_classify_with_ai(needs_ai, model)
+            ai_results = _batch_classify_with_ai(still_needs_ai, model)
             results.update(ai_results)
         except Exception as e:
             logging.error(f"[AutoProcessor] AI classification failed: {e}")
             # Fallback: mark all as PICK for safety
-            for msg in needs_ai:
-                results[msg.get('id')] = {
+            for msg in still_needs_ai:
+                results[str(msg.get("id"))] = {
                     "class": PostClassification.PICK,
                     "confidence": 0.5,
                     "reason": "AI classification failed, defaulting to PICK",
-                    "method": "fallback"
+                    "method": "fallback",
                 }
-    
+
     return results
 
 
-def _batch_classify_with_ai(messages: List[Dict[str, Any]], 
-                            model: str,
-                            batch_size: int = 20) -> Dict[str, Dict]:
+def _batch_classify_with_ai(
+    messages: List[Dict[str, Any]], model: str, batch_size: int = 20
+) -> Dict[str, Dict]:
     """
     Internal function to classify messages with images using VLM.
     OPTIMIZED: Increased batch size to 20 for efficient AI usage.
     """
     results = {}
-    
+
     # Process in batches
     for i in range(0, len(messages), batch_size):
-        batch = messages[i:i+batch_size]
-        
+        batch = messages[i : i + batch_size]
+
         # Collect images and build context
         images_to_send = []
         context_parts = []
-        
+
         for msg in batch:
-            msg_id = msg.get('id')
-            text = clean_text_for_ai(msg.get('text', ''))
-            
+            msg_id = msg.get("id")
+            text = clean_text_for_ai(msg.get("text", ""))
+
             # Get image paths
             imgs = []
-            if msg.get('images'):
-                imgs = msg['images']
-            elif msg.get('image'):
-                imgs = [msg['image']]
-            
+            if msg.get("images"):
+                imgs = msg["images"]
+            elif msg.get("image"):
+                imgs = [msg["image"]]
+
             # Resolve paths
             for img_path in imgs:
-                if img_path.startswith('/static/'):
-                    clean_path = img_path.lstrip('/').replace('/', os.sep)
+                if img_path.startswith("/static/"):
+                    clean_path = img_path.lstrip("/").replace("/", os.sep)
                     abs_path = os.path.join(BASE_DIR, clean_path)
                 else:
                     abs_path = img_path
-                
+
                 if os.path.exists(abs_path):
                     images_to_send.append(abs_path)
-            
+
             context_parts.append(f"[Message {msg_id}] Caption: {text[:200]}")
-        
+
         if not images_to_send:
             continue
-        
+
         # Build classification prompt - MINIFIED for efficiency
-        prompt = """Classify sports betting images.
+        prompt = (
+            """Classify sports betting images.
 CODES: PICK (Valid Bet), PROMO (Ad/VIP), RECAP (Results), DATA (Spreadsheet).
 CONTEXT:
-""" + "\n".join(context_parts) + """
+"""
+            + "\n".join(context_parts)
+            + """
 OUTPUT: Single-line JSON Object {"msg_id":{"class":"CODE","reason":"short reason"}}
 Example: {"123":{"class":"PICK","reason":"Lakers -5 slip"}}"""
+        )
 
         try:
             # Enforce fast model for classification
             # Using pooled completion to distribute load across providers
             # We want the FASTEST model for this.
-            
+
             # Use pooled completion if available, falling back to OpenRouter if all pools fail
             response = pooled_completion(prompt, images=images_to_send, timeout=60)
-            
+
             if not response:
                 # Fallback to OpenRouter directly
-                response = openrouter_completion(prompt, model="google/gemini-2.0-flash-exp:free", images=images_to_send, timeout=60)
-            
+                response = openrouter_completion(
+                    prompt,
+                    model="google/gemini-2.0-flash-exp:free",
+                    images=images_to_send,
+                    timeout=60,
+                )
+
             # Parse response
             cleaned = response.strip()
             if cleaned.startswith("```"):
@@ -277,103 +407,110 @@ Example: {"123":{"class":"PICK","reason":"Lakers -5 slip"}}"""
                 if cleaned.startswith("json"):
                     cleaned = cleaned[4:]
                 cleaned = cleaned.strip()
-            
+
             parsed = json.loads(cleaned)
-            
+
             # Map results back
             for msg in batch:
-                msg_id = str(msg.get('id'))
+                msg_id = str(msg.get("id"))
                 if msg_id in parsed:
                     ai_result = parsed[msg_id]
-                    results[msg.get('id')] = {
+                    results[msg.get("id")] = {
                         "class": ai_result.get("class", PostClassification.PICK),
                         "confidence": 0.9,
                         "reason": ai_result.get("reason", "AI classified"),
-                        "method": "ai_vision"
+                        "method": "ai_vision",
                     }
                 else:
                     # Not in response - default to PICK
-                    results[msg.get('id')] = {
+                    results[msg.get("id")] = {
                         "class": PostClassification.PICK,
                         "confidence": 0.6,
                         "reason": "Default",
-                        "method": "ai_default"
+                        "method": "ai_default",
                     }
-                    
+
         except json.JSONDecodeError as e:
             logging.error(f"[AutoProcessor] JSON parse error: {e}")
             # Default all to PICK
             for msg in batch:
-                results[msg.get('id')] = {
+                results[msg.get("id")] = {
                     "class": PostClassification.PICK,
                     "confidence": 0.5,
                     "reason": "JSON error",
-                    "method": "fallback"
+                    "method": "fallback",
                 }
         except Exception as e:
             logging.error(f"[AutoProcessor] Batch AI error: {e}")
             for msg in batch:
-                results[msg.get('id')] = {
+                results[msg.get("id")] = {
                     "class": PostClassification.PICK,
                     "confidence": 0.5,
                     "reason": "Error",
-                    "method": "fallback"
+                    "method": "fallback",
                 }
-    
+
     return results
 
 
-def auto_select_messages(messages: List[Dict[str, Any]], 
-                         use_ai: bool = True,
-                         model: str = DEFAULT_CLASSIFIER_MODEL) -> List[Dict[str, Any]]:
+def auto_select_messages(
+    messages: List[Dict[str, Any]],
+    use_ai: bool = True,
+    model: str = DEFAULT_CLASSIFIER_MODEL,
+) -> List[Dict[str, Any]]:
     """
     Main entry point: Automatically set 'selected' field based on classification.
-    
+
     Args:
         messages: List of message dicts from Telegram
         use_ai: Whether to use AI for uncertain cases (recommended for accuracy)
         model: Model to use for AI classification
-        
+
     Returns:
         Same messages list with 'selected', 'classification', and 'classification_reason' fields updated
     """
     if not messages:
         return messages
-    
+
     logging.info(f"[AutoProcessor] Processing {len(messages)} messages...")
-    
+
     if use_ai:
         classifications = classify_messages_with_ai(messages, model)
     else:
         classifications = {}
         for msg in messages:
-            classifications[msg.get('id')] = classify_message_fast(msg)
-    
+            classifications[msg.get("id")] = classify_message_fast(msg)
+
     # Apply classifications
     selected_count = 0
     deselected_count = 0
-    
+
     for msg in messages:
-        msg_id = msg.get('id')
+        msg_id = str(msg.get("id"))
         result = classifications.get(msg_id, {})
-        
+
         classification = result.get("class", PostClassification.UNKNOWN)
-        
+
         # Set selection based on classification
-        should_select = classification in [PostClassification.PICK, PostClassification.UNKNOWN]
-        
-        msg['selected'] = should_select
-        msg['classification'] = classification
-        msg['classification_reason'] = result.get("reason", "")
-        msg['classification_confidence'] = result.get("confidence", 0.5)
-        
+        should_select = classification in [
+            PostClassification.PICK,
+            PostClassification.UNKNOWN,
+        ]
+
+        msg["selected"] = should_select
+        msg["classification"] = classification
+        msg["classification_reason"] = result.get("reason", "")
+        msg["classification_confidence"] = result.get("confidence", 0.5)
+
         if should_select:
             selected_count += 1
         else:
             deselected_count += 1
-    
-    logging.info(f"[AutoProcessor] Results: {selected_count} selected, {deselected_count} auto-deselected")
-    
+
+    logging.info(
+        f"[AutoProcessor] Results: {selected_count} selected, {deselected_count} auto-deselected"
+    )
+
     return messages
 
 
@@ -384,19 +521,19 @@ def check_for_congestion(text: str, image_count: int = 0) -> bool:
     """
     if not text:
         return False
-    
+
     # Count newlines - high count suggests list/table
-    newline_count = text.count('\n')
+    newline_count = text.count("\n")
     if newline_count > 15:
         return True
-    
+
     # Count numbers - high count suggests data table
-    numbers = re.findall(r'\d+\.?\d*', text)
+    numbers = re.findall(r"\d+\.?\d*", text)
     if len(numbers) > 30:
         return True
-    
+
     # Multiple images in one message can be congested
     if image_count >= 4:
         return True
-    
+
     return False

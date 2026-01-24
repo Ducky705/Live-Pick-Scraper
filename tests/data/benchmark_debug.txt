@@ -1,0 +1,102 @@
+
+--- MSG 31578 ---
+TRUTH:
+  ID: 31578 | Pick: Houston Rockets ML
+  ID: 31578 | Pick: St. Louis vs St. Bonaventure Under 158.5
+  ID: 31578 | Pick: Indiana vs Rutgers Under 148
+  ID: 31578 | Pick: Utah State -5
+  ID: 31578 | Pick: Florida Gulf Coast +7.5
+LOCAL:
+  ID: 31578 | Pick: Rockets ML
+  ID: 31578 | Pick: St Louis vs St Bonaventure Under 158.5
+  ID: 31578 | Pick: Indiana vs Rutgers Under 148
+  ID: 31578 | Pick: Utah St -5
+  ID: 31578 | Pick: Florida GC +7.5
+
+--- MSG 31579 ---
+TRUTH:
+  ID: 31579 | Pick: Chicago Bulls +8.5
+LOCAL:
+  ID: 31579 | Pick: Bulls +8.5
+
+--- MSG 31580 ---
+TRUTH:
+  ID: 31580 | Pick: Akron Zips -8.5
+  ID: 31580 | Pick: Michigan Wolverines -15.5
+  ID: 31580 | Pick: Milwaukee Bucks -6.5
+LOCAL:
+  ID: 31580 | Pick: Akron Zips -8.5
+  ID: 31580 | Pick: Michigan Wolverines -15.5
+  ID: 31580 | Pick: Milwaukee Bucks -6.5
+
+--- MSG 31581 ---
+TRUTH:
+  ID: 31581 | Pick: (TENNIS) Khachanov ML / (TENNIS) Shelton ML
+  ID: 31581 | Pick: Machac +3.5 games
+  ID: 31581 | Pick: Longwood +1.5
+  ID: 31581 | Pick: Western Illinois vs Southern Indiana Over 134
+  ID: 31581 | Pick: Wagner vs Le Moyne Under 145
+  ID: 31581 | Pick: Furman -2.5
+  ID: 31581 | Pick: UMass ML
+  ID: 31581 | Pick: Michigan -12.5
+  ID: 31581 | Pick: Sacramento Kings +12.5
+  ID: 31581 | Pick: Milwaukee Bucks -6.5
+  ID: 31581 | Pick: Saint Louis -7.5
+  ID: 31581 | Pick: Indiana -6.5
+  ID: 31581 | Pick: Michigan -14.5
+  ID: 31581 | Pick: De Minaur ML
+  ID: 31581 | Pick: Detroit Pistons -3
+  ID: 31581 | Pick: Denver Nuggets +6.5
+  ID: 31581 | Pick: Ohio +9
+  ID: 31581 | Pick: Middle Tennessee State -1
+  ID: 31581 | Pick: UNC Greensboro +5
+  ID: 31581 | Pick: Chicago State +2.5
+  ID: 31581 | Pick: Mercyhurst ML
+LOCAL:
+  ID: 31581 | Pick: Khachanov ML
+  ID: 31581 | Pick: Shelton ML
+  ID: 31581 | Pick: (TENNIS) Khachanov ML / (TENNIS) Shelton ML
+  ID: 31581 | Pick: Machac +3.5
+  ID: 31581 | Pick: Longwood +1.5
+  ID: 31581 | Pick: Western Illinois vs Southern Indiana Over 134
+  ID: 31581 | Pick: Wagner vs Le Moyne Under 145
+  ID: 31581 | Pick: Furman -2.5
+  ID: 31581 | Pick: Umass ML
+  ID: 31581 | Pick: Michigan -12.5
+  ID: 31581 | Pick: Kings +12.5
+  ID: 31581 | Pick: Bucks -6.5
+  ID: 31581 | Pick: Saint Louis -7.5
+  ID: 31581 | Pick: Indiana -6.5
+  ID: 31581 | Pick: Michigan -14.5
+  ID: 31581 | Pick: De Minaur ML
+  ID: 31581 | Pick: Pistons -3
+  ID: 31581 | Pick: Nuggets +6.5
+  ID: 31581 | Pick: Ohio +9
+  ID: 31581 | Pick: Middle Tennessee St -1
+  ID: 31581 | Pick: NC Greensboro +5
+  ID: 31581 | Pick: Chicago State +2.5
+  ID: 31581 | Pick: Mercyhurst ML
+
+--- MSG 31582 ---
+TRUTH:
+  ID: 31582 | Pick: Denver Broncos +5.5
+  ID: 31582 | Pick: Los Angeles Rams +3
+  ID: 31582 | Pick: (NFL) Los Angeles Rams +8.5 / (NFL) Denver Broncos +10.5
+  ID: 31582 | Pick: St Louis vs St Bonaventure Over 158.5
+  ID: 31582 | Pick: Purdue -2.5
+  ID: 31582 | Pick: Texas ML
+  ID: 31582 | Pick: Washington Capitals ML
+  ID: 31582 | Pick: San Jose Sharks ML
+  ID: 31582 | Pick: Blues vs Stars Under 6
+  ID: 31582 | Pick: New Orleans Pelicans +6
+LOCAL:
+  ID: 31582 | Pick: Broncos +5.5
+  ID: 31582 | Pick: Rams +3
+  ID: 31582 | Pick: (NFL) Rams +8.5 / (NFL) Broncos +10.5
+  ID: 31582 | Pick: St Louis vs St Bonaventure Over 158.5
+  ID: 31582 | Pick: Purdue -2.5
+  ID: 31582 | Pick: Texas ML
+  ID: 31582 | Pick: Capitals ML
+  ID: 31582 | Pick: Sharks ML
+  ID: 31582 | Pick: Blues vs Stars Under 6
+  ID: 31582 | Pick: Pelicans +6

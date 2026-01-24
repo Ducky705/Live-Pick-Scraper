@@ -308,60 +308,34 @@ def expand_picks_list(compact_list: List[Dict[str, Any]]) -> List[Dict[str, Any]
 def parse_dsl_response(text: str) -> List[Dict[str, Any]]:
     """
     Parse pipe-delimited DSL response.
-    Format: id|c|l|t|p|o|u|r
+    Delegate to robust parser in src.parsers.dsl_parser
     """
-    import logging
+    try:
+        from src.parsers.dsl_parser import parse_dsl_lines
 
-    picks = []
-    if not text:
-        return []
+        # dsl_parser returns full dicts with standard keys
+        full_picks = parse_dsl_lines(text)
 
-    lines = text.strip().split("\n")
-    for line in lines:
-        line = line.strip()
-        if not line or "|" not in line:
-            continue
-
-        parts = [p.strip() for p in line.split("|")]
-        # Filter out header row
-        if parts[0].lower() in ["id", "message_id", "i"]:
-            continue
-
-        # Expect at least 5 parts: id|c|l|t|p...(o|u|r optional)
-        if len(parts) < 5:
-            continue
-
-        try:
-            # Map columns to compact schema keys
-            pick_obj = {
-                "i": parts[0],
-                "c": parts[1],
-                "l": parts[2],
-                "t": parts[3],
-                "p": parts[4],
+        compact_picks = []
+        for p in full_picks:
+            # Map back to compact schema for compatibility with existing pipeline
+            compact = {
+                "i": p.get("id"),
+                "c": p.get("capper_name"),
+                "l": p.get("league"),
+                "t": p.get("type"),
+                "p": p.get("pick"),
+                "o": p.get("odds"),
+                "u": p.get("units"),
+                "r": p.get("reasoning"),
             }
+            compact_picks.append(compact)
 
-            # Optional fields
-            if len(parts) > 5:
-                # Clean odds (remove _ and extra chars)
-                clean_odds = re.sub(r"[_\s]", "", parts[5])
-                if clean_odds.lower() != "null" and clean_odds != "":
-                    try:
-                        pick_obj["o"] = int(clean_odds)
-                    except ValueError:
-                        pick_obj["o"] = None  # DSL returned invalid number string
+        return compact_picks
 
-            if len(parts) > 6 and parts[6].lower() != "null" and parts[6] != "":
-                pick_obj["u"] = parts[6]
-            if len(parts) > 7 and parts[7].lower() != "null" and parts[7] != "":
-                pick_obj["r"] = parts[7]
-
-            picks.append(pick_obj)
-        except Exception as e:
-            logging.warning(f"[Decoder] DSL parse error on line '{line}': {e}")
-            continue
-
-    return picks
+    except ImportError:
+        logging.error("Could not import dsl_parser")
+        return []
 
 
 def extract_json_from_response(text: str) -> Optional[Union[Dict, List]]:
@@ -454,8 +428,14 @@ def normalize_response(
     if not response:
         return []
 
+    # Strip <analysis> block (CoT)
+    response = re.sub(
+        r"<analysis>.*?</analysis>", "", response, flags=re.DOTALL
+    ).strip()
+
     # Try DSL parsing first if it looks like DSL (contains pipes, no JSON brackets at start)
     trimmed = response.strip()
+
     if (
         trimmed
         and not trimmed.startswith("{")
@@ -479,6 +459,24 @@ def normalize_response(
             if expand:
                 return validate_and_correct_batch(picks, valid_message_ids)
             return picks
+
+    # DSL HANDLING: If response looks like DSL (pipe-separated), parse it
+    if (
+        "|" in response
+        and "picks" not in response
+        and not response.strip().startswith("{")
+    ):
+        picks = parse_dsl_response(response)
+        if picks:
+            if expand:
+                return validate_and_correct_batch(
+                    [expand_compact_pick(p) for p in picks], valid_message_ids
+                )
+            return picks
+
+    # JSON HANDLING
+    # 1. Clean the response text (remove markdown, comments)
+    # cleaned_text = _clean_json_response(response)
 
     # Extract JSON
     data = extract_json_from_response(response)
@@ -1508,44 +1506,34 @@ def normalize_pick_format(
         match = over_under_pattern.match(result)
         if match:
             name, side, line, stat = match.groups()
-            side_norm = "Over" if side.lower().startswith('o') else "Under"
-            
+            side_norm = "Over" if side.lower().startswith("o") else "Under"
+
             # Clean name: remove (Team) but keep (League)
             # Assumption: League is usually at start, Team is inside or end
             # "Holmgren (Thunder)" -> "Holmgren"
-            name_clean = re.sub(r'\s*\([A-Z][a-z]+\)\s*', ' ', name).strip()
+            name_clean = re.sub(r"\s*\([A-Z][a-z]+\)\s*", " ", name).strip()
             # Also clean if it's just attached at end without parens sometimes? No, rubric says parens.
             # Fix double spaces
-            name_clean = re.sub(r'\s+', ' ', name_clean)
-            
+            name_clean = re.sub(r"\s+", " ", name_clean)
+
             # Normalize stat (pts+reb+asst -> Pts+Reb+Ast)
             stat = stat.title()
             result = f"{name_clean}: {stat} {side_norm} {line}"
 
         # Pattern 1: Name Num+ STAT (e.g., "Luka Doncic 23+ PTS")
-        plus_pattern = re.compile(r'^([\(\)A-Za-z\s\.\-\']+)\s+(\d+)\+\s*(\w+)$', re.IGNORECASE)
+        plus_pattern = re.compile(
+            r"^([\(\)A-Za-z\s\.\-\']+)\s+(\d+)\+\s*(\w+)$", re.IGNORECASE
+        )
         match = plus_pattern.match(result)
         if match:
             name, num, stat = match.groups()
             # Clean name
-            name_clean = re.sub(r'\s*\([A-Z][a-z]+\)\s*', ' ', name).strip()
-            name_clean = re.sub(r'\s+', ' ', name_clean)
-            
+            name_clean = re.sub(r"\s*\([A-Z][a-z]+\)\s*", " ", name).strip()
+            name_clean = re.sub(r"\s+", " ", name_clean)
+
             # Convert 23+ to Over 22.5
             over_line = float(num) - 0.5
             result = f"{name_clean}: {stat.capitalize()} Over {over_line}"
-        else:
-            # Pattern 2: Name STAT Num+ (e.g., "LeBron Points 25+")
-            alt_pattern = re.compile(r'^([\(\)A-Za-z\s\.\-\']+)\s+(\w+)\s+(\d+)\+$', re.IGNORECASE)
-            match = alt_pattern.match(result)
-            if match:
-                name, stat, num = match.groups()
-                # Clean name
-                name_clean = re.sub(r'\s*\([A-Z][a-z]+\)\s*', ' ', name).strip()
-                name_clean = re.sub(r'\s+', ' ', name_clean)
-                
-                over_line = float(num) - 0.5
-                result = f"{name_clean}: {stat.capitalize()} Over {over_line}"
         else:
             # Pattern 2: Name STAT Num+ (e.g., "LeBron Points 25+")
             alt_pattern = re.compile(
@@ -1556,6 +1544,7 @@ def normalize_pick_format(
                 name, stat, num = match.groups()
                 # Clean name
                 name_clean = re.sub(r"\s*\([A-Z][a-z]+\)\s*", " ", name).strip()
+                name_clean = re.sub(r"\s+", " ", name_clean)
 
                 over_line = float(num) - 0.5
                 result = f"{name_clean}: {stat.capitalize()} Over {over_line}"
@@ -1704,13 +1693,13 @@ def normalize_pick_format(
 
                         # Fix: Remove "ML" if it was incorrectly added to a Set/Game spread
                         # e.g., "Bublik -1.5 sets ML" -> "Bublik -1.5 sets"
-                        if is_tennis_score and leg.strip().upper().endswith(' ML'):
+                        if is_tennis_score and leg.strip().upper().endswith(" ML"):
                             leg = leg.strip()[:-3].strip()
-                        
+
                         formatted_legs.append(leg)
-                
+
                 if formatted_legs:
-                    result = ' / '.join(formatted_legs)
+                    result = " / ".join(formatted_legs)
         else:
             # Handle "Team1/Team2 MLP" -> "Team1 ML / Team2 ML"
             mlp_match = re.search(r"^(.+?)\s*MLP\s*$", result, re.IGNORECASE)

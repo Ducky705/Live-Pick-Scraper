@@ -1,849 +1,659 @@
 {
-  "channel_id": -1001900292133,
-  "channel_name": "CappersFree",
-  "date": "2026-01-13",
-  "fetch_time": 18.51344609260559,
-  "message_count": 61,
   "messages": [
     {
-      "id": 57428,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 22:50 ET",
-      "text": "**PorterPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57428.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57428.jpg",
+      "id": 31597,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 19:01 ET",
+      "text": "Vezino \n\nPOD \nMilwaukee Bucks -8.5 \n\nTop Opinion!!\nBrooklyn nets +8.5",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57427,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 22:04 ET",
-      "text": "**\ud83d\udea8 STILL HAVE TIME TO GET ON BOARD \ud83d\udea8\n**\n**Join The BEST Team**\n\ud83d\udce9** DM: ****@cappersfree**** (click)**",
-      "images": [
-        "/static/temp_images/-1001900292133_57427.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57427.jpg",
+      "id": 31596,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 18:44 ET",
+      "text": "Tbsportsbetting\n\nSuns - 3 (NBA) \ud83d\udc0b \nPelicans +6 (NBA)\nIndiana -7 (NCAAB)\nTulane +3.5 (NAAB)",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57421,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:57 ET",
-      "text": "**monumental\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57421.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57421.jpg",
+      "id": 31595,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 18:44 ET",
+      "text": "SeanPerryWins \n\nSean Perry Wins VIP \nRockets vs Pistons U218",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57420,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:46 ET",
-      "text": "**TPD\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57420.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57420.jpg",
+      "id": 31594,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 18:44 ET",
+      "text": "IllicitPicks\n\nATP Australian Open\n(1U) Khachanov ML + Quinn +2.5 sets -140\n(1U) Khachanov + Musetti MLP - 110\n(1U) Shelton/Vacherot 03.5 sets - 150",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57419,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:40 ET",
-      "text": "**provenwinner\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57419.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57419.jpg",
+      "id": 31593,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 18:44 ET",
+      "text": "HammeringHank\n\nBlues ML +140 2U",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57418,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:37 ET",
-      "text": "**TheGamblingGawd\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57418.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57418.jpg",
+      "id": 31592,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 18:44 ET",
+      "text": "A11Bets\n\nSt Bonaventure +7.5 (-111) 0.75U\nSt Bonaventure ML (+312) 0.25U\nRutgers +7.5 (-102) 0.75U\nRutgers ML (+282) 0.25U\nColorado State +5.5(-107) 0.75U",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57417,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:37 ET",
-      "text": "**HUGE PROMO ALLERT**\u203c\ufe0f\n\n2\ufe0f\u20e3 **DAYS FOR THE PRICE OF****1\ufe0f\u20e3****\n\n****\u23fa****80K MAIN PLAY \n**\u23fa**THE OWNER\u2019S PERSONAL PLAY \n**\u23fa**EXCLUSIVE PLAY\n**\u23fa**BONUS CAPPERS \n(Travy, Laformula, Cesar, Chamba, ISW, Five, Vegasmira, YDC, AFS \u2026 etc)\n\n****\u23fa****YOUR PASS WILL NOT EXPIRE UNTIL THE MAIN PLAY WINS 2 IN A ROW (so at least 2 days)\n\nJoin The BEST Team**\n\ud83d\udce9** DM: ****@cappersfree****\n\nLet's crush it \ud83d\udcaa\ud83c\udffe\ud83d\udd25**",
-      "images": [
-        "/static/temp_images/-1001900292133_57417.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57417.jpg",
+      "id": 31591,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 18:09 ET",
+      "text": "Pardonmypick \n\n3U CBB POD\nMICHIGAN -16.5 -111\n\n2u ON EACH\nNBA PISTONS -4 -110\nNHL LIGHTNING -1.5 -112\nNHL DUCKS VS KRAKEN UNDER 6.5-120",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57414,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:26 ET",
-      "text": "**HammeringHank\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57414.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57414.jpg",
+      "id": 31590,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 18:01 ET",
+      "text": "ProvenWinner\n\nToronto vs Portland UNDER 226.5 | \n2 UNIT RISK \n\nMiddle Tennessee ML -120 | to WIN 2 UNITS (risking 2.4u to win 2u)\n\nMilwaukee Bucks -6 | \nto WIN 2 units\n\nNew Orleans Pelicans +6.5 |\n 2 UNIT RISK",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57411,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:20 ET",
-      "text": "**BeezoWins\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+      "id": 31589,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 17:35 ET",
+      "text": "\u23f0 STILL TIME TO HOP ON OUR PACKAGES!\n\n1. \ud83d\udc51 **VIP** **PACKAGE** \ud83d\udd1d\n\ud83d\udccb **VIP PACKAGE INCLUDES:\n\n**\ud83c\udfc6 TMS\n\ud83c\udfc6 ISW \n\ud83c\udfc6 BESTBET \n\ud83c\udfc6 CHAMBA**\n\ud83c\udfc6 **FIVESTAR \n\ud83c\udfc6 PARLAYTRAVY  \n\ud83c\udfc6 YOURDAILYCAPPER \n\ud83c\udf81 PLUS BONUSES! (Exclusive plays, hot streak cappers)\n\n2. \ud83d\udc8e [MAZI EXCLUSIVE PACKAGE:](https://t.me/c/1598078987/31530)\n\n\ud83d\udc8e**MAZI EXCLUSIVE PLAY;**\n\ud83d\udc8eVONN5;\n\ud83c\udf81 VIP CHANNEL as bonus\n\n\n\ud83d\udca5**BEST PRICES + BONUSES**\n\n\ud83d\udce9 Join now: @PICKSWIZARD1",
       "images": [
-        "/static/temp_images/-1001900292133_57411.jpg"
+        "/static/temp_images/-1001598078987_31589.jpg"
       ],
-      "image": "/static/temp_images/-1001900292133_57411.jpg",
+      "image": "/static/temp_images/-1001598078987_31589.jpg",
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [
+        "VIP CHANNEL TOP CAPPERS PICKSWIZARD VIP CHANNEL VIP CHANNEL TOP CAPPERS PICKSWIZARD"
+      ],
+      "ocr_text": "VIP CHANNEL TOP CAPPERS PICKSWIZARD VIP CHANNEL VIP CHANNEL TOP CAPPERS PICKSWIZARD",
+      "classification": "UNKNOWN",
+      "classification_reason": "",
+      "classification_confidence": 0.5
     },
     {
-      "id": 57410,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:20 ET",
-      "text": "**PlatinumLocks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57410.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57410.jpg",
+      "id": 31588,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 17:28 ET",
+      "text": "Hammering Hank\n\nCBB CARD \ud83c\udfc0\nIndiana -7 5U MAX BET\ud83d\udc8e\nFurman -4 4U\nUtah State -4.5 3U\nSt. Bonaventure +8 2U",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57409,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:20 ET",
-      "text": "**BrandonTheProfit \n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57409.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57409.jpg",
+      "id": 31587,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 17:28 ET",
+      "text": "AlgoPicks\n\nChicago State ML\nUtah State -4\nBucks -5.5",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57408,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:20 ET",
-      "text": "**NickyCashin\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57408.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57408.jpg",
+      "id": 31586,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 17:28 ET",
+      "text": "Vinny\n\nCavaliers -11.5 (2u)\nBlazers +3.5 (2u)\nOhio State Michigan over 164.5 (2u)\nUtah State ML (2u)",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57407,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:16 ET",
-      "text": "**BettingWithBush\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57407.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57407.jpg",
+      "id": 31585,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 17:28 ET",
+      "text": "Duckinvestments\n\nGuaranteed Picks\nMaple Leafs ML\n\nStraight Picks\nPistons ML\nPelicans +5.5\nSuns ML\nPacers/Thunder over 226.5\n\nParlay\nPistons ML\nPelicans +5.5\n\nParlay\nSuns ML\nPacers/Thunder over 226.5",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57406,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 17:54 ET",
-      "text": "**CashCing\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57406.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57406.jpg",
+      "id": 31584,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 17:28 ET",
+      "text": "TPD\n\nPick: Kansas State +5.5\nPick: Texas Moneyline",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57405,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 17:48 ET",
-      "text": "**SetPointBets\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57405.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57405.jpg",
+      "id": 31583,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 17:28 ET",
+      "text": "Bet Labs\n\nSt Bonaventure +8.5 -110 1U\nPelicans +6 -110 1U\nPelicans ML +190 0.3U\nIndiana / Rutgers U147.5 0.75U",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57404,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 17:42 ET",
-      "text": "**PardonMyPick\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57404.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57404.jpg",
+      "id": 31582,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 17:28 ET",
+      "text": "Porter Picks\n\nNFL\nBroncos +5.5 (4u)\nRams +3 (4u)\nRams +8.5/Broncos +10.5 (4u)\n\nNCAAB\nSt Louis vs St Bonaventure over 158.5 (3u)\nPurdue -2.5 (4u) Saturday\nTexas ML (3u) Saturday \n\nNHL\nCapitals ML (4u)\nSharks ML (3u)\nBlues vs Stars under 6 (3u)\n\nNBA\nPelicans +6 (3u)",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57403,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 17:22 ET",
-      "text": "**duckinvestments\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57403.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57403.jpg",
+      "id": 31581,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 12:59 ET",
+      "text": "\ud83d\udd2eNewmark\n\nAustralian Open\nKhachanov + Shelton MLP (4.5u)\nMachac +3.5 (3u)\n\n\ud83d\udd2eBet Sharper\n\nNCAAB\nLongwood +1.5\nWestern Illinois vs Southern Indiana over 134\nWagner vs Le Moyne under 145\n\n\ud83d\udd2eBullies Picks\n\nNCAAB\nFurman -2.5 (3u)\nUmass ML (3u)\nMichigan -12.5 (3u)\n\n\ud83d\udd2ePicks 4 Dayzzz\n\nNBA\nKings +12.5 (3u)\nBucks -6.5 (3u)\n\nCBB\nSaint Louis -7.5 (2u)\nIndiana -6.5 (2u)\nMichigan -14.5 (2u)\n\n\ud83d\udd2eMatch Point Bets\n\nEarly Max\nDe Minaur ML (5u)\n\n\ud83d\udd2eProp Joe\n\nNBA\nPistons -3 (1u)\nNuggets +6.5 (1u)\n\nCBB\nOhio +9 (2u)\nMiddle Tennessee St -1 (1u)\nNC Greensboro +5 (1u)\n\n\ud83d\udd2eNicky Cashin\n\nCBB\nChicago State +2.5 (1.5u)\nMercyhurst ML (1.5u)",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57402,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 17:22 ET",
-      "text": "**TUESDAY EXCLUSIVE PACKAGE**\ud83d\udc8e\n\n**\u23fa****VONN (2 Plays)\n****\u23fa****MAZI (Game of the Week)\n****\u23fa****MAZI (Max Bet)\n****\u23fa****JAYLAN\n**\n**Price:** $50\n\n\ud83d\udce9** DM: ****@cappersfree**",
-      "images": [
-        "/static/temp_images/-1001900292133_57402.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57402.jpg",
+      "id": 31580,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 12:34 ET",
+      "text": "SmartMoneySports \n\nAkron Zips -8.5 -105 (2u, 8:00e)\n\nMichigan Wolverines -15.5 - 110 (3u, 8:00e)\n\nMilwaukee Bucks -6.5 -110 (2u, 9:30e)",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57401,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 17:12 ET",
-      "text": "**MatchPointBets\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+      "id": 31579,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 12:34 ET",
+      "text": "\ud83d\udc8e [MAZI EXCLUSIVE PACKAGE](https://t.me/c/1598078987/31373) RECAP:\n\n**MAZI EXCLUSIVE** **PLAY** \u2013 \u2705\n\nDon\u2019t miss out todays plays\n\nDm for info : @pickswizard1",
       "images": [
-        "/static/temp_images/-1001900292133_57401.jpg"
+        "/static/temp_images/-1001598078987_31579.jpg"
       ],
-      "image": "/static/temp_images/-1001900292133_57401.jpg",
+      "image": "/static/temp_images/-1001598078987_31579.jpg",
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [
+        "USIVE PACKAGE MAZI BULLS+8.5"
+      ],
+      "ocr_text": "USIVE PACKAGE MAZI BULLS+8.5",
+      "classification": "UNKNOWN",
+      "classification_reason": "",
+      "classification_confidence": 0.5
     },
     {
-      "id": 57400,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 17:11 ET",
-      "text": "**SetPointBets\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57400.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57400.jpg",
+      "id": 31578,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 12:31 ET",
+      "text": "Cblez\n\nRockets ML +155 (1u)\nSt Louis/St Bonnies U 158\u00bd -110 (1u)\nIndiana/Rutgers U 148 - 110 (1u)\nUtah St -5 -110 (1u)\nFlorida GC +7\u00bd -110 (1u)",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57399,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 17:11 ET",
-      "text": "**Tbsportsbetting\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57399.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57399.jpg",
+      "id": 31577,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 12:28 ET",
+      "text": "Porterpicks \n\nPURDUE (-2.5) over Illinois\n(4-UNITS)\n\nBRONCOS (+5.5) over New England Patriots\n(4-UNITS)\n\nWASHINGTON CAPITALS (-125) over Calgary Flames\n(4-UNITS)",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": true,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57398,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 15:58 ET",
-      "text": "**PropJoe\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
+      "id": 31576,
+      "channel_name": "Telegram",
+      "date": "2026-01-23 12:23 ET",
+      "text": "\u2b06\ufe0f VIP WINNERS \ud83d\udc51\n\n**LIST OF OUR VIP CAPPERS:**\nYourdailycapper \nParlayTravy \nChamba\nBestbet\nFivestar\nTMS\nISW\n+ bonuses\n\n\u26a1\ufe0f **Join us \u2014 TOP cappers every day at the BEST prices!**\n\n\ud83e\udd1d\ud83e\udd1d\ud83e\udd1d\ud83e\udd1d\ud83d\udc49 @PICKSWIZARD1",
       "images": [
-        "/static/temp_images/-1001900292133_57398.jpg"
+        "/static/temp_images/-1001598078987_31576.jpg",
+        "/static/temp_images/-1001598078987_31575.jpg",
+        "/static/temp_images/-1001598078987_31574.jpg",
+        "/static/temp_images/-1001598078987_31573.jpg",
+        "/static/temp_images/-1001598078987_31572.jpg"
       ],
-      "image": "/static/temp_images/-1001900292133_57398.jpg",
+      "image": "/static/temp_images/-1001598078987_31576.jpg",
+      "grouped_id": 14153511987478674,
+      "selected": true,
+      "do_ocr": true,
+      "ocr_texts": [
+        "IP GHANNEL CAPPERS PICKSWIZARD TEP FIVESTAR FIVESTAR SPORTSPICKS VIP CHANNELTOP CAPPERSI PICKSWIZARD Five *Golden Whale (1) South Florida money line (College Basketball) *Whale Bet (2) Penn State alternate +7.5 (College Basketball) x *Whale Bet (3) Albany money line (College Basketball) \u00d7 *Whale Bet (4) Philadelphia 76ers +2.5",
+        "ISW NHLplay Montreal-Buf Ov 1.5. (1st P) 1U 3500bet Collegehoops Uab+2.5-105 1U 3150betx Robert Morris -5.5 -110 1U 3300bet",
+        "PICKSWIZARD CAPPERS YOUR DAILY CAPPER CHANNELTOPOAPPERS PICKSWIZARD Yourdailycapper NCAAB: 1 Unit X James Madison -2 NCAAB: 1 Unit William & Mary ML NHL: 1 Unit Blue JacketsML NBA: 1 Unit Trailblazers ML",
+        "siaddeodor lauueuodia Fivestar GoldenWhale(2) * LA Clippers money line (NBA) AFS CLIPPERS-2.5ISTHEPLAY $5,000",
+        "Chamba 2 Max plays: South Florida ML Sixers +4 NBA: 4% each Nuggets ML Sixers ML Hornets +6.5 Mavs +8.5"
+      ],
+      "ocr_text": "IP GHANNEL CAPPERS PICKSWIZARD TEP FIVESTAR FIVESTAR SPORTSPICKS VIP CHANNELTOP CAPPERSI PICKSWIZARD Five *Golden Whale (1) South Florida money line (College Basketball) *Whale Bet (2) Penn State alternate +7.5 (College Basketball) x *Whale Bet (3) Albany money line (College Basketball) \u00d7 *Whale Bet (4) Philadelphia 76ers +2.5\nISW NHLplay Montreal-Buf Ov 1.5. (1st P) 1U 3500bet Collegehoops Uab+2.5-105 1U 3150betx Robert Morris -5.5 -110 1U 3300bet\nPICKSWIZARD CAPPERS YOUR DAILY CAPPER CHANNELTOPOAPPERS PICKSWIZARD Yourdailycapper NCAAB: 1 Unit X James Madison -2 NCAAB: 1 Unit William & Mary ML NHL: 1 Unit Blue JacketsML NBA: 1 Unit Trailblazers ML\nsiaddeodor lauueuodia Fivestar GoldenWhale(2) * LA Clippers money line (NBA) AFS CLIPPERS-2.5ISTHEPLAY $5,000\nChamba 2 Max plays: South Florida ML Sixers +4 NBA: 4% each Nuggets ML Sixers ML Hornets +6.5 Mavs +8.5",
+      "classification": "UNKNOWN",
+      "classification_reason": "",
+      "classification_confidence": 0.5
+    },
+    {
+      "id": "2015125374263599541",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 13:11 ET",
+      "text": "Robert Ferringo\n\n1u - Georgia Tech (+8.5) \n4u - Texas (-3)\n5u - West Virginia (+18.5)\n2u - Virginia (-6.5) \n2u - Northeastern (+5.5)\n2u - Green Bay (+6.5)\n1u - Duquesne (-5) \n2u - Harvard (-2.5)\n2u -  Syracuse (+2.5)\n2u -  Purdue (-5.5)\n2u - Troy (-4.5)\n3u - South Carolina (+11) \n2u - Virginia Tech (+13.5)\n3u - Wichita State (-2.5) \n2u - Wake Forest (+18)\n2u - Baylor (-4)\n2u - Pepperdine (+10.5)\n1u - Vanderbilt (-7.5)\n7u - Boston College (+7.5)\n2u - San Francisco (+17)\n2u - Omaha (-4.5)\n3u -  Portland (+15.5)\n3u - San Diego (+13.5)\n\nTeaser\n1u - Northeastern (+10.5) + Milwaukee (+11.5)",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57397,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 15:58 ET",
-      "text": "**NickyCashin\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57397.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57397.jpg",
+      "id": "2015121934024110326",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:58 ET",
+      "text": "Bob Balfe\n\nMinnesota +5.5 \nUConn -10.5\nTexas -3.5",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57396,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 15:52 ET",
-      "text": "**Mojo\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57396.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57396.jpg",
+      "id": "2015121817187627407",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:57 ET",
+      "text": "Kyle Hunter \n\n3* Northern Dakota/Denver o161.5\n3* Iowa State/Oklahoma State u163",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57395,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 15:44 ET",
-      "text": "**TheSharpSheets\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57395.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57395.jpg",
+      "id": "2015121725109977492",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:57 ET",
+      "text": "BettingWithBush\n\nUFC\n4u - Paddy Pimblett -205 \n2u - Abeta Gautier -  RD 1 -120\n2u - Abeta Gautier ITD + Paddy Pimblett -136\n1u - Ty Miller + Charles Johnson -114 \n1u - Waldo Acosta + Jean Silva -131\n1u - Rose Namajunas ML +315",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57394,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 15:41 ET",
-      "text": "**PorterPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57394.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57394.jpg",
+      "id": "2015120218079768933",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:51 ET",
+      "text": "HammeringHank\n\nCBB\n3u - Villanova +11.5",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57393,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 15:35 ET",
-      "text": "**CalebPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57393.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57393.jpg",
+      "id": "2015120151835004983",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:50 ET",
+      "text": "Your Daily Capper\n\n2u - Texas ML\n1u - Colorado -2\n1u - Purdue -4\n\nParlay\nFlorida -3 + Alabama ML",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57385,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 14:10 ET",
-      "text": "**BulliesPicks\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57385.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57385.jpg",
+      "id": "2015119969391178215",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:50 ET",
+      "text": "Doc\n\nNHL \n4u - Sabres -105",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57378,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 13:18 ET",
-      "text": "**IllicitPicks & TTW\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57378.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57378.jpg",
+      "id": "2015117788143329751",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:41 ET",
+      "text": "Jack Jones\n\n15* Colorado -2\n15* Oklahoma State +10.5\n15* Niagara/Sacred Heart u142.5\n15* Green Bay/Robert Morris o141\n15* Northern Illinois/Ball State u143.5\n15* St. John's/Xavier o161.5\n15* North Dakota/Denver o162.5\n15* St. Thomas/South Dakota o161.5\n20* Minnesota +6",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57377,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:59 ET",
-      "text": "**Matthewp07\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57377.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57377.jpg",
+      "id": "2015117396139470972",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:40 ET",
+      "text": "Jack Jones\n\n15* Utah +19.5\n15* Northern Kentucky/Wright State o152\n15* Houston/Texas Tech u141\n20* Arkansas -9.5\n15* Warriors/Timberwolves o234\n15* Heat/Jazz o245.5\n20* Bulls ML +100\n20* Magic pk",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57376,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:56 ET",
-      "text": "**Mojo\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57376.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57376.jpg",
+      "id": "2015116924880073144",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:38 ET",
+      "text": "Gianni the Greek\n\nNBA\n3% Knicks/76ers u227.5 \n3% Warriors/Timberwolves o237.0  \n\nNHL\n3% Capitals +150",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57375,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:46 ET",
-      "text": "**Mojo\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57375.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57375.jpg",
+      "id": "2015116678271844843",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:37 ET",
+      "text": "Tom Cassale\n\nTexas ML",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57374,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:43 ET",
-      "text": "**AlgoPicks & Vinny\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57374.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57374.jpg",
+      "id": "2015116639927509388",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:37 ET",
+      "text": "Stephen Nover \n\n2* Indiana St. -2.5",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57373,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:37 ET",
-      "text": "**CashCing\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57373.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57373.jpg",
+      "id": "2015116566292275467",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:36 ET",
+      "text": "Chip Chirimbes  \n\nHouston ML",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57372,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:37 ET",
-      "text": "**A1Fantasy\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57372.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57372.jpg",
+      "id": "2015116394875248772",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:36 ET",
+      "text": "William Burns\n\nGeorgia +2",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57369,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:13 ET",
-      "text": "**TPD\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57369.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57369.jpg",
+      "id": "2015116331440546222",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:35 ET",
+      "text": "Aaa\n\nUFC\nDerrick Lewis",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57366,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:13 ET",
-      "text": "**Doc\u2019s\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57366.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57366.jpg",
+      "id": "2015116235252654394",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:35 ET",
+      "text": "Smart Money Sports\n\n2u - Minnesota  +5.5 -110\n2u - Texas -3 -105\n2u - Rhode Island ML +110 \n2u - Louisville  -13.5 -105 \n2u - Purdue  -6 -105 \n2u - San Diego State  -5.5 -110 \n2u - Memphis Tigers +3 -110 \n2u - Tennessee  +6 -105 \n2u - Arizona State  +2.5 -110",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57365,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:13 ET",
-      "text": "**PropJoe & Caleb\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57365.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57365.jpg",
+      "id": "2015115935578001412",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:34 ET",
+      "text": "Strike Point Sports\n\n4u - Texas -3\n4u - Purdue -5.5\n3u - Arkansas -11",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57364,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:13 ET",
-      "text": "**Austin\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57364.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57364.jpg",
+      "id": "2015115866669793409",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:33 ET",
+      "text": "Big Al\n\nNHL\n1* Oilers -175\n\nNBA\n4* Magic - 1.5\n\nCBB\n4* Minnesota +6\n3* Wofford +2\n3* Connecticut -10.5",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57356,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:13 ET",
-      "text": "**Caruso\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57356.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57356.jpg",
+      "id": "2015115680090325481",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:33 ET",
+      "text": "Larry Hartstein\n\nTCU +4.5",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     },
     {
-      "id": 57340,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 10:07 ET",
-      "text": "**EXCLUSIVE PACKAGE ****\ud83d\udd25****\n\n**\ud83d\udce9** DM: ****@cappersfree**",
-      "images": [
-        "/static/temp_images/-1001900292133_57340.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57340.jpg",
+      "id": "2015114437271925194",
+      "channel_name": "@EZMSports",
+      "date": "2026-01-24 12:28 ET",
+      "text": "Tokyo Brandon\n\n5% Cal St Fullerton/Cal Poly u172.5",
+      "images": [],
+      "image": null,
       "grouped_id": null,
       "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57327,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 10:07 ET",
-      "text": "**CESAR**",
-      "images": [
-        "/static/temp_images/-1001900292133_57327.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57327.jpg",
-      "grouped_id": null,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57326,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 10:07 ET",
-      "text": "**YOURDAILYCAPPER**",
-      "images": [
-        "/static/temp_images/-1001900292133_57326.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57326.jpg",
-      "grouped_id": null,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57325,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 10:07 ET",
-      "text": "**TMS**",
-      "images": [
-        "/static/temp_images/-1001900292133_57325.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57325.jpg",
-      "grouped_id": null,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57324,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 10:07 ET",
-      "text": "**FIVE**",
-      "images": [
-        "/static/temp_images/-1001900292133_57324.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57324.jpg",
-      "grouped_id": null,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57422,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 19:05 ET",
-      "text": "**stuntalot\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57426.jpg",
-        "/static/temp_images/-1001900292133_57425.jpg",
-        "/static/temp_images/-1001900292133_57424.jpg",
-        "/static/temp_images/-1001900292133_57423.jpg",
-        "/static/temp_images/-1001900292133_57422.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57426.jpg",
-      "grouped_id": 14146793035004474,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57415,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:28 ET",
-      "text": "**Cblez & SmartMoneySports\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57416.jpg",
-        "/static/temp_images/-1001900292133_57415.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57416.jpg",
-      "grouped_id": 14146775152467778,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57412,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 18:20 ET",
-      "text": "**TCC\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57413.jpg",
-        "/static/temp_images/-1001900292133_57412.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57413.jpg",
-      "grouped_id": 14146771439064514,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57391,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 15:32 ET",
-      "text": "**DirtyBubbleBets & A11Bets\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57392.jpg",
-        "/static/temp_images/-1001900292133_57391.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57392.jpg",
-      "grouped_id": 14146690799028562,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57389,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 15:30 ET",
-      "text": "**DarthFader & TTW\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57390.jpg",
-        "/static/temp_images/-1001900292133_57389.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57390.jpg",
-      "grouped_id": 14146689799073210,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57386,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 15:30 ET",
-      "text": "**CashItBaby\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57388.jpg",
-        "/static/temp_images/-1001900292133_57387.jpg",
-        "/static/temp_images/-1001900292133_57386.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57388.jpg",
-      "grouped_id": 14146689799073202,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57382,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 14:09 ET",
-      "text": "**HammeringHank, ThisGirlBetz & ParlaySafari\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57384.jpg",
-        "/static/temp_images/-1001900292133_57383.jpg",
-        "/static/temp_images/-1001900292133_57382.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57384.jpg",
-      "grouped_id": 14146651008741170,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57379,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 13:31 ET",
-      "text": "**Mojo, BetSharper & Picks4Dayzzz\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57381.jpg",
-        "/static/temp_images/-1001900292133_57380.jpg",
-        "/static/temp_images/-1001900292133_57379.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57381.jpg",
-      "grouped_id": 14146632521802882,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57370,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:18 ET",
-      "text": "**New Source\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57371.jpg",
-        "/static/temp_images/-1001900292133_57370.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57371.jpg",
-      "grouped_id": 14146597593704954,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57367,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:13 ET",
-      "text": "**BL\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57368.jpg",
-        "/static/temp_images/-1001900292133_57367.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57368.jpg",
-      "grouped_id": 14146595154177714,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57357,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:13 ET",
-      "text": "**Caruso\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57363.jpg",
-        "/static/temp_images/-1001900292133_57362.jpg",
-        "/static/temp_images/-1001900292133_57361.jpg",
-        "/static/temp_images/-1001900292133_57360.jpg",
-        "/static/temp_images/-1001900292133_57359.jpg",
-        "/static/temp_images/-1001900292133_57358.jpg",
-        "/static/temp_images/-1001900292133_57357.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57363.jpg",
-      "grouped_id": 14146595154177682,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57354,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:13 ET",
-      "text": "**DormroomDegenerates, CashCin**g**, ChefsBestBets & NickyCashin\n\u2796\u2796\u2796\u2796\u2796\nDM****\u27a1\ufe0f****@cappersfree****\u2705**",
-      "images": [
-        "/static/temp_images/-1001900292133_57355.jpg",
-        "/static/temp_images/-1001900292133_57354.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57355.jpg",
-      "grouped_id": 14146595154177666,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57346,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 12:13 ET",
-      "text": "**A11Bets, TTW, NewmarkTennis, ThisGirlBetz, MrBigBets, AndersPicks & Mojo**",
-      "images": [
-        "/static/temp_images/-1001900292133_57353.jpg",
-        "/static/temp_images/-1001900292133_57352.jpg",
-        "/static/temp_images/-1001900292133_57351.jpg",
-        "/static/temp_images/-1001900292133_57350.jpg",
-        "/static/temp_images/-1001900292133_57349.jpg",
-        "/static/temp_images/-1001900292133_57348.jpg",
-        "/static/temp_images/-1001900292133_57347.jpg",
-        "/static/temp_images/-1001900292133_57346.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57353.jpg",
-      "grouped_id": 14146595154177658,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57341,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 10:33 ET",
-      "text": "**Nothing better than seeing my guys win **\ud83d\udcaf",
-      "images": [
-        "/static/temp_images/-1001900292133_57345.jpg",
-        "/static/temp_images/-1001900292133_57344.jpg",
-        "/static/temp_images/-1001900292133_57343.jpg",
-        "/static/temp_images/-1001900292133_57342.jpg",
-        "/static/temp_images/-1001900292133_57341.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57345.jpg",
-      "grouped_id": 14146547430733482,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57338,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 10:07 ET",
-      "text": "\u23fa**MAIN PLAY - \u2705**\n\n\u23fa**THE OWNER\u2019S SMALL PERSONAL PLAY - \u2705\n\nMain Play cashed but everyone who was on board is getting today\u2019s VIP package for FREE **\ud83e\udd1d\n**\n**\u23fa**REALLY THE** **CHEAPEST PRICES IN THE INDUSTRY **(just hit me and we will always figure something out)\n\n**Join The BEST Team**\n**\u270d\ufe0f For any questions reach out to: ****@cappersfree**",
-      "images": [
-        "/static/temp_images/-1001900292133_57339.jpg",
-        "/static/temp_images/-1001900292133_57338.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57339.jpg",
-      "grouped_id": 14146534991449010,
-      "selected": true,
-      "do_ocr": true
-    },
-    {
-      "id": 57337,
-      "channel_name": "CAPPERS FREE\ud83d\udea8",
-      "date": "2026-01-13 10:07 ET",
-      "text": "",
-      "images": [
-        "/static/temp_images/-1001900292133_57337.jpg",
-        "/static/temp_images/-1001900292133_57336.jpg",
-        "/static/temp_images/-1001900292133_57335.jpg",
-        "/static/temp_images/-1001900292133_57334.jpg",
-        "/static/temp_images/-1001900292133_57333.jpg",
-        "/static/temp_images/-1001900292133_57332.jpg",
-        "/static/temp_images/-1001900292133_57331.jpg",
-        "/static/temp_images/-1001900292133_57330.jpg",
-        "/static/temp_images/-1001900292133_57329.jpg",
-        "/static/temp_images/-1001900292133_57328.jpg"
-      ],
-      "image": "/static/temp_images/-1001900292133_57337.jpg",
-      "grouped_id": 14146534813653682,
-      "selected": true,
-      "do_ocr": true
+      "do_ocr": false,
+      "ocr_texts": [],
+      "classification": "PICK",
+      "classification_reason": "Text message with no negative indicators",
+      "classification_confidence": 0.6
     }
   ],
-  "images_found": 105,
-  "images_missing": 0,
-  "missing_paths": []
+  "date": "2026-01-23",
+  "source": "Fetch Goldenset Script"
 }

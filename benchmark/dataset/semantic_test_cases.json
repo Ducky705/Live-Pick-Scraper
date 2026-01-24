@@ -1,0 +1,99 @@
+[
+    {
+        "id": "valid_nba_spread",
+        "input_pick": {
+            "league": "NBA",
+            "pick": "Lakers -5.5",
+            "type": "Spread",
+            "line": -5.5,
+            "odds": -110
+        },
+        "expected_valid": true
+    },
+    {
+        "id": "invalid_nba_spread_range",
+        "input_pick": {
+            "league": "NBA",
+            "pick": "Lakers -55.5",
+            "type": "Spread",
+            "line": -55.5,
+            "odds": -110
+        },
+        "expected_valid": false,
+        "expected_error": "Suspicious Spread"
+    },
+    {
+        "id": "valid_nfl_total",
+        "input_pick": {
+            "league": "NFL",
+            "pick": "Chiefs vs Bills Over 48.5",
+            "type": "Total",
+            "line": 48.5,
+            "odds": -110
+        },
+        "expected_valid": true
+    },
+    {
+        "id": "invalid_nfl_total_range",
+        "input_pick": {
+            "league": "NFL",
+            "pick": "Chiefs vs Bills Over 148.5",
+            "type": "Total",
+            "line": 148.5,
+            "odds": -110
+        },
+        "expected_valid": false,
+        "expected_error": "Suspicious Total"
+    },
+    {
+        "id": "invalid_sport_team_mismatch",
+        "input_pick": {
+            "league": "NFL",
+            "pick": "Lakers ML",
+            "type": "Moneyline",
+            "line": null,
+            "odds": -150
+        },
+        "expected_valid": false,
+        "expected_error": "Team/Sport Mismatch"
+    },
+    {
+        "id": "invalid_player_sport_mismatch",
+        "input_pick": {
+            "league": "NHL",
+            "pick": "Lakers LeBron James Over 25.5 Pts",
+            "subject": "LeBron James",
+            "type": "Player Prop",
+            "line": 25.5,
+            "odds": -110
+        },
+        "expected_valid": false,
+        "expected_error": "Team 'Lakers' belongs to NBA"
+    },
+    {
+        "id": "suspicious_odds_spread",
+        "input_pick": {
+            "league": "NBA",
+            "pick": "Celtics -5.5",
+            "type": "Spread",
+            "line": -5.5,
+            "odds": 400
+        },
+        "expected_valid": false,
+        "expected_error": "Suspicious Odds"
+    },
+    {
+        "id": "suspicious_prop_high_line",
+        "input_pick": {
+            "league": "NBA",
+            "pick": "LeBron James Over 500.5 Pts",
+            "subject": "LeBron James",
+            "type": "Player Prop",
+            "market": "Points",
+            "line": 500.5,
+            "odds": -110
+        },
+        "expected_valid": false,
+        "expected_error": "Suspicious Player Prop Line"
+    }
+]

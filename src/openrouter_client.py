@@ -10,15 +10,18 @@ DEFAULT_MODELS = [
     'tngtech/deepseek-r1t2-chimera:free'
 ]
 
-def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2):
+def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2, images=None, validate_json=False):
     """
     Calls OpenRouter API with retry logic and model fallback.
+    Supports Vision (images) if the model supports it.
     
     Args:
         prompt: The prompt to send
         model: Primary model to use (will be first in fallback list)
         timeout: Timeout in seconds per request (default 3 minutes)
         max_cycles: Number of times to cycle through all models before giving up
+        images: List of base64 encoded image strings (optional)
+        validate_json: Unused param for compatibility with other clients
     
     Returns:
         The JSON content string or raises an Exception after all retries fail.
@@ -48,11 +51,22 @@ def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2):
         for current_model in models:
             logging.info(f"[OpenRouter] Cycle {cycle+1}/{max_cycles}, Model: {current_model}")
             
+            # Construct message content
+            if images:
+                content_parts = [{"type": "text", "text": prompt}]
+                for b64_img in images:
+                    url = f"data:image/jpeg;base64,{b64_img}" if not b64_img.startswith("data:") else b64_img
+                    content_parts.append({
+                        "type": "image_url",
+                        "image_url": {"url": url}
+                    })
+                messages = [{"role": "user", "content": content_parts}]
+            else:
+                messages = [{"role": "user", "content": prompt}]
+            
             payload = {
                 "model": current_model,
-                "messages": [
-                    {"role": "user", "content": prompt}
-                ],
+                "messages": messages,
                 "temperature": 0.1,
                 "response_format": {"type": "json_object"}
             }
@@ -87,8 +101,13 @@ def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2):
                 continue
                 
             except requests.exceptions.RequestException as e:
+                # Log full error body if available
+                if hasattr(e, 'response') and e.response:
+                    logging.warning(f"[OpenRouter] Request error with {current_model}: {e.response.text}")
+                else:
+                    logging.warning(f"[OpenRouter] Request error with {current_model}: {e}")
+                
                 last_error = e
-                logging.warning(f"[OpenRouter] Request error with {current_model}: {e}")
                 continue
                 
             except Exception as e:
@@ -104,4 +123,5 @@ def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2):
     # All cycles exhausted
     logging.error(f"[OpenRouter] All {max_cycles} cycles failed. Last error: {last_error}")
     raise last_error if last_error else Exception("All API attempts failed")
+
 

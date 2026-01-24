@@ -103,14 +103,15 @@ def gemini_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=6
                     return None
             
             elif response.status_code == 429:
-                logging.warning("[Gemini] Rate limit (429). Waiting 5s...")
-                time.sleep(5)
-                continue
+                logging.warning("[Gemini] Rate limit (429). Failing fast.")
+                raise Exception("Gemini Rate limit 429")
             else:
                 logging.error(f"[Gemini] Error {response.status_code}: {response.text}")
                 return None
 
         except Exception as e:
+            if "429" in str(e):
+                raise e
             logging.error(f"[Gemini] Exception: {e}")
             return None
     
@@ -168,14 +169,15 @@ def gemini_text_completion(prompt, model=DEFAULT_MODEL, timeout=60):
                     return None
             
             elif response.status_code == 429:
-                logging.warning("[Gemini] Rate limit (429). Waiting 5s...")
-                time.sleep(5)
-                continue
+                logging.warning("[Gemini] Rate limit (429). Failing fast.")
+                raise Exception("Gemini Rate limit 429")
             else:
                 logging.error(f"[Gemini] Error {response.status_code}: {response.text}")
                 return None
 
         except Exception as e:
+            if "429" in str(e):
+                raise e
             logging.error(f"[Gemini] Exception: {e}")
             return None
     

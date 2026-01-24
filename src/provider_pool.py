@@ -30,7 +30,7 @@ from src.prompts.decoder import expand_compact_pick
 # --- CONFIGURATION ---
 
 # Strong fallback model (OpenRouter) - ONLY used when all fast providers fail
-STRONG_FALLBACK_MODEL = "tngtech/deepseek-r1t2-chimera:free"
+STRONG_FALLBACK_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 
 # Rate Limits - MAXIMUM SPEED configuration (Updated 2026-01-22)
 # Based on actual provider rate limits from user data

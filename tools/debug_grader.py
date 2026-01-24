@@ -224,64 +224,79 @@ async def run_pipeline(target_date: str, sample_size: int = None, use_cache: boo
     from src.pick_deduplicator import deduplicate_by_capper
     from src.prompts.decoder import normalize_response
     from src.parallel_batch_processor import parallel_processor
+    from src.multi_pick_validator import validate_and_flag_missing, MultiPickValidator
+    from src.semantic_validator import SemanticValidator
     
     metadata = {
         "target_date": target_date,
         "pipeline_start": datetime.now().isoformat(),
         "stages": {},
     }
-    
-    # Check for --cache flag or missing credentials
+
+    # Check for --cache flag
     if use_cache:
         log_info("Using cached data (--cache flag)")
         messages, picks = load_from_cache()
-        metadata["source"] = "cache"
-        metadata["stages"]["cache"] = {"messages": len(messages), "picks": len(picks)}
-        return messages, picks, metadata
-    
-    # 1. FETCH
-    log_info("Stage 1: Fetching messages from Telegram...")
-    tg = TelegramManager()
-    
-    if not API_ID or not API_HASH:
-        log_error("Telegram credentials missing (API_ID/API_HASH not set)!")
-        log_info("Attempting to use cached data instead...")
-        messages, picks = load_from_cache()
-        if messages:
-            metadata["source"] = "cache_fallback"
+        
+        # If we have picks, return immediately (full cache hit)
+        if picks:
+            metadata["source"] = "cache"
+            metadata["stages"]["cache"] = {"messages": len(messages), "picks": len(picks)}
             return messages, picks, metadata
-        log_error("No cache available. Create a .env file with API_ID and API_HASH.")
-        return [], [], metadata
-    
-    connected = await tg.connect_client()
-    if not connected:
-        log_error("Telegram not connected!")
-        return [], [], metadata
-    
-    start = time.time()
-    raw_messages = await tg.fetch_messages([TARGET_TELEGRAM_CHANNEL_ID], target_date)
-    metadata["stages"]["fetch"] = {"time": time.time() - start, "count": len(raw_messages)}
-    log_success(f"Fetched {len(raw_messages)} messages in {metadata['stages']['fetch']['time']:.1f}s")
-    
-    if sample_size and len(raw_messages) > sample_size:
-        raw_messages = raw_messages[:sample_size]
-        log_info(f"Sampled down to {sample_size} messages")
+        
+        # If no picks, continue to pipeline but skip fetch/dedup if messages exist
+        if messages:
+            log_info("Cached messages found, but no picks. Proceeding to Parsing stage...")
+
+    # 1. FETCH
+    if not messages:
+        log_info("Stage 1: Fetching messages from Telegram...")
+        tg = TelegramManager()
+        
+        if not API_ID or not API_HASH:
+            log_error("Telegram credentials missing (API_ID/API_HASH not set)!")
+            # Note: Cache fallback was attempted above
+            log_error("No cache available. Create a .env file with API_ID and API_HASH.")
+            return [], [], metadata
+        
+        connected = await tg.connect_client()
+        if not connected:
+            log_error("Telegram not connected!")
+            return [], [], metadata
+        
+        start = time.time()
+        raw_messages = await tg.fetch_messages([TARGET_TELEGRAM_CHANNEL_ID], target_date)
+        metadata["stages"]["fetch"] = {"time": time.time() - start, "count": len(raw_messages)}
+        log_success(f"Fetched {len(raw_messages)} messages in {metadata['stages']['fetch']['time']:.1f}s")
+        
+        if sample_size and len(raw_messages) > sample_size:
+            raw_messages = raw_messages[:sample_size]
+            log_info(f"Sampled down to {sample_size} messages")
+    else:
+        log_info("Skipping fetch (using cached messages)")
+        raw_messages = messages
+
     
     # 2. DEDUPLICATE
     log_info("Stage 2: Deduplicating...")
     unique_msgs = Deduplicator.merge_messages(raw_messages)
     metadata["stages"]["dedup"] = {"input": len(raw_messages), "output": len(unique_msgs)}
     log_success(f"Deduplicated: {len(raw_messages)} -> {len(unique_msgs)}")
-    
+
     # 3. OCR
     log_info("Stage 3: Running OCR...")
     ocr_tasks = []
     for i, msg in enumerate(unique_msgs):
+        # SKIP if we already have OCR text from cache
+        if msg.get('ocr_texts') or msg.get('ocr_text'):
+            continue
+            
         msg['ocr_texts'] = []
         images = msg.get('images', []) or ([msg['image']] if msg.get('image') else [])
         if msg.get('do_ocr') and images:
             for img in images:
                 ocr_tasks.append((i, img))
+
     
     if ocr_tasks:
         start = time.time()
@@ -321,10 +336,200 @@ async def run_pipeline(target_date: str, sample_size: int = None, use_cache: boo
         all_raw_picks = parallel_processor.process_batches(batches)
         
         picks = []
-        for raw_response in all_raw_picks:
-            batch_picks = normalize_response(raw_response, expand=True)
+        for batch_idx, raw_response in enumerate(all_raw_picks):
+            # Get the valid message IDs for this batch to prevent cross-contamination
+            valid_ids = None
+            msg_context = None
+            
+            if batch_idx < len(batches):
+                current_batch = batches[batch_idx]
+                valid_ids = [int(m.get('id')) for m in current_batch if m.get('id') is not None]
+                
+                # Build message context map for verification
+                msg_context = {}
+                for m in current_batch:
+                    mid = m.get('id')
+                    if mid:
+                        # Combine caption and OCR for full context
+                        full_text = (m.get('text', '') or '') + "\n" + (m.get('ocr_text', '') or '')
+                        msg_context[int(mid)] = full_text
+            
+            batch_picks = normalize_response(raw_response, expand=True, valid_message_ids=valid_ids, message_context=msg_context)
             picks.extend(batch_picks)
         
+        # --- REFINEMENT PASS (Multi-Pick & Semantic Validation) ---
+        log_info("Stage 5b: Refinement (Missing & Invalid Picks)...")
+        
+        # 1. Check for missing picks
+        picks, reparse_ids_missing = validate_and_flag_missing(selected, picks)
+        reparse_ids = set(reparse_ids_missing)
+        
+        # 2. Check for semantic errors & confidence
+        semantic_issues = {}
+        
+        # Create map of message ID to message object for context checks
+        msg_map = {}
+        for m in selected:
+            if m.get('id') is not None:
+                msg_map[int(m['id'])] = m
+
+        for p in picks:
+            mid = p.get('message_id')
+            if mid:
+                try:
+                    mid_int = int(mid)
+                except (ValueError, TypeError):
+                    continue
+
+                # A. Basic Semantic Validation
+                is_valid, reason = SemanticValidator.validate(p)
+                if not is_valid:
+                    if mid_int not in semantic_issues:
+                        semantic_issues[mid_int] = []
+                    semantic_issues[mid_int].append(f"Pick '{p.get('pick')}' invalid: {reason}")
+                    reparse_ids.add(mid_int)
+                
+                # B. Confidence Check (New Architectural Feature)
+                conf = p.get('confidence')
+                if conf is not None:
+                    try:
+                        conf_val = float(conf)
+                        if conf_val < 8:  # Threshold for re-parsing
+                            if mid_int not in semantic_issues:
+                                semantic_issues[mid_int] = []
+                            semantic_issues[mid_int].append(f"Low confidence ({conf_val}/10). Verify extraction.")
+                            reparse_ids.add(mid_int)
+                    except ValueError:
+                        pass
+
+                # C. "The Auditor" - Contextual Logic Checks
+                msg = msg_map.get(mid_int)
+                if msg:
+                    text_upper = (msg.get('text', '') + '\n' + msg.get('ocr_text', '')).upper()
+                    
+                    # C1. Unit Header Mismatch
+                    # Detect "10U" headers vs 1U picks
+                    extracted_units = p.get('units', 1.0)
+                    if extracted_units == 1.0:
+                        potential_units = 0
+                        if "10U" in text_upper or "MAX BET" in text_upper or "MAX PLAY" in text_upper:
+                            potential_units = 10
+                        elif "5U" in text_upper:
+                            potential_units = 5
+                        elif "3U" in text_upper:
+                            potential_units = 3
+                        
+                        if potential_units > 1:
+                            if mid_int not in semantic_issues:
+                                semantic_issues[mid_int] = []
+                            semantic_issues[mid_int].append(f"Possible Unit Mismatch: Text implies {potential_units}U, pick has 1U.")
+                            reparse_ids.add(mid_int)
+                    
+                    # C2. Parlay Keyword Mismatch
+                    # If text says "PARLAY" but we extracted a single ML/Spread/Total
+                    if "PARLAY" in text_upper and p.get('type') not in ['Parlay', 'Unknown']:
+                        # Only flag if we haven't extracted *any* parlays for this message yet
+                        # (This check is per-pick, so slightly imperfect, but good signal)
+                        if mid_int not in semantic_issues:
+                            semantic_issues[mid_int] = []
+                        semantic_issues[mid_int].append(f"Text mentions 'PARLAY' but pick is type '{p.get('type')}'. Verify if this is part of a parlay.")
+                        reparse_ids.add(mid_int)
+
+        reparse_ids = list(reparse_ids)
+        
+        reparse_ids = list(reparse_ids)
+        
+        if reparse_ids:
+            log_info(f"Refinement: {len(reparse_ids)} messages flagged for re-parsing")
+            
+            reparse_batch = []
+            
+            # Find the message objects and prepare them
+            for m in selected:
+                m_id = m.get('id')
+                if m_id in reparse_ids:
+                    # Create a copy to avoid modifying original
+                    retry_msg = m.copy()
+                    
+                    # Generate hint
+                    ocr_text = retry_msg.get('ocr_text', '')
+                    if not ocr_text and retry_msg.get('ocr_texts'):
+                        ocr_text = "\n".join(retry_msg['ocr_texts'])
+                        
+                    msg_picks = [p for p in picks if p.get('message_id') == m_id]
+                    
+                    hints = []
+                    
+                    # Add Missing Pick hints
+                    if m_id in reparse_ids_missing:
+                        hints.append(MultiPickValidator.get_reparse_hint(
+                            ocr_text=ocr_text,
+                            parsed_picks=msg_picks,
+                            caption=retry_msg.get('text', '')
+                        ))
+                    
+                    # Add Semantic hints
+                    if m_id in semantic_issues:
+                        hints.append("\n### CORRECTION NEEDED")
+                        hints.append("The following picks were flagged as invalid:")
+                        for issue in semantic_issues[m_id]:
+                            hints.append(f"- {issue}")
+                        hints.append("Please fix these errors in your re-extraction.")
+                    
+                    full_hint = "\n\n".join(hints)
+                    
+                    # Append hint to text for AI
+                    retry_msg['text'] = (retry_msg.get('text', '') + "\n\n" + full_hint)[:3500] 
+                    reparse_batch.append(retry_msg)
+            
+            if reparse_batch:
+                log_info(f"Running refinement on {len(reparse_batch)} messages...")
+                
+                # Process in small batches
+                reparse_batches = [reparse_batch[i:i+BATCH_SIZE] for i in range(0, len(reparse_batch), BATCH_SIZE)]
+                
+                try:
+                    # Use parallel processor for speed
+                    reparse_results = parallel_processor.process_batches(reparse_batches)
+                    
+                    # Process results
+                    new_picks_count = 0
+                    
+                    # Map results to message IDs
+                    for batch_idx, raw_response in enumerate(reparse_results):
+                        # Get IDs for this batch
+                        valid_ids = None
+                        if batch_idx < len(reparse_batches):
+                            valid_ids = [int(m.get('id')) for m in reparse_batches[batch_idx] if m.get('id') is not None]
+                            
+                        new_batch_picks = normalize_response(raw_response, expand=True, valid_message_ids=valid_ids)
+                        
+                        # Group new picks by ID
+                        new_picks_by_id = {}
+                        for p in new_batch_picks:
+                            mid = p.get('message_id')
+                            if mid not in new_picks_by_id:
+                                new_picks_by_id[mid] = []
+                            new_picks_by_id[mid].append(p)
+                            
+                        # Update main list - Replace old picks with new refined ones
+                        for mid, msg_new_picks in new_picks_by_id.items():
+                            if msg_new_picks: 
+                                # Remove old picks for this message
+                                # We convert to string/int safely for comparison
+                                picks = [p for p in picks if str(p.get('message_id')) != str(mid)]
+                                # Add new picks
+                                picks.extend(msg_new_picks)
+                                new_picks_count += len(msg_new_picks)
+                    
+                    log_success(f"Refinement complete: Replaced with {new_picks_count} refined picks")
+                    metadata["stages"]["refine"] = {"reparsed": len(reparse_batch), "new_picks": new_picks_count}
+                    
+                except Exception as e:
+                    log_error(f"Refinement failed: {e}")
+        else:
+            log_info("No refinement needed.")
+            
         picks = backfill_odds(picks)
         picks = deduplicate_by_capper(picks)
         
@@ -426,6 +631,11 @@ def format_pick_for_prompt(pick: dict, idx: int) -> str:
     # Result if present
     if pick.get('result'):
         lines.append(f"- **Result:** {pick.get('result')}")
+    
+    # Source snippet (for debugging attributions)
+    if pick.get('_source_text'):
+        snippet = pick['_source_text'].replace('\n', ' ')[:100]
+        lines.append(f"- **Source Snippet:** `{snippet}...`")
     
     return "\n".join(lines)
 

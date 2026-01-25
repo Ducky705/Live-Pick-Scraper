@@ -94,9 +94,24 @@ async def main():
         logging.info("Skipping Telegram fetch (Missing Credentials).")
         tg_msgs = []
     else:
-        logging.info(f"Fetching Telegram messages from {TARGET_TELEGRAM_CHANNEL_ID}...")
-        tg_msgs = await tg.fetch_messages([TARGET_TELEGRAM_CHANNEL_ID], target_date)
-        logging.info(f"Fetched {len(tg_msgs)} Telegram messages.")
+        # Support multiple comma-separated channel IDs from env
+        target_ids = []
+        if TARGET_TELEGRAM_CHANNEL_ID:
+            target_ids = [
+                tid.strip()
+                for tid in TARGET_TELEGRAM_CHANNEL_ID.split(",")
+                if tid.strip()
+            ]
+
+        if target_ids:
+            logging.info(
+                f"Fetching Telegram messages from {len(target_ids)} channels: {target_ids}..."
+            )
+            tg_msgs = await tg.fetch_messages(target_ids, target_date)
+            logging.info(f"Fetched {len(tg_msgs)} Telegram messages.")
+        else:
+            logging.warning("No TARGET_TELEGRAM_CHANNEL_ID configured.")
+            tg_msgs = []
 
     # Fetch Twitter
     logging.info("Fetching Tweets...")

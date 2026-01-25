@@ -1,5 +1,17 @@
 # Progress Tracker
 
+## Phase 7: Anti-Bot & Scalability
+- [ ] Upgrade Twitter Scraper with Anti-Bot protections:
+    - [ ] Implement randomized jitter/delays.
+    - [ ] Implement exponential backoff for rate limits.
+    - [ ] Rotate User-Agents (if feasible with Twikit, or just keep standard browser headers).
+    - [ ] Verify robust pagination without triggering 429s immediately.
+
+## Phase 6: Maintenance & Fixes
+- [x] Fix Twitter Scraper (`ConnectTimeout` and Suspended User handling).
+- [x] Fix Twitter Limit (was 20, now paginates).
+    - **Fix Details**: Added pagination loop with date checks. Confirmed >20 tweets retrieved.
+
 ## Phase 5: Smart Capper Matching
 - [x] Integrate `rapidfuzz` for high-performance fuzzy matching.
 - [x] Implement "Smart Active Priority" matching:

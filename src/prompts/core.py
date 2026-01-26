@@ -1,16 +1,3 @@
-"""
-Core Prompt Components - Centralized definitions for maximum token efficiency.
-
-This module contains:
-- Compact schema mappings (1-char keys)
-- Type abbreviations
-- League codes
-- Prompt builder functions
-
-IMPORTANT: All prompts use ultra-compact output format to minimize AI output tokens.
-The decoder.py module expands these back to full field names.
-"""
-
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 
@@ -70,23 +57,6 @@ LEAGUES = [
     "Other",
 ]
 
-# Noise keywords to skip (marketing, watermarks, etc.)
-NOISE_KEYWORDS = [
-    "VIP",
-    "WHALE",
-    "MAX BET",
-    "LOCK",
-    "80K",
-    "GUARANTEED",
-    "@cappersfree",
-    "@freepicks",
-    "@vippicks",
-    "POTD",
-    "Join",
-    "DM for",
-    "FREE PLAY",
-]
-
 # Stat abbreviations for props
 STAT_ABBREVS = {
     # Basketball
@@ -117,9 +87,22 @@ STAT_ABBREVS = {
     "P": "Points",
 }
 
-# =============================================================================
-# COMPRESSED PROMPT FRAGMENTS
-# =============================================================================
+# Noise keywords to skip (marketing, watermarks, etc.)
+NOISE_KEYWORDS = [
+    "VIP",
+    "WHALE",
+    "MAX BET",
+    "LOCK",
+    "80K",
+    "GUARANTEED",
+    "@cappersfree",
+    "@freepicks",
+    "@vippicks",
+    "POTD",
+    "Join",
+    "DM for",
+    "FREE PLAY",
+]
 
 # Ultra-compact schema doc for prompts (~150 chars vs ~800 original)
 SCHEMA_DOC = """KEYS:i=id,c=capper(First line of text/header. If unknown use 'Unknown'),l=league,t=type,p=pick,o=odds(int,e.g.-110),u=units(float),q=confidence(1-10)
@@ -460,7 +443,7 @@ TASKS:
 2.Fix errors(wrong odds,teams,Unknown fields)
 3.Remove duplicates
 4.c=capper from @handle or name
-5.l=specific league if inferable
+5.l=league from team names
 6.t=ML,SP,TL,PP,TP,GP,PD,PL,TS,FT,UK
 7.Skip noise(Whale,Max Bet,Guaranteed)
 8.If no picks,return empty []

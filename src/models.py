@@ -29,6 +29,10 @@ class BetPick(BaseModel):
     warning: Optional[str] = None # e.g. "Odds Mismatch", "Stat Anomaly"
     is_update: bool = False # True if this is an update to a previous play
     
+    # Enrichment Fields
+    opponent: Optional[str] = None
+    game_date: Optional[str] = None
+    
     # Phase 3: Granular Props
     subject: Optional[str] = None # "LeBron James"
     market: Optional[str] = None # "Points"

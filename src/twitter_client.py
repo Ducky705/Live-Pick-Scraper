@@ -393,9 +393,9 @@ class TwitterManager:
                             if resp.status_code == 200:
                                 with open(fpath, "wb") as f:
                                     f.write(resp.content)
-                                image_paths.append(f"/static/temp_images/{fname}")
+                                image_paths.append(fpath)
                         else:
-                            image_paths.append(f"/static/temp_images/{fname}")
+                            image_paths.append(fpath)
                     except Exception as e:
                         print(f"[Twitter] Image download error: {e}")
 

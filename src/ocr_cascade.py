@@ -298,10 +298,10 @@ def _call_openrouter(image_path: str, prompt: str, prompt_type: str) -> OCRResul
     try:
         from src.openrouter_client import openrouter_completion
 
-        # Primary: Llama 3.2 90B Vision (if available/free) or Gemma
+        # Primary: Llama 3.2 11B Vision (smaller, more likely available)
         # Fallback list handled by client if specific model fails? No, client is simple.
         # We'll try the most likely to work free model.
-        model = "meta-llama/llama-3.2-90b-vision-instruct:free"
+        model = "meta-llama/llama-3.2-11b-vision-instruct:free"
 
         b64 = _encode_image(image_path)
 

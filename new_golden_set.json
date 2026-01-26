@@ -1,0 +1,572 @@
+[
+  {
+    "id": 12806,
+    "channel_id": "unknown",
+    "date": "2026-01-24 18:28 ET",
+    "text": "UFC 324\n\n\ud83d\udc49\ud83c\udffb BettingWithBush \n\nPaddy \u201cThe Baddy\u201d Pimblett -205 4u\u2b50\nAbeta Gautier RD 1 -120 2u\u2b50\nAbeta Gautier ITD || Paddy Pimblett -136 2u\u2b50\nTy Miller || Charles Johnson -114 1u\nWaldo Acosta || Jean Silva -131 1u\nRose Namajunas ML +315 1u\n\n\ud83d\udc49\ud83c\udffb Porterpicks \n\nPimblett/Gaethje Over 2.5 (3U)\nNikita Krylov ML (2U)\nFigueiredo/Nurmagomedov Under 2.5 Rounds (1U)\n\n\ud83d\udc49\ud83c\udffb BrandonTheProfit UFC\n\nPimblett ML -235 (3u)\nPimblett/Natalia Silva MLP -113 (2U) DK\nHokit/O' Malley MLP +102 (2U)\n\n\ud83d\udc49\ud83c\udffb A11Bets\n\nPaddy + Waldo Cortes (-110) 1U\nPaddy by SUB (+150) 0.5U\nSean O Malley ML + Alcaraz ML (-150) 0.5U\n\n\ud83d\udc49\ud83c\udffb AnalyticsCapper \n\nPimblett ML (-230) 3U",
+    "images": [],
+    "source": "Telegram",
+    "expected_picks": [
+      {
+        "pick": "Paddy Pimblett Moneyline",
+        "league": "UFC",
+        "odds": -205,
+        "units": 4.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Abeta Gautier Round 1",
+        "league": "UFC",
+        "odds": -120,
+        "units": 2.0,
+        "type": "Prop",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Abeta Gautier ITD || Paddy Pimblett",
+        "league": "UFC",
+        "odds": -136,
+        "units": 2.0,
+        "type": "Prop",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Charles Johnson Moneyline",
+        "league": "UFC",
+        "odds": -114,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Jean Silva Moneyline",
+        "league": "UFC",
+        "odds": -131,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Rose Namajunas Moneyline",
+        "league": "UFC",
+        "odds": 315,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Pimblett/Gaethje Over 2.5 Rounds",
+        "league": "UFC",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Nikita Krylov Moneyline",
+        "league": "UFC",
+        "odds": null,
+        "units": 2.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Figueiredo/Nurmagomedov Under 2.5 Rounds",
+        "league": "UFC",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Paddy Pimblett Moneyline",
+        "league": "UFC",
+        "odds": -235,
+        "units": 3.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Pimblett/Natalia Silva MLP",
+        "league": "UFC",
+        "odds": -113,
+        "units": 2.0,
+        "type": "Prop",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Hokit/O' Malley MLP",
+        "league": "UFC",
+        "odds": 102,
+        "units": 2.0,
+        "type": "Prop",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Paddy Pimblett Moneyline",
+        "league": "UFC",
+        "odds": -230,
+        "units": 3.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Paddy Pimblett by SUB",
+        "league": "UFC",
+        "odds": 150,
+        "units": 0.5,
+        "type": "Prop",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Sean O Malley Moneyline",
+        "league": "UFC",
+        "odds": null,
+        "units": 0.5,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      }
+    ]
+  },
+  {
+    "id": 12793,
+    "channel_id": "unknown",
+    "date": "2026-01-24 12:03 ET",
+    "text": "**Big Al**\n\nNHL Selections\n1* Oilers -175, 10:05 pm\n\nNBA Selections\n4* Magic - 1.5, 7:10 pm\nNCAA Basketball Selections\n4* Minnesota +6, Noon\n3* Wofford +2, 11:00 am \n3* Connecticut -10.5, 12:30 pm\n\n**Kyle Anthony UFC 5% \ud83d\udd25\n**\nPaddy Pimblett ML & Jean Silva ML Parlay\n\n**Kyle Hunter** \n\n3* Georgia Tech UNDER 144 \n12:00 PM EST\n3* Denver OVER 161.5\n4:00 PM EST\n3* Oklahoma St UNDER 163 \n3:00 PM EST\n\n**Tokyo Brandon (14-3) **\n5% MAX CBB PLAY - Cal St Fullerton Under 172.5",
+    "images": [],
+    "source": "Telegram",
+    "expected_picks": [
+      {
+        "pick": "Oilers -175",
+        "league": "NHL",
+        "odds": -175,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "UNKNOWN",
+        "verification_proof": "Team mapping ambiguous",
+        "game_id": "401803169"
+      },
+      {
+        "pick": "Magic -1.5",
+        "league": "NBA",
+        "odds": null,
+        "units": 4.0,
+        "type": "Spread",
+        "verified_grade": "UNKNOWN",
+        "verification_proof": "Team mapping ambiguous",
+        "game_id": "401810501"
+      },
+      {
+        "pick": "Minnesota +6",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 4.0,
+        "type": "Spread",
+        "verified_grade": "UNKNOWN",
+        "verification_proof": "Team mapping ambiguous",
+        "game_id": "401810499"
+      },
+      {
+        "pick": "Wofford +2",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Spread",
+        "verified_grade": "UNKNOWN",
+        "verification_proof": "Team mapping ambiguous",
+        "game_id": "401809342"
+      },
+      {
+        "pick": "Connecticut -10.5",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Spread",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Paddy Pimblett ML & Jean Silva ML Parlay",
+        "league": "UFC",
+        "odds": null,
+        "units": 5.0,
+        "type": "Parlay",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Georgia Tech UNDER 144",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total",
+        "verified_grade": "LOSS",
+        "verification_proof": "Total: 193.0 vs 144.0",
+        "game_id": "401805179"
+      },
+      {
+        "pick": "Denver OVER 161.5",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Oklahoma St UNDER 163",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total",
+        "verified_grade": "WIN",
+        "verification_proof": "Total: 155.0 vs 163.0",
+        "game_id": "401827645"
+      },
+      {
+        "pick": "Cal St Fullerton UNDER 172.5",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 5.0,
+        "type": "Total",
+        "verified_grade": "WIN",
+        "verification_proof": "Total: 171.0 vs 172.5",
+        "game_id": "401809158"
+      }
+    ]
+  },
+  {
+    "id": 10903,
+    "channel_id": "unknown",
+    "date": "2026-01-24 18:28 ET",
+    "text": "UFC 324\n\n\ud83d\udc49\ud83c\udffb BettingWithBush \n\nPaddy \u201cThe Baddy\u201d Pimblett -205 4u\u2b50\nAbeta Gautier RD 1 -120 2u\u2b50\nAbeta Gautier ITD || Paddy Pimblett -136 2u\u2b50\nTy Miller || Charles Johnson -114 1u\nWaldo Acosta || Jean Silva -131 1u\nRose Namajunas ML +315 1u\n\n\ud83d\udc49\ud83c\udffb Porterpicks \n\nPimblett/Gaethje Over 2.5 (3U)\nNikita Krylov ML (2U)\nFigueiredo/Nurmagomedov Under 2.5 Rounds (1U)\n\n\ud83d\udc49\ud83c\udffb BrandonTheProfit UFC\n\nPimblett ML -235 (3u)\nPimblett/Natalia Silva MLP -113 (2U) DK\nHokit/O' Malley MLP +102 (2U)\n\n\ud83d\udc49\ud83c\udffb A11Bets\n\nPaddy + Waldo Cortes (-110) 1U\nPaddy by SUB (+150) 0.5U\nSean O Malley ML + Alcaraz ML (-150) 0.5U\n\n\ud83d\udc49\ud83c\udffb AnalyticsCapper \n\nPimblett ML (-230) 3U",
+    "images": [],
+    "source": "Telegram",
+    "expected_picks": [
+      {
+        "pick": "Paddy Pimblett ML",
+        "league": "UFC",
+        "odds": -205,
+        "units": 4.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Abeta Gautier RD 1",
+        "league": "UFC",
+        "odds": -120,
+        "units": 2.0,
+        "type": "Prop",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Abeta Gautier ITD",
+        "league": "UFC",
+        "odds": -136,
+        "units": 2.0,
+        "type": "Prop",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Ty Miller ML",
+        "league": "UFC",
+        "odds": -114,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "WIN",
+        "verification_proof": "Winner: Ty Miller, Picked: Ty Miller",
+        "game_id": "600057024"
+      },
+      {
+        "pick": "Charles Johnson ML",
+        "league": "UFC",
+        "odds": -114,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Waldo Acosta ML",
+        "league": "UFC",
+        "odds": -131,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Jean Silva ML",
+        "league": "UFC",
+        "odds": -131,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Rose Namajunas ML",
+        "league": "UFC",
+        "odds": 315,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Pimblett/Gaethje Over 2.5",
+        "league": "UFC",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Nikita Krylov ML",
+        "league": "UFC",
+        "odds": null,
+        "units": 2.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Figueiredo/Nurmagomedov Under 2.5 Rounds",
+        "league": "UFC",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Pimblett ML",
+        "league": "UFC",
+        "odds": -235,
+        "units": 3.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Pimblett/Natalia Silva ML",
+        "league": "UFC",
+        "odds": -113,
+        "units": 2.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Hokit/O' Malley ML",
+        "league": "UFC",
+        "odds": 102,
+        "units": 2.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Paddy + Waldo Cortes ML",
+        "league": "UFC",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Paddy by SUB",
+        "league": "UFC",
+        "odds": 150,
+        "units": 0.5,
+        "type": "Prop",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Sean O Malley ML + Alcaraz ML",
+        "league": "UFC",
+        "odds": -150,
+        "units": 0.5,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Pimblett ML",
+        "league": "UFC",
+        "odds": -230,
+        "units": 3.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      }
+    ]
+  },
+  {
+    "id": 10891,
+    "channel_id": "unknown",
+    "date": "2026-01-24 12:03 ET",
+    "text": "**Big Al**\n\nNHL Selections\n1* Oilers -175, 10:05 pm\n\nNBA Selections\n4* Magic - 1.5, 7:10 pm\nNCAA Basketball Selections\n4* Minnesota +6, Noon\n3* Wofford +2, 11:00 am \n3* Connecticut -10.5, 12:30 pm\n\n**Kyle Anthony UFC 5% \ud83d\udd25\n**\nPaddy Pimblett ML & Jean Silva ML Parlay\n\n**Kyle Hunter** \n\n3* Georgia Tech UNDER 144 \n12:00 PM EST\n3* Denver OVER 161.5\n4:00 PM EST\n3* Oklahoma St UNDER 163 \n3:00 PM EST\n\n**Tokyo Brandon (14-3) **\n5% MAX CBB PLAY - Cal St Fullerton Under 172.5",
+    "images": [],
+    "source": "Telegram",
+    "expected_picks": [
+      {
+        "pick": "Oilers -175",
+        "league": "NHL",
+        "odds": -175,
+        "units": 1.0,
+        "type": "Moneyline",
+        "verified_grade": "UNKNOWN",
+        "verification_proof": "Team mapping ambiguous",
+        "game_id": "401803169"
+      },
+      {
+        "pick": "Magic -1.5",
+        "league": "NBA",
+        "odds": null,
+        "units": 4.0,
+        "type": "Spread",
+        "verified_grade": "UNKNOWN",
+        "verification_proof": "Team mapping ambiguous",
+        "game_id": "401810501"
+      },
+      {
+        "pick": "Minnesota +6",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 4.0,
+        "type": "Spread",
+        "verified_grade": "UNKNOWN",
+        "verification_proof": "Team mapping ambiguous",
+        "game_id": "401810499"
+      },
+      {
+        "pick": "Wofford +2",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Spread",
+        "verified_grade": "UNKNOWN",
+        "verification_proof": "Team mapping ambiguous",
+        "game_id": "401809342"
+      },
+      {
+        "pick": "Connecticut -10.5",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Spread",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Paddy Pimblett ML & Jean Silva ML Parlay",
+        "league": "UFC",
+        "odds": null,
+        "units": 5.0,
+        "type": "Moneyline",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Georgia Tech UNDER 144",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total",
+        "verified_grade": "LOSS",
+        "verification_proof": "Total: 193.0 vs 144.0",
+        "game_id": "401805179"
+      },
+      {
+        "pick": "Denver OVER 161.5",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total",
+        "verified_grade": "PENDING",
+        "verification_proof": "No game found",
+        "game_id": null
+      },
+      {
+        "pick": "Oklahoma St UNDER 163",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total",
+        "verified_grade": "WIN",
+        "verification_proof": "Total: 155.0 vs 163.0",
+        "game_id": "401827645"
+      },
+      {
+        "pick": "Cal St Fullerton Under 172.5",
+        "league": "NCAAB",
+        "odds": null,
+        "units": 5.0,
+        "type": "Total",
+        "verified_grade": "WIN",
+        "verification_proof": "Total: 171.0 vs 172.5",
+        "game_id": "401809158"
+      }
+    ]
+  }
+]

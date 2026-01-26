@@ -27,6 +27,7 @@ from src.semantic_validator import SemanticValidator
 from src.multi_pick_validator import validate_and_flag_missing
 from src.multi_capper_verifier import verify_all_picks
 from src.pick_deduplicator import deduplicate_by_capper
+from src.game_enricher import enrich_picks
 from src.rule_based_extractor import RuleBasedExtractor
 
 # Setup Logging
@@ -252,6 +253,7 @@ async def main():
                 picks.extend(batch_picks)
 
             picks = backfill_odds(picks)
+            picks = enrich_picks(picks, target_date)
 
             logging.info(f"Extracted {len(picks)} total picks (Rule-Based + AI).")
 
@@ -464,6 +466,7 @@ async def main():
                             f"Refinement complete. Replaced with {new_picks_count} refined picks."
                         )
                         picks = backfill_odds(picks)
+                        picks = enrich_picks(picks, target_date)
                         picks = deduplicate_by_capper(picks)  # Re-deduplicate
 
                     except Exception as e:
@@ -472,6 +475,87 @@ async def main():
             # Two-Pass Verification (Parsing Check)
             if not TwoPassVerifier.verify_parsing_result(picks):
                 logging.warning("Low confidence in parsing result structure.")
+
+            # 7.4 Verification Report (Pre-Grading)
+            report_file = os.path.join(
+                OUTPUT_DIR, f"verification_report_{target_date}.md"
+            )
+            logging.info(f"Generating verification report: {report_file}")
+
+            # Ensure msg_map exists
+            if "msg_map" not in locals():
+                msg_map = {}
+                for m in selected_msgs:
+                    if m.get("id") is not None:
+                        msg_map[int(m["id"])] = m
+
+            try:
+                with open(report_file, "w", encoding="utf-8") as f:
+                    f.write(f"# Pick Verification Report - {target_date}\n\n")
+                    f.write(f"**Total Picks:** {len(picks)}\n\n")
+
+                    picks_by_msg = {}
+                    for p in picks:
+                        mid = p.get("message_id")
+                        if mid:
+                            try:
+                                mid_int = int(mid)
+                                if mid_int not in picks_by_msg:
+                                    picks_by_msg[mid_int] = []
+                                picks_by_msg[mid_int].append(p)
+                            except:
+                                pass
+
+                    # Sort by message ID
+                    for mid in sorted(picks_by_msg.keys()):
+                        msg_picks = picks_by_msg[mid]
+                        msg = msg_map.get(mid)
+
+                        f.write(f"---\n\n")
+                        f.write(f"## Message ID: {mid}\n\n")
+
+                        if msg:
+                            f.write("### 📝 Source Message\n")
+                            if msg.get("author"):
+                                f.write(f"**Author:** {msg['author']}\n")
+
+                            raw_text = msg.get("text", "").strip()
+                            if raw_text:
+                                formatted_text = raw_text.replace("\n", "\n> ")
+                                f.write(f"**Text:**\n> {formatted_text}\n\n")
+
+                            ocr = msg.get("ocr_text", "").strip()
+                            if ocr:
+                                formatted_ocr = ocr.replace("\n", "\n> ")
+                                f.write(f"**OCR:**\n> {formatted_ocr}\n\n")
+
+                            images = msg.get("images") or (
+                                [msg.get("image")] if msg.get("image") else []
+                            )
+                            if images:
+                                f.write(f"**Images:**\n")
+                                for img in images:
+                                    f.write(f"- `{img}`\n")
+                                f.write("\n")
+                        else:
+                            f.write("**⚠️ Source Message Not Found**\n\n")
+
+                        f.write(f"### 🎯 Parsed Picks\n")
+                        f.write("| Pick | Odds | Units | Type | Result |\n")
+                        f.write("| :--- | :--- | :--- | :--- | :--- |\n")
+                        for p in msg_picks:
+                            pick_str = str(p.get("pick", "-")).replace("|", "\|")
+                            odds_str = str(p.get("odds", "-"))
+                            units_str = str(p.get("units", "-"))
+                            type_str = str(p.get("type", "-"))
+                            result_str = str(p.get("result", "-"))
+                            f.write(
+                                f"| {pick_str} | {odds_str} | {units_str} | {type_str} | {result_str} |\n"
+                            )
+                        f.write("\n")
+                logging.info(f"Verification report saved to: {report_file}")
+            except Exception as e:
+                logging.error(f"Failed to generate verification report: {e}")
 
             # 7.5 GRADING
             logging.info("Grading picks against ESPN scores...")
@@ -574,6 +658,7 @@ async def main():
             picks.extend(batch_picks)
 
         picks = backfill_odds(picks)
+        picks = enrich_picks(picks, target_date)
 
         logging.info(f"Extracted {len(picks)} raw picks.")
 
@@ -780,6 +865,7 @@ async def main():
                         f"Refinement complete. Replaced with {new_picks_count} refined picks."
                     )
                     picks = backfill_odds(picks)
+                    picks = enrich_picks(picks, target_date)
                     picks = deduplicate_by_capper(picks)  # Re-deduplicate
 
                 except Exception as e:
@@ -853,9 +939,14 @@ async def main():
     )
     print("-" * 95)
     for p in picks:
-        capper = (p.get("capper_name") or "Unknown")[:19]
+        capper_raw = p.get("capper_name") or "Unknown"
+        capper = capper_raw.encode("ascii", "replace").decode("ascii")[:19]
+
         sport = (p.get("league") or "Unknown")[:9]
-        pick_val = (p.get("pick") or "Unknown")[:34]
+
+        pick_raw = p.get("pick") or "Unknown"
+        pick_val = pick_raw.encode("ascii", "replace").decode("ascii")[:34]
+
         odds = str(p.get("odds") or "")[:5]
         result = (p.get("result") or "")[:7]
         print(f"{capper:<20} | {sport:<10} | {pick_val:<35} | {odds:<6} | {result:<8}")

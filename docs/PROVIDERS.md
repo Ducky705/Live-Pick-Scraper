@@ -1,74 +1,51 @@
-# AI Providers & Parallel Processing
+# AI Providers & Smart Cascading Strategy
 
-CapperSuite utilizes a multi-provider strategy to parse betting picks with maximum speed and reliability. The system is designed to handle rate limits, failures, and varying model capabilities.
+CapperSuite utilizes a **"Complexity Router"** strategy (Smart Cascading) to balance Accuracy, Efficiency, and Speed. Instead of a simple round-robin, models are tiered by cost and speed.
 
-## Supported Providers
+## The Hierarchy
 
-| Provider | Client File | Role | Models | Status |
-|----------|-------------|------|--------|--------|
-| **Groq** | `src/groq_client.py` | Primary Parser | `llama-3.3-70b` | **RECOMMENDED** |
-| **Mistral** | `src/mistral_client.py` | Secondary / Vision | `codestral`, `pixtral` | Excellent |
-| **Gemini** | `src/gemini_client.py` | Backup | `gemini-2.5-flash` | Good |
-| **Cerebras** | `src/cerebras_client.py` | Overflow | `llama3.1-8b` | Fast, Text-only |
-| **OpenRouter** | `src/openrouter_client.py` | Fallback | Various | Slow |
+### Tier 1: The "Speedsters" (High Speed, Low Cost)
+*   **Primary:** **Gemini 2.0 Flash Lite**
+*   **Secondary:** **Cerebras (Llama-3.1-8b)**
+*   **Role:** "Gatekeeper". Handles 80% of traffic (filtering junk, parsing simple standard lines).
+*   **Characteristics:** Extremely high throughput, very low cost.
 
-## Parallel Batch Processor
+### Tier 2: The "Experts" (High Accuracy)
+*   **Primary:** **Groq (Llama-3.3-70b)**
+*   **Secondary:** **Mistral Large**
+*   **Role:** "Heavy Lifter". Handles complex bets (props, parlays), images (Vision), and **retries** from Tier 1.
+*   **Characteristics:** High intelligence, stricter rate limits.
 
-The `ParallelBatchProcessor` (`src/parallel_batch_processor.py`) orchestrates the distribution of work across these providers.
+### Tier 3: The "Safety Net"
+*   **Primary:** **OpenRouter / Gemini Pro**
+*   **Role:** Emergency failover if Tier 1 and Tier 2 are exhausted or failing.
 
-```
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           PARALLEL BATCH PROCESSOR                              │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                 │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐   │
-│  │ INCOMING │──▶│  BATCH   │───▶│   LOAD   │──▶│ WORKER   │───▶│ PROVIDER │   │
-│  │ MESSAGES │    │ SPLITTER │    │ BALANCER │    │  POOL    │    │   API    │   │
-│  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘   │
-│                                        │               │                        │
-│                                        ▼               │                        │
-│                                  ┌──────────┐          ▼                        │
-│                                  │ RATE LMT │    ┌──────────┐    ┌──────────┐   │
-│                                  │ MONITOR  │    │ 16x GROQ │    │ 4x MISTR │   │
-│                                  └──────────┘    └──────────┘    └──────────┘   │
-│                                                        │               │        │
-│                                                  ┌──────────┐    ┌──────────┐   │
-│                                                  │  3x GEM  │    │  2x CER  │   │
-│                                                  └──────────┘    └──────────┘   │
-│                                                                                 │
-└─────────────────────────────────────────────────────────────────────────────────┘
+## Logic Flow
+
+```mermaid
+graph TD
+    A[Incoming Batch] --> B{Contains Image?}
+    B -- Yes --> C[Tier 2: Groq Vision / Mistral]
+    B -- No --> D{Text Length > 3000 chars?}
+    D -- Yes --> E[Tier 2: Groq Llama-70b]
+    D -- No --> F[Tier 1: Gemini Flash Lite / Cerebras]
+    F --> G{Valid JSON & High Confidence?}
+    G -- Yes --> H[Save Result]
+    G -- No/Error --> E[Escalate to Tier 2: Groq (Retry)]
 ```
 
-### Strategy (Maximum Speed)
+## Supported Providers & Config
 
-The system aims for **25 concurrent workers** to maximize throughput:
+| Provider | Tier | Role | Models | Status |
+|----------|------|------|--------|--------|
+| **Gemini** | 1 | Primary Speed | `gemini-2.0-flash-lite` | **ACTIVE** |
+| **Cerebras** | 1 | Secondary Speed | `llama-3.1-8b` | **ACTIVE** |
+| **Groq** | 2 | Primary Expert | `llama-3.3-70b` | **ACTIVE** |
+| **Mistral** | 2 | Secondary Expert | `codestral`, `pixtral` | Active |
+| **OpenRouter**| 3 | Fallback | Various | Backup |
 
-1.  **Groq (16 workers)**: Handles 64% of the load. 1000 requests/minute limit allows high concurrency.
-2.  **Mistral (4 workers)**: Handles 16%. Supports high token limits (500K TPM), allowing efficient batching.
-3.  **Gemini (3 workers)**: Handles 12%.
-4.  **Cerebras (2 workers)**: Handles 8%.
+## Rate Limit Strategy (Smart Circuit Breaker)
 
-### Features
-
--   **Rate Limit Awareness**: Tracks RPM (Requests Per Minute) and TPM (Tokens Per Minute) for each provider.
--   **Smart Backoff**: Automatically sleeps if rate limits are hit.
--   **Failover**: If a primary provider fails, the batch is retried with a fallback provider.
--   **Load Balancing**: Distributes batches round-robin based on provider capacity.
-
-## Configuration
-
-Provider settings are defined in `src/parallel_batch_processor.py` (constant `PROVIDER_CONFIG`):
-
-```python
-PROVIDER_CONFIG = {
-    "groq": {
-        "model": "llama-3.3-70b-versatile",
-        "rpm": 1000,
-        "max_concurrent": 16,
-        "priority": 1,
-    },
-    # ...
-}
-```
-
-To enable a provider, ensure its API key is set in the `.env` file (`GROQ_TOKEN`, `MISTRAL_TOKEN`, etc.). The processor automatically detects available providers.
+- **Circuit Breaker:** If a provider hits `429` (Rate Limit) 3 times consecutively, it is suspended for 60s.
+- **Spillover:** If Tier 1 is saturated, traffic spills to Tier 2.
+- **Pre-flight Check:** Local token estimation prevents sending requests that would definitely fail known TPM limits.

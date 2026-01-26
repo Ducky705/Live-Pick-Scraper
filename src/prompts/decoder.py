@@ -2199,6 +2199,18 @@ def validate_and_correct_batch(
             except (ValueError, TypeError):
                 return None
 
+        # AUTO-RECOVERY: If we only have ONE valid message ID in the batch,
+        # assume all orphaned picks belong to it. This handles cases where AI forgets the ID.
+        if len(valid_set) == 1:
+            single_id = list(valid_set)[0]
+            for p in validated:
+                if get_pick_id_as_int(p) is None:
+                    logging.debug(
+                        f"[Decoder] Auto-assigning ID {single_id} to orphan pick: {p.get('pick', '')[:30]}..."
+                    )
+                    p["message_id"] = single_id
+                    p["i"] = single_id
+
         validated = [p for p in validated if get_pick_id_as_int(p) in valid_set]
         if len(validated) < before_count:
             filtered_count = before_count - len(validated)

@@ -5,13 +5,13 @@
     "images_tested": 30
   },
   "metrics": {
-    "precision": 0.7407407407407407,
-    "recall": 0.7407407407407407,
-    "f1": 0.7407407407407407,
-    "total_tp": 40,
+    "precision": 0.7307692307692307,
+    "recall": 0.7037037037037037,
+    "f1": 0.7169811320754716,
+    "total_tp": 38,
     "total_fp": 14,
-    "total_fn": 14,
-    "avg_latency": 4.1165509700775145
+    "total_fn": 16,
+    "avg_latency": 4.973498070240021
   },
   "classification_stats": {
     "PICK": 0,

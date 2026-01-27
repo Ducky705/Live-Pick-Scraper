@@ -128,34 +128,23 @@
         "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769513109.562376)",
         "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769513219.5239534)"
       ]
+    },
+    {
+      "iteration": 5,
+      "startedAt": "2026-01-27T11:47:48.695Z",
+      "endedAt": "2026-01-27T11:48:26.839Z",
+      "durationMs": 10646,
+      "toolsUsed": {},
+      "filesModified": [],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": []
     }
   ],
-  "totalDurationMs": 3592236,
+  "totalDurationMs": 3602882,
   "struggleIndicators": {
-    "repeatedErrors": {
-      "2026-01-27 11:46:01,062 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-": 1,
-      "2026-01-27 11:46:01,525 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 40": 1,
-      "2026-01-27 11:46:01,892 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:fr": 1,
-      "2026-01-27 11:46:04,377 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-": 1,
-      "2026-01-27 11:46:04,829 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 40": 1,
-      "2026-01-27 11:46:05,184 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:fr": 1,
-      "2026-01-27 11:46:05,185 - ERROR - [OpenRouter] All 2 cycles failed. Last error: 404 Client Error: No": 1,
-      "2026-01-27 11:46:05,185 - ERROR - [OCR Cascade] OpenRouter error: 404 Client Error: Not Found for ur": 1,
-      "+        \"2026-01-27 11:46:01,062 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-1": 1,
-      "+        \"2026-01-27 11:46:01,525 - WARNING - [OpenRouter] Request error with mistralai/devstral-251": 1,
-      "+        \"2026-01-27 11:46:01,892 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-": 1,
-      "+        \"2026-01-27 11:46:04,377 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-1": 1,
-      "+        \"2026-01-27 11:46:04,829 - WARNING - [OpenRouter] Request error with mistralai/devstral-251": 1,
-      "+        \"2026-01-27 11:46:05,184 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-": 1,
-      "+        \"2026-01-27 11:46:05,185 - ERROR - [OpenRouter] All 2 cycles failed. Last error: 404 Client": 1,
-      "+        \"2026-01-27 11:46:05,185 - ERROR - [OCR Cascade] OpenRouter error: 404 Client Error: Not Fo": 1,
-      "+      \"2026-01-27 11:46:05,185 - ERROR - [OpenRouter] All 2 cycles failed. Last error: 404 Client E": 1,
-      "+      \"2026-01-27 11:46:05,185 - ERROR - [OCR Cascade] OpenRouter error: 404 Client Error: Not Foun": 1,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429": 2,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown un": 8,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown un": 7
-    },
-    "noProgressIterations": 0,
-    "shortIterations": 0
+    "repeatedErrors": {},
+    "noProgressIterations": 1,
+    "shortIterations": 1
   }
 }

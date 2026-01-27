@@ -174,34 +174,23 @@
         "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769536914.7285419)",
         "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769536914.7285419)"
       ]
+    },
+    {
+      "iteration": 8,
+      "startedAt": "2026-01-27T18:04:46.765Z",
+      "endedAt": "2026-01-27T18:06:26.142Z",
+      "durationMs": 24475,
+      "toolsUsed": {},
+      "filesModified": [],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": []
     }
   ],
-  "totalDurationMs": 2338592,
+  "totalDurationMs": 2363067,
   "struggleIndicators": {
-    "repeatedErrors": {
-      "-        \"2026-01-27 11:46:01,062 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-1": 1,
-      "-        \"2026-01-27 11:46:01,525 - WARNING - [OpenRouter] Request error with mistralai/devstral-251": 1,
-      "-        \"2026-01-27 11:46:01,892 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-": 1,
-      "-        \"2026-01-27 11:46:04,377 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-1": 1,
-      "-        \"2026-01-27 11:46:04,829 - WARNING - [OpenRouter] Request error with mistralai/devstral-251": 1,
-      "-        \"2026-01-27 11:46:05,184 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-": 1,
-      "-        \"2026-01-27 11:46:05,185 - ERROR - [OpenRouter] All 2 cycles failed. Last error: 404 Client": 1,
-      "-        \"2026-01-27 11:46:05,185 - ERROR - [OCR Cascade] OpenRouter error: 404 Client Error: Not Fo": 1,
-      "-        \"+        \\\"2026-01-27 11:46:01,062 - WARNING - [OpenRouter] Request error with meta-llama/": 1,
-      "-        \"+        \\\"2026-01-27 11:46:01,525 - WARNING - [OpenRouter] Request error with mistralai/d": 1,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Groq Rate limit 429": 1,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429": 4,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown un": 9,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown un": 9,
-      "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun the golden set verification script to identify the specific fa": 1,
-      "except ValueError:": 1,
-      "logger.warning(f\"Smart odds backfill failed: {e}\")": 1,
-      "except (ValueError, TypeError):": 1,
-      "except FileNotFoundError:": 1,
-      "print(\"Error: new_golden_set.json not found.\")": 1,
-      "print(f\"CRITICAL ERROR: Pipeline failed to run. {e}\")": 1
-    },
-    "noProgressIterations": 0,
-    "shortIterations": 0
+    "repeatedErrors": {},
+    "noProgressIterations": 1,
+    "shortIterations": 1
   }
 }

@@ -272,4 +272,96 @@ class ExtractionPipeline:
         if not TwoPassVerifier.verify_parsing_result(picks):
             logger.warning("Low confidence in parsing result structure.")
 
+        # 7.4 Verification Report (Pre-Grading)
+        # GENERATE REPORT FOR ALL MESSAGES (Even those with no picks)
+        # This is essential for the "Audit Dry Run" the user requested.
+        import os
+        from config import OUTPUT_DIR
+
+        report_file = os.path.join(OUTPUT_DIR, f"verification_report_{target_date}.md")
+        logger.info(f"Generating verification report: {report_file}")
+
+        try:
+            with open(report_file, "w", encoding="utf-8") as f:
+                f.write(f"# Pick Verification Report - {target_date}\n\n")
+                f.write(f"**Total Messages Processed:** {len(msg_map)}\n")
+                f.write(f"**Total Picks Extracted:** {len(picks)}\n\n")
+
+                picks_by_msg = {}
+                for p in picks:
+                    mid = p.get("message_id")
+                    if mid:
+                        try:
+                            mid_int = int(mid)
+                            if mid_int not in picks_by_msg:
+                                picks_by_msg[mid_int] = []
+                            picks_by_msg[mid_int].append(p)
+                        except:
+                            pass
+
+                # Sort by message ID
+                # CRITICAL: Iterate over ALL messages to show "No Picks Found" cases as requested
+                all_msg_ids = sorted(msg_map.keys())
+
+                for mid in all_msg_ids:
+                    msg_picks = picks_by_msg.get(mid, [])
+                    msg = msg_map.get(mid)
+
+                    f.write(f"---\n\n")
+                    f.write(f"## Message ID: {mid}\n\n")
+
+                    if msg:
+                        f.write("### 📝 Source Message\n")
+                        if msg.get("author"):
+                            f.write(f"**Author:** {msg['author']}\n")
+
+                        # Source Info (Channel/Date)
+                        if msg.get("channel_name"):
+                            f.write(f"**Channel:** {msg['channel_name']}\n")
+                        if msg.get("date"):
+                            f.write(f"**Date:** {msg['date']}\n")
+
+                        raw_text = msg.get("text", "").strip()
+                        if raw_text:
+                            formatted_text = raw_text.replace("\n", "\n> ")
+                            f.write(f"**Text:**\n> {formatted_text}\n\n")
+
+                        ocr = msg.get("ocr_text", "").strip()
+                        if ocr:
+                            formatted_ocr = ocr.replace("\n", "\n> ")
+                            f.write(f"**OCR:**\n> {formatted_ocr}\n\n")
+
+                        images = msg.get("images") or (
+                            [msg.get("image")] if msg.get("image") else []
+                        )
+                        if images:
+                            f.write(f"**Images:**\n")
+                            for img in images:
+                                f.write(f"- `{img}`\n")
+                            f.write("\n")
+                    else:
+                        f.write("**⚠️ Source Message Not Found**\n\n")
+
+                    f.write(f"### 🎯 Parsed Picks\n")
+                    if msg_picks:
+                        f.write("| Pick | Odds | Units | Type | Result |\n")
+                        f.write("| :--- | :--- | :--- | :--- | :--- |\n")
+                        for p in msg_picks:
+                            pick_str = str(p.get("pick", "-")).replace("|", "\|")
+                            odds_str = str(p.get("odds", "-"))
+                            units_str = str(p.get("units", "-"))
+                            type_str = str(p.get("type", "-"))
+                            result_str = str(p.get("result", "-"))
+                            f.write(
+                                f"| {pick_str} | {odds_str} | {units_str} | {type_str} | {result_str} |\n"
+                            )
+                    else:
+                        f.write("> *No picks extracted from this message.*\n")
+
+                    f.write("\n")
+
+            logger.info(f"Verification report saved to: {report_file}")
+        except Exception as e:
+            logger.error(f"Failed to generate verification report: {e}")
+
         return picks

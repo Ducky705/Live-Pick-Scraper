@@ -1,0 +1,13 @@
+{
+  "active": true,
+  "iteration": 1,
+  "minIterations": 1,
+  "maxIterations": 10,
+  "completionPromise": "COMPLETE",
+  "tasksMode": false,
+  "taskPromise": "READY_FOR_NEXT_TASK",
+  "prompt": "I need to know that this code is good enough to use. It needs near PERFECT accuracy when it comes to results and picks. Like formatting can be alittle off, but the gist must be correct (type, result, mostly sport, and mostly pick). It can NOT (really important) skip or miss picks entirely. This always does well on benchmarks, but I need just the best of the best real world test or something to know that it is really ready to scrape information enough to sell as a billion dollar company",
+  "startedAt": "2026-01-27T10:43:27.579Z",
+  "model": "",
+  "agent": "opencode"
+}

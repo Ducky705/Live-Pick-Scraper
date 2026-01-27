@@ -560,8 +560,8 @@ PLAYER_PROP_PLUS_PATTERN = re.compile(
     re.IGNORECASE,
 )
 PARLAY_SEPARATORS = re.compile(
-    r"\s*[/&]\s*(?=[A-Z(])"
-)  # Separators between parlay legs (removed + to avoid "23+" false positive)
+    r"\s*(?:[/&]|\s+\|\|\s+)\s*(?=[A-Z(])"
+)  # Separators between parlay legs: /, &, ||
 PERIOD_PATTERN = re.compile(
     r"\b(1H|2H|1Q|2Q|3Q|4Q|F5|F3|P1|P2|P3|First\s*Half|1st\s*Half|2nd\s*Half|First\s*5|1st\s*P|2nd\s*P|3rd\s*P)",
     re.IGNORECASE,
@@ -1010,6 +1010,9 @@ def is_likely_american_odds(num_str: str, full_pick: str) -> bool:
         return False
 
     # 100+ is almost always American odds
+    # CRITICAL: -175 is definitely odds, but -17.5 is spread.
+    # The logic above (num <= 35) correctly treats 17.5 as spread.
+    # 175 is > 100, so it is odds.
     return num >= 100
 
 
@@ -1239,7 +1242,18 @@ def infer_type_from_pick(pick_str: str, current_type: str) -> str:
 
     # Priority 5: Team Total / Team Prop detection
     # "ORL Magic TEAM TOTAL Over 114.5" or "Magic Over 114.5" (single team)
+    # CRITICAL: Distinguish Team Prop from Game Total.
+    # CBB/NBA Game Totals are usually > 120. Team Totals are < 130.
+    # CBB Game Totals can be 120-160.
+    # Heuristic: If number > 135, it's almost certainly a Game Total, not Team Total.
+    # Exception: NBA All-Star game?
     if is_team_total_pick(pick_str):
+        # Extract the number to verify magnitude
+        match = re.search(r"(\d+\.?\d*)", pick_str)
+        if match:
+            val = float(match.group(1))
+            if val > 135:  # Threshold for CBB/NBA Team Total vs Game Total
+                return "Total"
         return "Team Prop"
 
     # Priority 6: Matchup totals using "/" (e.g., "Lakers/Clippers Under 222.5")
@@ -1711,8 +1725,8 @@ def normalize_pick_format(
                     result = " / ".join([f"{t.strip()} ML" for t in teams])
             else:
                 # Ensure parlay legs are separated by " / "
-                # Handle &
-                result = re.sub(r"\s*&\s*", " / ", result)
+                # Handle & and ||
+                result = re.sub(r"\s*(?:&|\s+\|\|\s+)\s*", " / ", result)
                 # Handle + safely (avoid splitting positive spreads)
                 # Match " + " that is NOT followed by a digit
                 result = re.sub(r"\s+\+\s+(?![0-9])", " / ", result)

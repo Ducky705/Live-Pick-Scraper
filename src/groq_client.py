@@ -14,7 +14,9 @@ LOCK_ACQUIRE_TIMEOUT = 30  # Reduced from 300s for faster failure
 
 # Model Configuration - User-specified high-performance models
 DEFAULT_TEXT_MODEL = "llama-3.3-70b-versatile"  # User's choice - best quality
-DEFAULT_VISION_MODEL = "llama-3.2-11b-vision-preview"  # Best vision model on Groq
+DEFAULT_VISION_MODEL = (
+    "meta-llama/llama-4-scout-17b-16e-instruct"  # Updated to Llama 4 Scout (Preview)
+)
 
 # Available models with rate limits (1000 RPM each)
 GROQ_MODELS = {

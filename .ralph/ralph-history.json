@@ -1,0 +1,49 @@
+{
+  "iterations": [
+    {
+      "iteration": 1,
+      "startedAt": "2026-01-27T10:43:57.160Z",
+      "endedAt": "2026-01-27T10:48:30.979Z",
+      "durationMs": 244640,
+      "toolsUsed": {
+        "Bash": 2,
+        "Grep": 2,
+        "Read": 3,
+        "Glob": 1,
+        "webfetch": 2,
+        "Edit": 2
+      },
+      "filesModified": [
+        "src/groq_client.py",
+        "src/openrouter_client.py"
+      ],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": [
+        "2026-01-27 11:46:01,062 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-instruct:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-27 11:46:01,525 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-27 11:46:01,892 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-27 11:46:04,377 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-instruct:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-27 11:46:04,829 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-27 11:46:05,184 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-27 11:46:05,185 - ERROR - [OpenRouter] All 2 cycles failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-27 11:46:05,185 - ERROR - [OCR Cascade] OpenRouter error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions"
+      ]
+    }
+  ],
+  "totalDurationMs": 244640,
+  "struggleIndicators": {
+    "repeatedErrors": {
+      "2026-01-27 11:46:01,062 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-": 1,
+      "2026-01-27 11:46:01,525 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 40": 1,
+      "2026-01-27 11:46:01,892 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:fr": 1,
+      "2026-01-27 11:46:04,377 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-": 1,
+      "2026-01-27 11:46:04,829 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 40": 1,
+      "2026-01-27 11:46:05,184 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:fr": 1,
+      "2026-01-27 11:46:05,185 - ERROR - [OpenRouter] All 2 cycles failed. Last error: 404 Client Error: No": 1,
+      "2026-01-27 11:46:05,185 - ERROR - [OCR Cascade] OpenRouter error: 404 Client Error: Not Found for ur": 1
+    },
+    "noProgressIterations": 0,
+    "shortIterations": 0
+  }
+}

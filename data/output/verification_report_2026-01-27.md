@@ -1,4 +1,4 @@
-# Pick Verification Report - 2026-01-24
+# Pick Verification Report - 2026-01-27
 
 **Total Messages Processed:** 5
 **Total Picks Extracted:** 44
@@ -8,6 +8,8 @@
 ## Message ID: 12793
 
 ### 📝 Source Message
+**Author:** TestCapper
+**Channel:** GoldenSet
 **Date:** 2026-01-24 12:03 ET
 **Text:**
 > **Big Al**
@@ -47,16 +49,18 @@
 | Wofford +2 | -110 | 3.0 | Spread | - |
 | Connecticut -10.5 | -110 | 3.0 | Spread | - |
 | (UFC) Paddy Pimblett ML / (UFC) Jean Silva ML | -110 | 5.0 | Parlay | - |
-| Georgia Tech UNDER 144 | -110 | 3.0 | Team Prop | - |
-| Denver OVER 161.5 | -110 | 3.0 | Team Prop | - |
-| Oklahoma St UNDER 163 | -110 | 3.0 | Team Prop | - |
-| Cal St Fullerton UNDER 172.5 | -110 | 5.0 | Team Prop | - |
+| Georgia Tech Under 144 | -110 | 3.0 | Team Prop | - |
+| Denver Over 161.5 | -110 | 3.0 | Team Prop | - |
+| Oklahoma St Under 163 | -110 | 3.0 | Team Prop | - |
+| Cal St Fullerton Under 172.5 | -110 | 5.0 | Team Prop | - |
 
 ---
 
 ## Message ID: 12806
 
 ### 📝 Source Message
+**Author:** TestCapper
+**Channel:** GoldenSet
 **Date:** 2026-01-24 18:28 ET
 **Text:**
 > UFC 324
@@ -95,30 +99,32 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Paddy “The Baddy” Pimblett ML | -205 | 4.0 | Moneyline | - |
-| Abeta Gautier RD 1 | -120 | 2.0 | Game Prop | - |
-| Paddy Pimblett ML | -136 | 2.0 | Moneyline | - |
-| Ty Miller ML | None | 1.0 | Moneyline | - |
-| Charles Johnson ML | -114 | 1.0 | Moneyline | - |
-| Waldo Acosta ML | None | 1.0 | Moneyline | - |
-| Jean Silva ML | -131 | 1.0 | Moneyline | - |
-| Rose Namajunas ML | 315 | 1.0 | Moneyline | - |
+| Paddy “The Baddy” Pimblett | -205 | 4.0 | Moneyline | - |
+| Abeta Gautier RD 1 | -120 | 2.0 | Player Prop | - |
+| Paddy Pimblett | -136 | 2.0 | Moneyline | - |
+| Ty Miller | None | 1.0 | Moneyline | - |
+| Charles Johnson | -114 | 1.0 | Moneyline | - |
+| Waldo Acosta | None | 1.0 | Moneyline | - |
+| Jean Silva | -131 | 1.0 | Moneyline | - |
+| Rose Namajunas | 315 | 1.0 | Moneyline | - |
 | Pimblett/Gaethje Over 2.5 | None | 3.0 | Total | - |
-| Nikita Krylov ML | None | 2.0 | Moneyline | - |
+| Nikita Krylov | None | 2.0 | Moneyline | - |
 | Figueiredo/Nurmagomedov Under 2.5 Rounds | None | 1.0 | Total | - |
-| Pimblett ML | -235 | 3.0 | Moneyline | - |
+| Pimblett | -235 | 3.0 | Moneyline | - |
 | (UFC) Pimblett ML / (UFC) Natalia Silva ML | -113 | 2.0 | Parlay | - |
 | (UFC) Hokit ML / (UFC) O' Malley ML | 102 | 2.0 | Parlay | - |
-| (UFC) Paddy ML / (UFC) Waldo Cortes ML | -110 | 1.0 | Parlay | - |
-| Paddy by SUB | 150 | 0.5 | Game Prop | - |
+| (UFC) Paddy + (UFC) Waldo Cortes | -110 | 1.0 | Parlay | - |
+| Paddy by SUB | 150 | 0.5 | Player Prop | - |
 | (UFC) Sean O Malley ML / (TENNIS) Alcaraz ML | -150 | 0.5 | Parlay | - |
-| Pimblett ML | -230 | 3.0 | Moneyline | - |
+| Pimblett | -230 | 3.0 | Moneyline | - |
 
 ---
 
 ## Message ID: 13001
 
 ### 📝 Source Message
+**Author:** TestCapper
+**Channel:** GoldenSet
 **Date:** 2026-01-27 10:00 ET
 **Text:**
 > ⚽️ SOCCER VIP ⚽️
@@ -149,7 +155,7 @@
 | Real Madrid -1.5 AH | 105 | 1.0 | Spread | - |
 | Juventus vs AC Milan Over 2.5 Goals | -120 | 1.0 | Total | - |
 | Sinner to win 1st Set | -130 | 1.0 | Moneyline | - |
-| Djokovic -4.5 Games | -110 | 1.0 | Spread | - |
+| Djokovic -4.5 Games vs Medvedev | -110 | 1.0 | Spread | - |
 | Rublev vs Zverev Over 38.5 Games | -115 | 1.0 | Total | - |
 
 ---
@@ -157,6 +163,8 @@
 ## Message ID: 13002
 
 ### 📝 Source Message
+**Author:** TestCapper
+**Channel:** GoldenSet
 **Date:** 2026-01-27 19:00 ET
 **Text:**
 > 🏀 NBA PLAYER PROPS 🏀
@@ -186,6 +194,8 @@
 ## Message ID: 13003
 
 ### 📝 Source Message
+**Author:** TestCapper
+**Channel:** GoldenSet
 **Date:** 2026-01-27 20:00 ET
 **Text:**
 > 🔥 MAX WHALE PLAYS 🔥

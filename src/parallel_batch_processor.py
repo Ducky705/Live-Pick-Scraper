@@ -297,10 +297,17 @@ class ParallelBatchProcessor:
                     working_providers.add(r.get("provider"))
 
             # Determine fallback order (prioritize working providers)
+            # CRITICAL OPTIMIZATION: Deprioritize OpenRouter (Slow)
+            base_fallback_order = [
+                "mistral",
+                "gemini",
+                "cerebras",
+                "groq",
+                "openrouter",
+            ]
+
             fallback_order = [
-                p
-                for p in ["openrouter", "mistral", "cerebras", "gemini", "groq"]
-                if p in self.providers and p != "groq"
+                p for p in base_fallback_order if p in self.providers and p != "groq"
             ]  # Groq already failed
 
             # Add working providers to front

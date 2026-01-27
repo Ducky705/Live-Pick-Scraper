@@ -181,6 +181,75 @@ def merge_duplicate_picks(pick1: Dict, pick2: Dict) -> Dict:
     return merged
 
 
+def remove_parlay_redundancy(picks: List[Dict]) -> List[Dict]:
+    """
+    Remove straight picks that are already contained in a Parlay pick
+    within the same message.
+    """
+    # Group by message_id
+    by_msg = {}
+    for p in picks:
+        # Handle 'i' or 'id' or 'message_id' key
+        mid = p.get("message_id") or p.get("id") or p.get("i")
+        # If no ID, treat as global/unknown (safe to skip grouping or group under None)
+        if mid is None:
+            # If no message ID, we can't safely associate parlay legs with straight bets
+            # to avoid cross-message pollution. Just pass them through.
+            # Or group them all together? Safer to skip redundancy check for them.
+            # Let's group them under "unknown"
+            mid = "unknown"
+
+        if mid not in by_msg:
+            by_msg[mid] = []
+        by_msg[mid].append(p)
+
+    final_picks = []
+
+    for mid, msg_picks in by_msg.items():
+        # Check for both Parlay and Teaser types
+        parlays = [p for p in msg_picks if p.get("type") in ("Parlay", "Teaser")]
+
+        if not parlays:
+            final_picks.extend(msg_picks)
+            continue
+
+        # Build set of normalized legs
+        redundant_legs = set()
+        for parlay in parlays:
+            # Assuming format: Leg1 / Leg2 / Leg3 or Leg1 + Leg2
+            raw_text = parlay.get("pick", "")
+            # Split by common delimiters
+            legs = re.split(r" \/ | \+ ", raw_text)
+            for leg in legs:
+                # Remove (LEAGUE) prefix if present for normalization
+                # e.g. "(NFL) Chiefs ML" -> "Chiefs ML"
+                leg_clean = re.sub(r"\([A-Za-z]+\)\s*", "", leg)
+                norm = normalize_pick_text(leg_clean)
+                if norm:
+                    redundant_legs.add(norm)
+
+        # Filter
+        for p in msg_picks:
+            if p.get("type") in ("Parlay", "Teaser"):
+                final_picks.append(p)
+                continue
+
+            # Check redundancy
+
+            p_norm = normalize_pick_text(p.get("pick", ""))
+
+            # strict match
+            if p_norm in redundant_legs:
+                logging.info(
+                    f"[PickDedup] Dropping redundant straight pick '{p.get('pick')}' (found in Parlay for msg {mid})"
+                )
+                continue
+
+            final_picks.append(p)
+
+    return final_picks
+
+
 def deduplicate_picks(picks: List[Dict], use_ai_fallback: bool = False) -> List[Dict]:
     """
     Deduplicate a list of parsed picks.
@@ -195,7 +264,12 @@ def deduplicate_picks(picks: List[Dict], use_ai_fallback: bool = False) -> List[
     if not picks:
         return []
 
-    if len(picks) == 1:
+    # Step 0: Remove Parlay Redundancy (Straight bets that are legs of a Parlay in the same msg)
+    # CRITICAL OPTIMIZATION: Disabled to improve Recall.
+    # Users often want both straight and parlay bets if listed explicitly.
+    # picks = remove_parlay_redundancy(picks)
+
+    if len(picks) <= 1:
         return picks
 
     # Track which picks have been merged

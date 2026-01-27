@@ -250,6 +250,17 @@ def expand_compact_pick(compact: Dict[str, Any]) -> Dict[str, Any]:
             except (ValueError, TypeError):
                 value = 1.0
 
+        # Special handling for confidence (ensure float and normalize 0-1 -> 1-10)
+        elif full_key == "confidence":
+            if value is not None:
+                try:
+                    conf_val = float(value)
+                    if 0 < conf_val <= 1.0:
+                        conf_val *= 10
+                    value = conf_val
+                except (ValueError, TypeError):
+                    value = 5  # Default medium confidence
+
         result[full_key] = value
 
     # Apply defaults

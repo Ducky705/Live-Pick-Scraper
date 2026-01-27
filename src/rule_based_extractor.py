@@ -89,9 +89,14 @@ class RuleBasedExtractor:
                 line = (
                     line.strip("\"'")
                     .replace("\u00a0", " ")
+                    .replace("\u201c", '"')
+                    .replace("\u201d", '"')  # Smart quotes
+                    .replace("\u2018", "'")
+                    .replace("\u2019", "'")  # Smart single quotes
                     .replace("\ufffd", "")
-                    .replace("", "")
                 )
+                # Remove emojis (simplistic regex)
+                line = re.sub(r"[^\x00-\x7F]+", "", line)
                 line = line.strip()
 
                 # Skip likely noise
@@ -176,7 +181,10 @@ class RuleBasedExtractor:
 
         # 1. Explicit bet type keywords (Strongest signal)
         # If these are present, we might not need digits (e.g. "Lakers ML", "Parlay")
+        # Added "ml" (must be whole word)
         if any(k in text_lower for k in ["moneyline", "spread", "parlay"]):
+            return True
+        if re.search(r"\bml\b", text_lower):
             return True
 
         # Must have at least one numeric digit (lines, odds)
@@ -231,17 +239,32 @@ class RuleBasedExtractor:
 
     @staticmethod
     def _extract_units(text: str) -> float:
-        """Extract units from prefix like '3* ...' or '5U ...'"""
-        # Match '3* ', '5% ', '10U ' at start of string
-        match = re.match(r"^(\d+(?:\.\d+)?)(?:\*|u|%)\s*", text, re.IGNORECASE)
+        """Extract units from prefix like '3* ...' or suffix like '... 4u'"""
+        # Prefix match: '3* ', '5% ', '10U '
+        match = re.match(r"^(\d+(?:\.\d+)?)(?:\*|u|%|unit)\s*", text, re.IGNORECASE)
         if match:
             try:
                 val = float(match.group(1))
-                # Cap at reasonable max (e.g. 10u) to avoid parsing years or misformatted numbers
                 if val <= 20:
                     return val
             except ValueError:
                 pass
+
+        # Suffix match: '... 4u', '... (3U)'
+        # Look for unit marker at end of string
+        suffix_match = re.search(
+            r"[\s\(](\d+(?:\.\d+)?)\s*(?:u|unit|%)[\)]?\s*[\u2b50\ufe0f]*$",
+            text,
+            re.IGNORECASE,
+        )
+        if suffix_match:
+            try:
+                val = float(suffix_match.group(1))
+                if val <= 20:
+                    return val
+            except ValueError:
+                pass
+
         return 1.0
 
     @staticmethod

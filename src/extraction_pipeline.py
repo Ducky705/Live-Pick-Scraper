@@ -185,7 +185,13 @@ class ExtractionPipeline:
                         ).upper()
 
                         # Unit Mismatch
-                        if p.get("units", 1.0) == 1.0:
+                        # CRITICAL OPTIMIZATION: Only run global unit check if there's only 1 pick.
+                        # Otherwise, "5U" appearing anywhere flags ALL 1U picks in a multi-pick message.
+                        picks_for_msg = [
+                            p for p in picks if str(p.get("message_id")) == str(mid_int)
+                        ]
+
+                        if p.get("units", 1.0) == 1.0 and len(picks_for_msg) == 1:
                             potential_units = 0
                             if "10U" in text_upper or "MAX BET" in text_upper:
                                 potential_units = 10

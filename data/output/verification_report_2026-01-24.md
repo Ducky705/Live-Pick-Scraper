@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-24
 
-**Total Messages Processed:** 5
-**Total Picks Extracted:** 43
+**Total Messages Processed:** 2
+**Total Picks Extracted:** 25
 
 ---
 
@@ -41,16 +41,16 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Oilers -175 | -110 | 1.0 | Moneyline | - |
-| Magic -1.5 | -110 | 4.0 | Spread | - |
+| Edmonton Oilers ML | -175 | 1.0 | Moneyline | - |
+| Orlando Magic -1.5 | -110 | 4.0 | Spread | - |
 | Minnesota +6 | -110 | 4.0 | Spread | - |
 | Wofford +2 | -110 | 3.0 | Spread | - |
 | Connecticut -10.5 | -110 | 3.0 | Spread | - |
 | (UFC) Paddy Pimblett ML / (UFC) Jean Silva ML | -110 | 5.0 | Parlay | - |
-| Georgia Tech Under 144 | -110 | 3.0 | Team Prop | - |
-| Denver Over 161.5 | -110 | 3.0 | Team Prop | - |
-| Oklahoma St Under 163 | -110 | 3.0 | Team Prop | - |
-| Cal St Fullerton Under 172.5 | -110 | 5.0 | Team Prop | - |
+| Georgia Tech: Points Under 144 | -110 | 3.0 | Team Prop | - |
+| Denver: Points Over 161.5 | -110 | 3.0 | Team Prop | - |
+| Oklahoma State: Points Under 163 | -110 | 3.0 | Team Prop | - |
+| Cal State Fullerton: Points Under 172.5 | -110 | 5.0 | Team Prop | - |
 
 ---
 
@@ -95,116 +95,19 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Paddy “The Baddy” Pimblett | -205 | 4.0 | Moneyline | - |
-| Abeta Gautier RD 1 | -120 | 2.0 | Team Prop | - |
-| (UFC) Abeta Gautier ITD / (UFC) Paddy Pimblett | -136 | 2.0 | Parlay | - |
-| (UFC) Ty Miller / (UFC) Charles Johnson | -114 | 1.0 | Parlay | - |
-| (UFC) Waldo Acosta / (UFC) Jean Silva | -131 | 1.0 | Parlay | - |
-| Rose Namajunas | 315 | 1.0 | Moneyline | - |
-| Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
-| Nikita Krylov | -110 | 2.0 | Moneyline | - |
-| Figueiredo/Nurmagomedov Under 2.5 | -110 | 1.0 | Total | - |
-| Pimblett | -235 | 3.0 | Moneyline | - |
-| (UFC) Pimblett / (UFC) Natalia Silva | -113 | 2.0 | Parlay | - |
-| (UFC) Hokit / (UFC) O' Malley | 102 | 2.0 | Parlay | - |
-| (UFC) Paddy / (UFC) Waldo Cortes | -110 | 1.0 | Parlay | - |
-| Paddy by SUB | 150 | 0.5 | Team Prop | - |
-| (UFC) Sean O Malley / (TENNIS) Alcaraz | -150 | 0.5 | Parlay | - |
-| Pimblett | -230 | 3.0 | Moneyline | - |
-
----
-
-## Message ID: 13001
-
-### 📝 Source Message
-**Date:** 2026-01-27 10:00 ET
-**Text:**
-> ⚽️ SOCCER VIP ⚽️
-> 
-> 🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL
-> Arsenal vs Liverpool
-> Pick: Arsenal DNB (-145)
-> 
-> 🇪🇸 La Liga
-> Real Madrid -1.5 AH (+105)
-> 
-> 🇮🇹 Serie A
-> Juventus / AC Milan Over 2.5 Goals (-120)
-> 
-> 🎾 TENNIS LOCKS
-> 
-> Sinner vs Alcaraz
-> Pick: Sinner to win 1st Set (-130)
-> 
-> Djokovic -4.5 Games vs Medvedev (-110)
-> 
-> Rublev/Zverev Over 38.5 Games (-115)
-
-### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Arsenal Dnb | -145 | 1.0 | Moneyline | - |
-| Real Madrid -1.5 AH | 105 | 1.0 | Spread | - |
-| Juventus vs AC Milan Over 2.5 Goals (-120) | -120 | 1.0 | Total | - |
-| Sinner to win 1st Set ML | -130 | 1.0 | Moneyline | - |
-| Djokovic -4.5 Games vs Medvedev | -110 | 1.0 | Spread | - |
-| Rublev vs Zverev Over 38.5 Games (-115) | -115 | 1.0 | Total | - |
-
----
-
-## Message ID: 13002
-
-### 📝 Source Message
-**Date:** 2026-01-27 19:00 ET
-**Text:**
-> 🏀 NBA PLAYER PROPS 🏀
-> 
-> Luka Doncic 45+ PRA (-120)
-> LeBron James Over 7.5 Rebounds (-140)
-> Steph Curry 5+ Threes (+110)
-> 
-> 🎮 ESPORTS
-> 
-> CS2: FaZe vs Navi
-> Map 1 Winner: FaZe (-125)
-> 
-> LoL: T1 -1.5 Maps vs GenG (+150)
-
-### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Luka Doncic 45+ PRA | -120 | 1.0 | Moneyline | - |
-| LeBron James Over 7.5 Rebounds (-140) | -140 | 1.0 | Total | - |
-| Steph Curry 5+ Threes | 110 | 1.0 | Moneyline | - |
-| Map 1 Winner: FaZe ML | -125 | 1.0 | Moneyline | - |
-| LoL: T1 -1.5 Maps vs GenG (+150) | 150 | 1.0 | Player Prop | - |
-
----
-
-## Message ID: 13003
-
-### 📝 Source Message
-**Date:** 2026-01-27 20:00 ET
-**Text:**
-> 🔥 MAX WHALE PLAYS 🔥
-> 
-> Commanders +3.5 (-115) 5U MAX
-> Ravens Team Total Over 24.5 (-120) 3U
-> 
-> 2-TEAM PARLAY (+260) 2U
-> Chiefs ML
-> Lions -6.5
-> 
-> TEASER (6 Point)
-> Bengals +7.5 / Bills +8.5 (-120)
-
-### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Commanders +3.5 | -115 | 5.0 | Spread | - |
-| Ravens Team Total Over 24.5 | -120 | 3.0 | Team Prop | - |
-| Chiefs ML | None | 2.0 | Moneyline | - |
-| Lions -6.5 | None | 1.0 | Spread | - |
-| (NFL) Bengals +7.5 / (NFL) Bills +8.5 | -120 | 2.0 | Parlay | - |
-| (NFL) Chiefs ML / (NFL) Lions -6.5 | 260 | 2.0 | Parlay | - |
+| Paddy "The Baddy" Pimblett 4u ML | -205 | 4.0 | Moneyline | - |
+| Abeta Gautier RD 1 2u ML | -120 | 2.0 | Moneyline | - |
+| Abeta Gautier Itd \|\| Paddy Pimblett 2u ML | -136 | 2.0 | Moneyline | - |
+| Ty Miller \|\| Charles Johnson 1u ML | -114 | 1.0 | Moneyline | - |
+| Waldo Acosta \|\| Jean Silva 1u ML | -131 | 1.0 | Moneyline | - |
+| Rose Namajunas ML 1u ML | 315 | 1.0 | Moneyline | - |
+| Pimblett vs Gaethje Over 2.5 (3U) | None | 3.0 | Total | - |
+| Nikita Krylov ML (2U) ML | None | 2.0 | Moneyline | - |
+| Figueiredo vs Nurmagomedov Under 2.5 Rounds (1U) | None | 1.0 | Total | - |
+| Pimblett ML (3u) ML | -235 | 3.0 | Moneyline | - |
+| Pimblett / Natalia Silva MLP -113 (2U) DK | None | 1.0 | Parlay | - |
+| Hokit / O' Malley MLP +102 (2U) | None | 2.0 | Parlay | - |
+| Paddy + Waldo Cortes 1U ML | -110 | 1.0 | Moneyline | - |
+| Paddy by Sub 0.5U ML | 150 | 0.5 | Moneyline | - |
+| Sean O Malley ML + Alcaraz ML 0.5U ML | -150 | 0.5 | Moneyline | - |
 

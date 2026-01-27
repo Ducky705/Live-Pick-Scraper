@@ -1,15 +1,37 @@
-Based on the summary provided, here is the analysis of the 10-iteration stabilization loop:
-1. Architectural Validation (The Hybrid Model)
-The jump from 0% to 87.5% (Iteration 2) confirms the Hybrid Extraction Architecture (Rule-Based + AI Fallback) is sound. The initial failure was purely infrastructural (API keys/Client Config), not logical. Once connectivity was established, the baseline performance was immediately high.
-2. The "Confidence Trap" (Iterations 6-8)
-The most critical insight occurred here. The regression to 77.5% reveals a classic vulnerability in hybrid systems: Over-Confident Heuristics.
-*   The Issue: The Rule-Based extractor was rating itself 9.5/10, effectively "short-circuiting" the pipeline and preventing the AI from refining complex messages.
-*   The Fix: Lowering the threshold to 8.5 was the correct mechanical adjustment, re-enabling the "Safety Net" behavior of the AI for edge cases.
-3. The 15% Gap
-Stabilizing at 85% Recall is a functional MVP, but in a betting context, missing 15% of picks is significant.
-*   Implication: The remaining failures likely fall into the "Uncanny Valley" of confidence—high enough to pass the rule-based check (score > 8.5), but structurally flawed enough to result in a bad parse.
-*   Risk: The system is currently sensitive to the specific value of 8.5. A slight change in input formatting could shift scores up, bypassing the AI again.
-Recommended Next Steps
-1.  Granular Failure Audit: Isolate the specific messages constituting the missing 15%. Are they a specific bet type (e.g., complex teasers) or a specific telegram channel format?
-2.  Dynamic Thresholding: Instead of a hard 8.5 cutoff, consider implementing a "Context Check" (e.g., if Units are missing or Odds look like dates, force AI fallback regardless of regex confidence).
-3.  Golden Set Expansion: The "verified golden set" logic was patched in Iteration 2. Ensure this set covers the edge cases discovered in Iterations 6-8 to prevent future regressions
+ROLE: Lead Performance Architect.
+MISSION: Radical optimization of the system's "Complexity Router" and AI Provider logic.
+
+CORE OBJECTIVES (Ranked):
+1. ACCURACY (Non-negotiable constraint).
+2. REQUEST ECONOMY (Minimize the sheer number of HTTP requests. One-shot perfection is the goal. Eliminate retries/chains).
+3. SPEED (Reduce end-to-end latency).
+4. ZERO COST (Strict adherence to FREE models with High Rate Limits).
+
+CONTEXT:
+We currently use a tiered system (`docs\PROVIDERS.md`). It may be inefficient—sending necessary fallback requests, using verbose prompts, or failing to utilize the full power of Tier 1 models.
+
+YOUR AUTONOMY:
+You are NOT restricted to the current logic. You are free to:
+- Rewrite the routing algorithms to be "One-Shot" aggressive.
+- Change the model hierarchy (provided they are Free/High-Limit).
+- Aggressively condense prompts to save tokens.
+- Dig into specific OpenRouter model IDs to find the hidden gems (fastest/freest).
+- Implement "Fail-Fast" logic: If a request is likely to fail (bad input), don't send it at all.
+- Implement "Parallel Speculation" if it saves time without costing money (e.g. firing two free models at once).
+
+MANDATORY PROTOCOL (The Scientific Method):
+1. ESTABLISH BASELINE: Do not change code until you have a `benchmark.py` running.
+   - It MUST measure: [Total Requests Sent], [Avg Latency], [Token Usage], [Accuracy %].
+2. FORMULATE A PLAN: Analyze the codebase. Identify where we are "leaking" requests (e.g., unnecessary pre-checks, eager fallbacks, redundant calls).
+3. ITERATE:
+   - Implement a change.
+   - Run `benchmark.py`.
+   - IF (Fewer Requests/Faster AND Same Accuracy) -> COMMIT.
+   - IF (Accuracy drops) -> REVERT immediately.
+
+CONSTRAINTS:
+- Use *only* models that are FREE and have lenient Rate Limits.
+- If using OpenRouter, select SPECIFIC free/high-limit model IDs. Do not use generic routers.
+
+GO:
+Read the docs, explore the code, build your benchmark, and start optimizing.

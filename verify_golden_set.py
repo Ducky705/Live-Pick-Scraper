@@ -18,14 +18,13 @@ logger = logging.getLogger("Verifier")
 def normalize_string(s):
     if not s:
         return ""
-    return str(s).lower().strip().replace(" ", "")
-
-
-def normalize_string(s):
-    if not s:
-        return ""
-    # Remove special chars and lowercase
-    return str(s).lower().replace("", "").replace("'", "").replace('"', "").strip()
+    # Remove special chars but KEEP spaces for tokenization
+    s = str(s).lower()
+    # Replace common separators with space
+    s = s.replace("/", " ").replace("-", " ").replace(":", " ").replace("|", " ")
+    # Remove quotes
+    s = s.replace("'", "").replace('"', "").replace("“", "").replace("”", "")
+    return s.strip()
 
 
 def fuzzy_match(expected, actual):
@@ -160,7 +159,7 @@ def run_verification():
     for item in golden_set:
         mid = item["id"]
         expected_list = item.get("expected_picks", [])
-        actual_list = actual_picks_by_id.get(mid, [])
+        actual_list = actual_picks_by_id.get(str(mid), [])
 
         total_expected += len(expected_list)
         total_found += len(actual_list)

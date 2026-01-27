@@ -22,8 +22,8 @@ DEFAULT_VISION_MODEL = (
 GROQ_MODELS = {
     "llama-3.1-8b-instant": {"rpm": 1000, "tpm": 250000, "speed": 560},
     "llama-3.3-70b-versatile": {"rpm": 1000, "tpm": 300000, "speed": 280},
-    "openai/gpt-oss-120b": {"rpm": 1000, "tpm": 250000, "speed": 500},
-    "openai/gpt-oss-20b": {"rpm": 1000, "tpm": 250000, "speed": 1000},
+    "mixtral-8x7b-32768": {"rpm": 1000, "tpm": 250000, "speed": 500},
+    "gemma2-9b-it": {"rpm": 1000, "tpm": 250000, "speed": 1000},
 }
 
 

@@ -41,7 +41,7 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Oilers -175 | -175 | 1.0 | Moneyline | - |
+| Oilers -175 | -110 | 1.0 | Moneyline | - |
 | Magic -1.5 | -110 | 4.0 | Spread | - |
 | Minnesota +6 | -110 | 4.0 | Spread | - |
 | Wofford +2 | -110 | 3.0 | Spread | - |

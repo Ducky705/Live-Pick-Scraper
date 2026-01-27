@@ -292,15 +292,23 @@
         "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Groq Rate limit 429",
         "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429"
       ]
+    },
+    {
+      "iteration": 12,
+      "startedAt": "2026-01-27T21:48:14.387Z",
+      "endedAt": "2026-01-27T21:49:40.484Z",
+      "durationMs": 11158,
+      "toolsUsed": {},
+      "filesModified": [],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": []
     }
   ],
-  "totalDurationMs": 3302263,
+  "totalDurationMs": 3313421,
   "struggleIndicators": {
-    "repeatedErrors": {
-      "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Groq Rate limit 429": 1,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429": 1
-    },
-    "noProgressIterations": 0,
-    "shortIterations": 0
+    "repeatedErrors": {},
+    "noProgressIterations": 1,
+    "shortIterations": 1
   }
 }

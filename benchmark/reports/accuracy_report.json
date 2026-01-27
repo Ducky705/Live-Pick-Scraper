@@ -1,327 +1,418 @@
 {
-  "total_messages": 10,
+  "total_messages": 5,
   "comparisons": [
     {
-      "message_id": 57428,
+      "message_id": "12806",
       "judge_has_picks": true,
       "judge_picks": [
-        "GOLDEN STATE WARRIORS (-10.5) over Portland Trail Blazers"
+        "Paddy Pimblett Moneyline",
+        "Abeta Gautier Round 1",
+        "Abeta Gautier ITD || Paddy Pimblett",
+        "Charles Johnson Moneyline",
+        "Jean Silva Moneyline",
+        "Rose Namajunas Moneyline",
+        "Pimblett/Gaethje Over 2.5 Rounds",
+        "Nikita Krylov Moneyline",
+        "Figueiredo/Nurmagomedov Under 2.5 Rounds",
+        "Paddy Pimblett Moneyline",
+        "Pimblett/Natalia Silva MLP",
+        "Hokit/O' Malley MLP",
+        "Paddy Pimblett Moneyline",
+        "Paddy Pimblett by SUB",
+        "Sean O Malley Moneyline"
       ],
-      "judge_capper": "PorterPicks",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
+      "judge_capper": null,
+      "scraper_picks": [
+        "Paddy \"The Baddy\" Pimblett 4u ML",
+        "Abeta Gautier RD 1 2u ML",
+        "Abeta Gautier Itd || Paddy Pimblett 2u ML",
+        "Ty Miller || Charles Johnson 1u ML",
+        "Waldo Acosta || Jean Silva 1u ML",
+        "Rose Namajunas ML 1u ML",
+        "Pimblett vs Gaethje Over 2.5 (3U)",
+        "Nikita Krylov ML (2U) ML",
+        "Figueiredo vs Nurmagomedov Under 2.5 Rounds (1U)",
+        "Pimblett ML (3u) ML",
+        "Pimblett / Natalia Silva MLP -113 (2U) DK",
+        "Hokit / O' Malley MLP +102 (2U)",
+        "Paddy + Waldo Cortes 1U ML",
+        "Paddy by Sub 0.5U ML",
+        "Sean O Malley ML + Alcaraz ML 0.5U ML"
+      ],
+      "scraper_cappers": [
+        "Unknown"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Paddy Pimblett Moneyline",
+          "scraper": "Paddy \"The Baddy\" Pimblett 4u ML",
+          "similarity": 0.6071428571428571
+        },
+        {
+          "judge": "Abeta Gautier Round 1",
+          "scraper": "Abeta Gautier RD 1 2u ML",
+          "similarity": 0.8
+        },
+        {
+          "judge": "Abeta Gautier ITD || Paddy Pimblett",
+          "scraper": "Abeta Gautier Itd || Paddy Pimblett 2u ML",
+          "similarity": 0.9210526315789473
+        },
+        {
+          "judge": "Charles Johnson Moneyline",
+          "scraper": "Ty Miller || Charles Johnson 1u ML",
+          "similarity": 0.6101694915254238
+        },
+        {
+          "judge": "Jean Silva Moneyline",
+          "scraper": "Waldo Acosta || Jean Silva 1u ML",
+          "similarity": 0.5
+        },
+        {
+          "judge": "Rose Namajunas Moneyline",
+          "scraper": "Rose Namajunas ML 1u ML",
+          "similarity": 0.723404255319149
+        },
+        {
+          "judge": "Pimblett/Gaethje Over 2.5 Rounds",
+          "scraper": "Pimblett vs Gaethje Over 2.5 (3U)",
+          "similarity": 0.8
+        },
+        {
+          "judge": "Nikita Krylov Moneyline",
+          "scraper": "Nikita Krylov ML (2U) ML",
+          "similarity": 0.6808510638297872
+        },
+        {
+          "judge": "Figueiredo/Nurmagomedov Under 2.5 Rounds",
+          "scraper": "Figueiredo vs Nurmagomedov Under 2.5 Rounds (1U)",
+          "similarity": 0.8863636363636364
+        },
+        {
+          "judge": "Paddy Pimblett Moneyline",
+          "scraper": "Pimblett ML (3u) ML",
+          "similarity": 0.5116279069767442
+        },
+        {
+          "judge": "Pimblett/Natalia Silva MLP",
+          "scraper": "Pimblett / Natalia Silva MLP -113 (2U) DK",
+          "similarity": 0.7761194029850746
+        },
+        {
+          "judge": "Hokit/O' Malley MLP",
+          "scraper": "Hokit / O' Malley MLP +102 (2U)",
+          "similarity": 0.76
+        },
+        {
+          "judge": "Paddy Pimblett by SUB",
+          "scraper": "Paddy by Sub 0.5U ML",
+          "similarity": 0.5853658536585366
+        },
+        {
+          "judge": "Sean O Malley Moneyline",
+          "scraper": "Sean O Malley ML + Alcaraz ML 0.5U ML",
+          "similarity": 0.5333333333333333
+        }
+      ],
       "false_negatives": [
-        "GOLDEN STATE WARRIORS (-10.5) over Portland Trail Blazers"
+        "Paddy Pimblett Moneyline"
       ],
-      "false_positives": [],
-      "status": "false_negative"
+      "false_positives": [
+        "Paddy + Waldo Cortes 1U ML"
+      ],
+      "status": "partial_match"
     },
     {
-      "message_id": 57427,
-      "judge_has_picks": false,
-      "judge_picks": [],
-      "judge_capper": "",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
+      "message_id": "12793",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Oilers -175",
+        "Magic -1.5",
+        "Minnesota +6",
+        "Wofford +2",
+        "Connecticut -10.5",
+        "Paddy Pimblett ML & Jean Silva ML Parlay",
+        "Georgia Tech UNDER 144",
+        "Denver OVER 161.5",
+        "Oklahoma St UNDER 163",
+        "Cal St Fullerton UNDER 172.5"
+      ],
+      "judge_capper": null,
+      "scraper_picks": [
+        "Oilers ML",
+        "Magic -1.5",
+        "Minnesota +6",
+        "Wofford +2",
+        "Connecticut -10.5",
+        "(UFC) Paddy Pimblett ML / (UFC) Jean Silva ML",
+        "Georgia Tech: Total Under 144",
+        "Denver: Total Over 161.5",
+        "Oklahoma St: Total Under 163",
+        "Cal St Fullerton: Total Under 172.5"
+      ],
+      "scraper_cappers": [
+        "Big Al",
+        "Kyle Anthony",
+        "Tokyo Brandon",
+        "Kyle Hunter"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Oilers -175",
+          "scraper": "Oilers ML",
+          "similarity": 0.7
+        },
+        {
+          "judge": "Magic -1.5",
+          "scraper": "Magic -1.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Minnesota +6",
+          "scraper": "Minnesota +6",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Wofford +2",
+          "scraper": "Wofford +2",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Connecticut -10.5",
+          "scraper": "Connecticut -10.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Paddy Pimblett ML & Jean Silva ML Parlay",
+          "scraper": "(UFC) Paddy Pimblett ML / (UFC) Jean Silva ML",
+          "similarity": 0.7529411764705882
+        },
+        {
+          "judge": "Georgia Tech UNDER 144",
+          "scraper": "Georgia Tech: Total Under 144",
+          "similarity": 0.8627450980392157
+        },
+        {
+          "judge": "Denver OVER 161.5",
+          "scraper": "Denver: Total Over 161.5",
+          "similarity": 0.8292682926829268
+        },
+        {
+          "judge": "Oklahoma St UNDER 163",
+          "scraper": "Oklahoma St: Total Under 163",
+          "similarity": 0.8571428571428571
+        },
+        {
+          "judge": "Cal St Fullerton UNDER 172.5",
+          "scraper": "Cal St Fullerton: Total Under 172.5",
+          "similarity": 0.8888888888888888
+        }
+      ],
       "false_negatives": [],
       "false_positives": [],
-      "status": "true_negative"
+      "status": "perfect_match"
     },
     {
-      "message_id": 57421,
+      "message_id": "13001",
       "judge_has_picks": true,
       "judge_picks": [
-        "VIRGINIA / LOUISVILLE UNDER 153",
-        "GEORGE MASON / LOYOLA CHICAGO UNDER 137.5",
-        "GEORGE MASON FIRST HALF -6",
-        "KANSAS +5.5",
-        "PROVIDENCE +4",
-        "MICHIGAN STATE -5"
+        "Arsenal DNB",
+        "Real Madrid -1.5 AH",
+        "Juventus vs AC Milan Over 2.5",
+        "Sinner to win 1st Set",
+        "Djokovic -4.5 Games",
+        "Rublev vs Zverev Over 38.5 Games"
       ],
-      "judge_capper": "@cappersfree",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
-      "false_negatives": [
-        "VIRGINIA / LOUISVILLE UNDER 153",
-        "GEORGE MASON / LOYOLA CHICAGO UNDER 137.5",
-        "GEORGE MASON FIRST HALF -6",
-        "KANSAS +5.5",
-        "PROVIDENCE +4",
-        "MICHIGAN STATE -5"
+      "judge_capper": null,
+      "scraper_picks": [
+        "Arsenal Dnb",
+        "Real Madrid -1.5 AH",
+        "Juventus vs AC Milan Over 2.5 Goals (-120)",
+        "Sinner to win 1st Set ML",
+        "Djokovic -4.5 Games vs Medvedev",
+        "Rublev vs Zverev Over 38.5 Games (-115)"
       ],
-      "false_positives": [],
-      "status": "false_negative"
-    },
-    {
-      "message_id": 57420,
-      "judge_has_picks": true,
-      "judge_picks": [
-        "UAB Moneyline",
-        "Cincinnati -7.5",
-        "Butler Moneyline"
+      "scraper_cappers": [
+        "Unknown"
       ],
-      "judge_capper": "TPD",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
-      "false_negatives": [
-        "UAB Moneyline",
-        "Cincinnati -7.5",
-        "Butler Moneyline"
+      "matched_picks": [
+        {
+          "judge": "Arsenal DNB",
+          "scraper": "Arsenal Dnb",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Real Madrid -1.5 AH",
+          "scraper": "Real Madrid -1.5 AH",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Juventus vs AC Milan Over 2.5",
+          "scraper": "Juventus vs AC Milan Over 2.5 Goals (-120)",
+          "similarity": 0.8169014084507042
+        },
+        {
+          "judge": "Sinner to win 1st Set",
+          "scraper": "Sinner to win 1st Set ML",
+          "similarity": 0.9333333333333333
+        },
+        {
+          "judge": "Djokovic -4.5 Games",
+          "scraper": "Djokovic -4.5 Games vs Medvedev",
+          "similarity": 0.76
+        },
+        {
+          "judge": "Rublev vs Zverev Over 38.5 Games",
+          "scraper": "Rublev vs Zverev Over 38.5 Games (-115)",
+          "similarity": 0.9014084507042254
+        }
       ],
-      "false_positives": [],
-      "status": "false_negative"
-    },
-    {
-      "message_id": 57419,
-      "judge_has_picks": true,
-      "judge_picks": [
-        "New Orleans Pelicans +2.5",
-        "Oklahoma City Thunder -7.5",
-        "Oklahoma City ML",
-        "Golden State ML"
-      ],
-      "judge_capper": "provenwinner",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
-      "false_negatives": [
-        "New Orleans Pelicans +2.5",
-        "Oklahoma City Thunder -7.5",
-        "Oklahoma City ML",
-        "Golden State ML"
-      ],
-      "false_positives": [],
-      "status": "false_negative"
-    },
-    {
-      "message_id": 57418,
-      "judge_has_picks": true,
-      "judge_picks": [
-        "Bruins Over 5.5",
-        "Lightning MI",
-        "Stars MI",
-        "Maple Leafs Over 5.5",
-        "Oilers MI",
-        "Oilers Over 6.5",
-        "Spurs +8",
-        "Nuggets MI"
-      ],
-      "judge_capper": "TheGamblingGawd",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
-      "false_negatives": [
-        "Bruins Over 5.5",
-        "Lightning MI",
-        "Stars MI",
-        "Maple Leafs Over 5.5",
-        "Oilers MI",
-        "Oilers Over 6.5",
-        "Spurs +8",
-        "Nuggets MI"
-      ],
-      "false_positives": [],
-      "status": "false_negative"
-    },
-    {
-      "message_id": 57417,
-      "judge_has_picks": false,
-      "judge_picks": [],
-      "judge_capper": "",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
       "false_negatives": [],
       "false_positives": [],
-      "status": "true_negative"
+      "status": "perfect_match"
     },
     {
-      "message_id": 57414,
+      "message_id": "13002",
       "judge_has_picks": true,
       "judge_picks": [
-        "Miami -4.5 5U MAX BET",
-        "Louisville -4 2U"
+        "Luka Doncic: PRA Over 44.5",
+        "LeBron James: Rebounds Over 7.5",
+        "Steph Curry: Threes Over 4.5",
+        "FaZe Map 1 Winner",
+        "T1 -1.5 Maps"
       ],
-      "judge_capper": "HammeringHank",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
+      "judge_capper": null,
+      "scraper_picks": [
+        "Luka Doncic 45+ PRA",
+        "LeBron James Over 7.5 Rebounds (-140)",
+        "Steph Curry 5+ Threes",
+        "Map 1 Winner: FaZe ML",
+        "LoL: T1 -1.5 Maps vs GenG (+150)"
+      ],
+      "scraper_cappers": [
+        "Unknown"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Luka Doncic: PRA Over 44.5",
+          "scraper": "Luka Doncic 45+ PRA",
+          "similarity": 0.6666666666666666
+        },
+        {
+          "judge": "LeBron James: Rebounds Over 7.5",
+          "scraper": "LeBron James Over 7.5 Rebounds (-140)",
+          "similarity": 0.6470588235294118
+        },
+        {
+          "judge": "Steph Curry: Threes Over 4.5",
+          "scraper": "Steph Curry 5+ Threes",
+          "similarity": 0.7346938775510204
+        },
+        {
+          "judge": "FaZe Map 1 Winner",
+          "scraper": "Map 1 Winner: FaZe ML",
+          "similarity": 0.631578947368421
+        },
+        {
+          "judge": "T1 -1.5 Maps",
+          "scraper": "LoL: T1 -1.5 Maps vs GenG (+150)",
+          "similarity": 0.5454545454545454
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "13003",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Commanders +3.5",
+        "Ravens Team Total Over 24.5",
+        "Chiefs ML / Lions -6.5",
+        "Bengals +7.5 / Bills +8.5"
+      ],
+      "judge_capper": null,
+      "scraper_picks": [
+        "(NFL) Commanders +3.5 / (NFL) Ravens: Team Total Over 24.5",
+        "Ravens: Team Total Over 24.5",
+        "Chiefs ML",
+        "Lions -6.5",
+        "(NFL) Bengals +7.5 / (NFL) Bills +8.5"
+      ],
+      "scraper_cappers": [
+        "Unknown"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Ravens Team Total Over 24.5",
+          "scraper": "Ravens: Team Total Over 24.5",
+          "similarity": 0.9818181818181818
+        },
+        {
+          "judge": "Chiefs ML / Lions -6.5",
+          "scraper": "Lions -6.5",
+          "similarity": 0.625
+        },
+        {
+          "judge": "Bengals +7.5 / Bills +8.5",
+          "scraper": "(NFL) Bengals +7.5 / (NFL) Bills +8.5",
+          "similarity": 0.8064516129032258
+        }
+      ],
       "false_negatives": [
-        "Miami -4.5 5U MAX BET",
-        "Louisville -4 2U"
+        "Commanders +3.5"
       ],
-      "false_positives": [],
-      "status": "false_negative"
-    },
-    {
-      "message_id": 57411,
-      "judge_has_picks": false,
-      "judge_picks": [],
-      "judge_capper": "BeezoWins",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
-      "false_negatives": [],
-      "false_positives": [],
-      "status": "true_negative"
-    },
-    {
-      "message_id": 57410,
-      "judge_has_picks": false,
-      "judge_picks": [],
-      "judge_capper": "PlatinumLocks",
-      "scraper_picks": [],
-      "scraper_cappers": [],
-      "matched_picks": [],
-      "false_negatives": [],
-      "false_positives": [],
-      "status": "true_negative"
+      "false_positives": [
+        "(NFL) Commanders +3.5 / (NFL) Ravens: Team Total Over 24.5",
+        "Chiefs ML"
+      ],
+      "status": "partial_match"
     }
   ],
   "summary": {
-    "perfect_match": 0,
-    "partial_match": 0,
+    "perfect_match": 3,
+    "partial_match": 2,
     "missed_picks": 0,
     "extra_picks": 0,
-    "false_negative": 6,
+    "false_negative": 0,
     "false_positive": 0,
-    "true_negative": 4,
+    "true_negative": 0,
     "judge_failed": 0
   },
   "all_false_negatives": [
     {
-      "message_id": 57428,
-      "pick": "GOLDEN STATE WARRIORS (-10.5) over Portland Trail Blazers",
-      "judge_capper": "PorterPicks"
+      "message_id": "12806",
+      "pick": "Paddy Pimblett Moneyline",
+      "judge_capper": null
     },
     {
-      "message_id": 57421,
-      "pick": "VIRGINIA / LOUISVILLE UNDER 153",
-      "judge_capper": "@cappersfree"
-    },
-    {
-      "message_id": 57421,
-      "pick": "GEORGE MASON / LOYOLA CHICAGO UNDER 137.5",
-      "judge_capper": "@cappersfree"
-    },
-    {
-      "message_id": 57421,
-      "pick": "GEORGE MASON FIRST HALF -6",
-      "judge_capper": "@cappersfree"
-    },
-    {
-      "message_id": 57421,
-      "pick": "KANSAS +5.5",
-      "judge_capper": "@cappersfree"
-    },
-    {
-      "message_id": 57421,
-      "pick": "PROVIDENCE +4",
-      "judge_capper": "@cappersfree"
-    },
-    {
-      "message_id": 57421,
-      "pick": "MICHIGAN STATE -5",
-      "judge_capper": "@cappersfree"
-    },
-    {
-      "message_id": 57420,
-      "pick": "UAB Moneyline",
-      "judge_capper": "TPD"
-    },
-    {
-      "message_id": 57420,
-      "pick": "Cincinnati -7.5",
-      "judge_capper": "TPD"
-    },
-    {
-      "message_id": 57420,
-      "pick": "Butler Moneyline",
-      "judge_capper": "TPD"
-    },
-    {
-      "message_id": 57419,
-      "pick": "New Orleans Pelicans +2.5",
-      "judge_capper": "provenwinner"
-    },
-    {
-      "message_id": 57419,
-      "pick": "Oklahoma City Thunder -7.5",
-      "judge_capper": "provenwinner"
-    },
-    {
-      "message_id": 57419,
-      "pick": "Oklahoma City ML",
-      "judge_capper": "provenwinner"
-    },
-    {
-      "message_id": 57419,
-      "pick": "Golden State ML",
-      "judge_capper": "provenwinner"
-    },
-    {
-      "message_id": 57418,
-      "pick": "Bruins Over 5.5",
-      "judge_capper": "TheGamblingGawd"
-    },
-    {
-      "message_id": 57418,
-      "pick": "Lightning MI",
-      "judge_capper": "TheGamblingGawd"
-    },
-    {
-      "message_id": 57418,
-      "pick": "Stars MI",
-      "judge_capper": "TheGamblingGawd"
-    },
-    {
-      "message_id": 57418,
-      "pick": "Maple Leafs Over 5.5",
-      "judge_capper": "TheGamblingGawd"
-    },
-    {
-      "message_id": 57418,
-      "pick": "Oilers MI",
-      "judge_capper": "TheGamblingGawd"
-    },
-    {
-      "message_id": 57418,
-      "pick": "Oilers Over 6.5",
-      "judge_capper": "TheGamblingGawd"
-    },
-    {
-      "message_id": 57418,
-      "pick": "Spurs +8",
-      "judge_capper": "TheGamblingGawd"
-    },
-    {
-      "message_id": 57418,
-      "pick": "Nuggets MI",
-      "judge_capper": "TheGamblingGawd"
-    },
-    {
-      "message_id": 57414,
-      "pick": "Miami -4.5 5U MAX BET",
-      "judge_capper": "HammeringHank"
-    },
-    {
-      "message_id": 57414,
-      "pick": "Louisville -4 2U",
-      "judge_capper": "HammeringHank"
+      "message_id": "13003",
+      "pick": "Commanders +3.5",
+      "judge_capper": null
     }
   ],
-  "all_false_positives": [],
+  "all_false_positives": [
+    {
+      "message_id": "12806",
+      "pick": "Paddy + Waldo Cortes 1U ML"
+    },
+    {
+      "message_id": "13003",
+      "pick": "(NFL) Commanders +3.5 / (NFL) Ravens: Team Total Over 24.5"
+    },
+    {
+      "message_id": "13003",
+      "pick": "Chiefs ML"
+    }
+  ],
   "metrics": {
-    "accuracy": 40.0,
-    "recall": -300.0,
-    "precision": 0.0,
-    "total_picks_expected": 24,
-    "total_picks_found": 0,
-    "total_missed": 24,
-    "total_false_positives": 0
+    "accuracy": 60.0,
+    "recall": 60.0,
+    "precision": 100.0,
+    "total_picks_expected": 40,
+    "total_picks_found": 41,
+    "total_missed": 2,
+    "total_false_positives": 3
   }
 }

@@ -4,3 +4,5 @@ Started: 2026-01-27 16:05:50.503673
 Iteration 5: 85.00% Accuracy (Baseline Restored). Validator Rigidity and Parlay Grouping addressed.
 Iteration 6: 90.00% Accuracy. Validator improved (League Mapping for Tennis, Token Noise reduction).
 Iteration 7: 97.50% Accuracy. Fixed Double Chance parsing (||), Parlay Headers, and Odds Extraction.
+
+Optimization Iteration 2: 60.00% Accuracy (Regression). Groq Priority Implemented but Rate Limited. Fixed Config Bugs.

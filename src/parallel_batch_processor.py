@@ -61,23 +61,6 @@ PROVIDER_CONFIG = {
         "min_delay": 0.5,
         "priority": 3,  # TERTIARY (Fallback)
     },
-    "openrouter": {
-        "model": "meta-llama/llama-3.3-70b-instruct:free",
-        "rpm": 100,
-        "tpm": 100000,
-        "max_concurrent": 5,
-        "min_delay": 0.5,
-        "priority": 2,  # SECONDARY (Reliable Free)
-    },
-    "mistral": {
-        "model": "mistral-large-latest",  # Updated model name
-        "rpm": 60,  # 60 requests per minute
-        "tpm": 500000,  # 500K TPM - can batch heavily!
-        "max_concurrent": 4,  # 60 RPM = 1/sec, 4 concurrent staggered
-        "min_delay": 1.0,  # 1 req/sec
-        "batch_size": 10,  # Bundle 10 messages per call
-        "priority": 3,
-    },
     "gemini": {
         "model": "gemini-2.0-flash-lite-preview-02-05",  # Updated model
         "rpm": 15,  # 15 requests per minute

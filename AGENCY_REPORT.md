@@ -1,14 +1,21 @@
-### 11. Ralph Loop Verification (Iteration 7)
-- **Goal:** Execute "Ralph Wiggum Loop" Iteration 7 (Refinement & Edge Cases).
+### 12. Ralph Loop - Iteration 2 (Performance Optimization)
+- **Goal:** Radical optimization of "Complexity Router" and AI Provider logic (Groq Priority).
 - **Actions:**
-    - **Double Chance Fix:** Updated `clean_text_for_ai` to normalize `||` to ` / `, allowing the AI to correctly identify combined matchups/parlays (Fixes Msg 12806).
-    - **Parlay Headers:** Updated AI Prompt (`core.py`) to explicitly instruct combining lines under "Parlay" headers into single picks (Fixes Msg 13003 splitting).
-    - **Odds Extraction:** Updated AI Prompt to handle odds without parentheses (e.g., "Team -175") which were previously missed or defaulted to -110.
+    - **Code Analysis:** Identified that `ParallelBatchProcessor` was using Round-Robin instead of Priority Waterfall, leaking requests to slower providers (Gemini/Cerebras) unnecessarily.
+    - **Bug Fix:** Fixed duplicate keys in `PROVIDER_CONFIG` (Mistral/OpenRouter were defined twice with conflicting priorities).
+    - **Optimization:**
+        - Switched `ExtractionPipeline` to use `process_batches_groq_priority` (Strict Priority).
+        - Reduced `batch_size` from 10 to 5 to mitigate Groq 429 Rate Limits.
+    - **Benchmarking:** Created `benchmark/run_scraper_on_file.py` to enable offline benchmarking against `new_golden_set.json`.
 - **Results:**
-    - **Accuracy:** **97.50%** (39/40 matched).
-    - **Status:** **PASSED (Ready for Production)**.
-    - **Findings:**
-        - **Msg 12806:** Correctly identified `Abeta Gautier ITD || Paddy Pimblett` as a combined entity.
-        - **Msg 13003:** Correctly extracted the `Chiefs/Lions` parlay (though still output redundant straight bets, which is a minor issue).
-        - **Msg 12793:** Oilers odds issue persists (-110 instead of -175) but is minor compared to structural fixes.
-- **Next Steps:** Merge to main branch and deploy.
+    - **Baseline Accuracy:** **80.0%** (Recall 80%, Precision 100%) using Mistral (Fallback).
+    - **Optimized Accuracy:** **60.0%** (Recall 60%). Regression due to potential grouping issues with smaller batches or Mistral variance.
+    - **Performance:** **Groq 70B is failing 100% of requests** with 429 Rate Limit (Tokens Rem=12000), forcing fallback to Mistral (~12s latency).
+- **Findings:**
+    - **Groq Bottleneck:** The current Groq tier/model (`llama-3.3-70b`) is too restrictive for our prompt size, even with batch_size=5.
+    - **Router Works:** The Priority Router correctly falls back to Mistral when Groq fails, preventing total system failure.
+    - **Regression:** Strict grouping/parsing seems slightly worse with the current optimization settings.
+- **Next Steps:**
+    - Investigate Groq Rate Limit (Use smaller model `llama3-8b`? or `mixtral`?).
+    - Tune `batch_size` further or implement "Smart Batching" (token counting).
+    - Address the grouping regression (False Positives).

@@ -47,10 +47,10 @@
 | Wofford +2 | -110 | 3.0 | Spread | - |
 | Connecticut -10.5 | -110 | 3.0 | Spread | - |
 | (UFC) Paddy Pimblett ML / (UFC) Jean Silva ML | -110 | 5.0 | Parlay | - |
-| Georgia Tech Under 144 | -110 | 3.0 | Team Prop | - |
-| Denver Over 161.5 | -110 | 3.0 | Team Prop | - |
-| Oklahoma St Under 163 | -110 | 3.0 | Team Prop | - |
-| Cal St Fullerton Under 172.5 | -110 | 5.0 | Team Prop | - |
+| Georgia Tech UNDER 144 | -110 | 3.0 | Total | - |
+| Denver OVER 161.5 | -110 | 3.0 | Total | - |
+| Oklahoma St UNDER 163 | -110 | 3.0 | Total | - |
+| Cal St Fullerton UNDER 172.5 | -110 | 5.0 | Total | - |
 
 ---
 
@@ -95,17 +95,16 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Paddy “The Baddy” Pimblett ML | -205 | 4.0 | Moneyline | - |
+| Paddy Pimblett ML | -205 | 4.0 | Moneyline | - |
 | Abeta Gautier RD 1 | -120 | 2.0 | Game Prop | - |
-| Paddy Pimblett ML | -136 | 2.0 | Moneyline | - |
-| Ty Miller ML | None | 1.0 | Moneyline | - |
+| Ty Miller ML | -110 | 1.0 | Moneyline | - |
 | Charles Johnson ML | -114 | 1.0 | Moneyline | - |
-| Waldo Acosta ML | None | 1.0 | Moneyline | - |
+| Waldo Acosta ML | -110 | 1.0 | Moneyline | - |
 | Jean Silva ML | -131 | 1.0 | Moneyline | - |
 | Rose Namajunas ML | 315 | 1.0 | Moneyline | - |
-| Pimblett/Gaethje Over 2.5 | None | 3.0 | Total | - |
-| Nikita Krylov ML | None | 2.0 | Moneyline | - |
-| Figueiredo/Nurmagomedov Under 2.5 Rounds | None | 1.0 | Total | - |
+| Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
+| Nikita Krylov ML | -110 | 2.0 | Moneyline | - |
+| Figueiredo/Nurmagomedov Under 2.5 | -110 | 1.0 | Total | - |
 | Pimblett ML | -235 | 3.0 | Moneyline | - |
 | (UFC) Pimblett ML / (UFC) Natalia Silva ML | -113 | 2.0 | Parlay | - |
 | (UFC) Hokit ML / (UFC) O' Malley ML | 102 | 2.0 | Parlay | - |
@@ -205,6 +204,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | Commanders +3.5 | -115 | 5.0 | Spread | - |
 | Ravens Team Total Over 24.5 | -120 | 3.0 | Team Prop | - |
-| (NFL) Chiefs ML / (NFL) Lions -6.5 | 260 | 2.0 | Parlay | - |
+| Chiefs ML | -110 | 2.0 | Moneyline | - |
+| Lions -6.5 | -110 | 2.0 | Spread | - |
 | (NFL) Bengals +7.5 / (NFL) Bills +8.5 | -120 | 2.0 | Parlay | - |
 

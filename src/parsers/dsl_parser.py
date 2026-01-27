@@ -36,6 +36,11 @@ def parse_dsl_lines(text: str) -> List[Dict[str, Any]]:
 
     for line in lines:
         line = line.strip()
+
+        # Handle Markdown headers (### ID|...)
+        if line.startswith("#") and "|" in line:
+            line = line.lstrip("#").strip()
+
         if not line or line.startswith("#") or line.startswith("//"):
             continue
 

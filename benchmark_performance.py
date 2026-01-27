@@ -102,13 +102,16 @@ def main():
         json.dump(picks, f, indent=2)
 
     # 4. Calculate Accuracy
-    golden_path = os.path.join("benchmark", "reports", "auto_golden_set.json")
+    # golden_path = os.path.join("benchmark", "reports", "auto_golden_set.json")
+    golden_path = os.path.abspath("new_golden_set.json")
     if not os.path.exists(golden_path):
-        print("\n[WARNING] Golden set not found. Skipping accuracy check.")
+        print(
+            f"\n[WARNING] Golden set not found at {golden_path}. Skipping accuracy check."
+        )
         accuracy = 0.0
         accuracy_report = {}
     else:
-        print("\n[Verifying Accuracy against Golden Set...]")
+        print(f"\n[Verifying Accuracy against Golden Set: {golden_path}]")
         with open(golden_path, "r", encoding="utf-8") as f:
             golden_set = json.load(f)
 

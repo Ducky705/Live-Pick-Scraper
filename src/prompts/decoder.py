@@ -2268,8 +2268,10 @@ def validate_and_correct_batch(
             # Log the dropped IDs for debugging
             dropped = [p for p in picks if get_pick_id_as_int(p) not in valid_set]
             if dropped:
-                logging.debug(f"Dropped picks sample: {dropped[:1]}")
-                logging.debug(f"Valid set sample: {list(valid_set)[:5]}")
+                logging.warning(
+                    f"Dropped picks sample IDs: {[get_pick_id_as_int(p) for p in dropped[:5]]}"
+                )
+                logging.warning(f"Valid set sample: {list(valid_set)[:5]}")
 
     return validated
 

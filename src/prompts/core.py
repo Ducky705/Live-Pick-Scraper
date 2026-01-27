@@ -299,6 +299,10 @@ CRITICAL RULES:
 4. FORMAT:
    - 1H/1Q bets MUST start with "1H" or "1Q".
    - Props: "Player: Stat Over/Under X".
+5. ID MAPPING (CRITICAL):
+   - The "id" column MUST match the `### id` from the DATA section.
+   - Do NOT use sequential numbers (1, 2, 3). Use the actual Message ID (e.g. 12806).
+   - If a message has multiple picks, repeat the same Message ID for each line.
 
 EXAMPLES:
 Input: "### 12345 [Dave] William & Mary +4.5 and Hofstra -3. Also Lakers Over 220."

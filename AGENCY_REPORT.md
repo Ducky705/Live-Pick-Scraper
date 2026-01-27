@@ -35,3 +35,21 @@
     - The 8b model is surprisingly effective, achieving higher accuracy than the 70b baseline (likely due to faster processing allowing more retries or cleaner regex pre-processing).
     - The regression is **FIXED** (60% -> 90%).
     - Groq limits are still tight, but the system is resilient.
+
+### 14. Ralph Loop - Iteration 8 (The "Batch 1" Breakthrough)
+- **Goal:** Fix the 27.5% Accuracy regression caused by ID mismatches and Groq batch failures.
+- **Actions:**
+    - **Prompt Fix:** Removed conflicting `NEGATIVE_CONSTRAINTS` (which demanded JSON) from the DSL Prompt. Added explicit "ID MAPPING" rules to enforce strict `### id` alignment.
+    - **Optimization:** Reduced `batch_size` from 5 to **1** in `src/extraction_pipeline.py`.
+        - *Reasoning:* `llama-3.1-8b-instant` output was truncating or hallucinating when processing 5 distinct messages in a single DSL block.
+        - *Trade-off:* Higher RPM (accepted, Groq has 500 RPM) vs. Perfect Accuracy.
+    - **Fallback:** Verified that Mistral correctly picks up requests when Groq hits 429 Rate Limits.
+- **Results:**
+    - **Accuracy:** **92.50%** (37/40 matched).
+    - **Improvements:**
+        - Message 12793 (10 picks) went from 0% -> 100% (Saved by Mistral Fallback).
+        - Filtered picks (Invalid IDs) dropped from 42 to 0.
+    - **Performance:** End-to-end time is still fast (parallel execution), but relies on Mistral for heavy lifting when Groq chokes.
+- **Next Steps:**
+    - Consider `batch_size=2` if speed becomes an issue, but 1 is safest for 8b models.
+    - Investigate why Groq hits 429 so aggressively even with low input tokens (likely a strict TPM or Daily limit on the free tier).

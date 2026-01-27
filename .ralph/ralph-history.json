@@ -197,12 +197,43 @@
       "errors": [
         "Judge Failed:     0"
       ]
+    },
+    {
+      "iteration": 8,
+      "startedAt": "2026-01-27T21:20:38.173Z",
+      "endedAt": "2026-01-27T21:28:48.692Z",
+      "durationMs": 319120,
+      "toolsUsed": {
+        "Bash": 6,
+        "Grep": 2,
+        "Read": 11,
+        "Edit": 5,
+        "Write": 1
+      },
+      "filesModified": [
+        "AGENCY_REPORT.md",
+        "data/output/verification_report_2026-01-24.md",
+        "progress.txt",
+        "src/extraction_pipeline.py",
+        "src/prompts/core.py",
+        "src/prompts/decoder.py"
+      ],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": [
+        "ERROR:src.parallel_batch_processor:[groq] Batch 2 failed: Groq Rate limit 429",
+        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769549153.382402)",
+        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769549153.382402)"
+      ]
     }
   ],
-  "totalDurationMs": 2449155,
+  "totalDurationMs": 2768275,
   "struggleIndicators": {
     "repeatedErrors": {
-      "Judge Failed:     0": 1
+      "Judge Failed:     0": 1,
+      "ERROR:src.parallel_batch_processor:[groq] Batch 2 failed: Groq Rate limit 429": 1,
+      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown un": 1,
+      "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown un": 1
     },
     "noProgressIterations": 0,
     "shortIterations": 0

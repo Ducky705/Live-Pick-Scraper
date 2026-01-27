@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class ExtractionPipeline:
     @staticmethod
     def run(
-        messages: List[Dict[str, Any]], target_date: str, batch_size: int = 5
+        messages: List[Dict[str, Any]], target_date: str, batch_size: int = 1
     ) -> List[Dict[str, Any]]:
         """
         Runs the full AI extraction pipeline:

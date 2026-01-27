@@ -31,6 +31,12 @@ def fuzzy_match(s1: str, s2: str) -> float:
 
 
 async def run_simulation():
+    # Force ASCII for Windows console safety
+    import sys
+
+    if sys.platform == "win32":
+        sys.stdout.reconfigure(encoding="utf-8")
+
     if not os.path.exists(GOLDEN_SET_PATH):
         logger.error("No golden set found!")
         return
@@ -184,11 +190,6 @@ async def run_simulation():
                 )
 
     # Final Stats
-    # Force ASCII for Windows console safety
-    import sys
-
-    if sys.platform == "win32":
-        sys.stdout.reconfigure(encoding="utf-8")
 
     recall = (
         (total_picks_found / total_picks_expected * 100) if total_picks_expected else 0

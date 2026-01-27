@@ -258,7 +258,15 @@ class PickParser:
     @staticmethod
     def _parse_parlay(text: str, league: str, date: Optional[str]) -> Pick:
         """Parse a parlay into a Pick with legs."""
-        legs_raw = [l.strip() for l in text.split("/") if l.strip()]
+        # Determine separator
+        if "/" in text:
+            legs_raw = [l.strip() for l in text.split("/") if l.strip()]
+        elif "&" in text:
+            legs_raw = [l.strip() for l in text.split("&") if l.strip()]
+        else:
+            # Fallback (colon separated? e.g. "Parlay: Leg 1, Leg 2")
+            # For now assume / as default to avoid breaking single lines
+            legs_raw = [text]
 
         parlay_pick = Pick(
             raw_text=text,

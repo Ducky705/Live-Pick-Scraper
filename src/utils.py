@@ -449,3 +449,93 @@ def clean_text_for_ai(text):
     text = text.replace("1/2", ".5")  # Simple fraction replacement
 
     return text[:2500]  # Safe clamp
+
+
+def auto_group_parlays(picks, message_context):
+    """
+    Groups individual picks into a Parlay if the message context strongly implies a parlay.
+
+    Args:
+        picks: List of pick dictionaries
+        message_context: Dict mapping message_id (int) -> full text context
+
+    Returns:
+        Updated list of picks with parlays grouped
+    """
+    if not picks or not message_context:
+        return picks
+
+    # Group by message_id
+    picks_by_id = {}
+    other_picks = []
+
+    for p in picks:
+        mid = p.get("message_id")
+        if mid:
+            try:
+                mid_int = int(mid)
+                if mid_int not in picks_by_id:
+                    picks_by_id[mid_int] = []
+                picks_by_id[mid_int].append(p)
+            except (ValueError, TypeError):
+                other_picks.append(p)
+        else:
+            other_picks.append(p)
+
+    final_picks = []
+    final_picks.extend(other_picks)
+
+    for mid, msg_picks in picks_by_id.items():
+        context = message_context.get(mid, "").upper()
+
+        # Check for explicit Parlay indicators
+        is_parlay_text = "PARLAY" in context or "BUILDER" in context
+
+        # Filter for straight bets that might need grouping
+        # We group anything that ISN'T already a Parlay or Unknown
+        straight_bets = [
+            p
+            for p in msg_picks
+            if str(p.get("type")).lower() not in ["parlay", "unknown"]
+        ]
+
+        # Existing parlays should be kept as is
+        existing_parlays = [
+            p for p in msg_picks if str(p.get("type")).lower() in ["parlay"]
+        ]
+
+        # Unknowns kept as is
+        unknowns = [p for p in msg_picks if str(p.get("type")).lower() in ["unknown"]]
+
+        # Rule: If text says Parlay, and we have > 1 straight bet, group them.
+        # Even if we already have existing parlays (Msg 13003 case)
+        if is_parlay_text and len(straight_bets) > 1:
+            # Construct merged pick
+            merged_pick_text = " / ".join(
+                [str(p.get("pick", "")) for p in straight_bets]
+            )
+
+            # Use the first leg's metadata
+            base = straight_bets[0]
+
+            new_pick = {
+                "message_id": mid,
+                "pick": merged_pick_text,
+                "type": "Parlay",
+                "odds": None,
+                "units": base.get("units", 1.0),
+                "league": base.get("league", "Other"),
+                "capper_name": base.get("capper_name", "Unknown"),
+                "confidence": 0.9,
+                "reasoning": "Auto-grouped based on Parlay keyword in text.",
+                "_source_text": base.get("_source_text", ""),
+            }
+
+            # Add the new grouped parlay + existing parlays + unknowns
+            final_picks.append(new_pick)
+            final_picks.extend(existing_parlays)
+            final_picks.extend(unknowns)
+        else:
+            final_picks.extend(msg_picks)
+
+    return final_picks

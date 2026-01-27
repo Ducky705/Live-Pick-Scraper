@@ -3,7 +3,7 @@ import time
 from typing import List, Dict, Any
 from src.parallel_batch_processor import parallel_processor
 from src.prompts.decoder import normalize_response
-from src.utils import backfill_odds
+from src.utils import backfill_odds, auto_group_parlays
 from src.game_enricher import enrich_picks
 from src.pick_deduplicator import deduplicate_by_capper
 from src.multi_pick_validator import validate_and_flag_missing, MultiPickValidator
@@ -87,6 +87,20 @@ class ExtractionPipeline:
                     message_context=message_context,
                 )
                 picks.extend(batch_picks)
+
+        # 2.5 Auto-Group Parlays
+        # Ensure we have context for all messages (even rule-based ones)
+        full_message_context = {}
+        for m in messages:
+            if m.get("id"):
+                try:
+                    text = m.get("text", "")
+                    ocr = m.get("ocr_text", "")
+                    full_message_context[int(m["id"])] = f"{text}\n{ocr}"
+                except:
+                    pass
+
+        picks = auto_group_parlays(picks, full_message_context)
 
         # 3. Enrichment & Basic Dedup
         picks = backfill_odds(picks)

@@ -41,7 +41,7 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Oilers -175 | -110 | 1.0 | Moneyline | - |
+| Oilers -175 | -175 | 1.0 | Moneyline | - |
 | Magic -1.5 | -110 | 4.0 | Spread | - |
 | Minnesota +6 | -110 | 4.0 | Spread | - |
 | Wofford +2 | -110 | 3.0 | Spread | - |
@@ -173,9 +173,9 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Luka Doncic 45+ PRA ML | -120 | 1.0 | Moneyline | - |
+| Luka Doncic 45+ PRA | -120 | 1.0 | Moneyline | - |
 | LeBron James Over 7.5 Rebounds (-140) | -140 | 1.0 | Total | - |
-| Steph Curry 5+ Threes ML | 110 | 1.0 | Moneyline | - |
+| Steph Curry 5+ Threes | 110 | 1.0 | Moneyline | - |
 | Map 1 Winner: FaZe ML | -125 | 1.0 | Moneyline | - |
 | LoL: T1 -1.5 Maps vs GenG (+150) | 150 | 1.0 | Player Prop | - |
 
@@ -203,7 +203,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | Commanders +3.5 | -115 | 5.0 | Spread | - |
 | Ravens Team Total Over 24.5 | -120 | 3.0 | Team Prop | - |
-| Chiefs ML | -110 | 1.0 | Moneyline | - |
-| Lions -6.5 | -110 | 1.0 | Spread | - |
+| Chiefs ML | None | 2.0 | Moneyline | - |
+| Lions -6.5 | None | 1.0 | Spread | - |
 | (NFL) Bengals +7.5 / (NFL) Bills +8.5 | -120 | 2.0 | Parlay | - |
 

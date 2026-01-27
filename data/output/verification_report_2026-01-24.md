@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-24
 
 **Total Messages Processed:** 5
-**Total Picks Extracted:** 44
+**Total Picks Extracted:** 42
 
 ---
 
@@ -47,10 +47,10 @@
 | Wofford +2 | -110 | 3.0 | Spread | - |
 | Connecticut -10.5 | -110 | 3.0 | Spread | - |
 | (UFC) Paddy Pimblett ML / (UFC) Jean Silva ML | -110 | 5.0 | Parlay | - |
-| Georgia Tech UNDER 144 | -110 | 3.0 | Team Prop | - |
-| Denver OVER 161.5 | -110 | 3.0 | Team Prop | - |
-| Oklahoma St UNDER 163 | -110 | 3.0 | Team Prop | - |
-| Cal St Fullerton UNDER 172.5 | -110 | 5.0 | Team Prop | - |
+| Georgia Tech Under 144 | -110 | 3.0 | Team Prop | - |
+| Denver Over 161.5 | -110 | 3.0 | Team Prop | - |
+| Oklahoma St Under 163 | -110 | 3.0 | Team Prop | - |
+| Cal St Fullerton Under 172.5 | -110 | 5.0 | Team Prop | - |
 
 ---
 
@@ -95,17 +95,15 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Paddy “The Baddy” Pimblett ML | -205 | 4.0 | Moneyline | - |
+| Paddy Pimblett ML | -205 | 4.0 | Moneyline | - |
 | Abeta Gautier RD 1 | -120 | 2.0 | Game Prop | - |
-| Paddy Pimblett ML | -136 | 2.0 | Moneyline | - |
-| Ty Miller ML | None | 1.0 | Moneyline | - |
-| Charles Johnson ML | -114 | 1.0 | Moneyline | - |
-| Waldo Acosta ML | None | 1.0 | Moneyline | - |
-| Jean Silva ML | -131 | 1.0 | Moneyline | - |
+| (UFC) Abeta Gautier ITD / (UFC) Paddy Pimblett ML | -136 | 2.0 | Parlay | - |
+| (UFC) Ty Miller ML / (UFC) Charles Johnson ML | -114 | 1.0 | Parlay | - |
+| (UFC) Waldo Acosta ML / (UFC) Jean Silva ML | -131 | 1.0 | Parlay | - |
 | Rose Namajunas ML | 315 | 1.0 | Moneyline | - |
-| Pimblett/Gaethje Over 2.5 | None | 3.0 | Total | - |
-| Nikita Krylov ML | None | 2.0 | Moneyline | - |
-| Figueiredo/Nurmagomedov Under 2.5 Rounds | None | 1.0 | Total | - |
+| Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
+| Nikita Krylov ML | -110 | 2.0 | Moneyline | - |
+| Figueiredo/Nurmagomedov Under 2.5 | -110 | 1.0 | Total | - |
 | Pimblett ML | -235 | 3.0 | Moneyline | - |
 | (UFC) Pimblett ML / (UFC) Natalia Silva ML | -113 | 2.0 | Parlay | - |
 | (UFC) Hokit ML / (UFC) O' Malley ML | 102 | 2.0 | Parlay | - |
@@ -149,7 +147,7 @@
 | Real Madrid -1.5 AH | 105 | 1.0 | Spread | - |
 | Juventus vs AC Milan Over 2.5 Goals | -120 | 1.0 | Total | - |
 | Sinner to win 1st Set | -130 | 1.0 | Moneyline | - |
-| Djokovic -4.5 Games | -110 | 1.0 | Spread | - |
+| Djokovic -4.5 Games vs Medvedev | -110 | 1.0 | Team Prop | - |
 | Rublev vs Zverev Over 38.5 Games | -115 | 1.0 | Total | - |
 
 ---
@@ -178,8 +176,8 @@
 | Luka Doncic: PRA Over 45 | -120 | 1.0 | Player Prop | - |
 | LeBron James: Rebounds Over 7.5 | -140 | 1.0 | Player Prop | - |
 | Steph Curry: Threes Over 5 | 110 | 1.0 | Player Prop | - |
-| FaZe vs Navi Map 1 Winner: FaZe | -125 | 1.0 | Game Prop | - |
-| T1 -1.5 Maps vs GenG | 150 | 1.0 | Spread | - |
+| FaZe ML | -125 | 1.0 | Moneyline | - |
+| T1 -1.5 Maps | 150 | 1.0 | Spread | - |
 
 ---
 

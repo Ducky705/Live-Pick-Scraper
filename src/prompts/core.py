@@ -148,7 +148,8 @@ NEGATIVE_CONSTRAINTS = """CONSTRAINTS:
   -Do NOT treat futures as Moneyline. t=FT.
   -Extract odds (e.g. +225) into "o" field.
 11.PERIOD FORMAT: "1H Team -X". Prefix 1H/1Q is MANDATORY in pick string.
-12.CAPPER NAME: DO NOT use 'Text', 'Caption', 'OCR', 'Content', 'T' as capper name. Look at the FIRST LINE of [CONTENT]."""
+12.CAPPER NAME: DO NOT use 'Text', 'Caption', 'OCR', 'Content', 'T' as capper name. Look at the FIRST LINE of [CONTENT].
+13.PARLAY SUMMARIES: If text lists "Team A + Team B" but also lists separate lines for "Team A" and "Team B", IGNORE the combined line. Only output the detailed legs or the parlay object if it is the ONLY bet."""
 
 
 # =============================================================================

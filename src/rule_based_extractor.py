@@ -58,8 +58,15 @@ class RuleBasedExtractor:
             # If we see "Parlay" or "Teaser", it's likely a complex multi-line parlay.
             # Rule-Based extraction is poor at grouping these (it splits them).
             # STRATEGY: Defer ALL Parlays/Teasers to AI to ensure correct grouping.
+            # ALSO: Check for "Team A + Team B" style headers (common in Telegram)
+            has_plus_parlay = " + " in full_text and (
+                "ML" in full_text or "Moneyline" in full_text
+            )
+
             has_parlay_keyword = (
-                "parlay" in full_text.lower() or "teaser" in full_text.lower()
+                "parlay" in full_text.lower()
+                or "teaser" in full_text.lower()
+                or has_plus_parlay
             )
             if has_parlay_keyword:
                 remaining_messages.append(msg)

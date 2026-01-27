@@ -1,9 +1,9 @@
 {
   "performance": {
-    "duration": 60.3402214050293,
-    "requests": 39,
-    "avg_latency": 6.941618130757258,
-    "tokens_estimated": 7282.0
+    "duration": 3.3611648082733154,
+    "requests": 2,
+    "avg_latency": 1.6547629833221436,
+    "tokens_estimated": 1426.75
   },
   "accuracy": {
     "total_messages": 2,
@@ -30,21 +30,23 @@
         ],
         "judge_capper": "Unknown",
         "scraper_picks": [
-          "Paddy \"The Baddy\" Pimblett 4u ML",
-          "Abeta Gautier RD 1 2u ML",
-          "Abeta Gautier Itd || Paddy Pimblett 2u ML",
-          "Ty Miller || Charles Johnson 1u ML",
-          "Waldo Acosta || Jean Silva 1u ML",
-          "Rose Namajunas ML 1u ML",
-          "Pimblett vs Gaethje Over 2.5 (3U)",
-          "Nikita Krylov ML (2U) ML",
-          "Figueiredo vs Nurmagomedov Under 2.5 Rounds (1U)",
-          "Pimblett ML (3u) ML",
-          "Pimblett / Natalia Silva MLP -113 (2U) DK",
-          "Hokit / O' Malley MLP +102 (2U)",
-          "Paddy + Waldo Cortes 1U ML",
-          "Paddy by Sub 0.5U ML",
-          "Sean O Malley ML + Alcaraz ML 0.5U ML"
+          "Paddy \u201cThe Baddy\u201d Pimblett",
+          "Abeta Gautier",
+          "Abeta Gautier ITD vs Opponent",
+          "Paddy Pimblett",
+          "Charles Johnson",
+          "Jean Silva",
+          "Rose Namajunas",
+          "Pimblett/Gaethje Over 2.5",
+          "Nikita Krylov",
+          "Figueiredo/Nurmagomedov Under 2.5 Rounds",
+          "Pimblett",
+          "Pimblett/Natalia Silva",
+          "Hokit/O' Malley",
+          "Paddy + Waldo Cortes",
+          "Paddy by SUB",
+          "Sean O Malley",
+          "Alcaraz"
         ],
         "scraper_cappers": [
           "Unknown"
@@ -52,82 +54,86 @@
         "matched_picks": [
           {
             "judge": "Paddy Pimblett Moneyline",
-            "scraper": "Paddy \"The Baddy\" Pimblett 4u ML",
-            "similarity": 0.6071428571428571
+            "scraper": "Paddy Pimblett",
+            "similarity": 0.7368421052631579
           },
           {
             "judge": "Abeta Gautier Round 1",
-            "scraper": "Abeta Gautier RD 1 2u ML",
-            "similarity": 0.8
+            "scraper": "Abeta Gautier",
+            "similarity": 0.7647058823529411
           },
           {
             "judge": "Abeta Gautier ITD || Paddy Pimblett",
-            "scraper": "Abeta Gautier Itd || Paddy Pimblett 2u ML",
-            "similarity": 0.9210526315789473
+            "scraper": "Abeta Gautier ITD vs Opponent",
+            "similarity": 0.71875
           },
           {
             "judge": "Charles Johnson Moneyline",
-            "scraper": "Ty Miller || Charles Johnson 1u ML",
-            "similarity": 0.6101694915254238
+            "scraper": "Charles Johnson",
+            "similarity": 0.75
           },
           {
             "judge": "Jean Silva Moneyline",
-            "scraper": "Waldo Acosta || Jean Silva 1u ML",
-            "similarity": 0.5
+            "scraper": "Jean Silva",
+            "similarity": 0.6666666666666666
           },
           {
             "judge": "Rose Namajunas Moneyline",
-            "scraper": "Rose Namajunas ML 1u ML",
-            "similarity": 0.723404255319149
+            "scraper": "Rose Namajunas",
+            "similarity": 0.7368421052631579
           },
           {
             "judge": "Pimblett/Gaethje Over 2.5 Rounds",
-            "scraper": "Pimblett vs Gaethje Over 2.5 (3U)",
-            "similarity": 0.8
+            "scraper": "Pimblett/Gaethje Over 2.5",
+            "similarity": 0.8771929824561403
           },
           {
             "judge": "Nikita Krylov Moneyline",
-            "scraper": "Nikita Krylov ML (2U) ML",
-            "similarity": 0.6808510638297872
+            "scraper": "Nikita Krylov",
+            "similarity": 0.7222222222222222
           },
           {
             "judge": "Figueiredo/Nurmagomedov Under 2.5 Rounds",
-            "scraper": "Figueiredo vs Nurmagomedov Under 2.5 Rounds (1U)",
-            "similarity": 0.8863636363636364
+            "scraper": "Figueiredo/Nurmagomedov Under 2.5 Rounds",
+            "similarity": 1.0
           },
           {
             "judge": "Paddy Pimblett Moneyline",
-            "scraper": "Pimblett ML (3u) ML",
-            "similarity": 0.5116279069767442
+            "scraper": "Paddy \u201cThe Baddy\u201d Pimblett",
+            "similarity": 0.56
           },
           {
             "judge": "Pimblett/Natalia Silva MLP",
-            "scraper": "Pimblett / Natalia Silva MLP -113 (2U) DK",
-            "similarity": 0.7761194029850746
+            "scraper": "Pimblett/Natalia Silva",
+            "similarity": 0.9166666666666666
           },
           {
             "judge": "Hokit/O' Malley MLP",
-            "scraper": "Hokit / O' Malley MLP +102 (2U)",
-            "similarity": 0.76
+            "scraper": "Hokit/O' Malley",
+            "similarity": 0.8823529411764706
+          },
+          {
+            "judge": "Paddy Pimblett Moneyline",
+            "scraper": "Pimblett",
+            "similarity": 0.5
           },
           {
             "judge": "Paddy Pimblett by SUB",
-            "scraper": "Paddy by Sub 0.5U ML",
-            "similarity": 0.5853658536585366
+            "scraper": "Paddy by SUB",
+            "similarity": 0.7272727272727273
           },
           {
             "judge": "Sean O Malley Moneyline",
-            "scraper": "Sean O Malley ML + Alcaraz ML 0.5U ML",
-            "similarity": 0.5333333333333333
+            "scraper": "Sean O Malley",
+            "similarity": 0.7222222222222222
           }
         ],
-        "false_negatives": [
-          "Paddy Pimblett Moneyline"
-        ],
+        "false_negatives": [],
         "false_positives": [
-          "Paddy + Waldo Cortes 1U ML"
+          "Paddy + Waldo Cortes",
+          "Alcaraz"
         ],
-        "status": "partial_match"
+        "status": "extra_picks"
       },
       {
         "message_id": "12793",
@@ -146,19 +152,18 @@
         ],
         "judge_capper": "Unknown",
         "scraper_picks": [
-          "Oilers ML",
+          "Oilers",
           "Magic -1.5",
           "Minnesota +6",
           "Wofford +2",
           "Connecticut -10.5",
-          "(UFC) Paddy Pimblett ML / (UFC) Jean Silva ML",
-          "Georgia Tech: Points Under 144",
-          "Denver: Points Over 161.5",
-          "Oklahoma St: Points Under 163",
-          "Cal St Fullerton: Points Under 172.5"
+          "Paddy Pimblett ML / Jean Silva ML",
+          "Georgia Tech vs Opponent Under 144",
+          "Denver vs Opponent Over 161.5",
+          "Oklahoma St vs Opponent Under 163",
+          "Cal St Fullerton vs Opponent Under 172.5"
         ],
         "scraper_cappers": [
-          "Tokyo Brandon",
           "Kyle Anthony",
           "Big Al",
           "Kyle Hunter"
@@ -166,8 +171,8 @@
         "matched_picks": [
           {
             "judge": "Oilers -175",
-            "scraper": "Oilers ML",
-            "similarity": 0.7
+            "scraper": "Oilers",
+            "similarity": 0.7058823529411765
           },
           {
             "judge": "Magic -1.5",
@@ -191,28 +196,28 @@
           },
           {
             "judge": "Paddy Pimblett ML & Jean Silva ML Parlay",
-            "scraper": "(UFC) Paddy Pimblett ML / (UFC) Jean Silva ML",
-            "similarity": 0.7529411764705882
+            "scraper": "Paddy Pimblett ML / Jean Silva ML",
+            "similarity": 0.8767123287671232
           },
           {
             "judge": "Georgia Tech UNDER 144",
-            "scraper": "Georgia Tech: Points Under 144",
-            "similarity": 0.8461538461538461
+            "scraper": "Georgia Tech vs Opponent Under 144",
+            "similarity": 0.7857142857142857
           },
           {
             "judge": "Denver OVER 161.5",
-            "scraper": "Denver: Points Over 161.5",
-            "similarity": 0.8095238095238095
+            "scraper": "Denver vs Opponent Over 161.5",
+            "similarity": 0.7391304347826086
           },
           {
             "judge": "Oklahoma St UNDER 163",
-            "scraper": "Oklahoma St: Points Under 163",
-            "similarity": 0.84
+            "scraper": "Oklahoma St vs Opponent Under 163",
+            "similarity": 0.7777777777777778
           },
           {
             "judge": "Cal St Fullerton UNDER 172.5",
-            "scraper": "Cal St Fullerton: Points Under 172.5",
-            "similarity": 0.875
+            "scraper": "Cal St Fullerton vs Opponent Under 172.5",
+            "similarity": 0.8235294117647058
           }
         ],
         "false_negatives": [],
@@ -222,35 +227,33 @@
     ],
     "summary": {
       "perfect_match": 1,
-      "partial_match": 1,
+      "partial_match": 0,
       "missed_picks": 0,
-      "extra_picks": 0,
+      "extra_picks": 1,
       "false_negative": 0,
       "false_positive": 0,
       "true_negative": 0,
       "judge_failed": 0
     },
-    "all_false_negatives": [
-      {
-        "message_id": "12806",
-        "pick": "Paddy Pimblett Moneyline",
-        "judge_capper": "Unknown"
-      }
-    ],
+    "all_false_negatives": [],
     "all_false_positives": [
       {
         "message_id": "12806",
-        "pick": "Paddy + Waldo Cortes 1U ML"
+        "pick": "Paddy + Waldo Cortes"
+      },
+      {
+        "message_id": "12806",
+        "pick": "Alcaraz"
       }
     ],
     "metrics": {
       "accuracy": 50.0,
-      "recall": 50.0,
+      "recall": 100.0,
       "precision": 100.0,
       "total_picks_expected": 25,
-      "total_picks_found": 25,
-      "total_missed": 1,
-      "total_false_positives": 1
+      "total_picks_found": 27,
+      "total_missed": 0,
+      "total_false_positives": 2
     }
   }
 }

@@ -132,6 +132,26 @@ class PickParser:
             if valid_legs >= 2:
                 return True
 
+        # Double Pipe separator (||)
+        if "||" in text:
+            return True
+
+        # Plus separator ( + ) - Be careful not to match +100 or +3.5
+        # Must be surrounded by spaces
+        if " + " in text:
+            # Check if it looks like "Pick A + Pick B"
+            legs = [l.strip() for l in text.split("+") if l.strip()]
+            valid_legs = 0
+            for leg in legs:
+                # Ignore if the leg is just a number (e.g. + 100)
+                if leg.replace(".", "").isdigit():
+                    continue
+                if re.search(r"\d|ML|Over|Under", leg, re.IGNORECASE):
+                    valid_legs += 1
+
+            if valid_legs >= 2:
+                return True
+
         return False
 
     @staticmethod
@@ -259,10 +279,14 @@ class PickParser:
     def _parse_parlay(text: str, league: str, date: Optional[str]) -> Pick:
         """Parse a parlay into a Pick with legs."""
         # Determine separator
-        if "/" in text:
+        if "||" in text:
+            legs_raw = [l.strip() for l in text.split("||") if l.strip()]
+        elif "/" in text:
             legs_raw = [l.strip() for l in text.split("/") if l.strip()]
         elif "&" in text:
             legs_raw = [l.strip() for l in text.split("&") if l.strip()]
+        elif " + " in text:
+            legs_raw = [l.strip() for l in text.split("+") if l.strip()]
         else:
             # Fallback (colon separated? e.g. "Parlay: Leg 1, Leg 2")
             # For now assume / as default to avoid breaking single lines

@@ -176,12 +176,41 @@
       "exitCode": 0,
       "completionDetected": false,
       "errors": []
+    },
+    {
+      "iteration": 8,
+      "startedAt": "2026-01-27T11:55:56.029Z",
+      "endedAt": "2026-01-27T12:00:07.288Z",
+      "durationMs": 222472,
+      "toolsUsed": {
+        "Bash": 6,
+        "Grep": 1,
+        "Read": 5,
+        "Edit": 1,
+        "Write": 1
+      },
+      "filesModified": [
+        "data/output/verification_report_2026-01-24.md",
+        "AGENCY_REPORT.md",
+        "src/rule_based_extractor.py"
+      ],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": [
+        "1.  **Diagnosis:** Ran `tests/run_production_simulation.py` and observed a Recall drop to **77.5%**. Complex messages (e.g., 15-fight UFC cards) were being \"handled\" by the Rule-Based extractor, but i",
+        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429",
+        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Groq Rate limit 429"
+      ]
     }
   ],
-  "totalDurationMs": 3907245,
+  "totalDurationMs": 4129717,
   "struggleIndicators": {
-    "repeatedErrors": {},
-    "noProgressIterations": 1,
-    "shortIterations": 1
+    "repeatedErrors": {
+      "1.  **Diagnosis:** Ran `tests/run_production_simulation.py` and observed a Recall drop to **77.5%**.": 1,
+      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429": 1,
+      "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Groq Rate limit 429": 1
+    },
+    "noProgressIterations": 0,
+    "shortIterations": 0
   }
 }

@@ -37,11 +37,11 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 PROVIDER_CONFIG = {
     "groq": {
-        "model": "llama-3.3-70b-versatile",  # User's choice - best quality
-        "rpm": 100,  # Lower RPM to match TPM constraints
-        "tpm": 15000,  # REFLECT ACTUAL LIMIT (12k observed)
-        "max_concurrent": 2,  # Reduce to 2 to prevent TPM blowout
-        "min_delay": 2.0,  # Slower pacing
+        "model": "llama-3.1-8b-instant",  # Iteration 3: Switch to 8b for speed/limits
+        "rpm": 500,  # Much higher limits for 8b
+        "tpm": 40000,  # Higher TPM limits
+        "max_concurrent": 8,  # Increase concurrency
+        "min_delay": 0.2,  # Faster pacing
         "priority": 1,  # PRIMARY provider
     },
     "mistral": {

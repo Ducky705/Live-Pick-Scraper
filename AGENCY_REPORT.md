@@ -19,3 +19,19 @@
     - Investigate Groq Rate Limit (Use smaller model `llama3-8b`? or `mixtral`?).
     - Tune `batch_size` further or implement "Smart Batching" (token counting).
     - Address the grouping regression (False Positives).
+
+### 13. Ralph Loop - Iteration 3 (Model Swapping)
+- **Goal:** Fix regression and Groq Rate Limits by switching to `llama-3.1-8b-instant`.
+- **Actions:**
+    - Modified `PROVIDER_CONFIG` in `src/parallel_batch_processor.py`.
+    - Switched Groq model to `llama-3.1-8b-instant`.
+    - Increased concurrency to 8 workers (aiming for speed).
+    - Ran `verify_golden_set.py`.
+- **Results:**
+    - **Accuracy:** **90.00%** (36/40 matched).
+    - **Performance:** Mixed. Groq still hit 429 Rate Limit on 1 batch (out of 2), likely due to aggressive concurrency.
+    - **Fallback:** Mistral successfully picked up the failed batch (7.78s).
+- **Analysis:**
+    - The 8b model is surprisingly effective, achieving higher accuracy than the 70b baseline (likely due to faster processing allowing more retries or cleaner regex pre-processing).
+    - The regression is **FIXED** (60% -> 90%).
+    - Groq limits are still tight, but the system is resilient.

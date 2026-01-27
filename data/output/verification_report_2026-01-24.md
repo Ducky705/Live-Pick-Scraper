@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-24
 
 **Total Messages Processed:** 5
-**Total Picks Extracted:** 42
+**Total Picks Extracted:** 43
 
 ---
 
@@ -95,22 +95,24 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Paddy Pimblett ML | -205 | 4.0 | Moneyline | - |
-| Abeta Gautier RD 1 | -120 | 2.0 | Game Prop | - |
-| (UFC) Abeta Gautier ITD / (UFC) Paddy Pimblett ML | -136 | 2.0 | Parlay | - |
-| (UFC) Ty Miller ML / (UFC) Charles Johnson ML | -114 | 1.0 | Parlay | - |
-| (UFC) Waldo Acosta ML / (UFC) Jean Silva ML | -131 | 1.0 | Parlay | - |
-| Rose Namajunas ML | 315 | 1.0 | Moneyline | - |
+| Paddy “The Baddy” Pimblett | -205 | 4.0 | Moneyline | - |
+| Abeta Gautier RD 1 | -120 | 2.0 | Player Prop | - |
+| Paddy Pimblett | -136 | 2.0 | Moneyline | - |
+| Ty Miller | -110 | 1.0 | Moneyline | - |
+| Charles Johnson | -114 | 1.0 | Moneyline | - |
+| Waldo Acosta | -110 | 1.0 | Moneyline | - |
+| Jean Silva | -131 | 1.0 | Moneyline | - |
+| Rose Namajunas | 315 | 1.0 | Moneyline | - |
 | Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
-| Nikita Krylov ML | -110 | 2.0 | Moneyline | - |
+| Nikita Krylov | -110 | 2.0 | Moneyline | - |
 | Figueiredo/Nurmagomedov Under 2.5 | -110 | 1.0 | Total | - |
-| Pimblett ML | -235 | 3.0 | Moneyline | - |
+| Pimblett | -235 | 3.0 | Moneyline | - |
 | (UFC) Pimblett ML / (UFC) Natalia Silva ML | -113 | 2.0 | Parlay | - |
 | (UFC) Hokit ML / (UFC) O' Malley ML | 102 | 2.0 | Parlay | - |
 | (UFC) Paddy ML / (UFC) Waldo Cortes ML | -110 | 1.0 | Parlay | - |
-| Paddy by SUB | 150 | 0.5 | Game Prop | - |
+| Paddy by SUB | 150 | 0.5 | Player Prop | - |
 | (UFC) Sean O Malley ML / (TENNIS) Alcaraz ML | -150 | 0.5 | Parlay | - |
-| Pimblett ML | -230 | 3.0 | Moneyline | - |
+| Pimblett | -230 | 3.0 | Moneyline | - |
 
 ---
 
@@ -145,10 +147,10 @@
 | :--- | :--- | :--- | :--- | :--- |
 | Arsenal DNB | -145 | 1.0 | Moneyline | - |
 | Real Madrid -1.5 AH | 105 | 1.0 | Spread | - |
-| Juventus vs AC Milan Over 2.5 Goals | -120 | 1.0 | Total | - |
+| Juventus vs AC Milan Over 2.5 | -120 | 1.0 | Total | - |
 | Sinner to win 1st Set | -130 | 1.0 | Moneyline | - |
-| Djokovic -4.5 Games vs Medvedev | -110 | 1.0 | Team Prop | - |
-| Rublev vs Zverev Over 38.5 Games | -115 | 1.0 | Total | - |
+| Djokovic -4.5 Games | -110 | 1.0 | Spread | - |
+| Rublev vs Zverev Over 38.5 | -115 | 1.0 | Total | - |
 
 ---
 
@@ -176,8 +178,8 @@
 | Luka Doncic: PRA Over 45 | -120 | 1.0 | Player Prop | - |
 | LeBron James: Rebounds Over 7.5 | -140 | 1.0 | Player Prop | - |
 | Steph Curry: Threes Over 5 | 110 | 1.0 | Player Prop | - |
-| FaZe ML | -125 | 1.0 | Moneyline | - |
-| T1 -1.5 Maps | 150 | 1.0 | Spread | - |
+| FaZe vs Navi Map 1 Winner: FaZe | -125 | 1.0 | Game Prop | - |
+| T1 -1.5 Maps vs GenG | 150 | 1.0 | Spread | - |
 
 ---
 
@@ -203,7 +205,6 @@
 | :--- | :--- | :--- | :--- | :--- |
 | Commanders +3.5 | -115 | 5.0 | Spread | - |
 | Ravens Team Total Over 24.5 | -120 | 3.0 | Team Prop | - |
-| Chiefs ML | -110 | 2.0 | Moneyline | - |
-| Lions -6.5 | -110 | 2.0 | Spread | - |
-| (NFL) Bengals +7.5 / (NFL) Bills +8.5 | -120 | 2.0 | Parlay | - |
+| (NFL) Chiefs ML / (NFL) Lions -6.5 | 260 | 2.0 | Parlay | - |
+| (NFL) Bengals +7.5 / (NFL) Bills +8.5 | -120 | 1.0 | Parlay | - |
 

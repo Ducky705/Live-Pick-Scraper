@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-27
 
 **Total Messages Processed:** 2
-**Total Picks Extracted:** 28
+**Total Picks Extracted:** 30
 
 ---
 
@@ -41,16 +41,18 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Oilers ML | -175 | 1.0 | Moneyline | - |
-| Magic -1.5 | -110 | 4.0 | Spread | - |
-| Minnesota +6 | -110 | 4.0 | Spread | - |
-| Wofford +2 | -110 | 3.0 | Spread | - |
-| Connecticut -10.5 | -110 | 3.0 | Spread | - |
-| (UFC) Paddy Pimblett ML / (UFC) Jean Silva ML | -110 | 5.0 | Parlay | - |
-| Georgia Tech: Total Under 144 | -110 | 3.0 | Team Prop | - |
-| Denver: Total Over 161.5 | -110 | 3.0 | Team Prop | - |
-| Oklahoma St: Total Under 163 | -110 | 3.0 | Team Prop | - |
-| Cal St Fullerton: Total Under 172.5 | -110 | 5.0 | Team Prop | - |
+| Oilers | -175 | 1.0 | Moneyline | - |
+| Magic - 1.5 | -110 | 1.0 | Spread | - |
+| Paddy Pimblett | -100 | 1.0 | Moneyline | - |
+| Jean Silva | -100 | 1.0 | Moneyline | - |
+| Georgia Tech vs Opponent Under 144 | -110 | 1.0 | Total | - |
+| Denver vs Opponent Over 161.5 | -110 | 1.0 | Total | - |
+| Oklahoma St vs Opponent Under 163 | -110 | 1.0 | Total | - |
+| Cal St Fullerton vs Opponent Under 172.5 | -110 | 1.0 | Total | - |
+| Wofford +2 | -110 | 1.0 | Spread | - |
+| Connecticut -10.5 | -110 | 1.0 | Spread | - |
+| Minnesota +6 | -110 | 1.0 | Spread | - |
+| Paddy Pimblett ML / Jean Silva ML | 100 | 1.0 | Parlay | - |
 
 ---
 
@@ -97,10 +99,10 @@
 | :--- | :--- | :--- | :--- | :--- |
 | pick | None | 1.0 | type | - |
 | Paddy “The Baddy” Pimblett ML | -205 | 4.0 | Moneyline | - |
-| Abeta Gautier ITD | -120 | 2.0 | Moneyline | - |
-| Paddy Pimblett ML | -136 | 2.0 | Moneyline | - |
-| Charles Johnson ML | -114 | 1.0 | Moneyline | - |
-| Jean Silva ML | -131 | 1.0 | Moneyline | - |
+| Abeta Gautier RD 1 | -120 | 2.0 | Spread | - |
+| Ty Miller | -114 | 1.0 | Spread | - |
+| Charles Johnson | -131 | 1.0 | Spread | - |
+| Jean Silva | -131 | 1.0 | Spread | - |
 | Rose Namajunas ML | 315 | 1.0 | Moneyline | - |
 | Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
 | Nikita Krylov ML | -110 | 2.0 | Moneyline | - |
@@ -108,8 +110,8 @@
 | Pimblett ML | -235 | 3.0 | Moneyline | - |
 | Pimblett/Natalia Silva MLP | -113 | 2.0 | Moneyline | - |
 | Hokit/O' Malley MLP | 102 | 2.0 | Moneyline | - |
-| Paddy + Waldo Cortes | -110 | 1.0 | Moneyline | - |
-| Paddy by SUB | 150 | 0.5 | Moneyline | - |
+| Paddy + Waldo Cortes | -110 | 1.0 | Spread | - |
+| Paddy by SUB | 150 | 0.5 | Spread | - |
 | Sean O Malley ML | -150 | 0.5 | Moneyline | - |
 | Alcaraz ML | -150 | 0.5 | Moneyline | - |
 | Pimblett ML | -230 | 3.0 | Moneyline | - |

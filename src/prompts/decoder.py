@@ -1222,6 +1222,10 @@ def infer_type_from_pick(pick_str: str, current_type: str) -> str:
             return "Parlay"
         return "Player Prop"
 
+    # Priority 2.1: Explicit Prop Keywords (PRA, PA, PR)
+    if re.search(r"\b(PRA|Pts\+Reb|Reb\+Ast)\b", pick_str, re.IGNORECASE):
+        return "Player Prop"
+
     # Priority 2.5: Tennis Set Spreads/Totals (often misclassified)
     # Check for "Name -1.5 sets" or "Name vs Name Over 22.5 games"
     if "sets" in pick_str.lower() or "games" in pick_str.lower():
@@ -1385,11 +1389,18 @@ def normalize_pick_format(
         "Whale",
         "Guaranteed",
         "VIP",
+        "Pick",
+        "Selection",
+        "My Play",
+        "My Pick",
     ]
     for noise in noise_prefixes:
         if result.lower().startswith(noise.lower() + " "):
             result = result[len(noise) :].strip()
             break
+
+    # Normalize "Dnb" -> "DNB" (Draw No Bet)
+    result = re.sub(r"\bDnb\b", "DNB", result, flags=re.IGNORECASE)
 
     # PRIORITY 0: Normalize Moneyline and Futures
     # Normalize "Moneyline" -> "ML", remove redundant "Money Line ML"
@@ -1477,10 +1488,20 @@ def normalize_pick_format(
         # Remove trailing odds without parens like "+105" at end
         result = re.sub(r"\s+[+-]\d{3,}$", "", result).strip()
         # Add ML suffix if not present
-        if not result.upper().endswith("ML") and not result.upper().endswith(
-            "MONEYLINE"
+        # BLOCK ML addition if it looks like a Prop (PRA, Rebounds, Threes, etc.) even if type says Moneyline
+        is_prop_text = any(
+            k in result.upper()
+            for k in ["PRA", "REB", "AST", "PTS", "THREES", "3PM", "BLOCKS", "STEALS"]
+        )
+
+        if (
+            not result.upper().endswith("ML")
+            and not result.upper().endswith("MONEYLINE")
+            and not is_prop_text
         ):
-            result = f"{result} ML"
+            # Don't add ML if it's DNB (Draw No Bet)
+            if "DNB" not in result.upper() and "DRAW NO BET" not in result.upper():
+                result = f"{result} ML"
 
     # PRIORITY 1: Normalize Team Props FIRST
     # "ORL Magic Over 114.5" -> "ORL Magic: Total Points Over 114.5"
@@ -1535,8 +1556,9 @@ def normalize_pick_format(
             result = f"{name_clean}: {stat} {side_norm} {line}"
 
         # Pattern 1: Name Num+ STAT (e.g., "Luka Doncic 23+ PTS")
+        # Also handle trailing ML/Moneyline noise
         plus_pattern = re.compile(
-            r"^([\(\)A-Za-z\s\.\-\']+)\s+(\d+)\+\s*(\w+)$", re.IGNORECASE
+            r"^([\(\)A-Za-z\s\.\-\']+)\s+(\d+)\+\s*(\w+)(?:\s*ML)?$", re.IGNORECASE
         )
         match = plus_pattern.match(result)
         if match:
@@ -1548,6 +1570,7 @@ def normalize_pick_format(
             # Convert 23+ to Over 22.5
             over_line = float(num) - 0.5
             result = f"{name_clean}: {stat.capitalize()} Over {over_line}"
+
         else:
             # Pattern 2: Name STAT Num+ (e.g., "LeBron Points 25+")
             alt_pattern = re.compile(

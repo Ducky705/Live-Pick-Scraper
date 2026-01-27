@@ -55,9 +55,18 @@ class RuleBasedExtractor:
                 continue
 
             # 2. Check for "Parlay" keyword - Multiline parlays are hard for regex
-            # If we see "Parlay" but don't find a slash-separated parlay line,
-            # it's likely a complex multi-line parlay. Defer to AI.
-            has_parlay_keyword = "parlay" in full_text.lower()
+            # If we see "Parlay" or "Teaser", it's likely a complex multi-line parlay.
+            # Rule-Based extraction is poor at grouping these (it splits them).
+            # STRATEGY: Defer ALL Parlays/Teasers to AI to ensure correct grouping.
+            has_parlay_keyword = (
+                "parlay" in full_text.lower() or "teaser" in full_text.lower()
+            )
+            if has_parlay_keyword:
+                remaining_messages.append(msg)
+                logger.debug(
+                    f"[RuleBased] Msg {msg_id} has Parlay/Teaser keyword. Deferring to AI."
+                )
+                continue
 
             # 3. Line-by-line extraction
             lines = full_text.split("\n")
@@ -67,6 +76,23 @@ class RuleBasedExtractor:
                 line = line.strip()
                 if not line:
                     continue
+
+                # CLEANUP: Remove common noise prefixes and bad characters
+                # Remove "Pick:", "Selection:", "My Pick:"
+                line = re.sub(
+                    r"^(?:Pick|Selection|My Pick|My Play):\s*",
+                    "",
+                    line,
+                    flags=re.IGNORECASE,
+                )
+                # Remove quotes and unicode garbage
+                line = (
+                    line.strip("\"'")
+                    .replace("\u00a0", " ")
+                    .replace("\ufffd", "")
+                    .replace("", "")
+                )
+                line = line.strip()
 
                 # Skip likely noise
                 if line.lower().startswith(("http", "www", "t.me", "@")):
@@ -101,7 +127,7 @@ class RuleBasedExtractor:
 
                         # Convert to standard dict format
                         pick_dict = RuleBasedExtractor._to_pick_dict(
-                            parsed, msg_id, line, units
+                            parsed, str(msg_id) if msg_id else "unknown", line, units
                         )
 
                         # Add metadata

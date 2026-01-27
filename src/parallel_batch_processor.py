@@ -39,9 +39,9 @@ PROVIDER_CONFIG = {
     "groq": {
         "model": "llama-3.1-8b-instant",  # Iteration 3: Switch to 8b for speed/limits
         "rpm": 500,  # Much higher limits for 8b
-        "tpm": 40000,  # Higher TPM limits
-        "max_concurrent": 8,  # Increase concurrency
-        "min_delay": 0.2,  # Faster pacing
+        "tpm": 30000,  # Lowered to 30k for safety (Free Tier)
+        "max_concurrent": 2,  # Reduced from 4 to 2 to stay under TPM limit (20k tokens safe zone)
+        "min_delay": 0.5,  # Slower pacing (120 RPM max) to respect limits
         "priority": 1,  # PRIMARY provider
     },
     "mistral": {
@@ -65,7 +65,7 @@ PROVIDER_CONFIG = {
         "model": "gemini-2.0-flash-lite-preview-02-05",  # Updated model
         "rpm": 15,  # 15 requests per minute
         "tpm": 250000,  # 250K TPM
-        "max_concurrent": 3,  # 15 RPM / 60 = 0.25/sec
+        "max_concurrent": 2,  # Reduced from 3 to 2 for safety
         "min_delay": 4.0,  # 4s between requests
         "batch_size": 5,  # Bundle 5 messages per call
         "priority": 4,

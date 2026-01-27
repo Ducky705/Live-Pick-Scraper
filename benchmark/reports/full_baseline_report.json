@@ -1,9 +1,9 @@
 {
   "performance": {
-    "duration": 24.873728036880493,
-    "requests": 4,
-    "avg_latency": 6.2068076729774475,
-    "tokens_estimated": 763.5
+    "duration": 60.3402214050293,
+    "requests": 39,
+    "avg_latency": 6.941618130757258,
+    "tokens_estimated": 7282.0
   },
   "accuracy": {
     "total_messages": 2,
@@ -146,28 +146,33 @@
         ],
         "judge_capper": "Unknown",
         "scraper_picks": [
-          "Edmonton Oilers ML",
-          "Orlando Magic -1.5",
+          "Oilers ML",
+          "Magic -1.5",
           "Minnesota +6",
           "Wofford +2",
           "Connecticut -10.5",
           "(UFC) Paddy Pimblett ML / (UFC) Jean Silva ML",
           "Georgia Tech: Points Under 144",
           "Denver: Points Over 161.5",
-          "Oklahoma State: Points Under 163",
-          "Cal State Fullerton: Points Under 172.5"
+          "Oklahoma St: Points Under 163",
+          "Cal St Fullerton: Points Under 172.5"
         ],
         "scraper_cappers": [
-          "Big Al",
           "Tokyo Brandon",
           "Kyle Anthony",
+          "Big Al",
           "Kyle Hunter"
         ],
         "matched_picks": [
           {
+            "judge": "Oilers -175",
+            "scraper": "Oilers ML",
+            "similarity": 0.7
+          },
+          {
             "judge": "Magic -1.5",
-            "scraper": "Orlando Magic -1.5",
-            "similarity": 0.7142857142857143
+            "scraper": "Magic -1.5",
+            "similarity": 1.0
           },
           {
             "judge": "Minnesota +6",
@@ -201,27 +206,23 @@
           },
           {
             "judge": "Oklahoma St UNDER 163",
-            "scraper": "Oklahoma State: Points Under 163",
-            "similarity": 0.7924528301886793
+            "scraper": "Oklahoma St: Points Under 163",
+            "similarity": 0.84
           },
           {
             "judge": "Cal St Fullerton UNDER 172.5",
-            "scraper": "Cal State Fullerton: Points Under 172.5",
-            "similarity": 0.835820895522388
+            "scraper": "Cal St Fullerton: Points Under 172.5",
+            "similarity": 0.875
           }
         ],
-        "false_negatives": [
-          "Oilers -175"
-        ],
-        "false_positives": [
-          "Edmonton Oilers ML"
-        ],
-        "status": "partial_match"
+        "false_negatives": [],
+        "false_positives": [],
+        "status": "perfect_match"
       }
     ],
     "summary": {
-      "perfect_match": 0,
-      "partial_match": 2,
+      "perfect_match": 1,
+      "partial_match": 1,
       "missed_picks": 0,
       "extra_picks": 0,
       "false_negative": 0,
@@ -234,31 +235,22 @@
         "message_id": "12806",
         "pick": "Paddy Pimblett Moneyline",
         "judge_capper": "Unknown"
-      },
-      {
-        "message_id": "12793",
-        "pick": "Oilers -175",
-        "judge_capper": "Unknown"
       }
     ],
     "all_false_positives": [
       {
         "message_id": "12806",
         "pick": "Paddy + Waldo Cortes 1U ML"
-      },
-      {
-        "message_id": "12793",
-        "pick": "Edmonton Oilers ML"
       }
     ],
     "metrics": {
-      "accuracy": 0.0,
-      "recall": 0.0,
+      "accuracy": 50.0,
+      "recall": 50.0,
       "precision": 100.0,
       "total_picks_expected": 25,
       "total_picks_found": 25,
-      "total_missed": 2,
-      "total_false_positives": 2
+      "total_missed": 1,
+      "total_false_positives": 1
     }
   }
 }

@@ -22,8 +22,23 @@ def normalize_string(s):
     s = str(s).lower()
     # Replace common separators with space
     s = s.replace("/", " ").replace("-", " ").replace(":", " ").replace("|", " ")
-    # Remove quotes
-    s = s.replace("'", "").replace('"', "").replace("“", "").replace("”", "")
+    # Remove quotes and parentheses
+    s = (
+        s.replace("'", "")
+        .replace('"', "")
+        .replace("“", "")
+        .replace("”", "")
+        .replace("(", "")
+        .replace(")", "")
+    )
+
+    # Remove common betting noise
+    s = (
+        s.replace(" vs ", " ")
+        .replace(" versus ", " ")
+        .replace(" @ ", " ")
+        .replace(" games", "")
+    )
 
     # Normalizations
     s = s.replace("dnb", "draw no bet")
@@ -43,7 +58,18 @@ def fuzzy_match(expected, actual):
     act_tokens = set(act_pick_raw.split())
 
     # Remove common filler words
-    stop_words = {"the", "a", "an", "bet", "pick", "prediction", "of", "in"}
+    stop_words = {
+        "the",
+        "a",
+        "an",
+        "bet",
+        "pick",
+        "prediction",
+        "of",
+        "in",
+        "ml",
+        "moneyline",
+    }
     exp_tokens -= stop_words
     act_tokens -= stop_words
 
@@ -54,15 +80,6 @@ def fuzzy_match(expected, actual):
     if not exp_tokens:
         return False
     ratio = len(intersection) / len(exp_tokens)
-
-    # Handle "ML" vs "Moneyline" alias
-    ml_alias = {"ml", "moneyline"}
-    has_ml_exp = not exp_tokens.isdisjoint(ml_alias)
-    has_ml_act = not act_tokens.isdisjoint(ml_alias)
-
-    # If explicit type mismatch (e.g. one says spread, other says ML), that's bad.
-    # But usually simple token overlap covers it.
-    # Let's require > 50% overlap of tokens OR (containment if short).
 
     pick_match = (
         (ratio >= 0.5)
@@ -79,6 +96,14 @@ def fuzzy_match(expected, actual):
         "soccer": ["epl", "la liga", "serie a", "bundesliga", "ucl", "mls"],
         "ncaab": ["college basketball", "cbb"],
         "ncaaf": ["college football", "cfb"],
+        "tennis": [
+            "atp",
+            "wta",
+            "us open",
+            "wimbledon",
+            "french open",
+            "australian open",
+        ],
     }
 
     # Check map

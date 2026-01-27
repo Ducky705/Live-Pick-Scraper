@@ -1,0 +1,48 @@
+{
+  "title": "Telegram Scraper Reliability Enhancement: Closing the 15% Recall Gap",
+  "version": "2.1.0",
+  "status": "Proposed",
+  "last_updated": "2026-01-27",
+  "context": {
+    "background": "Recent 10-iteration stabilization loop improved recall from 0% to 85%. A 15% gap remains due to 'Over-Confident Heuristics'.",
+    "problem_statement": "The system misses ~15% of picks because the rule-based extractor (score > 8.5) short-circuits AI refinement for complex messages (The 'Confidence Trap')."
+  },
+  "objectives": [
+    "Identify specific messages constituting the 15% recall gap.",
+    "Implement dynamic thresholding to eliminate 'Confidence Trap' failures.",
+    "Prevent regressions via Golden Set expansion."
+  ],
+  "functional_requirements": [
+    {
+      "id": "FR-001",
+      "name": "Granular Failure Audit",
+      "description": "Isolate and categorize the specific messages missing from the current 85% recall baseline.",
+      "tasks": [
+        "Analyze Iterations 6-8 logs.",
+        "Categorize failures (e.g., complex teasers, channel formats)."
+      ],
+      "priority": "High"
+    },
+    {
+      "id": "FR-002",
+      "name": "Dynamic Confidence Thresholding",
+      "description": "Implement 'Context Check' logic to force AI fallback based on semantic heuristics.",
+      "logic": "IF (RegexScore > 8.5) AND (ContextCheckFails) THEN ForceAIFallback",
+      "priority": "Critical"
+    },
+    {
+      "id": "FR-003",
+      "name": "Golden Set Expansion",
+      "description": "Update the golden set with identified edge cases.",
+      "tasks": [
+        "Add '15% gap' messages to `new_golden_set.json`.",
+        "Verify regression tests."
+      ],
+      "priority": "High"
+    }
+  ],
+  "success_metrics": {
+    "recall": "> 95% on expanded Golden Set.",
+    "reliability": "Zero 'Confidence Trap' failures."
+  }
+}

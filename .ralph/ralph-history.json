@@ -2,235 +2,26 @@
   "iterations": [
     {
       "iteration": 1,
-      "startedAt": "2026-01-27T10:43:57.160Z",
-      "endedAt": "2026-01-27T10:48:30.979Z",
-      "durationMs": 244640,
+      "startedAt": "2026-01-27T17:03:57.928Z",
+      "endedAt": "2026-01-27T17:07:00.756Z",
+      "durationMs": 103828,
       "toolsUsed": {
         "Bash": 2,
-        "Grep": 2,
-        "Read": 3,
-        "Glob": 1,
-        "webfetch": 2,
-        "Edit": 2
+        "mgrep": 1,
+        "Read": 5
       },
       "filesModified": [
-        "src/groq_client.py",
-        "src/openrouter_client.py"
+        "data/output/verification_report_2026-01-24.md"
       ],
-      "exitCode": 0,
-      "completionDetected": false,
-      "errors": [
-        "2026-01-27 11:46:01,062 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-instruct:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
-        "2026-01-27 11:46:01,525 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
-        "2026-01-27 11:46:01,892 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
-        "2026-01-27 11:46:04,377 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-instruct:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
-        "2026-01-27 11:46:04,829 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
-        "2026-01-27 11:46:05,184 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
-        "2026-01-27 11:46:05,185 - ERROR - [OpenRouter] All 2 cycles failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
-        "2026-01-27 11:46:05,185 - ERROR - [OCR Cascade] OpenRouter error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions"
-      ]
-    },
-    {
-      "iteration": 2,
-      "startedAt": "2026-01-27T10:49:02.149Z",
-      "endedAt": "2026-01-27T11:01:53.389Z",
-      "durationMs": 740851,
-      "toolsUsed": {
-        "Bash": 13,
-        "Grep": 1,
-        "Read": 9,
-        "Write": 1,
-        "Edit": 11
-      },
-      "filesModified": [
-        "data/output/verification_report_2026-01-24.md",
-        "AGENCY_REPORT.md",
-        "src/groq_client.py",
-        "src/openrouter_client.py",
-        "verify_golden_set.py"
-      ],
-      "exitCode": 0,
-      "completionDetected": false,
-      "errors": [
-        "+        \"2026-01-27 11:46:01,062 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-instruct:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/comp",
-        "+        \"2026-01-27 11:46:01,525 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions\",",
-        "+        \"2026-01-27 11:46:01,892 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions\",",
-        "+        \"2026-01-27 11:46:04,377 - WARNING - [OpenRouter] Request error with meta-llama/llama-3.2-11b-vision-instruct:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/comp",
-        "+        \"2026-01-27 11:46:04,829 - WARNING - [OpenRouter] Request error with mistralai/devstral-2512:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions\",",
-        "+        \"2026-01-27 11:46:05,184 - WARNING - [OpenRouter] Request error with tngtech/deepseek-r1t2-chimera:free: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions\",",
-        "+        \"2026-01-27 11:46:05,185 - ERROR - [OpenRouter] All 2 cycles failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions\",",
-        "+        \"2026-01-27 11:46:05,185 - ERROR - [OCR Cascade] OpenRouter error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions\"",
-        "+      \"2026-01-27 11:46:05,185 - ERROR - [OpenRouter] All 2 cycles failed. Last error: 404 Client Error: No\": 1,",
-        "+      \"2026-01-27 11:46:05,185 - ERROR - [OCR Cascade] OpenRouter error: 404 Client Error: Not Found for ur\": 1"
-      ]
-    },
-    {
-      "iteration": 3,
-      "startedAt": "2026-01-27T11:02:24.065Z",
-      "endedAt": "2026-01-27T11:14:48.319Z",
-      "durationMs": 712835,
-      "toolsUsed": {
-        "Bash": 9,
-        "Grep": 1,
-        "Read": 12,
-        "Edit": 7,
-        "Write": 3
-      },
-      "filesModified": [
-        "AGENCY_REPORT.md",
-        "data/output/verification_report_2026-01-24.md",
-        "src/grading/parser.py",
-        "test_parser.py"
-      ],
-      "exitCode": 0,
-      "completionDetected": false,
-      "errors": [
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769511838.8840668)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769511838.8840668)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769512132.5218716)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769512132.5218716)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769512406.5322793)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769512406.5322793)"
-      ]
-    },
-    {
-      "iteration": 4,
-      "startedAt": "2026-01-27T11:15:18.600Z",
-      "endedAt": "2026-01-27T11:47:19.855Z",
-      "durationMs": 1893910,
-      "toolsUsed": {
-        "Bash": 18,
-        "Read": 18,
-        "Write": 2,
-        "Edit": 21
-      },
-      "filesModified": [
-        "AGENCY_REPORT.md",
-        "data/output/verification_report_2026-01-24.md",
-        "src/extraction_pipeline.py",
-        "src/multi_pick_validator.py",
-        "src/rule_based_extractor.py",
-        "tests/run_production_simulation.py",
-        "reproduce_issue.py"
-      ],
-      "exitCode": 0,
-      "completionDetected": false,
-      "errors": [
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769512714.089519)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769512714.089519)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769512839.8168125)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769512839.8168125)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769512987.7292697)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769512987.7292697)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769513109.562376)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown until 1769513109.562376)",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769513219.5239534)"
-      ]
-    },
-    {
-      "iteration": 5,
-      "startedAt": "2026-01-27T11:47:48.695Z",
-      "endedAt": "2026-01-27T11:48:26.839Z",
-      "durationMs": 10646,
-      "toolsUsed": {},
-      "filesModified": [],
-      "exitCode": 0,
-      "completionDetected": false,
-      "errors": []
-    },
-    {
-      "iteration": 6,
-      "startedAt": "2026-01-27T11:48:56.096Z",
-      "endedAt": "2026-01-27T11:54:07.376Z",
-      "durationMs": 282850,
-      "toolsUsed": {
-        "Glob": 2,
-        "Bash": 4,
-        "Read": 9,
-        "Grep": 1,
-        "Edit": 4,
-        "Write": 1
-      },
-      "filesModified": [
-        "src/grading/parser.py",
-        "tests/run_production_simulation.py",
-        "debug_score.py"
-      ],
-      "exitCode": 0,
-      "completionDetected": false,
-      "errors": [
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429",
-        "UnicodeEncodeError: 'charmap' codec can't encode character '\\u2b50' in position 70: character maps to <undefined>",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769514720.2689824)"
-      ]
-    },
-    {
-      "iteration": 7,
-      "startedAt": "2026-01-27T11:54:37.522Z",
-      "endedAt": "2026-01-27T11:55:27.152Z",
-      "durationMs": 21513,
-      "toolsUsed": {},
-      "filesModified": [],
-      "exitCode": 0,
-      "completionDetected": false,
-      "errors": []
-    },
-    {
-      "iteration": 8,
-      "startedAt": "2026-01-27T11:55:56.029Z",
-      "endedAt": "2026-01-27T12:00:07.288Z",
-      "durationMs": 222472,
-      "toolsUsed": {
-        "Bash": 6,
-        "Grep": 1,
-        "Read": 5,
-        "Edit": 1,
-        "Write": 1
-      },
-      "filesModified": [
-        "data/output/verification_report_2026-01-24.md",
-        "AGENCY_REPORT.md",
-        "src/rule_based_extractor.py"
-      ],
-      "exitCode": 0,
-      "completionDetected": false,
-      "errors": [
-        "1.  **Diagnosis:** Ran `tests/run_production_simulation.py` and observed a Recall drop to **77.5%**. Complex messages (e.g., 15-fight UFC cards) were being \"handled\" by the Rule-Based extractor, but i",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429",
-        "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Groq Rate limit 429"
-      ]
-    },
-    {
-      "iteration": 9,
-      "startedAt": "2026-01-27T12:00:36.652Z",
-      "endedAt": "2026-01-27T12:01:33.226Z",
-      "durationMs": 27901,
-      "toolsUsed": {
-        "mgrep": 1
-      },
-      "filesModified": [],
-      "exitCode": 0,
-      "completionDetected": false,
-      "errors": []
-    },
-    {
-      "iteration": 10,
-      "startedAt": "2026-01-27T12:02:02.381Z",
-      "endedAt": "2026-01-27T12:02:39.897Z",
-      "durationMs": 10112,
-      "toolsUsed": {},
-      "filesModified": [],
       "exitCode": 0,
       "completionDetected": false,
       "errors": []
     }
   ],
-  "totalDurationMs": 4167730,
+  "totalDurationMs": 103828,
   "struggleIndicators": {
     "repeatedErrors": {},
-    "noProgressIterations": 2,
-    "shortIterations": 2
+    "noProgressIterations": 0,
+    "shortIterations": 0
   }
 }

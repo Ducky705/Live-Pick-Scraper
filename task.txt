@@ -1,0 +1,15 @@
+Based on the summary provided, here is the analysis of the 10-iteration stabilization loop:
+1. Architectural Validation (The Hybrid Model)
+The jump from 0% to 87.5% (Iteration 2) confirms the Hybrid Extraction Architecture (Rule-Based + AI Fallback) is sound. The initial failure was purely infrastructural (API keys/Client Config), not logical. Once connectivity was established, the baseline performance was immediately high.
+2. The "Confidence Trap" (Iterations 6-8)
+The most critical insight occurred here. The regression to 77.5% reveals a classic vulnerability in hybrid systems: Over-Confident Heuristics.
+*   The Issue: The Rule-Based extractor was rating itself 9.5/10, effectively "short-circuiting" the pipeline and preventing the AI from refining complex messages.
+*   The Fix: Lowering the threshold to 8.5 was the correct mechanical adjustment, re-enabling the "Safety Net" behavior of the AI for edge cases.
+3. The 15% Gap
+Stabilizing at 85% Recall is a functional MVP, but in a betting context, missing 15% of picks is significant.
+*   Implication: The remaining failures likely fall into the "Uncanny Valley" of confidence—high enough to pass the rule-based check (score > 8.5), but structurally flawed enough to result in a bad parse.
+*   Risk: The system is currently sensitive to the specific value of 8.5. A slight change in input formatting could shift scores up, bypassing the AI again.
+Recommended Next Steps
+1.  Granular Failure Audit: Isolate the specific messages constituting the missing 15%. Are they a specific bet type (e.g., complex teasers) or a specific telegram channel format?
+2.  Dynamic Thresholding: Instead of a hard 8.5 cutoff, consider implementing a "Context Check" (e.g., if Units are missing or Odds look like dates, force AI fallback regardless of regex confidence).
+3.  Golden Set Expansion: The "verified golden set" logic was patched in Iteration 2. Ensure this set covers the edge cases discovered in Iterations 6-8 to prevent future regressions

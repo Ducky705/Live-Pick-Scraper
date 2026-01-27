@@ -53,3 +53,11 @@
 - **Next Steps:**
     - Consider `batch_size=2` if speed becomes an issue, but 1 is safest for 8b models.
     - Investigate why Groq hits 429 so aggressively even with low input tokens (likely a strict TPM or Daily limit on the free tier).
+
+### 15. Ralph Loop - Iteration 9 (The Visual Cortex)
+- **Goal:** Establish a high-performance Visualization Layer (Frontend) to monitor scraper throughput, accuracy, and rate limits in real-time.
+- **Actions:**
+    - **Architecture:** Initialize React + Vite + Tailwind CSS stack.
+    - **Design:** "Avant-Garde" Terminal/Cyberpunk aesthetic for high-density data visualization.
+    - **Integration:** Map `data/picks_*.json` schema to UI components.
+- **Status:** In Progress.

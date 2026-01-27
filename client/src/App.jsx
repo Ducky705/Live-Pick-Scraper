@@ -74,8 +74,8 @@ export default function App() {
               <Terminal className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight font-mono">RALPH LOOP // <span className="text-primary">ITERATION 9</span></h1>
-              <p className="text-muted-foreground text-sm font-mono">CORTEX VISUALIZER // V0.0.9</p>
+              <h1 className="text-2xl font-bold tracking-tight font-mono">RALPH LOOP // <span className="text-primary">ITERATION 15</span></h1>
+              <p className="text-muted-foreground text-sm font-mono">CORTEX VISUALIZER // V0.0.15</p>
             </div>
           </div>
           <div className="flex gap-4">

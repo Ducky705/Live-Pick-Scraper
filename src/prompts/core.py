@@ -129,6 +129,7 @@ CRITICAL TYPE RULES:
 -If pick has single team Over/Under (no opponent): t=TP (Team Prop), e.g., "Magic Over 114.5"
 -Parlay 1, Parlay 2, etc. are SEPARATE picks with t=PL
 -CRITICAL: "Team1 + Team2 (-140)" = Parlay with 2 legs, not single ML
+-PARLAY HEADERS: If text says "2-Team Parlay" or "Parlay:", combine the lines below into ONE pick (t=PL) with " / ". Do NOT separate.
 
 PARLAY LEAGUE RULES:
 -If ALL legs are same league (e.g., all NBA), set l=NBA (NOT Other).
@@ -235,14 +236,13 @@ Extract betting picks from data below.
 
 RULES:
 1.c=capper from header/username/CAPPER: tag. Check FIRST LINE of [CONTENT] for name. Ignore "Content"/"Caption".
-2.o=American odds int(-110,+150) or null if not visible. DO NOT GUESS -110.
-
+2.o=American odds int(-110,+150). Extract "Team -175" -> o=-175. NO parentheses needed.
 3.u=units float. CHECK HEADERS (e.g."10U MAX"). Default 1.
 4.Separate picks per capper.
 5.Period bets:if text has 1H/1Q/F5/P1, t=PD.
 6.Parlay:each leg prefixed with (LEAGUE).
 7.Reasoning:Add 1 sentence "r".
-8.LISTS: Scan FULL message. Extract items 1 to N. EACH LINE IS A SEPARATE PICK. Do NOT parlay them unless it says "Parlay".
+8.LISTS: Scan FULL message. Extract items 1 to N. EACH LINE IS A SEPARATE PICK. Do NOT parlay them unless it says "Parlay" OR is under a PARLAY header.
 
 9.SPLIT PICKS: "Team +8 & ML" = 2 picks.
 10.Tennis: NO "ML" on sets/games.

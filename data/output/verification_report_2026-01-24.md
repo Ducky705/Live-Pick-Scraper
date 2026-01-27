@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-24
 
 **Total Messages Processed:** 5
-**Total Picks Extracted:** 42
+**Total Picks Extracted:** 43
 
 ---
 
@@ -97,19 +97,19 @@
 | :--- | :--- | :--- | :--- | :--- |
 | Paddy “The Baddy” Pimblett | -205 | 4.0 | Moneyline | - |
 | Abeta Gautier RD 1 | -120 | 2.0 | Team Prop | - |
-| Ty Miller | -114 | 1.0 | Moneyline | - |
-| Charles Johnson | -131 | 1.0 | Moneyline | - |
-| Waldo Acosta | -131 | 1.0 | Moneyline | - |
+| (UFC) Abeta Gautier ITD / (UFC) Paddy Pimblett | -136 | 2.0 | Parlay | - |
+| (UFC) Ty Miller / (UFC) Charles Johnson | -114 | 1.0 | Parlay | - |
+| (UFC) Waldo Acosta / (UFC) Jean Silva | -131 | 1.0 | Parlay | - |
 | Rose Namajunas | 315 | 1.0 | Moneyline | - |
 | Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
 | Nikita Krylov | -110 | 2.0 | Moneyline | - |
 | Figueiredo/Nurmagomedov Under 2.5 | -110 | 1.0 | Total | - |
 | Pimblett | -235 | 3.0 | Moneyline | - |
-| (UFC) Pimblett ML / (UFC) Natalia Silva ML | -113 | 2.0 | Parlay | - |
-| (UFC) Hokit ML / (UFC) O' Malley ML | 102 | 2.0 | Parlay | - |
-| (UFC) Paddy ML / (UFC) Waldo Cortes ML | -110 | 1.0 | Parlay | - |
+| (UFC) Pimblett / (UFC) Natalia Silva | -113 | 2.0 | Parlay | - |
+| (UFC) Hokit / (UFC) O' Malley | 102 | 2.0 | Parlay | - |
+| (UFC) Paddy / (UFC) Waldo Cortes | -110 | 1.0 | Parlay | - |
 | Paddy by SUB | 150 | 0.5 | Team Prop | - |
-| (UFC) Sean O Malley ML / (TENNIS) Alcaraz ML | -150 | 0.5 | Parlay | - |
+| (UFC) Sean O Malley / (TENNIS) Alcaraz | -150 | 0.5 | Parlay | - |
 | Pimblett | -230 | 3.0 | Moneyline | - |
 
 ---
@@ -206,4 +206,5 @@
 | Chiefs ML | None | 2.0 | Moneyline | - |
 | Lions -6.5 | None | 1.0 | Spread | - |
 | (NFL) Bengals +7.5 / (NFL) Bills +8.5 | -120 | 2.0 | Parlay | - |
+| (NFL) Chiefs ML / (NFL) Lions -6.5 | 260 | 2.0 | Parlay | - |
 

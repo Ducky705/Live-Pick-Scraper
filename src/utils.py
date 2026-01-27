@@ -448,6 +448,9 @@ def clean_text_for_ai(text):
     text = text.replace("½", ".5")
     text = text.replace("1/2", ".5")  # Simple fraction replacement
 
+    # 8. Normalize Double Chance / OR separators
+    text = text.replace("||", " / ")
+
     return text[:2500]  # Safe clamp
 
 

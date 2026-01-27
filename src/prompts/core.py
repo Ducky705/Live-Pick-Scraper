@@ -110,73 +110,21 @@ TYPES:ML,SP,TL,PP,TP,GP,PD,PL,TS,FT,UK
 LEAGUES:NFL,NCAAF,NBA,NCAAB,WNBA,MLB,NHL,EPL,MLS,UCL,UFC,PFL,TENNIS,SOCCER,PGA,F1,Other"""
 
 # Pick format rules (compressed from 100+ line formatting guide)
-PICK_FORMAT_RULES = """PICK FORMATS:
+PICK_FORMAT_RULES = """FORMATS:
 ML=Team ML|SP=Team -7.5|TL=Team A vs B O/U X
-PP=Name: Stat O/U X|TP=Team: Stat O/U X|GP=Team/Event: Period/Prop Type
-PD=1H Team -5 OR 1H Team vs Team O/U X (MUST start with 1H/1Q)|PL=(LG) Leg1 / (LG) Leg2|FT=Event: Selection
-TENNIS:Name ML|Name +/-X sets|Name +/-X games|A vs B O/U X games
-PERIOD TRIGGERS:1H,2H,1Q,2Q,3Q,4Q,F5,F3,P1,P2,P3,"First Half","First 5"
-STATS:Pts,Reb,Ast,PRA,PassYds,RushYds,RecYds,PassTD,Rec,K,H,HR,RBI,SOG,G,A
-
-CRITICAL TYPE RULES:
--If pick has "Team -7" or "Team +3.5" (number after team): t=SP (Spread), NOT ML
--If pick has "ML" explicitly: t=ML
--If pick has "Over X" or "Under X" with two teams: t=TL (Total)
--CRITICAL: "Lakers/Clippers Under 222.5" is t=TL (Total), NOT Parlay! The "/" is a matchup separator
--CRITICAL: "William & Mary ML" is ONE team (college), NOT a parlay! "&" is part of the name
--COMPOUND TEAM NAMES (NOT parlays): William & Mary, Texas A&M, Simon Fraser
--If pick has "Team A / Team B" with ML/Spread for EACH: t=PL (Parlay)
--If pick has single team Over/Under (no opponent): t=TP (Team Prop), e.g., "Magic Over 114.5"
--Parlay 1, Parlay 2, etc. are SEPARATE picks with t=PL
--CRITICAL: "Team1 + Team2 (-140)" = Parlay with 2 legs, not single ML
--PARLAY HEADERS: If text says "2-Team Parlay" or "Parlay:", combine the lines below into ONE pick (t=PL) with " / ". Do NOT separate.
-
-PARLAY LEAGUE RULES:
--If ALL legs are same league (e.g., all NBA), set l=NBA (NOT Other).
--If legs are mixed (NBA + NFL), set l=Other.
--ALWAYS use (LEAGUE) prefix for EVERY leg in p field, even if same league.
-
-TENNIS FORMATTING:
--Sets/Games spreads: "Name -1.5 sets" or "Name -4.5 games".
--NEVER append "ML" to set/game spreads (Invalid: "Name -1.5 sets ML").
--NEVER use "/" inside a leg description. It breaks parlay splitting.
-
-OVER/UNDER POLARITY (CRITICAL - NEVER FLIP):
--If source says "UNDER 222.5", output MUST be "Under 222.5" - NEVER change to "Over"
--If source says "OVER 150.5", output MUST be "Over 150.5" - NEVER change to "Under"
--ALWAYS preserve the EXACT polarity (Over/Under) from the source text
--This is a FATAL ERROR if flipped - bets are opposite outcomes
-
-ODDS VS SPREAD DISTINCTION:
--Numbers 100+ are American ODDS (e.g., +105, -110), NOT spreads
--"Team (+105)" means Moneyline at +105 odds, NOT spread of +105 points
--"Team +3.5" is a Spread (small number with decimal)
--"Team -7" is a Spread (single digit number)
--Put odds in "o" field, NOT in pick string
-
-GAME PROPS / PERIOD PROPS:
--"Team 60-Min ML" = Game Prop for 60-minute regulation result
--"Vegas Golden Knights 60-MIN REGULATION" = pick should be "Vegas Golden Knights 60-Min ML"
--ALWAYS include team name with period/regulation props
--Format: "Team Name: Period/Prop Type" or "Team Name Period ML"
--PERIOD BETS: MUST START WITH PERIOD (e.g. "1H George Mason -6")
-
-LIST/ENUMERATED PARSING (CRITICAL):
--ALWAYS extract ALL items from numbered/labeled lists (Parlay 1, Parlay 2, Parlay 3... Parlay 7)
--Each "Parlay N:" or numbered item (1., 2., 3.) is a SEPARATE pick row
--"Duck Parlay:" or similar labels = one parlay pick per label
--NEVER skip items in a list. If message has "Parlay 1" through "Parlay 7", output 7 picks
--SCAN ENTIRE MESSAGE - first and last items in lists are commonly missed
-
-CROSS-SPORT PARLAY RULES:
--"De Minaur/Warriors MLP" = cross-sport parlay: t=PL, l=Other, p="(TENNIS) De Minaur ML / (NBA) Warriors ML"
--MLP = Moneyline Parlay. Always t=PL
--When parlay has legs from different sports, l=Other and EACH leg gets (LEAGUE) prefix
--Tennis players: De Minaur, Alcaraz, Sinner, Djokovic, Swiatek, Gauff, etc. -> l=TENNIS
-
-MULTI-PICK STRING RULE:
--If a string contains multiple distinct picks (e.g., "Bublik ML De Minaur ML Alcaraz 3:0 Paul +1.5 sets"):
--Split into SEPARATE pick rows, one per bet. DO NOT output as single mashup string."""
+PP=Name: Stat O/U X|TP=Team: Stat O/U X|GP=Team/Event: Prop
+PD=1H Team -5|PL=(LG) Leg1 / (LG) Leg2
+RULES:
+1.Type: "Team -7"=SP. "Team ML"=ML. "Team (+105)"=ML(Odds). "Over X"=TL/TP.
+2.Totals: "Lakers/Clippers Under 222.5"=TL (Matchup Separator /).
+3.Names: "William & Mary","Texas A&M" are SINGLE TEAMS (NCAAB).
+4.Parlays: "Team A / Team B" or "Team A + Team B"=PL. "2-Team Parlay:"=Combine lines below.
+5.Split: "Parlay 1, Parlay 2" or "1., 2." are SEPARATE picks. Output ALL 1-N.
+6.Polarity: NEVER FLIP OVER/UNDER. Source "Under" -> Output "Under".
+7.Odds: >100 or <-100 are ODDS (o field). <20 are SPREADS (p string).
+8.Period: Must start with 1H/1Q. "1H Team -5".
+9.Tennis: "Name -1.5 sets" (No ML). "Name ML".
+10.Multi-Sport: l=Other. Legs get (LEAGUE) prefix. "De Minaur/Warriors"=(TENNIS)/(NBA)."""
 
 # Noise filter instruction
 NOISE_FILTER = """SKIP:VIP,WHALE,MAX BET,LOCK,80K,GUARANTEED,@watermarks,records,sportsbook names,recaps with checkmarks"""

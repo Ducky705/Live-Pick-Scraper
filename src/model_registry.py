@@ -18,10 +18,10 @@ Rate Limits Summary:
 # 1000 RPM, 250-300K TPM, 16 concurrent workers
 # =============================================================================
 GROQ_MODELS = [
-    "llama-3.3-70b-versatile",    # 280 t/s, best quality (DEFAULT)
-    "llama-3.1-8b-instant",       # 560 t/s, fastest
-    "openai/gpt-oss-120b",        # 500 t/s, GPT OSS 120B
-    "openai/gpt-oss-20b",         # 1000 t/s, GPT OSS 20B (fastest new)
+    "llama-3.3-70b-versatile",  # 280 t/s, best quality (DEFAULT)
+    "llama-3.1-8b-instant",  # 560 t/s, fastest
+    "openai/gpt-oss-120b",  # 500 t/s, GPT OSS 120B
+    "openai/gpt-oss-20b",  # 1000 t/s, GPT OSS 20B (fastest new)
 ]
 
 # =============================================================================
@@ -30,30 +30,25 @@ GROQ_MODELS = [
 # =============================================================================
 MISTRAL_MODELS = [
     # Large models
-    "mistral-large-latest",       # mistral-large-2512
-    "mistral-large-2411",         # Older large
-    
-    # Small models  
-    "mistral-small-latest",       # mistral-small-2506
-    "mistral-small-2501",         # Older small
-    "mistral-saba-2502",          # Saba variant
-    
+    "mistral-large-latest",  # mistral-large-2512
+    "mistral-large-2411",  # Older large
+    # Small models
+    "mistral-small-latest",  # mistral-small-2506
+    "mistral-small-2501",  # Older small
+    "mistral-saba-2502",  # Saba variant
     # Code models
-    "codestral-latest",           # codestral-2508 (DEFAULT for parsing)
-    "codestral-2501",             # Older codestral
-    
+    "codestral-latest",  # codestral-2508 (DEFAULT for parsing)
+    "codestral-2501",  # Older codestral
     # Mini models (fastest)
-    "ministral-8b-latest",        # ministral-8b-2512
-    "ministral-8b-2410",          # Older 8B
-    "ministral-3b-2410",          # Tiny 3B
-    
+    "ministral-8b-latest",  # ministral-8b-2512
+    "ministral-8b-2410",  # Older 8B
+    "ministral-3b-2410",  # Tiny 3B
     # MoE models
-    "open-mixtral-8x22b",         # Large MoE
-    "open-mistral-nemo",          # Nemo 12B
-    
+    "open-mixtral-8x22b",  # Large MoE
+    "open-mistral-nemo",  # Nemo 12B
     # Vision models (can do text too)
-    "pixtral-large-latest",       # pixtral-large-2411
-    "pixtral-12b-2409",           # Smaller pixtral
+    "pixtral-large-latest",  # pixtral-large-2411
+    "pixtral-12b-2409",  # Smaller pixtral
 ]
 
 # =============================================================================
@@ -61,10 +56,10 @@ MISTRAL_MODELS = [
 # 10-15 RPM, 250K TPM, 3 concurrent workers
 # =============================================================================
 GEMINI_MODELS = [
-    "gemini-2.5-flash-lite",      # 15 RPM - highest (DEFAULT)
-    "gemini-2.5-flash",           # 10 RPM
-    "gemini-2.0-flash",           # 10 RPM
-    "gemini-2.0-flash-lite",      # Gemini 2.0 Flash-Lite
+    "gemini-2.5-flash-lite",  # 15 RPM - highest (DEFAULT)
+    "gemini-2.5-flash",  # 10 RPM
+    "gemini-2.0-flash",  # 10 RPM
+    "gemini-2.0-flash-lite",  # Gemini 2.0 Flash-Lite
 ]
 
 # =============================================================================
@@ -72,10 +67,10 @@ GEMINI_MODELS = [
 # 30 RPM, 60K TPM, 2 concurrent workers
 # =============================================================================
 CEREBRAS_MODELS = [
-    "llama-3.3-70b",              # Best quality (~2100 t/s)
-    "llama3.1-8b",                # Fast (~2200 t/s)
-    "qwen-3-32b",                 # Qwen 3 32B (~2600 t/s)
-    "gpt-oss-120b",               # GPT OSS 120B (~3000 t/s)
+    "llama-3.3-70b",  # Best quality (~2100 t/s)
+    "llama3.1-8b",  # Fast (~2200 t/s)
+    "qwen-3-32b",  # Qwen 3 32B (~2600 t/s)
+    "gpt-oss-120b",  # GPT OSS 120B (~3000 t/s)
 ]
 
 # =============================================================================
@@ -83,28 +78,24 @@ CEREBRAS_MODELS = [
 # NOT RECOMMENDED for speed-critical operations
 # =============================================================================
 OPENROUTER_MODELS = [
-    # DeepSeek (reasoning model - slow but accurate)
-    "deepseek/deepseek-r1-0528:free",
-    
+    # DeepSeek
+    "deepseek/deepseek-r1:free",  # R1 (Reasoning) - Very smart, can be slow
+    "deepseek/deepseek-r1-distill-llama-70b:free",
     # Meta Llama
     "meta-llama/llama-3.3-70b-instruct:free",
     "meta-llama/llama-3.1-405b-instruct:free",
-    
     # Google Gemma/Gemini
+    "google/gemini-2.0-flash-lite-preview-02-05:free",  # NEW: Flash Lite 2.0
     "google/gemini-2.0-flash-exp:free",
     "google/gemma-3-27b-it:free",
     "google/gemma-3-12b-it:free",
-    
     # NVIDIA
     "nvidia/nemotron-3-nano-30b-a3b:free",
-    
     # Arcee
     "arcee-ai/trinity-mini:free",
-    
     # Mistral (via OpenRouter)
     "mistralai/mistral-small-3.1-24b-instruct:free",
     "mistralai/devstral-2512:free",
-    
     # Moonshot
     "moonshotai/kimi-k2:free",
 ]
@@ -117,8 +108,9 @@ MODEL_REGISTRY = {
     "mistral": MISTRAL_MODELS,
     "groq": GROQ_MODELS,
     "cerebras": CEREBRAS_MODELS,
-    "openrouter": OPENROUTER_MODELS
+    "openrouter": OPENROUTER_MODELS,
 }
+
 
 def get_all_models():
     """Return a flat list of all (provider, model) tuples."""
@@ -128,9 +120,11 @@ def get_all_models():
             all_models.append((provider, model))
     return all_models
 
+
 def get_models_for_provider(provider: str):
     """Return list of models for a specific provider."""
     return MODEL_REGISTRY.get(provider, [])
+
 
 def count_models():
     """Return total count of registered models."""

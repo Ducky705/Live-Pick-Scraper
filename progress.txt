@@ -2,3 +2,4 @@
 Started: 2026-01-27 16:05:50.503673
 ---
 Iteration 5: 85.00% Accuracy (Baseline Restored). Validator Rigidity and Parlay Grouping addressed.
+Iteration 6: 90.00% Accuracy. Validator improved (League Mapping for Tennis, Token Noise reduction).

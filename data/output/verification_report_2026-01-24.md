@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-24
 
 **Total Messages Processed:** 2
-**Total Picks Extracted:** 25
+**Total Picks Extracted:** 27
 
 ---
 
@@ -41,16 +41,18 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Oilers ML | -175 | 1.0 | Moneyline | - |
-| Magic -1.5 | -110 | 4.0 | Spread | - |
-| Minnesota +6 | -110 | 4.0 | Spread | - |
-| Wofford +2 | -110 | 3.0 | Spread | - |
-| Connecticut -10.5 | -110 | 3.0 | Spread | - |
-| (UFC) Paddy Pimblett ML / (UFC) Jean Silva ML | -110 | 5.0 | Parlay | - |
-| Georgia Tech: Points Under 144 | -110 | 3.0 | Team Prop | - |
-| Denver: Points Over 161.5 | -110 | 3.0 | Team Prop | - |
-| Oklahoma St: Points Under 163 | -110 | 3.0 | Team Prop | - |
-| Cal St Fullerton: Points Under 172.5 | -110 | 5.0 | Team Prop | - |
+| Oilers | -175 | 1.0 | Moneyline | - |
+| Magic - 1.5 | -110 | 1.0 | Spread | - |
+| Minnesota +6 | -110 | 1.0 | Spread | - |
+| Wofford +2 | -110 | 1.0 | Spread | - |
+| Connecticut -10.5 | -110 | 1.0 | Spread | - |
+| Paddy Pimblett | -999 | 1.0 | Moneyline | - |
+| Jean Silva | -999 | 1.0 | Moneyline | - |
+| Paddy Pimblett / Jean Silva | -999 | 1.0 | Parlay | - |
+| Georgia Tech vs Opponent Under 144 | -110 | 1.0 | Total | - |
+| Denver vs Opponent Over 161.5 | -110 | 1.0 | Total | - |
+| Oklahoma St vs Opponent Under 163 | -110 | 1.0 | Total | - |
+| Cal St Fullerton vs Opponent Under 172.5 | -110 | 1.0 | Total | - |
 
 ---
 

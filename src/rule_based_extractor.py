@@ -106,7 +106,7 @@ class RuleBasedExtractor:
 
                         # Add metadata
                         pick_dict["extraction_method"] = "rule_based"
-                        pick_dict["confidence"] = 9.5  # High confidence on 0-10 scale
+                        pick_dict["confidence"] = 8.5  # High confidence on 0-10 scale
 
                         msg_picks.append(pick_dict)
 

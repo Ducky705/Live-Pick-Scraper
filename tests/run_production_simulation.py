@@ -160,8 +160,18 @@ async def run_simulation():
                     else:
                         match_status = "[GRADE MISMATCH]"
 
+                sys_odds = best_match.get("odds")
+                exp_odds = exp.get("odds")
+
+                odds_status = ""
+                if exp_odds is not None:
+                    if str(sys_odds) == str(exp_odds):
+                        odds_status = "[ODDS OK]"
+                    else:
+                        odds_status = f"[ODDS MISMATCH: {sys_odds} != {exp_odds}]"
+
                 print(
-                    f"  [MATCH {best_score:.2f}] {exp_text[:40]:<40} -> {best_match.get('pick', '')[:40]:<40} | {sys_grade} vs {verified_grade} {match_status}"
+                    f"  [MATCH {best_score:.2f}] {exp_text[:30]:<30} -> {best_match.get('pick', '')[:30]:<30} | {sys_grade} vs {verified_grade} {match_status} {odds_status}"
                 )
             else:
                 print(f"  [MISSING] {exp_text}")
@@ -174,6 +184,12 @@ async def run_simulation():
                 )
 
     # Final Stats
+    # Force ASCII for Windows console safety
+    import sys
+
+    if sys.platform == "win32":
+        sys.stdout.reconfigure(encoding="utf-8")
+
     recall = (
         (total_picks_found / total_picks_expected * 100) if total_picks_expected else 0
     )

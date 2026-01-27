@@ -104,6 +104,17 @@ class ExtractionPipeline:
         _, missing_ids = validate_and_flag_missing(messages, picks)
         reparse_ids.update(missing_ids)
 
+        # Identify messages that have at least one High Confidence (Rule-Based) pick
+        high_conf_msg_ids = set()
+        for p in picks:
+            if p.get("confidence") is not None and float(p.get("confidence", 0)) > 9.0:
+                mid = p.get("message_id")
+                if mid:
+                    try:
+                        high_conf_msg_ids.add(int(mid))
+                    except:
+                        pass
+
         # 4b. Semantic & Confidence Checks
         for p in picks:
             mid = p.get("message_id")
@@ -144,41 +155,50 @@ class ExtractionPipeline:
                         pass
 
                 # Contextual Checks
-                msg = msg_map.get(mid_int)
-                if msg:
-                    text_upper = (
-                        msg.get("text", "") + "\n" + msg.get("ocr_text", "")
-                    ).upper()
+                # Skip contextual checks if confidence is very high (Rule-Based)
+                if conf is not None and float(conf) > 9.0:
+                    pass
+                else:
+                    # If this message ALREADY has a high confidence pick, ignore low confidence issues
+                    # This prevents duplicates from AI tainting the message
+                    if mid_int in high_conf_msg_ids:
+                        continue
 
-                    # Unit Mismatch
-                    if p.get("units", 1.0) == 1.0:
-                        potential_units = 0
-                        if "10U" in text_upper or "MAX BET" in text_upper:
-                            potential_units = 10
-                        elif "5U" in text_upper:
-                            potential_units = 5
-                        elif "3U" in text_upper:
-                            potential_units = 3
+                    msg = msg_map.get(mid_int)
+                    if msg:
+                        text_upper = (
+                            msg.get("text", "") + "\n" + msg.get("ocr_text", "")
+                        ).upper()
 
-                        if potential_units > 1:
+                        # Unit Mismatch
+                        if p.get("units", 1.0) == 1.0:
+                            potential_units = 0
+                            if "10U" in text_upper or "MAX BET" in text_upper:
+                                potential_units = 10
+                            elif "5U" in text_upper:
+                                potential_units = 5
+                            elif "3U" in text_upper:
+                                potential_units = 3
+
+                            if potential_units > 1:
+                                if mid_int not in semantic_issues:
+                                    semantic_issues[mid_int] = []
+                                semantic_issues[mid_int].append(
+                                    f"Possible Unit Mismatch: Text implies {potential_units}U, pick has 1U."
+                                )
+                                reparse_ids.add(mid_int)
+
+                        # Parlay Mismatch
+                        if "PARLAY" in text_upper and p.get("type") not in [
+                            "Parlay",
+                            "Unknown",
+                        ]:
                             if mid_int not in semantic_issues:
                                 semantic_issues[mid_int] = []
                             semantic_issues[mid_int].append(
-                                f"Possible Unit Mismatch: Text implies {potential_units}U, pick has 1U."
+                                f"Text mentions 'PARLAY' but pick is type '{p.get('type')}'."
                             )
                             reparse_ids.add(mid_int)
-
-                    # Parlay Mismatch
-                    if "PARLAY" in text_upper and p.get("type") not in [
-                        "Parlay",
-                        "Unknown",
-                    ]:
-                        if mid_int not in semantic_issues:
-                            semantic_issues[mid_int] = []
-                        semantic_issues[mid_int].append(
-                            f"Text mentions 'PARLAY' but pick is type '{p.get('type')}'."
-                        )
-                        reparse_ids.add(mid_int)
 
         # 5. Execute Refinement
         reparse_ids_list = list(reparse_ids)
@@ -212,6 +232,10 @@ class ExtractionPipeline:
                         hints.append("Please fix these errors in your re-extraction.")
 
                     full_hint = "\n\n".join(hints)
+
+                    # DEBUG LOG
+                    logger.warning(f"[DEBUG] Reparsing Msg {m_id} because: {full_hint}")
+
                     retry_msg["text"] = (
                         retry_msg.get("text", "") + "\n\n" + full_hint
                     )[:3500]

@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-24
 
 **Total Messages Processed:** 5
-**Total Picks Extracted:** 43
+**Total Picks Extracted:** 40
 
 ---
 
@@ -95,24 +95,20 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Paddy “The Baddy” Pimblett | -205 | 4.0 | Moneyline | - |
-| Abeta Gautier RD 1 | -120 | 2.0 | Player Prop | - |
-| Paddy Pimblett | -136 | 2.0 | Moneyline | - |
-| Ty Miller | -110 | 1.0 | Moneyline | - |
-| Charles Johnson | -114 | 1.0 | Moneyline | - |
-| Waldo Acosta | -110 | 1.0 | Moneyline | - |
-| Jean Silva | -131 | 1.0 | Moneyline | - |
-| Rose Namajunas | 315 | 1.0 | Moneyline | - |
-| Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
-| Nikita Krylov | -110 | 2.0 | Moneyline | - |
-| Figueiredo/Nurmagomedov Under 2.5 | -110 | 1.0 | Total | - |
-| Pimblett | -235 | 3.0 | Moneyline | - |
-| (UFC) Pimblett ML / (UFC) Natalia Silva ML | -113 | 2.0 | Parlay | - |
-| (UFC) Hokit ML / (UFC) O' Malley ML | 102 | 2.0 | Parlay | - |
-| (UFC) Paddy ML / (UFC) Waldo Cortes ML | -110 | 1.0 | Parlay | - |
-| Paddy by SUB | 150 | 0.5 | Player Prop | - |
-| (UFC) Sean O Malley ML / (TENNIS) Alcaraz ML | -150 | 0.5 | Parlay | - |
-| Pimblett | -230 | 3.0 | Moneyline | - |
+| Paddy “The Baddy” Pimblett 4u⭐ ML | -205 | 1.0 | Moneyline | - |
+| Abeta Gautier RD 1 2u⭐ ML | -120 | 1.0 | Moneyline | - |
+| Abeta Gautier Itd \|\| Paddy Pimblett 2u⭐ ML | -136 | 1.0 | Moneyline | - |
+| Ty Miller \|\| Charles Johnson 1u ML | -114 | 1.0 | Moneyline | - |
+| Waldo Acosta \|\| Jean Silva 1u ML | -131 | 1.0 | Moneyline | - |
+| Rose Namajunas ML 1u ML | 315 | 1.0 | Moneyline | - |
+| Pimblett vs Gaethje Over 2.5 (3U) | None | 1.0 | Total | - |
+| Figueiredo vs Nurmagomedov Under 2.5 Rounds (1U) | None | 1.0 | Total | - |
+| Pimblett ML (3u) ML | -235 | 1.0 | Moneyline | - |
+| Pimblett / Natalia Silva MLP -113 (2U) DK | None | 1.0 | Parlay | - |
+| Hokit / O' Malley MLP +102 (2U) | None | 1.0 | Parlay | - |
+| Paddy + Waldo Cortes 1U ML | -110 | 1.0 | Moneyline | - |
+| Paddy by Sub 0.5U ML | 150 | 1.0 | Moneyline | - |
+| Sean O Malley ML + Alcaraz ML 0.5U ML | -150 | 1.0 | Moneyline | - |
 
 ---
 
@@ -145,12 +141,12 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Arsenal DNB | -145 | 1.0 | Moneyline | - |
+| Pick: Arsenal Dnb (-145) | -145 | 1.0 | Player Prop | - |
 | Real Madrid -1.5 AH | 105 | 1.0 | Spread | - |
-| Juventus vs AC Milan Over 2.5 | -120 | 1.0 | Total | - |
-| Sinner to win 1st Set | -130 | 1.0 | Moneyline | - |
-| Djokovic -4.5 Games | -110 | 1.0 | Spread | - |
-| Rublev vs Zverev Over 38.5 | -115 | 1.0 | Total | - |
+| Juventus vs AC Milan Over 2.5 Goals (-120) | -120 | 1.0 | Total | - |
+| Pick: Sinner to win 1st Set (-130) | -130 | 1.0 | Player Prop | - |
+| Djokovic -4.5 Games vs Medvedev | -110 | 1.0 | Spread | - |
+| Rublev vs Zverev Over 38.5 Games (-115) | -115 | 1.0 | Total | - |
 
 ---
 
@@ -175,11 +171,11 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Luka Doncic: PRA Over 45 | -120 | 1.0 | Player Prop | - |
-| LeBron James: Rebounds Over 7.5 | -140 | 1.0 | Player Prop | - |
-| Steph Curry: Threes Over 5 | 110 | 1.0 | Player Prop | - |
-| FaZe vs Navi Map 1 Winner: FaZe | -125 | 1.0 | Game Prop | - |
-| T1 -1.5 Maps vs GenG | 150 | 1.0 | Spread | - |
+| Luka Doncic 45+ PRA ML | -120 | 1.0 | Moneyline | - |
+| LeBron James Over 7.5 Rebounds (-140) | -140 | 1.0 | Total | - |
+| Steph Curry 5+ Threes ML | 110 | 1.0 | Moneyline | - |
+| Map 1 Winner: FaZe ML | -125 | 1.0 | Moneyline | - |
+| LoL: T1 -1.5 Maps vs GenG (+150) | 150 | 1.0 | Player Prop | - |
 
 ---
 
@@ -203,8 +199,9 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Commanders +3.5 | -115 | 5.0 | Spread | - |
-| Ravens Team Total Over 24.5 | -120 | 3.0 | Team Prop | - |
-| (NFL) Chiefs ML / (NFL) Lions -6.5 | 260 | 2.0 | Parlay | - |
-| (NFL) Bengals +7.5 / (NFL) Bills +8.5 | -120 | 1.0 | Parlay | - |
+| Commanders +3.5 5U Max | -115 | 1.0 | Spread | - |
+| Ravens Team Total Over 24.5 (-120) 3U | -120 | 1.0 | Total | - |
+| -Team Parlay 2U ML | 260 | 1.0 | Moneyline | - |
+| Lions -6.5 | None | 1.0 | Spread | - |
+| (NFL) Bengals +7.5 / (NFL) Bills +8.5 (-120) | None | 1.0 | Parlay | - |
 

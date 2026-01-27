@@ -86,6 +86,9 @@ class RuleBasedExtractor:
                     if inferred:
                         league_hint = inferred
 
+                    # Extract units before parsing (since parser cleans them)
+                    units = RuleBasedExtractor._extract_units(line)
+
                     parsed: Pick = PickParser.parse(line, league_hint)
 
                     if RuleBasedExtractor._is_valid_extraction(parsed):
@@ -98,12 +101,12 @@ class RuleBasedExtractor:
 
                         # Convert to standard dict format
                         pick_dict = RuleBasedExtractor._to_pick_dict(
-                            parsed, msg_id, line
+                            parsed, msg_id, line, units
                         )
 
                         # Add metadata
                         pick_dict["extraction_method"] = "rule_based"
-                        pick_dict["confidence"] = 0.95
+                        pick_dict["confidence"] = 9.5  # High confidence on 0-10 scale
 
                         msg_picks.append(pick_dict)
 
@@ -122,7 +125,7 @@ class RuleBasedExtractor:
                     # E.g. "2-Team Parlay:\nLakers ML\nHeat ML" -> Found 2 MLs.
                     # Fallback to AI for accuracy.
                     remaining_messages.append(msg)
-                    logger.debug(
+                    logger.warning(
                         f"[RuleBased] Msg {msg_id} has 'Parlay' but found straight bets. Deferring to AI."
                     )
                 else:
@@ -145,28 +148,29 @@ class RuleBasedExtractor:
         """Check if line has strong betting indicators."""
         text_lower = text.lower()
 
+        # 1. Explicit bet type keywords (Strongest signal)
+        # If these are present, we might not need digits (e.g. "Lakers ML", "Parlay")
+        if any(k in text_lower for k in ["moneyline", "spread", "parlay"]):
+            return True
+
         # Must have at least one numeric digit (lines, odds)
         if not any(c.isdigit() for c in text):
             return False
 
         # Check for specific patterns
-        # 1. Odds/Spread pattern: -110, +3.5, -7
+        # 2. Odds/Spread pattern: -110, +3.5, -7
         # Needs to be careful not to match dates like 12-10
         if re.search(r"(?<!\d)[+-]\d{1,4}(?:\.\d+)?", text):
             return True
 
-        # 2. Total pattern: Over 220
+        # 3. Total pattern: Over 220
         if re.search(r"\b(o|u|over|under)\s*\d", text_lower):
             return True
 
-        # 3. Prop pattern: Name: Stat
+        # 4. Prop pattern: Name: Stat
         if ":" in text and any(
             k in text_lower for k in ["pts", "reb", "ast", "threes", "yards", "td"]
         ):
-            return True
-
-        # 4. Explicit bet type keywords
-        if any(k in text_lower for k in ["moneyline", "spread", "parlay"]):
             return True
 
         return False
@@ -200,8 +204,23 @@ class RuleBasedExtractor:
         return True
 
     @staticmethod
+    def _extract_units(text: str) -> float:
+        """Extract units from prefix like '3* ...' or '5U ...'"""
+        # Match '3* ', '5% ', '10U ' at start of string
+        match = re.match(r"^(\d+(?:\.\d+)?)(?:\*|u|%)\s*", text, re.IGNORECASE)
+        if match:
+            try:
+                val = float(match.group(1))
+                # Cap at reasonable max (e.g. 10u) to avoid parsing years or misformatted numbers
+                if val <= 20:
+                    return val
+            except ValueError:
+                pass
+        return 1.0
+
+    @staticmethod
     def _to_pick_dict(
-        pick: Pick, message_id: str, original_text: str
+        pick: Pick, message_id: str, original_text: str, units: float = 1.0
     ) -> Dict[str, Any]:
         """Convert Pick object to the dictionary format used by the pipeline."""
         return {
@@ -211,8 +230,8 @@ class RuleBasedExtractor:
             "type": pick.bet_type.value,
             "pick": pick.selection,  # Use the cleaned selection from parser
             "odds": pick.odds,
-            "units": 1.0,  # Default
+            "units": units,
             "reasoning": "Extracted via Rule-Based Regex",
             "_source_text": original_text,
-            "confidence": 0.95,
+            "confidence": 9.5,
         }

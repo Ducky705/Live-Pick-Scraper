@@ -16,7 +16,10 @@ logger = logging.getLogger(__name__)
 class ExtractionPipeline:
     @staticmethod
     def run(
-        messages: List[Dict[str, Any]], target_date: str, batch_size: int = 1
+        messages: List[Dict[str, Any]],
+        target_date: str,
+        batch_size: int = 1,
+        strategy: str = "groq",
     ) -> List[Dict[str, Any]]:
         """
         Runs the full AI extraction pipeline:
@@ -51,10 +54,14 @@ class ExtractionPipeline:
 
             # 1. AI Processing
             try:
-                # Use Groq-Priority Strategy (Blast Groq, Fallback to others)
-                all_raw_picks = parallel_processor.process_batches_groq_priority(
-                    batches
-                )
+                if strategy == "round_robin":
+                    logger.info("Using Strategy: ROUND ROBIN (Mixed Providers)")
+                    all_raw_picks = parallel_processor.process_batches(batches)
+                else:
+                    logger.info("Using Strategy: GROQ PRIORITY (16 concurrent)")
+                    all_raw_picks = parallel_processor.process_batches_groq_priority(
+                        batches
+                    )
             except Exception as e:
                 logger.error(f"Parallel processing failed: {e}")
                 all_raw_picks = []

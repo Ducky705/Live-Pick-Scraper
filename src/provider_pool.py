@@ -49,7 +49,7 @@ STRONG_FALLBACK_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 # Rate Limits - MAXIMUM SPEED configuration (Updated 2026-01-22)
 # Based on actual provider rate limits from user data
 LIMITS = {
-    "groq": Semaphore(1),  # Iteration 21: Safe limit for Groq
+    "groq": Semaphore(5),  # Iteration 34: Tuned for stability (was 10, caused 429s)
     "mistral": Semaphore(2),
     "gemini": Semaphore(1),
     "cerebras": Semaphore(3),  # Iteration 21: Increased Cerebras concurrency

@@ -394,11 +394,55 @@
       "exitCode": 0,
       "completionDetected": false,
       "errors": []
+    },
+    {
+      "iteration": 21,
+      "startedAt": "2026-01-28T03:52:08.527Z",
+      "endedAt": "2026-01-28T04:05:58.530Z",
+      "durationMs": 393949,
+      "toolsUsed": {
+        "Bash": 6,
+        "Read": 7,
+        "Write": 2,
+        "Edit": 7
+      },
+      "filesModified": [
+        "AGENCY_REPORT.md",
+        "src/openrouter_client.py",
+        "src/provider_pool.py",
+        "benchmark_iteration_21.py",
+        "iteration_21_stats.txt"
+      ],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": [
+        "2026-01-28 04:54:42,565 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-28 04:54:42,789 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-28 04:54:42,797 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 400 Client Error: Bad Request for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-28 04:54:42,913 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 400 Client Error: Bad Request for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-28 04:54:42,950 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-28 04:54:42,967 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-28 04:54:42,971 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-28 04:54:43,031 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 400 Client Error: Bad Request for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-28 04:54:43,040 - [OpenRouter] Request error with google/gemini-2.0-flash-exp:free: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions",
+        "2026-01-28 04:54:43,124 - [OpenRouter] Request error with google/gemini-2.0-flash-exp:free: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions"
+      ]
     }
   ],
-  "totalDurationMs": 3683181,
+  "totalDurationMs": 4077130,
   "struggleIndicators": {
-    "repeatedErrors": {},
+    "repeatedErrors": {
+      "2026-01-28 04:54:42,565 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 42": 1,
+      "2026-01-28 04:54:42,789 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 42": 1,
+      "2026-01-28 04:54:42,797 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 40": 1,
+      "2026-01-28 04:54:42,913 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 40": 1,
+      "2026-01-28 04:54:42,950 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 42": 1,
+      "2026-01-28 04:54:42,967 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 42": 1,
+      "2026-01-28 04:54:42,971 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 42": 1,
+      "2026-01-28 04:54:43,031 - [OpenRouter] Request error with meta-llama/llama-3.3-70b-instruct:free: 40": 1,
+      "2026-01-28 04:54:43,040 - [OpenRouter] Request error with google/gemini-2.0-flash-exp:free: 429 Clie": 1,
+      "2026-01-28 04:54:43,124 - [OpenRouter] Request error with google/gemini-2.0-flash-exp:free: 429 Clie": 1
+    },
     "noProgressIterations": 0,
     "shortIterations": 0
   }

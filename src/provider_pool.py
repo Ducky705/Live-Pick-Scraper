@@ -49,10 +49,10 @@ STRONG_FALLBACK_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 # Rate Limits - MAXIMUM SPEED configuration (Updated 2026-01-22)
 # Based on actual provider rate limits from user data
 LIMITS = {
-    "groq": Semaphore(1),  # Stricter limit (1 concurrent) to prevent 429s
+    "groq": Semaphore(1),  # Iteration 21: Safe limit for Groq
     "mistral": Semaphore(2),
     "gemini": Semaphore(1),
-    "cerebras": Semaphore(1),
+    "cerebras": Semaphore(3),  # Iteration 21: Increased Cerebras concurrency
 }
 
 # Provider Availability Flags
@@ -345,7 +345,8 @@ def _attempt_provider_execution(
     if not sem:
         return None, 0.0
 
-    if not sem.acquire(blocking=False):
+    # Iteration 21: Wait up to 2s for a slot instead of fast-fail
+    if not sem.acquire(timeout=2.0):
         return None, 0.0
 
     try:

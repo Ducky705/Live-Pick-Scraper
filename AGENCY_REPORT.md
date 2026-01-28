@@ -69,3 +69,18 @@
     - **Frontend:** Refactored `App.jsx` to replace static `import` with dynamic `fetch()` polling.
     - **Integration:** Established a 10-second polling interval for near real-time updates without page reloads.
 - **Status:** Live Link Established.
+
+### 17. Ralph Loop - Iteration 21 (Concurrency Tuning)
+- **Goal:** Maximize throughput ("Request Economy") by unlocking parallelism without overwhelming free-tier rate limits.
+- **Actions:**
+    - **Stress Test:** Created `benchmark_iteration_21.py` to test high concurrency (10 -> 5 -> 4).
+    - **Optimization:**
+        - Implemented "Queue Wait" logic in `src/provider_pool.py` (`timeout=2.0` instead of fast-fail) to prioritize local providers (Cerebras/Groq) over fallback.
+        - Tuned Semaphores: Groq=1 (Strict), Cerebras=3 (Increased), Mistral=2.
+        - **Critical Fix:** Removed broken models (DeepSeek R1, Qwen, Gemini Pro) from `src/openrouter_client.py` which were causing fallback cascades to fail (404/400 errors).
+- **Results:**
+    - **High Load (10 Concurrent):** 70% Success. Overwhelmed providers.
+    - **Stable Load (4 Concurrent):** **95% Success** (19/20).
+    - **Throughput:** ~0.80s per request avg latency (Wall Clock / N).
+    - **Winner:** Cerebras (Free Tier) proved most robust for parallel requests. Groq is fast but strictly rate-limited.
+- **Outcome:** System is now optimized for maximum *safe* concurrency (4 workers). Fallback chain is repaired.

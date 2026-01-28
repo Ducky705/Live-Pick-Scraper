@@ -7,10 +7,7 @@ import time
 # Model fallback list (ordered by reliability)
 DEFAULT_MODELS = [
     "google/gemini-2.0-flash-exp:free",
-    "google/gemini-2.0-pro-exp-02-05:free",
     "meta-llama/llama-3.3-70b-instruct:free",
-    "deepseek/deepseek-r1:free",
-    "qwen/qwen-2.5-vl-72b-instruct:free",
 ]
 
 

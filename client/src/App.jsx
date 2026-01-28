@@ -40,7 +40,7 @@ export default function App() {
   const [filter, setFilter] = useState('');
   const [expandedId, setExpandedId] = useState(null);
 
-  // Ralph Loop Iteration 30: Efficiency Calibration
+  // Ralph Loop Iteration 32: High Velocity Stress Test
   const fetchData = async () => {
     try {
       const response = await fetch('/latest_picks.json');
@@ -103,7 +103,7 @@ export default function App() {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground font-mono text-sm mt-2"
           >
-            ITERATION 30 // LIVE LINK ESTABLISHED
+            ITERATION 32 // HIGH VELOCITY TEST
           </motion.p>
         </div>
 

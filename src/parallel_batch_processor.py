@@ -18,7 +18,7 @@ import logging
 import json
 import time
 from queue import Queue, Empty
-from threading import Thread, Event, Lock
+from threading import Thread, Event, Lock, Condition
 from typing import List, Dict, Any
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -62,7 +62,7 @@ PROVIDER_CONFIG = {
         "priority": 5,  # TERTIARY (Fallback)
     },
     "gemini": {
-        "model": "gemini-2.0-flash-lite-preview-02-05",  # Updated model
+        "model": "gemini-1.5-flash",  # Reverted to stable model
         "rpm": 15,  # 15 requests per minute
         "tpm": 250000,  # 250K TPM
         "max_concurrent": 2,  # Reduced from 3 to 2 for safety
@@ -79,6 +79,64 @@ PROVIDER_CONFIG = {
         "priority": 3,  # PROMOTED to 3 (Fast)
     },
 }
+
+
+class AdaptiveConcurrencyLimiter:
+    """
+    US-001: Adaptive Concurrency Control
+    Prevents "Death Spirals" by throttling workers on 429 errors.
+    """
+
+    def __init__(self, initial=4, min_limit=1, max_limit=25):
+        self.limit = initial
+        self.min_limit = min_limit
+        self.max_limit = max_limit
+        self.current_running = 0
+        self.condition = Condition()
+        self.success_streak = 0
+
+    def acquire(self):
+        """Block until a slot is available based on current dynamic limit."""
+        with self.condition:
+            while self.current_running >= self.limit:
+                self.condition.wait()
+            self.current_running += 1
+
+    def release(self):
+        """Release a slot and notify waiting threads."""
+        with self.condition:
+            self.current_running -= 1
+            self.condition.notify()
+
+    def record_success(self):
+        """Record success and potentially increase concurrency."""
+        with self.condition:
+            self.success_streak += 1
+            # After 10 consecutive successes, increment by 1 (up to MAX)
+            if self.success_streak >= 10:
+                if self.limit < self.max_limit:
+                    old_limit = self.limit
+                    self.limit = min(self.limit + 1, self.max_limit)
+                    self.success_streak = 0
+                    if self.limit > old_limit:
+                        logger.info(
+                            f"Adaptive Concurrency: Backoff recovery - Limit increased to {self.limit}"
+                        )
+                        self.condition.notify()  # Wake up a thread if we have room now
+
+    def record_429(self):
+        """Record 429 error and trigger backoff."""
+        with self.condition:
+            old_limit = self.limit
+            # Upon receiving a 429 error, concurrency immediately drops by 50% (min 1)
+            new_limit = max(self.min_limit, int(self.limit * 0.5))
+
+            if new_limit < old_limit:
+                self.limit = new_limit
+                self.success_streak = 0  # Reset streak
+                logger.warning(
+                    f"Backoff Warning: Concurrency dropped to {self.limit} (Active: {self.current_running})"
+                )
 
 
 class RateLimiter:
@@ -123,6 +181,10 @@ class ParallelBatchProcessor:
         self.stats_lock = Lock()
         self.provider_status = {p: "active" for p in self.providers}
         self.status_lock = Lock()
+
+        # Initialize Adaptive Limiter (Default: 4, Max: 25)
+        # US-001: Start at 4 concurrent requests, ramp up to 25 if stable
+        self.adaptive_limiter = AdaptiveConcurrencyLimiter(initial=4, max_limit=25)
 
     def _execute_request(self, provider: str, messages: List[dict]) -> str:
         """Execute a single request to a provider with rate limiting."""
@@ -173,6 +235,10 @@ class ParallelBatchProcessor:
         self, batch_id: int, messages: List[dict], provider: str
     ) -> Dict:
         """Process a single batch with a specific provider."""
+
+        # Acquire adaptive concurrency slot (US-001)
+        self.adaptive_limiter.acquire()
+
         start = time.time()
         try:
             result = self._execute_request(provider, messages)
@@ -195,6 +261,10 @@ class ParallelBatchProcessor:
                 self.stats[provider]["total_time"] += duration
 
             logger.info(f"[{provider}] Batch {batch_id} done in {duration:.2f}s")
+
+            # Record success for adaptive concurrency (US-001)
+            self.adaptive_limiter.record_success()
+
             return {
                 "batch_id": batch_id,
                 "status": "success",
@@ -207,6 +277,10 @@ class ParallelBatchProcessor:
             with self.stats_lock:
                 self.stats[provider]["errors"] += 1
 
+            # Check for 429 and trigger backoff (US-001)
+            if "429" in str(e):
+                self.adaptive_limiter.record_429()
+
             logger.error(f"[{provider}] Batch {batch_id} failed: {e}")
             return {
                 "batch_id": batch_id,
@@ -214,6 +288,9 @@ class ParallelBatchProcessor:
                 "error": str(e),
                 "provider": provider,
             }
+        finally:
+            # Release slot (US-001)
+            self.adaptive_limiter.release()
 
     def process_batches(self, batches: List[List[dict]]) -> List[Any]:
         """

@@ -20,6 +20,7 @@ import time
 import random
 import json
 from threading import Lock, Semaphore
+from concurrent.futures import ThreadPoolExecutor, as_completed, FIRST_COMPLETED, wait
 from typing import Optional, List, Dict, Any
 
 from src.cerebras_client import (
@@ -329,6 +330,65 @@ def _execute_fast_request(
     return None
 
 
+def _attempt_provider_execution(
+    provider_name: str,
+    model: str,
+    prompt: str,
+    images: Optional[List[str]],
+    timeout: int,
+) -> tuple[Optional[str], float]:
+    """
+    Helper to execute a provider request with semaphore handling.
+    Returns: (result_string_or_None, quality_score)
+    """
+    if not _is_available(provider_name):
+        return None, 0.0
+
+    sem = LIMITS.get(provider_name)
+    if not sem:
+        return None, 0.0
+
+    if not sem.acquire(blocking=False):
+        return None, 0.0
+
+    try:
+        # Double check
+        if not _is_available(provider_name):
+            return None, 0.0
+
+        logging.info(f"[HybridPool] Trying {provider_name} ({model})...")
+        start_t = time.time()
+        result = _execute_fast_request(provider_name, prompt, images, timeout)
+        duration = time.time() - start_t
+
+        if result:
+            if not _validate_json_response(result):
+                logging.warning(f"[HybridPool] {provider_name} invalid JSON.")
+                return None, 0.0
+
+            score, issues = _calculate_quality_score(result)
+            if score >= QUALITY_THRESHOLD:
+                logging.info(
+                    f"[HybridPool] {provider_name} success in {duration:.2f}s (quality: {score:.0%})"
+                )
+                return result, score
+            else:
+                logging.warning(
+                    f"[HybridPool] {provider_name} low quality ({score:.0%}). Issues: {issues}"
+                )
+                return result, score  # Return as fallback candidate
+        else:
+            return None, 0.0
+
+    except Exception as e:
+        if "429" in str(e):
+            _mark_rate_limited(provider_name, wait_seconds=30)
+        logging.error(f"[HybridPool] Error with {provider_name}: {e}")
+        return None, 0.0
+    finally:
+        sem.release()
+
+
 def pooled_completion(
     prompt: str,
     images: Optional[List[str]] = None,
@@ -412,82 +472,76 @@ def pooled_completion(
             f"[HybridPool] No fast providers available for {task_type}. Going to OpenRouter."
         )
     else:
-        # Try each fast provider
-        for provider_info in candidates:
-            provider_name = provider_info["name"]
+        # --- ITERATION 17: PARALLEL SPECULATION ---
+        # Try top 2 providers simultaneously to minimize latency.
 
-            # CRITICAL CHECK: Re-check availability inside loop (in case previous iter triggered cooldown)
-            if not _is_available(provider_name):
-                logging.info(
-                    f"[HybridPool] {provider_name} became unavailable/rate-limited. Skipping."
-                )
-                continue
+        speculative_batch = candidates[:2]
+        remaining_candidates = candidates[2:]
 
-            sem = LIMITS.get(provider_name)
-            if not sem:
-                continue
+        # 1. Speculative Phase (Top 2)
+        if speculative_batch:
+            logging.info(
+                f"[HybridPool] Speculative execution: {[p['name'] for p in speculative_batch]}"
+            )
 
-            # Non-blocking acquire (skip if busy)
-            acquired = sem.acquire(blocking=False)
-            if not acquired:
-                logging.info(f"[HybridPool] {provider_name} is busy. Skipping.")
-                continue
+            with ThreadPoolExecutor(max_workers=len(speculative_batch)) as executor:
+                futures = {
+                    executor.submit(
+                        _attempt_provider_execution,
+                        p["name"],
+                        p["model"],
+                        prompt,
+                        images,
+                        timeout,
+                    ): p["name"]
+                    for p in speculative_batch
+                }
 
-            try:
-                # Double-check availability after acquire (just to be safe)
-                if not _is_available(provider_name):
-                    sem.release()
-                    continue
+                # Wait for FIRST completion
+                done, not_done = wait(futures.keys(), return_when=FIRST_COMPLETED)
 
-                logging.info(
-                    f"[HybridPool] Trying {provider_name} ({provider_info['model']})..."
-                )
-                start_t = time.time()
+                # Check if the first one was successful
+                for f in done:
+                    res, score = f.result()
+                    if res and score >= QUALITY_THRESHOLD:
+                        logging.info(f"[HybridPool] Speculative WINNER: {futures[f]}")
+                        return res
+                    if res:
+                        _last_fast_result = res
 
-                result = _execute_fast_request(provider_name, prompt, images, timeout)
-
-                duration = time.time() - start_t
-
-                if result:
-                    # Validate JSON structure
-                    if not _validate_json_response(result):
-                        logging.warning(
-                            f"[HybridPool] {provider_name} returned invalid JSON. Trying next..."
-                        )
-                        continue
-
-                    # Check quality score
-                    quality_score, quality_issues = _calculate_quality_score(result)
-
-                    if quality_score >= QUALITY_THRESHOLD:
-                        logging.info(
-                            f"[HybridPool] {provider_name} success in {duration:.2f}s (quality: {quality_score:.0%})"
-                        )
-                        return result
-                    else:
-                        # Low quality - log issues and trigger fallback
-                        logging.warning(
-                            f"[HybridPool] {provider_name} returned low-quality response "
-                            f"(score: {quality_score:.0%} < {QUALITY_THRESHOLD:.0%}). Issues: {quality_issues}"
-                        )
-                        # Store result as potential fallback if OpenRouter also fails
-                        _last_fast_result = result
-                        continue
-                else:
-                    logging.warning(f"[HybridPool] {provider_name} returned None.")
-
-            except Exception as e:
-                if "429" in str(e):
-                    _mark_rate_limited(provider_name, wait_seconds=30)
-                    logging.warning(
-                        f"[HybridPool] Marked {provider_name} as rate limited."
+                # If first one failed, wait for the rest (gracefully)
+                if not_done:
+                    logging.info(
+                        "[HybridPool] First speculative failed, waiting for others..."
                     )
+                    done2, _ = wait(not_done, timeout=timeout)
+                    for f in done2:
+                        res, score = f.result()
+                        if res and score >= QUALITY_THRESHOLD:
+                            logging.info(
+                                f"[HybridPool] Speculative RECOVERY: {futures[f]}"
+                            )
+                            return res
+                        if res:
+                            _last_fast_result = res
 
-                logging.error(
-                    f"[HybridPool] Unexpected error with {provider_name}: {e}"
+        # 2. Sequential Phase (Remaining)
+        if remaining_candidates:
+            logging.info(
+                "[HybridPool] Speculative phase failed. Trying remaining providers sequentially..."
+            )
+            for provider_info in remaining_candidates:
+                res, score = _attempt_provider_execution(
+                    provider_info["name"],
+                    provider_info["model"],
+                    prompt,
+                    images,
+                    timeout,
                 )
-            finally:
-                sem.release()
+                if res and score >= QUALITY_THRESHOLD:
+                    return res
+                if res:
+                    _last_fast_result = res
 
     # --- FALLBACK: OpenRouter (DeepSeek R1) ---
     logging.info(

@@ -266,20 +266,23 @@
         "ERROR:src.parallel_batch_processor:[gemini] Batch 2 returned None (API error)",
         "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769563894.7136126)"
       ]
+    },
+    {
+      "iteration": 14,
+      "startedAt": "2026-01-28T01:45:58.442Z",
+      "endedAt": "2026-01-28T01:53:24.644Z",
+      "durationMs": 12476,
+      "toolsUsed": {},
+      "filesModified": [],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": []
     }
   ],
-  "totalDurationMs": 2212984,
+  "totalDurationMs": 2225460,
   "struggleIndicators": {
-    "repeatedErrors": {
-      "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Groq Rate limit 429": 1,
-      "SyntaxError: invalid syntax": 1,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429": 1,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 2 failed: Groq Rate limit 429": 1,
-      "ERROR:root:[Gemini] Error 404: {": 1,
-      "ERROR:src.parallel_batch_processor:[gemini] Batch 2 returned None (API error)": 1,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown un": 1
-    },
-    "noProgressIterations": 0,
-    "shortIterations": 0
+    "repeatedErrors": {},
+    "noProgressIterations": 1,
+    "shortIterations": 1
   }
 }

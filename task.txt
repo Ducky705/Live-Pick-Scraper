@@ -1,37 +1,29 @@
 ROLE: Lead Performance Architect.
-MISSION: Radical optimization of the system's "Complexity Router" and AI Provider logic.
+STATUS: Phase 2 - "The Fast Tier Quality Fix" (RECOVERY MODE).
 
-CORE OBJECTIVES (Ranked):
-1. ACCURACY (Non-negotiable constraint).
-2. REQUEST ECONOMY (Minimize the sheer number of HTTP requests. One-shot perfection is the goal. Eliminate retries/chains).
-3. SPEED (Reduce end-to-end latency).
-4. ZERO COST (Strict adherence to FREE models with High Rate Limits).
+CURRENT STATE:
+- Iteration 6 FAILED (40% Accuracy) because we increased Batch Size to 5.
+- We MUST revert to `BATCH_SIZE = 1`.
+- PROBLEM: Tier 1 models (Llama-8b) are fast (1.3s) but "Dumb" (fail to extract 'capper'/'league' names correctly), triggering "Unknown Field" warnings.
 
-CONTEXT:
-We currently use a tiered system (`docs\PROVIDERS.md`). It may be inefficient—sending necessary fallback requests, using verbose prompts, or failing to utilize the full power of Tier 1 models.
+MISSION:
+Optimize the **System Prompts** specifically for Tier 1 (Small Models) to eliminate "Unknown" fields while keeping Batch Size at 1.
 
-YOUR AUTONOMY:
-You are NOT restricted to the current logic. You are free to:
-- Rewrite the routing algorithms to be "One-Shot" aggressive.
-- Change the model hierarchy (provided they are Free/High-Limit).
-- Aggressively condense prompts to save tokens.
-- Dig into specific OpenRouter model IDs to find the hidden gems (fastest/freest).
-- Implement "Fail-Fast" logic: If a request is likely to fail (bad input), don't send it at all.
-- Implement "Parallel Speculation" if it saves time without costing money (e.g. firing two free models at once).
+OBJECTIVES:
+1. REVERT BATCH SIZE: Ensure `BATCH_SIZE = 1` in `src/extraction_pipeline.py`.
+2. PROMPT SURGERY: Refactor `CorePrompt` to be explicitly clear about `capper` and `league` extraction.
+   - ADD "ANCHOR" INSTRUCTIONS: Tell the model exactly where to look (e.g. "Header line", "first line").
+   - DO NOT COMPRESS blindly. Structure > Compression.
+3. ELIMINATE FALLBACKS: Reduce the "Unknown Field" rate to 0%.
 
-MANDATORY PROTOCOL (The Scientific Method):
-1. ESTABLISH BASELINE: Do not change code until you have a `benchmark.py` running.
-   - It MUST measure: [Total Requests Sent], [Avg Latency], [Token Usage], [Accuracy %].
-2. FORMULATE A PLAN: Analyze the codebase. Identify where we are "leaking" requests (e.g., unnecessary pre-checks, eager fallbacks, redundant calls).
-3. ITERATE:
-   - Implement a change.
-   - Run `benchmark.py`.
-   - IF (Fewer Requests/Faster AND Same Accuracy) -> COMMIT.
-   - IF (Accuracy drops) -> REVERT immediately.
+PROTOCOL:
+1. Revert Batch Size to 1.
+2. Modify PROMPTS.
+3. Run `benchmark_iteration_25.py`.
+   - SUCCESS = 100% Accuracy AND 0 "Unknown" warnings.
 
-CONSTRAINTS:
-- Use *only* models that are FREE and have lenient Rate Limits.
-- If using OpenRouter, select SPECIFIC free/high-limit model IDs. Do not use generic routers.
+HARD CONSTRAINTS:
+- **BATCH_SIZE MUST BE 1.** (Non-negotiable).
+- Do NOT switch to paid models.
 
-GO:
-Read the docs, explore the code, build your benchmark, and start optimizing.
+GO.

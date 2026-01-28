@@ -105,9 +105,9 @@ NOISE_KEYWORDS = [
 ]
 
 # Ultra-compact schema doc for prompts (~150 chars vs ~800 original)
-SCHEMA_DOC = """KEYS:i=id,c=capper(First line of text/header. If unknown use 'Unknown'),l=league,t=type,p=pick,o=odds(int,e.g.-110),u=units(float),q=confidence(1-10)
+SCHEMA_DOC = """KEYS:i=id,c=capper(ANCHOR:Look at FIRST LINE of text. REQUIRED),l=league(ANCHOR:Infer from teams. REQUIRED),t=type,p=pick,o=odds(int),u=units(float),q=confidence(1-10)
 TYPES:ML,SP,TL,PP,TP,GP,PD,PL,TS,FT,UK
-LEAGUES:NFL,NCAAF,NBA,NCAAB,WNBA,MLB,NHL,EPL,MLS,UCL,UFC,PFL,TENNIS,SOCCER,PGA,F1,Other"""
+LEAGUES:NFL,NCAAF,NBA,NCAAB,WNBA,MLB,NHL,EPL,MLS,UCL,UFC,PFL,TENNIS,SOCCER,PGA,F1,ESPORTS,Other"""
 
 # Pick format rules (compressed from 100+ line formatting guide)
 PICK_FORMAT_RULES = """FORMATS:
@@ -184,24 +184,25 @@ Extract betting picks from data below.
 {NEGATIVE_CONSTRAINTS}
 
 RULES:
-1.c=capper from header/username/CAPPER: tag. Check FIRST LINE of [CONTENT] for name. Ignore "Content"/"Caption".
-2.o=American odds int(-110,+150). Extract "Team -175" -> o=-175. NO parentheses needed.
-3.u=units float. Look for "X u", "(Xu)", "X%", "X*". If header "Max Bet", u=5. If "Whale", u=10. Default 1.
-4.Separate picks per capper.
-5.Period bets:if text has 1H/1Q/F5/P1, t=PD.
-6.Parlay:each leg prefixed with (LEAGUE). If text implies Parlay, set t=PL.
-7.Reasoning:Add 1 sentence "r".
-8.LISTS: Scan FULL message. Extract items 1 to N. EACH LINE IS A SEPARATE PICK. Do NOT parlay them unless it says "Parlay" OR is under a PARLAY header.
+1.c=capper (ANCHOR): Look at the VERY FIRST LINE of the [CONTENT] block. That is usually the capper/channel name. Ignore "Content"/"Caption".
+2.l=league (ANCHOR): Infer from the teams/players. Lakers->NBA, Chiefs->NFL, Chelsea->EPL, FaZe/T1->ESPORTS. Do NOT use "Other" if you can infer the sport.
+3.o=American odds int(-110,+150). Extract "Team -175" -> o=-175. NO parentheses needed.
+4.u=units float. Look for "X u", "(Xu)", "X%", "X*". If header "Max Bet", u=5. If "Whale", u=10. Default 1.
+5.Separate picks per capper.
+6.Period bets:if text has 1H/1Q/F5/P1, t=PD.
+7.Parlay:each leg prefixed with (LEAGUE). If text implies Parlay, set t=PL.
+8.Reasoning:Add 1 sentence "r".
+9.LISTS: Scan FULL message. Extract items 1 to N. EACH LINE IS A SEPARATE PICK. Do NOT parlay them unless it says "Parlay" OR is under a PARLAY header.
 
-9.SPLIT PICKS: "Team +8 & ML" = 2 picks.
-10.Tennis: NO "ML" on sets/games.
-11.PARLAY PROPS: Expand "Player 23+ Pts" inside parlay legs.
-12.SEASON: JAN/FEB is BASKETBALL (NCAAB). NCAAF is over.
-13.CONFIDENCE (q): 1-10.
-14.UK TYPE: Use t=UK for vague picks like "NBA EXCLUSIVE PLAY" or "WHAMMY".
-15.NOISE: Remove "Early Max", "Lock".
-16.PARLAY VS SEPARATE: "Leg1 + Leg2" on ONE line is a PARLAY (t=PL).
-17.ODDS VALIDATION: Odds <100 (> -100) are LINES.
+10.SPLIT PICKS: "Team +8 & ML" = 2 picks.
+11.Tennis: NO "ML" on sets/games.
+12.PARLAY PROPS: Expand "Player 23+ Pts" inside parlay legs.
+13.SEASON: JAN/FEB is BASKETBALL (NCAAB). NCAAF is over.
+14.CONFIDENCE (q): 1-10.
+15.UK TYPE: Use t=UK for vague picks like "NBA EXCLUSIVE PLAY" or "WHAMMY".
+16.NOISE: Remove "Early Max", "Lock".
+17.PARLAY VS SEPARATE: "Leg1 + Leg2" on ONE line is a PARLAY (t=PL).
+18.ODDS VALIDATION: Odds <100 (> -100) are LINES.
 
 OUTPUT:{{"picks":[{{"i":123,"c":"Name","l":"NBA","t":"PP","p":"LeBron: Pts O 25.5","o":-110,"u":1,"r":"Found LeBron prop in OCR text"}}]}}
 

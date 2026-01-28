@@ -460,12 +460,32 @@
       "exitCode": 0,
       "completionDetected": false,
       "errors": []
+    },
+    {
+      "iteration": 25,
+      "startedAt": "2026-01-28T04:57:51.184Z",
+      "endedAt": "2026-01-28T05:08:14.984Z",
+      "durationMs": 186670,
+      "toolsUsed": {
+        "Bash": 6,
+        "Grep": 1,
+        "Read": 6,
+        "Write": 2
+      },
+      "filesModified": [
+        "AGENCY_REPORT.md",
+        "benchmark_iteration_25.py",
+        "iteration_25_stats.txt"
+      ],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": []
     }
   ],
-  "totalDurationMs": 4118842,
+  "totalDurationMs": 4305512,
   "struggleIndicators": {
     "repeatedErrors": {},
-    "noProgressIterations": 3,
-    "shortIterations": 3
+    "noProgressIterations": 0,
+    "shortIterations": 0
   }
 }

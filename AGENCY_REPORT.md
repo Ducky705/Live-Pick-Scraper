@@ -84,3 +84,19 @@
     - **Throughput:** ~0.80s per request avg latency (Wall Clock / N).
     - **Winner:** Cerebras (Free Tier) proved most robust for parallel requests. Groq is fast but strictly rate-limited.
 - **Outcome:** System is now optimized for maximum *safe* concurrency (4 workers). Fallback chain is repaired.
+
+### 18. Ralph Loop - Iteration 25 (Real Data Stress Test)
+- **Goal:** Validate the "Safe Concurrency" model against the **Real World Golden Set** (complex/heavy messages) instead of mock data.
+- **Actions:**
+    - **Benchmark:** Created `benchmark_iteration_25.py` loading `new_golden_set.json` (5 complex, multi-pick messages).
+    - **Execution:** Ran with `CONCURRENCY_LIMIT=4` (Safe Limit from Iter 21).
+- **Results:**
+    - **Success Rate:** **100%** (5/5).
+    - **Latency:** ~2.65s avg (vs 0.8s on mock data).
+    - **Observations:**
+        - **Fast Tier Instability:** Cerebras and Groq frequently flagged as "Low Quality" (missing `capper` or `league`), triggering fallbacks.
+        - **Fallback robustness:** OpenRouter (DeepSeek R1 / Llama 70B) successfully handled 100% of the "Low Quality" fallbacks.
+- **Findings:**
+    - The "Fast Tier" (Cerebras/Groq) is **fast but dumb** on complex real-world data (fails to extract metadata like `capper`).
+    - The "Fallback Layer" is doing the heavy lifting for quality, which explains the higher latency (2.65s).
+    - **Verdict:** System is STABLE but reliant on expensive/slower fallbacks for complex messages.

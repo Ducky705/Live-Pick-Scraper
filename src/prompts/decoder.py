@@ -16,6 +16,7 @@ Usage:
 import json
 import re
 import logging
+import sys
 from typing import Dict, Any, List, Optional, Union
 
 # =============================================================================
@@ -565,9 +566,14 @@ PLAYER_PROP_PATTERN = re.compile(
     r"^([\(\)A-Za-z\s\.\-\']+):\s*([\w\+]+)\s+(over|under|o|u)\s*(\d+\.?\d*)",
     re.IGNORECASE,
 )
+# Player prop without colon: "LeBron James Over 7.5 Rebounds"
+PLAYER_PROP_NO_COLON_PATTERN = re.compile(
+    r"^([A-Za-z\s\.\-\']+?)\s+(over|under|o|u)\s+(\d+\.?\d*)\s+([A-Za-z\+]+)",
+    re.IGNORECASE,
+)
 # Player prop "Num+ format (e.g., "23+ PTS")
 PLAYER_PROP_PLUS_PATTERN = re.compile(
-    r"\d+\+\s*(?:pts?|points?|reb|rebounds?|ast|assists?|stl|steals?|blk|blocks?|3pm|threes?)",
+    r"\d+\+\s*(?:pts?|points?|reb|rebounds?|ast|assists?|stl|steals?|blk|blocks?|3pm|threes?|pra|p\+r\+a|sog|shots?|kills?|maps?)",
     re.IGNORECASE,
 )
 PARLAY_SEPARATORS = re.compile(
@@ -1207,6 +1213,13 @@ def infer_type_from_pick(pick_str: str, current_type: str) -> str:
 
     pick_str = pick_str.strip()
 
+    # BRUTE FORCE FIX for PRA/Threes/Rebounds
+    # If explicit keywords found, force Player Prop immediately
+    if "PRA" in pick_str.upper() or " P+R+A" in pick_str.upper():
+        return "Player Prop"
+    if "THREES" in pick_str.upper() or "3PM" in pick_str.upper():
+        return "Player Prop"
+
     # Priority 0: Futures (Super Bowl, Championship, etc.)
     if FUTURE_PATTERN.search(pick_str):
         return "Future"
@@ -1228,6 +1241,8 @@ def infer_type_from_pick(pick_str: str, current_type: str) -> str:
     # Priority 2: Player Prop with "Num+ STAT" format (e.g., "23+ PTS")
     # Check this BEFORE parlay detection to avoid "+" being treated as separator
     if PLAYER_PROP_PLUS_PATTERN.search(pick_str):
+        if "Luka" in pick_str:
+            sys.stderr.write(f"DEBUG INFER: MATCHED PLUS PATTERN for {pick_str}\n")
         # CRITICAL: If it contains a parlay separator '/', it's a Parlay of Props (SGP)
         if "/" in pick_str and not is_matchup_total(pick_str):
             return "Parlay"
@@ -1253,6 +1268,14 @@ def infer_type_from_pick(pick_str: str, current_type: str) -> str:
     # Priority 4: Player/Team Prop format (Name: Stat Over/Under X)
     # Check BEFORE totals to catch "LeBron: Pts Over 25.5"
     if PLAYER_PROP_PATTERN.search(pick_str):
+        return "Player Prop"
+
+    # Priority 4.5: Implicit Player Prop (Name Over X Stat)
+    # "LeBron James Over 7.5 Rebounds"
+    # Ensure it's not a Team Total ("Magic Over 114.5" - no stat at end)
+    if PLAYER_PROP_NO_COLON_PATTERN.search(pick_str):
+        if "LeBron" in pick_str:
+            sys.stderr.write(f"DEBUG INFER: MATCHED IMPLICIT PATTERN for {pick_str}\n")
         return "Player Prop"
 
     # Priority 5: Team Total / Team Prop detection
@@ -1960,6 +1983,18 @@ def extract_structured_fields(pick: Dict[str, Any]) -> Dict[str, Any]:
                     result["line"] = float(normalized_prop.group(4))
                 except ValueError:
                     pass
+
+            # Try implicit format: "LeBron James Over 7.5 Rebounds"
+            elif PLAYER_PROP_NO_COLON_PATTERN.search(pick_str):
+                match = PLAYER_PROP_NO_COLON_PATTERN.search(pick_str)
+                if match:
+                    result["subject"] = match.group(1).strip()
+                    result["prop_side"] = match.group(2).capitalize()
+                    try:
+                        result["line"] = float(match.group(3))
+                    except ValueError:
+                        pass
+                    result["market"] = match.group(4).capitalize()
 
     # Extract team prop fields
     elif bet_type == "Team Prop":

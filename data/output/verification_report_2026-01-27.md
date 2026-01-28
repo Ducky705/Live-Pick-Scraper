@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-27
 
 **Total Messages Processed:** 5
-**Total Picks Extracted:** 38
+**Total Picks Extracted:** 39
 
 ---
 
@@ -98,19 +98,20 @@
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
 | pick | None | 1.0 | type | - |
-| Paddy “The Baddy” Pimblett ML | -205 | 4.0 | Moneyline | - |
-| Abeta Gautier ITD | -120 | 2.0 | Moneyline | - |
-| Paddy Pimblett ML | -114 | 1.0 | Moneyline | - |
-| Jean Silva ML | -131 | 1.0 | Moneyline | - |
-| Rose Namajunas ML | 315 | 1.0 | Moneyline | - |
+| Paddy “The Baddy” Pimblett | -205 | 4.0 | Moneyline | - |
+| Abeta Gautier | -120 | 2.0 | Moneyline | - |
+| Paddy Pimblett | -136 | 2.0 | Moneyline | - |
+| Charles Johnson | -114 | 1.0 | Moneyline | - |
+| Jean Silva | -131 | 1.0 | Moneyline | - |
+| Rose Namajunas | 315 | 1.0 | Moneyline | - |
 | Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
-| Nikita Krylov ML | -110 | 2.0 | Moneyline | - |
+| Nikita Krylov | -110 | 2.0 | Moneyline | - |
 | Figueiredo/Nurmagomedov Under 2.5 Rounds | -110 | 1.0 | Total | - |
-| Pimblett ML | -235 | 3.0 | Moneyline | - |
-| Pimblett/Natalia Silva MLP | -113 | 2.0 | Moneyline | - |
-| Hokit/O' Malley MLP | 102 | 2.0 | Moneyline | - |
-| Paddy + Waldo Cortes | -110 | 1.0 | Moneyline | - |
-| Paddy by SUB | 150 | 0.5 | Moneyline | - |
+| Pimblett | -235 | 3.0 | Moneyline | - |
+| Pimblett/Natalia Silva | -113 | 2.0 | MLP | - |
+| Hokit/O' Malley | 102 | 2.0 | MLP | - |
+| Paddy + Waldo Cortes | -110 | 1.0 | Parlay | - |
+| Paddy by SUB | 150 | 0.5 | Parlay | - |
 | Sean O Malley ML | -150 | 0.5 | Moneyline | - |
 | Alcaraz ML | -150 | 0.5 | Moneyline | - |
 | Pimblett ML | -230 | 3.0 | Moneyline | - |

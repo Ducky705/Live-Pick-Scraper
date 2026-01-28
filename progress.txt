@@ -30,3 +30,11 @@ Iteration 11: Live Data Pipeline Integrated.
 - Backend now exports `latest_picks.json` to client/public.
 - Frontend uses Fetch API + Polling (10s) for real-time updates.
 - Removed dependency on static golden set for dashboard.
+
+Iteration 13: Accuracy Recovery & Parser Fixes.
+- Fixed Critical Bug: `dsl_parser.py` now supports 5-column Compact Schema (was hardcoded for 8).
+- Fixed Prop Detection: Updated regex for "Name Over X Stat" (Implicit Props).
+- Added Support: PRA, Threes, and eSports stats in regex patterns.
+- Accuracy: Recovered to 60% (from <40% regression).
+- Issues: Groq Rate Limits (429) causing fallback to weaker models.
+

@@ -52,19 +52,72 @@ def parse_dsl_lines(text: str) -> List[Dict[str, Any]]:
             continue
 
         # Parse fields
-        message_id = parts[0]
-        capper = parts[1]
-        league = parts[2]
-        bet_type = parts[3]
-        pick_value = parts[4]
-
+        message_id = None
+        capper = None
+        league = None
+        bet_type = None
+        pick_value = None
         odds = None
         units = 1.0
         reasoning = None
+        odds_str = None
+        units_str = None
 
-        # Odds
-        if len(parts) >= 6:
-            odds_str = parts[5]
+        if len(parts) >= 8:
+            # Legacy 8-column format
+            # ID | CAPPER | LEAGUE | TYPE | PICK | ODDS | UNITS | REASONING
+            message_id = parts[0]
+            capper = parts[1]
+            league = parts[2]
+            bet_type = parts[3]
+            pick_value = parts[4]
+            if len(parts) >= 6:
+                odds_str = parts[5]
+            if len(parts) >= 7:
+                units_str = parts[6]
+            if len(parts) >= 8:
+                reasoning = parts[7]
+
+        elif len(parts) == 5:
+            # Compact 5-column format (as per dsl.py)
+            # LEAGUE | TYPE | PICK | ODDS | UNITS
+            league = parts[0]
+            bet_type = parts[1]
+            pick_value = parts[2]
+            odds_str = parts[3]
+            units_str = parts[4]
+
+        elif len(parts) == 6:
+            # 5-column + Reasoning?
+            # LEAGUE | TYPE | PICK | ODDS | UNITS | REASONING
+            league = parts[0]
+            bet_type = parts[1]
+            pick_value = parts[2]
+            odds_str = parts[3]
+            units_str = parts[4]
+            reasoning = parts[5]
+
+        else:
+            # Fallback for unknown formats, or try to guess?
+            # If < 5, we skip (handled above)
+            # If 7? Maybe ID | LEAGUE ...
+            # Let's stick to supporting 5 and 8 strictly for now.
+            # Actually, let's try to detect if first col is ID (digits)
+            if parts[0].isdigit() and len(parts) >= 7:
+                # ID | ...
+                message_id = parts[0]
+                capper = parts[1]
+                league = parts[2]
+                bet_type = parts[3]
+                pick_value = parts[4]
+                odds_str = parts[5]
+                if len(parts) >= 7:
+                    units_str = parts[6]
+            else:
+                continue
+
+        # Process Odds
+        if odds_str:
             try:
                 if odds_str and odds_str.lower() != "null":
                     # Remove non-numeric chars except -
@@ -74,9 +127,8 @@ def parse_dsl_lines(text: str) -> List[Dict[str, Any]]:
             except ValueError:
                 pass
 
-        # Units
-        if len(parts) >= 7:
-            units_str = parts[6]
+        # Process Units
+        if units_str:
             try:
                 if units_str and units_str.lower() != "null":
                     clean = re.sub(r"[^\d\.]", "", units_str)
@@ -84,10 +136,6 @@ def parse_dsl_lines(text: str) -> List[Dict[str, Any]]:
                         units = float(clean)
             except ValueError:
                 pass
-
-        # Reasoning
-        if len(parts) >= 8:
-            reasoning = parts[7]
 
         # Validation: League and Type should be relatively short
         if len(league) > 20 or len(bet_type) > 20:

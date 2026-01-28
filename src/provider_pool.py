@@ -42,15 +42,16 @@ from src.prompts.decoder import expand_compact_pick
 # --- CONFIGURATION ---
 
 # Strong fallback model (OpenRouter) - ONLY used when all fast providers fail
-STRONG_FALLBACK_MODEL = "google/gemini-2.0-flash-lite-preview-02-05:free"
+# Switched to Llama 3.3 70b Free for better reliability (Gemini was throwing 400s)
+STRONG_FALLBACK_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 
 # Rate Limits - MAXIMUM SPEED configuration (Updated 2026-01-22)
 # Based on actual provider rate limits from user data
 LIMITS = {
-    "groq": Semaphore(2),  # Reduced from 16 to 2 to avoid 429s
-    "mistral": Semaphore(2),  # Reduced from 4
-    "gemini": Semaphore(1),  # Reduced from 3 to avoid 429s
-    "cerebras": Semaphore(1),  # Reduced from 2
+    "groq": Semaphore(1),  # Stricter limit (1 concurrent) to prevent 429s
+    "mistral": Semaphore(2),
+    "gemini": Semaphore(1),
+    "cerebras": Semaphore(1),
 }
 
 # Provider Availability Flags
@@ -269,16 +270,16 @@ def _get_fast_providers(task_type: str = "text") -> List[Dict[str, Any]]:
     candidates = []
 
     if task_type == "text":
-        # Text Providers: Groq FIRST (1000 RPM), then Mistral, then Cerebras
+        # Text Providers: Groq FIRST (1000 RPM), then Cerebras (Faster/Better), then Mistral
         if os.getenv("GROQ_TOKEN") and _is_available("groq"):
             candidates.append({"name": "groq", "model": GROQ_TEXT_MODEL, "priority": 1})
-        if os.getenv("MISTRAL_TOKEN") and _is_available("mistral"):
-            candidates.append(
-                {"name": "mistral", "model": MISTRAL_TEXT_MODEL, "priority": 2}
-            )
         if os.getenv("CEREBRAS_TOKEN") and _is_available("cerebras"):
             candidates.append(
-                {"name": "cerebras", "model": CEREBRAS_MODEL, "priority": 3}
+                {"name": "cerebras", "model": CEREBRAS_MODEL, "priority": 2}
+            )
+        if os.getenv("MISTRAL_TOKEN") and _is_available("mistral"):
+            candidates.append(
+                {"name": "mistral", "model": MISTRAL_TEXT_MODEL, "priority": 3}
             )
 
     elif task_type == "vision":
@@ -320,6 +321,8 @@ def _execute_fast_request(
             return mistral_completion(prompt, image_input=img_input, timeout=timeout)
 
     except Exception as e:
+        if "429" in str(e):
+            raise e  # Propagate rate limit to caller
         logging.error(f"[HybridPool] Error executing {provider}: {e}")
         return None
 
@@ -413,6 +416,13 @@ def pooled_completion(
         for provider_info in candidates:
             provider_name = provider_info["name"]
 
+            # CRITICAL CHECK: Re-check availability inside loop (in case previous iter triggered cooldown)
+            if not _is_available(provider_name):
+                logging.info(
+                    f"[HybridPool] {provider_name} became unavailable/rate-limited. Skipping."
+                )
+                continue
+
             sem = LIMITS.get(provider_name)
             if not sem:
                 continue
@@ -424,6 +434,11 @@ def pooled_completion(
                 continue
 
             try:
+                # Double-check availability after acquire (just to be safe)
+                if not _is_available(provider_name):
+                    sem.release()
+                    continue
+
                 logging.info(
                     f"[HybridPool] Trying {provider_name} ({provider_info['model']})..."
                 )
@@ -462,6 +477,12 @@ def pooled_completion(
                     logging.warning(f"[HybridPool] {provider_name} returned None.")
 
             except Exception as e:
+                if "429" in str(e):
+                    _mark_rate_limited(provider_name, wait_seconds=30)
+                    logging.warning(
+                        f"[HybridPool] Marked {provider_name} as rate limited."
+                    )
+
                 logging.error(
                     f"[HybridPool] Unexpected error with {provider_name}: {e}"
                 )

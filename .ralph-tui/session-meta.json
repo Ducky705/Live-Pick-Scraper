@@ -1,0 +1,14 @@
+{
+  "id": "39864d93-e80a-4a8b-8269-1e59945a9204",
+  "status": "running",
+  "startedAt": "2026-01-28T18:30:45.135Z",
+  "updatedAt": "2026-01-28T18:30:45.135Z",
+  "agentPlugin": "opencode",
+  "trackerPlugin": "json",
+  "prdPath": "prd.json",
+  "currentIteration": 0,
+  "maxIterations": 50,
+  "totalTasks": 0,
+  "tasksCompleted": 0,
+  "cwd": "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15"
+}

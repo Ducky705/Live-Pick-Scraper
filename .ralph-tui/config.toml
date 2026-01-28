@@ -1,0 +1,11 @@
+configVersion = "2.1"
+maxIterations = 50
+autoCommit = true
+agent = "opencode"
+tracker = "json"
+subagentTracingDetail = "full"
+
+[agentOptions]
+model = "google/gemini-3-pro-preview"
+
+[trackerOptions]

@@ -1,29 +1,36 @@
-ROLE: Lead Performance Architect.
-STATUS: Phase 2 - "The Fast Tier Quality Fix" (RECOVERY MODE).
+ROLE: Reliability Engineer / QA Lead.
+MISSION: STRESS TEST the Optimized Extraction Pipeline to identify breaking points, memory leaks, and long-run rate limits.
 
-CURRENT STATE:
-- Iteration 6 FAILED (40% Accuracy) because we increased Batch Size to 5.
-- We MUST revert to `BATCH_SIZE = 1`.
-- PROBLEM: Tier 1 models (Llama-8b) are fast (1.3s) but "Dumb" (fail to extract 'capper'/'league' names correctly), triggering "Unknown Field" warnings.
-
-MISSION:
-Optimize the **System Prompts** specifically for Tier 1 (Small Models) to eliminate "Unknown" fields while keeping Batch Size at 1.
+CONTEXT:
+We have optimized the pipeline to ~0.6s latency for small batches (5 msgs) with 100% accuracy. We need to verify if this performance holds for LARGE datasets (500+ messages) and long-running sessions.
 
 OBJECTIVES:
-1. REVERT BATCH SIZE: Ensure `BATCH_SIZE = 1` in `src/extraction_pipeline.py`.
-2. PROMPT SURGERY: Refactor `CorePrompt` to be explicitly clear about `capper` and `league` extraction.
-   - ADD "ANCHOR" INSTRUCTIONS: Tell the model exactly where to look (e.g. "Header line", "first line").
-   - DO NOT COMPRESS blindly. Structure > Compression.
-3. ELIMINATE FALLBACKS: Reduce the "Unknown Field" rate to 0%.
+1. CREATE MEGA-DATASET:
+   - Generate or synthesize a `benchmark/dataset/stress_test_500.json` file.
+   - Use a mix of "Simple" (Rule-based) and "Complex" (AI-required) messages to simulate real traffic (Ratio: 80% Simple, 20% Complex).
+   
+2. EXECUTE STRESS TEST:
+   - Create `benchmark/stress_test.py`.
+   - Run the pipeline against the 500 messages with `CONCURRENCY=4`.
+   - MONITOR:
+     - Memory Usage (Does it creep up?)
+     - Rate Limits (Do we hit 429s after minute 5?)
+     - Latency Drift (Does 0.6s become 2.0s after 100 messages?)
+
+3. OPTIMIZE FOR ENDURANCE:
+   - If Rate Limits hit: Implement "Smart Throttle" (dynamic sleep) or "Backoff" logic.
+   - If Memory leaks: Add garbage collection or stream processing.
+   - If Latency drifts: Investigate Provider fatigue.
 
 PROTOCOL:
-1. Revert Batch Size to 1.
-2. Modify PROMPTS.
-3. Run `benchmark_iteration_25.py`.
-   - SUCCESS = 100% Accuracy AND 0 "Unknown" warnings.
+1. Generate the dataset.
+2. Run the stress test.
+3. Analyze logs.
+4. Fix ONE major bottleneck found.
+5. Report findings.
 
-HARD CONSTRAINTS:
-- **BATCH_SIZE MUST BE 1.** (Non-negotiable).
-- Do NOT switch to paid models.
+CONSTRAINTS:
+- Do not spend real money (Keep to Free Tier models).
+- Maintain the "Batch Size 1" safety constraint.
 
 GO.

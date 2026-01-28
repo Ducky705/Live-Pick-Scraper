@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-27
 
 **Total Messages Processed:** 5
-**Total Picks Extracted:** 39
+**Total Picks Extracted:** 40
 
 ---
 
@@ -42,16 +42,18 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Oilers ML | -175 | 1.0 | Moneyline | - |
-| Magic -1.5 | -110 | 4.0 | Spread | - |
-| Minnesota +6 | -110 | 4.0 | Spread | - |
-| Wofford +2 | -110 | 3.0 | Spread | - |
-| Connecticut -10.5 | -110 | 3.0 | Spread | - |
-| (UFC) Paddy Pimblett ML / (UFC) Jean Silva ML | -110 | 5.0 | Parlay | - |
-| Georgia Tech: Total Under 144 | -110 | 3.0 | Team Prop | - |
-| Denver: Total Over 161.5 | -110 | 3.0 | Team Prop | - |
-| Oklahoma St: Total Under 163 | -110 | 3.0 | Team Prop | - |
-| Cal St Fullerton: Total Under 172.5 | -110 | 5.0 | Team Prop | - |
+| Oilers | -175 | 1.0 | Moneyline | - |
+| Magic - 1.5 | -110 | 1.0 | Spread | - |
+| Minnesota +6 | -110 | 1.0 | Spread | - |
+| Wofford +2 | -110 | 1.0 | Spread | - |
+| Connecticut -10.5 | -110 | 1.0 | Spread | - |
+| Paddy Pimblett | -110 | 1.0 | Moneyline | - |
+| Jean Silva | -110 | 1.0 | Moneyline | - |
+| Paddy Pimblett / Jean Silva | -110 | 1.0 | Parlay | - |
+| Georgia Tech vs Opponent Under 144 | -110 | 1.0 | Total | - |
+| Denver vs Opponent Over 161.5 | -110 | 1.0 | Total | - |
+| Oklahoma St vs Opponent Under 163 | -110 | 1.0 | Total | - |
+| Cal St Fullerton vs Opponent Under 172.5 | -110 | 1.0 | Total | - |
 
 ---
 
@@ -97,9 +99,9 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| pick | None | 1.0 | type | - |
 | Paddy “The Baddy” Pimblett | -205 | 4.0 | Moneyline | - |
 | Abeta Gautier | -120 | 2.0 | Moneyline | - |
+| Abeta Gautier vs Opponent ITD | -120 | 2.0 | Total | - |
 | Paddy Pimblett | -136 | 2.0 | Moneyline | - |
 | Charles Johnson | -114 | 1.0 | Moneyline | - |
 | Jean Silva | -131 | 1.0 | Moneyline | - |
@@ -107,14 +109,13 @@
 | Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
 | Nikita Krylov | -110 | 2.0 | Moneyline | - |
 | Figueiredo/Nurmagomedov Under 2.5 Rounds | -110 | 1.0 | Total | - |
-| Pimblett | -235 | 3.0 | Moneyline | - |
-| Pimblett/Natalia Silva | -113 | 2.0 | MLP | - |
-| Hokit/O' Malley | 102 | 2.0 | MLP | - |
+| Pimblett | -230 | 3.0 | Moneyline | - |
+| Pimblett/Natalia Silva | -113 | 2.0 | Moneyline | - |
+| Hokit/O' Malley | 102 | 2.0 | Moneyline | - |
 | Paddy + Waldo Cortes | -110 | 1.0 | Parlay | - |
-| Paddy by SUB | 150 | 0.5 | Parlay | - |
-| Sean O Malley ML | -150 | 0.5 | Moneyline | - |
-| Alcaraz ML | -150 | 0.5 | Moneyline | - |
-| Pimblett ML | -230 | 3.0 | Moneyline | - |
+| Paddy by SUB | 150 | 0.5 | Spread | - |
+| Sean O Malley | -150 | 0.5 | Moneyline | - |
+| Alcaraz | -150 | 0.5 | Moneyline | - |
 
 ---
 

@@ -3,15 +3,8 @@ import { Terminal, Activity, Database, Search, ChevronDown, ChevronUp, Zap, Radi
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Mock Data Load (Keep existing logic)
+// Mock Data Load (Replaced by Live Fetch in Iteration 11)
 let initialData = [];
-try {
-  import('../../new_golden_set.json').then(module => {
-    initialData = module.default;
-  }).catch(e => console.error("Could not load data", e));
-} catch (e) {
-  console.log("Data load failed or not in build");
-}
 
 const Card = ({ className, children, hoverEffect = true }) => (
   <motion.div 
@@ -47,14 +40,28 @@ export default function App() {
   const [filter, setFilter] = useState('');
   const [expandedId, setExpandedId] = useState(null);
 
+  // Ralph Loop Iteration 11: Live Data Polling
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/latest_picks.json');
+      if (!response.ok) throw new Error("Data stream offline");
+      const jsonData = await response.json();
+      setData(jsonData);
+      setLoading(false);
+    } catch (error) {
+      console.warn("Live feed disconnected, retrying...", error);
+      // Keep loading true if we have NO data, otherwise keep showing old data
+      if (data.length === 0) setLoading(false); 
+    }
+  };
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      import('../../new_golden_set.json').then(module => {
-        setData(module.default);
-        setLoading(false);
-      }).catch(() => setLoading(false));
-    }, 800);
-    return () => clearTimeout(timer);
+    // Initial Fetch
+    fetchData();
+
+    // Poll every 10 seconds
+    const interval = setInterval(fetchData, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const stats = {
@@ -96,7 +103,7 @@ export default function App() {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground font-mono text-sm mt-2"
           >
-            ITERATION 10 // AVANT-GARDE PROTOCOL
+            ITERATION 11 // LIVE LINK ESTABLISHED
           </motion.p>
         </div>
 

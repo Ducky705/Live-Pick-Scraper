@@ -61,3 +61,11 @@
     - **Design:** "Avant-Garde" Terminal/Cyberpunk aesthetic for high-density data visualization.
     - **Integration:** Map `data/picks_*.json` schema to UI components.
 - **Status:** Completed.
+
+### 16. Ralph Loop - Iteration 11 (Live Data Pipeline)
+- **Goal:** Connect the Frontend "Visual Cortex" to the Backend Extraction Pipeline for real-time data visualization.
+- **Actions:**
+    - **Backend:** Modified `cli_tool.py` to auto-deploy `latest_picks.json` to the client's public directory after every run.
+    - **Frontend:** Refactored `App.jsx` to replace static `import` with dynamic `fetch()` polling.
+    - **Integration:** Established a 10-second polling interval for near real-time updates without page reloads.
+- **Status:** Live Link Established.

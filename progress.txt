@@ -25,3 +25,8 @@ Iteration 10: UI Refinement & Interaction Design (Avant-Garde).
 - Enhancing visual hierarchy with 'Intentional Minimalism'.
 - Integrating advanced Framer Motion transitions.
 - Optimizing information density in Pick Cards.
+
+Iteration 11: Live Data Pipeline Integrated.
+- Backend now exports `latest_picks.json` to client/public.
+- Frontend uses Fetch API + Polling (10s) for real-time updates.
+- Removed dependency on static golden set for dashboard.

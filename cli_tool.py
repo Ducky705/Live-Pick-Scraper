@@ -228,6 +228,20 @@ async def main():
     with open(output_file, "w") as f:
         json.dump(picks, f, indent=2)
 
+    # RALPH LOOP ITERATION 11: Export to Client Public Folder for Live Dashboard
+    try:
+        import shutil
+
+        client_public_dir = os.path.join(os.path.dirname(__file__), "client", "public")
+        if not os.path.exists(client_public_dir):
+            os.makedirs(client_public_dir)
+
+        latest_picks_file = os.path.join(client_public_dir, "latest_picks.json")
+        shutil.copy2(output_file, latest_picks_file)
+        logging.info(f"Deployed picks to Dashboard: {latest_picks_file}")
+    except Exception as e:
+        logging.error(f"Failed to deploy picks to Dashboard: {e}")
+
     print("\n" + "=" * 50)
     print("   RESULTS   ")
     print("=" * 50)

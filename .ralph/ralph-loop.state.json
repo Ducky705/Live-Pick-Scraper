@@ -1,13 +1,13 @@
 {
   "active": true,
-  "iteration": 34,
+  "iteration": 1,
   "minIterations": 1,
-  "maxIterations": 150,
+  "maxIterations": 50,
   "completionPromise": "COMPLETE",
   "tasksMode": false,
   "taskPromise": "READY_FOR_NEXT_TASK",
-  "prompt": "You are the Lead Performance Architect tasked with radically optimizing the 'Complexity Router' and AI Provider logic. Your priorities are: 1. Accuracy (Non-negotiable), 2. Request Economy (Minimize HTTP requests), 3. Speed, and 4. Zero Cost (Free/High-Limit models only).\n\n**Execution Plan:**\n\n1.  **Discovery & Baseline (CRITICAL FIRST STEP):**\n    *   Analyze `docs/PROVIDERS.md` and existing routing code (search for `router`, `provider`, `ai` logic).\n    *   Create a `benchmark.py` (or `.ts` if appropriate) script. This script must run a set of diverse test cases and output: [Total Requests], [Avg Latency], [Token Usage], and [Accuracy %].\n    *   Run this benchmark to establish the current performance baseline and save it to `baseline_stats.txt`.\n\n2.  **Strategic Analysis:**\n    *   Identify 'request leaks' (redundant fallbacks, chains, retries).\n    *   Select specific Free/High-Rate-Limit OpenRouter model IDs to replace inefficient ones. Aim for 'One-Shot' capability.\n\n3.  **Iterative Optimization:**\n    *   **Refactor:** Rewrite routing algorithms to be 'One-Shot' aggressive. Condense system prompts. Implement 'Fail-Fast' logic.\n    *   **Test:** After every significant change, run the `benchmark` script.\n    *   **Decision:** IF (metrics improve AND accuracy >= baseline) -> Keep/Commit. IF (accuracy drops) -> Revert immediately.\n\n**Constraints:**\n- Do not degrade accuracy.\n- Use ONLY free/lenient rate-limit models.\n- Focus on specific model IDs, not generic routing groups.",
-  "startedAt": "2026-01-27T23:54:50.520Z",
+  "prompt": "You are the Lead Performance Architect. Your mission is to radically optimize the system's 'Complexity Router' and AI Provider logic, prioritizing Accuracy, Request Economy, Speed, and Zero Cost (Free models).\n\n**Phase 1: Baseline & Instrumentation**\n1.  **Analyze**: Review `docs/PROVIDERS.md` and the codebase to understand the current tiered routing logic.\n2.  **Build Benchmark**: Create `benchmark.py` to measure [Total Requests], [Avg Latency], [Token Usage], and [Accuracy]. Create a representative test dataset to ensure consistency.\n3.  **Establish Baseline**: Run `benchmark.py` against the current system and record the metrics.\n\n**Phase 2: Scientific Optimization**\nIterate through the following process for each improvement opportunity:\n1.  **Hypothesize**: Identify a specific area for improvement (e.g., 'The prompt is too verbose', 'Tier 1 fallback is triggered too often', 'Model X is slow').\n2.  **Implement**: Apply the change (e.g., condense prompts, switch to a faster free OpenRouter model ID, implement parallel speculation).\n3.  **Verify**: Run `benchmark.py`.\n    *   **Success**: If Efficiency improves AND Accuracy is stable/better -> **COMMIT**.\n    *   **Failure**: If Accuracy drops -> **REVERT** immediately.\n\n**Constraints**:\n-   Strictly use FREE models with high rate limits.\n-   Do not sacrifice Accuracy for Speed.\n\n**Goal**: Achieve a 'One-Shot' aggressive architecture that minimizes HTTP requests and latency.",
+  "startedAt": "2026-01-28T10:47:33.235Z",
   "model": "",
   "agent": "opencode"
 }

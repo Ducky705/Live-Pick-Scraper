@@ -61,23 +61,31 @@ def main():
     print("PERFORMANCE BENCHMARK - BASELINE ESTABLISHMENT")
     print("=" * 60)
 
-    # 1. Load Input Messages
-    input_path = os.path.join("cache", "messages.json")
+    # 1. Load Input Messages from Golden Set (for consistent benchmarking)
+    input_path = os.path.abspath("new_golden_set.json")
     if not os.path.exists(input_path):
-        print(f"ERROR: {input_path} not found. Run scraper first.")
+        print(f"ERROR: {input_path} not found.")
         return
 
     with open(input_path, "r", encoding="utf-8") as f:
-        raw_data = json.load(f)
+        golden_data = json.load(f)
 
-    if isinstance(raw_data, dict) and "messages" in raw_data:
-        messages = raw_data["messages"]
-    else:
-        messages = raw_data
+    messages = []
+    for item in golden_data:
+        # Map golden set item to TelegramMessage dict structure
+        msg = {
+            "id": item.get("id"),
+            "text": item.get("text", ""),
+            "date": item.get("date", "2026-01-01 12:00 ET"),
+            "images": item.get("images", []),
+            "channel_id": item.get("channel_id", 0),
+            "channel_name": item.get("channel_name", "BenchmarkChannel"),
+            "ocr_text": "",
+            "ocr_texts": [],
+        }
+        messages.append(msg)
 
-    # Limit for baseline speed (optional, but good for dev)
-    # messages = messages[:50]
-    print(f"Loaded {len(messages)} messages for benchmarking.")
+    print(f"Loaded {len(messages)} messages from Golden Set for benchmarking.")
 
     # 2. Run Pipeline with Instrumentation
     print("\n[Running Extraction Pipeline...]")

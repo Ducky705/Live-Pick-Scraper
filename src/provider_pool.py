@@ -47,10 +47,10 @@ STRONG_FALLBACK_MODEL = "google/gemini-2.0-flash-lite-preview-02-05:free"
 # Rate Limits - MAXIMUM SPEED configuration (Updated 2026-01-22)
 # Based on actual provider rate limits from user data
 LIMITS = {
-    "groq": Semaphore(16),  # 1000 RPM = 16 concurrent (PRIMARY)
-    "mistral": Semaphore(4),  # 60 RPM = 4 concurrent
-    "gemini": Semaphore(3),  # 15 RPM = 3 concurrent
-    "cerebras": Semaphore(2),  # 30 RPM = 2 concurrent
+    "groq": Semaphore(2),  # Reduced from 16 to 2 to avoid 429s
+    "mistral": Semaphore(2),  # Reduced from 4
+    "gemini": Semaphore(1),  # Reduced from 3 to avoid 429s
+    "cerebras": Semaphore(1),  # Reduced from 2
 }
 
 # Provider Availability Flags

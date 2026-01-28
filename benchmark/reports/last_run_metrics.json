@@ -1,6 +1,6 @@
 {
-  "requests": 3,
-  "avg_latency": 1.3889119625091553,
-  "tokens": 3635,
-  "accuracy": 0.0
+  "requests": 7,
+  "avg_latency": 1.7998884405408586,
+  "tokens": 2469,
+  "accuracy": 60.0
 }

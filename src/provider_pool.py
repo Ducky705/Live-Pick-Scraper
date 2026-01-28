@@ -278,10 +278,7 @@ def _get_fast_providers(task_type: str = "text") -> List[Dict[str, Any]]:
             candidates.append(
                 {"name": "cerebras", "model": CEREBRAS_MODEL, "priority": 2}
             )
-        if os.getenv("MISTRAL_TOKEN") and _is_available("mistral"):
-            candidates.append(
-                {"name": "mistral", "model": MISTRAL_TEXT_MODEL, "priority": 3}
-            )
+        # Mistral removed from text tier for Iteration 18 (Low Quality/High Latency)
 
     elif task_type == "vision":
         # Vision Providers: Groq, Mistral (Cerebras is text-only)
@@ -472,76 +469,22 @@ def pooled_completion(
             f"[HybridPool] No fast providers available for {task_type}. Going to OpenRouter."
         )
     else:
-        # --- ITERATION 17: PARALLEL SPECULATION ---
-        # Try top 2 providers simultaneously to minimize latency.
+        # --- ITERATION 18: SEQUENTIAL FAST-FAIL ---
+        # "Request Economy" Optimization: Eliminate parallel requests.
+        # Try best provider first. If it fails, move to next.
 
-        speculative_batch = candidates[:2]
-        remaining_candidates = candidates[2:]
-
-        # 1. Speculative Phase (Top 2)
-        if speculative_batch:
-            logging.info(
-                f"[HybridPool] Speculative execution: {[p['name'] for p in speculative_batch]}"
+        for provider_info in candidates:
+            res, score = _attempt_provider_execution(
+                provider_info["name"],
+                provider_info["model"],
+                prompt,
+                images,
+                timeout,
             )
-
-            with ThreadPoolExecutor(max_workers=len(speculative_batch)) as executor:
-                futures = {
-                    executor.submit(
-                        _attempt_provider_execution,
-                        p["name"],
-                        p["model"],
-                        prompt,
-                        images,
-                        timeout,
-                    ): p["name"]
-                    for p in speculative_batch
-                }
-
-                # Wait for FIRST completion
-                done, not_done = wait(futures.keys(), return_when=FIRST_COMPLETED)
-
-                # Check if the first one was successful
-                for f in done:
-                    res, score = f.result()
-                    if res and score >= QUALITY_THRESHOLD:
-                        logging.info(f"[HybridPool] Speculative WINNER: {futures[f]}")
-                        return res
-                    if res:
-                        _last_fast_result = res
-
-                # If first one failed, wait for the rest (gracefully)
-                if not_done:
-                    logging.info(
-                        "[HybridPool] First speculative failed, waiting for others..."
-                    )
-                    done2, _ = wait(not_done, timeout=timeout)
-                    for f in done2:
-                        res, score = f.result()
-                        if res and score >= QUALITY_THRESHOLD:
-                            logging.info(
-                                f"[HybridPool] Speculative RECOVERY: {futures[f]}"
-                            )
-                            return res
-                        if res:
-                            _last_fast_result = res
-
-        # 2. Sequential Phase (Remaining)
-        if remaining_candidates:
-            logging.info(
-                "[HybridPool] Speculative phase failed. Trying remaining providers sequentially..."
-            )
-            for provider_info in remaining_candidates:
-                res, score = _attempt_provider_execution(
-                    provider_info["name"],
-                    provider_info["model"],
-                    prompt,
-                    images,
-                    timeout,
-                )
-                if res and score >= QUALITY_THRESHOLD:
-                    return res
-                if res:
-                    _last_fast_result = res
+            if res and score >= QUALITY_THRESHOLD:
+                return res
+            if res:
+                _last_fast_result = res
 
     # --- FALLBACK: OpenRouter (DeepSeek R1) ---
     logging.info(

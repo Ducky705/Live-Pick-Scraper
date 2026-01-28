@@ -116,21 +116,23 @@
         "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769559676.014972)",
         "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown until 1769559712.8849516)"
       ]
+    },
+    {
+      "iteration": 6,
+      "startedAt": "2026-01-28T00:24:03.045Z",
+      "endedAt": "2026-01-28T00:25:22.881Z",
+      "durationMs": 10452,
+      "toolsUsed": {},
+      "filesModified": [],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": []
     }
   ],
-  "totalDurationMs": 982177,
+  "totalDurationMs": 992629,
   "struggleIndicators": {
-    "repeatedErrors": {
-      "ERROR:src.parallel_batch_processor:[groq] Batch 2 failed: Groq Rate limit 429": 2,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Provider groq is rate limited (cooldown un": 4,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Provider groq is rate limited (cooldown un": 2,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 1 failed: Groq Rate limit 429": 3,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 2 failed: Provider groq is rate limited (cooldown un": 1,
-      "ERROR:src.parallel_batch_processor:[groq] Batch 0 failed: Groq Rate limit 429": 1,
-      "3.  **Parsing Error:** Cerebras fallback returned invalid JSON structure (`['type']` missing `pick` ": 1,
-      "ERROR:src.parallel_batch_processor:[gemini] Batch 2 failed: Gemini Rate limit 429": 1
-    },
-    "noProgressIterations": 0,
-    "shortIterations": 0
+    "repeatedErrors": {},
+    "noProgressIterations": 1,
+    "shortIterations": 1
   }
 }

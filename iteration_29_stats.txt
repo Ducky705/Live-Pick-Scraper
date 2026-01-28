@@ -1,0 +1,4 @@
+Total Requests: 5
+Total Time: 14.3859
+Avg Latency: 2.8772
+Success Rate: 1.0

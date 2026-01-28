@@ -1,15 +1,13 @@
 # Pick Verification Report - 2026-01-24
 
 **Total Messages Processed:** 5
-**Total Picks Extracted:** 44
+**Total Picks Extracted:** 46
 
 ---
 
 ## Message ID: 12793
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
 **Date:** 2026-01-24 12:03 ET
 **Text:**
 > **Big Al**
@@ -43,24 +41,25 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Oilers ML | -175 | 1.0 | Moneyline | - |
-| Magic -1.5 | -110 | 4.0 | Spread | - |
-| Minnesota +6 | -110 | 4.0 | Spread | - |
-| Wofford +2 | -110 | 3.0 | Spread | - |
-| Connecticut -10.5 | -110 | 3.0 | Spread | - |
-| (UFC) Paddy Pimblett ML / (UFC) Jean Silva ML | -110 | 5.0 | Parlay | - |
-| Georgia Tech: Total Under 144 | -110 | 3.0 | Team Prop | - |
-| Denver: Total Over 161.5 | -110 | 3.0 | Team Prop | - |
-| Oklahoma St: Total Under 163 | -110 | 3.0 | Team Prop | - |
-| Cal St Fullerton: Total Under 172.5 | -110 | 5.0 | Team Prop | - |
+| Oilers | -175 | 1.0 | Moneyline | - |
+| Magic - 1.5 | -110 | 1.0 | Spread | - |
+| Minnesota +6 | -110 | 1.0 | Spread | - |
+| Wofford +2 | -110 | 1.0 | Spread | - |
+| Connecticut -10.5 | -110 | 1.0 | Spread | - |
+| Paddy Pimblett | None | 1.0 | Moneyline | - |
+| Jean Silva | None | 1.0 | Moneyline | - |
+| Paddy Pimblett & Jean Silva | None | 1.0 | Parlay | - |
+| Georgia Tech vs Opponent Under 144 | -110 | 1.0 | Total | - |
+| Denver vs Opponent Over 161.5 | -110 | 1.0 | Total | - |
+| Oklahoma St vs Opponent Under 163 | -110 | 1.0 | Total | - |
+| Cal St Fullerton | None | 1.0 | Moneyline | - |
+| Cal St Fullerton vs Opponent Under 172.5 | -110 | 1.0 | Total | - |
 
 ---
 
 ## Message ID: 12806
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
 **Date:** 2026-01-24 18:28 ET
 **Text:**
 > UFC 324
@@ -100,32 +99,28 @@
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
 | pick | None | 1.0 | type | - |
-| Paddy “The Baddy” Pimblett | -205 | 4.0 | Moneyline | - |
-| Abeta Gautier | -120 | 2.0 | Moneyline | - |
-| Paddy Pimblett | -136 | 2.0 | Moneyline | - |
-| Ty Miller | -114 | 1.0 | Moneyline | - |
-| Charles Johnson | -114 | 1.0 | Moneyline | - |
-| Jean Silva | -131 | 1.0 | Moneyline | - |
-| Rose Namajunas | 315 | 1.0 | Moneyline | - |
+| Paddy “The Baddy” Pimblett ML | -205 | 4.0 | Moneyline | - |
+| Abeta Gautier ITD | -120 | 2.0 | Moneyline | - |
+| Paddy Pimblett ML | -114 | 1.0 | Moneyline | - |
+| Jean Silva ML | -131 | 1.0 | Moneyline | - |
+| Rose Namajunas ML | 315 | 1.0 | Moneyline | - |
 | Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
-| Nikita Krylov | -110 | 2.0 | Moneyline | - |
+| Nikita Krylov ML | -110 | 2.0 | Moneyline | - |
 | Figueiredo/Nurmagomedov Under 2.5 Rounds | -110 | 1.0 | Total | - |
-| Pimblett | -235 | 3.0 | Moneyline | - |
-| Pimblett/Natalia Silva | -113 | 2.0 | Moneyline | - |
-| Hokit/O' Malley | 102 | 2.0 | Moneyline | - |
-| Paddy + Waldo Cortes | -110 | 1.0 | Parlay | - |
+| Pimblett ML | -235 | 3.0 | Moneyline | - |
+| Pimblett/Natalia Silva MLP | -113 | 2.0 | Moneyline | - |
+| Hokit/O' Malley MLP | 102 | 2.0 | Moneyline | - |
+| Paddy + Waldo Cortes | -110 | 1.0 | Moneyline | - |
 | Paddy by SUB | 150 | 0.5 | Moneyline | - |
-| Sean O Malley | -150 | 0.5 | Moneyline | - |
-| Alcaraz | -150 | 0.5 | Moneyline | - |
-| Pimblett | -230 | 3.0 | Moneyline | - |
+| Sean O Malley ML | -150 | 0.5 | Moneyline | - |
+| Alcaraz ML | -150 | 0.5 | Moneyline | - |
+| Pimblett ML | -230 | 3.0 | Moneyline | - |
 
 ---
 
 ## Message ID: 13001
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
 **Date:** 2026-01-27 10:00 ET
 **Text:**
 > ⚽️ SOCCER VIP ⚽️
@@ -164,8 +159,6 @@
 ## Message ID: 13002
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
 **Date:** 2026-01-27 19:00 ET
 **Text:**
 > 🏀 NBA PLAYER PROPS 🏀
@@ -195,8 +188,6 @@
 ## Message ID: 13003
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
 **Date:** 2026-01-27 20:00 ET
 **Text:**
 > 🔥 MAX WHALE PLAYS 🔥
@@ -214,8 +205,9 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (NFL) Commanders +3.5 / (NFL) Ravens: Team Total Over 24.5 | -115 | 5.0 | Spread | - |
-| Ravens: Team Total Over 24.5 | -120 | 3.0 | Team Prop | - |
-| Chiefs ML | None | 1.0 | Moneyline | - |
-| (NFL) Bengals +7.5 / (NFL) Bills +8.5 | -120 | 1.0 | Parlay | - |
+| Commanders +3.5 | -115 | 5.0 | Spread | - |
+| Ravens vs Opponent Over 24.5 | -120 | 3.0 | Total | - |
+| Bengals +7.5 / Bills +8.5 | -120 | 2.0 | Parlay | - |
+| Chiefs ML | 100 | 2.0 | Moneyline | - |
+| Lions -6.5 | -110 | 2.0 | Spread | - |
 

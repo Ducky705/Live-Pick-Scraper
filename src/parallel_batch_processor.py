@@ -51,7 +51,7 @@ PROVIDER_CONFIG = {
         "max_concurrent": 4,  # 60 RPM = 1/sec, 4 concurrent staggered
         "min_delay": 1.0,  # 1 req/sec
         "batch_size": 10,  # Bundle 10 messages per call
-        "priority": 2,  # SECONDARY (Preferred Backup)
+        "priority": 4,  # DEMOTED to 4 (Slow)
     },
     "openrouter": {
         "model": "meta-llama/llama-3.3-70b-instruct:free",
@@ -59,7 +59,7 @@ PROVIDER_CONFIG = {
         "tpm": 100000,
         "max_concurrent": 5,
         "min_delay": 0.5,
-        "priority": 3,  # TERTIARY (Fallback)
+        "priority": 5,  # TERTIARY (Fallback)
     },
     "gemini": {
         "model": "gemini-2.0-flash-lite-preview-02-05",  # Updated model
@@ -68,7 +68,7 @@ PROVIDER_CONFIG = {
         "max_concurrent": 2,  # Reduced from 3 to 2 for safety
         "min_delay": 4.0,  # 4s between requests
         "batch_size": 5,  # Bundle 5 messages per call
-        "priority": 4,
+        "priority": 2,  # PROMOTED to 2 (Fast + High Limits)
     },
     "cerebras": {
         "model": "llama3.1-8b",  # Fast
@@ -76,7 +76,7 @@ PROVIDER_CONFIG = {
         "tpm": 60000,  # 60K TPM (lower)
         "max_concurrent": 2,  # 30 RPM = 0.5/sec
         "min_delay": 2.0,  # 2s between requests
-        "priority": 5,
+        "priority": 3,  # PROMOTED to 3 (Fast)
     },
 }
 
@@ -359,12 +359,12 @@ class ParallelBatchProcessor:
                 else:
                     failed_batches.append((batch_id, batches[batch_id]))
 
-        # Phase 2: Retry failures with fallback providers (Mistral > Gemini > Cerebras)
+        # Phase 2: Retry failures with fallback providers (Gemini > Cerebras > Mistral)
         if failed_batches:
             logger.info(
                 f"Retrying {len(failed_batches)} failed batches with fallbacks..."
             )
-            fallback_providers = ["mistral", "gemini", "cerebras"]
+            fallback_providers = ["gemini", "cerebras", "mistral"]
 
             for batch_id, batch in failed_batches:
                 for provider in fallback_providers:

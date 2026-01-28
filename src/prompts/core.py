@@ -127,7 +127,7 @@ RULES:
 10.Multi-Sport: l=Other. Legs get (LEAGUE) prefix. "De Minaur/Warriors"=(TENNIS)/(NBA)."""
 
 # Noise filter instruction
-NOISE_FILTER = """SKIP:VIP,WHALE,MAX BET,LOCK,80K,GUARANTEED,@watermarks,records,sportsbook names,recaps with checkmarks"""
+NOISE_FILTER = """MARKETING: Ignore headers/words like 'VIP','WHALE','MAX BET','LOCK','80K','GUARANTEED'. Do NOT use them as Capper Name. EXTRACT picks underneath."""
 
 # Negative constraints (new)
 NEGATIVE_CONSTRAINTS = """CONSTRAINTS:
@@ -186,10 +186,10 @@ Extract betting picks from data below.
 RULES:
 1.c=capper from header/username/CAPPER: tag. Check FIRST LINE of [CONTENT] for name. Ignore "Content"/"Caption".
 2.o=American odds int(-110,+150). Extract "Team -175" -> o=-175. NO parentheses needed.
-3.u=units float. CHECK HEADERS (e.g."10U MAX"). Default 1.
+3.u=units float. Look for "X u", "(Xu)", "X%", "X*". If header "Max Bet", u=5. If "Whale", u=10. Default 1.
 4.Separate picks per capper.
 5.Period bets:if text has 1H/1Q/F5/P1, t=PD.
-6.Parlay:each leg prefixed with (LEAGUE).
+6.Parlay:each leg prefixed with (LEAGUE). If text implies Parlay, set t=PL.
 7.Reasoning:Add 1 sentence "r".
 8.LISTS: Scan FULL message. Extract items 1 to N. EACH LINE IS A SEPARATE PICK. Do NOT parlay them unless it says "Parlay" OR is under a PARLAY header.
 

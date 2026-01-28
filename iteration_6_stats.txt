@@ -1,0 +1,4 @@
+Total Requests: 2
+Avg Latency: 1.40s
+Accuracy: 40.0%
+Notes: Batch Size increased to 5. Noise Filter relaxed. Efficiency improved 2.5x (5 req -> 2 req). Accuracy bottleneck: Message 13003 (Whale) and 12793 (Mixed/Refinement).

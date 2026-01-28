@@ -495,37 +495,48 @@ def auto_group_parlays(picks, message_context):
         is_parlay_text = "PARLAY" in context or "BUILDER" in context
 
         # Filter for straight bets that might need grouping
-        # We group anything that ISN'T already a Parlay or Unknown
-        straight_bets = [
+        # We group anything that ISN'T already a MULTI-LEG Parlay.
+        # Single-leg "Parlay" items (AI artifacts) should be treated as candidates for grouping.
+        candidates = []
+        for p in msg_picks:
+            p_type = str(p.get("type")).lower()
+            p_pick = str(p.get("pick", ""))
+
+            # If it's already a multi-leg parlay (contains / or +), keep it separate
+            if p_type == "parlay" and ("/" in p_pick or " + " in p_pick):
+                continue
+
+            # If it's explicitly "Unknown" type, keep it separate (usually noise)
+            if p_type == "unknown":
+                continue
+
+            # Otherwise, it's a candidate (Spread, Moneyline, Total, or Single-Leg Parlay)
+            candidates.append(p)
+
+        # Existing explicit multi-leg parlays should be kept as is
+        existing_parlays = [
             p
             for p in msg_picks
-            if str(p.get("type")).lower() not in ["parlay", "unknown"]
-        ]
-
-        # Existing parlays should be kept as is
-        existing_parlays = [
-            p for p in msg_picks if str(p.get("type")).lower() in ["parlay"]
+            if str(p.get("type")).lower() == "parlay"
+            and ("/" in p.get("pick", "") or " + " in p.get("pick", ""))
         ]
 
         # Unknowns kept as is
         unknowns = [p for p in msg_picks if str(p.get("type")).lower() in ["unknown"]]
 
-        # Rule: If text says Parlay, and we have > 1 straight bet, group them.
-        # Even if we already have existing parlays (Msg 13003 case)
-        if is_parlay_text and len(straight_bets) > 1:
+        # Rule: If text says Parlay, and we have > 1 candidate, group them.
+        if is_parlay_text and len(candidates) > 1:
             # Construct merged pick
-            merged_pick_text = " / ".join(
-                [str(p.get("pick", "")) for p in straight_bets]
-            )
+            merged_pick_text = " / ".join([str(p.get("pick", "")) for p in candidates])
 
             # Use the first leg's metadata
-            base = straight_bets[0]
+            base = candidates[0]
 
             new_pick = {
                 "message_id": mid,
                 "pick": merged_pick_text,
                 "type": "Parlay",
-                "odds": None,
+                "odds": None,  # Reset odds for calculated parlay
                 "units": base.get("units", 1.0),
                 "league": base.get("league", "Other"),
                 "capper_name": base.get("capper_name", "Unknown"),

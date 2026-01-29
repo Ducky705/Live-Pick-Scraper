@@ -47,7 +47,7 @@ PROVIDER_CONFIG = {
         "model": "llama-3.1-8b-instant",  # Iteration 3: Switch to 8b for speed/limits
         "rpm": 500,  # Much higher limits for 8b
         "tpm": 18000,  # CRITICAL: Lowered to 18k to match observed Free Tier limits (avoid 429s)
-        "max_concurrent": 2,  # Reduced concurrency to prevent burst limit hits
+        "max_concurrent": 1,  # REDUCED to 1 (Low Bandwidth, Fast Latency)
         "min_delay": 1.0,  # 1s delay to be safe
         "priority": 1,  # PRIMARY provider
         "tier": 1,  # US-002: Speed Tier
@@ -57,18 +57,18 @@ PROVIDER_CONFIG = {
         "model": "mistral-large-latest",  # Updated model name
         "rpm": 60,  # 60 requests per minute
         "tpm": 500000,  # 500K TPM - can batch heavily!
-        "max_concurrent": 2,  # Reduced concurrency
-        "min_delay": 2.0,  # 0.5 req/sec
+        "max_concurrent": 20,  # INCREASED to 20 (High Bandwidth, Slow Latency)
+        "min_delay": 0.5,  # 2 req/sec
         "batch_size": 10,  # Bundle 10 messages per call
-        "priority": 4,  # DEMOTED to 4 (Slow)
+        "priority": 2,  # PROMOTED to 2 (High Bandwidth)
         "tier": 2,  # US-002: Quality Tier
     },
     "openrouter": {
         "model": "meta-llama/llama-3.3-70b-instruct:free",
         "rpm": 100,
         "tpm": 100000,
-        "max_concurrent": 2,
-        "min_delay": 2.0,
+        "max_concurrent": 5, # Moderate
+        "min_delay": 1.0,
         "priority": 5,  # TERTIARY (Fallback)
         "tier": 2,  # US-002: Quality Tier
     },
@@ -76,19 +76,19 @@ PROVIDER_CONFIG = {
         "model": "gemini-1.5-flash",  # Reverted to stable model that definitely exists
         "rpm": 15,  # 15 requests per minute
         "tpm": 250000,  # 250K TPM
-        "max_concurrent": 1,  # Reduced from 3 to 1 for safety
-        "min_delay": 5.0,  # 5s between requests
+        "max_concurrent": 10,  # INCREASED to 10 (High Bandwidth)
+        "min_delay": 4.0,  # 4s between requests (15 RPM)
         "batch_size": 5,  # Bundle 5 messages per call
-        "priority": 2,  # PROMOTED to 2 (Fast + High Limits)
+        "priority": 3,  # PROMOTED to 3
         "tier": 2,  # US-002: Quality Tier
     },
     "cerebras": {
         "model": "llama3.1-8b",  # Fast
         "rpm": 30,  # 30 requests per minute
         "tpm": 60000,  # 60K TPM (lower)
-        "max_concurrent": 1,  # 30 RPM = 0.5/sec
-        "min_delay": 4.0,  # 4s between requests
-        "priority": 3,  # PROMOTED to 3 (Fast)
+        "max_concurrent": 2,  # Limited by TPM
+        "min_delay": 2.0,  # 2s between requests
+        "priority": 4,  # Reordered
         "tier": 1,  # US-002: Speed Tier
     },
 }
@@ -195,11 +195,20 @@ class ParallelBatchProcessor:
         }
         self.stats_lock = Lock()
         self.provider_status = {p: "active" for p in self.providers}
+        self.consecutive_errors = {p: 0 for p in self.providers}
         self.status_lock = Lock()
 
-        # Initialize Adaptive Limiter (Default: 4, Max: 25)
-        # US-001: Start at 4 concurrent requests, ramp up to 25 if stable
-        self.adaptive_limiter = AdaptiveConcurrencyLimiter(initial=4, max_limit=25)
+        # Initialize Adaptive Limiters per Provider
+        # US-002: Per-provider adaptive concurrency to prevent one flaky provider from throttling others
+        self.adaptive_limiters = {}
+        for p in self.providers:
+            config = PROVIDER_CONFIG.get(p, {})
+            max_conc = config.get("max_concurrent", 5)
+            # Start at max to be aggressive, or half max? Start at max but drop fast.
+            # Actually US-001 said start at 4. Let's start at max_concurrent for that provider.
+            self.adaptive_limiters[p] = AdaptiveConcurrencyLimiter(
+                initial=max_conc, min_limit=1, max_limit=max_conc
+            )
 
     def _execute_request(self, provider: str, messages: List[dict]) -> str:
         """Execute a single request to a provider with rate limiting."""
@@ -236,17 +245,27 @@ class ParallelBatchProcessor:
         try:
             # Execute
             if provider == "groq":
-                return groq_text_completion(prompt, model=model, timeout=timeout)
+                result = groq_text_completion(prompt, model=model, timeout=timeout)
             elif provider == "openrouter":
-                return openrouter_completion(prompt, model=model, timeout=timeout)
+                result = openrouter_completion(prompt, model=model, timeout=timeout)
             elif provider == "mistral":
-                return mistral_completion(prompt, model=model, timeout=timeout)
+                result = mistral_completion(prompt, model=model, timeout=timeout)
             elif provider == "cerebras":
-                return cerebras_completion(prompt, model=model, timeout=timeout)
+                result = cerebras_completion(prompt, model=model, timeout=timeout)
             elif provider == "gemini":
-                return gemini_text_completion(prompt, model=model, timeout=timeout)
+                result = gemini_text_completion(prompt, model=model, timeout=timeout)
             else:
                 raise ValueError(f"Unknown provider: {provider}")
+
+            if result is None:
+                raise Exception(f"Provider {provider} returned None (possible timeout/error)")
+
+            # Success - reset consecutive errors
+            with self.status_lock:
+                self.consecutive_errors[provider] = 0
+
+            return result
+
         except Exception as e:
             # US-002: Catch timeouts explicitly
             # Note: Clients currently swallow RequestException and return None (except 429)
@@ -257,14 +276,21 @@ class ParallelBatchProcessor:
             error_str = str(e).lower()
             if "timeout" in error_str or isinstance(e, requests.Timeout):
                 logger.error(f"Timeout Failure: {provider} exceeded {timeout}s limit")
+                # Trigger backoff for timeouts too
+                with self.status_lock:
+                    self.consecutive_errors[provider] += 1
+                    backoff = min(60.0, 5.0 * (2 ** (self.consecutive_errors[provider] - 1)))
+                    self.provider_status[provider] = time.time() + backoff
                 raise e  # Re-raise to be handled by caller as error
 
             if "429" in str(e):
                 with self.status_lock:
-                    # Set 60s cooldown for rate limits
-                    self.provider_status[provider] = time.time() + 60
+                    self.consecutive_errors[provider] += 1
+                    # Exponential Backoff: 5s, 10s, 20s, 40s, 60s (max)
+                    backoff = min(60.0, 5.0 * (2 ** (self.consecutive_errors[provider] - 1)))
+                    self.provider_status[provider] = time.time() + backoff
                 logger.warning(
-                    f"[{provider}] MARKED RATE LIMITED (Fast Fail Enabled - 60s Cooldown)"
+                    f"[{provider}] MARKED RATE LIMITED (Backoff {backoff}s)"
                 )
             raise e
 
@@ -273,8 +299,10 @@ class ParallelBatchProcessor:
     ) -> Dict:
         """Process a single batch with a specific provider."""
 
-        # Acquire adaptive concurrency slot (US-001)
-        self.adaptive_limiter.acquire()
+        # Acquire adaptive concurrency slot (US-001/US-002: Per Provider)
+        limiter = self.adaptive_limiters.get(provider)
+        if limiter:
+            limiter.acquire()
 
         start = time.time()
         try:
@@ -300,7 +328,8 @@ class ParallelBatchProcessor:
             logger.info(f"[{provider}] Batch {batch_id} done in {duration:.2f}s")
 
             # Record success for adaptive concurrency (US-001)
-            self.adaptive_limiter.record_success()
+            if limiter:
+                limiter.record_success()
 
             return {
                 "batch_id": batch_id,
@@ -315,8 +344,8 @@ class ParallelBatchProcessor:
                 self.stats[provider]["errors"] += 1
 
             # Check for 429 and trigger backoff (US-001)
-            if "429" in str(e):
-                self.adaptive_limiter.record_429()
+            if "429" in str(e) and limiter:
+                limiter.record_429()
 
             logger.error(f"[{provider}] Batch {batch_id} failed: {e}")
             return {
@@ -327,7 +356,33 @@ class ParallelBatchProcessor:
             }
         finally:
             # Release slot (US-001)
-            self.adaptive_limiter.release()
+            if limiter:
+                limiter.release()
+
+    def _retry_batch(
+        self,
+        batch_id: int,
+        batch: List[dict],
+        failed_provider: str,
+        fallback_order: List[str],
+    ) -> Dict:
+        """Retry a batch with fallback providers."""
+        for provider in fallback_order:
+            if provider == failed_provider:
+                continue
+
+            result = self._process_batch(batch_id, batch, provider)
+            if result["status"] == "success":
+                logger.info(f"Batch {batch_id} recovered via {provider}")
+                return result
+
+        logger.error(f"Batch {batch_id} failed on all providers")
+        return {
+            "batch_id": batch_id,
+            "status": "error",
+            "data": None,
+            "provider": "all_failed",
+        }
 
     def process_batches(self, batches: List[List[dict]]) -> List[Any]:
         """
@@ -414,26 +469,28 @@ class ParallelBatchProcessor:
 
             logger.info(f"Fallback order: {fallback_order}")
 
-            for batch_id, batch, failed_provider in failed_batches:
-                success = False
-                for provider in fallback_order:
-                    if provider == failed_provider:
-                        continue  # Skip the one that already failed
+            # US-002: Parallelize Phase 2 Retries
+            # Use max_workers to speed up recovery
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                futures_retry = {
+                    executor.submit(
+                        self._retry_batch, batch_id, batch, failed_provider, fallback_order
+                    ): batch_id
+                    for batch_id, batch, failed_provider in failed_batches
+                }
 
-                    result = self._process_batch(batch_id, batch, provider)
-                    if result["status"] == "success":
+                for future in as_completed(futures_retry):
+                    batch_id = futures_retry[future]
+                    try:
+                        result = future.result()
                         results[batch_id] = result
-                        success = True
-                        logger.info(f"Batch {batch_id} recovered via {provider}")
-                        break
-
-                if not success:
-                    logger.error(f"Batch {batch_id} failed on all providers")
-                    results[batch_id] = {
-                        "batch_id": batch_id,
-                        "status": "error",
-                        "data": None,
-                    }
+                    except Exception as e:
+                        logger.error(f"Retry thread failed for Batch {batch_id}: {e}")
+                        results[batch_id] = {
+                            "batch_id": batch_id,
+                            "status": "error",
+                            "data": None,
+                        }
 
         self._print_summary()
 
@@ -484,19 +541,27 @@ class ParallelBatchProcessor:
             )
             fallback_providers = ["cerebras", "mistral"]
 
+            # US-002: Parallelize Phase 2 Retries
+            with ThreadPoolExecutor(max_workers=len(fallback_providers) * 2) as executor:
+                futures_retry = {
+                    executor.submit(
+                        self._retry_batch, batch_id, batch, "groq", fallback_providers
+                    ): batch_id
+                    for batch_id, batch in failed_batches
+                }
 
-            for batch_id, batch in failed_batches:
-                for provider in fallback_providers:
-                    result = self._process_batch(batch_id, batch, provider)
-                    if result["status"] == "success":
+                for future in as_completed(futures_retry):
+                    batch_id = futures_retry[future]
+                    try:
+                        result = future.result()
                         results[batch_id] = result
-                        break
-                else:
-                    results[batch_id] = {
-                        "batch_id": batch_id,
-                        "status": "error",
-                        "data": None,
-                    }
+                    except Exception as e:
+                        logger.error(f"Retry thread failed for Batch {batch_id}: {e}")
+                        results[batch_id] = {
+                            "batch_id": batch_id,
+                            "status": "error",
+                            "data": None,
+                        }
 
         self._print_summary()
         

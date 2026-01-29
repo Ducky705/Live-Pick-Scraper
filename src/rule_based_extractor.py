@@ -80,9 +80,12 @@ class RuleBasedExtractor:
             # 3. Line-by-line extraction
             lines = full_text.split("\n")
             msg_picks = []
-
-            for line in lines:
-                line = line.strip()
+            
+            i = 0
+            while i < len(lines):
+                line = lines[i].strip()
+                i += 1
+                
                 if not line:
                     continue
 
@@ -123,7 +126,15 @@ class RuleBasedExtractor:
                 # 3. Fix "U162" -> "Under 162", "o145" -> "Over 145"
                 line = re.sub(r"\b([Uu])(\d+(\.\d+)?)", r"Under \2", line)
                 line = re.sub(r"\b([Oo])(\d+(\.\d+)?)", r"Over \2", line)
+                
+                # 4. Fix "Money Line" -> "Moneyline" -> "ML"
+                line = re.sub(r"Money\s*Line", "Moneyline", line, flags=re.IGNORECASE)
 
+                # 5. Fix "Anytime Goal Scorer" -> "Name: Anytime Goal Scorer" (for Prop Parser)
+                # If we see AGS pattern but no colon, inject one before the keyword
+                if ":" not in line and re.search(r"\b(Anytime Goal Scorer|AGS|Score|Scorer)\b", line, re.IGNORECASE):
+                    line = re.sub(r"\s+(Anytime Goal Scorer|AGS|Anytime Goal|To Score)\b", r": Anytime Goal Scorer", line, flags=re.IGNORECASE)
+                
                 # Remove emojis (simplistic regex) - Keep ASCII + standard punctuation
                 line = re.sub(r"[^\x00-\x7F]+", "", line)
                 
@@ -144,6 +155,29 @@ class RuleBasedExtractor:
                     continue
                 if len(line) < 5:
                     continue
+
+                # --- MULTILINE MERGE LOGIC ---
+                # Check if this line is likely a team/player name but lacks bet info,
+                # and the NEXT line is just odds/line.
+                if i < len(lines) and not RuleBasedExtractor._has_pick_indicators(line):
+                    next_line = lines[i].strip()
+                    # Clean next line slightly to check it
+                    next_line_clean = re.sub(r"[^\x00-\x7F]+", "", next_line).strip()
+                    
+                    # If next line looks like odds/line (e.g. "-110", "+145", "Over 220")
+                    # Strict check: Start with +/-, or "Over/Under", or "ML"
+                    is_continuation = False
+                    if re.match(r"^[+-]\d+", next_line_clean):
+                        is_continuation = True
+                    elif re.match(r"^(Over|Under|O|U)\s*\d", next_line_clean, re.IGNORECASE):
+                        is_continuation = True
+                    elif re.match(r"^ML|Moneyline", next_line_clean, re.IGNORECASE):
+                        is_continuation = True
+                    
+                    if is_continuation:
+                        # MERGE
+                        line = f"{line} {next_line_clean}"
+                        i += 1 # Consume next line
 
                 # Attempt parse
                 try:
@@ -245,10 +279,23 @@ class RuleBasedExtractor:
             return True
 
         # 4. Prop pattern: Name: Stat
-        if ":" in text and any(
-            k in text_lower for k in ["pts", "reb", "ast", "threes", "yards", "td"]
-        ):
-            return True
+        # Added goal/score/scorer patterns
+        if ":" in text or "goal" in text_lower or "score" in text_lower:
+             if any(
+                k in text_lower
+                for k in [
+                    "pts",
+                    "reb",
+                    "ast",
+                    "threes",
+                    "yards",
+                    "td",
+                    "goal",
+                    "score",
+                    "scorer",
+                ]
+            ):
+                return True
 
         return False
 
@@ -323,6 +370,9 @@ class RuleBasedExtractor:
             "pick": pick.selection,  # Use the cleaned selection from parser
             "odds": pick.odds,
             "units": units,
+            "line": pick.line,
+            "is_over": pick.is_over,
+            "stat": pick.stat,
             "reasoning": "Extracted via Rule-Based Regex",
             "_source_text": original_text,
             "confidence": 9.5,

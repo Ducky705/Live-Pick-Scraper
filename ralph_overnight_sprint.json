@@ -1,0 +1,67 @@
+{
+  "name": "Overnight Deep Optimization: The Accuracy & Speed Marathon",
+  "branchName": "feat/overnight-optimization-sprint",
+  "userStories": [
+    {
+      "id": "US-010",
+      "title": "Regex Expansion: The 'Missing 50' Harvest",
+      "description": "The benchmark currently misses 53 picks. Analyze the 'CRITICAL: Sample MISSED PICKS' section in `benchmark/reports/final_platform_grade.json`. Update `src/rule_based_extractor.py` with specific regex patterns for: 1) Team names followed by line/odds on the next line. 2) ML picks with 'MI' or 'Moneyline' variations. 3) Player props (Goal/Point scorers) that are currently being ignored.",
+      "priority": 1,
+      "passes": true,
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "Rule-Based extraction handles > 95% of messages.",
+        "Recall increases to > 85% WITHOUT using AI refinement.",
+        "Zero regressions in existing rule-based picks."
+      ],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-011",
+      "title": "Extreme Throughput: Batch & Provider Balancing",
+      "description": "Optimize `src/parallel_batch_processor.py` for maximum throughput. 1) Implement 'Provider Striping' to use Groq, Cerebras, and Mistral simultaneously for different batches. 2) Increase global concurrency to 32. 3) Optimize the Refinement prompt to be < 500 tokens to stay under TPM limits. Goal is to sustain > 5.0 msg/sec.",
+      "priority": 2,
+      "passes": false,
+      "dependsOn": [
+        "US-010"
+      ],
+      "acceptanceCriteria": [
+        "Throughput > 5.0 messages/second on 50-item benchmark.",
+        "Successful handling of 429 errors via immediate provider rotation.",
+        "Average AI response time < 2.0s."
+      ]
+    },
+    {
+      "id": "US-012",
+      "title": "False Positive Cleanup & Noise Filtering",
+      "description": "We currently have 70-160 False Positives. Many are 'noise' (chat, headers). Update `src/pick_normalizer.py` or `src/semantic_validator.py` to filter out: 1) Picks with impossible odds (e.g. > +5000 or < -5000). 2) Picks where team names aren't in our league database. 3) Duplicate picks from the same author in the same message.",
+      "priority": 3,
+      "passes": false,
+      "dependsOn": [
+        "US-011"
+      ],
+      "acceptanceCriteria": [
+        "False Positives reduced to < 20 picks.",
+        "Precision remains > 95%."
+      ]
+    },
+    {
+      "id": "US-013",
+      "title": "The 500-Message Gauntlet (Full Benchmark)",
+      "description": "The ultimate test. Set `FULL_BENCHMARK=1` and run the entire 500-message goldenset. The agent must iteratively fix every crash, timeout, or logic error that appears on the larger dataset. This task requires high endurance and stable error handling.",
+      "priority": 4,
+      "passes": false,
+      "dependsOn": [
+        "US-012"
+      ],
+      "acceptanceCriteria": [
+        "Full benchmark (500 items) completes in < 5 minutes.",
+        "Final Metrics: F1 > 90%, Throughput > 5.0 msg/sec, Tokens/Pick < 500.",
+        "Code passed ruff check and ruff format."
+      ]
+    }
+  ],
+  "metadata": {
+    "updatedAt": "2026-01-29T22:54:36.822Z"
+  }
+}

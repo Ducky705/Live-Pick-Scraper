@@ -9,7 +9,6 @@ Implements the recommendations from benchmark report v2:
 """
 
 import re
-from typing import Optional
 
 # =============================================================================
 # PERIOD INDICATOR NORMALIZATION
@@ -24,7 +23,6 @@ PERIOD_ALIASES = {
     "firsthalf": "1H",
     "fh": "1H",
     "h1": "1H",
-    
     # Second Half
     "2h": "2H",
     "second half": "2H",
@@ -32,44 +30,36 @@ PERIOD_ALIASES = {
     "secondhalf": "2H",
     "sh": "2H",
     "h2": "2H",
-    
     # Quarters
     "1q": "1Q",
     "first quarter": "1Q",
     "1st quarter": "1Q",
     "q1": "1Q",
-    
     "2q": "2Q",
     "second quarter": "2Q",
     "2nd quarter": "2Q",
     "q2": "2Q",
-    
     "3q": "3Q",
     "third quarter": "3Q",
     "3rd quarter": "3Q",
     "q3": "3Q",
-    
     "4q": "4Q",
     "fourth quarter": "4Q",
     "4th quarter": "4Q",
     "q4": "4Q",
-    
     # Hockey Periods
     "1p": "1P",
     "first period": "1P",
     "1st period": "1P",
     "p1": "1P",
-    
     "2p": "2P",
     "second period": "2P",
     "2nd period": "2P",
     "p2": "2P",
-    
     "3p": "3P",
     "third period": "3P",
     "3rd period": "3P",
     "p3": "3P",
-    
     # Baseball Innings
     "f5": "F5",
     "first 5": "F5",
@@ -77,12 +67,10 @@ PERIOD_ALIASES = {
     "first 5 innings": "F5",
     "first5": "F5",
     "1st 5": "F5",
-    
     "f3": "F3",
     "first 3": "F3",
     "first three": "F3",
     "1st 3": "F3",
-    
     "f1": "F1",
     "first inning": "F1",
     "1st inning": "F1",
@@ -192,7 +180,6 @@ TEAM_ALIASES = {
     "was": "Wizards",
     "washington": "Wizards",
     "washington wizards": "Wizards",
-    
     # NFL
     "kc": "Chiefs",
     "kansas city": "Chiefs",
@@ -250,7 +237,6 @@ TEAM_ALIASES = {
     "la chargers": "Chargers",
     "lar": "Rams",
     "la rams": "Rams",
-    
     # NHL
     "vgk": "Golden Knights",
     "vegas": "Golden Knights",
@@ -302,7 +288,6 @@ TEAM_ALIASES = {
     "sjc": "Sharks",
     "sj": "Sharks",
     "san jose": "Sharks",
-    
     # MLB
     "lad": "Dodgers",
     "la dodgers": "Dodgers",
@@ -326,7 +311,6 @@ TEAM_ALIASES = {
     "chicago cubs": "Cubs",
     "stl cards": "Cardinals",
     "st louis cardinals": "Cardinals",
-    
     # NCAAB / NCAAF common abbreviations
     "unc": "North Carolina",
     "duke": "Duke",
@@ -363,7 +347,7 @@ TEAM_ALIASES = {
 def normalize_period_indicator(pick_text: str) -> str:
     """
     Normalizes period indicators in a pick text to canonical format.
-    
+
     Examples:
         "1h NYK vs BOS Over 110" -> "1H NYK vs BOS Over 110"
         "First Half Lakers -3" -> "1H Lakers -3"
@@ -371,22 +355,22 @@ def normalize_period_indicator(pick_text: str) -> str:
     """
     if not pick_text:
         return pick_text
-    
+
     result = pick_text
-    
+
     # Sort by length descending to match longer phrases first
     for alias, canonical in sorted(PERIOD_ALIASES.items(), key=lambda x: -len(x[0])):
         # Case-insensitive match with word boundaries
-        pattern = rf'\b{re.escape(alias)}\b'
+        pattern = rf"\b{re.escape(alias)}\b"
         result = re.sub(pattern, canonical, result, flags=re.IGNORECASE)
-    
+
     return result
 
 
 def normalize_team_name(pick_text: str) -> str:
     """
     Normalizes team abbreviations to their standard names.
-    
+
     Examples:
         "LAL -5" -> "Lakers -5"
         "Golden State Warriors ML" -> "Warriors ML"
@@ -394,22 +378,22 @@ def normalize_team_name(pick_text: str) -> str:
     """
     if not pick_text:
         return pick_text
-    
+
     result = pick_text
-    
+
     # Sort by length descending to match longer names first
     for alias, canonical in sorted(TEAM_ALIASES.items(), key=lambda x: -len(x[0])):
         # Case-insensitive match with word boundaries
-        pattern = rf'\b{re.escape(alias)}\b'
+        pattern = rf"\b{re.escape(alias)}\b"
         result = re.sub(pattern, canonical, result, flags=re.IGNORECASE)
-    
+
     return result
 
 
 def normalize_over_under(pick_text: str) -> str:
     """
     Standardizes over/under notation.
-    
+
     Examples:
         "o215.5" -> "Over 215.5"
         "u48" -> "Under 48"
@@ -417,59 +401,59 @@ def normalize_over_under(pick_text: str) -> str:
     """
     if not pick_text:
         return pick_text
-    
+
     result = pick_text
-    
+
     # Normalize "o" and "u" prefixes for totals
-    result = re.sub(r'\bo(\d+\.?\d*)', r'Over \1', result, flags=re.IGNORECASE)
-    result = re.sub(r'\bu(\d+\.?\d*)', r'Under \1', result, flags=re.IGNORECASE)
-    
+    result = re.sub(r"\bo(\d+\.?\d*)", r"Over \1", result, flags=re.IGNORECASE)
+    result = re.sub(r"\bu(\d+\.?\d*)", r"Under \1", result, flags=re.IGNORECASE)
+
     # Standardize case for Over/Under
-    result = re.sub(r'\bover\b', 'Over', result, flags=re.IGNORECASE)
-    result = re.sub(r'\bunder\b', 'Under', result, flags=re.IGNORECASE)
-    
+    result = re.sub(r"\bover\b", "Over", result, flags=re.IGNORECASE)
+    result = re.sub(r"\bunder\b", "Under", result, flags=re.IGNORECASE)
+
     return result
 
 
 def normalize_moneyline(pick_text: str) -> str:
     """
     Standardizes moneyline notation.
-    
+
     Examples:
         "Lakers ml" -> "Lakers ML"
         "Chiefs Moneyline" -> "Chiefs ML"
     """
     if not pick_text:
         return pick_text
-    
+
     result = pick_text
-    
+
     # Normalize moneyline to ML
-    result = re.sub(r'\bmoneyline\b', 'ML', result, flags=re.IGNORECASE)
-    result = re.sub(r'\bml\b', 'ML', result, flags=re.IGNORECASE)
-    
+    result = re.sub(r"\bmoneyline\b", "ML", result, flags=re.IGNORECASE)
+    result = re.sub(r"\bml\b", "ML", result, flags=re.IGNORECASE)
+
     return result
 
 
 def normalize_spread(pick_text: str) -> str:
     """
     Ensures consistent spread formatting.
-    
+
     Examples:
         "Lakers - 5.5" -> "Lakers -5.5"
         "Chiefs +3.0" -> "Chiefs +3"
     """
     if not pick_text:
         return pick_text
-    
+
     result = pick_text
-    
+
     # Remove space between sign and number
-    result = re.sub(r'([+-])\s+(\d)', r'\1\2', result)
-    
+    result = re.sub(r"([+-])\s+(\d)", r"\1\2", result)
+
     # Remove trailing .0 from whole numbers
-    result = re.sub(r'(\d+)\.0\b', r'\1', result)
-    
+    result = re.sub(r"(\d+)\.0\b", r"\1", result)
+
     return result
 
 
@@ -477,27 +461,27 @@ def normalize_whitespace(pick_text: str) -> str:
     """Normalizes whitespace in pick text."""
     if not pick_text:
         return pick_text
-    
+
     # Collapse multiple spaces
-    result = re.sub(r'\s+', ' ', pick_text)
-    
+    result = re.sub(r"\s+", " ", pick_text)
+
     # Trim
     result = result.strip()
-    
+
     return result
 
 
 def normalize_pick(pick_text: str) -> str:
     """
     Applies all normalization rules to a pick text.
-    
+
     This is the main entry point for pick normalization.
     """
     if not pick_text:
         return pick_text
-    
+
     result = pick_text
-    
+
     # Apply normalizations in order
     result = normalize_period_indicator(result)
     result = normalize_team_name(result)
@@ -505,32 +489,32 @@ def normalize_pick(pick_text: str) -> str:
     result = normalize_moneyline(result)
     result = normalize_spread(result)
     result = normalize_whitespace(result)
-    
+
     return result
 
 
 def normalize_for_comparison(pick_text: str) -> str:
     """
     Normalizes pick text specifically for comparison purposes.
-    
+
     This is more aggressive than normalize_pick() and is used
     when comparing expected vs actual picks in benchmarks.
     """
     if not pick_text:
         return ""
-    
+
     # Apply standard normalization
     result = normalize_pick(pick_text)
-    
+
     # Lowercase for comparison
     result = result.lower()
-    
+
     # Remove all punctuation except + - .
-    result = re.sub(r'[^\w\s+\-.]', '', result)
-    
+    result = re.sub(r"[^\w\s+\-.]", "", result)
+
     # Collapse whitespace
-    result = re.sub(r'\s+', ' ', result).strip()
-    
+    result = re.sub(r"\s+", " ", result).strip()
+
     return result
 
 
@@ -538,10 +522,11 @@ def normalize_for_comparison(pick_text: str) -> str:
 # UTILITY FUNCTIONS
 # =============================================================================
 
-def extract_numeric_value(pick_text: str) -> Optional[float]:
+
+def extract_numeric_value(pick_text: str) -> float | None:
     """
     Extracts the primary numeric value from a pick.
-    
+
     Examples:
         "Lakers -5.5" -> -5.5
         "Over 215.5" -> 215.5
@@ -549,53 +534,53 @@ def extract_numeric_value(pick_text: str) -> Optional[float]:
     """
     if not pick_text:
         return None
-    
+
     # Match spread/total numbers
-    match = re.search(r'([+-]?\d+\.?\d*)', pick_text)
+    match = re.search(r"([+-]?\d+\.?\d*)", pick_text)
     if match:
         try:
             return float(match.group(1))
         except ValueError:
             pass
-    
+
     return None
 
 
 def picks_match(pick1: str, pick2: str, threshold: float = 0.85) -> bool:
     """
     Determines if two picks match after normalization.
-    
+
     Uses normalized comparison for better matching across
     different formatting styles.
     """
     from difflib import SequenceMatcher
-    
+
     norm1 = normalize_for_comparison(pick1)
     norm2 = normalize_for_comparison(pick2)
-    
+
     # Exact match after normalization
     if norm1 == norm2:
         return True
-    
+
     # Fuzzy match
     ratio = SequenceMatcher(None, norm1, norm2).ratio()
     if ratio >= threshold:
         return True
-    
+
     # Check if numeric values match (for spread/total picks)
     num1 = extract_numeric_value(norm1)
     num2 = extract_numeric_value(norm2)
-    
+
     if num1 is not None and num2 is not None:
         # Same number, check if main terms overlap
         if abs(num1 - num2) < 0.1:
             # Remove the number and compare remaining text
-            text1 = re.sub(r'[+-]?\d+\.?\d*', '', norm1).strip()
-            text2 = re.sub(r'[+-]?\d+\.?\d*', '', norm2).strip()
-            
+            text1 = re.sub(r"[+-]?\d+\.?\d*", "", norm1).strip()
+            text2 = re.sub(r"[+-]?\d+\.?\d*", "", norm2).strip()
+
             if text1 and text2:
                 text_ratio = SequenceMatcher(None, text1, text2).ratio()
                 if text_ratio >= 0.7:
                     return True
-    
+
     return False

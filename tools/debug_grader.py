@@ -12,13 +12,12 @@ Usage:
 NO SUPABASE WRITES - debug/evaluation mode only.
 """
 
-import os
-import sys
-import json
 import asyncio
+import json
+import sys
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-import time
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -93,9 +92,7 @@ def copy_to_clipboard(text: str) -> bool:
         try:
             import subprocess
 
-            process = subprocess.Popen(
-                ["clip"], stdin=subprocess.PIPE, text=True, encoding="utf-8"
-            )
+            process = subprocess.Popen(["clip"], stdin=subprocess.PIPE, text=True, encoding="utf-8")
             process.communicate(text)
             return True
         except Exception:
@@ -135,7 +132,7 @@ def load_from_cache():
     # Load messages
     if messages_cache.exists():
         try:
-            with open(messages_cache, "r", encoding="utf-8") as f:
+            with open(messages_cache, encoding="utf-8") as f:
                 data = json.load(f)
                 messages = data.get("messages", [])
                 log_success(f"Loaded {len(messages)} messages from cache")
@@ -145,7 +142,7 @@ def load_from_cache():
     # Merge OCR data into messages
     if ocr_cache.exists() and messages:
         try:
-            with open(ocr_cache, "r", encoding="utf-8") as f:
+            with open(ocr_cache, encoding="utf-8") as f:
                 ocr_data = json.load(f)
                 ocr_results = ocr_data.get("results", {})
 
@@ -174,7 +171,7 @@ def load_from_cache():
     # Load picks and expand compact keys
     if parse_cache.exists():
         try:
-            with open(parse_cache, "r", encoding="utf-8") as f:
+            with open(parse_cache, encoding="utf-8") as f:
                 data = json.load(f)
                 raw_picks = data.get("picks", [])
 
@@ -204,9 +201,7 @@ def load_from_cache():
     return messages, picks
 
 
-async def run_pipeline(
-    target_date: str, sample_size: int = None, use_cache: bool = False
-):
+async def run_pipeline(target_date: str, sample_size: int = None, use_cache: bool = False):
     """
     Run the full scraper pipeline without Supabase writes.
     Returns (raw_messages, processed_picks, metadata).
@@ -214,17 +209,17 @@ async def run_pipeline(
     log_header("RUNNING PIPELINE (NO SUPABASE)")
     log_info(f"Target Date: {target_date}")
 
-    from config import API_ID, API_HASH, TARGET_TELEGRAM_CHANNEL_ID
-    from src.telegram_client import TelegramManager
-    from src.deduplicator import Deduplicator
-    from src.ocr_handler import extract_text_batch
+    from config import API_HASH, API_ID, TARGET_TELEGRAM_CHANNEL_ID
     from src.auto_processor import auto_select_messages
-    from src.utils import clean_text_for_ai, backfill_odds
+    from src.deduplicator import Deduplicator
+    from src.multi_pick_validator import MultiPickValidator, validate_and_flag_missing
+    from src.ocr_handler import extract_text_batch
+    from src.parallel_batch_processor import parallel_processor
     from src.pick_deduplicator import deduplicate_by_capper
     from src.prompts.decoder import normalize_response
-    from src.parallel_batch_processor import parallel_processor
-    from src.multi_pick_validator import validate_and_flag_missing, MultiPickValidator
     from src.semantic_validator import SemanticValidator
+    from src.telegram_client import TelegramManager
+    from src.utils import backfill_odds, clean_text_for_ai
 
     metadata = {
         "target_date": target_date,
@@ -251,13 +246,9 @@ async def run_pipeline(
 
         # If no picks, continue to pipeline but skip fetch/dedup if messages exist
         if messages:
-            log_info(
-                "Cached messages found, but no picks. Proceeding to Parsing stage..."
-            )
+            log_info("Cached messages found, but no picks. Proceeding to Parsing stage...")
 
-            log_info(
-                "Cached messages found, but no picks. Proceeding to Parsing stage..."
-            )
+            log_info("Cached messages found, but no picks. Proceeding to Parsing stage...")
 
     # 1. FETCH
     if not messages:
@@ -267,9 +258,7 @@ async def run_pipeline(
         if not API_ID or not API_HASH:
             log_error("Telegram credentials missing (API_ID/API_HASH not set)!")
             # Note: Cache fallback was attempted above
-            log_error(
-                "No cache available. Create a .env file with API_ID and API_HASH."
-            )
+            log_error("No cache available. Create a .env file with API_ID and API_HASH.")
             return [], [], metadata
 
         connected = await tg.connect_client()
@@ -278,16 +267,12 @@ async def run_pipeline(
             return [], [], metadata
 
         start = time.time()
-        raw_messages = await tg.fetch_messages(
-            [TARGET_TELEGRAM_CHANNEL_ID], target_date
-        )
+        raw_messages = await tg.fetch_messages([TARGET_TELEGRAM_CHANNEL_ID], target_date)
         metadata["stages"]["fetch"] = {
             "time": time.time() - start,
             "count": len(raw_messages),
         }
-        log_success(
-            f"Fetched {len(raw_messages)} messages in {metadata['stages']['fetch']['time']:.1f}s"
-        )
+        log_success(f"Fetched {len(raw_messages)} messages in {metadata['stages']['fetch']['time']:.1f}s")
 
         if sample_size and len(raw_messages) > sample_size:
             raw_messages = raw_messages[:sample_size]
@@ -329,17 +314,13 @@ async def run_pipeline(
             if text and not text.startswith("[Error"):
                 cleaned = clean_text_for_ai(text)
                 unique_msgs[msg_idx]["ocr_texts"].append(cleaned)
-                unique_msgs[msg_idx]["ocr_text"] = "\n".join(
-                    unique_msgs[msg_idx]["ocr_texts"]
-                )
+                unique_msgs[msg_idx]["ocr_text"] = "\n".join(unique_msgs[msg_idx]["ocr_texts"])
 
         metadata["stages"]["ocr"] = {
             "time": time.time() - start,
             "images": len(ocr_tasks),
         }
-        log_success(
-            f"OCR complete: {len(ocr_tasks)} images in {metadata['stages']['ocr']['time']:.1f}s"
-        )
+        log_success(f"OCR complete: {len(ocr_tasks)} images in {metadata['stages']['ocr']['time']:.1f}s")
     else:
         metadata["stages"]["ocr"] = {"time": 0, "images": 0}
 
@@ -360,9 +341,7 @@ async def run_pipeline(
     # 5. PARSING
     log_info("Stage 5: AI Parsing (parallel multi-provider)...")
     BATCH_SIZE = 10
-    batches = [
-        selected[i : i + BATCH_SIZE] for i in range(0, len(selected), BATCH_SIZE)
-    ]
+    batches = [selected[i : i + BATCH_SIZE] for i in range(0, len(selected), BATCH_SIZE)]
 
     start = time.time()
     try:
@@ -376,9 +355,7 @@ async def run_pipeline(
 
             if batch_idx < len(batches):
                 current_batch = batches[batch_idx]
-                valid_ids = [
-                    int(m.get("id")) for m in current_batch if m.get("id") is not None
-                ]
+                valid_ids = [int(m.get("id")) for m in current_batch if m.get("id") is not None]
 
                 # Build message context map for verification
                 msg_context = {}
@@ -386,11 +363,7 @@ async def run_pipeline(
                     mid = m.get("id")
                     if mid:
                         # Combine caption and OCR for full context
-                        full_text = (
-                            (m.get("text", "") or "")
-                            + "\n"
-                            + (m.get("ocr_text", "") or "")
-                        )
+                        full_text = (m.get("text", "") or "") + "\n" + (m.get("ocr_text", "") or "")
                         msg_context[int(mid)] = full_text
 
             batch_picks = normalize_response(
@@ -430,9 +403,7 @@ async def run_pipeline(
                 if not is_valid:
                     if mid_int not in semantic_issues:
                         semantic_issues[mid_int] = []
-                    semantic_issues[mid_int].append(
-                        f"Pick '{p.get('pick')}' invalid: {reason}"
-                    )
+                    semantic_issues[mid_int].append(f"Pick '{p.get('pick')}' invalid: {reason}")
                     reparse_ids.add(mid_int)
 
                 # B. Confidence Check (New Architectural Feature)
@@ -443,9 +414,7 @@ async def run_pipeline(
                         if conf_val < 8:  # Threshold for re-parsing
                             if mid_int not in semantic_issues:
                                 semantic_issues[mid_int] = []
-                            semantic_issues[mid_int].append(
-                                f"Low confidence ({conf_val}/10). Verify extraction."
-                            )
+                            semantic_issues[mid_int].append(f"Low confidence ({conf_val}/10). Verify extraction.")
                             reparse_ids.add(mid_int)
                     except ValueError:
                         pass
@@ -453,20 +422,14 @@ async def run_pipeline(
                 # C. "The Auditor" - Contextual Logic Checks
                 msg = msg_map.get(mid_int)
                 if msg:
-                    text_upper = (
-                        msg.get("text", "") + "\n" + msg.get("ocr_text", "")
-                    ).upper()
+                    text_upper = (msg.get("text", "") + "\n" + msg.get("ocr_text", "")).upper()
 
                     # C1. Unit Header Mismatch
                     # Detect "10U" headers vs 1U picks
                     extracted_units = p.get("units", 1.0)
                     if extracted_units == 1.0:
                         potential_units = 0
-                        if (
-                            "10U" in text_upper
-                            or "MAX BET" in text_upper
-                            or "MAX PLAY" in text_upper
-                        ):
+                        if "10U" in text_upper or "MAX BET" in text_upper or "MAX PLAY" in text_upper:
                             potential_units = 10
                         elif "5U" in text_upper:
                             potential_units = 5
@@ -542,25 +505,18 @@ async def run_pipeline(
                     full_hint = "\n\n".join(hints)
 
                     # Append hint to text for AI
-                    retry_msg["text"] = (
-                        retry_msg.get("text", "") + "\n\n" + full_hint
-                    )[:3500]
+                    retry_msg["text"] = (retry_msg.get("text", "") + "\n\n" + full_hint)[:3500]
                     reparse_batch.append(retry_msg)
 
             if reparse_batch:
                 log_info(f"Running refinement on {len(reparse_batch)} messages...")
 
                 # Process in small batches
-                reparse_batches = [
-                    reparse_batch[i : i + BATCH_SIZE]
-                    for i in range(0, len(reparse_batch), BATCH_SIZE)
-                ]
+                reparse_batches = [reparse_batch[i : i + BATCH_SIZE] for i in range(0, len(reparse_batch), BATCH_SIZE)]
 
                 try:
                     # Use parallel processor for speed
-                    reparse_results = parallel_processor.process_batches(
-                        reparse_batches
-                    )
+                    reparse_results = parallel_processor.process_batches(reparse_batches)
 
                     # Process results
                     new_picks_count = 0
@@ -571,14 +527,10 @@ async def run_pipeline(
                         valid_ids = None
                         if batch_idx < len(reparse_batches):
                             valid_ids = [
-                                int(m.get("id"))
-                                for m in reparse_batches[batch_idx]
-                                if m.get("id") is not None
+                                int(m.get("id")) for m in reparse_batches[batch_idx] if m.get("id") is not None
                             ]
 
-                        new_batch_picks = normalize_response(
-                            raw_response, expand=True, valid_message_ids=valid_ids
-                        )
+                        new_batch_picks = normalize_response(raw_response, expand=True, valid_message_ids=valid_ids)
 
                         # Group new picks by ID
                         new_picks_by_id = {}
@@ -593,18 +545,12 @@ async def run_pipeline(
                             if msg_new_picks:
                                 # Remove old picks for this message
                                 # We convert to string/int safely for comparison
-                                picks = [
-                                    p
-                                    for p in picks
-                                    if str(p.get("message_id")) != str(mid)
-                                ]
+                                picks = [p for p in picks if str(p.get("message_id")) != str(mid)]
                                 # Add new picks
                                 picks.extend(msg_new_picks)
                                 new_picks_count += len(msg_new_picks)
 
-                    log_success(
-                        f"Refinement complete: Replaced with {new_picks_count} refined picks"
-                    )
+                    log_success(f"Refinement complete: Replaced with {new_picks_count} refined picks")
                     metadata["stages"]["refine"] = {
                         "reparsed": len(reparse_batch),
                         "new_picks": new_picks_count,
@@ -619,9 +565,7 @@ async def run_pipeline(
         picks = deduplicate_by_capper(picks)
 
         metadata["stages"]["parse"] = {"time": time.time() - start, "picks": len(picks)}
-        log_success(
-            f"Parsed {len(picks)} picks in {metadata['stages']['parse']['time']:.1f}s"
-        )
+        log_success(f"Parsed {len(picks)} picks in {metadata['stages']['parse']['time']:.1f}s")
 
     except Exception as e:
         log_error(f"Parsing failed: {e}")
@@ -639,11 +583,7 @@ async def run_pipeline(
 
         wins = sum(1 for p in picks if p.get("result") == "Win")
         losses = sum(1 for p in picks if p.get("result") == "Loss")
-        pending = sum(
-            1
-            for p in picks
-            if p.get("result") in ["Pending", "Pending/Unknown", None, ""]
-        )
+        pending = sum(1 for p in picks if p.get("result") in ["Pending", "Pending/Unknown", None, ""])
 
         metadata["stages"]["grade"] = {
             "wins": wins,
@@ -720,9 +660,7 @@ def format_pick_for_prompt(pick: dict, idx: int) -> str:
     # Structured fields (show all, even if None, for completeness check)
     lines.append(f"- **Subject:** {pick.get('subject') or 'N/A'}")
     lines.append(f"- **Market:** {pick.get('market') or 'N/A'}")
-    lines.append(
-        f"- **Line:** {pick.get('line') if pick.get('line') is not None else 'N/A'}"
-    )
+    lines.append(f"- **Line:** {pick.get('line') if pick.get('line') is not None else 'N/A'}")
     lines.append(f"- **Side:** {pick.get('prop_side') or 'N/A'}")
 
     # Result if present
@@ -742,7 +680,7 @@ def load_pick_format_spec() -> str:
     spec_path = PROJECT_ROOT / "docs" / "pick_format.md"
     if spec_path.exists():
         try:
-            with open(spec_path, "r", encoding="utf-8") as f:
+            with open(spec_path, encoding="utf-8") as f:
                 return f.read()
         except Exception as e:
             log_error(f"Failed to load pick_format.md: {e}")
@@ -849,9 +787,7 @@ Below are the original Telegram messages that were processed:
         prompt += format_message_for_prompt(msg, i) + "\n\n"
 
     if len(messages) > max_messages:
-        prompt += (
-            f"\n*[...{len(messages) - max_messages} more messages not shown...]*\n\n"
-        )
+        prompt += f"\n*[...{len(messages) - max_messages} more messages not shown...]*\n\n"
 
     prompt += """---
 
@@ -964,13 +900,9 @@ Provide a 3-5 sentence summary covering:
 async def main():
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Debug Grader - Generate AI evaluation prompt"
-    )
+    parser = argparse.ArgumentParser(description="Debug Grader - Generate AI evaluation prompt")
     parser.add_argument("--sample", type=int, default=None, help="Limit to N messages")
-    parser.add_argument(
-        "--cache", action="store_true", help="Use cached data instead of fetching"
-    )
+    parser.add_argument("--cache", action="store_true", help="Use cached data instead of fetching")
     args = parser.parse_args()
 
     log_header("DEBUG GRADER TOOL")
@@ -1009,9 +941,7 @@ async def main():
         log_success("Prompt copied to clipboard!")
         log_info("Paste into ChatGPT, Claude, or another AI model for evaluation.")
     else:
-        log_error(
-            "Could not copy to clipboard. Install pyperclip: pip install pyperclip"
-        )
+        log_error("Could not copy to clipboard. Install pyperclip: pip install pyperclip")
 
         # Save to file as fallback
         output_file = CACHE_DIR / "grading_prompt.md"
@@ -1028,9 +958,7 @@ async def main():
     # Print preview
     log_header("PROMPT PREVIEW (first 2000 chars)")
     print(prompt[:2000])
-    print(
-        f"\n{Colors.YELLOW}[... {len(prompt) - 2000} more characters ...]{Colors.RESET}"
-    )
+    print(f"\n{Colors.YELLOW}[... {len(prompt) - 2000} more characters ...]{Colors.RESET}")
 
     log_header("DONE")
 

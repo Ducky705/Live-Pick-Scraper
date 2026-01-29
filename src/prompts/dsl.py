@@ -49,7 +49,7 @@ def generate_dsl_user_prompt(message_text: str, ocr_text: str = "") -> str:
     """
     Combine message text and OCR into a user prompt.
     """
-    prompt = f"### INPUT MESSAGE\n"
+    prompt = "### INPUT MESSAGE\n"
     if message_text:
         prompt += f"Caption: {message_text}\n"
     if ocr_text:

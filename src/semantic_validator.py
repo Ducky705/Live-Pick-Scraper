@@ -29,50 +29,57 @@ class SemanticValidator:
         "NBA": {
             "min_total": 170.0,
             "max_total": 280.0,
-            "max_spread": 25.0, # Rare to see spreads > 25
-            "spread_odds_range": (-200, 200) # Standard spreads usually -110ish
+            "max_spread": 25.0,  # Rare to see spreads > 25
+            "spread_odds_range": (-200, 200),  # Standard spreads usually -110ish
         },
-        "NFL": {
-            "min_total": 30.0,
-            "max_total": 70.0,
-            "max_spread": 21.0,
-            "spread_odds_range": (-200, 200)
-        },
+        "NFL": {"min_total": 30.0, "max_total": 70.0, "max_spread": 21.0, "spread_odds_range": (-200, 200)},
         "NCAAF": {
             "min_total": 30.0,
             "max_total": 90.0,
-            "max_spread": 60.0, # College spreads can be huge
-            "spread_odds_range": (-200, 200)
+            "max_spread": 60.0,  # College spreads can be huge
+            "spread_odds_range": (-200, 200),
         },
-        "NCAAB": {
-            "min_total": 100.0,
-            "max_total": 180.0,
-            "max_spread": 40.0,
-            "spread_odds_range": (-200, 200)
-        },
+        "NCAAB": {"min_total": 100.0, "max_total": 180.0, "max_spread": 40.0, "spread_odds_range": (-200, 200)},
         "NHL": {
             "min_total": 4.0,
             "max_total": 10.0,
-            "max_spread": 3.5, # Puck line usually 1.5, maybe 2.5
-            "spread_odds_range": (-300, 300) # Puck lines can be juice heavy
+            "max_spread": 3.5,  # Puck line usually 1.5, maybe 2.5
+            "spread_odds_range": (-300, 300),  # Puck lines can be juice heavy
         },
         "MLB": {
             "min_total": 5.0,
             "max_total": 15.0,
-            "max_spread": 4.5, # Run line usually 1.5
-            "spread_odds_range": (-300, 300)
-        }
+            "max_spread": 4.5,  # Run line usually 1.5
+            "spread_odds_range": (-300, 300),
+        },
     }
 
     # Common team names mapped to leagues for cross-checking
     TEAM_LEAGUES = {
-        "Lakers": "NBA", "Celtics": "NBA", "Warriors": "NBA", "Knicks": "NBA",
-        "Chiefs": "NFL", "Eagles": "NFL", "Cowboys": "NFL", "49ers": "NFL",
-        "Dodgers": "MLB", "Yankees": "MLB", "Braves": "MLB",
-        "Oilers": "NHL", "Maple Leafs": "NHL", "Bruins": "NHL",
+        "Lakers": "NBA",
+        "Celtics": "NBA",
+        "Warriors": "NBA",
+        "Knicks": "NBA",
+        "Chiefs": "NFL",
+        "Eagles": "NFL",
+        "Cowboys": "NFL",
+        "49ers": "NFL",
+        "Dodgers": "MLB",
+        "Yankees": "MLB",
+        "Braves": "MLB",
+        "Oilers": "NHL",
+        "Maple Leafs": "NHL",
+        "Bruins": "NHL",
         # Colleges (Jan/Feb = Basketball)
-        "Penn State": "NCAAB", "Duke": "NCAAB", "UNC": "NCAAB", "Kansas": "NCAAB", "Purdue": "NCAAB",
-        "Alabama": "NCAAB", "Houston": "NCAAB", "UConn": "NCAAB", "Tennessee": "NCAAB"
+        "Penn State": "NCAAB",
+        "Duke": "NCAAB",
+        "UNC": "NCAAB",
+        "Kansas": "NCAAB",
+        "Purdue": "NCAAB",
+        "Alabama": "NCAAB",
+        "Houston": "NCAAB",
+        "UConn": "NCAAB",
+        "Tennessee": "NCAAB",
     }
 
     @staticmethod
@@ -82,6 +89,16 @@ class SemanticValidator:
         Returns (is_valid, reason_if_invalid).
         """
         sport = pick.get("league", "Other")
+
+        # US-013: Normalize Leagues (CBB->NCAAB, CFB->NCAAF)
+        # We do this here to ensure validation rules apply correctly
+        if sport == "CBB":
+            sport = "NCAAB"
+            pick["league"] = "NCAAB"
+        elif sport == "CFB":
+            sport = "NCAAF"
+            pick["league"] = "NCAAF"
+
         pick_type = pick.get("type", "Unknown")
         line = pick.get("line")
         odds = pick.get("odds")
@@ -134,6 +151,52 @@ class SemanticValidator:
                     break
 
             if not found_team:
+                # US-013: Check for uppercase abbreviations (Case Sensitive)
+                # These are dangerous to add to TEAM_ALIASES (e.g. "WAS" vs "was", "MIN" vs "min")
+                abbrevs = [
+                    "WAS",
+                    "MIN",
+                    "PHI",
+                    "DAL",
+                    "CHI",
+                    "MIA",
+                    "HOU",
+                    "TEN",
+                    "SF",
+                    "CIN",
+                    "BUF",
+                    "PIT",
+                    "CLE",
+                    "IND",
+                    "JAX",
+                    "DET",
+                    "GB",
+                    "NE",
+                    "NY",
+                    "LV",
+                    "KC",
+                    "LAC",
+                    "LAL",
+                    "GSW",
+                    "OKC",
+                    "NOP",
+                    "SAS",
+                    "MIL",
+                    "TOR",
+                    "BOS",
+                    "ATL",
+                    "CHA",
+                    "ORL",
+                    "BKN",
+                    "DEN",
+                    "UTA",
+                    "POR",
+                    "SAC",
+                ]
+                if any(re.search(rf"\b{a}\b", pick_text) for a in abbrevs):
+                    found_team = True
+
+            if not found_team:
                 # Double check: Is it an "Over/Under" without team name?
                 # If so, it's technically invalid as we don't know the game,
                 # UNLESS it's a "Grand Salami" or specific league prop, but we'll flag it.
@@ -158,9 +221,23 @@ class SemanticValidator:
 
             # TOTALS
             if pick_type == "Total" and line is not None:
-                if line < rules["min_total"] or line > rules["max_total"]:
-                    # Exception: Alternate lines or Props misclassified as Totals
-                    return False, f"Suspicious Total: {line} for {sport} (Expected {rules['min_total']}-{rules['max_total']})"
+                # RELAXATION: Check for Player Prop keywords classified as Total
+                prop_keywords = ["pts", "points", "reb", "ast", "goal", "score", "sog", "shot", "hit", "base"]
+                is_prop_text = any(k in pick_text.lower() for k in prop_keywords)
+
+                if not is_prop_text:
+                    if line < rules["min_total"] or line > rules["max_total"]:
+                        # Check for cross-sport match (e.g. NHL total in NBA)
+                        for other_sport, other_rules in SemanticValidator.RULES.items():
+                            if other_sport != sport:
+                                if other_rules["min_total"] <= line <= other_rules["max_total"]:
+                                    return False, f"Suspicious Total for {sport}, likely {other_sport} (Range match)"
+
+                        # Exception: Alternate lines or Props misclassified as Totals
+                        return (
+                            False,
+                            f"Suspicious Total: {line} for {sport} (Expected {rules['min_total']}-{rules['max_total']})",
+                        )
 
             # SPREADS
             if pick_type == "Spread" and line is not None:
@@ -170,23 +247,22 @@ class SemanticValidator:
                 # Check for "Moneyline-like" odds on a Spread
                 # e.g., Spread -5 with +500 odds is extremely unlikely (unless it's a heavily alt line)
                 if odds is not None:
-                    min_odds, max_odds = rules["spread_odds_range"]
                     # If odds are way outside normal spread juice (e.g. +400), it might be a ML or Prop
                     if odds >= 300 or odds <= -500:
-                         return False, f"Suspicious Odds for Spread: {odds} (Likely Moneyline or Prop)"
+                        return False, f"Suspicious Odds for Spread: {odds} (Likely Moneyline or Prop)"
 
         # 3. Type Logic
         # If type is "Moneyline" but line is set (e.g. -5.5), that's inconsistent
         if pick_type == "Moneyline" and line is not None and abs(line) > 0:
-             # Some parsers might put moneyline odds in line field? No, line should be point spread.
-             # Exception: "Pick'em" might be represented as 0
-             return False, f"Moneyline should not have a line/spread value: {line}"
+            # Some parsers might put moneyline odds in line field? No, line should be point spread.
+            # Exception: "Pick'em" might be represented as 0
+            return False, f"Moneyline should not have a line/spread value: {line}"
 
         # 4. Prop Logic
         if pick_type == "Player Prop":
             # If line is 0.5 or 1.5, that's fine.
             # If line is > 100 (except maybe rushing yards), suspicious for most sports
-            if line is not None and line > 300: # 300+ passing yards is possible, but >500 is rare
+            if line is not None and line > 300:  # 300+ passing yards is possible, but >500 is rare
                 return False, f"Suspicious Player Prop Line: {line}"
 
             # Check for team names in player prop subject
@@ -206,6 +282,13 @@ class SemanticValidator:
         # Example: Mismatch Sport
         # If Reason is "Team 'Lakers' belongs to NBA", simply switch league
         match = re.search(r"belongs to (\w+)", reason)
+        if match:
+            correct_sport = match.group(1)
+            pick["league"] = correct_sport
+            return pick
+
+        # Example: Range match logic
+        match = re.search(r"likely (\w+) \(Range match\)", reason)
         if match:
             correct_sport = match.group(1)
             pick["league"] = correct_sport

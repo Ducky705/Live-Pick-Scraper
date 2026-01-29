@@ -1,9 +1,8 @@
+import json
+import logging
 import os
 import sys
-import json
 import time
-import logging
-from typing import List, Dict
 
 # Setup
 sys.path.insert(0, os.path.abspath("."))
@@ -15,8 +14,8 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 logger = logging.getLogger("Benchmark01")
 
 try:
-    from src.provider_pool import pooled_completion
     from src.prompts.core import get_compact_extraction_prompt
+    from src.provider_pool import pooled_completion
 except ImportError:
     # Fallback for when running in an environment where src isn't perfectly set up or differing versions
     logger.error("Could not import src modules. Ensure running from root.")
@@ -72,9 +71,7 @@ def run_benchmark():
     logger.info("=" * 40)
     logger.info(f"Total Time:     {total_time:.2f}s")
     logger.info(f"Avg Latency:    {avg_latency:.2f}s")
-    logger.info(
-        f"Success Rate:   {successful}/{len(TEST_MESSAGES)} ({successful / len(TEST_MESSAGES) * 100:.1f}%)"
-    )
+    logger.info(f"Success Rate:   {successful}/{len(TEST_MESSAGES)} ({successful / len(TEST_MESSAGES) * 100:.1f}%)")
     logger.info("=" * 40)
 
     # Save Stats

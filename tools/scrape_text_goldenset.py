@@ -1,9 +1,9 @@
-import sys
-import os
 import asyncio
 import json
 import logging
+import os
 import re
+import sys
 from datetime import datetime, timedelta
 
 # Add project root to path
@@ -12,9 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.telegram_client import TelegramManager
 
 # Setup logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("TextScraper")
 
 # Configuration
@@ -67,9 +65,7 @@ async def scrape_data():
 
     # Iterate dates
     start_date = datetime.now()
-    dates_to_fetch = [
-        (start_date - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(DAYS_BACK)
-    ]
+    dates_to_fetch = [(start_date - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(DAYS_BACK)]
 
     logger.info(f"Targeting dates: {dates_to_fetch}")
 
@@ -107,9 +103,7 @@ async def scrape_data():
             seen.add(c["id"])
             unique_candidates.append(c)
 
-    logger.info(
-        f"Scrape Complete. Found {len(unique_candidates)} betting-relevant messages."
-    )
+    logger.info(f"Scrape Complete. Found {len(unique_candidates)} betting-relevant messages.")
 
     # Save
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)

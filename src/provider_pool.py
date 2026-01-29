@@ -14,29 +14,34 @@ Logic:
 3. OpenRouter ONLY if ALL fast providers fail
 """
 
-import os
-import logging
-import time
-import random
 import json
+import logging
+import os
+import time
 from threading import Lock, Semaphore
-from concurrent.futures import ThreadPoolExecutor, as_completed, FIRST_COMPLETED, wait
-from typing import Optional, List, Dict, Any
+from typing import Any
 
 from src.cerebras_client import (
-    cerebras_completion,
     DEFAULT_TEXT_MODEL as CEREBRAS_MODEL,
 )
+from src.cerebras_client import (
+    cerebras_completion,
+)
 from src.groq_client import (
-    groq_vision_completion,
-    groq_text_completion,
     DEFAULT_TEXT_MODEL as GROQ_TEXT_MODEL,
+)
+from src.groq_client import (
     DEFAULT_VISION_MODEL as GROQ_VISION_MODEL,
+)
+from src.groq_client import (
+    groq_text_completion,
+    groq_vision_completion,
+)
+from src.mistral_client import (
+    DEFAULT_VISION_MODEL as MISTRAL_VISION_MODEL,
 )
 from src.mistral_client import (
     mistral_completion,
-    DEFAULT_TEXT_MODEL as MISTRAL_TEXT_MODEL,
-    DEFAULT_VISION_MODEL as MISTRAL_VISION_MODEL,
 )
 from src.prompts.decoder import expand_compact_pick
 
@@ -88,9 +93,7 @@ def _mark_rate_limited(provider: str, wait_seconds: int = 10):
     """Mark a provider as rate limited for a cooldown period."""
     with PROVIDER_LOCK:
         COOLDOWN[provider] = int(time.time() + wait_seconds)
-        logging.warning(
-            f"[HybridPool] {provider} hit rate limit. Cooldown for {wait_seconds}s."
-        )
+        logging.warning(f"[HybridPool] {provider} hit rate limit. Cooldown for {wait_seconds}s.")
 
 
 def _validate_json_response(response: str) -> bool:
@@ -219,13 +222,9 @@ def _calculate_quality_score(response: str) -> tuple[float, list[str]]:
     # Optional fields: odds (light penalty)
 
     critical_failures = (
-        quality_issues["unknown_capper"]
-        + quality_issues["unknown_pick"]
-        + quality_issues["suspicious_capper"]
+        quality_issues["unknown_capper"] + quality_issues["unknown_pick"] + quality_issues["suspicious_capper"]
     )
-    important_failures = (
-        quality_issues["unknown_league"] + quality_issues["invalid_type"]
-    )
+    important_failures = quality_issues["unknown_league"] + quality_issues["invalid_type"]
 
     # Score calculation
     critical_penalty = (critical_failures / total_picks) * 0.5  # Up to 50% penalty
@@ -235,25 +234,15 @@ def _calculate_quality_score(response: str) -> tuple[float, list[str]]:
 
     # Build issue descriptions
     if quality_issues["unknown_capper"] > 0:
-        issues.append(
-            f"{quality_issues['unknown_capper']}/{total_picks} picks have unknown capper"
-        )
+        issues.append(f"{quality_issues['unknown_capper']}/{total_picks} picks have unknown capper")
     if quality_issues["suspicious_capper"] > 0:
-        issues.append(
-            f"{quality_issues['suspicious_capper']}/{total_picks} picks have suspicious capper (watermark?)"
-        )
+        issues.append(f"{quality_issues['suspicious_capper']}/{total_picks} picks have suspicious capper (watermark?)")
     if quality_issues["unknown_pick"] > 0:
-        issues.append(
-            f"{quality_issues['unknown_pick']}/{total_picks} picks have unknown pick value"
-        )
+        issues.append(f"{quality_issues['unknown_pick']}/{total_picks} picks have unknown pick value")
     if quality_issues["unknown_league"] > 0:
-        issues.append(
-            f"{quality_issues['unknown_league']}/{total_picks} picks have unknown league"
-        )
+        issues.append(f"{quality_issues['unknown_league']}/{total_picks} picks have unknown league")
     if quality_issues["invalid_type"] > 0:
-        issues.append(
-            f"{quality_issues['invalid_type']}/{total_picks} picks have invalid type"
-        )
+        issues.append(f"{quality_issues['invalid_type']}/{total_picks} picks have invalid type")
 
     return score, issues
 
@@ -262,7 +251,7 @@ def _calculate_quality_score(response: str) -> tuple[float, list[str]]:
 QUALITY_THRESHOLD = 0.7  # If score < 70%, trigger fallback
 
 
-def _get_fast_providers(task_type: str = "text") -> List[Dict[str, Any]]:
+def _get_fast_providers(task_type: str = "text") -> list[dict[str, Any]]:
     """
     Get list of available fast providers for a task.
     PRIORITY ORDER: Groq (PRIMARY) > Mistral > Cerebras (text only)
@@ -275,21 +264,15 @@ def _get_fast_providers(task_type: str = "text") -> List[Dict[str, Any]]:
         if os.getenv("GROQ_TOKEN") and _is_available("groq"):
             candidates.append({"name": "groq", "model": GROQ_TEXT_MODEL, "priority": 1})
         if os.getenv("CEREBRAS_TOKEN") and _is_available("cerebras"):
-            candidates.append(
-                {"name": "cerebras", "model": CEREBRAS_MODEL, "priority": 2}
-            )
+            candidates.append({"name": "cerebras", "model": CEREBRAS_MODEL, "priority": 2})
         # Mistral removed from text tier for Iteration 18 (Low Quality/High Latency)
 
     elif task_type == "vision":
         # Vision Providers: Groq, Mistral (Cerebras is text-only)
         if os.getenv("GROQ_TOKEN") and _is_available("groq"):
-            candidates.append(
-                {"name": "groq", "model": GROQ_VISION_MODEL, "priority": 1}
-            )
+            candidates.append({"name": "groq", "model": GROQ_VISION_MODEL, "priority": 1})
         if os.getenv("MISTRAL_TOKEN") and _is_available("mistral"):
-            candidates.append(
-                {"name": "mistral", "model": MISTRAL_VISION_MODEL, "priority": 2}
-            )
+            candidates.append({"name": "mistral", "model": MISTRAL_VISION_MODEL, "priority": 2})
 
     # Sort by priority (Groq first), NO random shuffle for MAXIMUM SPEED
     candidates.sort(key=lambda x: x.get("priority", 99))
@@ -298,8 +281,8 @@ def _get_fast_providers(task_type: str = "text") -> List[Dict[str, Any]]:
 
 
 def _execute_fast_request(
-    provider: str, prompt: str, images: Optional[List[str]] = None, timeout: int = 60
-) -> Optional[str]:
+    provider: str, prompt: str, images: list[str] | None = None, timeout: int = 60
+) -> str | None:
     """Execute the request against a specific fast provider."""
     try:
         if provider == "cerebras":
@@ -331,9 +314,9 @@ def _attempt_provider_execution(
     provider_name: str,
     model: str,
     prompt: str,
-    images: Optional[List[str]],
+    images: list[str] | None,
     timeout: int,
-) -> tuple[Optional[str], float]:
+) -> tuple[str | None, float]:
     """
     Helper to execute a provider request with semaphore handling.
     Returns: (result_string_or_None, quality_score)
@@ -366,14 +349,10 @@ def _attempt_provider_execution(
 
             score, issues = _calculate_quality_score(result)
             if score >= QUALITY_THRESHOLD:
-                logging.info(
-                    f"[HybridPool] {provider_name} success in {duration:.2f}s (quality: {score:.0%})"
-                )
+                logging.info(f"[HybridPool] {provider_name} success in {duration:.2f}s (quality: {score:.0%})")
                 return result, score
             else:
-                logging.warning(
-                    f"[HybridPool] {provider_name} low quality ({score:.0%}). Issues: {issues}"
-                )
+                logging.warning(f"[HybridPool] {provider_name} low quality ({score:.0%}). Issues: {issues}")
                 return result, score  # Return as fallback candidate
         else:
             return None, 0.0
@@ -389,12 +368,12 @@ def _attempt_provider_execution(
 
 def pooled_completion(
     prompt: str,
-    images: Optional[List[str]] = None,
+    images: list[str] | None = None,
     timeout: int = 60,
-    model: Optional[str] = None,
-    provider: Optional[str] = None,
+    model: str | None = None,
+    provider: str | None = None,
     require_accuracy: bool = False,
-) -> Optional[str]:
+) -> str | None:
     """
     Main entry point for Hybrid Provider Pool.
 
@@ -422,22 +401,18 @@ def pooled_completion(
             from src.openrouter_client import openrouter_completion
 
             logging.info(f"[HybridPool] Bypassing pool for specific model: {model}")
-            return openrouter_completion(
-                prompt, model=model, images=images, timeout=timeout
-            )
+            return openrouter_completion(prompt, model=model, images=images, timeout=timeout)
         except Exception as e:
             logging.error(f"[HybridPool] OpenRouter failed for model {model}: {e}")
             return None
 
     # --- BYPASS: Accuracy mode (skip fast tier) ---
     if require_accuracy:
-        logging.info(f"[HybridPool] Accuracy mode: Routing directly to DeepSeek R1")
+        logging.info("[HybridPool] Accuracy mode: Routing directly to DeepSeek R1")
         try:
             from src.openrouter_client import openrouter_completion
 
-            return openrouter_completion(
-                prompt, model=STRONG_FALLBACK_MODEL, images=images, timeout=timeout
-            )
+            return openrouter_completion(prompt, model=STRONG_FALLBACK_MODEL, images=images, timeout=timeout)
         except Exception as e:
             logging.error(f"[HybridPool] OpenRouter (accuracy mode) failed: {e}")
             return None
@@ -466,9 +441,7 @@ def pooled_completion(
     _last_fast_result = None  # Store best fast result in case OpenRouter fails
 
     if not candidates:
-        logging.warning(
-            f"[HybridPool] No fast providers available for {task_type}. Going to OpenRouter."
-        )
+        logging.warning(f"[HybridPool] No fast providers available for {task_type}. Going to OpenRouter.")
     else:
         # --- ITERATION 18: SEQUENTIAL FAST-FAIL ---
         # "Request Economy" Optimization: Eliminate parallel requests.
@@ -488,33 +461,23 @@ def pooled_completion(
                 _last_fast_result = res
 
     # --- FALLBACK: OpenRouter (DeepSeek R1) ---
-    logging.info(
-        f"[HybridPool] Fast tier failed/low-quality. Falling back to OpenRouter (DeepSeek R1)..."
-    )
+    logging.info("[HybridPool] Fast tier failed/low-quality. Falling back to OpenRouter (DeepSeek R1)...")
 
     try:
         from src.openrouter_client import openrouter_completion
 
-        result = openrouter_completion(
-            prompt, model=STRONG_FALLBACK_MODEL, images=images, timeout=timeout
-        )
+        result = openrouter_completion(prompt, model=STRONG_FALLBACK_MODEL, images=images, timeout=timeout)
 
         if result and _validate_json_response(result):
             # Check quality of OpenRouter response too
             or_quality, or_issues = _calculate_quality_score(result)
-            logging.info(
-                f"[HybridPool] OpenRouter fallback success (quality: {or_quality:.0%})."
-            )
+            logging.info(f"[HybridPool] OpenRouter fallback success (quality: {or_quality:.0%}).")
             return result
         else:
-            logging.error(
-                f"[HybridPool] OpenRouter fallback returned invalid response."
-            )
+            logging.error("[HybridPool] OpenRouter fallback returned invalid response.")
             # Return the best fast result we had, if any
             if _last_fast_result:
-                logging.info(
-                    f"[HybridPool] Returning last fast-tier result as fallback."
-                )
+                logging.info("[HybridPool] Returning last fast-tier result as fallback.")
                 return _last_fast_result
             return result  # Return anyway, let caller handle
 

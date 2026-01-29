@@ -1,9 +1,10 @@
 import asyncio
 import os
 import sys
+
+import requests
 from dotenv import load_dotenv
 from twikit import Client
-import requests
 
 # Load env vars
 load_dotenv()

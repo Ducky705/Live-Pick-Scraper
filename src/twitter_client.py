@@ -1,10 +1,11 @@
-import os
 import asyncio
-import json
+import os
 import random
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
+
 from twikit import Client
-from config import TEMP_IMG_DIR, SESSIONS_DIR
+
+from config import SESSIONS_DIR, TEMP_IMG_DIR
 
 # Check for credentials in env
 TWITTER_USERNAME = os.getenv("TWITTER_USERNAME")
@@ -31,9 +32,7 @@ class TwitterManager:
             else:
                 print("[Twitter] No cookies found. Attempting login...")
                 if not TWITTER_USERNAME or not TWITTER_PASSWORD:
-                    raise ValueError(
-                        "TWITTER_USERNAME and TWITTER_PASSWORD must be set in .env or environment"
-                    )
+                    raise ValueError("TWITTER_USERNAME and TWITTER_PASSWORD must be set in .env or environment")
 
                 await self.client.login(
                     auth_info_1=TWITTER_USERNAME,
@@ -58,25 +57,18 @@ class TwitterManager:
                 user = await client.get_user_by_screen_name(screen_name)
                 break
             except Exception as e:
-                if (
-                    "User is suspended" in str(e)
-                    or "user does not exist" in str(e).lower()
-                ):
+                if "User is suspended" in str(e) or "user does not exist" in str(e).lower():
                     print(f"[Twitter] User {screen_name} is unavailable: {e}")
                     return []
 
                 # Check for Rate Limit
                 if "429" in str(e) or "Too Many Requests" in str(e):
                     wait_time = 60 * (2**attempt)
-                    print(
-                        f"[Twitter] Rate Limit fetching user {screen_name}. Sleeping {wait_time}s..."
-                    )
+                    print(f"[Twitter] Rate Limit fetching user {screen_name}. Sleeping {wait_time}s...")
                     await asyncio.sleep(wait_time)
                     continue
 
-                print(
-                    f"[Twitter] Error getting user {screen_name} (Attempt {attempt + 1}/5): {repr(e)}"
-                )
+                print(f"[Twitter] Error getting user {screen_name} (Attempt {attempt + 1}/5): {e!r}")
                 await asyncio.sleep(5)  # Standard short retry
 
         if not user:
@@ -111,11 +103,9 @@ class TwitterManager:
                         target_dt = datetime.strptime(min_date_str, "%Y-%m-%d").date()
                         if dt.date() < target_dt:
                             # We found tweets older than target, so we have enough
-                            print(
-                                f"[Twitter] Reached older tweets ({dt.date()} < {target_dt}). Stopping."
-                            )
+                            print(f"[Twitter] Reached older tweets ({dt.date()} < {target_dt}). Stopping.")
                             break
-                    except Exception as e:
+                    except Exception:
                         # If parsing fails, just continue fetching to be safe
                         pass
 
@@ -136,9 +126,7 @@ class TwitterManager:
                             break
 
                         collected_tweets.extend(more_tweets)
-                        print(
-                            f"[Twitter] Batch {page + 1} count: {len(more_tweets)} (Total: {len(collected_tweets)})"
-                        )
+                        print(f"[Twitter] Batch {page + 1} count: {len(more_tweets)} (Total: {len(collected_tweets)})")
                         tweets = more_tweets  # Update reference for next()
                         page += 1
                         break  # Success, exit retry loop
@@ -147,9 +135,7 @@ class TwitterManager:
                         # Handle Rate Limits (429) specifically
                         if "429" in str(e) or "Too Many Requests" in str(e):
                             retry_count += 1
-                            wait_time = 60 * (
-                                2 ** (retry_count - 1)
-                            )  # Exponential Backoff: 60s, 120s, 240s
+                            wait_time = 60 * (2 ** (retry_count - 1))  # Exponential Backoff: 60s, 120s, 240s
                             print(
                                 f"[Twitter] Rate Limit Hit on page {page + 1}. Attempt {retry_count}/{max_retries}. Sleeping {wait_time}s..."
                             )
@@ -219,9 +205,7 @@ class TwitterManager:
                                     if resp.status_code == 200:
                                         with open(fpath, "wb") as f:
                                             f.write(resp.content)
-                                        image_paths.append(
-                                            f"/static/temp_images/{fname}"
-                                        )
+                                        image_paths.append(f"/static/temp_images/{fname}")
                             except Exception as e:
                                 print(f"Error downloading Twitter image: {e}")
 
@@ -236,7 +220,7 @@ class TwitterManager:
                     # Alternative ISO
                     dt = datetime.fromisoformat(ts)
                 except:
-                    dt = datetime.now(timezone.utc)  # Fallback
+                    dt = datetime.now(UTC)  # Fallback
 
             dt_et = dt.astimezone(ET_OFFSET)
 
@@ -263,9 +247,7 @@ class TwitterManager:
         # Load monitored accounts from .env or default to list
         env_accounts = os.getenv("TWITTER_MONITORED_ACCOUNTS")
         if env_accounts:
-            MONITORED_ACCOUNTS = [
-                acc.strip() for acc in env_accounts.split(",") if acc.strip()
-            ]
+            MONITORED_ACCOUNTS = [acc.strip() for acc in env_accounts.split(",") if acc.strip()]
         else:
             # Fallback Default List
             MONITORED_ACCOUNTS = [
@@ -297,10 +279,7 @@ class TwitterManager:
         # Chunk users into groups of 10 to keep query length reasonable
         # (Twitter queries have char limits, but 10 usernames is usually safe)
         CHUNK_SIZE = 10
-        chunks = [
-            MONITORED_ACCOUNTS[i : i + CHUNK_SIZE]
-            for i in range(0, len(MONITORED_ACCOUNTS), CHUNK_SIZE)
-        ]
+        chunks = [MONITORED_ACCOUNTS[i : i + CHUNK_SIZE] for i in range(0, len(MONITORED_ACCOUNTS), CHUNK_SIZE)]
 
         for i, chunk in enumerate(chunks):
             try:
@@ -308,9 +287,7 @@ class TwitterManager:
                 from_clause = " OR ".join([f"from:{acc}" for acc in chunk])
                 query = f"({from_clause}) since:{target_date}"
 
-                print(
-                    f"[Twitter] Executing Batch {i + 1}/{len(chunks)}: {query[:50]}..."
-                )
+                print(f"[Twitter] Executing Batch {i + 1}/{len(chunks)}: {query[:50]}...")
 
                 # Fetch with pagination (Search also supports pagination)
                 # We use 'Latest' to get chronological order
@@ -318,15 +295,11 @@ class TwitterManager:
 
                 # Search loop
                 try:
-                    results = await client.search_tweet(
-                        query, product="Latest", count=40
-                    )
+                    results = await client.search_tweet(query, product="Latest", count=40)
 
                     while results:
                         collected_batch.extend(results)
-                        print(
-                            f"  - Found {len(results)} tweets in page. Total batch: {len(collected_batch)}"
-                        )
+                        print(f"  - Found {len(results)} tweets in page. Total batch: {len(collected_batch)}")
 
                         # Stop if we have enough or if we went too far back (search usually handles 'since' well)
                         if len(collected_batch) >= limit:
@@ -340,7 +313,7 @@ class TwitterManager:
 
                 except Exception as e:
                     if "429" in str(e):
-                        print(f"[Twitter] Rate limit during search. Sleeping 60s...")
+                        print("[Twitter] Rate limit during search. Sleeping 60s...")
                         await asyncio.sleep(60)
                     else:
                         print(f"[Twitter] Search error: {e}")
@@ -409,7 +382,7 @@ class TwitterManager:
             try:
                 dt = datetime.fromisoformat(ts)
             except:
-                dt = datetime.now(timezone.utc)
+                dt = datetime.now(UTC)
 
         dt_et = dt.astimezone(ET_OFFSET)
 

@@ -1,12 +1,12 @@
 import asyncio
-import sys
 import os
+import sys
 
 # Add project root to path
 sys.path.append(os.path.abspath(os.getcwd()))
 
-from src.score_fetcher import fetch_scores_for_date
 from src.grading.matcher import Matcher
+from src.score_fetcher import fetch_scores_for_date
 
 
 async def check_score():

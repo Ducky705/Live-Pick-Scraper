@@ -6,14 +6,14 @@ using the same Goldenset Inputs.
 """
 
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.prompts.dsl import get_dsl_system_prompt, generate_dsl_user_prompt
+from src.prompts.dsl import generate_dsl_user_prompt, get_dsl_system_prompt
 
 INPUT_FILE = PROJECT_ROOT / "tests" / "data" / "goldenset_inputs.json"
 
@@ -29,7 +29,7 @@ def copy_to_clipboard(text: str) -> bool:
 
 
 def main():
-    with open(INPUT_FILE, "r", encoding="utf-8") as f:
+    with open(INPUT_FILE, encoding="utf-8") as f:
         messages = json.load(f)
 
     print(f"Loaded {len(messages)} messages.")

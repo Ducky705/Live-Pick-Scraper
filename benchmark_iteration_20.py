@@ -1,10 +1,9 @@
+import asyncio
+import json
+import logging
 import os
 import sys
-import json
 import time
-import logging
-import asyncio
-from typing import List, Dict
 
 # Setup
 sys.path.insert(0, os.path.abspath("."))
@@ -15,8 +14,8 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 logger = logging.getLogger("Benchmark20")
 
-from src.provider_pool import pooled_completion
 from src.prompts.core import get_compact_extraction_prompt
+from src.provider_pool import pooled_completion
 
 # Mock Data
 TEST_MESSAGES = [
@@ -33,23 +32,17 @@ TEST_MESSAGES = [
 ]
 
 
-async def process_message_controlled(
-    i: int, raw_msg: str, sem: asyncio.Semaphore
-) -> Dict:
+async def process_message_controlled(i: int, raw_msg: str, sem: asyncio.Semaphore) -> dict:
     """Async wrapper with Semaphore for concurrency control."""
     async with sem:
-        logger.info(
-            f"Processing Msg {i + 1}/{len(TEST_MESSAGES)} (Acquired Semaphore)..."
-        )
+        logger.info(f"Processing Msg {i + 1}/{len(TEST_MESSAGES)} (Acquired Semaphore)...")
 
         prompt = get_compact_extraction_prompt(raw_data=raw_msg)
         start_t = time.time()
 
         loop = asyncio.get_running_loop()
         # Run blocking call in executor
-        response = await loop.run_in_executor(
-            None, lambda: pooled_completion(prompt, images=None, timeout=30)
-        )
+        response = await loop.run_in_executor(None, lambda: pooled_completion(prompt, images=None, timeout=30))
 
         duration = time.time() - start_t
 
@@ -74,17 +67,13 @@ async def run_benchmark_async():
     # Iteration 20: Controlled Concurrency (Semaphore)
     # Why: Naive gather (It 19) can flood providers. Limiting concurrency ensures stability.
     CONCURRENCY_LIMIT = 4
-    logger.info(
-        f"Starting Ralph Wiggum Loop - Iteration 20 (Controlled Semaphore={CONCURRENCY_LIMIT})..."
-    )
+    logger.info(f"Starting Ralph Wiggum Loop - Iteration 20 (Controlled Semaphore={CONCURRENCY_LIMIT})...")
     logger.info(f"Test Set: {len(TEST_MESSAGES)} messages")
 
     sem = asyncio.Semaphore(CONCURRENCY_LIMIT)
     start_global = time.time()
 
-    tasks = [
-        process_message_controlled(i, msg, sem) for i, msg in enumerate(TEST_MESSAGES)
-    ]
+    tasks = [process_message_controlled(i, msg, sem) for i, msg in enumerate(TEST_MESSAGES)]
     results = await asyncio.gather(*tasks)
 
     end_global = time.time()
@@ -100,9 +89,7 @@ async def run_benchmark_async():
     logger.info(f"Total Requests: {total_requests}")
     logger.info(f"Total Time:     {total_time:.2f}s")
     logger.info(f"Avg Latency:    {avg_latency:.2f}s (Wall Clock / N)")
-    logger.info(
-        f"Success Rate:   {successful}/{len(TEST_MESSAGES)} ({successful / len(TEST_MESSAGES) * 100:.1f}%)"
-    )
+    logger.info(f"Success Rate:   {successful}/{len(TEST_MESSAGES)} ({successful / len(TEST_MESSAGES) * 100:.1f}%)")
     logger.info("=" * 40)
 
     with open("iteration_20_stats.txt", "w") as f:

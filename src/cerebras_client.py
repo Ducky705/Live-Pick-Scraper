@@ -1,10 +1,11 @@
-import os
-import requests
 import json
 import logging
-import time
+import os
 import random
+import time
 from threading import Semaphore
+
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -120,7 +121,7 @@ def cerebras_completion(
         try:
             # Use Semaphore for 2 concurrent requests (30 RPM = 0.5/sec)
             if not GLOBAL_CEREBRAS_SEMAPHORE.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error(f"[Cerebras] Failed to acquire semaphore slot. Skipping.")
+                logging.error("[Cerebras] Failed to acquire semaphore slot. Skipping.")
                 continue
 
             try:
@@ -143,22 +144,18 @@ def cerebras_completion(
                         if extracted:
                             return extracted
                         else:
-                            logging.warning(
-                                f"[Cerebras] Invalid JSON from {model}. Retrying."
-                            )
+                            logging.warning(f"[Cerebras] Invalid JSON from {model}. Retrying.")
                             last_error = "Invalid JSON"
                             # Loop will retry
                     else:
                         return content.strip()
                 else:
-                    logging.warning(f"[Cerebras] No choices returned.")
+                    logging.warning("[Cerebras] No choices returned.")
             elif response.status_code == 429:
-                logging.warning(f"[Cerebras] Rate limit (429). Failing fast.")
+                logging.warning("[Cerebras] Rate limit (429). Failing fast.")
                 raise Exception("Cerebras Rate limit 429")
             else:
-                logging.error(
-                    f"[Cerebras] Error {response.status_code}: {response.text}"
-                )
+                logging.error(f"[Cerebras] Error {response.status_code}: {response.text}")
                 last_error = f"Error {response.status_code}"
 
         except Exception as e:
@@ -171,11 +168,7 @@ def cerebras_completion(
             last_error = str(e)
 
         # Wait before retry
-        wait_time = _get_backoff_delay(
-            cycle, RETRY_CONFIG["cycle_delay"], RETRY_CONFIG["max_delay"]
-        )
+        wait_time = _get_backoff_delay(cycle, RETRY_CONFIG["cycle_delay"], RETRY_CONFIG["max_delay"])
         time.sleep(wait_time)
 
-    raise Exception(
-        f"[Cerebras] Failed after {max_cycles} cycles. Last error: {last_error}"
-    )
+    raise Exception(f"[Cerebras] Failed after {max_cycles} cycles. Last error: {last_error}")

@@ -18,7 +18,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from datetime import datetime
+
 
 def create_pdf_with_pillow(image_paths: list[Path], output_path: Path):
     """Create PDF using Pillow (no external dependencies)."""
@@ -27,39 +27,39 @@ def create_pdf_with_pillow(image_paths: list[Path], output_path: Path):
     except ImportError:
         print("ERROR: Pillow not installed. Run: pip install Pillow")
         sys.exit(1)
-    
+
     if not image_paths:
         print("No images found!")
         return False
-    
+
     # Convert images to RGB (required for PDF)
     images = []
     for i, path in enumerate(image_paths):
         try:
             img = Image.open(path)
-            if img.mode == 'RGBA':
+            if img.mode == "RGBA":
                 # Convert RGBA to RGB with white background
-                background = Image.new('RGB', img.size, (255, 255, 255))
+                background = Image.new("RGB", img.size, (255, 255, 255))
                 background.paste(img, mask=img.split()[3])
                 img = background
-            elif img.mode != 'RGB':
-                img = img.convert('RGB')
+            elif img.mode != "RGB":
+                img = img.convert("RGB")
             images.append(img)
-            print(f"  [{i+1}/{len(image_paths)}] {path.name}")
+            print(f"  [{i + 1}/{len(image_paths)}] {path.name}")
         except Exception as e:
             print(f"  [SKIP] {path.name}: {e}")
-    
+
     if not images:
         print("No valid images to process!")
         return False
-    
+
     # Save as PDF
     first_image = images[0]
     if len(images) > 1:
         first_image.save(output_path, save_all=True, append_images=images[1:])
     else:
         first_image.save(output_path)
-    
+
     print(f"\nPDF created: {output_path}")
     print(f"Total images: {len(images)}")
     return True
@@ -67,9 +67,9 @@ def create_pdf_with_pillow(image_paths: list[Path], output_path: Path):
 
 def generate_prompt(image_paths: list[Path]) -> str:
     """Generate the AI prompt for golden set annotation."""
-    
-    image_list = "\n".join([f"  {i+1}. {p.name}" for i, p in enumerate(image_paths)])
-    
+
+    image_list = "\n".join([f"  {i + 1}. {p.name}" for i, p in enumerate(image_paths)])
+
     return f"""# Golden Set Annotation Task
 
 You are annotating {len(image_paths)} sports betting images to create ground-truth training data.
@@ -219,56 +219,53 @@ def main():
     parser.add_argument("--limit", type=int, default=50, help="Max images to include")
     parser.add_argument("--output", type=Path, default=Path("golden_set"), help="Output directory")
     args = parser.parse_args()
-    
+
     # Find images
     project_root = Path(__file__).parent.parent
     temp_images = project_root / "temp_images"
-    
+
     if not temp_images.exists():
         print(f"ERROR: temp_images directory not found at {temp_images}")
         sys.exit(1)
-    
+
     # Get image files
-    extensions = {'.jpg', '.jpeg', '.png', '.webp'}
-    image_paths = sorted([
-        p for p in temp_images.iterdir() 
-        if p.suffix.lower() in extensions
-    ])[:args.limit]
-    
+    extensions = {".jpg", ".jpeg", ".png", ".webp"}
+    image_paths = sorted([p for p in temp_images.iterdir() if p.suffix.lower() in extensions])[: args.limit]
+
     print(f"Found {len(image_paths)} images (limit: {args.limit})")
-    
+
     if not image_paths:
         print("No images found!")
         sys.exit(1)
-    
+
     # Create output directory
     output_dir = project_root / args.output
     output_dir.mkdir(exist_ok=True)
-    
+
     # Generate PDF
     print("\nCreating PDF...")
     pdf_path = output_dir / "images.pdf"
     create_pdf_with_pillow(image_paths, pdf_path)
-    
+
     # Generate prompt
     print("\nGenerating prompt...")
     prompt = generate_prompt(image_paths)
     prompt_path = output_dir / "prompt.txt"
-    prompt_path.write_text(prompt, encoding='utf-8')
+    prompt_path.write_text(prompt, encoding="utf-8")
     print(f"Prompt saved: {prompt_path}")
-    
+
     # Save image list for reference
-    image_list = [{"index": i+1, "filename": p.name, "path": str(p)} for i, p in enumerate(image_paths)]
+    image_list = [{"index": i + 1, "filename": p.name, "path": str(p)} for i, p in enumerate(image_paths)]
     list_path = output_dir / "image_list.json"
-    list_path.write_text(json.dumps(image_list, indent=2), encoding='utf-8')
+    list_path.write_text(json.dumps(image_list, indent=2), encoding="utf-8")
     print(f"Image list saved: {list_path}")
-    
+
     # Create empty response file
     response_path = output_dir / "response.json"
     if not response_path.exists():
-        response_path.write_text('{\n  "annotations": []\n}', encoding='utf-8')
+        response_path.write_text('{\n  "annotations": []\n}', encoding="utf-8")
     print(f"Response file: {response_path}")
-    
+
     print(f"""
 ================================================================================
 GOLDEN SET CREATED

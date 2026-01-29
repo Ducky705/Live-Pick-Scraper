@@ -1,18 +1,16 @@
 import json
+import logging
 import os
+import statistics
 import sys
 import time
-import logging
-import statistics
 from unittest.mock import patch
-from typing import List, Dict, Any
 
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from benchmark.run_autotest import run_comparison
 from src.extraction_pipeline import ExtractionPipeline
-import src.provider_pool
-from benchmark.run_autotest import run_comparison, print_report
 
 # Configure logging
 logging.basicConfig(level=logging.ERROR)  # Suppress noise, we want clean output
@@ -67,7 +65,7 @@ def main():
         print(f"ERROR: {input_path} not found.")
         return
 
-    with open(input_path, "r", encoding="utf-8") as f:
+    with open(input_path, encoding="utf-8") as f:
         golden_data = json.load(f)
 
     messages = []
@@ -113,14 +111,12 @@ def main():
     # golden_path = os.path.join("benchmark", "reports", "auto_golden_set.json")
     golden_path = os.path.abspath("new_golden_set.json")
     if not os.path.exists(golden_path):
-        print(
-            f"\n[WARNING] Golden set not found at {golden_path}. Skipping accuracy check."
-        )
+        print(f"\n[WARNING] Golden set not found at {golden_path}. Skipping accuracy check.")
         accuracy = 0.0
         accuracy_report = {}
     else:
         print(f"\n[Verifying Accuracy against Golden Set: {golden_path}]")
-        with open(golden_path, "r", encoding="utf-8") as f:
+        with open(golden_path, encoding="utf-8") as f:
             golden_set = json.load(f)
 
         # Helper to format for run_comparison

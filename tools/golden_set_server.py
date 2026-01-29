@@ -5,12 +5,11 @@ Opens browser at http://localhost:8765
 """
 
 import http.server
-import socketserver
 import json
-import os
+import socketserver
 import webbrowser
 from pathlib import Path
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse
 
 PORT = 8765
 BASE_DIR = Path(__file__).parent.parent
@@ -23,22 +22,22 @@ class GoldenSetHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         parsed = urlparse(self.path)
-        
+
         # Ignore favicon requests
         if parsed.path == "/favicon.ico":
             self.send_response(204)  # No Content
             self.end_headers()
             return
-        
+
         # API: List all images
         if parsed.path == "/api/images":
             self.send_json_response(self.get_image_list())
             return
-        
+
         # Serve the UI at root
         if parsed.path == "/" or parsed.path == "":
             self.path = "/tools/golden_set.html"
-        
+
         return super().do_GET()
 
     def do_OPTIONS(self):
@@ -52,20 +51,17 @@ class GoldenSetHandler(http.server.SimpleHTTPRequestHandler):
         """Get all jpg/png images from temp_images folder"""
         if not IMAGES_DIR.exists():
             return {"images": [], "error": "temp_images directory not found"}
-        
+
         extensions = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
         images = []
-        
+
         for f in sorted(IMAGES_DIR.iterdir()):
             if f.suffix.lower() in extensions:
-                images.append({
-                    "filename": f.name,
-                    "path": f"temp_images/{f.name}"
-                })
+                images.append({"filename": f.name, "path": f"temp_images/{f.name}"})
                 # Limit to 50 images for golden set creation
                 if len(images) >= 50:
                     break
-        
+
         return {"images": images, "total": len(images), "limited": True}
 
     def send_json_response(self, data):
@@ -93,11 +89,11 @@ def main():
 ║  Press Ctrl+C to stop                                        ║
 ╚══════════════════════════════════════════════════════════════╝
 """)
-    
+
     with socketserver.TCPServer(("", PORT), GoldenSetHandler) as httpd:
         # Open browser automatically
         webbrowser.open(f"http://localhost:{PORT}")
-        
+
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:

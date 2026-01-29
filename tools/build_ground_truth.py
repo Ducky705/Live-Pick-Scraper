@@ -1,23 +1,18 @@
-import json
-import os
-import sys
 import asyncio
+import json
 import logging
+import os
 import re
-from datetime import datetime
-from typing import List, Dict, Any
+import sys
 
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.openrouter_client import openrouter_completion
 from src.score_fetcher import fetch_scores_for_date
-from src.prompts.decoder import normalize_response
 
 # Setup logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("GroundTruthBuilder")
 
 INPUT_FILE = os.path.join(os.path.dirname(__file__), "../data/raw_test_candidates.json")
@@ -58,7 +53,7 @@ Return a JSON object with a key "picks" containing a list of objects:
 """
 
 
-def independent_grade(pick: Dict, score_data: Dict) -> Dict:
+def independent_grade(pick: dict, score_data: dict) -> dict:
     """
     Independently calculates the grade based on score data.
     Returns { "grade": "WIN/LOSS/PUSH/VOID", "proof": "Score: X-Y, Line: Z" }
@@ -157,9 +152,7 @@ def independent_grade(pick: Dict, score_data: Dict) -> Dict:
             side = total_match.group(1)
             line = float(total_match.group(2))
 
-            total_score = float(score_data.get("score1") or 0) + float(
-                score_data.get("score2") or 0
-            )
+            total_score = float(score_data.get("score1") or 0) + float(score_data.get("score2") or 0)
 
             if "o" in side:
                 if total_score > line:
@@ -168,13 +161,12 @@ def independent_grade(pick: Dict, score_data: Dict) -> Dict:
                     grade = "LOSS"
                 else:
                     grade = "PUSH"
+            elif total_score < line:
+                grade = "WIN"
+            elif total_score > line:
+                grade = "LOSS"
             else:
-                if total_score < line:
-                    grade = "WIN"
-                elif total_score > line:
-                    grade = "LOSS"
-                else:
-                    grade = "PUSH"
+                grade = "PUSH"
 
             return {"grade": grade, "proof": f"Total: {total_score} vs {line}"}
 
@@ -193,7 +185,7 @@ async def build_dataset():
         logger.error(f"Input file not found: {INPUT_FILE}")
         return
 
-    with open(INPUT_FILE, "r", encoding="utf-8") as f:
+    with open(INPUT_FILE, encoding="utf-8") as f:
         raw_data = json.load(f)
 
     logger.info(f"Loaded {len(raw_data)} raw messages.")
@@ -211,9 +203,7 @@ async def build_dataset():
         prompt = ANALYST_PROMPT.format(text=msg["text"], date=msg["date"])
         try:
             # Use specific high-quality model
-            response = openrouter_completion(
-                prompt, model="google/gemini-2.0-flash-exp:free"
-            )
+            response = openrouter_completion(prompt, model="google/gemini-2.0-flash-exp:free")
             parsed = json.loads(response)
             picks = parsed.get("picks", [])
 
@@ -250,9 +240,7 @@ async def build_dataset():
                     else:
                         t1_parts = [w.lower() for w in t1.split() if len(w) > 3]
                         t2_parts = [w.lower() for w in t2.split() if len(w) > 3]
-                        if any(w in p_text for w in t1_parts) or any(
-                            w in p_text for w in t2_parts
-                        ):
+                        if any(w in p_text for w in t1_parts) or any(w in p_text for w in t2_parts):
                             match_found = True
 
                     if match_found:
@@ -263,9 +251,7 @@ async def build_dataset():
 
                 if matched_game:
                     grade_info = independent_grade(p, matched_game)
-                    logger.info(
-                        f"  [Verified] {p['pick']} -> {grade_info['grade']} ({grade_info['proof']})"
-                    )
+                    logger.info(f"  [Verified] {p['pick']} -> {grade_info['grade']} ({grade_info['proof']})")
                 else:
                     logger.warning(f"  [Unmatched] {p['pick']} (Date: {msg_date_str})")
 
@@ -288,9 +274,7 @@ async def build_dataset():
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(verified_data, f, indent=2)
 
-    logger.info(
-        f"Ground Truth Built! Saved {len(verified_data)} verified cases to {OUTPUT_FILE}"
-    )
+    logger.info(f"Ground Truth Built! Saved {len(verified_data)} verified cases to {OUTPUT_FILE}")
 
 
 if __name__ == "__main__":

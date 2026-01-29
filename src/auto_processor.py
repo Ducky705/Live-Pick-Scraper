@@ -12,12 +12,12 @@ the main OCR/parsing pipeline. This solves the user's core problems:
 Uses the SAME models as the rest of the system (no new dependencies).
 """
 
-import os
-import sys
 import json
 import logging
+import os
 import re
-from typing import List, Dict, Any, Optional, cast
+import sys
+from typing import Any, cast
 
 # Add project root to path if needed
 if getattr(sys, "frozen", False):
@@ -25,18 +25,15 @@ if getattr(sys, "frozen", False):
 else:
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+from src.ocr_engine import get_ocr_engine
+from src.ocr_preprocessing import preprocess_for_rapidocr
 from src.openrouter_client import openrouter_completion
 from src.provider_pool import pooled_completion
 from src.utils import clean_text_for_ai
-from src.ocr_engine import get_ocr_engine
-from src.ocr_preprocessing import preprocess_for_rapidocr
-import cv2
-import numpy as np
 
 # Use the same default model as the main pipeline - VERIFIED WORKING
-DEFAULT_CLASSIFIER_MODEL = (
-    "google/gemini-2.0-flash-exp:free"  # Fast vision model for classification
-)
+DEFAULT_CLASSIFIER_MODEL = "google/gemini-2.0-flash-exp:free"  # Fast vision model for classification
 
 
 class PostClassification:
@@ -95,7 +92,7 @@ DATA_DUMP_PATTERNS = [
 ]
 
 
-def classify_by_text_heuristics(text: str) -> Optional[str]:
+def classify_by_text_heuristics(text: str) -> str | None:
     """
     Fast text-based classification using regex patterns.
     Returns classification or None if no match.
@@ -116,11 +113,7 @@ def classify_by_text_heuristics(text: str) -> Optional[str]:
     for pattern in PROMO_PATTERNS:
         if re.search(pattern, text_lower):
             # If it has strong betting signals, ignore weak promo signals
-            if (
-                has_betting_signal
-                and "join" not in pattern
-                and "subscribe" not in pattern
-            ):
+            if has_betting_signal and "join" not in pattern and "subscribe" not in pattern:
                 continue
             return PostClassification.PROMO
 
@@ -143,7 +136,7 @@ def count_result_indicators(text: str) -> int:
     return len(indicators)
 
 
-def classify_message_fast(message: Dict[str, Any]) -> Dict[str, Any]:
+def classify_message_fast(message: dict[str, Any]) -> dict[str, Any]:
     """
     Fast classification using text heuristics only (no AI call).
     Returns a classification result dict.
@@ -157,7 +150,7 @@ def classify_message_fast(message: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "class": classification,
             "confidence": 0.8,
-            "reason": f"Text pattern match",
+            "reason": "Text pattern match",
             "method": "heuristic",
         }
 
@@ -181,7 +174,7 @@ def classify_message_fast(message: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def classify_image_with_local_ocr(image_path: str) -> Optional[Dict[str, Any]]:
+def classify_image_with_local_ocr(image_path: str) -> dict[str, Any] | None:
     """
     Classify an image using local RapidOCR + Text Heuristics.
     Returns result dict if classification is confident, else None.
@@ -236,9 +229,7 @@ def classify_image_with_local_ocr(image_path: str) -> Optional[Dict[str, Any]]:
         return None
 
 
-def classify_messages_with_ai(
-    messages: List[Dict[str, Any]], model: str = DEFAULT_CLASSIFIER_MODEL
-) -> Dict[str, Dict]:
+def classify_messages_with_ai(messages: list[dict[str, Any]], model: str = DEFAULT_CLASSIFIER_MODEL) -> dict[str, dict]:
     """
     Classify messages using Vision AI for images that couldn't be classified by heuristics.
     Batches messages for efficiency.
@@ -327,9 +318,7 @@ def classify_messages_with_ai(
     return results
 
 
-def _batch_classify_with_ai(
-    messages: List[Dict[str, Any]], model: str, batch_size: int = 20
-) -> Dict[str, Dict]:
+def _batch_classify_with_ai(messages: list[dict[str, Any]], model: str, batch_size: int = 20) -> dict[str, dict]:
     """
     Internal function to classify messages with images using VLM.
     OPTIMIZED: Increased batch size to 20 for efficient AI usage.
@@ -454,10 +443,10 @@ Example: {"123":{"class":"PICK","reason":"Lakers -5 slip"}}"""
 
 
 def auto_select_messages(
-    messages: List[Dict[str, Any]],
+    messages: list[dict[str, Any]],
     use_ai: bool = True,
     model: str = DEFAULT_CLASSIFIER_MODEL,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     Main entry point: Automatically set 'selected' field based on classification.
 
@@ -507,9 +496,7 @@ def auto_select_messages(
         else:
             deselected_count += 1
 
-    logging.info(
-        f"[AutoProcessor] Results: {selected_count} selected, {deselected_count} auto-deselected"
-    )
+    logging.info(f"[AutoProcessor] Results: {selected_count} selected, {deselected_count} auto-deselected")
 
     return messages
 

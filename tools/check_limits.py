@@ -1,6 +1,7 @@
-import os
-import requests
 import json
+import os
+
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,10 +18,10 @@ try:
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()
-    
+
     # Check if there's any limit info in the response or just model metadata
     # We will print model names and available fields to see if limits are exposed
-    
+
     if "models" in data:
         print(f"{'Model Name':<50} | {'Input Limit':<15} | {'Output Limit':<15}")
         print("-" * 85)
@@ -31,14 +32,14 @@ try:
             display_name = model.get("displayName", "N/A")
             input_limit = model.get("inputTokenLimit", "N/A")
             output_limit = model.get("outputTokenLimit", "N/A")
-            
+
             # Print basic info first
-            print(f"{name:<50} | {str(input_limit):<15} | {str(output_limit):<15}")
-            
+            print(f"{name:<50} | {input_limit!s:<15} | {output_limit!s:<15}")
+
             # Uncomment to inspect full JSON for one model if needed
             # if "gemini-1.5-flash" in name:
             #     print(json.dumps(model, indent=2))
-                
+
     else:
         print("No models found or unexpected response format.")
         print(json.dumps(data, indent=2))

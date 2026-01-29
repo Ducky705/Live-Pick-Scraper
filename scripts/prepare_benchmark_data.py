@@ -10,7 +10,7 @@ def convert_golden_set_to_messages():
         print(f"Error: {input_path} not found.")
         return
 
-    with open(input_path, "r", encoding="utf-8") as f:
+    with open(input_path, encoding="utf-8") as f:
         data = json.load(f)
 
     # data is a list of message objects

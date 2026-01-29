@@ -1,21 +1,18 @@
-import sys
 import os
+import sys
 
 # Add project root to path
 sys.path.append(os.getcwd())
 
-import time
 import logging
-from unittest.mock import MagicMock, patch
+
 from src.parallel_batch_processor import (
-    ParallelBatchProcessor,
     AdaptiveConcurrencyLimiter,
+    ParallelBatchProcessor,
 )
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -24,17 +21,17 @@ def test_adaptive_concurrency():
 
     # Initialize processor
     processor = ParallelBatchProcessor()
-    
+
     # Just test the class directly since it's now per-provider
     limiter = AdaptiveConcurrencyLimiter(initial=4, min_limit=1, max_limit=25)
 
     # 1. Verify Initial State
-    print(f"\n[Check 1] Initial State")
+    print("\n[Check 1] Initial State")
     print(f"Initial Limit: {limiter.limit} (Expected: 4)")
     assert limiter.limit == 4, f"Expected initial limit 4, got {limiter.limit}"
 
     # 2. Verify Backoff on 429
-    print(f"\n[Check 2] Backoff Logic")
+    print("\n[Check 2] Backoff Logic")
     # Simulate 429
     limiter.record_429()
     print(f"Limit after 1st 429: {limiter.limit} (Expected: 2)")
@@ -50,7 +47,7 @@ def test_adaptive_concurrency():
     assert limiter.limit == 1, f"Expected limit 1, got {limiter.limit}"
 
     # 3. Verify Recovery (10 successful requests)
-    print(f"\n[Check 3] Recovery Logic")
+    print("\n[Check 3] Recovery Logic")
 
     # Simulate 9 successes
     for i in range(9):
@@ -112,7 +109,7 @@ def test_integration():
     # process_batches uses round-robin.
     # Groq has max_concurrent=1 in new config.
     # So it will be used.
-    
+
     print("Running process_batches with simulated 429s...")
     results = processor.process_batches(batches)
 
@@ -124,19 +121,19 @@ def test_integration():
     # The limiter should have dropped to at least 2 (if it was hit).
     # Since call_count goes up, and process_batches distributes across providers.
     # If Groq was hit with 429, its limiter should drop.
-    
+
     # Since we can't guarantee Groq got the 429s (round robin), this test is flaky in multi-provider setup.
     # But let's check if ANY limiter dropped.
-    
+
     dropped = False
     for p, limiter in processor.adaptive_limiters.items():
         if limiter.limit < limiter.max_limit:
             dropped = True
             print(f"Provider {p} limit dropped to {limiter.limit}")
-    
+
     # Actually, with the new per-provider logic, we only drop if THAT provider hits 429.
     # If mock_execute raises 429 regardless of provider, then whoever called it drops.
-    
+
     if dropped:
         print("Integration Test Passed: Limit dropped below initial value for at least one provider.")
     else:

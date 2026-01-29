@@ -1,10 +1,8 @@
+import json
+import logging
 import os
 import sys
-import json
 import time
-import logging
-import asyncio
-from typing import List, Dict
 
 # Setup
 sys.path.insert(0, os.path.abspath("."))
@@ -15,8 +13,8 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 logger = logging.getLogger("Benchmark17")
 
-from src.provider_pool import pooled_completion
 from src.prompts.core import get_compact_extraction_prompt
+from src.provider_pool import pooled_completion
 
 # Mock Data (Representative of typical inputs)
 TEST_MESSAGES = [
@@ -96,9 +94,7 @@ def run_benchmark():
     logger.info(f"Total Requests: {total_requests}")  # External calls
     logger.info(f"Total Time:     {total_time:.2f}s")
     logger.info(f"Avg Latency:    {avg_latency:.2f}s")
-    logger.info(
-        f"Success Rate:   {successful}/{len(TEST_MESSAGES)} ({successful / len(TEST_MESSAGES) * 100:.1f}%)"
-    )
+    logger.info(f"Success Rate:   {successful}/{len(TEST_MESSAGES)} ({successful / len(TEST_MESSAGES) * 100:.1f}%)")
     logger.info("=" * 40)
 
     # Save Stats

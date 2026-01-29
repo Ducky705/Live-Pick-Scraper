@@ -1,5 +1,6 @@
-import unittest
 import json
+import unittest
+
 from src.prompts.decoder import normalize_response
 
 
@@ -17,9 +18,7 @@ class TestHallucinationPrevention(unittest.TestCase):
 
         # AI hallucinates -110 odds
         # Use valid JSON string format
-        ai_response = json.dumps(
-            [{"i": 123, "p": "Lakers", "t": "Moneyline", "o": -110}]
-        )
+        ai_response = json.dumps([{"i": 123, "p": "Lakers", "t": "Moneyline", "o": -110}])
 
         # Run normalization with context
         results = normalize_response(ai_response, expand=True, message_context=context)
@@ -44,9 +43,7 @@ class TestHallucinationPrevention(unittest.TestCase):
         source_text = "Lakers -110 to win."
         context = {message_id: source_text}
 
-        ai_response = json.dumps(
-            [{"i": 456, "p": "Lakers", "t": "Moneyline", "o": -110}]
-        )
+        ai_response = json.dumps([{"i": 456, "p": "Lakers", "t": "Moneyline", "o": -110}])
 
         results = normalize_response(ai_response, expand=True, message_context=context)
         pick = results[0]
@@ -55,9 +52,7 @@ class TestHallucinationPrevention(unittest.TestCase):
         print(f"Result Odds: {pick.get('odds')}")
 
         # Assert odds were KEPT
-        self.assertEqual(
-            pick.get("odds"), -110, "Valid odds (-110) should have been kept."
-        )
+        self.assertEqual(pick.get("odds"), -110, "Valid odds (-110) should have been kept.")
 
 
 if __name__ == "__main__":

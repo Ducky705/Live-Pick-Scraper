@@ -1,17 +1,15 @@
-import os
-import sys
 import json
 import logging
+import os
 import re
-import time
+import sys
 
 sys.path.insert(0, os.getcwd())
 
 from src.openrouter_client import openrouter_completion
+from src.parsers.dsl_parser import parse_dsl_lines
 from src.prompt_builder import generate_ai_prompt
 from src.rule_based_extractor import RuleBasedExtractor
-from src.ocr_handler import extract_text_batch
-from src.parsers.dsl_parser import parse_dsl_lines
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -53,11 +51,11 @@ def fuzzy_match(gt_pick, sys_pick):
 
 
 def debug_failures(target_images):
-    with open(IMAGE_MAP_PATH, "r", encoding="utf-8") as f:
+    with open(IMAGE_MAP_PATH, encoding="utf-8") as f:
         image_map = json.load(f)
-    with open(PARSING_GOLDEN_SET_PATH, "r", encoding="utf-8") as f:
+    with open(PARSING_GOLDEN_SET_PATH, encoding="utf-8") as f:
         parsing_golden = json.load(f)
-    with open(OCR_GOLDEN_SET_PATH, "r", encoding="utf-8") as f:
+    with open(OCR_GOLDEN_SET_PATH, encoding="utf-8") as f:
         ocr_golden = json.load(f)
 
     for img_key in target_images:
@@ -92,9 +90,7 @@ def debug_failures(target_images):
             try:
                 parsed_json = json.loads(cleaned)
                 if isinstance(parsed_json, dict):
-                    parsed_picks = (
-                        parsed_json.get("picks") or parsed_json.get("analysis") or []
-                    )
+                    parsed_picks = parsed_json.get("picks") or parsed_json.get("analysis") or []
                 elif isinstance(parsed_json, list):
                     parsed_picks = parsed_json
             except:
@@ -137,10 +133,9 @@ def debug_failures(target_images):
                     match_found = True
                     print(f"  [MATCH] {gt_pick} == {sys_pick} (Ratio: {ratio:.2f})")
                     break
-                else:
-                    # debug partials
-                    if ratio > 0.3:
-                        print(f"  [NEAR]  {gt_pick} vs {sys_pick} (Ratio: {ratio:.2f})")
+                # debug partials
+                elif ratio > 0.3:
+                    print(f"  [NEAR]  {gt_pick} vs {sys_pick} (Ratio: {ratio:.2f})")
 
             if not match_found:
                 print(f"  [MISS]  {gt_pick}")

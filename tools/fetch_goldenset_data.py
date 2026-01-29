@@ -6,13 +6,12 @@ Fetches fresh data from BOTH Telegram and Twitter to populate the cache
 for Goldenset generation.
 """
 
-import os
-import sys
 import asyncio
 import json
-import time
-from pathlib import Path
+import os
+import sys
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -24,12 +23,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from config import TARGET_TELEGRAM_CHANNEL_ID, TEMP_IMG_DIR
-from src.telegram_client import TelegramManager
-from src.twitter_client import TwitterManager
+from src.auto_processor import auto_select_messages
 from src.deduplicator import Deduplicator
 from src.ocr_handler import extract_text_batch
+from src.telegram_client import TelegramManager
+from src.twitter_client import TwitterManager
 from src.utils import clean_text_for_ai
-from src.auto_processor import auto_select_messages
 
 CACHE_DIR = PROJECT_ROOT / "data" / "cache"
 
@@ -132,9 +131,7 @@ async def main():
 
                 # Attach to message
                 unique_msgs[t_idx]["ocr_texts"].append(cleaned)
-                unique_msgs[t_idx]["ocr_text"] = "\n".join(
-                    unique_msgs[t_idx]["ocr_texts"]
-                )
+                unique_msgs[t_idx]["ocr_text"] = "\n".join(unique_msgs[t_idx]["ocr_texts"])
 
                 # Store in map for cache file
                 ocr_results_map[path] = {
@@ -163,9 +160,7 @@ async def main():
         },
     )
 
-    save_cache(
-        "ocr_results", {"results": ocr_results_map, "count": len(ocr_results_map)}
-    )
+    save_cache("ocr_results", {"results": ocr_results_map, "count": len(ocr_results_map)})
 
     print("\nDONE! Data cached.")
     print(f"Messages: {len(classified)}")

@@ -1,10 +1,9 @@
+import difflib
 import logging
 import re
-from typing import List, Dict, Optional, Tuple
-import difflib
 
 from src.models import BetPick
-from src.score_fetcher import fetch_scores_for_date, fetch_odds_for_date
+from src.score_fetcher import fetch_odds_for_date, fetch_scores_for_date
 
 logger = logging.getLogger("EnrichmentEngine")
 
@@ -15,7 +14,7 @@ class EnrichmentEngine:
         self._games_cache = {}
         self._odds_cache = {}
 
-    def enrich_picks(self, picks: List[BetPick]) -> List[BetPick]:
+    def enrich_picks(self, picks: list[BetPick]) -> list[BetPick]:
         """
         Main entry point. Enriches a list of picks with opponent, league, and odds data.
         """
@@ -25,9 +24,7 @@ class EnrichmentEngine:
         # Group picks by date to minimize API calls
         picks_by_date = {}
         for p in picks:
-            date_key = (
-                p.date.split()[0] if p.date else "today"
-            )  # simplistic date handling
+            date_key = p.date.split()[0] if p.date else "today"  # simplistic date handling
             if date_key not in picks_by_date:
                 picks_by_date[date_key] = []
             picks_by_date[date_key].append(p)
@@ -47,7 +44,7 @@ class EnrichmentEngine:
 
         return enriched_picks
 
-    def _get_schedule(self, date_str: str) -> List[Dict]:
+    def _get_schedule(self, date_str: str) -> list[dict]:
         """Fetch games from ESPN via score_fetcher"""
         if date_str in self._games_cache:
             return self._games_cache[date_str]
@@ -57,7 +54,7 @@ class EnrichmentEngine:
         self._games_cache[date_str] = games
         return games
 
-    def _get_odds(self, date_str: str) -> Dict:
+    def _get_odds(self, date_str: str) -> dict:
         """Fetch odds from ESPN via score_fetcher"""
         if date_str in self._odds_cache:
             return self._odds_cache[date_str]
@@ -66,7 +63,7 @@ class EnrichmentEngine:
         self._odds_cache[date_str] = odds
         return odds
 
-    def _enrich_single_pick(self, pick: BetPick, schedule: List[Dict], odds_data: Dict):
+    def _enrich_single_pick(self, pick: BetPick, schedule: list[dict], odds_data: dict):
         """
         Core logic: Match pick to game -> Fill blanks -> Rewrite pick string.
         """
@@ -93,11 +90,7 @@ class EnrichmentEngine:
 
                 # 3. Rewrite Pick String (Normalization)
                 # Rule: Totals MUST be "Team A vs Team B Over/Under X"
-                if (
-                    pick.type in ["Total", "TL"]
-                    or "Over" in pick.pick
-                    or "Under" in pick.pick
-                ):
+                if pick.type in ["Total", "TL"] or "Over" in pick.pick or "Under" in pick.pick:
                     # Check if "vs" format is missing
                     if " vs " not in pick.pick:
                         # Construct proper Total string
@@ -111,16 +104,12 @@ class EnrichmentEngine:
                 if pick.odds is None and odds_data:
                     self._backfill_odds(pick, matched_game, odds_data, picked_team)
 
-    def _find_matching_game(
-        self, pick: BetPick, schedule: List[Dict]
-    ) -> Optional[Dict]:
+    def _find_matching_game(self, pick: BetPick, schedule: list[dict]) -> dict | None:
         """Fuzzy match pick text against scheduled games"""
         # Quick filter by league if known
         candidates = schedule
         if pick.league and pick.league not in ["Unknown", "Other"]:
-            candidates = [
-                g for g in schedule if g["league"].lower() == pick.league.lower()
-            ]
+            candidates = [g for g in schedule if g["league"].lower() == pick.league.lower()]
 
         best_match = None
         best_score = 0
@@ -144,12 +133,12 @@ class EnrichmentEngine:
             else:
                 # Partial match (e.g. "Okla St")
                 # Using rapidfuzz or difflib here would be better but keeping it fast/simple first
-                s1 = difflib.SequenceMatcher(
-                    None, t1, pick_text_norm
-                ).find_longest_match(0, len(t1), 0, len(pick_text_norm)).size / len(t1)
-                s2 = difflib.SequenceMatcher(
-                    None, t2, pick_text_norm
-                ).find_longest_match(0, len(t2), 0, len(pick_text_norm)).size / len(t2)
+                s1 = difflib.SequenceMatcher(None, t1, pick_text_norm).find_longest_match(
+                    0, len(t1), 0, len(pick_text_norm)
+                ).size / len(t1)
+                s2 = difflib.SequenceMatcher(None, t2, pick_text_norm).find_longest_match(
+                    0, len(t2), 0, len(pick_text_norm)
+                ).size / len(t2)
 
                 # Boost if words match
                 if self._word_overlap_score(t1, pick_text_norm) > 0.8:
@@ -196,9 +185,7 @@ class EnrichmentEngine:
         overlap = len(t_words.intersection(p_words))
         return overlap / len(t_words)
 
-    def _identify_team_in_text(
-        self, text: str, team1: str, team2: str
-    ) -> Optional[str]:
+    def _identify_team_in_text(self, text: str, team1: str, team2: str) -> str | None:
         """Which of the two teams is mentioned in the text?"""
         text_lower = text.lower()
 
@@ -235,9 +222,7 @@ class EnrichmentEngine:
             return s
         return ""
 
-    def _backfill_odds(
-        self, pick: BetPick, game: Dict, odds_data: Dict, picked_team: str
-    ):
+    def _backfill_odds(self, pick: BetPick, game: dict, odds_data: dict, picked_team: str):
         """Find odds for the specific game and market"""
         # Generate the odds key format used in fetch_odds_for_date
         # "league:event_id:comp_id" - wait, fetch_odds returns keys, but we have game['id']
@@ -265,16 +250,12 @@ class EnrichmentEngine:
         # 2. Spread
         elif "-" in pick.pick or "+" in pick.pick:
             is_home = picked_team == matched_odds.get("home_team")
-            pick.odds = matched_odds.get(
-                "spread_home_odds" if is_home else "spread_away_odds"
-            )
+            pick.odds = matched_odds.get("spread_home_odds" if is_home else "spread_away_odds")
 
         # 3. Moneyline
         elif "ML" in pick.pick:
             is_home = picked_team == matched_odds.get("home_team")
-            pick.odds = matched_odds.get(
-                "moneyline_home" if is_home else "moneyline_away"
-            )
+            pick.odds = matched_odds.get("moneyline_home" if is_home else "moneyline_away")
 
         if pick.odds is not None:
             logger.info(f"Backfilled odds for {pick.pick}: {pick.odds}")

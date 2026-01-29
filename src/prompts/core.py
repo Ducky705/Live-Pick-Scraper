@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Dict, Any, Optional
+from typing import Any
 
 # =============================================================================
 # COMPACT SCHEMA DEFINITIONS
@@ -147,9 +147,7 @@ NEGATIVE_CONSTRAINTS = """CONSTRAINTS:
 # =============================================================================
 
 
-def get_compact_extraction_prompt(
-    raw_data: str, current_date: Optional[str] = None
-) -> str:
+def get_compact_extraction_prompt(raw_data: str, current_date: str | None = None) -> str:
     """
     Generate ultra-compact extraction prompt.
 
@@ -190,7 +188,7 @@ DATA:
 {raw_data}"""
 
 
-def get_compact_revision_prompt(failed_items: List[Dict[str, Any]]) -> str:
+def get_compact_revision_prompt(failed_items: list[dict[str, Any]]) -> str:
     """
     Generate compact revision/refinement prompt for failed extractions.
 
@@ -232,7 +230,7 @@ INPUT:{items_json}
 OUTPUT:[{{"i":12345,"c":"Name","l":"NBA","p":"Team -5"}}]"""
 
 
-def get_dsl_extraction_prompt(raw_data: str, current_date: Optional[str] = None) -> str:
+def get_dsl_extraction_prompt(raw_data: str, current_date: str | None = None) -> str:
     """
     Generate DSL extraction prompt (Pipe-Delimited) with Chain-of-Thought.
 
@@ -391,7 +389,7 @@ OUTPUT:{{"picks":[{{"i":123,"c":"Dave","l":"NBA","p":"Lakers -5","u":1}}]}}"""
 # =============================================================================
 
 
-def compress_raw_data(selected_data: List[Dict[str, Any]]) -> str:
+def compress_raw_data(selected_data: list[dict[str, Any]]) -> str:
     """
     Compress raw message data for prompt input.
 

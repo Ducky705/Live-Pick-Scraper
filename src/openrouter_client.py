@@ -1,8 +1,8 @@
-import os
-import requests
-import json
 import logging
+import os
 import time
+
+import requests
 
 # Model fallback list (ordered by reliability)
 DEFAULT_MODELS = [
@@ -11,9 +11,7 @@ DEFAULT_MODELS = [
 ]
 
 
-def openrouter_completion(
-    prompt, model=None, timeout=180, max_cycles=2, images=None, validate_json=False
-):
+def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2, images=None, validate_json=False):
     """
     Calls OpenRouter API with retry logic and model fallback.
     Supports Vision (images) if the model supports it.
@@ -52,22 +50,14 @@ def openrouter_completion(
 
     for cycle in range(max_cycles):
         for current_model in models:
-            logging.info(
-                f"[OpenRouter] Cycle {cycle + 1}/{max_cycles}, Model: {current_model}"
-            )
+            logging.info(f"[OpenRouter] Cycle {cycle + 1}/{max_cycles}, Model: {current_model}")
 
             # Construct message content
             if images:
                 content_parts = [{"type": "text", "text": prompt}]
                 for b64_img in images:
-                    url = (
-                        f"data:image/jpeg;base64,{b64_img}"
-                        if not b64_img.startswith("data:")
-                        else b64_img
-                    )
-                    content_parts.append(
-                        {"type": "image_url", "image_url": {"url": url}}
-                    )
+                    url = f"data:image/jpeg;base64,{b64_img}" if not b64_img.startswith("data:") else b64_img
+                    content_parts.append({"type": "image_url", "image_url": {"url": url}})
                 messages = [{"role": "user", "content": content_parts}]
             else:
                 messages = [{"role": "user", "content": prompt}]
@@ -105,40 +95,28 @@ def openrouter_completion(
 
             except requests.exceptions.Timeout:
                 # US-002: Fail fast on timeout
-                raise requests.exceptions.Timeout(
-                    f"Timeout after {timeout}s with {current_model}"
-                )
+                raise requests.exceptions.Timeout(f"Timeout after {timeout}s with {current_model}")
 
             except requests.exceptions.RequestException as e:
                 # Log full error body if available
                 if hasattr(e, "response") and e.response:
-                    logging.warning(
-                        f"[OpenRouter] Request error with {current_model}: {e.response.text}"
-                    )
+                    logging.warning(f"[OpenRouter] Request error with {current_model}: {e.response.text}")
                 else:
-                    logging.warning(
-                        f"[OpenRouter] Request error with {current_model}: {e}"
-                    )
+                    logging.warning(f"[OpenRouter] Request error with {current_model}: {e}")
 
                 last_error = e
                 continue
 
             except Exception as e:
                 last_error = e
-                logging.error(
-                    f"[OpenRouter] Unexpected error with {current_model}: {e}"
-                )
+                logging.error(f"[OpenRouter] Unexpected error with {current_model}: {e}")
                 continue
 
         # If we completed a cycle without success, log it
         if cycle < max_cycles - 1:
-            logging.info(
-                f"[OpenRouter] Cycle {cycle + 1} complete, retrying from beginning..."
-            )
+            logging.info(f"[OpenRouter] Cycle {cycle + 1} complete, retrying from beginning...")
             time.sleep(2)  # Brief pause before retrying
 
     # All cycles exhausted
-    logging.error(
-        f"[OpenRouter] All {max_cycles} cycles failed. Last error: {last_error}"
-    )
+    logging.error(f"[OpenRouter] All {max_cycles} cycles failed. Last error: {last_error}")
     raise last_error if last_error else Exception("All API attempts failed")

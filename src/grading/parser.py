@@ -4,9 +4,9 @@ Robust parser for pick strings according to pick_format.md specification.
 """
 
 import re
-from typing import Optional, List
-from src.grading.schema import Pick, BetType
+
 from src.grading.constants import LEAGUE_ALIASES_MAP, PERIOD_PATTERNS, STAT_KEY_MAP
+from src.grading.schema import BetType, Pick
 
 
 class PickParser:
@@ -15,7 +15,7 @@ class PickParser:
     """
 
     @staticmethod
-    def parse(text: str, league: str, date: Optional[str] = None) -> Pick:
+    def parse(text: str, league: str, date: str | None = None) -> Pick:
         """
         Parse a pick string into a Pick object.
 
@@ -116,10 +116,7 @@ class PickParser:
         # Ampersand separator (less common for parlays, usually use /)
         if " & " in text:
             # Check for compound names first
-            if any(
-                name in text.lower()
-                for name in ["william & mary", "texas a&m", "a & m", "w & m"]
-            ):
+            if any(name in text.lower() for name in ["william & mary", "texas a&m", "a & m", "w & m"]):
                 return False
 
             legs = [l.strip() for l in text.split("&") if l.strip()]
@@ -160,7 +157,7 @@ class PickParser:
         return "teaser" in text.lower()
 
     @staticmethod
-    def _detect_period(text: str) -> Optional[str]:
+    def _detect_period(text: str) -> str | None:
         """Detect if pick is a period bet and return period identifier."""
         text_lower = text.lower()
 
@@ -222,17 +219,14 @@ class PickParser:
     def _is_total(text: str) -> bool:
         """Check if text is a total (over/under) bet."""
         text_lower = text.lower()
-        return bool(
-            re.search(r"\b(over|under|o/u)\b", text_lower)
-            or re.search(r"\b[ou]\s+\d", text_lower)
-        )
+        return bool(re.search(r"\b(over|under|o/u)\b", text_lower) or re.search(r"\b[ou]\s+\d", text_lower))
 
     # -------------------------------------------------------------------------
     # Parsing Methods
     # -------------------------------------------------------------------------
 
     @staticmethod
-    def _extract_odds(text: str) -> tuple[Optional[int], str]:
+    def _extract_odds(text: str) -> tuple[int | None, str]:
         """
         Extract American odds from text and return (odds, clean_text).
         Looks for patterns like (-110), -110, +200.
@@ -249,7 +243,7 @@ class PickParser:
                 sign = paren_match.group(1) or ""
                 num = paren_match.group(2)
                 odds = int(sign + num)
-                
+
                 # Remove from text to avoid confusing line parser
                 text_clean = text.replace(paren_match.group(0), "").strip()
                 return odds, text_clean
@@ -258,7 +252,7 @@ class PickParser:
 
         # Pattern 2: Standalone odds at end of string or separated
         # We look for [+-] and 3+ digits (e.g. -110, +1200, - 110)
-        
+
         # Regex: boundary, optional sign, space?, 3+ digits, boundary
         matches = list(re.finditer(r"(?<!\d)([+-])\s*(\d{3,})(?!\d)", text_clean))
         if matches:
@@ -268,7 +262,7 @@ class PickParser:
                 sign = m.group(1)
                 num = m.group(2)
                 val = int(sign + num)
-                
+
                 # Heuristic: Odds are usually > 100 or < -100.
                 if abs(val) >= 100:
                     odds = val
@@ -280,7 +274,7 @@ class PickParser:
         return odds, text_clean
 
     @staticmethod
-    def _parse_parlay(text: str, league: str, date: Optional[str]) -> Pick:
+    def _parse_parlay(text: str, league: str, date: str | None) -> Pick:
         """Parse a parlay into a Pick with legs."""
         # Determine separator
         if "||" in text:
@@ -339,7 +333,7 @@ class PickParser:
         return parlay_pick
 
     @staticmethod
-    def _parse_teaser(text: str, league: str, date: Optional[str]) -> Pick:
+    def _parse_teaser(text: str, league: str, date: str | None) -> Pick:
         """Parse a teaser bet."""
         # Teasers are essentially parlays with adjusted lines
         # Format: "(Teaser 6pt NFL) Team -2.5 / (Teaser 6pt NFL) Team +8.5"
@@ -348,9 +342,7 @@ class PickParser:
         return pick
 
     @staticmethod
-    def _parse_period_bet(
-        text: str, league: str, date: Optional[str], period: str
-    ) -> Pick:
+    def _parse_period_bet(text: str, league: str, date: str | None, period: str) -> Pick:
         """Parse a period-specific bet."""
         # Remove period prefix from text for further parsing
         text_clean = text
@@ -388,7 +380,7 @@ class PickParser:
         )
 
     @staticmethod
-    def _parse_prop(text: str, league: str, date: Optional[str]) -> Pick:
+    def _parse_prop(text: str, league: str, date: str | None) -> Pick:
         """Parse a player or team prop bet."""
         # 0. Extract Odds first
         odds, text_clean = PickParser._extract_odds(text)
@@ -407,13 +399,9 @@ class PickParser:
         line_match = re.search(r"(?:over|under|o/u|>|<)\s*(\d+\.?\d*)", rest_lower)
         if line_match:
             line = float(line_match.group(1))
-            is_over = not (
-                "under" in rest_lower or "<" in rest_lower or "u " in rest_lower
-            )
+            is_over = not ("under" in rest_lower or "<" in rest_lower or "u " in rest_lower)
             # Remove line part to get stat
-            stat = re.sub(
-                r"(?:over|under|o/u|>|<)\s*\d+\.?\d*", "", rest, flags=re.IGNORECASE
-            ).strip()
+            stat = re.sub(r"(?:over|under|o/u|>|<)\s*\d+\.?\d*", "", rest, flags=re.IGNORECASE).strip()
         else:
             # Try pattern: "25.5+ Pts" or "Pts 25.5+"
             plus_match = re.search(r"(\d+\.?\d*)\+", rest)
@@ -428,10 +416,7 @@ class PickParser:
         # Map to standard stat keys
         stat_key = stat_normalized
         for key, aliases in STAT_KEY_MAP.items():
-            if (
-                stat_normalized in [a.replace(" ", "") for a in aliases]
-                or stat_normalized == key
-            ):
+            if stat_normalized in [a.replace(" ", "") for a in aliases] or stat_normalized == key:
                 stat_key = key
                 break
 
@@ -449,7 +434,7 @@ class PickParser:
         )
 
     @staticmethod
-    def _parse_total(text: str, league: str, date: Optional[str]) -> Pick:
+    def _parse_total(text: str, league: str, date: str | None) -> Pick:
         """Parse a total (over/under) bet."""
         # 0. Extract Odds first
         odds, text_clean = PickParser._extract_odds(text)
@@ -477,7 +462,7 @@ class PickParser:
         )
 
     @staticmethod
-    def _parse_spread_or_ml(text: str, league: str, date: Optional[str]) -> Pick:
+    def _parse_spread_or_ml(text: str, league: str, date: str | None) -> Pick:
         """Parse as spread or moneyline."""
         # 0. Extract Odds first
         odds, text_clean = PickParser._extract_odds(text)
@@ -497,7 +482,7 @@ class PickParser:
             # 1. Has +/- sign
             # 2. Or is followed by 'pt' or 'point'
             # 3. Or text has 'spread'
-            
+
             sign = spread_match.group(1) or ""
             num = spread_match.group(2)
             try:
@@ -513,9 +498,7 @@ class PickParser:
 
             # Filter out years? 2024. But odds extraction handles >100.
             # Filter out "76ers" -> "76"
-            is_part_of_word = re.search(
-                rf"{re.escape(full_match)}[a-zA-Z]", text_clean
-            )
+            is_part_of_word = re.search(rf"{re.escape(full_match)}[a-zA-Z]", text_clean)
 
             if has_sign and not is_part_of_word:
                 found_spread_line = val
@@ -524,11 +507,7 @@ class PickParser:
                 # Dangerous to assume, but we have extracted odds so it's safer.
                 pass
 
-        if (
-            is_ml
-            or (not found_spread_line and odds is not None)
-            or (not found_spread_line and not is_ml)
-        ):
+        if is_ml or (not found_spread_line and odds is not None) or (not found_spread_line and not is_ml):
             # Cases:
             # 1. Explicit ML -> ML
             # 2. No spread line found, but odds found (-175) -> ML (odds extracted above)

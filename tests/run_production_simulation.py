@@ -1,10 +1,9 @@
+import asyncio
+import difflib
 import json
+import logging
 import os
 import sys
-import asyncio
-import logging
-import difflib
-from typing import List, Dict, Any
 
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -12,13 +11,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.extraction_pipeline import ExtractionPipeline
 from src.grader import grade_picks
 from src.score_fetcher import fetch_scores_for_date
-from src.models import BetPick
-from src.grading.constants import LEAGUE_ALIASES_MAP
 
 # Setup logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("ProductionSimulation")
 
 GOLDEN_SET_PATH = os.path.join(os.path.dirname(__file__), "../new_golden_set.json")
@@ -41,7 +36,7 @@ async def run_simulation():
         logger.error("No golden set found!")
         return
 
-    with open(GOLDEN_SET_PATH, "r", encoding="utf-8") as f:
+    with open(GOLDEN_SET_PATH, encoding="utf-8") as f:
         test_cases = json.load(f)
 
     logger.info(f"Loaded {len(test_cases)} test cases from Golden Set.")
@@ -76,9 +71,7 @@ async def run_simulation():
     picks = ExtractionPipeline.run(messages, target_date)
     end_time = asyncio.get_event_loop().time()
 
-    logger.info(
-        f"Pipeline finished in {end_time - start_time:.2f}s. Extracted {len(picks)} picks."
-    )
+    logger.info(f"Pipeline finished in {end_time - start_time:.2f}s. Extracted {len(picks)} picks.")
 
     # GRADE PICKS
     # We need to fetch scores. Since dates might vary in golden set, we should ideally fetch for all relevant dates.
@@ -114,9 +107,7 @@ async def run_simulation():
         total_picks_expected += len(expected_picks)
 
         # Find system picks for this case
-        sys_picks = [
-            p for p in graded_picks if str(p.get("message_id")) == str(case_id)
-        ]
+        sys_picks = [p for p in graded_picks if str(p.get("message_id")) == str(case_id)]
 
         found_indices = set()
 
@@ -185,20 +176,12 @@ async def run_simulation():
         # Check for hallucinations (picks found but not expected)
         for idx, sys_pick in enumerate(sys_picks):
             if idx not in found_indices:
-                print(
-                    f"  [HALLUCINATION?] {sys_pick.get('pick', '')} (Type: {sys_pick.get('type')})"
-                )
+                print(f"  [HALLUCINATION?] {sys_pick.get('pick', '')} (Type: {sys_pick.get('type')})")
 
     # Final Stats
 
-    recall = (
-        (total_picks_found / total_picks_expected * 100) if total_picks_expected else 0
-    )
-    grade_acc = (
-        (total_grades_matched / total_verified_grades * 100)
-        if total_verified_grades
-        else 0
-    )
+    recall = (total_picks_found / total_picks_expected * 100) if total_picks_expected else 0
+    grade_acc = (total_grades_matched / total_verified_grades * 100) if total_verified_grades else 0
 
     print("\n" + "=" * 60)
     print("               SIMULATION RESULTS")

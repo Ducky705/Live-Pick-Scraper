@@ -1,11 +1,12 @@
-import os
-import requests
+import base64
 import json
 import logging
-import time
+import os
 import random
-import base64
+import time
 from threading import Semaphore
+
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,9 +19,7 @@ LOCK_ACQUIRE_TIMEOUT = 30  # Reduced for faster failure
 
 # Models - User-specified high-performance configuration
 # Text / Reasoning
-MISTRAL_LARGE = (
-    "mistral-large-latest"  # Mistral Large 3 - Best for complex JSON parsing
-)
+MISTRAL_LARGE = "mistral-large-latest"  # Mistral Large 3 - Best for complex JSON parsing
 MISTRAL_SMALL = "mistral-small-latest"
 MISTRAL_NEMO = "open-mistral-nemo"
 CODESTRAL = "codestral-latest"
@@ -112,14 +111,10 @@ def mistral_completion(
         # Vision Request
         # Check if model is a pixtral model
         if "pixtral" not in model.lower():
-            logging.warning(
-                f"[Mistral] Image provided but model {model} might not support vision. Proceeding anyway."
-            )
+            logging.warning(f"[Mistral] Image provided but model {model} might not support vision. Proceeding anyway.")
 
         image_data = None
-        if isinstance(image_input, str) and (
-            len(image_input) < 1000 or os.path.exists(image_input)
-        ):
+        if isinstance(image_input, str) and (len(image_input) < 1000 or os.path.exists(image_input)):
             # File path
             try:
                 with open(image_input, "rb") as f:
@@ -166,7 +161,7 @@ def mistral_completion(
         try:
             # Use Semaphore for 4 concurrent requests (60 RPM = 1/sec)
             if not GLOBAL_MISTRAL_SEMAPHORE.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error(f"[Mistral] Failed to acquire semaphore slot. Skipping.")
+                logging.error("[Mistral] Failed to acquire semaphore slot. Skipping.")
                 continue
 
             try:
@@ -189,22 +184,18 @@ def mistral_completion(
                         if extracted:
                             return extracted
                         else:
-                            logging.warning(
-                                f"[Mistral] Invalid JSON from {model}. Retrying."
-                            )
+                            logging.warning(f"[Mistral] Invalid JSON from {model}. Retrying.")
                             last_error = "Invalid JSON"
                             # Loop will retry
                     else:
                         return content.strip()
                 else:
-                    logging.warning(f"[Mistral] No choices returned.")
+                    logging.warning("[Mistral] No choices returned.")
             elif response.status_code == 429:
-                logging.warning(f"[Mistral] Rate limit (429). Failing fast.")
+                logging.warning("[Mistral] Rate limit (429). Failing fast.")
                 raise Exception("Mistral Rate limit 429")
             else:
-                logging.error(
-                    f"[Mistral] Error {response.status_code}: {response.text}"
-                )
+                logging.error(f"[Mistral] Error {response.status_code}: {response.text}")
                 last_error = f"Error {response.status_code}: {response.text}"
 
         except Exception as e:
@@ -217,13 +208,9 @@ def mistral_completion(
             last_error = str(e)
 
         # Wait before retry
-        wait_time = _get_backoff_delay(
-            cycle, RETRY_CONFIG["cycle_delay"], RETRY_CONFIG["max_delay"]
-        )
+        wait_time = _get_backoff_delay(cycle, RETRY_CONFIG["cycle_delay"], RETRY_CONFIG["max_delay"])
         time.sleep(wait_time)
 
     # Only raise exception if all retries failed
-    logging.error(
-        f"[Mistral] Failed after {max_cycles} cycles. Last error: {last_error}"
-    )
+    logging.error(f"[Mistral] Failed after {max_cycles} cycles. Last error: {last_error}")
     return None

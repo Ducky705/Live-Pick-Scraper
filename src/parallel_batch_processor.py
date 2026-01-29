@@ -16,21 +16,20 @@ Strategy: Aggressive striping across all providers to maximize throughput.
 """
 
 import logging
-import json
 import time
-from queue import Queue, Empty
-from threading import Thread, Event, Lock, Condition
-from typing import List, Dict, Any
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import Condition, Lock
+from typing import Any
+
+import requests  # Import requests to catch Timeout
 
 # Import clients
 from src.cerebras_client import cerebras_completion
+from src.gemini_client import gemini_text_completion
 from src.groq_client import groq_text_completion
 from src.mistral_client import mistral_completion
-from src.gemini_client import gemini_text_completion
 from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt
-import requests  # Import requests to catch Timeout
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +38,8 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 # US-011: Aggressive Timeouts for < 2.0s Avg Response
-TIMEOUT_TIER_1_SOFT = 5.0   # Speed Target (Groq/Cerebras) - Aggressive Fail Fast
-TIMEOUT_TIER_2_SOFT = 15.0  # Quality Target (Mistral/Gemini) - Fail fast if slow
+TIMEOUT_TIER_1_SOFT = 5.0  # Speed Target (Groq/Cerebras) - Aggressive Fail Fast
+TIMEOUT_TIER_2_SOFT = 25.0  # Quality Target (Mistral/Gemini) - Increased for stability
 TIMEOUT_GLOBAL_HARD = 60.0  # Hard Limit
 
 PROVIDER_CONFIG = {
@@ -48,18 +47,17 @@ PROVIDER_CONFIG = {
         "model": "llama-3.1-8b-instant",
         "rpm": 500,
         "tpm": 18000,
-        "max_concurrent": 1,   # US-011: Reduced due to 403 errors (Don't waste threads)
+        "max_concurrent": 1,  # US-011: Reduced due to 403 errors (Don't waste threads)
         "min_delay": 0.2,
         "priority": 1,
         "tier": 1,
     },
-
     "mistral": {
-        "model": "open-mistral-nemo", # US-011: Fastest Mistral model
+        "model": "open-mistral-nemo",  # US-011: Fastest Mistral model
         "rpm": 60,
         "tpm": 500000,
         "max_concurrent": 15,  # US-011: Increased
-        "min_delay": 1.0,      # 1s delay (60 RPM)
+        "min_delay": 1.0,  # 1s delay (60 RPM)
         "batch_size": 20,
         "priority": 2,
         "tier": 2,
@@ -69,16 +67,16 @@ PROVIDER_CONFIG = {
         "rpm": 30,
         "tpm": 60000,
         "max_concurrent": 10,  # US-011: Increased, rely on Cerebras speed
-        "min_delay": 2.0,      # 2s delay (30 RPM)
+        "min_delay": 2.0,  # 2s delay (30 RPM)
         "priority": 3,
         "tier": 1,
     },
     "gemini": {
-        "model": "gemini-2.0-flash-exp", # US-011: Use new fast model
+        "model": "gemini-2.0-flash-exp",  # US-011: Use new fast model
         "rpm": 15,
         "tpm": 250000,
-        "max_concurrent": 6,   # US-011: Push limits
-        "min_delay": 4.0,      # 4s delay
+        "max_concurrent": 6,  # US-011: Push limits
+        "min_delay": 4.0,  # 4s delay
         "batch_size": 10,
         "priority": 4,
         "tier": 2,
@@ -149,9 +147,7 @@ class AdaptiveConcurrencyLimiter:
             if new_limit < old_limit:
                 self.limit = new_limit
                 self.success_streak = 0  # Reset streak
-                logger.warning(
-                    f"Backoff Warning: Concurrency dropped to {self.limit} (Active: {self.current_running})"
-                )
+                logger.warning(f"Backoff Warning: Concurrency dropped to {self.limit} (Active: {self.current_running})")
 
 
 class RateLimiter:
@@ -173,27 +169,23 @@ class RateLimiter:
 
 
 class ParallelBatchProcessor:
-    def __init__(self, providers: List[str] | None = None):
+    def __init__(self, providers: list[str] | None = None):
         """
         Initialize processor with EXTREME SPEED configuration.
         """
         self.providers = providers or [
-            "groq",
+            # "groq", # Disabled due to 403 blocks
             "cerebras",
             "mistral",
             "gemini",
         ]
 
         self.rate_limiters = {
-            p: RateLimiter(PROVIDER_CONFIG[p]["min_delay"])
-            for p in self.providers
-            if p in PROVIDER_CONFIG
+            p: RateLimiter(PROVIDER_CONFIG[p]["min_delay"]) for p in self.providers if p in PROVIDER_CONFIG
         }
-        self.stats = {
-            p: {"count": 0, "errors": 0, "total_time": 0.0} for p in self.providers
-        }
+        self.stats = {p: {"count": 0, "errors": 0, "total_time": 0.0} for p in self.providers}
         self.stats_lock = Lock()
-        self.provider_status: Dict[str, Any] = {p: "active" for p in self.providers}
+        self.provider_status: dict[str, Any] = {p: "active" for p in self.providers}
         self.consecutive_errors = {p: 0 for p in self.providers}
         self.status_lock = Lock()
 
@@ -202,19 +194,15 @@ class ParallelBatchProcessor:
         for p in self.providers:
             config = PROVIDER_CONFIG.get(p, {})
             max_conc = config.get("max_concurrent", 5)
-            self.adaptive_limiters[p] = AdaptiveConcurrencyLimiter(
-                initial=max_conc, min_limit=1, max_limit=max_conc
-            )
+            self.adaptive_limiters[p] = AdaptiveConcurrencyLimiter(initial=max_conc, min_limit=1, max_limit=max_conc)
 
-    def _execute_request(self, provider: str, messages: List[dict]) -> str:
+    def _execute_request(self, provider: str, messages: list[dict]) -> str:
         """Execute a single request to a provider with rate limiting."""
         # Check fast-fail status
         with self.status_lock:
             status = self.provider_status.get(provider)
             if isinstance(status, (int, float)) and time.time() < status:
-                raise Exception(
-                    f"Provider {provider} is rate limited (cooldown until {status})"
-                )
+                raise Exception(f"Provider {provider} is rate limited (cooldown until {status})")
 
         config = PROVIDER_CONFIG.get(provider)
         if not config:
@@ -276,14 +264,10 @@ class ParallelBatchProcessor:
                     self.consecutive_errors[provider] += 1
                     backoff = min(60.0, 5.0 * (2 ** (self.consecutive_errors[provider] - 1)))
                     self.provider_status[provider] = time.time() + backoff
-                logger.warning(
-                    f"[{provider}] MARKED RATE LIMITED (Backoff {backoff}s)"
-                )
+                logger.warning(f"[{provider}] MARKED RATE LIMITED (Backoff {backoff}s)")
             raise e
 
-    def _process_batch(
-        self, batch_id: int, messages: List[dict], provider: str
-    ) -> Dict:
+    def _process_batch(self, batch_id: int, messages: list[dict], provider: str) -> dict:
         """Process a single batch with a specific provider."""
 
         # Acquire adaptive concurrency slot
@@ -345,10 +329,10 @@ class ParallelBatchProcessor:
     def _retry_batch(
         self,
         batch_id: int,
-        batch: List[dict],
+        batch: list[dict],
         failed_provider: str,
-        fallback_order: List[str],
-    ) -> Dict:
+        fallback_order: list[str],
+    ) -> dict:
         """Retry a batch with fallback providers."""
         for provider in fallback_order:
             if provider == failed_provider:
@@ -367,9 +351,7 @@ class ParallelBatchProcessor:
             "provider": "all_failed",
         }
 
-    def process_batches(
-        self, batches: List[List[dict]], allowed_providers: List[str] | None = None
-    ) -> List[Any]:
+    def process_batches(self, batches: list[list[dict]], allowed_providers: list[str] | None = None) -> list[Any]:
         """
         Process batches with EXTREME parallelism and AUTO-FALLBACK.
         """
@@ -378,7 +360,7 @@ class ParallelBatchProcessor:
 
         workers = []
         target_providers = allowed_providers if allowed_providers else self.providers
-        
+
         for p in target_providers:
             if p in PROVIDER_CONFIG:
                 workers.extend([p] * PROVIDER_CONFIG[p]["max_concurrent"])
@@ -390,7 +372,7 @@ class ParallelBatchProcessor:
 
         logger.info(f"Using {max_workers} workers across {len(target_providers)} providers")
 
-        results: List[Any] = [None] * total
+        results: list[Any] = [None] * total
         failed_batches = []
         batch_queue = list(enumerate(batches))
 
@@ -422,9 +404,7 @@ class ParallelBatchProcessor:
 
         # Phase 2: Retry
         if failed_batches:
-            logger.warning(
-                f"Retrying {len(failed_batches)} failed batches..."
-            )
+            logger.warning(f"Retrying {len(failed_batches)} failed batches...")
 
             working_providers: set[str] = set()
             for r in results:
@@ -442,9 +422,7 @@ class ParallelBatchProcessor:
 
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures_retry = {
-                    executor.submit(
-                        self._retry_batch, batch_id, batch, failed_provider, fallback_order
-                    ): batch_id
+                    executor.submit(self._retry_batch, batch_id, batch, failed_provider, fallback_order): batch_id
                     for batch_id, batch, failed_provider in failed_batches
                 }
 
@@ -458,16 +436,16 @@ class ParallelBatchProcessor:
 
         self._print_summary()
 
-        final_results: List[Any] = []
+        final_results: list[Any] = []
         for r in results:
             if r and r.get("status") == "success" and r.get("data"):
                 final_results.append(r["data"])
             else:
                 final_results.append(None)
-        
+
         return final_results
 
-    def process_batches_groq_priority(self, batches: List[List[dict]]) -> List[Any]:
+    def process_batches_groq_priority(self, batches: list[list[dict]]) -> list[Any]:
         """
         Legacy method mapped to hybrid strategy.
         """
@@ -479,18 +457,14 @@ class ParallelBatchProcessor:
         logger.info("=" * 60)
         logger.info("EXTREME THROUGHPUT SUMMARY")
         logger.info("=" * 60)
-        logger.info(
-            f"{'Provider':<12} | {'Batches':>8} | {'Errors':>7} | {'Avg Time':>10} | {'RPM':>10}"
-        )
+        logger.info(f"{'Provider':<12} | {'Batches':>8} | {'Errors':>7} | {'Avg Time':>10} | {'RPM':>10}")
         logger.info("-" * 60)
 
         for p in self.providers:
             s = self.stats.get(p, {"count": 0, "errors": 0, "total_time": 0})
             avg_time = s["total_time"] / s["count"] if s["count"] > 0 else 0
             rpm = PROVIDER_CONFIG.get(p, {}).get("rpm", 0)
-            logger.info(
-                f"{p:<12} | {s['count']:>8} | {s['errors']:>7} | {avg_time:>8.2f}s | {rpm:>10}"
-            )
+            logger.info(f"{p:<12} | {s['count']:>8} | {s['errors']:>7} | {avg_time:>8.2f}s | {rpm:>10}")
         logger.info("=" * 60)
 
 

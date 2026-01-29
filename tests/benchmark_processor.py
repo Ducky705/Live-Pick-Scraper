@@ -1,7 +1,7 @@
-import time
 import logging
-from typing import List, Dict, Any
-from unittest.mock import patch, MagicMock
+import time
+from unittest.mock import patch
+
 from src.parallel_batch_processor import parallel_processor
 
 # Configure logging to suppress noise during benchmark

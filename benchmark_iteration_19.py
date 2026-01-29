@@ -1,10 +1,9 @@
+import asyncio
+import json
+import logging
 import os
 import sys
-import json
 import time
-import logging
-import asyncio
-from typing import List, Dict
 
 # Setup
 sys.path.insert(0, os.path.abspath("."))
@@ -15,8 +14,8 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 logger = logging.getLogger("Benchmark19")
 
-from src.provider_pool import pooled_completion
 from src.prompts.core import get_compact_extraction_prompt
+from src.provider_pool import pooled_completion
 
 # Mock Data (Representative of typical inputs)
 TEST_MESSAGES = [
@@ -43,7 +42,7 @@ TEST_MESSAGES = [
 ]
 
 
-async def process_message_async(i: int, raw_msg: str) -> Dict:
+async def process_message_async(i: int, raw_msg: str) -> dict:
     """Async wrapper for processing a single message."""
     logger.info(f"Processing Msg {i + 1}/{len(TEST_MESSAGES)} (Async)...")
 
@@ -54,9 +53,7 @@ async def process_message_async(i: int, raw_msg: str) -> Dict:
 
     # Run the blocking pooled_completion in a thread executor to avoid blocking the event loop
     loop = asyncio.get_running_loop()
-    response = await loop.run_in_executor(
-        None, lambda: pooled_completion(prompt, images=None, timeout=30)
-    )
+    response = await loop.run_in_executor(None, lambda: pooled_completion(prompt, images=None, timeout=30))
 
     duration = time.time() - start_t
 
@@ -102,9 +99,7 @@ async def run_benchmark_async():
     logger.info(f"Total Requests: {total_requests}")
     logger.info(f"Total Time:     {total_time:.2f}s")
     logger.info(f"Avg Latency:    {avg_latency:.2f}s (Wall Clock / N)")
-    logger.info(
-        f"Success Rate:   {successful}/{len(TEST_MESSAGES)} ({successful / len(TEST_MESSAGES) * 100:.1f}%)"
-    )
+    logger.info(f"Success Rate:   {successful}/{len(TEST_MESSAGES)} ({successful / len(TEST_MESSAGES) * 100:.1f}%)")
     logger.info("=" * 40)
 
     # Save Stats

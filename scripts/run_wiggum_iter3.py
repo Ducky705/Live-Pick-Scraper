@@ -1,9 +1,8 @@
+import asyncio
 import json
+import logging
 import os
 import sys
-import asyncio
-import logging
-from typing import List, Dict, Any
 
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -11,15 +10,11 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.extraction_pipeline import ExtractionPipeline
 
 # Setup logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("WiggumIter3")
 
 GOLDEN_SET_PATH = os.path.join(os.path.dirname(__file__), "../new_golden_set.json")
-OUTPUT_PATH = os.path.join(
-    os.path.dirname(__file__), "../data/output/test_wiggum_iter3.json"
-)
+OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "../data/output/test_wiggum_iter3.json")
 
 
 async def run_wiggum():
@@ -31,7 +26,7 @@ async def run_wiggum():
         logger.error("No golden set found!")
         return
 
-    with open(GOLDEN_SET_PATH, "r", encoding="utf-8") as f:
+    with open(GOLDEN_SET_PATH, encoding="utf-8") as f:
         test_cases = json.load(f)
 
     logger.info(f"Loaded {len(test_cases)} test cases from Golden Set.")
@@ -62,9 +57,7 @@ async def run_wiggum():
     picks = ExtractionPipeline.run(messages, target_date)
     end_time = asyncio.get_event_loop().time()
 
-    logger.info(
-        f"Pipeline finished in {end_time - start_time:.2f}s. Extracted {len(picks)} picks."
-    )
+    logger.info(f"Pipeline finished in {end_time - start_time:.2f}s. Extracted {len(picks)} picks.")
 
     # Save to output file
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:

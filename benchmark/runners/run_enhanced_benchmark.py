@@ -9,20 +9,18 @@ Key improvements tested:
 3. Reduced false positives from noise extraction
 """
 
-import os
-import sys
 import json
 import logging
+import os
+import sys
 import time
 
 # Add project root to path
-sys.path.insert(
-    0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
+from src.auto_processor import PostClassification, classify_message_fast
 from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt
-from src.auto_processor import classify_message_fast, PostClassification
 from src.rule_based_extractor import RuleBasedExtractor
 
 # Setup logging
@@ -66,11 +64,7 @@ def fuzzy_match(gt_pick, sys_pick, gt_type="", sys_type=""):
 def calculate_metrics(tp, fp, fn):
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-    f1 = (
-        2 * (precision * recall) / (precision + recall)
-        if (precision + recall) > 0
-        else 0
-    )
+    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
     return {"precision": precision, "recall": recall, "f1": f1}
 
 
@@ -81,13 +75,13 @@ def run_enhanced_benchmark(model=None, limit=0):
     model = model or DEFAULT_MODEL
 
     # Load datasets
-    with open(IMAGE_MAP_PATH, "r", encoding="utf-8") as f:
+    with open(IMAGE_MAP_PATH, encoding="utf-8") as f:
         image_map = json.load(f)
 
-    with open(OCR_GOLDEN_SET_PATH, "r", encoding="utf-8") as f:
+    with open(OCR_GOLDEN_SET_PATH, encoding="utf-8") as f:
         ocr_golden = json.load(f)
 
-    with open(PARSING_GOLDEN_SET_PATH, "r", encoding="utf-8") as f:
+    with open(PARSING_GOLDEN_SET_PATH, encoding="utf-8") as f:
         parsing_golden = json.load(f)
 
     # Metrics
@@ -103,9 +97,7 @@ def run_enhanced_benchmark(model=None, limit=0):
     if limit > 0:
         images_to_test = images_to_test[:limit]
 
-    logging.info(
-        f"Starting ENHANCED Pipeline Benchmark with {len(images_to_test)} images"
-    )
+    logging.info(f"Starting ENHANCED Pipeline Benchmark with {len(images_to_test)} images")
     logging.info(f"Model: {model}")
     logging.info("-" * 60)
 
@@ -126,13 +118,9 @@ def run_enhanced_benchmark(model=None, limit=0):
         mock_message = {"id": idx + 1, "text": ocr_text, "images": [img_path]}
         classification_result = classify_message_fast(mock_message)
         classification = classification_result.get("class", "UNKNOWN")
-        classification_stats[classification] = (
-            classification_stats.get(classification, 0) + 1
-        )
+        classification_stats[classification] = classification_stats.get(classification, 0) + 1
 
-        logging.info(
-            f"  Classification: {classification} ({classification_result.get('reason', '')})"
-        )
+        logging.info(f"  Classification: {classification} ({classification_result.get('reason', '')})")
 
         # STEP 2: If classified as non-PICK, skip parsing (saves time & reduces FP)
         if classification not in [PostClassification.PICK, PostClassification.UNKNOWN]:
@@ -140,9 +128,7 @@ def run_enhanced_benchmark(model=None, limit=0):
             # If ground truth has picks but we skipped, that's a FN
             if expected_picks:
                 total_fn += len(expected_picks)
-                logging.warning(
-                    f"  -> FALSE NEGATIVE: Skipped {len(expected_picks)} real picks!"
-                )
+                logging.warning(f"  -> FALSE NEGATIVE: Skipped {len(expected_picks)} real picks!")
             continue
 
         # STEP 2.5: Try Rule-Based Extraction
@@ -162,9 +148,7 @@ def run_enhanced_benchmark(model=None, limit=0):
         source = "AI"
 
         if rule_picks:
-            logging.info(
-                f"  -> Rule-Based Extractor found {len(rule_picks)} picks! Skipping AI."
-            )
+            logging.info(f"  -> Rule-Based Extractor found {len(rule_picks)} picks! Skipping AI.")
             # Convert rule picks (flat dicts) to list
             parsed_picks = rule_picks
             source = "RULE"
@@ -177,7 +161,7 @@ def run_enhanced_benchmark(model=None, limit=0):
             # STEP 3: Parse with AI (same as baseline)
             try:
                 if not ocr_text or len(ocr_text.strip()) < 10:
-                    logging.warning(f"  -> Empty OCR, skipping")
+                    logging.warning("  -> Empty OCR, skipping")
                     total_fn += len(expected_picks)
                     continue
 
@@ -239,9 +223,7 @@ def run_enhanced_benchmark(model=None, limit=0):
         total_fp += fp
         total_fn += fn
 
-        logging.info(
-            f"  -> [{source}] TP:{tp} FP:{fp} FN:{fn} (Latency: {latency:.1f}s)"
-        )
+        logging.info(f"  -> [{source}] TP:{tp} FP:{fp} FN:{fn} (Latency: {latency:.1f}s)")
 
     # Final metrics
     metrics = calculate_metrics(total_tp, total_fp, total_fn)
@@ -295,7 +277,7 @@ def run_enhanced_benchmark(model=None, limit=0):
     # Load baseline for comparison
     baseline_path = os.path.join(RESULTS_DIR, "full_pipeline_baseline.json")
     if os.path.exists(baseline_path):
-        with open(baseline_path, "r") as f:
+        with open(baseline_path) as f:
             baseline = json.load(f)
 
         baseline_f1 = baseline.get("metrics", {}).get("f1", 0)
@@ -304,9 +286,7 @@ def run_enhanced_benchmark(model=None, limit=0):
         print("\nCOMPARISON TO BASELINE:")
         print(f"  Baseline F1:  {baseline_f1:.2%}")
         print(f"  Enhanced F1:  {enhanced_f1:.2%}")
-        print(
-            f"  Improvement:  {(enhanced_f1 - baseline_f1) * 100:.2f} percentage points"
-        )
+        print(f"  Improvement:  {(enhanced_f1 - baseline_f1) * 100:.2f} percentage points")
 
     return results
 

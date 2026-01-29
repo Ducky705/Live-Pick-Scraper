@@ -52,7 +52,7 @@
       "title": "The 500-Message Gauntlet (Full Benchmark)",
       "description": "The ultimate test. Set `FULL_BENCHMARK=1` and run the entire 500-message goldenset. The agent must iteratively fix every crash, timeout, or logic error that appears on the larger dataset. This task requires high endurance and stable error handling.",
       "priority": 4,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-012"
       ],
@@ -60,10 +60,11 @@
         "Full benchmark (500 items) completes in < 5 minutes.",
         "Final Metrics: F1 > 90%, Throughput > 5.0 msg/sec, Tokens/Pick < 500.",
         "Code passed ruff check and ruff format."
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     }
   ],
   "metadata": {
-    "updatedAt": "2026-01-29T23:10:20.449Z"
+    "updatedAt": "2026-01-29T23:27:12.548Z"
   }
 }

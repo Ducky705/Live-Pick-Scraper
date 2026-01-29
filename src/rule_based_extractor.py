@@ -5,12 +5,12 @@ Reduces reliance on AI by attempting to extract betting picks using strict regex
 If confident picks are found, the message is skipped from the expensive AI pipeline.
 """
 
-import re
 import logging
-from typing import List, Dict, Any, Tuple, Optional
+import re
+from typing import Any
 
 from src.grading.parser import PickParser
-from src.grading.schema import Pick, BetType
+from src.grading.schema import BetType, Pick
 from src.prompts.decoder import infer_league_from_entity, normalize_pick_format
 
 logger = logging.getLogger(__name__)
@@ -23,8 +23,8 @@ class RuleBasedExtractor:
 
     @staticmethod
     def extract(
-        messages: List[Dict[str, Any]],
-    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+        messages: list[dict[str, Any]],
+    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         """
         Process a list of messages and try to extract picks without AI.
 
@@ -59,15 +59,9 @@ class RuleBasedExtractor:
             # Rule-Based extraction is poor at grouping these (it splits them).
             # STRATEGY: Defer ALL Parlays/Teasers to AI to ensure correct grouping.
             # ALSO: Check for "Team A + Team B" style headers (common in Telegram)
-            has_plus_parlay = " + " in full_text and (
-                "ML" in full_text or "Moneyline" in full_text
-            )
+            has_plus_parlay = " + " in full_text and ("ML" in full_text or "Moneyline" in full_text)
 
-            has_parlay_keyword = (
-                "parlay" in full_text.lower()
-                or "teaser" in full_text.lower()
-                or has_plus_parlay
-            )
+            has_parlay_keyword = "parlay" in full_text.lower() or "teaser" in full_text.lower() or has_plus_parlay
             # EXPERIMENTAL: Don't skip on 'parlay' to allow extracting straight bets from mixed messages.
             # The AI fallback logic (if extraction is partial) should handle the complex parts if needed.
             # if has_parlay_keyword:
@@ -80,12 +74,12 @@ class RuleBasedExtractor:
             # 3. Line-by-line extraction
             lines = full_text.split("\n")
             msg_picks = []
-            
+
             i = 0
             while i < len(lines):
                 line = lines[i].strip()
                 i += 1
-                
+
                 if not line:
                     continue
 
@@ -99,7 +93,7 @@ class RuleBasedExtractor:
                 )
                 # Remove numbering (e.g. "1. ", "1) ")
                 line = re.sub(r"^\d+[\.\)]\s*", "", line)
-                
+
                 # Remove quotes and unicode garbage
                 line = (
                     line.strip("\"'")
@@ -117,7 +111,7 @@ class RuleBasedExtractor:
                     .replace("\u2014", "-")  # Em dash
                     .replace("\u2212", "-")  # Minus sign
                 )
-                
+
                 # NORMALIZE: Fix common OCR/Typo issues
                 # 1. "MI" -> "ML" (common OCR error for Moneyline)
                 line = re.sub(r"\bMI\b", "ML", line)
@@ -126,27 +120,34 @@ class RuleBasedExtractor:
                 # 3. Fix "U162" -> "Under 162", "o145" -> "Over 145"
                 line = re.sub(r"\b([Uu])(\d+(\.\d+)?)", r"Under \2", line)
                 line = re.sub(r"\b([Oo])(\d+(\.\d+)?)", r"Over \2", line)
-                
+
                 # 4. Fix "Money Line" -> "Moneyline" -> "ML"
                 line = re.sub(r"Money\s*Line", "Moneyline", line, flags=re.IGNORECASE)
 
                 # 5. Fix "Anytime Goal Scorer" -> "Name: Anytime Goal Scorer" (for Prop Parser)
                 # If we see AGS pattern but no colon, inject one before the keyword
                 if ":" not in line and re.search(r"\b(Anytime Goal Scorer|AGS|Score|Scorer)\b", line, re.IGNORECASE):
-                    line = re.sub(r"\s+(Anytime Goal Scorer|AGS|Anytime Goal|To Score)\b", r": Anytime Goal Scorer", line, flags=re.IGNORECASE)
-                
+                    line = re.sub(
+                        r"\s+(Anytime Goal Scorer|AGS|Anytime Goal|To Score)\b",
+                        r": Anytime Goal Scorer",
+                        line,
+                        flags=re.IGNORECASE,
+                    )
+
                 # Remove emojis (simplistic regex) - Keep ASCII + standard punctuation
                 line = re.sub(r"[^\x00-\x7F]+", "", line)
-                
+
                 # Clean specific noise patterns
                 # 1. Remove everything after pipe |
                 line = line.split("|")[0]
-                
+
                 # 2. Remove parenthetical commentary (e.g. "(risking 2u)")
                 # Be careful not to remove (2u) or (-110)
                 # Strategy: Remove (...) if it contains "risk", "win", "to win", "profit"
                 if "(" in line:
-                    line = re.sub(r"\((?=[^)]*(?:risk|win|profit|analysis|writeup)).*?\)", "", line, flags=re.IGNORECASE)
+                    line = re.sub(
+                        r"\((?=[^)]*(?:risk|win|profit|analysis|writeup)).*?\)", "", line, flags=re.IGNORECASE
+                    )
 
                 line = line.strip()
 
@@ -163,7 +164,7 @@ class RuleBasedExtractor:
                     next_line = lines[i].strip()
                     # Clean next line slightly to check it
                     next_line_clean = re.sub(r"[^\x00-\x7F]+", "", next_line).strip()
-                    
+
                     # If next line looks like odds/line (e.g. "-110", "+145", "Over 220")
                     # Strict check: Start with +/-, or "Over/Under", or "ML"
                     is_continuation = False
@@ -173,11 +174,11 @@ class RuleBasedExtractor:
                         is_continuation = True
                     elif re.match(r"^ML|Moneyline", next_line_clean, re.IGNORECASE):
                         is_continuation = True
-                    
+
                     if is_continuation:
                         # MERGE
                         line = f"{line} {next_line_clean}"
-                        i += 1 # Consume next line
+                        i += 1  # Consume next line
 
                 # Attempt parse
                 try:
@@ -194,7 +195,16 @@ class RuleBasedExtractor:
                     # Extract units before parsing (since parser cleans them)
                     units = RuleBasedExtractor._extract_units(line)
 
-                    parsed: Pick = PickParser.parse(line, league_hint)
+                    # AGGRESSIVE CLEANUP: Remove all parenthetical content before parsing
+                    # We already extracted units, and 'PickParser' doesn't need the noise.
+                    # This fixes "Texas ML (good to -2)" crashing the parser.
+                    line_clean = re.sub(r"\(.*?\)", "", line).strip()
+
+                    # Also remove trailing text after odds if separated by space?
+                    # e.g. "Texas -3 -110 for the win" -> "Texas -3 -110"
+                    # Hard to do reliably.
+
+                    parsed: Pick = PickParser.parse(line_clean, league_hint)
 
                     if RuleBasedExtractor._is_valid_extraction(parsed):
                         # Normalize the pick string (e.g. "Jazz/Celtics O" -> "Jazz vs Celtics Over")
@@ -206,7 +216,7 @@ class RuleBasedExtractor:
 
                         # Convert to standard dict format
                         capper = msg.get("author") or "Unknown"
-                        
+
                         pick_dict = RuleBasedExtractor._to_pick_dict(
                             parsed, str(msg_id) if msg_id else "unknown", line, units
                         )
@@ -218,7 +228,7 @@ class RuleBasedExtractor:
 
                         msg_picks.append(pick_dict)
 
-                except Exception as e:
+                except Exception:
                     continue
 
             # 4. Decision Logic
@@ -233,16 +243,12 @@ class RuleBasedExtractor:
                     # E.g. "2-Team Parlay:\nLakers ML\nHeat ML" -> Found 2 MLs.
                     # Fallback to AI for accuracy.
                     remaining_messages.append(msg)
-                    logger.warning(
-                        f"[RuleBased] Msg {msg_id} has 'Parlay' but found straight bets. Deferring to AI."
-                    )
+                    logger.warning(f"[RuleBased] Msg {msg_id} has 'Parlay' but found straight bets. Deferring to AI.")
                 else:
                     # Success
                     extracted_picks.extend(msg_picks)
                     handled_msgs += 1
-                    logger.debug(
-                        f"[RuleBased] Extracted {len(msg_picks)} picks from msg {msg_id}"
-                    )
+                    logger.debug(f"[RuleBased] Extracted {len(msg_picks)} picks from msg {msg_id}")
             else:
                 remaining_messages.append(msg)
 
@@ -281,7 +287,7 @@ class RuleBasedExtractor:
         # 4. Prop pattern: Name: Stat
         # Added goal/score/scorer patterns
         if ":" in text or "goal" in text_lower or "score" in text_lower:
-             if any(
+            if any(
                 k in text_lower
                 for k in [
                     "pts",
@@ -358,9 +364,7 @@ class RuleBasedExtractor:
         return 1.0
 
     @staticmethod
-    def _to_pick_dict(
-        pick: Pick, message_id: str, original_text: str, units: float = 1.0
-    ) -> Dict[str, Any]:
+    def _to_pick_dict(pick: Pick, message_id: str, original_text: str, units: float = 1.0) -> dict[str, Any]:
         """Convert Pick object to the dictionary format used by the pipeline."""
         return {
             "message_id": message_id,

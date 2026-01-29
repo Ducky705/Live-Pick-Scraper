@@ -11,10 +11,10 @@ Example:
 """
 
 import re
-from typing import List, Dict, Any, Optional
+from typing import Any
 
 
-def parse_dsl_lines(text: str) -> List[Dict[str, Any]]:
+def parse_dsl_lines(text: str) -> list[dict[str, Any]]:
     """
     Parse a block of text containing DSL lines.
     Ignores lines that don't match the format (e.g. reasoning/thoughts).
@@ -97,24 +97,23 @@ def parse_dsl_lines(text: str) -> List[Dict[str, Any]]:
             units_str = parts[4]
             reasoning = parts[5]
 
+        # Fallback for unknown formats, or try to guess?
+        # If < 5, we skip (handled above)
+        # If 7? Maybe ID | LEAGUE ...
+        # Let's stick to supporting 5 and 8 strictly for now.
+        # Actually, let's try to detect if first col is ID (digits)
+        elif parts[0].isdigit() and len(parts) >= 7:
+            # ID | ...
+            message_id = parts[0]
+            capper = parts[1]
+            league = parts[2]
+            bet_type = parts[3]
+            pick_value = parts[4]
+            odds_str = parts[5]
+            if len(parts) >= 7:
+                units_str = parts[6]
         else:
-            # Fallback for unknown formats, or try to guess?
-            # If < 5, we skip (handled above)
-            # If 7? Maybe ID | LEAGUE ...
-            # Let's stick to supporting 5 and 8 strictly for now.
-            # Actually, let's try to detect if first col is ID (digits)
-            if parts[0].isdigit() and len(parts) >= 7:
-                # ID | ...
-                message_id = parts[0]
-                capper = parts[1]
-                league = parts[2]
-                bet_type = parts[3]
-                pick_value = parts[4]
-                odds_str = parts[5]
-                if len(parts) >= 7:
-                    units_str = parts[6]
-            else:
-                continue
+            continue
 
         # Process Odds
         if odds_str:

@@ -1,24 +1,23 @@
 import asyncio
-import os
-import sys
 import json
 import logging
+import os
+import sys
 from datetime import datetime, timedelta, timezone
+
 from dotenv import load_dotenv
 
 # Ensure we can import from src
 sys.path.append(os.path.join(os.getcwd(), ".."))
 sys.path.append(os.getcwd())
 
-from src.telegram_client import TelegramManager
-from src.discord_client import discord_manager
-from src.twitter_client import TwitterManager
 from config import OUTPUT_DIR
+from src.discord_client import discord_manager
+from src.telegram_client import TelegramManager
+from src.twitter_client import TwitterManager
 
 # Setup Logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -40,9 +39,7 @@ async def main():
     print("\n[1/3] Fetching Discord...")
     channel_ids_str = os.getenv("DISCORD_CHANNEL_IDS", "")
     if channel_ids_str:
-        discord_channels = [
-            cid.strip() for cid in channel_ids_str.split(",") if cid.strip()
-        ]
+        discord_channels = [cid.strip() for cid in channel_ids_str.split(",") if cid.strip()]
         for cid in discord_channels:
             try:
                 # Fetch last 100 to ensure we cover the whole day
@@ -80,9 +77,7 @@ async def main():
     print("\n[3/3] Fetching Telegram...")
     tg_channel_ids_str = os.getenv("TARGET_TELEGRAM_CHANNEL_ID")
     if tg_channel_ids_str:
-        tg_channel_ids = [
-            tid.strip() for tid in tg_channel_ids_str.split(",") if tid.strip()
-        ]
+        tg_channel_ids = [tid.strip() for tid in tg_channel_ids_str.split(",") if tid.strip()]
         try:
             tg_manager = TelegramManager()
             authorized = await tg_manager.connect_client()
@@ -90,9 +85,7 @@ async def main():
                 print("  Telegram not authorized. Skipping.")
             else:
                 # fetch_messages handles date filtering
-                tg_msgs = await tg_manager.fetch_messages(
-                    tg_channel_ids, target_date_str
-                )
+                tg_msgs = await tg_manager.fetch_messages(tg_channel_ids, target_date_str)
                 for m in tg_msgs:
                     m["source"] = "telegram"
                 all_messages.extend(tg_msgs)

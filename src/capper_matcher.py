@@ -1,5 +1,4 @@
-import rapidfuzz
-from rapidfuzz import process, fuzz
+from rapidfuzz import fuzz, process
 
 
 class CapperMatcher:
@@ -54,9 +53,7 @@ class CapperMatcher:
         choices = list(name_to_candidate.keys())
 
         # Use WRatio as it handles partial matches and case well
-        raw_matches = process.extract(
-            raw_lower, choices, scorer=fuzz.WRatio, limit=limit, score_cutoff=threshold
-        )
+        raw_matches = process.extract(raw_lower, choices, scorer=fuzz.WRatio, limit=limit, score_cutoff=threshold)
 
         for match_name, score, _ in raw_matches:
             cand = name_to_candidate[match_name]

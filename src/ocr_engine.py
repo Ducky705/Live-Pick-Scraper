@@ -13,8 +13,8 @@ Key Features:
 """
 
 import logging
+
 import numpy as np
-from typing import Tuple, Optional, Union, List
 from PIL import Image
 
 logger = logging.getLogger(__name__)
@@ -23,12 +23,13 @@ logger = logging.getLogger(__name__)
 class RapidOCREngine:
     """
     Singleton wrapper for RapidOCR.
-    
+
     Usage:
         engine = RapidOCREngine.get_instance()
         text = engine.extract_text(image)
         text, confidence = engine.extract_text_with_confidence(image)
     """
+
     _instance = None
     _engine = None
     _initialized = False
@@ -53,18 +54,17 @@ class RapidOCREngine:
         """
         try:
             from rapidocr_onnxruntime import RapidOCR
-            
+
             # Initialize with optimized settings for betting slips
             # - text_score: Lower threshold to catch faint text
             # - use_angle_cls: Disabled (betting slips are upright)
             self._engine = RapidOCR()
-            
+
             logger.info("[RapidOCR] Engine initialized successfully (ONNX Runtime)")
-            
+
         except ImportError:
             logger.error(
-                "[RapidOCR] rapidocr-onnxruntime not installed. "
-                "Install with: pip install rapidocr-onnxruntime"
+                "[RapidOCR] rapidocr-onnxruntime not installed. Install with: pip install rapidocr-onnxruntime"
             )
             self._engine = None
         except Exception as e:
@@ -75,13 +75,13 @@ class RapidOCREngine:
         """Check if the engine is ready to use."""
         return self._engine is not None
 
-    def _prepare_image(self, img: Union[str, np.ndarray, Image.Image]) -> Optional[np.ndarray]:
+    def _prepare_image(self, img: str | np.ndarray | Image.Image) -> np.ndarray | None:
         """
         Convert input to numpy array in BGR format (OpenCV standard).
-        
+
         Args:
             img: File path, numpy array (BGR), or PIL Image (RGB)
-            
+
         Returns:
             numpy array in BGR format, or None on error
         """
@@ -89,33 +89,34 @@ class RapidOCREngine:
             if isinstance(img, str):
                 # File path - let RapidOCR handle it directly
                 return img
-                
+
             if isinstance(img, Image.Image):
                 # PIL Image (RGB) -> numpy BGR
                 import cv2
+
                 arr = np.array(img)
                 if len(arr.shape) == 3 and arr.shape[2] == 3:
                     arr = cv2.cvtColor(arr, cv2.COLOR_RGB2BGR)
                 return arr
-                
+
             if isinstance(img, np.ndarray):
                 # Already numpy, assume BGR (OpenCV standard)
                 return img
-                
+
             logger.warning(f"[RapidOCR] Unsupported image type: {type(img)}")
             return None
-            
+
         except Exception as e:
             logger.error(f"[RapidOCR] Image preparation failed: {e}")
             return None
 
-    def extract_text(self, img: Union[str, np.ndarray, Image.Image]) -> str:
+    def extract_text(self, img: str | np.ndarray | Image.Image) -> str:
         """
         Extract all text from an image.
-        
+
         Args:
             img: Image as file path, numpy array (BGR), or PIL Image
-            
+
         Returns:
             Combined text string with lines separated by newlines
         """
@@ -144,10 +145,10 @@ class RapidOCREngine:
                 # Use top-left Y coordinate for sorting
                 y_pos = min(pt[1] for pt in box)
                 detections.append((y_pos, text))
-            
+
             # Sort by Y position (top to bottom)
             detections.sort(key=lambda x: x[0])
-            
+
             # Combine texts
             texts = [d[1] for d in detections]
             return "\n".join(texts)
@@ -156,15 +157,13 @@ class RapidOCREngine:
             logger.error(f"[RapidOCR] Text extraction failed: {e}")
             return ""
 
-    def extract_text_with_confidence(
-        self, img: Union[str, np.ndarray, Image.Image]
-    ) -> Tuple[str, float]:
+    def extract_text_with_confidence(self, img: str | np.ndarray | Image.Image) -> tuple[str, float]:
         """
         Extract text with average confidence score.
-        
+
         Args:
             img: Image as file path, numpy array (BGR), or PIL Image
-            
+
         Returns:
             Tuple of (combined_text, average_confidence)
             Confidence is 0.0-1.0
@@ -184,7 +183,7 @@ class RapidOCREngine:
 
             detections = []
             confidences = []
-            
+
             for item in result:
                 box = item[0]
                 text = item[1]
@@ -192,29 +191,27 @@ class RapidOCREngine:
                 y_pos = min(pt[1] for pt in box)
                 detections.append((y_pos, text))
                 confidences.append(conf)
-            
+
             detections.sort(key=lambda x: x[0])
             texts = [d[1] for d in detections]
-            
+
             full_text = "\n".join(texts)
             avg_confidence = sum(confidences) / len(confidences) if confidences else 0.0
-            
+
             return full_text, avg_confidence
 
         except Exception as e:
             logger.error(f"[RapidOCR] Extraction failed: {e}")
             return "", 0.0
 
-    def extract_text_with_boxes(
-        self, img: Union[str, np.ndarray, Image.Image]
-    ) -> List[dict]:
+    def extract_text_with_boxes(self, img: str | np.ndarray | Image.Image) -> list[dict]:
         """
         Extract text with bounding box information.
         Useful for layout analysis.
-        
+
         Args:
             img: Image as file path, numpy array (BGR), or PIL Image
-            
+
         Returns:
             List of dicts: [{"text": str, "box": [[x,y],...], "confidence": float}, ...]
         """
@@ -233,15 +230,11 @@ class RapidOCREngine:
 
             detections = []
             for item in result:
-                detections.append({
-                    "box": item[0],
-                    "text": item[1],
-                    "confidence": item[2]
-                })
-            
+                detections.append({"box": item[0], "text": item[1], "confidence": item[2]})
+
             # Sort by vertical position
             detections.sort(key=lambda d: min(pt[1] for pt in d["box"]))
-            
+
             return detections
 
         except Exception as e:
@@ -255,13 +248,11 @@ def get_ocr_engine() -> RapidOCREngine:
     return RapidOCREngine.get_instance()
 
 
-def extract_text(img: Union[str, np.ndarray, Image.Image]) -> str:
+def extract_text(img: str | np.ndarray | Image.Image) -> str:
     """Quick access to text extraction."""
     return get_ocr_engine().extract_text(img)
 
 
-def extract_text_with_confidence(
-    img: Union[str, np.ndarray, Image.Image]
-) -> Tuple[str, float]:
+def extract_text_with_confidence(img: str | np.ndarray | Image.Image) -> tuple[str, float]:
     """Quick access to text extraction with confidence."""
     return get_ocr_engine().extract_text_with_confidence(img)

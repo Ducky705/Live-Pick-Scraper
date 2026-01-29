@@ -8,15 +8,14 @@ This module provides shared helpers for:
 - Content detection
 """
 
-from collections import Counter
-import re
-import os
 import glob
+import os
+import re
 import unicodedata
-from typing import Optional
+from collections import Counter
 
 
-def normalize_string(text: Optional[str], remove_spaces: bool = False) -> str:
+def normalize_string(text: str | None, remove_spaces: bool = False) -> str:
     """
     Normalize a string for comparison purposes.
 
@@ -155,11 +154,7 @@ def backfill_odds(picks):
         p_odds = p.get("odds")
 
         # Validate that odds is actually a number/string worth saving
-        isValidOdds = (
-            p_odds is not None
-            and str(p_odds).strip() != ""
-            and str(p_odds).lower() != "none"
-        )
+        isValidOdds = p_odds is not None and str(p_odds).strip() != "" and str(p_odds).lower() != "none"
 
         if isValidOdds and p_text:
             if p_text not in odds_map:
@@ -182,11 +177,7 @@ def backfill_odds(picks):
 
         # Handle Odds
         current_odds = p.get("odds")
-        is_missing = (
-            current_odds is None
-            or str(current_odds).strip() == ""
-            or str(current_odds).lower() == "none"
-        )
+        is_missing = current_odds is None or str(current_odds).strip() == "" or str(current_odds).lower() == "none"
 
         if is_missing:
             p_text = normalize(p.get("pick", ""))
@@ -213,14 +204,7 @@ def backfill_odds(picks):
             p["units"] = 1.0
         else:
             try:
-                clean_str = (
-                    str(raw_unit)
-                    .lower()
-                    .replace("units", "")
-                    .replace("unit", "")
-                    .replace("u", "")
-                    .strip()
-                )
+                clean_str = str(raw_unit).lower().replace("units", "").replace("unit", "").replace("u", "").strip()
                 val = float(clean_str)
                 p["units"] = 1.0 if val > 25 else val
             except ValueError:
@@ -246,7 +230,6 @@ def smart_backfill_odds(picks, target_date):
     Returns:
         Updated picks list with odds backfilled where possible
     """
-    import concurrent.futures
     import logging
 
     logger = logging.getLogger(__name__)
@@ -260,11 +243,7 @@ def smart_backfill_odds(picks, target_date):
 
     for p in picks:
         current_odds = p.get("odds")
-        is_missing = (
-            current_odds is None
-            or str(current_odds).strip() == ""
-            or str(current_odds).lower() == "none"
-        )
+        is_missing = current_odds is None or str(current_odds).strip() == "" or str(current_odds).lower() == "none"
 
         if is_missing:
             league = (p.get("league") or p.get("lg") or "").lower()
@@ -276,13 +255,11 @@ def smart_backfill_odds(picks, target_date):
         logger.debug("All picks have odds, no ESPN fetch needed")
         return picks
 
-    logger.info(
-        f"Fetching ESPN odds for {len(leagues_needed)} leagues: {', '.join(sorted(leagues_needed))}"
-    )
+    logger.info(f"Fetching ESPN odds for {len(leagues_needed)} leagues: {', '.join(sorted(leagues_needed))}")
 
     try:
-        from src.score_fetcher import fetch_odds_for_leagues
         from src.score_cache import get_cache
+        from src.score_fetcher import fetch_odds_for_leagues
 
         cache = get_cache()
 
@@ -313,9 +290,7 @@ def smart_backfill_odds(picks, target_date):
 
             # Cache the fetched odds by league
             for league in leagues_to_fetch:
-                league_odds = {
-                    k: v for k, v in fetched_odds.items() if k.startswith(f"{league}:")
-                }
+                league_odds = {k: v for k, v in fetched_odds.items() if k.startswith(f"{league}:")}
                 if league_odds:
                     cache.set_odds(api_date, league, league_odds)
 
@@ -333,18 +308,14 @@ def smart_backfill_odds(picks, target_date):
                 away = (odds_data.get("away_team") or "").lower()
 
                 # Check if pick mentions either team
-                if _pick_mentions_team(pick_text, home) or _pick_mentions_team(
-                    pick_text, away
-                ):
+                if _pick_mentions_team(pick_text, home) or _pick_mentions_team(pick_text, away):
                     # Determine which odds to use based on pick type
                     p["odds"] = _extract_appropriate_odds(p, odds_data)
                     if p["odds"]:
                         matched_count += 1
                     break
 
-        logger.info(
-            f"Backfilled odds for {matched_count}/{len(missing_odds_picks)} picks from ESPN"
-        )
+        logger.info(f"Backfilled odds for {matched_count}/{len(missing_odds_picks)} picks from ESPN")
 
     except Exception as e:
         logger.warning(f"Smart odds backfill failed: {e}")
@@ -418,9 +389,7 @@ def clean_text_for_ai(text):
     text = re.sub(r"[-=_]{3,}", " ", text)
 
     # 4. Remove generic Telegram noise
-    text = re.sub(
-        r"(?i)(join\s*us|subscribe|link\s*in\s*bio|click\s*here|t\.me\/).*", "", text
-    )
+    text = re.sub(r"(?i)(join\s*us|subscribe|link\s*in\s*bio|click\s*here|t\.me\/).*", "", text)
 
     # 5. CRITICAL: Remove known channel watermarks that get misidentified as cappers
     # These are channel branding, NOT capper names
@@ -517,8 +486,7 @@ def auto_group_parlays(picks, message_context):
         existing_parlays = [
             p
             for p in msg_picks
-            if str(p.get("type")).lower() == "parlay"
-            and ("/" in p.get("pick", "") or " + " in p.get("pick", ""))
+            if str(p.get("type")).lower() == "parlay" and ("/" in p.get("pick", "") or " + " in p.get("pick", ""))
         ]
 
         # Unknowns kept as is

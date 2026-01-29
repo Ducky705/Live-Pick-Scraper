@@ -1,9 +1,10 @@
 import json
-import time
-import os
 import logging
-import psutil
+import os
 import sys
+import time
+
+import psutil
 
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -18,9 +19,7 @@ print("Configured Groq Concurrency to 4")
 from src.extraction_pipeline import ExtractionPipeline
 
 # Setup Logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("StressTest")
 
 
@@ -39,7 +38,7 @@ def run_stress_test():
         print(f"Error: {dataset_path} not found.")
         return
 
-    with open(dataset_path, "r") as f:
+    with open(dataset_path) as f:
         all_messages = json.load(f)
 
     print(f"Loaded {len(all_messages)} messages.")
@@ -67,15 +66,11 @@ def run_stress_test():
         chunk_start = time.time()
         start_mem = monitor_memory()
 
-        print(
-            f"\n--- Running Chunk {chunk_idx + 1}/{total_chunks} ({len(chunk)} msgs) ---"
-        )
+        print(f"\n--- Running Chunk {chunk_idx + 1}/{total_chunks} ({len(chunk)} msgs) ---")
         try:
             # We use batch_size=5 inside the pipeline for the AI requests
             # strategy="groq" uses the modified configuration
-            picks = ExtractionPipeline.run(
-                chunk, target_date="2024-01-01", batch_size=5, strategy="groq"
-            )
+            picks = ExtractionPipeline.run(chunk, target_date="2024-01-01", batch_size=5, strategy="groq")
             print(f"Extracted {len(picks)} picks from chunk.")
             sys.stdout.flush()
         except Exception as e:
@@ -88,9 +83,7 @@ def run_stress_test():
         duration = chunk_end - chunk_start
         mem_diff = end_mem - start_mem
 
-        print(
-            f"Chunk {chunk_idx + 1}: Duration={duration:.2f}s, Mem={end_mem:.2f}MB (Diff: {mem_diff:+.2f}MB)"
-        )
+        print(f"Chunk {chunk_idx + 1}: Duration={duration:.2f}s, Mem={end_mem:.2f}MB (Diff: {mem_diff:+.2f}MB)")
 
         results.append(
             {
@@ -116,7 +109,7 @@ def run_stress_test():
 
         drift_factor = avg_second / avg_first if avg_first > 0 else 1.0
 
-        print(f"\n--- Analysis ---")
+        print("\n--- Analysis ---")
         print(f"Avg Duration (First Half): {avg_first:.2f}s")
         print(f"Avg Duration (Second Half): {avg_second:.2f}s")
         print(f"Drift Factor: {drift_factor:.2f}x")
@@ -130,9 +123,7 @@ def run_stress_test():
         mem_start = results[0]["memory"]
         mem_end = results[-1]["memory"]
         if mem_end > mem_start * 1.2:
-            print(
-                f"WARNING: Memory usage increased by {(mem_end / mem_start - 1) * 100:.1f}%"
-            )
+            print(f"WARNING: Memory usage increased by {(mem_end / mem_start - 1) * 100:.1f}%")
 
 
 if __name__ == "__main__":

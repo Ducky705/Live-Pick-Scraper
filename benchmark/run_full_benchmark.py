@@ -1,23 +1,19 @@
+import json
+import logging
 import os
 import sys
-import json
 import time
-import logging
-from typing import List, Dict, Any
-from unittest.mock import MagicMock
 
 # Setup paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
 
+import benchmark.run_autotest as autotest
 from src.extraction_pipeline import ExtractionPipeline
 from src.parallel_batch_processor import parallel_processor
-import benchmark.run_autotest as autotest
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Metrics Storage
 METRICS = {
@@ -32,7 +28,7 @@ METRICS = {
 _original_execute = parallel_processor._execute_request
 
 
-def _patched_execute_request(provider: str, messages: List[dict]) -> str:
+def _patched_execute_request(provider: str, messages: list[dict]) -> str:
     """Patched execution to count metrics."""
     METRICS["total_requests"] += 1
 
@@ -55,9 +51,9 @@ def _patched_execute_request(provider: str, messages: List[dict]) -> str:
 parallel_processor._execute_request = _patched_execute_request
 
 
-def load_new_golden_set(path: str) -> Dict:
+def load_new_golden_set(path: str) -> dict:
     """Load and adapt new_golden_set.json to match run_autotest requirements."""
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
 
     judgments = []
@@ -83,13 +79,13 @@ def load_new_golden_set(path: str) -> Dict:
     return {"judgments": judgments}
 
 
-def load_messages_from_ids(ids: List[int], cache_path: str) -> List[Dict]:
+def load_messages_from_ids(ids: list[int], cache_path: str) -> list[dict]:
     """Load messages corresponding to the golden set IDs."""
     if not os.path.exists(cache_path):
         logging.error(f"Cache file not found: {cache_path}")
         return []
 
-    with open(cache_path, "r", encoding="utf-8") as f:
+    with open(cache_path, encoding="utf-8") as f:
         data = json.load(f)
 
     # Handle wrapped format
@@ -111,7 +107,7 @@ def load_messages_from_ids(ids: List[int], cache_path: str) -> List[Dict]:
     # Also load OCR results if available
     ocr_path = os.path.join(os.path.dirname(cache_path), "ocr_results.json")
     if os.path.exists(ocr_path):
-        with open(ocr_path, "r", encoding="utf-8") as f:
+        with open(ocr_path, encoding="utf-8") as f:
             ocr_data = json.load(f)
             results = ocr_data.get("results", {})
             for res in results.values():
@@ -199,14 +195,12 @@ def main():
     duration = METRICS["end_time"] - METRICS["start_time"]
     avg_latency = METRICS["total_time"] / max(METRICS["total_requests"], 1)
 
-    print(f"PERFORMANCE METRICS:")
+    print("PERFORMANCE METRICS:")
     print(f"  Total Duration:     {duration:.2f}s")
     print(f"  Total Requests:     {METRICS['total_requests']}")
     print(f"  Avg Latency (AI):   {avg_latency:.2f}s per request")
     print(f"  Est. Token Usage:   {int(METRICS['total_tokens_estimated'])} tokens")
-    print(
-        f"  Throughput:         {len(messages) / max(duration, 0.1):.2f} messages/sec"
-    )
+    print(f"  Throughput:         {len(messages) / max(duration, 0.1):.2f} messages/sec")
 
     print("\nACCURACY METRICS:")
     autotest.print_report(comparison_results)
@@ -222,9 +216,7 @@ def main():
         "accuracy": comparison_results,
     }
 
-    with open(
-        os.path.join(BASE_DIR, "benchmark", "reports", "full_baseline_report.json"), "w"
-    ) as f:
+    with open(os.path.join(BASE_DIR, "benchmark", "reports", "full_baseline_report.json"), "w") as f:
         json.dump(full_report, f, indent=2)
 
 

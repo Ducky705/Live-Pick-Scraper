@@ -70,18 +70,11 @@ class ExtractionPipeline:
                             messages_for_ai.append(msg_map[mid_str])
 
         if not messages_for_ai:
-            logger.info(
-                "All messages handled by Rule-Based Extractor! Skipping AI pipeline."
-            )
+            logger.info("All messages handled by Rule-Based Extractor! Skipping AI pipeline.")
         else:
-            logger.info(
-                f"Generating AI Prompts for {len(messages_for_ai)} remaining messages..."
-            )
+            logger.info(f"Generating AI Prompts for {len(messages_for_ai)} remaining messages...")
             # Split into batches
-            batches = [
-                messages_for_ai[i : i + batch_size]
-                for i in range(0, len(messages_for_ai), batch_size)
-            ]
+            batches = [messages_for_ai[i : i + batch_size] for i in range(0, len(messages_for_ai), batch_size)]
 
             # 1. AI Processing
             try:
@@ -90,9 +83,7 @@ class ExtractionPipeline:
                     all_raw_picks = parallel_processor.process_batches(batches)
                 else:
                     logger.info("Using Strategy: GROQ PRIORITY (16 concurrent)")
-                    all_raw_picks = parallel_processor.process_batches_groq_priority(
-                        batches
-                    )
+                    all_raw_picks = parallel_processor.process_batches_groq_priority(batches)
             except Exception as e:
                 logger.error(f"Parallel processing failed: {e}")
                 all_raw_picks = []
@@ -120,11 +111,7 @@ class ExtractionPipeline:
                 valid_ids = None
                 if batch_idx < len(batches):
                     # Remove int() cast to support string IDs (e.g., synthetic)
-                    valid_ids = [
-                        str(m.get("id"))
-                        for m in batches[batch_idx]
-                        if m.get("id") is not None
-                    ]
+                    valid_ids = [str(m.get("id")) for m in batches[batch_idx] if m.get("id") is not None]
 
                 batch_picks = normalize_response(
                     raw_response_str,
@@ -214,9 +201,7 @@ class ExtractionPipeline:
                     else:
                         if mid_str not in semantic_issues:
                             semantic_issues[mid_str] = []
-                        semantic_issues[mid_str].append(
-                            f"Pick '{p.get('pick')}' invalid: {reason}"
-                        )
+                        semantic_issues[mid_str].append(f"Pick '{p.get('pick')}' invalid: {reason}")
                         reparse_ids.add(mid_str)
 
                 # Confidence Check
@@ -226,9 +211,7 @@ class ExtractionPipeline:
                         if float(conf) < 8:
                             if mid_str not in semantic_issues:
                                 semantic_issues[mid_str] = []
-                            semantic_issues[mid_str].append(
-                                f"Low confidence ({conf}/10)."
-                            )
+                            semantic_issues[mid_str].append(f"Low confidence ({conf}/10).")
                             reparse_ids.add(mid_str)
                     except ValueError:
                         pass
@@ -245,16 +228,12 @@ class ExtractionPipeline:
 
                     msg = msg_map.get(mid_str)
                     if msg:
-                        text_upper = (
-                            msg.get("text", "") + "\n" + msg.get("ocr_text", "")
-                        ).upper()
+                        text_upper = (msg.get("text", "") + "\n" + msg.get("ocr_text", "")).upper()
 
                         # Unit Mismatch
                         # CRITICAL OPTIMIZATION: Only run global unit check if there's only 1 pick.
                         # Otherwise, "5U" appearing anywhere flags ALL 1U picks in a multi-pick message.
-                        picks_for_msg = [
-                            p for p in picks if str(p.get("message_id")) == mid_str
-                        ]
+                        picks_for_msg = [p for p in picks if str(p.get("message_id")) == mid_str]
 
                         if p.get("units", 1.0) == 1.0 and len(picks_for_msg) == 1:
                             potential_units = 0
@@ -305,14 +284,12 @@ class ExtractionPipeline:
                     # Check if missing
                     is_missing = False
                     for p in picks:
-                         # logic for checking missing ids was removed/simplified above in `missing_ids` set
-                         pass
+                        # logic for checking missing ids was removed/simplified above in `missing_ids` set
+                        pass
 
-                    if m_id_str in missing_ids: # checking against set of strings
-                         hints.append(
-                            MultiPickValidator.get_reparse_hint(
-                                ocr_text, msg_picks, retry_msg.get("text", "")
-                            )
+                    if m_id_str in missing_ids:  # checking against set of strings
+                        hints.append(
+                            MultiPickValidator.get_reparse_hint(ocr_text, msg_picks, retry_msg.get("text", ""))
                         )
 
                     if m_id_str in semantic_issues:
@@ -327,22 +304,23 @@ class ExtractionPipeline:
                     # DEBUG LOG
                     logger.debug(f"[DEBUG] Reparsing Msg {m_id_str} because: {full_hint}")
 
-                    retry_msg["text"] = (
-                        retry_msg.get("text", "") + "\n\n" + full_hint
-                    )[:3500]
+                    retry_msg["text"] = (retry_msg.get("text", "") + "\n\n" + full_hint)[:3500]
                     reparse_batch.append(retry_msg)
 
             if reparse_batch:
                 try:
                     # Refinement Batching (US-001: Optimization)
-                    refine_batch_sz = 5 # Increased to 5 for Throughput (US-011)
+                    refine_batch_sz = 5  # Increased to 5 for Throughput (US-011)
                     reparse_batches = [
-                        reparse_batch[i : i + refine_batch_sz]
-                        for i in range(0, len(reparse_batch), refine_batch_sz)
+                        reparse_batch[i : i + refine_batch_sz] for i in range(0, len(reparse_batch), refine_batch_sz)
                     ]
                     reparse_results = parallel_processor.process_batches(
                         reparse_batches,
-                        allowed_providers=["mistral", "cerebras", "gemini"] # Exclude Groq for refinement (US-006) to avoid Rate Limits
+                        allowed_providers=[
+                            "mistral",
+                            "cerebras",
+                            "gemini",
+                        ],  # Exclude Groq for refinement (US-006) to avoid Rate Limits
                     )
 
                     new_picks_count = 0
@@ -353,14 +331,12 @@ class ExtractionPipeline:
                         valid_ids = None
                         if batch_idx < len(reparse_batches):
                             valid_ids = [
-                                str(m.get("id")) # Keep as string/any
+                                str(m.get("id"))  # Keep as string/any
                                 for m in reparse_batches[batch_idx]
                                 if m.get("id") is not None
                             ]
 
-                        new_batch_picks = normalize_response(
-                            raw_response_str, expand=True, valid_message_ids=valid_ids
-                        )
+                        new_batch_picks = normalize_response(raw_response_str, expand=True, valid_message_ids=valid_ids)
 
                         # Replace picks
                         new_picks_by_id: dict[Any, list[dict[str, Any]]] = {}
@@ -376,17 +352,11 @@ class ExtractionPipeline:
                         for mid_key_str, msg_new_picks in new_picks_by_id.items():
                             if msg_new_picks:
                                 # US-001 Safety Net: Only replace if we have new picks
-                                picks = [
-                                    p
-                                    for p in picks
-                                    if str(p.get("message_id")) != mid_key_str
-                                ]
+                                picks = [p for p in picks if str(p.get("message_id")) != mid_key_str]
                                 picks.extend(msg_new_picks)
                                 new_picks_count += len(msg_new_picks)
 
-                    logger.info(
-                        f"Refinement complete. Replaced with {new_picks_count} refined picks."
-                    )
+                    logger.info(f"Refinement complete. Replaced with {new_picks_count} refined picks.")
                     picks = backfill_odds(picks)
                     picks = enrich_picks(picks, target_date)
                     picks = deduplicate_by_capper(picks)
@@ -477,9 +447,7 @@ class ExtractionPipeline:
                             formatted_ocr = ocr.replace("\n", "\n> ")
                             f.write(f"**OCR:**\n> {formatted_ocr}\n\n")
 
-                        images = msg.get("images") or (
-                            [msg.get("image")] if msg.get("image") else []
-                        )
+                        images = msg.get("images") or ([msg.get("image")] if msg.get("image") else [])
                         if images:
                             f.write("**Images:**\n")
                             for img in images:
@@ -498,9 +466,7 @@ class ExtractionPipeline:
                             units_str = str(p.get("units", "-"))
                             type_str = str(p.get("type", "-"))
                             result_str = str(p.get("result", "-"))
-                            f.write(
-                                f"| {pick_str} | {odds_str} | {units_str} | {type_str} | {result_str} |\n"
-                            )
+                            f.write(f"| {pick_str} | {odds_str} | {units_str} | {type_str} | {result_str} |\n")
                     else:
                         f.write("> *No picks extracted from this message.*\n")
 

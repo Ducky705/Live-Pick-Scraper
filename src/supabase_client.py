@@ -1,6 +1,6 @@
 # src/supabase_client.py
-import os
 import logging
+import os
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 # Try to import from config first (for bundled EXE), fallback to .env
 try:
-    from config import SUPABASE_URL, SUPABASE_KEY
+    from config import SUPABASE_KEY, SUPABASE_URL
 except ImportError:
     SUPABASE_URL = None
     SUPABASE_KEY = None
@@ -78,29 +78,16 @@ def refresh_caches():
 
     try:
         # 1. Cappers
-        res_cap = (
-            supabase.table("capper_directory").select("id, canonical_name").execute()
-        )
-        _capper_map = {
-            item["canonical_name"].lower().strip(): item["id"] for item in res_cap.data
-        }
+        res_cap = supabase.table("capper_directory").select("id, canonical_name").execute()
+        _capper_map = {item["canonical_name"].lower().strip(): item["id"] for item in res_cap.data}
 
         # 2. Variants (Map alias to Capper ID)
-        res_var = (
-            supabase.table("capper_variants")
-            .select("capper_id, variant_name")
-            .execute()
-        )
-        _variant_map = {
-            item["variant_name"].lower().strip(): item["capper_id"]
-            for item in res_var.data
-        }
+        res_var = supabase.table("capper_variants").select("capper_id, variant_name").execute()
+        _variant_map = {item["variant_name"].lower().strip(): item["capper_id"] for item in res_var.data}
 
         # 3. Active Cappers (Check historical stats for activity)
         # Using historical_capper_stats is efficient as it's aggregated
-        res_active = (
-            supabase.table("historical_capper_stats").select("capper_id").execute()
-        )
+        res_active = supabase.table("historical_capper_stats").select("capper_id").execute()
         # Also check picks table for very recent activity not yet in stats
         # (Optional but safer)
         # res_recent = supabase.table("picks").select("capper_id").limit(1000).execute()
@@ -195,9 +182,7 @@ def get_or_create_capper_id(name):
     active_candidates = [c for c in candidates if c["is_active"]]
 
     # Try active match first
-    matches = capper_matcher.match_name(
-        clean_lookup, active_candidates, limit=1, threshold=90
-    )
+    matches = capper_matcher.match_name(clean_lookup, active_candidates, limit=1, threshold=90)
 
     if matches:
         best = matches[0]
@@ -208,15 +193,11 @@ def get_or_create_capper_id(name):
 
     # 3. If no active match, try matching against ALL cappers (including inactive)
     # Still strict threshold
-    matches_all = capper_matcher.match_name(
-        clean_lookup, candidates, limit=1, threshold=90
-    )
+    matches_all = capper_matcher.match_name(clean_lookup, candidates, limit=1, threshold=90)
 
     if matches_all:
         best = matches_all[0]
-        logger.info(
-            f"[Match-Inactive] '{name}' -> '{best['name']}' (ID: {best['id']}, Score: {best['score']})"
-        )
+        logger.info(f"[Match-Inactive] '{name}' -> '{best['name']}' (ID: {best['id']}, Score: {best['score']})")
         return best["id"]
 
     # 4. If still no match, Create New Capper (User Preference: Auto-Create)
@@ -224,11 +205,7 @@ def get_or_create_capper_id(name):
     supabase = get_supabase()
     try:
         logger.info(f"[DB] No match found. Creating new capper: {clean_insert_name}")
-        res = (
-            supabase.table("capper_directory")
-            .insert({"canonical_name": clean_insert_name})
-            .execute()
-        )
+        res = supabase.table("capper_directory").insert({"canonical_name": clean_insert_name}).execute()
 
         if res.data and len(res.data) > 0:
             new_id = res.data[0]["id"]
@@ -290,18 +267,14 @@ def upload_picks(picks, target_date=None):
         try:
             capper_id = get_or_create_capper_id(p.get("capper_name"))
             if not capper_id:
-                errors.append(
-                    f"Row {i + 1}: Could not find or create Capper '{p.get('capper_name')}'."
-                )
+                errors.append(f"Row {i + 1}: Could not find or create Capper '{p.get('capper_name')}'.")
                 continue
 
             league_id = get_league_id(p.get("league"))
             if not league_id:
                 league_id = _league_map.get("other")
                 if not league_id:
-                    errors.append(
-                        f"Row {i + 1}: League '{p.get('league')}' not recognized."
-                    )
+                    errors.append(f"Row {i + 1}: League '{p.get('league')}' not recognized.")
                     continue
 
             bet_type_id = get_bet_type_id(p.get("type"))
@@ -341,7 +314,7 @@ def upload_picks(picks, target_date=None):
             db_rows.append(row)
 
         except Exception as e:
-            errors.append(f"Row {i + 1} Error: {str(e)}")
+            errors.append(f"Row {i + 1} Error: {e!s}")
 
     if not db_rows:
         return {

@@ -10,14 +10,13 @@ Usage:
     python -m benchmark.run_autotest [--golden FILE] [--scraper FILE]
 """
 
-import os
-import sys
 import json
 import logging
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
-from difflib import SequenceMatcher
+import os
+import sys
 from collections import defaultdict
+from difflib import SequenceMatcher
+from typing import Any
 
 # Setup paths
 if getattr(sys, "frozen", False):
@@ -27,9 +26,7 @@ else:
 sys.path.insert(0, BASE_DIR)
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 def similarity(a: str, b: str) -> float:
@@ -52,9 +49,7 @@ def normalize_pick(pick: str) -> str:
     return normalized
 
 
-def find_best_match(
-    pick: str, candidates: List[str], threshold: float = 0.6
-) -> Optional[Tuple[str, float]]:
+def find_best_match(pick: str, candidates: list[str], threshold: float = 0.6) -> tuple[str, float] | None:
     """Find the best matching pick from candidates."""
     if not pick or not candidates:
         return None
@@ -75,25 +70,25 @@ def find_best_match(
     return None
 
 
-def load_golden_set(path: str) -> Dict:
+def load_golden_set(path: str) -> dict:
     """Load the Judge's golden set."""
     if not os.path.exists(path):
         logging.error(f"Golden set not found: {path}")
         return {}
 
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
 
     return data
 
 
-def load_scraper_output(path: str) -> List[Dict]:
+def load_scraper_output(path: str) -> list[dict]:
     """Load the scraper's parsed picks."""
     if not os.path.exists(path):
         logging.error(f"Scraper output not found: {path}")
         return []
 
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
 
     # Handle both direct list and wrapped format
@@ -106,7 +101,7 @@ def load_scraper_output(path: str) -> List[Dict]:
     return []
 
 
-def build_message_id_map(scraper_picks: List[Dict]) -> Dict[Any, List[Dict]]:
+def build_message_id_map(scraper_picks: list[dict]) -> dict[Any, list[dict]]:
     """Group scraper picks by message_id."""
     by_message = defaultdict(list)
     for pick in scraper_picks:
@@ -117,7 +112,7 @@ def build_message_id_map(scraper_picks: List[Dict]) -> Dict[Any, List[Dict]]:
     return dict(by_message)
 
 
-def compare_message(judgment: Dict, scraper_picks: List[Dict]) -> Dict:
+def compare_message(judgment: dict, scraper_picks: list[dict]) -> dict:
     """
     Compare Judge's judgment for a message against scraper's picks.
     Returns detailed comparison results.
@@ -180,9 +175,7 @@ def compare_message(judgment: Dict, scraper_picks: List[Dict]) -> Dict:
         for jp in judge_picks:
             match = find_best_match(jp, unmatched_scraper, threshold=0.5)
             if match:
-                matched.append(
-                    {"judge": jp, "scraper": match[0], "similarity": match[1]}
-                )
+                matched.append({"judge": jp, "scraper": match[0], "similarity": match[1]})
                 if match[0] in unmatched_scraper:
                     unmatched_scraper.remove(match[0])
                 if jp in unmatched_judge:
@@ -206,7 +199,7 @@ def compare_message(judgment: Dict, scraper_picks: List[Dict]) -> Dict:
     return result
 
 
-def run_comparison(golden_set: Dict, scraper_picks: List[Dict]) -> Dict:
+def run_comparison(golden_set: dict, scraper_picks: list[dict]) -> dict:
     """
     Run full comparison between golden set and scraper output.
     Returns comprehensive accuracy report.
@@ -259,18 +252,14 @@ def run_comparison(golden_set: Dict, scraper_picks: List[Dict]) -> Dict:
     # Calculate accuracy metrics
     total_with_picks_msgs = sum(1 for j in judgments if j.get("has_picks"))
     total_picks_expected = sum(len(j.get("picks", [])) for j in judgments if j.get("has_picks"))
-    
-    total_correct = (
-        results["summary"]["perfect_match"] + results["summary"]["true_negative"]
-    )
+
+    total_correct = results["summary"]["perfect_match"] + results["summary"]["true_negative"]
     total_evaluated = len(judgments) - results["summary"]["judge_failed"]
 
     results["metrics"] = {
         "accuracy": round(total_correct / max(total_evaluated, 1) * 100, 2),
         "recall": round(
-            (total_picks_expected - len(results["all_false_negatives"]))
-            / max(total_picks_expected, 1)
-            * 100,
+            (total_picks_expected - len(results["all_false_negatives"])) / max(total_picks_expected, 1) * 100,
             2,
         ),
         "precision": round(
@@ -280,9 +269,7 @@ def run_comparison(golden_set: Dict, scraper_picks: List[Dict]) -> Dict:
             2,
         ),
         "total_picks_expected": total_picks_expected,
-        "total_picks_found": sum(
-            len(c.get("scraper_picks", [])) for c in results["comparisons"]
-        ),
+        "total_picks_found": sum(len(c.get("scraper_picks", [])) for c in results["comparisons"]),
         "total_missed": len(results["all_false_negatives"]),
         "total_false_positives": len(results["all_false_positives"]),
     }
@@ -290,7 +277,7 @@ def run_comparison(golden_set: Dict, scraper_picks: List[Dict]) -> Dict:
     return results
 
 
-def print_report(results: Dict):
+def print_report(results: dict):
     """Print a human-readable accuracy report."""
     print("\n" + "=" * 60)
     print("SCRAPER ACCURACY REPORT")
@@ -300,28 +287,20 @@ def print_report(results: Dict):
     metrics = results.get("metrics", {})
 
     print(f"\nTotal Messages Analyzed: {results['total_messages']}")
-    print(f"\nStatus Breakdown:")
+    print("\nStatus Breakdown:")
     print(f"  Perfect Match:    {summary.get('perfect_match', 0)}")
     print(f"  Partial Match:    {summary.get('partial_match', 0)}")
     print(f"  Missed Picks:     {summary.get('missed_picks', 0)}")
     print(f"  Extra Picks:      {summary.get('extra_picks', 0)}")
-    print(
-        f"  False Negative:   {summary.get('false_negative', 0)} (HAD picks but scraper found NONE)"
-    )
-    print(
-        f"  False Positive:   {summary.get('false_positive', 0)} (NO picks but scraper found some)"
-    )
+    print(f"  False Negative:   {summary.get('false_negative', 0)} (HAD picks but scraper found NONE)")
+    print(f"  False Positive:   {summary.get('false_positive', 0)} (NO picks but scraper found some)")
     print(f"  True Negative:    {summary.get('true_negative', 0)}")
     print(f"  Judge Failed:     {summary.get('judge_failed', 0)}")
 
-    print(f"\nAccuracy Metrics:")
+    print("\nAccuracy Metrics:")
     print(f"  Overall Accuracy: {metrics.get('accuracy', 0)}%")
-    print(
-        f"  Recall:           {metrics.get('recall', 0)}% (of real picks, how many did we find?)"
-    )
-    print(
-        f"  Precision:        {metrics.get('precision', 0)}% (of found picks, how many are real?)"
-    )
+    print(f"  Recall:           {metrics.get('recall', 0)}% (of real picks, how many did we find?)")
+    print(f"  Precision:        {metrics.get('precision', 0)}% (of found picks, how many are real?)")
     print(f"  Total Expected:   {metrics.get('total_picks_expected', 0)} picks")
     print(f"  Total Found:      {metrics.get('total_picks_found', 0)} picks")
     print(f"  Total MISSED:     {metrics.get('total_missed', 0)} picks")
@@ -330,20 +309,18 @@ def print_report(results: Dict):
     # Show sample false negatives (most critical issue)
     false_negs = results.get("all_false_negatives", [])
     if false_negs:
-        print(f"\n" + "-" * 60)
+        print("\n" + "-" * 60)
         print("CRITICAL: Sample MISSED PICKS (False Negatives)")
         print("-" * 60)
         for fn in false_negs[:10]:
-            print(
-                f'  MSG {fn["message_id"]}: "{fn["pick"]}" (Capper: {fn.get("judge_capper", "Unknown")})'
-            )
+            print(f'  MSG {fn["message_id"]}: "{fn["pick"]}" (Capper: {fn.get("judge_capper", "Unknown")})')
         if len(false_negs) > 10:
             print(f"  ... and {len(false_negs) - 10} more missed picks")
 
     # Show sample false positives
     false_pos = results.get("all_false_positives", [])
     if false_pos:
-        print(f"\n" + "-" * 60)
+        print("\n" + "-" * 60)
         print("WARNING: Sample FALSE POSITIVES (Noise)")
         print("-" * 60)
         for fp in false_pos[:5]:
@@ -352,7 +329,7 @@ def print_report(results: Dict):
     print("\n" + "=" * 60)
 
 
-def save_report(results: Dict, output_path: str):
+def save_report(results: dict, output_path: str):
     """Save full report to JSON file."""
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
@@ -362,35 +339,21 @@ def save_report(results: Dict, output_path: str):
 def main():
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Compare scraper output vs Judge golden set"
-    )
-    parser.add_argument(
-        "--golden", type=str, default=None, help="Path to golden set JSON"
-    )
-    parser.add_argument(
-        "--scraper", type=str, default=None, help="Path to scraper output JSON"
-    )
-    parser.add_argument(
-        "--output", type=str, default=None, help="Path to save detailed report"
-    )
+    parser = argparse.ArgumentParser(description="Compare scraper output vs Judge golden set")
+    parser.add_argument("--golden", type=str, default=None, help="Path to golden set JSON")
+    parser.add_argument("--scraper", type=str, default=None, help="Path to scraper output JSON")
+    parser.add_argument("--output", type=str, default=None, help="Path to save detailed report")
     args = parser.parse_args()
 
     # Default paths
-    golden_path = args.golden or os.path.join(
-        BASE_DIR, "benchmark", "reports", "auto_golden_set.json"
-    )
+    golden_path = args.golden or os.path.join(BASE_DIR, "benchmark", "reports", "auto_golden_set.json")
     scraper_path = args.scraper or os.path.join(BASE_DIR, "cache", "graded_picks.json")
-    output_path = args.output or os.path.join(
-        BASE_DIR, "benchmark", "reports", "accuracy_report.json"
-    )
+    output_path = args.output or os.path.join(BASE_DIR, "benchmark", "reports", "accuracy_report.json")
 
     # Load data
     golden_set = load_golden_set(golden_path)
     if not golden_set:
-        print(
-            "ERROR: Could not load golden set. Run 'python -m benchmark.auto_judge' first."
-        )
+        print("ERROR: Could not load golden set. Run 'python -m benchmark.auto_judge' first.")
         return
 
     # Handle list format (new_golden_set.json) vs dict format (auto_judge output)
@@ -407,9 +370,7 @@ def main():
         judgments = golden_set.get("judgments", [])
 
     scraper_picks = load_scraper_output(scraper_path)
-    logging.info(
-        f"Loaded {len(judgments)} judgments and {len(scraper_picks)} scraper picks"
-    )
+    logging.info(f"Loaded {len(judgments)} judgments and {len(scraper_picks)} scraper picks")
 
     # Run comparison
     # We need to construct a "golden_set" dict or modify run_comparison to take list

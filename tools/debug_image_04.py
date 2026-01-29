@@ -1,16 +1,15 @@
-import os
-import sys
 import json
 import logging
-import time
+import os
+import sys
 
 # Add project root to path
 sys.path.insert(0, os.getcwd())
 
-from src.openrouter_client import openrouter_completion
-from src.prompt_builder import generate_ai_prompt
 from src.ocr_handler import extract_text_batch
+from src.openrouter_client import openrouter_completion
 from src.parsers.dsl_parser import parse_dsl_lines
+from src.prompt_builder import generate_ai_prompt
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -25,7 +24,7 @@ DEFAULT_MODEL = "tngtech/deepseek-r1t2-chimera:free"
 def debug_image_04():
     img_key = "image_04.jpg"
 
-    with open(IMAGE_MAP_PATH, "r", encoding="utf-8") as f:
+    with open(IMAGE_MAP_PATH, encoding="utf-8") as f:
         image_map = json.load(f)
 
     img_path = image_map.get(img_key)
@@ -57,9 +56,7 @@ def debug_image_04():
 
     # safe print
     try:
-        print(
-            f"RESPONSE:\n{'-' * 40}\n{response.encode('ascii', 'replace').decode()}\n{'-' * 40}"
-        )
+        print(f"RESPONSE:\n{'-' * 40}\n{response.encode('ascii', 'replace').decode()}\n{'-' * 40}")
     except:
         print("Response printing failed due to encoding")
 

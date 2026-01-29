@@ -14,10 +14,11 @@ Usage:
 """
 
 import json
-import re
 import logging
+import re
 import sys
-from typing import Dict, Any, List, Optional, Union, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 # =============================================================================
 # EXPANSION MAPPINGS
@@ -124,9 +125,7 @@ COMPOUND_TEAM_NAMES = {
 }
 
 # Regex to detect compound team names (case-insensitive)
-COMPOUND_TEAM_REGEX = re.compile(
-    r"\b(william\s*[&]\s*mary|texas\s*a\s*[&]\s*m|w\s*[&]\s*m)\b", re.IGNORECASE
-)
+COMPOUND_TEAM_REGEX = re.compile(r"\b(william\s*[&]\s*mary|texas\s*a\s*[&]\s*m|w\s*[&]\s*m)\b", re.IGNORECASE)
 
 # =============================================================================
 # EXPANSION FUNCTIONS
@@ -203,7 +202,7 @@ def expand_league(league_value: Any) -> str:
     return "Other"
 
 
-def expand_compact_pick(compact: Dict[str, Any]) -> Dict[str, Any]:
+def expand_compact_pick(compact: dict[str, Any]) -> dict[str, Any]:
     """
     Expand a compact pick dict to full field names.
 
@@ -296,7 +295,7 @@ def expand_compact_pick(compact: Dict[str, Any]) -> Dict[str, Any]:
     return result
 
 
-def expand_picks_list(compact_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def expand_picks_list(compact_list: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """
     Expand a list of compact picks.
 
@@ -317,7 +316,7 @@ def expand_picks_list(compact_list: List[Dict[str, Any]]) -> List[Dict[str, Any]
 # =============================================================================
 
 
-def parse_dsl_response(text: str) -> List[Dict[str, Any]]:
+def parse_dsl_response(text: str) -> list[dict[str, Any]]:
     """
     Parse pipe-delimited DSL response.
     Delegate to robust parser in src.parsers.dsl_parser
@@ -350,7 +349,7 @@ def parse_dsl_response(text: str) -> List[Dict[str, Any]]:
         return []
 
 
-def extract_json_from_response(text: str) -> Optional[Union[Dict, List]]:
+def extract_json_from_response(text: str) -> dict | list | None:
     """
     Extract JSON from potentially messy AI response.
 
@@ -419,9 +418,9 @@ def extract_json_from_response(text: str) -> Optional[Union[Dict, List]]:
 def normalize_response(
     response: str,
     expand: bool = True,
-    valid_message_ids: Optional[Sequence[Union[int, str]]] = None,
-    message_context: Optional[Dict[int, str]] = None,
-) -> List[Dict[str, Any]]:
+    valid_message_ids: Sequence[int | str] | None = None,
+    message_context: dict[int, str] | None = None,
+) -> list[dict[str, Any]]:
     """
     Normalize AI response to a list of pick dicts.
 
@@ -441,19 +440,12 @@ def normalize_response(
         return []
 
     # Strip <analysis> block (CoT)
-    response = re.sub(
-        r"<analysis>.*?</analysis>", "", response, flags=re.DOTALL
-    ).strip()
+    response = re.sub(r"<analysis>.*?</analysis>", "", response, flags=re.DOTALL).strip()
 
     # Try DSL parsing first if it looks like DSL (contains pipes, no JSON brackets at start)
     trimmed = response.strip()
 
-    if (
-        trimmed
-        and not trimmed.startswith("{")
-        and not trimmed.startswith("[")
-        and "|" in trimmed
-    ):
+    if trimmed and not trimmed.startswith("{") and not trimmed.startswith("[") and "|" in trimmed:
         picks = parse_dsl_response(trimmed)
         if picks:
             # Inject message context if available (for source verification)
@@ -476,11 +468,7 @@ def normalize_response(
             return picks
 
     # DSL HANDLING: If response looks like DSL (pipe-separated), parse it
-    if (
-        "|" in response
-        and "picks" not in response
-        and not response.strip().startswith("{")
-    ):
+    if "|" in response and "picks" not in response and not response.strip().startswith("{"):
         picks = parse_dsl_response(response)
         if picks:
             if expand:
@@ -498,9 +486,7 @@ def normalize_response(
     data = extract_json_from_response(response)
 
     if data is None:
-        logging.warning(
-            f"[Decoder] Failed to extract JSON from response: {response[:100]}..."
-        )
+        logging.warning(f"[Decoder] Failed to extract JSON from response: {response[:100]}...")
         return []
 
     # Handle different response structures
@@ -539,9 +525,7 @@ def normalize_response(
                     pass
 
     if expand:
-        return validate_and_correct_batch(
-            picks, list(valid_message_ids) if valid_message_ids is not None else None
-        )
+        return validate_and_correct_batch(picks, list(valid_message_ids) if valid_message_ids is not None else None)
 
     return picks
 
@@ -551,21 +535,15 @@ def normalize_response(
 # =============================================================================
 
 # Regex patterns for type inference
-SPREAD_PATTERN = re.compile(
-    r"[+-]\d+\.?\d*(?=[\s\)\],]|$)"
-)  # Team -7.5, Team +3, Team (+105)
+SPREAD_PATTERN = re.compile(r"[+-]\d+\.?\d*(?=[\s\)\],]|$)")  # Team -7.5, Team +3, Team (+105)
 TOTAL_PATTERN = re.compile(r"\b(?:over|under|o|u)\s*\d+\.?\d*", re.IGNORECASE)
 
 # Pattern to distinguish American odds from spread lines
 # Odds are typically 3+ digits: +105, -110, +150, -200
 # Spreads are typically 1-2 digits with optional .5: +3.5, -7, +10.5
 # Exception: spreads can be double digits like +14 or -21
-AMERICAN_ODDS_PATTERN = re.compile(
-    r"[+-](1[0-9]{2}|[2-9][0-9]{2,})(?:\s|$|[,\)\]])"
-)  # 3+ digit number like +105, -200
-SMALL_SPREAD_PATTERN = re.compile(
-    r"[+-](\d{1,2}(?:\.\d)?)(?:\s|$)"
-)  # 1-2 digit with optional .5
+AMERICAN_ODDS_PATTERN = re.compile(r"[+-](1[0-9]{2}|[2-9][0-9]{2,})(?:\s|$|[,\)\]])")  # 3+ digit number like +105, -200
+SMALL_SPREAD_PATTERN = re.compile(r"[+-](\d{1,2}(?:\.\d)?)(?:\s|$)")  # 1-2 digit with optional .5
 # Updated to allow parentheses in names like "Holmgren (Thunder)" AND + in stats like Pts+Reb+Ast
 # Added \( and \) to initial char class to support "(NBA) Name" prefixes
 PLAYER_PROP_PATTERN = re.compile(
@@ -582,9 +560,7 @@ PLAYER_PROP_PLUS_PATTERN = re.compile(
     r"\d+\+\s*(?:pts?|points?|reb|rebounds?|ast|assists?|stl|steals?|blk|blocks?|3pm|threes?|pra|p\+r\+a|sog|shots?|kills?|maps?)",
     re.IGNORECASE,
 )
-PARLAY_SEPARATORS = re.compile(
-    r"\s*(?:[/&]|\s+\|\|\s+)\s*(?=[A-Z(])"
-)  # Separators between parlay legs: /, &, ||
+PARLAY_SEPARATORS = re.compile(r"\s*(?:[/&]|\s+\|\|\s+)\s*(?=[A-Z(])")  # Separators between parlay legs: /, &, ||
 PERIOD_PATTERN = re.compile(
     r"\b(1H|2H|1Q|2Q|3Q|4Q|F5|F3|P1|P2|P3|First\s*Half|1st\s*Half|2nd\s*Half|First\s*5|1st\s*P|2nd\s*P|3rd\s*P)",
     re.IGNORECASE,
@@ -888,11 +864,11 @@ COLLEGE_TEAMS = {
 }
 
 
-def infer_league_from_entity(entity: str) -> Optional[str]:
+def infer_league_from_entity(entity: str) -> str | None:
     """Infer league from a team/player name."""
     if not entity:
         return None
-        
+
     entity_lower = str(entity).lower().strip()
 
     # Check tennis first
@@ -919,9 +895,7 @@ def infer_league_from_entity(entity: str) -> Optional[str]:
     return None
 
 
-def add_league_prefixes_to_parlay(
-    parlay_str: str, default_league: Optional[str] = None
-) -> str:
+def add_league_prefixes_to_parlay(parlay_str: str, default_league: str | None = None) -> str:
     """
     Add missing league prefixes to parlay legs.
 
@@ -1073,24 +1047,16 @@ def is_team_total_pick(pick_str: str) -> bool:
         parts = pick_str.split("/")
         if len(parts) == 2:
             # Check if both sides have team-like content before over/under
-            has_over_under = any(
-                x in pick_str.lower() for x in ["over", "under", " o ", " u "]
-            )
+            has_over_under = any(x in pick_str.lower() for x in ["over", "under", " o ", " u "])
             if has_over_under:
                 left = parts[0].strip()
-                right_before_ou = re.split(
-                    r"\s+(?:over|under|o|u)\s*", parts[1], flags=re.IGNORECASE
-                )[0].strip()
+                right_before_ou = re.split(r"\s+(?:over|under|o|u)\s*", parts[1], flags=re.IGNORECASE)[0].strip()
                 # If right side has substantial text before over/under, it's a matchup
-                if len(right_before_ou) > 2 and any(
-                    c.isalpha() for c in right_before_ou
-                ):
+                if len(right_before_ou) > 2 and any(c.isalpha() for c in right_before_ou):
                     return False
 
     # Single team pattern: "TeamName Over/Under X" without opponent
-    single_team_pattern = re.compile(
-        r"^([A-Za-z\s\.\-\']+?)\s+(over|under|o|u)\s*\d", re.IGNORECASE
-    )
+    single_team_pattern = re.compile(r"^([A-Za-z\s\.\-\']+?)\s+(over|under|o|u)\s*\d", re.IGNORECASE)
     return bool(single_team_pattern.match(pick_str.strip()))
 
 
@@ -1189,9 +1155,7 @@ def is_single_team_total(pick_str: str) -> bool:
         return False
 
     # Single team + Over/Under pattern
-    single_team_pattern = re.compile(
-        r"^([A-Za-z\s\.\-\']+?)\s+(over|under|o|u)\s*\d", re.IGNORECASE
-    )
+    single_team_pattern = re.compile(r"^([A-Za-z\s\.\-\']+?)\s+(over|under|o|u)\s*\d", re.IGNORECASE)
     return bool(single_team_pattern.match(pick_str.strip()))
 
 
@@ -1391,8 +1355,8 @@ def infer_type_from_pick(pick_str: str, current_type: str) -> str:
 def normalize_pick_format(
     pick_str: str,
     bet_type: str,
-    original_text: Optional[str] = None,
-    league_context: Optional[str] = None,
+    original_text: str | None = None,
+    league_context: str | None = None,
 ) -> str:
     """
     Normalize pick string to match rubric format.
@@ -1499,10 +1463,7 @@ def normalize_pick_format(
                 if ":" in result:
                     parts = result.split(":", 1)
                     # If keyword is in the SECOND part ("Rams: Super Bowl") -> Swap
-                    if (
-                        kw.lower() in parts[1].lower()
-                        and kw.lower() not in parts[0].lower()
-                    ):
+                    if kw.lower() in parts[1].lower() and kw.lower() not in parts[0].lower():
                         result = f"{parts[1].strip()}: {parts[0].strip()}"
                 break  # Only fix based on first keyword found
 
@@ -1521,9 +1482,7 @@ def normalize_pick_format(
         # Normalize "60-Min ML" or "Regulation" to "Regulation Team ML"
         if "60-MIN" in result.upper() or "REGULATION" in result.upper():
             # Strip 60-Min/Regulation from string first
-            result = re.sub(
-                r"\s*(?:60-Min|Regulation)\s*(?:ML)?", "", result, flags=re.IGNORECASE
-            ).strip()
+            result = re.sub(r"\s*(?:60-Min|Regulation)\s*(?:ML)?", "", result, flags=re.IGNORECASE).strip()
             result = f"Regulation {result}"
 
         # Remove parenthesized odds like "(+105)" or "(-110)"
@@ -1533,15 +1492,10 @@ def normalize_pick_format(
         # Add ML suffix if not present
         # BLOCK ML addition if it looks like a Prop (PRA, Rebounds, Threes, etc.) even if type says Moneyline
         is_prop_text = any(
-            k in result.upper()
-            for k in ["PRA", "REB", "AST", "PTS", "THREES", "3PM", "BLOCKS", "STEALS"]
+            k in result.upper() for k in ["PRA", "REB", "AST", "PTS", "THREES", "3PM", "BLOCKS", "STEALS"]
         )
 
-        if (
-            not result.upper().endswith("ML")
-            and not result.upper().endswith("MONEYLINE")
-            and not is_prop_text
-        ):
+        if not result.upper().endswith("ML") and not result.upper().endswith("MONEYLINE") and not is_prop_text:
             # Don't add ML if it's DNB (Draw No Bet)
             if "DNB" not in result.upper() and "DRAW NO BET" not in result.upper():
                 result = f"{result} ML"
@@ -1559,9 +1513,7 @@ def normalize_pick_format(
             team, side, line = match.groups()
             result = f"{team.strip()}: Total Points {side.capitalize()} {line}"
         else:
-            team_total_pattern = re.compile(
-                r"^([A-Za-z\s\.\-\']+?)\s+(over|under)\s+([\d\.]+)$", re.IGNORECASE
-            )
+            team_total_pattern = re.compile(r"^([A-Za-z\s\.\-\']+?)\s+(over|under)\s+([\d\.]+)$", re.IGNORECASE)
             match = team_total_pattern.match(result)
             if match:
                 team, side, line = match.groups()
@@ -1600,9 +1552,7 @@ def normalize_pick_format(
 
         # Pattern 1: Name Num+ STAT (e.g., "Luka Doncic 23+ PTS")
         # Also handle trailing ML/Moneyline noise
-        plus_pattern = re.compile(
-            r"^([\(\)A-Za-z\s\.\-\']+)\s+(\d+)\+\s*(\w+)(?:\s*ML)?$", re.IGNORECASE
-        )
+        plus_pattern = re.compile(r"^([\(\)A-Za-z\s\.\-\']+)\s+(\d+)\+\s*(\w+)(?:\s*ML)?$", re.IGNORECASE)
         match = plus_pattern.match(result)
         if match:
             name, num, stat = match.groups()
@@ -1616,9 +1566,7 @@ def normalize_pick_format(
 
         else:
             # Pattern 2: Name STAT Num+ (e.g., "LeBron Points 25+")
-            alt_pattern = re.compile(
-                r"^([\(\)A-Za-z\s\.\-\']+)\s+(\w+)\s+(\d+)\+$", re.IGNORECASE
-            )
+            alt_pattern = re.compile(r"^([\(\)A-Za-z\s\.\-\']+)\s+(\w+)\s+(\d+)\+$", re.IGNORECASE)
             match = alt_pattern.match(result)
             if match:
                 name, stat, num = match.groups()
@@ -1631,13 +1579,9 @@ def normalize_pick_format(
 
     # PRIORITY 2.5: Normalize Tennis Set Spreads & Totals (Fix misformatting)
     # "Quinn: sets Over 2.5" -> "Quinn +2.5 sets" or "Shelton/Vacherot: sets Over 3.5" -> "Shelton vs Vacherot Over 3.5 sets"
-    if bet_type in ["Spread", "Total"] and (
-        "sets" in result.lower() or "games" in result.lower()
-    ):
+    if bet_type in ["Spread", "Total"] and ("sets" in result.lower() or "games" in result.lower()):
         # Handle "Name: sets Over/Under X" (Prop format applied to Tennis)
-        tennis_prop_pattern = re.compile(
-            r"^(.+?):\s*(?:sets|games)\s+(Over|Under)\s+([\d\.]+)$", re.IGNORECASE
-        )
+        tennis_prop_pattern = re.compile(r"^(.+?):\s*(?:sets|games)\s+(Over|Under)\s+([\d\.]+)$", re.IGNORECASE)
         match = tennis_prop_pattern.match(result)
         if match:
             subject, side, line = match.groups()
@@ -1658,16 +1602,15 @@ def normalize_pick_format(
             # Wait, "Over 2.5 sets" for a player is weird. Usually "Over 12.5 games".
             # If the source text was "Quinn +2.5 sets", extracting it as "Quinn: sets Over 2.5" is the error.
             # We should check if we can restore the spread format.
-            else:
-                # If side is "Over", it might be a + spread. If "Under", maybe -?
-                # Without original context, this is risky. But let's follow the rubric hint.
-                # "Quinn: sets Over 2.5" -> "Quinn +2.5 sets"
-                if side.lower() == "over":
-                    result = f"{subject} +{line} sets"
-                elif side.lower() == "under":
-                    # Under 2.5 sets usually means 2-0 win? Or -2.5 sets?
-                    # Let's assume standard spread notation:
-                    result = f"{subject} -{line} sets"
+            # If side is "Over", it might be a + spread. If "Under", maybe -?
+            # Without original context, this is risky. But let's follow the rubric hint.
+            # "Quinn: sets Over 2.5" -> "Quinn +2.5 sets"
+            elif side.lower() == "over":
+                result = f"{subject} +{line} sets"
+            elif side.lower() == "under":
+                # Under 2.5 sets usually means 2-0 win? Or -2.5 sets?
+                # Let's assume standard spread notation:
+                result = f"{subject} -{line} sets"
 
     # Normalize Over/Under abbreviations (handle edge cases)
     result = re.sub(r"\bO\s+(\d)", r"Over \1", result, flags=re.IGNORECASE)
@@ -1680,9 +1623,7 @@ def normalize_pick_format(
     # "Lakers/Clippers Under 222.5" -> "Lakers vs Clippers Under 222.5"
     if True:
         # Relaxed pattern to catch more cases
-        total_sep_pattern = re.compile(
-            r"(.+?)\s*[/&]\s*(.+?)\s+(over|under|o|u)\s+", re.IGNORECASE
-        )
+        total_sep_pattern = re.compile(r"(.+?)\s*[/&]\s*(.+?)\s+(over|under|o|u)\s+", re.IGNORECASE)
 
         # We use re.sub with a callback to handle multiple occurrences
         def replace_total_sep(m):
@@ -1694,12 +1635,7 @@ def normalize_pick_format(
                 return m.group(0)
 
             # If "vs" or "@" is already in team_a or team_b, don't touch (avoid double fixing)
-            if (
-                " vs " in team_a.lower()
-                or " @ " in team_a
-                or " vs " in team_b.lower()
-                or " @ " in team_b
-            ):
+            if " vs " in team_a.lower() or " @ " in team_a or " vs " in team_b.lower() or " @ " in team_b:
                 return m.group(0)
 
             # Normalize over/under
@@ -1732,9 +1668,7 @@ def normalize_pick_format(
 
         # Only run fallback if type is Total, as it's too aggressive for Parlays without Over/Under check
         if bet_type == "Total":
-            result = re.sub(
-                r"\b([A-Za-z0-9]+)\s*[/&]\s*([A-Za-z0-9]+)\b", replace_sep, result
-            )
+            result = re.sub(r"\b([A-Za-z0-9]+)\s*[/&]\s*([A-Za-z0-9]+)\b", replace_sep, result)
 
     # PRIORITY 4: Normalize Parlays
     if bet_type == "Parlay":
@@ -1766,8 +1700,7 @@ def normalize_pick_format(
                             ]
                         )
                         if not is_tennis_score and not any(
-                            x in leg.upper()
-                            for x in ["ML", "SPREAD", "OVER", "UNDER", "-", "+"]
+                            x in leg.upper() for x in ["ML", "SPREAD", "OVER", "UNDER", "-", "+"]
                         ):
                             leg = f"{leg} ML"
 
@@ -1909,7 +1842,7 @@ def normalize_pick_format(
     return result
 
 
-def extract_structured_fields(pick: Dict[str, Any]) -> Dict[str, Any]:
+def extract_structured_fields(pick: dict[str, Any]) -> dict[str, Any]:
     """
     Extract structured fields from pick string based on type.
 
@@ -1950,9 +1883,7 @@ def extract_structured_fields(pick: Dict[str, Any]) -> Dict[str, Any]:
     # Extract total line
     elif bet_type == "Total":
         # Allow space between O/U and number
-        total_match = re.search(
-            r"(?:over|under|o|u)\s*(\d+\.?\d*)", pick_str, re.IGNORECASE
-        )
+        total_match = re.search(r"(?:over|under|o|u)\s*(\d+\.?\d*)", pick_str, re.IGNORECASE)
         if total_match:
             try:
                 result["line"] = float(total_match.group(1))
@@ -2008,9 +1939,7 @@ def extract_structured_fields(pick: Dict[str, Any]) -> Dict[str, Any]:
     # Extract team prop fields
     elif bet_type == "Team Prop":
         # Format: "Team Name: Stat Over/Under X"
-        team_prop_match = re.match(
-            r"^([^:]+):\s*(.+?)\s+(Over|Under)\s+(\d+\.?\d*)$", pick_str, re.IGNORECASE
-        )
+        team_prop_match = re.match(r"^([^:]+):\s*(.+?)\s+(Over|Under)\s+(\d+\.?\d*)$", pick_str, re.IGNORECASE)
         if team_prop_match:
             result["subject"] = team_prop_match.group(1).strip()
             result["market"] = team_prop_match.group(2).strip()
@@ -2069,9 +1998,7 @@ def extract_structured_fields(pick: Dict[str, Any]) -> Dict[str, Any]:
         # Allow any casing for "Odds:" prefix
         # Capture signed integer > 100
         # Check parens first: "(+140)" or "(Odds: -110)"
-        odds_match = re.search(
-            r"\((?:odds:?\s*)?([+-]\d{3,})\)", original_pick, re.IGNORECASE
-        )
+        odds_match = re.search(r"\((?:odds:?\s*)?([+-]\d{3,})\)", original_pick, re.IGNORECASE)
         if odds_match:
             try:
                 result["odds"] = int(odds_match.group(1))
@@ -2090,7 +2017,7 @@ def extract_structured_fields(pick: Dict[str, Any]) -> Dict[str, Any]:
     return result
 
 
-def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
+def validate_and_correct_pick(pick: dict[str, Any]) -> dict[str, Any]:
     """
     Full post-processing validation and correction for a single pick.
 
@@ -2121,16 +2048,12 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
     # Step 1: Infer correct type
     corrected_type = infer_type_from_pick(pick_str, current_type)
     if corrected_type != current_type:
-        logging.debug(
-            f"[Decoder] Type correction: '{current_type}' -> '{corrected_type}' for pick: {pick_str[:50]}"
-        )
+        logging.debug(f"[Decoder] Type correction: '{current_type}' -> '{corrected_type}' for pick: {pick_str[:50]}")
         result["type"] = corrected_type
 
     # Step 2: Normalize format
     # Pass extracted league to help with parlay formatting
-    normalized_pick = normalize_pick_format(
-        pick_str, corrected_type, league_context=result.get("league")
-    )
+    normalized_pick = normalize_pick_format(pick_str, corrected_type, league_context=result.get("league"))
     if normalized_pick != pick_str:
         result["pick"] = normalized_pick
 
@@ -2139,9 +2062,7 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
     result = extract_structured_fields(result)
 
     # Force default values for missing required fields if extraction failed
-    if result.get("line") is None and (
-        result.get("type") == "Spread" or result.get("type") == "Total"
-    ):
+    if result.get("line") is None and (result.get("type") == "Spread" or result.get("type") == "Total"):
         # Log this failure? Or try harder?
         # For now, let validation catch it, or maybe infer from pick string again
         pass
@@ -2153,9 +2074,7 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
         # Check for cross-sport
         if is_cross_sport_parlay(final_pick):
             if result.get("league") != "Other":
-                logging.debug(
-                    f"[Decoder] Cross-sport parlay detected, setting league='Other': {final_pick[:50]}"
-                )
+                logging.debug(f"[Decoder] Cross-sport parlay detected, setting league='Other': {final_pick[:50]}")
                 result["league"] = "Other"
 
         # Check for single-sport parlay misclassified as "Other"
@@ -2200,17 +2119,13 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
                 )
                 result["type"] = "Spread"
                 # Also strip "ML" if present
-                result["pick"] = re.sub(
-                    r"\s*ML\s*", "", p_str, flags=re.IGNORECASE
-                ).strip()
+                result["pick"] = re.sub(r"\s*ML\s*", "", p_str, flags=re.IGNORECASE).strip()
 
     # RULE 2: If type is Total but pick looks like a Parlay (has "ML" or "/"), force change to Parlay
     if result.get("type") == "Total":
         p_str = result.get("pick") or ""
         if "ML" in p_str or (" / " in p_str and "vs" not in p_str.lower()):
-            logging.debug(
-                f"[Decoder] Strict Rule: Total '{p_str}' looks like Parlay, changing Total -> Parlay"
-            )
+            logging.debug(f"[Decoder] Strict Rule: Total '{p_str}' looks like Parlay, changing Total -> Parlay")
             result["type"] = "Parlay"
             # Re-normalize as parlay
             result["pick"] = normalize_pick_format(p_str, "Parlay")
@@ -2219,7 +2134,7 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
     # If League=TENNIS and pick has "+/- X sets", type MUST be Spread
     if result.get("league") == "TENNIS" and "sets" in result.get("pick", "").lower():
         if result.get("type") == "Player Prop":
-            logging.debug(f"[Decoder] Strict Rule: Tennis set prop -> Spread")
+            logging.debug("[Decoder] Strict Rule: Tennis set prop -> Spread")
             result["type"] = "Spread"
 
     # Step 6: Anti-Hallucination Verification (Source Text Check)
@@ -2227,24 +2142,20 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
     # Check for attached source text (from normalize_response injection)
     source_text = result.get("_source_text")
     if source_text:
-        from src.verification import verify_odds_in_source, verify_line_in_source
+        from src.verification import verify_line_in_source, verify_odds_in_source
 
         # Verify Odds
         if result.get("odds") is not None:
             verified_odds = verify_odds_in_source(result, source_text)
             if verified_odds is None:
-                logging.debug(
-                    f"[Decoder] Anti-Hallucination: Removing odds {result['odds']} (not found in source)"
-                )
+                logging.debug(f"[Decoder] Anti-Hallucination: Removing odds {result['odds']} (not found in source)")
                 result["odds"] = None
 
         # Verify Lines (Spreads/Totals)
         if result.get("line") is not None:
             verified_line = verify_line_in_source(result, source_text)
             if verified_line is None:
-                logging.debug(
-                    f"[Decoder] Anti-Hallucination: Line {result['line']} not found in source"
-                )
+                logging.debug(f"[Decoder] Anti-Hallucination: Line {result['line']} not found in source")
                 # Don't delete line yet, just log warning. Hallucinating lines is rarer than odds.
                 # Often line is implied or slightly different format (e.g. "pk" vs "0")
 
@@ -2256,8 +2167,8 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def validate_and_correct_batch(
-    picks: List[Dict[str, Any]], valid_message_ids: Optional[Sequence[Union[int, str]]] = None
-) -> List[Dict[str, Any]]:
+    picks: list[dict[str, Any]], valid_message_ids: Sequence[int | str] | None = None
+) -> list[dict[str, Any]]:
     """
     Apply post-processing validation to a batch of picks.
 
@@ -2278,7 +2189,7 @@ def validate_and_correct_batch(
         valid_set = set(str(mid) for mid in valid_message_ids if mid is not None)
         before_count = len(validated)
 
-        def get_pick_id_str(p: Dict[str, Any]) -> Optional[str]:
+        def get_pick_id_str(p: dict[str, Any]) -> str | None:
             """Safely extract message_id as str for comparison."""
             # It could be 'message_id' (expanded) or 'i' (compact)
             msg_id = p.get("message_id") or p.get("i")
@@ -2307,9 +2218,7 @@ def validate_and_correct_batch(
             # Log the dropped IDs for debugging
             dropped = [p for p in picks if get_pick_id_str(p) not in valid_set]
             if dropped:
-                logging.warning(
-                    f"Dropped picks sample IDs: {[get_pick_id_str(p) for p in dropped[:5]]}"
-                )
+                logging.warning(f"Dropped picks sample IDs: {[get_pick_id_str(p) for p in dropped[:5]]}")
                 if valid_set:
                     logging.warning(f"Valid set sample: {list(valid_set)[:5]}")
 
@@ -2321,7 +2230,7 @@ def validate_and_correct_batch(
 # =============================================================================
 
 
-def ensure_backward_compatible(pick: Dict[str, Any]) -> Dict[str, Any]:
+def ensure_backward_compatible(pick: dict[str, Any]) -> dict[str, Any]:
     """
     Ensure a pick dict has both old and new field names for transition period.
 

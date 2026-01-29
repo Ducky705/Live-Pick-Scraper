@@ -1,14 +1,12 @@
 import json
+import logging
 import os
 import sys
-import logging
-from typing import List, Dict, Any
 
 # Setup path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from src.extraction_pipeline import ExtractionPipeline
-from src.utils import clean_text_for_ai
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -23,22 +21,10 @@ def normalize_string(s):
     # Replace common separators with space
     s = s.replace("/", " ").replace("-", " ").replace(":", " ").replace("|", " ")
     # Remove quotes and parentheses
-    s = (
-        s.replace("'", "")
-        .replace('"', "")
-        .replace("“", "")
-        .replace("”", "")
-        .replace("(", "")
-        .replace(")", "")
-    )
+    s = s.replace("'", "").replace('"', "").replace("“", "").replace("”", "").replace("(", "").replace(")", "")
 
     # Remove common betting noise
-    s = (
-        s.replace(" vs ", " ")
-        .replace(" versus ", " ")
-        .replace(" @ ", " ")
-        .replace(" games", "")
-    )
+    s = s.replace(" vs ", " ").replace(" versus ", " ").replace(" @ ", " ").replace(" games", "")
 
     # Normalizations
     s = s.replace("dnb", "draw no bet")
@@ -81,11 +67,7 @@ def fuzzy_match(expected, actual):
         return False
     ratio = len(intersection) / len(exp_tokens)
 
-    pick_match = (
-        (ratio >= 0.5)
-        or (exp_pick_raw in act_pick_raw)
-        or (act_pick_raw in exp_pick_raw)
-    )
+    pick_match = (ratio >= 0.5) or (exp_pick_raw in act_pick_raw) or (act_pick_raw in exp_pick_raw)
 
     # 2. League/Sport
     exp_league = normalize_string(expected.get("league"))
@@ -131,9 +113,7 @@ def fuzzy_match(expected, actual):
             # Allow slight difference (e.g. 1.90 vs 1.91 or -110 vs -115)
             # We allow a variance of 5 points for American odds or 0.05 for Decimal
             if abs(exp_odd) > 5.0:  # Likely American
-                odds_match = (
-                    abs(exp_odd - act_odd) <= 10.0
-                )  # Allow -110 vs -115 difference
+                odds_match = abs(exp_odd - act_odd) <= 10.0  # Allow -110 vs -115 difference
             else:
                 odds_match = abs(exp_odd - act_odd) <= 0.05
         except:
@@ -165,7 +145,7 @@ def fuzzy_match(expected, actual):
 def run_verification():
     print("Loading Golden Set...")
     try:
-        with open("new_golden_set.json", "r", encoding="utf-8") as f:
+        with open("new_golden_set.json", encoding="utf-8") as f:
             golden_set = json.load(f)
     except FileNotFoundError:
         print("Error: new_golden_set.json not found.")
@@ -205,9 +185,7 @@ def run_verification():
         return
 
     end_time = os.times().elapsed
-    print(
-        f"Pipeline finished in {end_time - start_time:.2f}s. Extracted {len(actual_picks)} picks."
-    )
+    print(f"Pipeline finished in {end_time - start_time:.2f}s. Extracted {len(actual_picks)} picks.")
 
     if actual_picks:
         print("DEBUG: First pick keys:", actual_picks[0].keys())
@@ -254,9 +232,7 @@ def run_verification():
                     found = True
                     matched_indices.add(i)
                     total_correct += 1
-                    print(
-                        f"  [PASS] {exp['pick']} ({exp.get('odds')}) -> {act['pick']} ({act.get('odds')})"
-                    )
+                    print(f"  [PASS] {exp['pick']} ({exp.get('odds')}) -> {act['pick']} ({act.get('odds')})")
                     break
 
             if not found:

@@ -1,5 +1,4 @@
 import json
-import collections
 from collections import Counter
 
 OUTPUT_FILE = r"D:\Programs\Sports Betting\TelegramScraper\v0.0.15\data\output\verified_messages_2026-01-24.json"
@@ -7,7 +6,7 @@ OUTPUT_FILE = r"D:\Programs\Sports Betting\TelegramScraper\v0.0.15\data\output\v
 
 def generate_report():
     try:
-        with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+        with open(OUTPUT_FILE, encoding="utf-8") as f:
             messages = json.load(f)
     except FileNotFoundError:
         print(f"File not found: {OUTPUT_FILE}")

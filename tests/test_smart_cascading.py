@@ -1,9 +1,9 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
+
 from src.parallel_batch_processor import (
-    ParallelBatchProcessor,
     ComplexityRouter,
-    SmartCircuitBreaker,
+    ParallelBatchProcessor,
 )
 
 

@@ -1,15 +1,16 @@
 # src/telegram_client.py
-import os
 import asyncio
-import random
 import logging
+import os
+import random
 from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger(__name__)
 from telethon import TelegramClient
-from telethon.errors import SessionPasswordNeededError, FloodWaitError
+from telethon.errors import FloodWaitError, SessionPasswordNeededError
 from telethon.tl.types import MessageMediaPhoto
-from config import API_ID, API_HASH, TEMP_IMG_DIR, SESSION_FILE_PATH
+
+from config import API_HASH, API_ID, SESSION_FILE_PATH, TEMP_IMG_DIR
 
 
 class TelegramManager:
@@ -39,9 +40,7 @@ class TelegramManager:
         Ensures the client is initialized on the CURRENT event loop (Background Thread).
         """
         if self.client is None:
-            logger.debug(
-                f"[DEBUG] Initializing Telegram Client on Loop: {id(asyncio.get_running_loop())}"
-            )
+            logger.debug(f"[DEBUG] Initializing Telegram Client on Loop: {id(asyncio.get_running_loop())}")
             logger.debug(f"[DEBUG] Session Path: {SESSION_FILE_PATH}")
 
             # Force integer ID
@@ -199,21 +198,15 @@ class TelegramManager:
                         await client.download_media(message, path, thumb="x")
                     except Exception:
                         # Thumbnail not available (common for older messages), try full image
-                        logger.warning(
-                            f"[Fallback] Thumbnail unavailable for {filename}, downloading full image..."
-                        )
-                        await client.download_media(
-                            message, path
-                        )  # No thumb = full image
+                        logger.warning(f"[Fallback] Thumbnail unavailable for {filename}, downloading full image...")
+                        await client.download_media(message, path)  # No thumb = full image
 
                     return path if os.path.exists(path) else None
                 except FloodWaitError as e:
                     logger.warning(f"[Anti-Flood] Sleeping {e.seconds}s...")
                     await asyncio.sleep(e.seconds + 1)
                     try:
-                        await client.download_media(
-                            message, path
-                        )  # Retry with full image
+                        await client.download_media(message, path)  # Retry with full image
                         return path if os.path.exists(path) else None
                     except:
                         return None
@@ -224,9 +217,7 @@ class TelegramManager:
         for i, channel_id in enumerate(channel_ids):
             # Report Progress - Channel reading gets 0-10% of the bar (fast)
             percent = int((i / len(channel_ids)) * 10)
-            await self._report_progress(
-                percent, f"Reading Channel {i + 1}/{len(channel_ids)}..."
-            )
+            await self._report_progress(percent, f"Reading Channel {i + 1}/{len(channel_ids)}...")
 
             if i > 0:
                 await asyncio.sleep(random.uniform(1.5, 3.5))
@@ -245,14 +236,10 @@ class TelegramManager:
                 try:
                     # Calculate offset_date: Start of the day AFTER target date (in ET)
                     # This ensures we fetch messages starting from midnight after target date, going backwards
-                    offset_dt = datetime.combine(
-                        target_date_obj + timedelta(days=1), datetime.min.time()
-                    )
+                    offset_dt = datetime.combine(target_date_obj + timedelta(days=1), datetime.min.time())
                     offset_dt = offset_dt.replace(tzinfo=ET_OFFSET)
 
-                    async for message in client.iter_messages(
-                        entity, limit=500, offset_date=offset_dt
-                    ):
+                    async for message in client.iter_messages(entity, limit=500, offset_date=offset_dt):
                         if not message.date:
                             continue
 
@@ -281,13 +268,9 @@ class TelegramManager:
                         }
 
                         # IMAGE HANDLING
-                        if message.media and isinstance(
-                            message.media, MessageMediaPhoto
-                        ):
+                        if message.media and isinstance(message.media, MessageMediaPhoto):
                             filename = f"{channel_id}_{message.id}.jpg"
-                            task = asyncio.create_task(
-                                download_image_task(message, filename)
-                            )
+                            task = asyncio.create_task(download_image_task(message, filename))
                             # We store the task/metadata temporarily
                             msg_dict["pending_download"] = (task, filename)
 
@@ -313,20 +296,14 @@ class TelegramManager:
                                     if "pending_downloads" not in existing:
                                         existing["pending_downloads"] = []
                                         if "pending_download" in existing:
-                                            existing["pending_downloads"].append(
-                                                existing["pending_download"]
-                                            )
+                                            existing["pending_downloads"].append(existing["pending_download"])
                                             del existing["pending_download"]
 
-                                    existing["pending_downloads"].append(
-                                        msg_dict["pending_download"]
-                                    )
+                                    existing["pending_downloads"].append(msg_dict["pending_download"])
                         else:
                             # Single Message - Add immediately (but handle deferred download)
                             if "pending_download" in msg_dict:
-                                msg_dict["pending_downloads"] = [
-                                    msg_dict["pending_download"]
-                                ]
+                                msg_dict["pending_downloads"] = [msg_dict["pending_download"]]
                                 del msg_dict["pending_download"]
                             all_messages.append(msg_dict)
 
@@ -361,9 +338,7 @@ class TelegramManager:
             for i, (msg_dict, task, filename) in enumerate(download_tasks):
                 # Update progress for each file (10% to 95%)
                 percent = 10 + int((i / total_downloads) * 85)
-                await self._report_progress(
-                    percent, f"Downloading {i + 1}/{total_downloads}..."
-                )
+                await self._report_progress(percent, f"Downloading {i + 1}/{total_downloads}...")
 
                 result = await task
                 if result:

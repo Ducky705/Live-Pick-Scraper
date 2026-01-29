@@ -14,17 +14,13 @@ ESPN_LEAGUE_MAP = {
     "wnba": ("basketball", "wnba"),
     "ncaab": ("basketball", "mens-college-basketball"),
     "wncaab": ("basketball", "womens-college-basketball"),
-    
     # Football
     "nfl": ("football", "nfl"),
     "ncaaf": ("football", "college-football"),
-    
     # Hockey
     "nhl": ("hockey", "nhl"),
-    
     # Baseball
     "mlb": ("baseball", "mlb"),
-    
     # Soccer
     "epl": ("soccer", "eng.1"),
     "mls": ("soccer", "usa.1"),
@@ -35,25 +31,20 @@ ESPN_LEAGUE_MAP = {
     "seriea": ("soccer", "ita.1"),
     "ligue1": ("soccer", "fra.1"),
     "nwsl": ("soccer", "usa.nwsl"),
-    
     # MMA/Combat
     "ufc": ("mma", "ufc"),
     "pfl": ("mma", "pfl"),
-    
     # Tennis
     "tennis": ("tennis", "atp"),
     "atp": ("tennis", "atp"),
     "wta": ("tennis", "wta"),
-    
     # Racing
     "f1": ("racing", "f1"),
     "nascar": ("racing", "nascar-premier"),
     "indycar": ("racing", "irl"),
-    
     # Golf
     "pga": ("golf", "pga"),
     "lpga": ("golf", "lpga"),
-    
     # Lacrosse
     "pll": ("lacrosse", "pll"),
 }
@@ -76,7 +67,6 @@ LEAGUE_ALIASES_MAP = {
     "atp": "atp",
     "wta": "wta",
     "pga": "pga",
-    
     # Aliases
     "cfb": "ncaaf",
     "mcb": "ncaab",
@@ -93,10 +83,7 @@ LEAGUE_ALIASES_MAP = {
 }
 
 # Soccer leagues (for 3-way ML handling)
-SOCCER_LEAGUES = {
-    "epl", "mls", "ucl", "championship", "laliga", 
-    "bundesliga", "seriea", "ligue1", "nwsl"
-}
+SOCCER_LEAGUES = {"epl", "mls", "ucl", "championship", "laliga", "bundesliga", "seriea", "ligue1", "nwsl"}
 
 # Individual sports (use athlete names, not team names)
 INDIVIDUAL_SPORTS = {"ufc", "pfl", "atp", "wta", "tennis", "pga", "lpga", "f1", "nascar", "indycar"}
@@ -117,7 +104,6 @@ STAT_KEY_MAP = {
     "3pm": ["threepointfieldgoalsmade", "3pm", "fg3m", "threepointersmade"],
     "pra": ["pts+reb+ast"],  # Calculated
     "pts+reb+ast": ["pts+reb+ast"],  # Calculated
-    
     # FOOTBALL
     "passyds": ["passingyards", "passyds", "passyards"],
     "rushyds": ["rushingyards", "rushyds", "rushyards"],
@@ -129,7 +115,6 @@ STAT_KEY_MAP = {
     "comp": ["completions", "comp", "passingcompletions"],
     "int": ["interceptions", "int", "passinginterceptions"],
     "att": ["attempts", "att", "rushingcarries", "carries"],
-    
     # BASEBALL
     "k": ["strikeouts", "k", "pitchingstrikeouts", "batterstrikeouts"],
     "h": ["hits", "h"],
@@ -140,7 +125,6 @@ STAT_KEY_MAP = {
     "totalbases": ["totalbases", "tb"],
     "bb": ["walks", "bb", "baseonballs"],
     "sb": ["stolenbases", "sb"],
-    
     # HOCKEY
     "g": ["goals", "g"],
     "a": ["assists", "a"],

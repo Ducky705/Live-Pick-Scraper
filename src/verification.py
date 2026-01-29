@@ -4,11 +4,10 @@ Verification Module
 Anti-Hallucination layer that verifies extracted values against the original source text.
 """
 
-import re
-from typing import Dict, Any, Optional
+from typing import Any
 
 
-def verify_odds_in_source(pick: Dict[str, Any], source_text: str) -> Optional[int]:
+def verify_odds_in_source(pick: dict[str, Any], source_text: str) -> int | None:
     """
     Verify that the extracted odds actually exist in the source text.
     Returns the odds if found, or None if hallucinated.
@@ -65,11 +64,7 @@ def verify_odds_in_source(pick: Dict[str, Any], source_text: str) -> Optional[in
     # If -110 was hallucinated (very common default), strict check
     if odds_val == -110:
         # If specific markers aren't found, reject it
-        if (
-            "-110" not in source_text
-            and "1.91" not in source_text
-            and "110" not in source_text
-        ):
+        if "-110" not in source_text and "1.91" not in source_text and "110" not in source_text:
             # CHECK: Did the source have DIFFERENT odds that we missed?
             # e.g. Source: "Oilers -175" -> AI: -110 (wrong) -> We should return None to strip it
             # But maybe we can find the real odds?
@@ -79,7 +74,7 @@ def verify_odds_in_source(pick: Dict[str, Any], source_text: str) -> Optional[in
     return odds_val
 
 
-def verify_line_in_source(pick: Dict[str, Any], source_text: str) -> Optional[float]:
+def verify_line_in_source(pick: dict[str, Any], source_text: str) -> float | None:
     """
     Verify that the spread/total line exists in the source text.
     Prevents "Utah State -4" becoming "Moneyline" (and losing the -4)

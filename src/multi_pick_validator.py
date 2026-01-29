@@ -13,10 +13,10 @@ Solution:
 - Flag discrepancies for re-processing
 """
 
-import re
 import logging
+import re
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any
 
 
 @dataclass
@@ -25,7 +25,7 @@ class PickCountEstimate:
 
     estimated_count: int
     confidence: float  # 0-1
-    signals: List[str]  # What indicated this count
+    signals: list[str]  # What indicated this count
     has_parlay: bool
     has_multiple_cappers: bool
 
@@ -76,9 +76,7 @@ class MultiPickValidator:
         re.IGNORECASE,
     )
     OVER_UNDER_PATTERN = re.compile(r"\b(?:over|under|o|u)\s*\d+\.?\d*", re.IGNORECASE)
-    PARLAY_LEG_PATTERN = re.compile(
-        r"(\d+)\s*(?:leg|pick|team|way)\s*(?:parlay)?", re.IGNORECASE
-    )
+    PARLAY_LEG_PATTERN = re.compile(r"(\d+)\s*(?:leg|pick|team|way)\s*(?:parlay)?", re.IGNORECASE)
     BULLET_PATTERN = re.compile(r"^[\s]*[-•●◦▪︎★✓✔☑✅❌]\s*\S", re.MULTILINE)
     NUMBERED_PATTERN = re.compile(r"^\s*\d+[.):\-]\s*\S", re.MULTILINE)
     CHECKMARK_PATTERN = re.compile(r"[✓✔☑✅❌⭕🔴🟢]")
@@ -175,9 +173,7 @@ class MultiPickValidator:
         estimated_count = sorted_estimates[median_idx]
 
         # Confidence based on signal agreement
-        agreement_ratio = sum(
-            1 for e in estimates if abs(e - estimated_count) <= 1
-        ) / len(estimates)
+        agreement_ratio = sum(1 for e in estimates if abs(e - estimated_count) <= 1) / len(estimates)
         confidence = min(0.9, 0.5 + (agreement_ratio * 0.4))
 
         return PickCountEstimate(
@@ -192,9 +188,9 @@ class MultiPickValidator:
     def validate_extraction(
         cls,
         ocr_text: str,
-        parsed_picks: List[Dict[str, Any]],
+        parsed_picks: list[dict[str, Any]],
         caption: str = "",
-        message_id: Optional[int] = None,
+        message_id: int | None = None,
     ) -> ValidationResult:
         """
         Validate that extracted picks match expected count.
@@ -209,7 +205,7 @@ class MultiPickValidator:
         combined_text = f"{ocr_text}\n{caption}"
         team_matches = cls.TEAM_PATTERN.findall(combined_text)
         uncovered_teams = []
-        
+
         parsed_teams = set()
         for p in parsed_picks:
             # Handle potential None values safely
@@ -222,12 +218,14 @@ class MultiPickValidator:
             parts = tm_lower.split()
             found = False
             for part in parts:
-                 if len(part) < 3: continue 
-                 for p_sel in parsed_teams:
-                     if part in p_sel:
-                         found = True
-                         break
-                 if found: break
+                if len(part) < 3:
+                    continue
+                for p_sel in parsed_teams:
+                    if part in p_sel:
+                        found = True
+                        break
+                if found:
+                    break
             if not found:
                 uncovered_teams.append(tm)
 
@@ -239,7 +237,7 @@ class MultiPickValidator:
             # RELAXED TOLERANCE (US-006): Be less aggressive.
             # Only enforce strict count if we are VERY confident (> 0.85)
             tolerance = 0 if estimate.confidence > 0.85 else 1
-        
+
         is_valid = missing_count <= tolerance
 
         # Determine if we should retry
@@ -253,19 +251,23 @@ class MultiPickValidator:
         if is_valid:
             reason_parts.append(f"Extraction complete: {actual_count} picks (expected ~{estimate.estimated_count})")
         else:
-            reason_parts.append(f"Potential missing picks: got {actual_count}, expected ~{estimate.estimated_count}. Signals: {', '.join(estimate.signals[:3])}")
+            reason_parts.append(
+                f"Potential missing picks: got {actual_count}, expected ~{estimate.estimated_count}. Signals: {', '.join(estimate.signals[:3])}"
+            )
 
         # Override validity if uncovered teams found
         if uncovered_teams:
-             # US-006: Less aggressive validation
-             # Only flag if we found ZERO picks. 
-             # If we found some picks and are within tolerance, ignore uncovered teams (likely opponents).
-             if actual_count == 0:
-                 needs_reparse = True
-                 reason_parts.append(f"Uncovered Teams (No picks): {len(uncovered_teams)} ({', '.join(uncovered_teams[:2])}...)")
-             elif needs_reparse:
-                 # Just add context if we are already reparsing
-                 reason_parts.append(f"Uncovered Teams: {len(uncovered_teams)}")
+            # US-006: Less aggressive validation
+            # Only flag if we found ZERO picks.
+            # If we found some picks and are within tolerance, ignore uncovered teams (likely opponents).
+            if actual_count == 0:
+                needs_reparse = True
+                reason_parts.append(
+                    f"Uncovered Teams (No picks): {len(uncovered_teams)} ({', '.join(uncovered_teams[:2])}...)"
+                )
+            elif needs_reparse:
+                # Just add context if we are already reparsing
+                reason_parts.append(f"Uncovered Teams: {len(uncovered_teams)}")
 
         reason = " | ".join(reason_parts)
 
@@ -283,15 +285,13 @@ class MultiPickValidator:
         )
 
     @classmethod
-    def get_reparse_hint(
-        cls, ocr_text: str, parsed_picks: List[Dict[str, Any]], caption: str = ""
-    ) -> str:
+    def get_reparse_hint(cls, ocr_text: str, parsed_picks: list[dict[str, Any]], caption: str = "") -> str:
         """
         Generate a terse hint for AI to re-parse (optimized for < 500 tokens).
         """
         estimate = cls.estimate_pick_count(ocr_text, caption)
         actual_count = len(parsed_picks)
-        
+
         # Extremely compact hint
         signals_str = ", ".join(estimate.signals[:3])
         hint = (
@@ -300,10 +300,10 @@ class MultiPickValidator:
             f"Signals: {signals_str}.\n"
             f"ACTION: Extract ALL picks/legs. Look closely at image/text."
         )
-        
+
         if estimate.has_parlay:
             hint += " PARLAY DETECTED: Extract every leg."
-            
+
         if estimate.has_multiple_cappers:
             hint += " MULTI-CAPPER: Sep by capper."
 
@@ -311,8 +311,8 @@ class MultiPickValidator:
 
 
 def validate_and_flag_missing(
-    messages: List[Dict[str, Any]], parsed_picks: List[Dict[str, Any]]
-) -> Tuple[List[Dict[str, Any]], List[int]]:
+    messages: list[dict[str, Any]], parsed_picks: list[dict[str, Any]]
+) -> tuple[list[dict[str, Any]], list[int]]:
     """
     Validate all messages and flag those with potentially missing picks.
 
@@ -358,6 +358,6 @@ def validate_and_flag_missing(
         )
 
         if result.needs_reparse:
-            needs_reparse.append(mid_str) # Return string ID
+            needs_reparse.append(mid_str)  # Return string ID
 
     return parsed_picks, needs_reparse

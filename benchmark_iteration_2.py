@@ -1,9 +1,7 @@
+import logging
 import os
 import sys
-import json
 import time
-import logging
-from typing import List, Dict
 
 # Setup
 sys.path.insert(0, os.path.abspath("."))
@@ -51,9 +49,7 @@ TEST_MESSAGES = [
 
 
 def run_benchmark():
-    logger.info(
-        "Starting Ralph Wiggum Loop - Iteration 2 (Performance Optimization)..."
-    )
+    logger.info("Starting Ralph Wiggum Loop - Iteration 2 (Performance Optimization)...")
     logger.info(f"Test Set: {len(TEST_MESSAGES)} messages")
     logger.info("Testing Strategy: Groq Priority (Batch Size=5)")
 
@@ -62,9 +58,7 @@ def run_benchmark():
     # Run Pipeline
     try:
         # Use batch_size=5 as per Iteration 2 specs
-        picks = ExtractionPipeline.run(
-            TEST_MESSAGES, target_date="2024-01-28", batch_size=5
-        )
+        picks = ExtractionPipeline.run(TEST_MESSAGES, target_date="2024-01-28", batch_size=5)
         success = True
     except Exception as e:
         logger.error(f"Pipeline failed: {e}")

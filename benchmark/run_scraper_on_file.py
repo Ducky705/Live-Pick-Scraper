@@ -1,37 +1,24 @@
 import json
+import logging
 import os
 import sys
-import asyncio
-import logging
-from typing import List, Dict, Any
 
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.extraction_pipeline import ExtractionPipeline
-from src.utils import backfill_odds
-from src.game_enricher import enrich_picks
-from src.pick_deduplicator import deduplicate_by_capper
 
 # Setup logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("ScraperRunner")
 
 
 def main():
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Run ExtractionPipeline on a local JSON file"
-    )
-    parser.add_argument(
-        "--input", type=str, required=True, help="Input messages JSON file"
-    )
-    parser.add_argument(
-        "--output", type=str, required=True, help="Output picks JSON file"
-    )
+    parser = argparse.ArgumentParser(description="Run ExtractionPipeline on a local JSON file")
+    parser.add_argument("--input", type=str, required=True, help="Input messages JSON file")
+    parser.add_argument("--output", type=str, required=True, help="Output picks JSON file")
     args = parser.parse_args()
 
     input_path = args.input
@@ -42,7 +29,7 @@ def main():
         return
 
     logger.info(f"Loading messages from {input_path}...")
-    with open(input_path, "r", encoding="utf-8") as f:
+    with open(input_path, encoding="utf-8") as f:
         data = json.load(f)
 
     # Handle wrapped format

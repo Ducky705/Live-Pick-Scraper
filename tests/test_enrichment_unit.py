@@ -1,5 +1,6 @@
-from src.enrichment.engine import EnrichmentEngine
 import asyncio
+
+from src.enrichment.engine import EnrichmentEngine
 from src.models import BetPick
 
 

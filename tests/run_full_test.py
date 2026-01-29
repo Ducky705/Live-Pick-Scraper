@@ -1,26 +1,23 @@
+import asyncio
+import difflib
 import json
+import logging
 import os
 import sys
-import asyncio
-import logging
-from typing import List, Dict, Any
-import difflib
 
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.models import BetPick
-from src.grader import grade_picks
-from src.score_fetcher import fetch_scores_for_date
-from src.prompt_builder import generate_ai_prompt
-from src.openrouter_client import openrouter_completion
-from src.prompts.decoder import normalize_response
 from src.enrichment.engine import EnrichmentEngine  # Import the new engine
+from src.grader import grade_picks
+from src.models import BetPick
+from src.openrouter_client import openrouter_completion
+from src.prompt_builder import generate_ai_prompt
+from src.prompts.decoder import normalize_response
+from src.score_fetcher import fetch_scores_for_date
 
 # Setup logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("FullRegression")
 
 GOLDEN_SET_PATH = os.path.join(os.path.dirname(__file__), "../new_golden_set.json")
@@ -37,7 +34,7 @@ async def run_test():
         logger.error("No golden set found!")
         return
 
-    with open(GOLDEN_SET_PATH, "r", encoding="utf-8") as f:
+    with open(GOLDEN_SET_PATH, encoding="utf-8") as f:
         test_cases = json.load(f)
 
     logger.info(f"Loaded {len(test_cases)} test cases.")
@@ -56,9 +53,7 @@ async def run_test():
         msg = {
             "id": case["id"],
             "text": case["text"],
-            "images": case.get(
-                "images", []
-            ),  # Paths might be broken, but text is primary
+            "images": case.get("images", []),  # Paths might be broken, but text is primary
             "date": case["date"],
         }
 
@@ -73,9 +68,7 @@ async def run_test():
             max_retries = 3
             for attempt in range(max_retries):
                 try:
-                    response = openrouter_completion(
-                        prompt, model="google/gemini-2.0-flash-exp:free"
-                    )
+                    response = openrouter_completion(prompt, model="google/gemini-2.0-flash-exp:free")
                     extracted_picks = normalize_response(response, expand=True)
                     if extracted_picks:
                         break  # Success
@@ -183,16 +176,10 @@ async def run_test():
                             logger.error(
                                 f"  [GRADE MISMATCH] '{exp['pick']}' -> System: {sys_grade} vs Verified: {verified_grade}"
                             )
-                            logger.error(
-                                f"     System Proof: {best_match.get('score_summary')}"
-                            )
-                            logger.error(
-                                f"     Verified Proof: {exp.get('verification_proof')}"
-                            )
+                            logger.error(f"     System Proof: {best_match.get('score_summary')}")
+                            logger.error(f"     Verified Proof: {exp.get('verification_proof')}")
                     else:
-                        logger.info(
-                            f"  [Pick Found] '{exp['pick']}' (Grade: {sys_grade} - Verification unavailable)"
-                        )
+                        logger.info(f"  [Pick Found] '{exp['pick']}' (Grade: {sys_grade} - Verification unavailable)")
                 else:
                     logger.warning(f"  [MISSING] Could not find pick: '{exp['pick']}'")
 
@@ -203,14 +190,8 @@ async def run_test():
     print("\n" + "=" * 60)
     print("               FINAL REGRESSION RESULTS")
     print("=" * 60)
-    recall = (
-        (total_picks_found / total_picks_expected * 100) if total_picks_expected else 0
-    )
-    grade_acc = (
-        (total_grades_matched / total_verified_grades * 100)
-        if total_verified_grades
-        else 0
-    )
+    recall = (total_picks_found / total_picks_expected * 100) if total_picks_expected else 0
+    grade_acc = (total_grades_matched / total_verified_grades * 100) if total_verified_grades else 0
 
     print(f"Total Test Cases: {len(test_cases)}")
     print(f"Total Picks Expected: {total_picks_expected}")

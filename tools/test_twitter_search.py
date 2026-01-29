@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+
 from dotenv import load_dotenv
 from twikit import Client
 
@@ -36,9 +37,7 @@ async def main():
 
         print(f"Found {len(results)} tweets.")
         for tweet in results:
-            print(
-                f"- [@{tweet.user.screen_name}] {tweet.created_at}: {tweet.text[:50]}..."
-            )
+            print(f"- [@{tweet.user.screen_name}] {tweet.created_at}: {tweet.text[:50]}...")
 
     except Exception as e:
         print(f"Search Error: {e}")

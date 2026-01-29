@@ -1,5 +1,4 @@
 from src.grading.parser import PickParser
-from src.grading.schema import BetType
 
 
 def test(text):

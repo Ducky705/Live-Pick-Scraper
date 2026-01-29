@@ -2,9 +2,7 @@ import json
 import random
 
 
-def generate_stress_dataset(
-    output_path="benchmark/dataset/stress_test_500.json", count=500
-):
+def generate_stress_dataset(output_path="benchmark/dataset/stress_test_500.json", count=500):
     dataset = []
 
     # Simple templates (Rule-based)

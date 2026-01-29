@@ -6,13 +6,12 @@ Runs the local pipeline against the saved Goldenset Truth.
 Calculates Precision, Recall, F1, and Field-Level Accuracy.
 """
 
+import asyncio
 import json
-import os
 import sys
 import time
-from pathlib import Path
 from collections import defaultdict
-import asyncio
+from pathlib import Path
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -23,7 +22,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # --- IMPORT PIPELINE COMPONENTS ---
-from src.auto_processor import auto_select_messages
 from src.parallel_batch_processor import parallel_processor
 from src.prompts.decoder import normalize_response
 from src.utils import backfill_odds
@@ -45,7 +43,7 @@ class Colors:
 
 
 def load_json(path):
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -142,16 +140,10 @@ def compare_picks(local_picks, truth_picks):
                 matches.append((t_pick, best_match))
 
                 # Check fields
-                if (
-                    str(t_pick.get("league")).lower()
-                    == str(best_match.get("league")).lower()
-                ):
+                if str(t_pick.get("league")).lower() == str(best_match.get("league")).lower():
                     detailed_stats["league_matches"] += 1
 
-                if (
-                    str(t_pick.get("type")).lower()
-                    == str(best_match.get("type")).lower()
-                ):
+                if str(t_pick.get("type")).lower() == str(best_match.get("type")).lower():
                     detailed_stats["type_matches"] += 1
 
                 # Odds (allow slight variation or None)
@@ -159,9 +151,7 @@ def compare_picks(local_picks, truth_picks):
                 l_odds = best_match.get("odds")
                 if t_odds == l_odds:
                     detailed_stats["odds_matches"] += 1
-                elif (
-                    t_odds and l_odds and abs(int(t_odds) - int(l_odds)) <= 5
-                ):  # Tolerance
+                elif t_odds and l_odds and abs(int(t_odds) - int(l_odds)) <= 5:  # Tolerance
                     detailed_stats["odds_matches"] += 1
 
                 # Units
@@ -233,11 +223,7 @@ def generate_report(tp, fp, fn, stats, duration):
     """Generate Markdown report"""
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-    f1 = (
-        2 * (precision * recall) / (precision + recall)
-        if (precision + recall) > 0
-        else 0
-    )
+    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
     total = stats["total_matched_picks"]
     acc_league = stats["league_matches"] / total if total > 0 else 0
@@ -307,9 +293,7 @@ def main():
     try:
         print("\n" + report)
     except UnicodeEncodeError:
-        print(
-            "\n[Report suppressed due to console encoding error. See benchmark_report.md]"
-        )
+        print("\n[Report suppressed due to console encoding error. See benchmark_report.md]")
 
     with open(REPORT_FILE, "w", encoding="utf-8") as f:
         f.write(report)

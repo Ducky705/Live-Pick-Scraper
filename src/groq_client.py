@@ -1,10 +1,10 @@
-import os
-import requests
+import base64
 import json
 import logging
-import time
-import base64
+import os
 from threading import Semaphore
+
+import requests
 
 # MAXIMUM SPEED: Groq allows 1000 RPM = 16 concurrent requests
 # Replace single Lock with Semaphore for parallel execution
@@ -14,9 +14,7 @@ LOCK_ACQUIRE_TIMEOUT = 30  # Reduced from 300s for faster failure
 
 # Model Configuration - User-specified high-performance models
 DEFAULT_TEXT_MODEL = "llama-3.3-70b-versatile"  # User's choice - best quality
-DEFAULT_VISION_MODEL = (
-    "meta-llama/llama-4-scout-17b-16e-instruct"  # Updated to Llama 4 Scout (Preview)
-)
+DEFAULT_VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"  # Updated to Llama 4 Scout (Preview)
 
 # Available models with rate limits (1000 RPM each)
 GROQ_MODELS = {
@@ -43,16 +41,13 @@ def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, time
 
     # Encode image (supports file path or base64)
     try:
-        if isinstance(image_input, str) and (
-            len(image_input) < 1000 or os.path.exists(image_input)
-        ):
+        if isinstance(image_input, str) and (len(image_input) < 1000 or os.path.exists(image_input)):
             with open(image_input, "rb") as f:
                 image_data = base64.b64encode(f.read()).decode("utf-8")
+        elif isinstance(image_input, bytes):
+            image_data = base64.b64encode(image_input).decode("utf-8")
         else:
-            if isinstance(image_input, bytes):
-                image_data = base64.b64encode(image_input).decode("utf-8")
-            else:
-                image_data = image_input if image_input else ""
+            image_data = image_input if image_input else ""
     except Exception as e:
         logging.error(f"[Groq] Failed to process image input: {e}")
         return None
@@ -83,9 +78,7 @@ def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, time
                 return None
 
             try:
-                response = requests.post(
-                    url, headers=headers, json=payload, timeout=timeout
-                )
+                response = requests.post(url, headers=headers, json=payload, timeout=timeout)
             finally:
                 GLOBAL_GROQ_SEMAPHORE.release()
 
@@ -121,9 +114,7 @@ def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, time
     return None
 
 
-def groq_text_completion(
-    prompt, model=DEFAULT_TEXT_MODEL, timeout=60, validate_json=True
-):
+def groq_text_completion(prompt, model=DEFAULT_TEXT_MODEL, timeout=60, validate_json=True):
     """
     Calls Groq API for text-only tasks (parsing).
     MAXIMUM SPEED: 16 concurrent requests allowed (1000 RPM).
@@ -157,9 +148,7 @@ def groq_text_completion(
                 return None
 
             try:
-                response = requests.post(
-                    url, headers=headers, json=payload, timeout=timeout
-                )
+                response = requests.post(url, headers=headers, json=payload, timeout=timeout)
             finally:
                 GLOBAL_GROQ_SEMAPHORE.release()
 
@@ -172,9 +161,7 @@ def groq_text_completion(
                             json.loads(content)
                             return content
                         except json.JSONDecodeError:
-                            logging.warning(
-                                f"[Groq] Invalid JSON response. Retrying..."
-                            )
+                            logging.warning("[Groq] Invalid JSON response. Retrying...")
                             continue
                     return content
                 except KeyError:

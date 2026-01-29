@@ -1,9 +1,7 @@
+import logging
 import os
 import sys
-import json
 import time
-import logging
-from typing import List, Dict
 
 # Setup
 sys.path.insert(0, os.path.abspath("."))
@@ -51,9 +49,7 @@ TEST_MESSAGES = [
 
 
 def run_benchmark():
-    logger.info(
-        "Starting Ralph Wiggum Loop - Iteration 3 (Optimization: Round Robin Strategy)..."
-    )
+    logger.info("Starting Ralph Wiggum Loop - Iteration 3 (Optimization: Round Robin Strategy)...")
     logger.info(f"Test Set: {len(TEST_MESSAGES)} messages")
     logger.info("Testing Strategy: Round Robin (Mixed Providers, Max Parallelism)")
 

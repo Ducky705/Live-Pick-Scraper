@@ -8,7 +8,6 @@ a prompt for a Superior AI (ChatGPT/Claude) to establish the Ground Truth.
 
 import json
 import sys
-import os
 from pathlib import Path
 
 # Add project root to path
@@ -36,9 +35,7 @@ def copy_to_clipboard(text: str) -> bool:
         try:
             import subprocess
 
-            process = subprocess.Popen(
-                ["clip"], stdin=subprocess.PIPE, text=True, encoding="utf-8"
-            )
+            process = subprocess.Popen(["clip"], stdin=subprocess.PIPE, text=True, encoding="utf-8")
             process.communicate(text)
             return True
         except Exception:
@@ -56,13 +53,13 @@ def load_data():
         print(f"Error: {msg_path} not found. Run pipeline first.")
         return []
 
-    with open(msg_path, "r", encoding="utf-8") as f:
+    with open(msg_path, encoding="utf-8") as f:
         data = json.load(f)
         messages = data.get("messages", [])
 
     ocr_results = {}
     if ocr_path.exists():
-        with open(ocr_path, "r", encoding="utf-8") as f:
+        with open(ocr_path, encoding="utf-8") as f:
             ocr_data = json.load(f)
             ocr_results = ocr_data.get("results", {})
 
@@ -98,7 +95,7 @@ def generate_prompt(messages):
     spec_path = PROJECT_ROOT / "docs" / "pick_format.md"
     spec_content = ""
     if spec_path.exists():
-        with open(spec_path, "r", encoding="utf-8") as f:
+        with open(spec_path, encoding="utf-8") as f:
             spec_content = f.read()
 
     prompt = f"""# EXPERT SPORTS DATA EXTRACTION TASK

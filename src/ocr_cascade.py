@@ -39,15 +39,15 @@ Usage:
     results = extract_batch_cascade(image_paths)
 """
 
+import base64
+import logging
 import os
 import sys
-import logging
 import time
-import base64
+from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
-from typing import Optional, List, Dict, Tuple, cast, Any
-from concurrent.futures import ThreadPoolExecutor, as_completed, Future
 from enum import Enum
+from typing import Any, cast
 
 # Setup paths
 if getattr(sys, "frozen", False):
@@ -56,7 +56,7 @@ else:
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
 
-from src.ocr_validator import is_usable_ocr, validate_ocr_detailed, OCRQuality
+from src.ocr_validator import is_usable_ocr
 
 
 class OCRMethod(Enum):
@@ -79,7 +79,7 @@ class OCRResult:
     confidence: float
     time_ms: int
     prompt_type: str  # "structured" or "raw"
-    error: Optional[str] = None
+    error: str | None = None
 
 
 # --- PROMPTS ---
@@ -115,6 +115,7 @@ def _run_local_ocr(image_path: str) -> OCRResult:
     significantly better accuracy than Tesseract on complex images.
     """
     import cv2
+
     from src.ocr_engine import get_ocr_engine
     from src.ocr_preprocessing import preprocess_for_rapidocr
 
@@ -188,7 +189,7 @@ _run_tesseract = _run_local_ocr
 # --- VISION PROVIDERS ---
 
 
-def _encode_image(image_path: str) -> Optional[str]:
+def _encode_image(image_path: str) -> str | None:
     """Encode image to base64."""
     try:
         with open(image_path, "rb") as f:
@@ -248,11 +249,9 @@ def _call_mistral(image_path: str, prompt: str, prompt_type: str) -> OCRResult:
     start = time.time()
 
     try:
-        from src.mistral_client import mistral_completion, PIXTRAL_LARGE
+        from src.mistral_client import PIXTRAL_LARGE, mistral_completion
 
-        response = mistral_completion(
-            prompt, model=PIXTRAL_LARGE, image_input=image_path, validate_json=False
-        )
+        response = mistral_completion(prompt, model=PIXTRAL_LARGE, image_input=image_path, validate_json=False)
         elapsed = int((time.time() - start) * 1000)
 
         if response:
@@ -315,9 +314,7 @@ def _call_openrouter(image_path: str, prompt: str, prompt_type: str) -> OCRResul
                 error="Failed to encode image",
             )
 
-        response = openrouter_completion(
-            prompt, model=model, images=[b64], validate_json=False
-        )
+        response = openrouter_completion(prompt, model=model, images=[b64], validate_json=False)
         elapsed = int((time.time() - start) * 1000)
 
         if response:
@@ -447,9 +444,7 @@ class OCRCascade:
             f"Gemini={self.gemini_available}"
         )
 
-    def _run_vision_fallback(
-        self, image_path: str, prompt: str, prompt_type: str
-    ) -> OCRResult:
+    def _run_vision_fallback(self, image_path: str, prompt: str, prompt_type: str) -> OCRResult:
         """
         Run vision providers sequentially (fallback chain).
         Stops at first success to save API calls.
@@ -484,9 +479,7 @@ class OCRCascade:
                 error="No vision providers available",
             )
 
-        logging.info(
-            f"[OCR Cascade] Starting Vision Fallback (Sequential: {', '.join(p[0] for p in providers)})"
-        )
+        logging.info(f"[OCR Cascade] Starting Vision Fallback (Sequential: {', '.join(p[0] for p in providers)})")
 
         accumulated_time = 0
         last_error = None
@@ -499,17 +492,13 @@ class OCRCascade:
 
                 # Accept if we got text (confidence check handled inside func or we trust it)
                 if result.text and len(result.text.strip()) > 5:
-                    logging.info(
-                        f"[OCR Cascade] {name} success (confidence={result.confidence:.2f})"
-                    )
+                    logging.info(f"[OCR Cascade] {name} success (confidence={result.confidence:.2f})")
                     # Update time to reflect total wait
                     result.time_ms = accumulated_time
                     return result
 
                 last_error = result.error or "Empty result"
-                logging.warning(
-                    f"[OCR Cascade] {name} returned empty/low quality. Trying next..."
-                )
+                logging.warning(f"[OCR Cascade] {name} returned empty/low quality. Trying next...")
 
             except Exception as e:
                 logging.error(f"[OCR Cascade] {name} error: {e}")
@@ -546,20 +535,14 @@ class OCRCascade:
             )
 
         # Step 1: Try RapidOCR (fast path)
-        logging.debug(
-            f"[OCR Cascade] Step 1: RapidOCR for {os.path.basename(image_path)}"
-        )
+        logging.debug(f"[OCR Cascade] Step 1: RapidOCR for {os.path.basename(image_path)}")
         local_result = _run_local_ocr(image_path)
 
         if local_result.confidence >= self.local_threshold:
-            logging.info(
-                f"[OCR Cascade] RapidOCR success (confidence={local_result.confidence:.2f})"
-            )
+            logging.info(f"[OCR Cascade] RapidOCR success (confidence={local_result.confidence:.2f})")
             return local_result
 
-        logging.debug(
-            f"[OCR Cascade] RapidOCR low confidence ({local_result.confidence:.2f}), trying Vision APIs"
-        )
+        logging.debug(f"[OCR Cascade] RapidOCR low confidence ({local_result.confidence:.2f}), trying Vision APIs")
 
         # Step 2: Run Vision Fallback (Sequential)
         prompt = STRUCTURED_PROMPT if prompt_type == "structured" else RAW_PROMPT
@@ -568,16 +551,12 @@ class OCRCascade:
         # Step 3: Return best result
         if vision_result.text:
             return vision_result
-        elif (
-            local_result.confidence > 0.3
-        ):  # Fallback to local if vision failed completely but local had something
+        elif local_result.confidence > 0.3:  # Fallback to local if vision failed completely but local had something
             return local_result
         else:
             return vision_result  # Return the failed vision result with error info
 
-    def extract_batch(
-        self, image_paths: List[str], prompt_type: str = "raw"
-    ) -> List[OCRResult]:
+    def extract_batch(self, image_paths: list[str], prompt_type: str = "raw") -> list[OCRResult]:
         """
         Extract text from multiple images with smart provider distribution.
 
@@ -585,17 +564,14 @@ class OCRCascade:
         1. Run RapidOCR on ALL images in parallel (fast)
         2. Distribute Vision API calls across providers (parallel across providers, sequential within)
         """
-        results: List[Optional[OCRResult]] = [None] * len(image_paths)
+        results: list[OCRResult | None] = [None] * len(image_paths)
         needs_vision = []  # (index, path) tuples
 
         logging.info(f"[OCR Cascade] Batch processing {len(image_paths)} images...")
 
         # Step 1: Parallel RapidOCR
         with ThreadPoolExecutor(max_workers=4) as executor:
-            futures = {
-                executor.submit(_run_local_ocr, path): i
-                for i, path in enumerate(image_paths)
-            }
+            futures = {executor.submit(_run_local_ocr, path): i for i, path in enumerate(image_paths)}
 
             for future in as_completed(futures):
                 idx = futures[future]
@@ -648,26 +624,20 @@ class OCRCascade:
             ]
 
         # Distribute images across providers (round-robin)
-        provider_queues: Dict[str, List[Tuple[int, str]]] = {
-            name: [] for name, _ in providers
-        }
+        provider_queues: dict[str, list[tuple[int, str]]] = {name: [] for name, _ in providers}
         for i, (idx, path) in enumerate(needs_vision):
             provider_name = providers[i % len(providers)][0]
             provider_queues[provider_name].append((idx, path))
 
         # Process each provider's queue in parallel (providers parallel, within sequential)
-        def process_queue(
-            provider_name: str, func, queue: List[Tuple[int, str]]
-        ) -> List[Tuple[int, OCRResult]]:
+        def process_queue(provider_name: str, func, queue: list[tuple[int, str]]) -> list[tuple[int, OCRResult]]:
             queue_results = []
             for idx, path in queue:
                 try:
                     result = func(path, prompt, prompt_type)
                     queue_results.append((idx, result))
                 except Exception as e:
-                    logging.error(
-                        f"[OCR Cascade] {provider_name} failed for {path}: {e}"
-                    )
+                    logging.error(f"[OCR Cascade] {provider_name} failed for {path}: {e}")
                     queue_results.append(
                         (
                             idx,
@@ -684,14 +654,10 @@ class OCRCascade:
             return queue_results
 
         with ThreadPoolExecutor(max_workers=len(providers)) as executor:
-            vision_futures: List[Future[List[Tuple[int, OCRResult]]]] = []
+            vision_futures: list[Future[list[tuple[int, OCRResult]]]] = []
             for name, func in providers:
                 if provider_queues[name]:
-                    vision_futures.append(
-                        executor.submit(
-                            process_queue, name, func, provider_queues[name]
-                        )
-                    )
+                    vision_futures.append(executor.submit(process_queue, name, func, provider_queues[name]))
 
             for future in as_completed(vision_futures):
                 try:
@@ -751,9 +717,7 @@ def extract_text_cascade(image_path: str, prompt_type: str = "raw") -> str:
     return result.text
 
 
-def extract_batch_cascade(
-    image_paths: List[str], prompt_type: str = "raw"
-) -> List[str]:
+def extract_batch_cascade(image_paths: list[str], prompt_type: str = "raw") -> list[str]:
     """
     Extract text from multiple images using cascade OCR.
 

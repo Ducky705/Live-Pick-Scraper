@@ -4,10 +4,9 @@ DSL Verification Tool
 Tests if the DSL parser correctly parses the provided sample output.
 """
 
-import sys
-import os
-from pathlib import Path
 import json
+import sys
+from pathlib import Path
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -22,7 +21,7 @@ def main():
         print(f"Error: {test_file} not found")
         return
 
-    with open(test_file, "r", encoding="utf-8") as f:
+    with open(test_file, encoding="utf-8") as f:
         content = f.read()
 
     print(f"Loaded {len(content)} chars of DSL output.")

@@ -152,7 +152,7 @@ def are_picks_equivalent(pick1: dict, pick2: dict) -> tuple[bool, float]:
         if pick_sim >= 0.75:
             return True, 1.0
         # Substring check for same message (e.g. "Bulls" vs "Bulls ML")
-        if len(p1) > 4 and len(p2) > 4: # Avoid merging short noise like "ML" vs "Team ML"
+        if len(p1) > 4 and len(p2) > 4:  # Avoid merging short noise like "ML" vs "Team ML"
             if p1 in p2 or p2 in p1:
                 return True, 0.95
 
@@ -325,23 +325,11 @@ def deduplicate_picks(picks: list[dict], use_ai_fallback: bool = False) -> list[
                     current = merge_duplicate_picks(current, pick2)
                     consumed.add(j)
                     try:
-                        c_name = (
-                            str(pick1.get("capper_name", ""))
-                            .encode("ascii", "replace")
-                            .decode("ascii")
-                        )
-                        c_pick = (
-                            str(pick1.get("pick", ""))
-                            .encode("ascii", "replace")
-                            .decode("ascii")
-                        )
-                        logging.info(
-                            f"[PickDedup] Merged (medium conf {confidence:.2f}): '{c_name}' - '{c_pick}'"
-                        )
+                        c_name = str(pick1.get("capper_name", "")).encode("ascii", "replace").decode("ascii")
+                        c_pick = str(pick1.get("pick", "")).encode("ascii", "replace").decode("ascii")
+                        logging.info(f"[PickDedup] Merged (medium conf {confidence:.2f}): '{c_name}' - '{c_pick}'")
                     except Exception:
-                        logging.info(
-                            f"[PickDedup] Merged (medium conf {confidence:.2f})"
-                        )
+                        logging.info(f"[PickDedup] Merged (medium conf {confidence:.2f})")
                 else:
                     # Low confidence - save for AI review if enabled
                     low_confidence_pairs.append((i, j, confidence))
@@ -350,9 +338,7 @@ def deduplicate_picks(picks: list[dict], use_ai_fallback: bool = False) -> list[
 
     # AI fallback for low-confidence pairs (placeholder)
     if use_ai_fallback and low_confidence_pairs:
-        logging.info(
-            f"[PickDedup] {len(low_confidence_pairs)} pairs need AI review (not implemented)"
-        )
+        logging.info(f"[PickDedup] {len(low_confidence_pairs)} pairs need AI review (not implemented)")
         # TODO: Implement AI-based duplicate resolution
         # This would send ambiguous pairs to an LLM to determine if they're the same pick
 

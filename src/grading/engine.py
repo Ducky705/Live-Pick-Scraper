@@ -4,13 +4,13 @@ Core grading engine - evaluates picks against game results.
 """
 
 import logging
-from typing import List, Dict, Any, Optional, Union
+from typing import Any
 
-from src.grading.schema import Pick, GradedPick, BetType, GradeResult
-from src.grading.parser import PickParser
+from src.grading.constants import SOCCER_LEAGUES, STAT_KEY_MAP
 from src.grading.loader import DataLoader
 from src.grading.matcher import Matcher
-from src.grading.constants import STAT_KEY_MAP, SOCCER_LEAGUES, PERIOD_PATTERNS
+from src.grading.parser import PickParser
+from src.grading.schema import BetType, GradedPick, GradeResult, Pick
 
 logger = logging.getLogger(__name__)
 
@@ -20,24 +20,24 @@ class GraderEngine:
     Main grading engine that evaluates picks against ESPN game data.
     """
 
-    def __init__(self, scores: List[Dict[str, Any]]):
+    def __init__(self, scores: list[dict[str, Any]]):
         """
         Initialize with pre-fetched scores.
-        
+
         Args:
             scores: List of game dictionaries from DataLoader.fetch_scores()
         """
         self.scores = scores
-        self._boxscore_cache: Dict[str, List[Dict]] = {}
+        self._boxscore_cache: dict[str, list[dict]] = {}
 
-    def grade(self, pick: Union[Pick, str], league_hint: str = "Other") -> GradedPick:
+    def grade(self, pick: Pick | str, league_hint: str = "Other") -> GradedPick:
         """
         Grade a single pick.
-        
+
         Args:
             pick: Pick object or raw string
             league_hint: League hint if pick is a string
-            
+
         Returns:
             GradedPick with result
         """
@@ -65,94 +65,94 @@ class GraderEngine:
                 return self._grade_moneyline(pick)
             else:
                 return GradedPick(pick, GradeResult.PENDING, details="Unknown bet type")
-                
+
         except Exception as e:
             logger.error(f"Error grading pick: {e}")
             return GradedPick(pick, GradeResult.ERROR, details=str(e))
 
-    def grade_batch(self, picks: List[Dict[str, Any]]) -> List[GradedPick]:
+    def grade_batch(self, picks: list[dict[str, Any]]) -> list[GradedPick]:
         """
         Grade a batch of picks with optimized boxscore pre-fetching.
-        
+
         Args:
             picks: List of dicts with 'pick' and 'league' keys
-            
+
         Returns:
             List of GradedPick objects
         """
         # Pre-fetch boxscores for player props to avoid sequential API calls
         self._prefetch_boxscores_for_props(picks)
-        
+
         results = []
         for p in picks:
-            text = p.get('pick', p.get('p', ''))
-            league = p.get('league', p.get('lg', 'other'))
-            date = p.get('date')
-            
+            text = p.get("pick", p.get("p", ""))
+            league = p.get("league", p.get("lg", "other"))
+            date = p.get("date")
+
             parsed = PickParser.parse(text, league, date)
             graded = self.grade(parsed)
             results.append(graded)
-        
+
         return results
-    
-    def _prefetch_boxscores_for_props(self, picks: List[Dict[str, Any]]):
+
+    def _prefetch_boxscores_for_props(self, picks: list[dict[str, Any]]):
         """
         Pre-fetch boxscores in parallel for all player prop picks.
         This avoids sequential API calls during grading.
         """
         import concurrent.futures
+
         from src.score_cache import get_cache
-        
+
         cache = get_cache()
         games_to_fetch = {}  # game_id -> game dict
-        
+
         # Identify all player props and their games
         for p in picks:
-            text = p.get('pick', p.get('p', ''))
-            league = p.get('league', p.get('lg', 'other'))
-            
+            text = p.get("pick", p.get("p", ""))
+            league = p.get("league", p.get("lg", "other"))
+
             # Quick heuristic check for player props (has ":" in text or common stat keywords)
-            is_likely_prop = ':' in text or any(kw in text.lower() for kw in [
-                'pts', 'reb', 'ast', 'over', 'under', 'yds', 'td', 'rec'
-            ])
-            
+            is_likely_prop = ":" in text or any(
+                kw in text.lower() for kw in ["pts", "reb", "ast", "over", "under", "yds", "td", "rec"]
+            )
+
             if not is_likely_prop:
                 continue
-            
+
             # Find matching game
             game = Matcher.find_game(text, league, self.scores)
             if not game:
                 continue
-            
-            game_id = game.get('id')
+
+            game_id = game.get("id")
             if not game_id:
                 continue
-            
+
             # Skip if already in memory cache
             if game_id in self._boxscore_cache:
                 continue
-            
+
             # Check persistent cache
             cached_boxscore = cache.get_boxscore(game_id)
             if cached_boxscore:
                 self._boxscore_cache[game_id] = cached_boxscore
                 continue
-            
+
             # Need to fetch
             games_to_fetch[game_id] = game
-        
+
         if not games_to_fetch:
             return
-        
+
         logger.info(f"Pre-fetching {len(games_to_fetch)} boxscores for player props...")
-        
+
         # Fetch in parallel
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             futures = {
-                executor.submit(DataLoader.fetch_boxscore, game): game_id
-                for game_id, game in games_to_fetch.items()
+                executor.submit(DataLoader.fetch_boxscore, game): game_id for game_id, game in games_to_fetch.items()
             }
-            
+
             for future in concurrent.futures.as_completed(futures):
                 game_id = futures[future]
                 try:
@@ -202,7 +202,7 @@ class GraderEngine:
             grade=final_grade,
             score_summary=f"{len(pick.legs)} legs",
             details=" / ".join(details_parts),
-            leg_results=leg_results
+            leg_results=leg_results,
         )
 
     # -------------------------------------------------------------------------
@@ -217,85 +217,92 @@ class GraderEngine:
 
         # Get period scores
         if not pick.period:
-             return GradedPick(pick, GradeResult.PENDING, details="Period not specified")
+            return GradedPick(pick, GradeResult.PENDING, details="Period not specified")
 
         period_scores = self._get_period_scores(game, pick.period)
         if period_scores is None:
             return GradedPick(pick, GradeResult.PENDING, details=f"Period {pick.period} data not available")
 
         ps1, ps2 = period_scores
-        
+
         # Determine underlying bet type from metadata or re-parse
-        underlying = pick.metadata.get('underlying_type', 'Moneyline')
-        
-        if underlying == 'Total' or pick.is_over is not None:
+        underlying = pick.metadata.get("underlying_type", "Moneyline")
+
+        if underlying == "Total" or pick.is_over is not None:
             # Total for period
             total = ps1 + ps2
             line = pick.line or 0
             summary = f"{pick.period} Total: {total} vs {line}"
-            
+
             if pick.is_over:
                 if total > line:
-                    return GradedPick(pick, GradeResult.WIN, summary, game_id=game.get('id'))
+                    return GradedPick(pick, GradeResult.WIN, summary, game_id=game.get("id"))
                 elif total < line:
-                    return GradedPick(pick, GradeResult.LOSS, summary, game_id=game.get('id'))
-            else:
-                if total < line:
-                    return GradedPick(pick, GradeResult.WIN, summary, game_id=game.get('id'))
-                elif total > line:
-                    return GradedPick(pick, GradeResult.LOSS, summary, game_id=game.get('id'))
-            return GradedPick(pick, GradeResult.PUSH, summary, game_id=game.get('id'))
-        
+                    return GradedPick(pick, GradeResult.LOSS, summary, game_id=game.get("id"))
+            elif total < line:
+                return GradedPick(pick, GradeResult.WIN, summary, game_id=game.get("id"))
+            elif total > line:
+                return GradedPick(pick, GradeResult.LOSS, summary, game_id=game.get("id"))
+            return GradedPick(pick, GradeResult.PUSH, summary, game_id=game.get("id"))
+
         else:
             # Spread or ML for period
             picked, opponent, is_t1 = Matcher.resolve_picked_team(pick.selection, game)
             if not picked:
                 return GradedPick(pick, GradeResult.PENDING, details="Could not resolve team")
-            
+
             ps_picked = ps1 if is_t1 else ps2
             ps_opp = ps2 if is_t1 else ps1
-            
+
             line = pick.line or 0
             adj = ps_picked + line
             summary = f"{pick.period}: {picked} {ps_picked}+{line}={adj} vs {opponent} {ps_opp}"
-            
-            if adj > ps_opp:
-                return GradedPick(pick, GradeResult.WIN, summary, game_id=game.get('id'))
-            elif adj < ps_opp:
-                return GradedPick(pick, GradeResult.LOSS, summary, game_id=game.get('id'))
-            return GradedPick(pick, GradeResult.PUSH, summary, game_id=game.get('id'))
 
-    def _get_period_scores(self, game: Dict, period: str) -> Optional[tuple]:
+            if adj > ps_opp:
+                return GradedPick(pick, GradeResult.WIN, summary, game_id=game.get("id"))
+            elif adj < ps_opp:
+                return GradedPick(pick, GradeResult.LOSS, summary, game_id=game.get("id"))
+            return GradedPick(pick, GradeResult.PUSH, summary, game_id=game.get("id"))
+
+    def _get_period_scores(self, game: dict, period: str) -> tuple | None:
         """Calculate scores for a specific period."""
-        t1_lines = game.get('team1_data', {}).get('linescores', [])
-        t2_lines = game.get('team2_data', {}).get('linescores', [])
-        
+        t1_lines = game.get("team1_data", {}).get("linescores", [])
+        t2_lines = game.get("team2_data", {}).get("linescores", [])
+
         if not t1_lines or not t2_lines:
             return None
-        
+
         # Map period to indices (1-based periods in ESPN data)
         period_map = {
-            '1Q': [1], '2Q': [2], '3Q': [3], '4Q': [4],
-            '1P': [1], '2P': [2], '3P': [3],
-            '1H': [1, 2], '2H': [3, 4],
-            'F5': [1, 2, 3, 4, 5], 'F3': [1, 2, 3], 'F1': [1]
+            "1Q": [1],
+            "2Q": [2],
+            "3Q": [3],
+            "4Q": [4],
+            "1P": [1],
+            "2P": [2],
+            "3P": [3],
+            "1H": [1, 2],
+            "2H": [3, 4],
+            "F5": [1, 2, 3, 4, 5],
+            "F3": [1, 2, 3],
+            "F1": [1],
         }
-        
+
         target_periods = period_map.get(period, [])
         if not target_periods:
             return None
-        
+
         def sum_periods(linescores, periods):
             total = 0
             for ls in linescores:
-                p = int(ls.get('period', 0))
+                p = int(ls.get("period", 0))
                 if p in periods:
                     try:
-                        total += float(ls.get('value', 0))
+                        total += float(ls.get("value", 0))
                     except (ValueError, TypeError):
                         pass  # Skip invalid period scores
             return total
-        
+
         return sum_periods(t1_lines, target_periods), sum_periods(t2_lines, target_periods)
 
     # -------------------------------------------------------------------------
@@ -308,11 +315,11 @@ class GraderEngine:
         if not game:
             return GradedPick(pick, GradeResult.PENDING, details="Game not found")
 
-        game_id = game.get('id')
-        
+        game_id = game.get("id")
+
         # Ensure subject and stat are present
         if not pick.subject or not pick.stat:
-             return GradedPick(pick, GradeResult.PENDING, details="Missing subject or stat for prop bet")
+            return GradedPick(pick, GradeResult.PENDING, details="Missing subject or stat for prop bet")
 
         # Try to find stat value
         stat_value = None
@@ -322,7 +329,7 @@ class GraderEngine:
         leader, cat = Matcher.find_player_in_leaders(pick.subject, game)
         if leader:
             try:
-                stat_value = float(leader.get('value', 0))
+                stat_value = float(leader.get("value", 0))
             except:
                 pass
 
@@ -332,14 +339,12 @@ class GraderEngine:
             if boxscore:
                 player = Matcher.find_player_in_boxscore(pick.subject, boxscore)
                 if player:
-                    found_name = player.get('name', pick.subject)
+                    found_name = player.get("name", pick.subject)
                     stat_value = self._extract_stat(player, pick.stat)
 
         if stat_value is None:
             return GradedPick(
-                pick, GradeResult.PENDING, 
-                details=f"Stat {pick.stat} not found for {pick.subject}",
-                game_id=game_id
+                pick, GradeResult.PENDING, details=f"Stat {pick.stat} not found for {pick.subject}", game_id=game_id
             )
 
         # Compare
@@ -351,67 +356,66 @@ class GraderEngine:
                 return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
             elif stat_value < line:
                 return GradedPick(pick, GradeResult.LOSS, summary, game_id=game_id)
-        else:
-            if stat_value < line:
-                return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
-            elif stat_value > line:
-                return GradedPick(pick, GradeResult.LOSS, summary, game_id=game_id)
+        elif stat_value < line:
+            return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
+        elif stat_value > line:
+            return GradedPick(pick, GradeResult.LOSS, summary, game_id=game_id)
 
         return GradedPick(pick, GradeResult.PUSH, summary, game_id=game_id)
 
-    def _get_boxscore(self, game: Dict) -> Optional[List[Dict]]:
+    def _get_boxscore(self, game: dict) -> list[dict] | None:
         """Get boxscore for a game, with memory and persistent caching."""
         from src.score_cache import get_cache
-        
-        game_id = game.get('id')
+
+        game_id = game.get("id")
         if not game_id:
             return None
-        
+
         # 1. Check memory cache
         if game_id in self._boxscore_cache:
             return self._boxscore_cache[game_id]
-        
+
         # 2. Check game object
-        if 'full_boxscore' in game:
-            self._boxscore_cache[game_id] = game['full_boxscore']
-            return game['full_boxscore']
-        
+        if "full_boxscore" in game:
+            self._boxscore_cache[game_id] = game["full_boxscore"]
+            return game["full_boxscore"]
+
         # 3. Check persistent cache
         cache = get_cache()
         cached = cache.get_boxscore(game_id)
         if cached:
             self._boxscore_cache[game_id] = cached
             return cached
-        
+
         # 4. Fetch from API
         boxscore = DataLoader.fetch_boxscore(game)
         if boxscore:
             self._boxscore_cache[game_id] = boxscore
-            game['full_boxscore'] = boxscore
+            game["full_boxscore"] = boxscore
             cache.set_boxscore(game_id, boxscore)
-        
+
         return boxscore
 
-    def _extract_stat(self, player: Dict, stat_key: str) -> Optional[float]:
+    def _extract_stat(self, player: dict, stat_key: str) -> float | None:
         """Extract a stat value from player data."""
         if not stat_key:
             return None
-        
+
         stat_key_lower = stat_key.lower()
-        
+
         # Handle combined stats (PRA)
-        if stat_key_lower in ['pra', 'pts+reb+ast']:
+        if stat_key_lower in ["pra", "pts+reb+ast"]:
             try:
-                pts = float(player.get('points', player.get('pts', 0)))
-                reb = float(player.get('rebounds', player.get('reb', player.get('totalrebounds', 0))))
-                ast = float(player.get('assists', player.get('ast', 0)))
+                pts = float(player.get("points", player.get("pts", 0)))
+                reb = float(player.get("rebounds", player.get("reb", player.get("totalrebounds", 0))))
+                ast = float(player.get("assists", player.get("ast", 0)))
                 return pts + reb + ast
             except (ValueError, TypeError):
                 return None
-        
+
         # Look up possible keys
         possible_keys = STAT_KEY_MAP.get(stat_key_lower, [stat_key_lower])
-        
+
         for key in possible_keys:
             if key in player:
                 try:
@@ -424,7 +428,7 @@ class GraderEngine:
                     return float(player[key.lower()])
                 except (ValueError, TypeError):
                     pass  # Try next key
-        
+
         return None
 
     # -------------------------------------------------------------------------
@@ -438,32 +442,31 @@ class GraderEngine:
             return GradedPick(pick, GradeResult.PENDING, details="Game not found")
 
         try:
-            s1 = float(game.get('score1', 0) or 0)
-            s2 = float(game.get('score2', 0) or 0)
+            s1 = float(game.get("score1", 0) or 0)
+            s2 = float(game.get("score2", 0) or 0)
         except:
             return GradedPick(pick, GradeResult.PENDING, details="Invalid scores")
 
         total = s1 + s2
         line = pick.line or 0
-        
+
         # Sanity check: if total is 0 and line is > 5, scores are likely invalid
         # This catches tennis "game totals" where ESPN doesn't provide game counts
         if total == 0 and line > 5:
             return GradedPick(pick, GradeResult.PENDING, details="Scores appear invalid (0-0)")
-        
+
         summary = f"Total: {total} vs {line}"
-        game_id = game.get('id')
+        game_id = game.get("id")
 
         if pick.is_over:
             if total > line:
                 return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
             elif total < line:
                 return GradedPick(pick, GradeResult.LOSS, summary, game_id=game_id)
-        else:
-            if total < line:
-                return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
-            elif total > line:
-                return GradedPick(pick, GradeResult.LOSS, summary, game_id=game_id)
+        elif total < line:
+            return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
+        elif total > line:
+            return GradedPick(pick, GradeResult.LOSS, summary, game_id=game_id)
 
         return GradedPick(pick, GradeResult.PUSH, summary, game_id=game_id)
 
@@ -482,15 +485,15 @@ class GraderEngine:
             return GradedPick(pick, GradeResult.PENDING, details="Could not resolve team")
 
         try:
-            s_picked = float(game['score1'] if is_t1 else game['score2'])
-            s_opp = float(game['score2'] if is_t1 else game['score1'])
+            s_picked = float(game["score1"] if is_t1 else game["score2"])
+            s_opp = float(game["score2"] if is_t1 else game["score1"])
         except:
             return GradedPick(pick, GradeResult.PENDING, details="Invalid scores")
 
         line = pick.line or 0
         adj = s_picked + line
         summary = f"{picked} {s_picked} (+{line}={adj}) vs {opponent} {s_opp}"
-        game_id = game.get('id')
+        game_id = game.get("id")
 
         if adj > s_opp:
             return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
@@ -514,21 +517,21 @@ class GraderEngine:
             return GradedPick(pick, GradeResult.PENDING, details="Could not resolve team")
 
         # Check winner flags first
-        winner_picked = game.get('winner1') if is_t1 else game.get('winner2')
-        winner_opp = game.get('winner2') if is_t1 else game.get('winner1')
+        winner_picked = game.get("winner1") if is_t1 else game.get("winner2")
+        winner_opp = game.get("winner2") if is_t1 else game.get("winner1")
 
         try:
-            s_picked = float(game['score1'] if is_t1 else game['score2'])
-            s_opp = float(game['score2'] if is_t1 else game['score1'])
+            s_picked = float(game["score1"] if is_t1 else game["score2"])
+            s_opp = float(game["score2"] if is_t1 else game["score1"])
         except:
             s_picked = 0
             s_opp = 0
 
         # Build summary, handling None scores gracefully
-        score1_display = game.get('score1') if game.get('score1') is not None else '?'
-        score2_display = game.get('score2') if game.get('score2') is not None else '?'
+        score1_display = game.get("score1") if game.get("score1") is not None else "?"
+        score2_display = game.get("score2") if game.get("score2") is not None else "?"
         summary = f"{game['team1']} {score1_display} - {score2_display} {game['team2']}"
-        game_id = game.get('id')
+        game_id = game.get("id")
 
         if winner_picked:
             return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
@@ -540,11 +543,11 @@ class GraderEngine:
             return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
         elif s_picked < s_opp:
             return GradedPick(pick, GradeResult.LOSS, summary, game_id=game_id)
-        
+
         # Tie handling
         league_lower = pick.league.lower()
         if league_lower in SOCCER_LEAGUES:
             # Soccer 3-way ML: Draw = Loss
             return GradedPick(pick, GradeResult.LOSS, summary + " (Draw)", game_id=game_id)
-        
+
         return GradedPick(pick, GradeResult.PUSH, summary, game_id=game_id)

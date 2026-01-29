@@ -1,10 +1,9 @@
-import os
-import requests
-import json
-import logging
-import time
 import base64
+import logging
+import os
 from threading import Semaphore
+
+import requests
 
 # MAXIMUM SPEED: Gemini model-specific rate limits
 # gemini-2.5-flash-lite: 15 RPM = 3 concurrent
@@ -43,18 +42,15 @@ def gemini_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=6
 
     # Encode image (supports file path or base64)
     try:
-        if isinstance(image_input, str) and (
-            len(image_input) < 1000 or os.path.exists(image_input)
-        ):
+        if isinstance(image_input, str) and (len(image_input) < 1000 or os.path.exists(image_input)):
             # It's a file path
             with open(image_input, "rb") as f:
                 image_data = base64.b64encode(f.read()).decode("utf-8")
+        # Assume it's already base64
+        elif isinstance(image_input, bytes):
+            image_data = base64.b64encode(image_input).decode("utf-8")
         else:
-            # Assume it's already base64
-            if isinstance(image_input, bytes):
-                image_data = base64.b64encode(image_input).decode("utf-8")
-            else:
-                image_data = image_input if image_input else ""
+            image_data = image_input if image_input else ""
     except Exception as e:
         logging.error(f"[Gemini] Failed to process image input: {e}")
         return None
@@ -87,9 +83,7 @@ def gemini_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=6
 
             try:
                 # Model-specific delay (removed hardcoded 4s, now handled by rate limiter)
-                response = requests.post(
-                    url, headers=headers, json=payload, timeout=timeout
-                )
+                response = requests.post(url, headers=headers, json=payload, timeout=timeout)
             finally:
                 GLOBAL_GEMINI_SEMAPHORE.release()
 
@@ -153,9 +147,7 @@ def gemini_text_completion(prompt, model=DEFAULT_MODEL, timeout=60):
 
             try:
                 # Model-specific delay (removed hardcoded 4s, now handled by rate limiter)
-                response = requests.post(
-                    url, headers=headers, json=payload, timeout=timeout
-                )
+                response = requests.post(url, headers=headers, json=payload, timeout=timeout)
             finally:
                 GLOBAL_GEMINI_SEMAPHORE.release()
 

@@ -1,8 +1,9 @@
-import time
 import logging
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+
 import requests
+
 from src.parallel_batch_processor import parallel_processor
 
 # Configure logging
@@ -24,9 +25,7 @@ class TestLatencyEnforcement(unittest.TestCase):
 
             args, kwargs = mock_groq.call_args
             print(f"Groq called with: {kwargs}")
-            self.assertEqual(
-                kwargs.get("timeout"), 5.0, "Tier 1 should have 5.0s timeout"
-            )
+            self.assertEqual(kwargs.get("timeout"), 5.0, "Tier 1 should have 5.0s timeout")
 
     def test_tier2_timeout_config(self):
         """Test that Tier 2 provider (Mistral) receives 20.0s timeout."""
@@ -42,9 +41,7 @@ class TestLatencyEnforcement(unittest.TestCase):
 
             args, kwargs = mock_mistral.call_args
             print(f"Mistral called with: {kwargs}")
-            self.assertEqual(
-                kwargs.get("timeout"), 20.0, "Tier 2 should have 20.0s timeout"
-            )
+            self.assertEqual(kwargs.get("timeout"), 20.0, "Tier 2 should have 20.0s timeout")
 
     def test_timeout_logging_and_reraise(self):
         """Test that Timeout exceptions are caught, logged as 'Timeout Failure', and re-raised."""
@@ -55,9 +52,7 @@ class TestLatencyEnforcement(unittest.TestCase):
 
             batch = [{"id": 1, "text": "test"}]
 
-            with self.assertLogs(
-                logger="src.parallel_batch_processor", level="ERROR"
-            ) as cm:
+            with self.assertLogs(logger="src.parallel_batch_processor", level="ERROR") as cm:
                 with self.assertRaises(requests.exceptions.Timeout):
                     parallel_processor._execute_request("groq", batch)
 

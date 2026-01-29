@@ -1,10 +1,10 @@
 import asyncio
+import json
 import logging
 import os
 import sys
-import json
-import time
 from datetime import datetime, timedelta, timezone
+
 from dotenv import load_dotenv
 
 # Load .env file explicitly
@@ -13,13 +13,13 @@ load_dotenv()
 # Ensure src is in path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from config import TARGET_TELEGRAM_CHANNEL_ID, TARGET_DISCORD_CHANNEL_ID, OUTPUT_DIR, LOG_DIR
+from config import LOG_DIR, OUTPUT_DIR, TARGET_DISCORD_CHANNEL_ID, TARGET_TELEGRAM_CHANNEL_ID
+from src.auto_processor import auto_select_messages
+from src.deduplicator import Deduplicator
+from src.discord_client import DiscordScraper
+from src.ocr_handler import extract_text_batch
 from src.telegram_client import TelegramManager
 from src.twitter_client import TwitterManager
-from src.discord_client import DiscordScraper
-from src.deduplicator import Deduplicator
-from src.ocr_handler import extract_text_batch
-from src.auto_processor import auto_select_messages
 from src.utils import clean_text_for_ai
 
 # Setup Logging
@@ -42,21 +42,17 @@ async def main():
     logging.info("Initializing Clients...")
 
     # Telegram
-    from config import API_ID, API_HASH
+    from config import API_HASH, API_ID
 
     tg = TelegramManager()
 
     if not API_ID or not API_HASH:
-        logging.warning(
-            "Telegram credentials missing (API_ID/API_HASH). Skipping Telegram fetch."
-        )
+        logging.warning("Telegram credentials missing (API_ID/API_HASH). Skipping Telegram fetch.")
         tg_msgs = []
     else:
         tg_connected = await tg.connect_client()
         if not tg_connected:
-            logging.info(
-                "Session not found or expired. Starting interactive authentication..."
-            )
+            logging.info("Session not found or expired. Starting interactive authentication...")
             try:
                 client = await tg.get_client()
                 # Interactive login in the terminal
@@ -78,9 +74,7 @@ async def main():
     now_et = datetime.now(ET)
     yesterday_et = now_et - timedelta(days=1)
     target_date = yesterday_et.strftime("%Y-%m-%d")
-    logging.info(
-        f"Target Date: {target_date} (Eastern Time, now ET: {now_et.strftime('%Y-%m-%d %H:%M')})"
-    )
+    logging.info(f"Target Date: {target_date} (Eastern Time, now ET: {now_et.strftime('%Y-%m-%d %H:%M')})")
 
     # Fetch Telegram
     if not API_ID or not API_HASH:
@@ -90,16 +84,10 @@ async def main():
         # Support multiple comma-separated channel IDs from env
         target_ids = []
         if TARGET_TELEGRAM_CHANNEL_ID:
-            target_ids = [
-                tid.strip()
-                for tid in TARGET_TELEGRAM_CHANNEL_ID.split(",")
-                if tid.strip()
-            ]
+            target_ids = [tid.strip() for tid in TARGET_TELEGRAM_CHANNEL_ID.split(",") if tid.strip()]
 
         if target_ids:
-            logging.info(
-                f"Fetching Telegram messages from {len(target_ids)} channels: {target_ids}..."
-            )
+            logging.info(f"Fetching Telegram messages from {len(target_ids)} channels: {target_ids}...")
             tg_msgs = await tg.fetch_messages(target_ids, target_date)
             logging.info(f"Fetched {len(tg_msgs)} Telegram messages.")
         else:
@@ -116,15 +104,15 @@ async def main():
     if TARGET_DISCORD_CHANNEL_ID:
         logging.info("Fetching Discord messages...")
         ds = DiscordScraper()
-        
+
         # Support multiple comma-separated channel IDs
         discord_ids = [did.strip() for did in TARGET_DISCORD_CHANNEL_ID.split(",") if did.strip()]
-        
+
         for did in discord_ids:
-             logging.info(f"Fetching from Discord Channel: {did}...")
-             msgs = ds.fetch_messages(did, limit=50)
-             discord_msgs.extend(msgs)
-        
+            logging.info(f"Fetching from Discord Channel: {did}...")
+            msgs = ds.fetch_messages(did, limit=50)
+            discord_msgs.extend(msgs)
+
         logging.info(f"Fetched {len(discord_msgs)} Discord messages.")
     else:
         logging.info("Skipping Discord fetch (No TARGET_DISCORD_CHANNEL_ID).")
@@ -175,9 +163,7 @@ async def main():
                 cleaned = clean_text_for_ai(text_result)
                 unique_msgs[original_msg_idx]["ocr_texts"].append(cleaned)
                 # Combine into main ocr_text field for prompts
-                unique_msgs[original_msg_idx]["ocr_text"] = "\n".join(
-                    unique_msgs[original_msg_idx]["ocr_texts"]
-                )
+                unique_msgs[original_msg_idx]["ocr_text"] = "\n".join(unique_msgs[original_msg_idx]["ocr_texts"])
 
     logging.info("OCR Complete.")
 
@@ -187,9 +173,7 @@ async def main():
 
     # Filter only "selected" messages (likely picks)
     selected_msgs = [m for m in classified_msgs if m.get("selected")]
-    logging.info(
-        f"Selected {len(selected_msgs)} likely pick messages out of {len(classified_msgs)}."
-    )
+    logging.info(f"Selected {len(selected_msgs)} likely pick messages out of {len(classified_msgs)}.")
 
     if not selected_msgs:
         logging.warning("No picks detected after classification.")
@@ -205,8 +189,8 @@ async def main():
     logging.info("Grading picks against ESPN scores...")
     try:
         from src.grader import grade_picks
-        from src.score_fetcher import fetch_scores_for_date
         from src.grading.constants import LEAGUE_ALIASES_MAP
+        from src.score_fetcher import fetch_scores_for_date
 
         # OPTIMIZATION: Extract leagues from picks to fetch only what's needed
         relevant_leagues = set()
@@ -216,9 +200,7 @@ async def main():
                 # Normalize to canonical league name
                 relevant_leagues.add(LEAGUE_ALIASES_MAP.get(lg, lg))
 
-        logging.info(
-            f"Fetching scores for leagues: {', '.join(sorted(relevant_leagues)) or 'all'}"
-        )
+        logging.info(f"Fetching scores for leagues: {', '.join(sorted(relevant_leagues)) or 'all'}")
         scores = fetch_scores_for_date(
             target_date,
             requested_leagues=list(relevant_leagues) if relevant_leagues else None,
@@ -230,15 +212,9 @@ async def main():
         # Count results
         wins = sum(1 for p in picks if p.get("result") == "Win")
         losses = sum(1 for p in picks if p.get("result") == "Loss")
-        pending = sum(
-            1
-            for p in picks
-            if p.get("result") in ["Pending", "Pending/Unknown", None, ""]
-        )
+        pending = sum(1 for p in picks if p.get("result") in ["Pending", "Pending/Unknown", None, ""])
 
-        logging.info(
-            f"Grading complete: {wins} Wins, {losses} Losses, {pending} Pending"
-        )
+        logging.info(f"Grading complete: {wins} Wins, {losses} Losses, {pending} Pending")
     except Exception as e:
         logging.error(f"Grading failed: {e}")
 
@@ -270,9 +246,7 @@ async def main():
     print(f"Saved to: {output_file}")
 
     # Simple Table Output
-    print(
-        f"{'CAPPER':<20} | {'SPORT':<10} | {'PICK':<35} | {'ODDS':<6} | {'RESULT':<8}"
-    )
+    print(f"{'CAPPER':<20} | {'SPORT':<10} | {'PICK':<35} | {'ODDS':<6} | {'RESULT':<8}")
     print("-" * 95)
     for p in picks:
         capper_raw = p.get("capper_name") or "Unknown"
@@ -295,9 +269,7 @@ async def main():
 
     if dry_run:
         logging.info("Skipping Supabase upload (--dry-run mode)")
-        print(
-            "\n[DRY RUN] Supabase upload skipped. Review picks above and run without --dry-run to upload."
-        )
+        print("\n[DRY RUN] Supabase upload skipped. Review picks above and run without --dry-run to upload.")
     else:
         logging.info("Uploading picks to Supabase...")
         try:
@@ -306,12 +278,8 @@ async def main():
             result = upload_picks(picks, target_date)
 
             if result.get("success"):
-                logging.info(
-                    f"Successfully uploaded {result.get('count', 0)} picks to Supabase"
-                )
-                print(
-                    f"\n[SUPABASE] Uploaded {result.get('count', 0)} picks successfully!"
-                )
+                logging.info(f"Successfully uploaded {result.get('count', 0)} picks to Supabase")
+                print(f"\n[SUPABASE] Uploaded {result.get('count', 0)} picks successfully!")
             else:
                 logging.error(f"Supabase upload failed: {result.get('error')}")
                 if result.get("details"):

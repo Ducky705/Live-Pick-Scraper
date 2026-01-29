@@ -3,10 +3,10 @@
   "sessionId": "e3f66baf-c8eb-474e-8d1e-4c9618ecb886",
   "status": "running",
   "startedAt": "2026-01-29T22:47:17.163Z",
-  "updatedAt": "2026-01-29T22:54:36.826Z",
-  "currentIteration": 0,
+  "updatedAt": "2026-01-29T23:00:33.180Z",
+  "currentIteration": 1,
   "maxIterations": 100,
-  "tasksCompleted": 0,
+  "tasksCompleted": 1,
   "isPaused": false,
   "agentPlugin": "opencode",
   "trackerState": {
@@ -17,8 +17,8 @@
       {
         "id": "US-010",
         "title": "Regex Expansion: The 'Missing 50' Harvest",
-        "status": "open",
-        "completedInSession": false
+        "status": "completed",
+        "completedInSession": true
       },
       {
         "id": "US-011",
@@ -40,7 +40,18 @@
       }
     ]
   },
-  "iterations": [],
+  "iterations": [
+    {
+      "iteration": 1,
+      "status": "completed",
+      "taskId": "US-010",
+      "taskTitle": "Regex Expansion: The 'Missing 50' Harvest",
+      "taskCompleted": true,
+      "durationMs": 438397,
+      "startedAt": "2026-01-29T22:47:18.424Z",
+      "endedAt": "2026-01-29T22:54:36.821Z"
+    }
+  ],
   "skippedTaskIds": [],
   "cwd": "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15",
   "activeTaskIds": [],

@@ -24,7 +24,7 @@ GEMINI_RATE_LIMITS = {
 }
 
 # Recommended Free Tier Model (highest RPM)
-DEFAULT_MODEL = "gemini-1.5-flash"
+DEFAULT_MODEL = "gemini-2.0-flash-exp"
 
 
 def gemini_vision_completion(prompt, image_input, model=DEFAULT_MODEL, timeout=60):

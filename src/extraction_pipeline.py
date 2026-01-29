@@ -335,7 +335,7 @@ class ExtractionPipeline:
             if reparse_batch:
                 try:
                     # Refinement Batching (US-001: Optimization)
-                    refine_batch_sz = 1 # Reduced to 1 for Granular Parallelism (US-006)
+                    refine_batch_sz = 5 # Increased to 5 for Throughput (US-011)
                     reparse_batches = [
                         reparse_batch[i : i + refine_batch_sz]
                         for i in range(0, len(reparse_batch), refine_batch_sz)

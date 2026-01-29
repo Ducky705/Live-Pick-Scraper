@@ -287,44 +287,27 @@ class MultiPickValidator:
         cls, ocr_text: str, parsed_picks: List[Dict[str, Any]], caption: str = ""
     ) -> str:
         """
-        Generate a hint for AI to re-parse with more attention.
-        Used when validation fails.
+        Generate a terse hint for AI to re-parse (optimized for < 500 tokens).
         """
         estimate = cls.estimate_pick_count(ocr_text, caption)
         actual_count = len(parsed_picks)
-
-        hint_lines = [
-            "### REPARSE INSTRUCTION",
-            f"Previous extraction found {actual_count} picks, but analysis suggests ~{estimate.estimated_count}.",
-            "",
-            "**INDICATORS FOUND:**",
-        ]
-
-        for signal in estimate.signals:
-            hint_lines.append(f"- {signal}")
-
-        hint_lines.extend(
-            [
-                "",
-                "**INSTRUCTIONS:**",
-                "1. Re-read the OCR text carefully",
-                "2. Look for additional picks that may have been missed",
-                "3. Check for multi-line picks that may have been truncated",
-                "4. If this is a parlay, ensure ALL legs are extracted separately",
-            ]
+        
+        # Extremely compact hint
+        signals_str = ", ".join(estimate.signals[:3])
+        hint = (
+            f"!!! REPARSE REQUIRED !!!\n"
+            f"Found {actual_count} picks, expected ~{estimate.estimated_count}.\n"
+            f"Signals: {signals_str}.\n"
+            f"ACTION: Extract ALL picks/legs. Look closely at image/text."
         )
-
+        
         if estimate.has_parlay:
-            hint_lines.append(
-                "5. This appears to be a PARLAY - extract each leg as a separate pick"
-            )
-
+            hint += " PARLAY DETECTED: Extract every leg."
+            
         if estimate.has_multiple_cappers:
-            hint_lines.append(
-                "6. Multiple cappers detected - ensure each capper's picks are attributed correctly"
-            )
+            hint += " MULTI-CAPPER: Sep by capper."
 
-        return "\n".join(hint_lines)
+        return hint
 
 
 def validate_and_flag_missing(

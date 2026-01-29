@@ -1,17 +1,18 @@
 """
-Parallel Batch Processor v3
+Parallel Batch Processor v4
 ===========================
-MAXIMUM SPEED rate-limit-aware load balancer across providers.
+EXTREME THROUGHPUT (US-011)
+Global Concurrency: 32 workers
+Target: > 5.0 msg/sec
 
-Rate Limits (Updated 2026-01-22 from user-provided data):
-  - Groq:     1000 RPM, 300K TPM - PRIMARY (16 workers)
-  - Mistral:  60 RPM, 500K TPM - SECONDARY (4 workers, batched)
-  - Cerebras: 30 RPM, 60K TPM - TERTIARY (2 workers)
+Rate Limits (Updated 2026-01-22):
+  - Groq:     500 RPM, 300K TPM - PRIMARY (16 workers)
+  - Mistral:  60 RPM, 500K TPM - SECONDARY (8 workers, batched)
+  - Cerebras: 30 RPM, 60K TPM - TERTIARY (5 workers)
   - Gemini:   15 RPM, 250K TPM - OVERFLOW (3 workers)
-  - OpenRouter: FALLBACK ONLY (3-120s latency, not recommended)
+  - OpenRouter: FALLBACK ONLY
 
-Strategy: Groq-first (80%+ load), others as overflow, OpenRouter emergency only.
-Total: 25 concurrent workers for MAXIMUM THROUGHPUT.
+Strategy: Aggressive striping across all providers to maximize throughput.
 """
 
 import logging
@@ -37,59 +38,59 @@ logger = logging.getLogger(__name__)
 # RATE LIMIT & LATENCY CONFIGURATION
 # =============================================================================
 
-# US-002: Latency Budget Enforcement
-TIMEOUT_TIER_1_SOFT = 25.0  # Speed Target (Groq/Cerebras) - Increased from 15.0 for US-006 (Batch Size 20)
-TIMEOUT_TIER_2_SOFT = 50.0  # Quality Target (Mistral/Gemini) - Increased from 35.0 for Refinement
-TIMEOUT_GLOBAL_HARD = 90.0  # Hard Limit (Backstop) - Increased from 60.0
+# US-011: Aggressive Timeouts for < 2.0s Avg Response
+TIMEOUT_TIER_1_SOFT = 5.0   # Speed Target (Groq/Cerebras) - Aggressive Fail Fast
+TIMEOUT_TIER_2_SOFT = 15.0  # Quality Target (Mistral/Gemini) - Fail fast if slow
+TIMEOUT_GLOBAL_HARD = 60.0  # Hard Limit
 
 PROVIDER_CONFIG = {
     "groq": {
-        "model": "llama-3.1-8b-instant",  # Iteration 3: Switch to 8b for speed/limits
-        "rpm": 500,  # Much higher limits for 8b
-        "tpm": 18000,  # CRITICAL: Lowered to 18k to match observed Free Tier limits (avoid 429s)
-        "max_concurrent": 1,  # REDUCED to 1 (Very Safe limit for US-004)
-        "min_delay": 1.0,  # Increased delay
-        "priority": 1,  # PRIMARY provider
-        "tier": 1,  # US-002: Speed Tier
+        "model": "llama-3.1-8b-instant",
+        "rpm": 500,
+        "tpm": 18000,
+        "max_concurrent": 1,   # US-011: Reduced due to 403 errors (Don't waste threads)
+        "min_delay": 0.2,
+        "priority": 1,
+        "tier": 1,
     },
 
     "mistral": {
-        "model": "mistral-large-latest",  # Updated model name
-        "rpm": 60,  # 60 requests per minute
-        "tpm": 500000,  # 500K TPM - can batch heavily!
-        "max_concurrent": 10,  # REDUCED to 10 (Stability over Speed)
-        "min_delay": 1.0,  # Increased delay
-        "batch_size": 20,  # Bundle 20 messages per call (US-006)
-        "priority": 2,  # PROMOTED to 2 (High Bandwidth)
-        "tier": 2,  # US-002: Quality Tier
+        "model": "open-mistral-nemo", # US-011: Fastest Mistral model
+        "rpm": 60,
+        "tpm": 500000,
+        "max_concurrent": 15,  # US-011: Increased
+        "min_delay": 1.0,      # 1s delay (60 RPM)
+        "batch_size": 20,
+        "priority": 2,
+        "tier": 2,
+    },
+    "cerebras": {
+        "model": "llama3.1-8b",
+        "rpm": 30,
+        "tpm": 60000,
+        "max_concurrent": 10,  # US-011: Increased, rely on Cerebras speed
+        "min_delay": 2.0,      # 2s delay (30 RPM)
+        "priority": 3,
+        "tier": 1,
+    },
+    "gemini": {
+        "model": "gemini-2.0-flash-exp", # US-011: Use new fast model
+        "rpm": 15,
+        "tpm": 250000,
+        "max_concurrent": 6,   # US-011: Push limits
+        "min_delay": 4.0,      # 4s delay
+        "batch_size": 10,
+        "priority": 4,
+        "tier": 2,
     },
     "openrouter": {
         "model": "meta-llama/llama-3.3-70b-instruct:free",
         "rpm": 100,
         "tpm": 100000,
-        "max_concurrent": 5, # Moderate
+        "max_concurrent": 2,
         "min_delay": 1.0,
-        "priority": 5,  # TERTIARY (Fallback)
-        "tier": 2,  # US-002: Quality Tier
-    },
-    "gemini": {
-        "model": "gemini-1.5-flash",  # Revert to stable model
-        "rpm": 15,  # 15 requests per minute
-        "tpm": 250000,  # 250K TPM
-        "max_concurrent": 3,  # Set to 3 (Safe limit for free tier)
-        "min_delay": 4.0,  # 4s between requests (15 RPM)
-        "batch_size": 10,  # Bundle 10 messages per call (US-006)
-        "priority": 3,  # PROMOTED to 3
-        "tier": 2,  # US-002: Quality Tier
-    },
-    "cerebras": {
-        "model": "llama3.1-8b",  # Fast
-        "rpm": 30,  # 30 requests per minute
-        "tpm": 60000,  # 60K TPM (lower)
-        "max_concurrent": 2,  # INCREASED to 2
-        "min_delay": 2.0,  # 2s between requests
-        "priority": 4,  # Reordered
-        "tier": 1,  # US-002: Speed Tier
+        "priority": 5,
+        "tier": 2,
     },
 }
 
@@ -133,9 +134,9 @@ class AdaptiveConcurrencyLimiter:
                     self.limit = min(self.limit + 1, self.max_limit)
                     self.success_streak = 0
                     if self.limit > old_limit:
-                        logger.info(
-                            f"Adaptive Concurrency: Backoff recovery - Limit increased to {self.limit}"
-                        )
+                        # logger.debug(
+                        #     f"Adaptive Concurrency: Backoff recovery - Limit increased to {self.limit}"
+                        # )
                         self.condition.notify()  # Wake up a thread if we have room now
 
     def record_429(self):
@@ -174,15 +175,13 @@ class RateLimiter:
 class ParallelBatchProcessor:
     def __init__(self, providers: List[str] | None = None):
         """
-        Initialize processor with MAXIMUM SPEED configuration.
-        Priority: Groq (16) > Mistral (4) > Gemini (3) > Cerebras (2) = 25 workers
+        Initialize processor with EXTREME SPEED configuration.
         """
         self.providers = providers or [
             "groq",
             "cerebras",
             "mistral",
-            "gemini",  # Re-enabled (US-005)
-            # "openrouter", # Disabled due to slowness
+            "gemini",
         ]
 
         self.rate_limiters = {
@@ -199,13 +198,10 @@ class ParallelBatchProcessor:
         self.status_lock = Lock()
 
         # Initialize Adaptive Limiters per Provider
-        # US-002: Per-provider adaptive concurrency to prevent one flaky provider from throttling others
         self.adaptive_limiters = {}
         for p in self.providers:
             config = PROVIDER_CONFIG.get(p, {})
             max_conc = config.get("max_concurrent", 5)
-            # Start at max to be aggressive, or half max? Start at max but drop fast.
-            # Actually US-001 said start at 4. Let's start at max_concurrent for that provider.
             self.adaptive_limiters[p] = AdaptiveConcurrencyLimiter(
                 initial=max_conc, min_limit=1, max_limit=max_conc
             )
@@ -232,7 +228,6 @@ class ParallelBatchProcessor:
         model = config["model"]
 
         # US-002: Determine Timeout based on Tier
-        # Tier 1: 5s, Tier 2: 20s. Hard Cap: 25s
         tier = config.get("tier", 2)
         if tier == 1:
             timeout = TIMEOUT_TIER_1_SOFT
@@ -267,26 +262,18 @@ class ParallelBatchProcessor:
             return result
 
         except Exception as e:
-            # US-002: Catch timeouts explicitly
-            # Note: Clients currently swallow RequestException and return None (except 429)
-            # We need to catch 'Timeout' if it bubbles up, or 'ReadTimeout', etc.
-            # If clients return None on timeout, we might miss the specific log.
-            # However, we will modify clients to bubble up timeouts.
-
             error_str = str(e).lower()
             if "timeout" in error_str or isinstance(e, requests.Timeout):
                 logger.error(f"Timeout Failure: {provider} exceeded {timeout}s limit")
-                # Trigger backoff for timeouts too
                 with self.status_lock:
                     self.consecutive_errors[provider] += 1
                     backoff = min(60.0, 5.0 * (2 ** (self.consecutive_errors[provider] - 1)))
                     self.provider_status[provider] = time.time() + backoff
-                raise e  # Re-raise to be handled by caller as error
+                raise e
 
             if "429" in str(e):
                 with self.status_lock:
                     self.consecutive_errors[provider] += 1
-                    # Exponential Backoff: 5s, 10s, 20s, 40s, 60s (max)
                     backoff = min(60.0, 5.0 * (2 ** (self.consecutive_errors[provider] - 1)))
                     self.provider_status[provider] = time.time() + backoff
                 logger.warning(
@@ -299,7 +286,7 @@ class ParallelBatchProcessor:
     ) -> Dict:
         """Process a single batch with a specific provider."""
 
-        # Acquire adaptive concurrency slot (US-001/US-002: Per Provider)
+        # Acquire adaptive concurrency slot
         limiter = self.adaptive_limiters.get(provider)
         if limiter:
             limiter.acquire()
@@ -309,7 +296,6 @@ class ParallelBatchProcessor:
             result = self._execute_request(provider, messages)
             duration = time.time() - start
 
-            # CRITICAL: Treat None result as an error (API returned nothing)
             if result is None:
                 with self.stats_lock:
                     self.stats[provider]["errors"] += 1
@@ -327,7 +313,6 @@ class ParallelBatchProcessor:
 
             logger.info(f"[{provider}] Batch {batch_id} done in {duration:.2f}s")
 
-            # Record success for adaptive concurrency (US-001)
             if limiter:
                 limiter.record_success()
 
@@ -343,7 +328,6 @@ class ParallelBatchProcessor:
             with self.stats_lock:
                 self.stats[provider]["errors"] += 1
 
-            # Check for 429 and trigger backoff (US-001)
             if "429" in str(e) and limiter:
                 limiter.record_429()
 
@@ -355,7 +339,6 @@ class ParallelBatchProcessor:
                 "provider": provider,
             }
         finally:
-            # Release slot (US-001)
             if limiter:
                 limiter.release()
 
@@ -388,16 +371,11 @@ class ParallelBatchProcessor:
         self, batches: List[List[dict]], allowed_providers: List[str] | None = None
     ) -> List[Any]:
         """
-        Process batches with MAXIMUM parallelism and AUTO-FALLBACK.
-
-        Strategy:
-        1. Round-robin across all providers based on their capacity
-        2. Retry failed batches with fallback providers
+        Process batches with EXTREME parallelism and AUTO-FALLBACK.
         """
         total = len(batches)
-        logger.info(f"Processing {total} batches with auto-fallback enabled...")
+        logger.info(f"Processing {total} batches with EXTREME throughput...")
 
-        # Calculate worker allocation: Groq(16) + Mistral(4) + Gemini(3) + Cerebras(2) = 25
         workers = []
         target_providers = allowed_providers if allowed_providers else self.providers
         
@@ -407,20 +385,20 @@ class ParallelBatchProcessor:
 
         max_workers = len(workers)
         if max_workers == 0:
-            logger.error("No workers available with current provider configuration!")
+            logger.error("No workers available!")
             return [None] * total
 
-        logger.info(f"Using {max_workers} workers: {list(set(workers))}")
+        logger.info(f"Using {max_workers} workers across {len(target_providers)} providers")
 
-        results: List[Any] = [None] * total  # Use list for indexed access
+        results: List[Any] = [None] * total
         failed_batches = []
-        batch_queue = list(enumerate(batches))  # [(id, batch), ...]
+        batch_queue = list(enumerate(batches))
 
         # Round-robin assignment
         def get_next_provider(idx: int) -> str:
             return workers[idx % len(workers)]
 
-        # Phase 1: Initial pass with round-robin
+        # Phase 1: Initial pass
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {}
 
@@ -429,7 +407,6 @@ class ParallelBatchProcessor:
                 future = executor.submit(self._process_batch, batch_id, batch, provider)
                 futures[future] = (batch_id, batch, provider)
 
-            # Collect results
             for future in as_completed(futures):
                 batch_id, batch, provider = futures[future]
                 result = future.result()
@@ -439,46 +416,30 @@ class ParallelBatchProcessor:
                 else:
                     failed_batches.append((batch_id, batch, provider))
 
-                # Progress
                 done = sum(1 for r in results if r is not None)
-                if done % 5 == 0 or done == total:
+                if done % 10 == 0 or done == total:
                     logger.info(f"Progress: {done}/{total} batches complete")
 
-        # Phase 2: Retry failed batches with fallback providers
+        # Phase 2: Retry
         if failed_batches:
             logger.warning(
-                f"Retrying {len(failed_batches)} failed batches with fallback providers..."
+                f"Retrying {len(failed_batches)} failed batches..."
             )
 
-            # Get list of providers that worked (have successful results)
             working_providers: set[str] = set()
             for r in results:
                 if r and r.get("status") == "success":
                     working_providers.add(r.get("provider"))
 
-            # Determine fallback order (prioritize working providers)
-            # CRITICAL OPTIMIZATION: Deprioritize OpenRouter (Slow)
-            base_fallback_order = [
-                "cerebras",
-                "mistral",
-                "groq",
-                "gemini",
-            ]
+            base_fallback_order = ["groq", "cerebras", "mistral", "gemini"]
+            fallback_order = [p for p in base_fallback_order if p in target_providers]
 
-            fallback_order = [
-                p for p in base_fallback_order if p in target_providers
-            ]
-
-            # Add working providers to front
+            # Prioritize working
             for wp in working_providers:
                 if wp in fallback_order:
                     fallback_order.remove(wp)
                     fallback_order.insert(0, wp)
 
-            logger.info(f"Fallback order: {fallback_order}")
-
-            # US-002: Parallelize Phase 2 Retries
-            # Use max_workers to speed up recovery
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures_retry = {
                     executor.submit(
@@ -494,15 +455,9 @@ class ParallelBatchProcessor:
                         results[batch_id] = result
                     except Exception as e:
                         logger.error(f"Retry thread failed for Batch {batch_id}: {e}")
-                        results[batch_id] = {
-                            "batch_id": batch_id,
-                            "status": "error",
-                            "data": None,
-                        }
 
         self._print_summary()
 
-        # Return results in order (preserve None for failures to maintain batch mapping)
         final_results: List[Any] = []
         for r in results:
             if r and r.get("status") == "success" and r.get("data"):
@@ -514,19 +469,18 @@ class ParallelBatchProcessor:
 
     def process_batches_groq_priority(self, batches: List[List[dict]]) -> List[Any]:
         """
-        Groq-first strategy -> Now mapped to HYBRID MAX SPEED for US-005.
-        Uses all providers with weighted allocation (Groq > Mistral > Cerebras > Gemini).
+        Legacy method mapped to hybrid strategy.
         """
-        logger.info("Redirecting 'Groq Priority' to 'Hybrid Max Speed' (All Providers)")
+        logger.info("Redirecting 'Groq Priority' to 'Hybrid Extreme Speed'")
         return self.process_batches(batches)
 
     def _print_summary(self) -> None:
         """Print execution stats."""
         logger.info("=" * 60)
-        logger.info("PARALLEL BATCH PROCESSING SUMMARY")
+        logger.info("EXTREME THROUGHPUT SUMMARY")
         logger.info("=" * 60)
         logger.info(
-            f"{'Provider':<12} | {'Batches':>8} | {'Errors':>7} | {'Avg Time':>10} | {'RPM Used':>10}"
+            f"{'Provider':<12} | {'Batches':>8} | {'Errors':>7} | {'Avg Time':>10} | {'RPM':>10}"
         )
         logger.info("-" * 60)
 

@@ -25,6 +25,8 @@ def normalize_capper_name(name: str) -> str:
     """Normalize capper name for comparison."""
     if not name:
         return ""
+    # Ensure string
+    name = str(name)
     # Lowercase, remove special chars, collapse spaces
     clean = re.sub(r"[^a-z0-9\s]", "", name.lower())
     clean = re.sub(r"\s+", "", clean)  # Remove all spaces for comparison
@@ -35,6 +37,8 @@ def normalize_pick_text(pick: str) -> str:
     """Normalize pick text for comparison."""
     if not pick:
         return ""
+    # Ensure string
+    pick = str(pick)
     # Lowercase
     clean = pick.lower()
     # Normalize team abbreviations

@@ -1,13 +1,14 @@
 # Pick Verification Report - 2026-01-24
 
 **Total Messages Processed:** 50
-**Total Picks Extracted:** 163
+**Total Picks Extracted:** 213
 
 ---
 
 ## Message ID: 10889
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > **MARCO D'ANGELO
@@ -22,6 +23,7 @@
 ## Message ID: 10891
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > **Big Al**
@@ -60,6 +62,7 @@
 ## Message ID: 12791
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > **MARCO D'ANGELO
@@ -74,6 +77,7 @@
 ## Message ID: 12793
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > **Big Al**
@@ -112,6 +116,7 @@
 ## Message ID: 1464630099621052417
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Eric Cohen 6-3 nfl run
@@ -126,6 +131,7 @@
 ## Message ID: 1464645478649172193
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > MARCO D'ANGELO
@@ -141,6 +147,7 @@
 ## Message ID: 1464653596745400578
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > TMS
@@ -154,6 +161,7 @@
 ## Message ID: 1464654875336904917
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > ✅NewmarkTennis
@@ -171,6 +179,7 @@
 ## Message ID: 1464660776504529130
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > ===
@@ -195,6 +204,7 @@
 ## Message ID: 1464660856343363626
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Ralph Michaels 
@@ -209,6 +219,7 @@
 ## Message ID: 1464663934270308353
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Kyle Hunter 
@@ -227,6 +238,7 @@
 ## Message ID: 1464664001999929477
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Tokyo Brandon
@@ -240,6 +252,7 @@
 ## Message ID: 1464664628926742820
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > 👍 Gianni The Greek:
@@ -258,6 +271,7 @@
 ## Message ID: 1464665301156368506
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Big Al
@@ -281,6 +295,7 @@
 ## Message ID: 1464665682120544348
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Kyle Anthony 5% 
@@ -294,6 +309,7 @@
 ## Message ID: 1464666797620859198
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > ISW
@@ -308,6 +324,7 @@
 ## Message ID: 1464667314380079129
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > ====
@@ -327,6 +344,7 @@
 ## Message ID: 1464669178576240700
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > ====
@@ -343,6 +361,7 @@
 ## Message ID: 1464672333536166059
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > ..
@@ -361,6 +380,7 @@
 ## Message ID: 1464673962532409456
 
 ### 📝 Source Message
+**Author:** Discord
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Zach's Bets NCAAB:
@@ -383,6 +403,7 @@
 ## Message ID: 2014852997667528902
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Your Daily Capper 
@@ -399,6 +420,7 @@
 ## Message ID: 2014853069344055341
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Will Rogers
@@ -413,6 +435,7 @@
 ## Message ID: 2015078297160270275
 
 ### 📝 Source Message
+**Author:** @allpicksarefree
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > 🔮Provenwinner 
@@ -530,6 +553,7 @@
 ## Message ID: 2015091837036282311
 
 ### 📝 Source Message
+**Author:** @allpicksarefree
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Cblez
@@ -550,6 +574,7 @@
 ## Message ID: 2015104132424548519
 
 ### 📝 Source Message
+**Author:** @allpicksarefree
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > 🏀 CBB Cappers Consensus:
@@ -565,6 +590,7 @@
 ## Message ID: 2015112285795262578
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Bet Sharper
@@ -585,6 +611,7 @@
 ## Message ID: 2015112637978394887
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Prop Joe
@@ -604,6 +631,7 @@
 ## Message ID: 2015112825925238860
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Cblez
@@ -625,6 +653,7 @@
 ## Message ID: 2015113176019591264
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Ben burns
@@ -640,6 +669,7 @@
 ## Message ID: 2015113321666802065
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Gianni the Greek
@@ -658,6 +688,7 @@
 ## Message ID: 2015113466470969651
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Marco D’Angelo
@@ -672,6 +703,7 @@
 ## Message ID: 2015114437271925194
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Tokyo Brandon
@@ -686,6 +718,7 @@
 ## Message ID: 2015115794125090973
 
 ### 📝 Source Message
+**Author:** @allcappersfreee
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > #BigAl🔥
@@ -724,6 +757,7 @@
 ## Message ID: 2015115866669793409
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Big Al
@@ -747,6 +781,7 @@
 ## Message ID: 2015115935578001412
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Strike Point Sports
@@ -763,6 +798,7 @@
 ## Message ID: 2015116068604502256
 
 ### 📝 Source Message
+**Author:** @allcappersfreee
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Fezzy UFC🏆🔥 https://t.co/vNDvPU06rH
@@ -775,6 +811,7 @@
 ## Message ID: 2015116109851267539
 
 ### 📝 Source Message
+**Author:** @ItsCappersPicks
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > ⚽️ Fredo 
@@ -789,6 +826,7 @@
 ## Message ID: 2015116235252654394
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Smart Money Sports
@@ -811,6 +849,7 @@
 ## Message ID: 2015116338759614915
 
 ### 📝 Source Message
+**Author:** @allcappersfreee
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > 24/01
@@ -843,6 +882,7 @@
 ## Message ID: 2015116639927509388
 
 ### 📝 Source Message
+**Author:** @EZMSports
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Stephen Nover 
@@ -857,6 +897,7 @@
 ## Message ID: 2015116848984215979
 
 ### 📝 Source Message
+**Author:** @allcappersfreee
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > #LEARLOCKS🔥
@@ -876,6 +917,7 @@
 ## Message ID: 31604
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > 🔮Provenwinner 
@@ -993,6 +1035,7 @@
 ## Message ID: 31605
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Cblez
@@ -1013,6 +1056,7 @@
 ## Message ID: 31606
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > NickyCashin
@@ -1032,6 +1076,7 @@
 ## Message ID: 31608
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > ThisGirlBetz
@@ -1059,6 +1104,7 @@
 ## Message ID: 31609
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > DirtyBubbleBets 
@@ -1076,6 +1122,7 @@
 ## Message ID: 31610
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > AndersPicks
@@ -1092,6 +1139,7 @@
 ## Message ID: 31611
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > OutofLineBets
@@ -1107,6 +1155,7 @@
 ## Message ID: 31613
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > Smart Money Sports
@@ -1130,6 +1179,7 @@
 ## Message ID: 31614
 
 ### 📝 Source Message
+**Author:** Telegram
 **Date:** 2026-01-24 12:00 ET
 **Text:**
 > HammeringHank

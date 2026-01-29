@@ -121,7 +121,7 @@ class ExtractionPipeline:
                 if batch_idx < len(batches):
                     # Remove int() cast to support string IDs (e.g., synthetic)
                     valid_ids = [
-                        m.get("id")
+                        str(m.get("id"))
                         for m in batches[batch_idx]
                         if m.get("id") is not None
                     ]
@@ -137,15 +137,30 @@ class ExtractionPipeline:
         # 2.5 Auto-Group Parlays
         # Ensure we have context for all messages (even rule-based ones)
         full_message_context = {}
+        msg_author_map = {}
         for m in messages:
             if m.get("id"):
+                str_id = str(m["id"])
                 try:
                     text = m.get("text", "")
                     ocr = m.get("ocr_text", "")
                     # Store by string ID
-                    full_message_context[str(m["id"])] = f"{text}\n{ocr}"
+                    full_message_context[str_id] = f"{text}\n{ocr}"
                 except:
                     pass
+                
+                if m.get("author"):
+                    msg_author_map[str_id] = m.get("author")
+
+        # US-004: Ensure capper_name is populated from message author if missing
+        # This prevents "Unknown" cappers from different messages being merged.
+        for p in picks:
+            mid = str(p.get("message_id", ""))
+            if mid in msg_author_map:
+                current_capper = p.get("capper_name", "Unknown")
+                # Trust the source metadata if the pick doesn't have a specific capper
+                if current_capper.lower() == "unknown":
+                    p["capper_name"] = msg_author_map[mid]
 
         picks = auto_group_parlays(picks, full_message_context)
 
@@ -191,7 +206,7 @@ class ExtractionPipeline:
                 # Semantic Validation
                 is_valid, reason = SemanticValidator.validate(p)
                 if not is_valid:
-                    fixed_p = SemanticValidator.fix_pick(p, reason)
+                    fixed_p = SemanticValidator.fix_pick(p, reason or "Unknown validation error")
                     is_valid_now, reason_now = SemanticValidator.validate(fixed_p)
 
                     if is_valid_now:
@@ -337,7 +352,7 @@ class ExtractionPipeline:
                         valid_ids = None
                         if batch_idx < len(reparse_batches):
                             valid_ids = [
-                                m.get("id") # Keep as string/any
+                                str(m.get("id")) # Keep as string/any
                                 for m in reparse_batches[batch_idx]
                                 if m.get("id") is not None
                             ]

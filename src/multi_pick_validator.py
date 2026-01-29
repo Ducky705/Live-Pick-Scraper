@@ -206,14 +206,20 @@ class MultiPickValidator:
 
         # Determine if valid
         # Allow some tolerance based on confidence
-        tolerance = 1 if estimate.confidence > 0.6 else 2
+        # BUT: If we found 0 picks and expect > 0, we MUST reparse.
+        if actual_count == 0 and estimate.estimated_count > 0:
+            tolerance = 0
+        else:
+            tolerance = 1 if estimate.confidence > 0.6 else 2
+        
         is_valid = missing_count <= tolerance
 
         # Determine if we should retry
+        # Retry if missing > tolerance AND confidence is decent
         needs_reparse = (
             missing_count > tolerance
-            and estimate.confidence > 0.5
-            and estimate.estimated_count > 1
+            and estimate.confidence > 0.4  # Lowered threshold to catch more misses
+            and estimate.estimated_count >= 1
         )
 
         # Build reason

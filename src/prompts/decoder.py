@@ -17,7 +17,7 @@ import json
 import re
 import logging
 import sys
-from typing import Dict, Any, List, Optional, Union
+from typing import Dict, Any, List, Optional, Union, Sequence
 
 # =============================================================================
 # EXPANSION MAPPINGS
@@ -419,7 +419,7 @@ def extract_json_from_response(text: str) -> Optional[Union[Dict, List]]:
 def normalize_response(
     response: str,
     expand: bool = True,
-    valid_message_ids: Optional[List[Union[int, str]]] = None,
+    valid_message_ids: Optional[Sequence[Union[int, str]]] = None,
     message_context: Optional[Dict[int, str]] = None,
 ) -> List[Dict[str, Any]]:
     """
@@ -469,7 +469,10 @@ def normalize_response(
                             pass
 
             if expand:
-                return validate_and_correct_batch(picks, valid_message_ids)
+                return validate_and_correct_batch(
+                    picks,
+                    list(valid_message_ids) if valid_message_ids is not None else None,
+                )
             return picks
 
     # DSL HANDLING: If response looks like DSL (pipe-separated), parse it
@@ -482,7 +485,8 @@ def normalize_response(
         if picks:
             if expand:
                 return validate_and_correct_batch(
-                    [expand_compact_pick(p) for p in picks], valid_message_ids
+                    [expand_compact_pick(p) for p in picks],
+                    list(valid_message_ids) if valid_message_ids is not None else None,
                 )
             return picks
 
@@ -535,7 +539,9 @@ def normalize_response(
                     pass
 
     if expand:
-        return validate_and_correct_batch(picks, valid_message_ids)
+        return validate_and_correct_batch(
+            picks, list(valid_message_ids) if valid_message_ids is not None else None
+        )
 
     return picks
 
@@ -2250,7 +2256,7 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def validate_and_correct_batch(
-    picks: List[Dict[str, Any]], valid_message_ids: Optional[List[Union[int, str]]] = None
+    picks: List[Dict[str, Any]], valid_message_ids: Optional[Sequence[Union[int, str]]] = None
 ) -> List[Dict[str, Any]]:
     """
     Apply post-processing validation to a batch of picks.

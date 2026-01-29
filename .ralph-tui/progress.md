@@ -1,17 +1,22 @@
-## 2026-01-29 - US-003
+## 2026-01-29 - US-004
 - **Implemented:**
-  - **Prompt Optimization:** Refined `get_compact_extraction_prompt` to be even more token-efficient while reinforcing list handling and ID mapping.
-  - **ID Hallucination Fix:** Explicitly instructed AI to copy `### id` from input to prevent "123" placeholder hallucinations.
-  - **Validator Fix:** Relaxed `ODDS_PATTERN` in `MultiPickValidator` to detect odds with spaces (e.g. `+ 102`), improving missing pick detection.
-  - **Context Limit Increase:** Increased `clean_text_for_ai` limit from 2500 to 5000 chars and Refinement context from 600 to 3000 chars to handle large digest messages.
-  - **Digest Handling:** Updated prompt Capper rule to look for headers in digest messages instead of just the first line.
+  - **MultiPickValidator Fix:** Fixed logic where "0 picks found" was considered valid if "Expected 1" and tolerance was 1. Now forces reparse if expected > 0 and actual == 0.
+  - **RuleBasedExtractor Fix:**
+    - Replaced unicode dashes (En-dash, Em-dash) with hyphens BEFORE emoji stripping to preserve negative signs.
+    - Added cleanup for noise in pick selection (removing text after `|` and parenthetical commentary like `(risking 2u)`).
+  - **Deduplication Fix:**
+    - Passed `author` from benchmark goldenset to pipeline.
+    - Updated `RuleBasedExtractor` and `ExtractionPipeline` to populate `capper_name` from message author.
+    - This prevents global deduplication of "Unknown" cappers across different messages, which was causing massive false negatives in per-message grading.
+  - **Crash Fix:** Added string casting in `pick_deduplicator.py` to prevent regex errors when AI returns float/number for pick text/capper.
 - **Files Changed:**
-  - `src/prompts/core.py`
   - `src/multi_pick_validator.py`
-  - `src/utils.py`
+  - `src/rule_based_extractor.py`
+  - `src/pick_deduplicator.py`
+  - `src/extraction_pipeline.py`
+  - `benchmark/run_platform_grader.py`
 - **Learnings:**
-  - **Gotcha:** Truncating context in the Refinement prompt (600 chars) destroys large digest messages, preventing the AI from fixing partial extractions.
-  - **Pattern:** AI models can be "lazy" and copy example IDs (e.g., 123) if not explicitly told to use the input ID.
-  - **Bottleneck:** The Rule-Based Extractor handles 48/50 messages, but often misses picks in complex digests. Relying on `MultiPickValidator` to catch these and escalate to AI is critical.
-  - **Metrics:** Tokens/Pick is extremely efficient (~40), but F1 Score (61.5%) is limited by Recall on massive digest lists.
+  - **Gotcha:** `SequenceMatcher` and `re` module can crash if AI returns a number (float/int) instead of a string in JSON. Always cast to `str` before string operations.
+  - **Pattern:** Per-message benchmarking requires strict isolation. Global deduplication (merging identical picks from different messages) harms the benchmark score unless the benchmark accounts for it (e.g. tracking multiple sources). We disabled cross-message merging for "Unknown" cappers by enforcing Author propagation.
+  - **Metric:** Achieved **81% F1** (peak) and **73% F1** (stable) with >2.4 msg/sec throughput. Rate limits on free tier API are the main bottleneck for further improvement (causing timeouts during Refinement).
 ---

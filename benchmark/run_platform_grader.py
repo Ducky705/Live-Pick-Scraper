@@ -86,6 +86,7 @@ def run_grader():
             "id": item["message_id"],
             "text": item["text"],
             "source": item.get("source", "unknown"),
+            "author": item.get("capper", "Unknown"),  # US-004: Pass capper to prevent global dedup issues
             "date": "2026-01-24 12:00 ET" # Mock date
         })
 

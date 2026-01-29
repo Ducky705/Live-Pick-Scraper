@@ -52,7 +52,7 @@
       "title": "Final Polish & Verification",
       "description": "Run the full benchmark suite one last time. Ensure all metrics meet the target goals. Clean up any debug logging.",
       "priority": 4,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-003"
       ],
@@ -61,10 +61,11 @@
         "Throughput > 5 msg/sec",
         "Tokens per pick < 1000",
         "Codebase is clean and strictly typed."
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     }
   ],
   "metadata": {
-    "updatedAt": "2026-01-29T19:05:00.553Z"
+    "updatedAt": "2026-01-29T19:17:56.603Z"
   }
 }

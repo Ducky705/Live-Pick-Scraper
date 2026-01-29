@@ -109,9 +109,24 @@ class RuleBasedExtractor:
                     .replace("½", ".5")
                     .replace("¼", ".25")
                     .replace("¾", ".75")
+                    # Replace unicode dashes with standard hyphen
+                    .replace("\u2013", "-")  # En dash
+                    .replace("\u2014", "-")  # Em dash
+                    .replace("\u2212", "-")  # Minus sign
                 )
-                # Remove emojis (simplistic regex)
+                # Remove emojis (simplistic regex) - Keep ASCII + standard punctuation
                 line = re.sub(r"[^\x00-\x7F]+", "", line)
+                
+                # Clean specific noise patterns
+                # 1. Remove everything after pipe |
+                line = line.split("|")[0]
+                
+                # 2. Remove parenthetical commentary (e.g. "(risking 2u)")
+                # Be careful not to remove (2u) or (-110)
+                # Strategy: Remove (...) if it contains "risk", "win", "to win", "profit"
+                if "(" in line:
+                    line = re.sub(r"\((?=[^)]*(?:risk|win|profit|analysis|writeup)).*?\)", "", line, flags=re.IGNORECASE)
+
                 line = line.strip()
 
                 # Skip likely noise
@@ -146,9 +161,12 @@ class RuleBasedExtractor:
                         parsed.selection = normalized_selection
 
                         # Convert to standard dict format
+                        capper = msg.get("author") or "Unknown"
+                        
                         pick_dict = RuleBasedExtractor._to_pick_dict(
                             parsed, str(msg_id) if msg_id else "unknown", line, units
                         )
+                        pick_dict["capper_name"] = capper
 
                         # Add metadata
                         pick_dict["extraction_method"] = "rule_based"

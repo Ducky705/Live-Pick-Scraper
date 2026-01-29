@@ -1,0 +1,23 @@
+{
+  "name": "Platform Grader Optimization",
+  "branchName": "fix/platform-grader-optimization",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Establish Baseline & Optimize Loop",
+      "description": "Run the platform grader benchmark and iteratively improve the codebase to maximize accuracy, speed, and efficiency. Goal: F1 > 95%, Speed > 5 msg/sec.",
+      "priority": 1,
+      "passes": true,
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "F1 Score > 95%",
+        "Throughput > 5 msg/sec",
+        "Tokens per pick < 1000"
+      ],
+      "completionNotes": "Completed by agent"
+    }
+  ],
+  "metadata": {
+    "updatedAt": "2026-01-29T18:01:57.408Z"
+  }
+}

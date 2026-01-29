@@ -1,0 +1,21 @@
+{
+  "speed": {
+    "duration": 10.113281011581421,
+    "throughput": 0.9887987873122783,
+    "latency_ms": 1011.3281011581421
+  },
+  "efficiency": {
+    "total_requests": 3,
+    "requests_per_msg": 0.3,
+    "total_tokens": 4504.25
+  },
+  "accuracy": {
+    "accuracy": 20.0,
+    "recall": 54.37,
+    "precision": 100.0,
+    "total_picks_expected": 103,
+    "total_picks_found": 83,
+    "total_missed": 47,
+    "total_false_positives": 27
+  }
+}

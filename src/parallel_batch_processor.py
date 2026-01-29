@@ -29,54 +29,67 @@ from src.mistral_client import mistral_completion
 from src.gemini_client import gemini_text_completion
 from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt
+import requests  # Import requests to catch Timeout
 
 logger = logging.getLogger(__name__)
 
 # =============================================================================
-# RATE LIMIT CONFIGURATION - MAXIMUM SPEED
+# RATE LIMIT & LATENCY CONFIGURATION
 # =============================================================================
+
+# US-002: Latency Budget Enforcement
+TIMEOUT_TIER_1_SOFT = 15.0  # Speed Target (Groq/Cerebras) - Increased from 5.0
+TIMEOUT_TIER_2_SOFT = 30.0  # Quality Target (Mistral/Gemini) - Increased from 20.0
+TIMEOUT_GLOBAL_HARD = 45.0  # Hard Limit (Backstop) - Increased from 25.0
+
 PROVIDER_CONFIG = {
     "groq": {
         "model": "llama-3.1-8b-instant",  # Iteration 3: Switch to 8b for speed/limits
         "rpm": 500,  # Much higher limits for 8b
         "tpm": 30000,  # Lowered to 30k for safety (Free Tier)
-        "max_concurrent": 2,  # Reduced from 4 to 2 to stay under TPM limit (20k tokens safe zone)
-        "min_delay": 0.5,  # Slower pacing (120 RPM max) to respect limits
+        "max_concurrent": 1,  # CRITICAL: Reduced to 1 to avoid TPM limits
+        "min_delay": 5.0,  # Slow down: 12 RPM max
         "priority": 1,  # PRIMARY provider
+        "tier": 1,  # US-002: Speed Tier
     },
+
     "mistral": {
         "model": "mistral-large-latest",  # Updated model name
         "rpm": 60,  # 60 requests per minute
         "tpm": 500000,  # 500K TPM - can batch heavily!
-        "max_concurrent": 4,  # 60 RPM = 1/sec, 4 concurrent staggered
-        "min_delay": 1.0,  # 1 req/sec
+        "max_concurrent": 2,  # Reduced concurrency
+        "min_delay": 2.0,  # 0.5 req/sec
         "batch_size": 10,  # Bundle 10 messages per call
         "priority": 4,  # DEMOTED to 4 (Slow)
+        "tier": 2,  # US-002: Quality Tier
     },
     "openrouter": {
         "model": "meta-llama/llama-3.3-70b-instruct:free",
         "rpm": 100,
         "tpm": 100000,
-        "max_concurrent": 5,
-        "min_delay": 0.5,
+        "max_concurrent": 2,
+        "min_delay": 2.0,
         "priority": 5,  # TERTIARY (Fallback)
+        "tier": 2,  # US-002: Quality Tier
     },
     "gemini": {
-        "model": "gemini-1.5-flash",  # Reverted to stable model
+        "model": "gemini-1.5-flash",  # Reverted to stable model that definitely exists
         "rpm": 15,  # 15 requests per minute
         "tpm": 250000,  # 250K TPM
-        "max_concurrent": 2,  # Reduced from 3 to 2 for safety
-        "min_delay": 4.0,  # 4s between requests
+        "max_concurrent": 1,  # Reduced from 3 to 1 for safety
+        "min_delay": 5.0,  # 5s between requests
         "batch_size": 5,  # Bundle 5 messages per call
         "priority": 2,  # PROMOTED to 2 (Fast + High Limits)
+        "tier": 2,  # US-002: Quality Tier
     },
     "cerebras": {
         "model": "llama3.1-8b",  # Fast
         "rpm": 30,  # 30 requests per minute
         "tpm": 60000,  # 60K TPM (lower)
-        "max_concurrent": 2,  # 30 RPM = 0.5/sec
-        "min_delay": 2.0,  # 2s between requests
+        "max_concurrent": 1,  # 30 RPM = 0.5/sec
+        "min_delay": 4.0,  # 4s between requests
         "priority": 3,  # PROMOTED to 3 (Fast)
+        "tier": 1,  # US-002: Speed Tier
     },
 }
 
@@ -99,7 +112,8 @@ class AdaptiveConcurrencyLimiter:
         """Block until a slot is available based on current dynamic limit."""
         with self.condition:
             while self.current_running >= self.limit:
-                self.condition.wait()
+                # Add timeout to prevent infinite deadlocks if notify is missed
+                self.condition.wait(timeout=1.0)
             self.current_running += 1
 
     def release(self):
@@ -165,11 +179,12 @@ class ParallelBatchProcessor:
         """
         self.providers = providers or [
             "groq",
-            "openrouter",
-            "mistral",
-            "gemini",
             "cerebras",
+            "mistral",
+            # "gemini",  # Disabled due to 404s/Auth issues
+            # "openrouter", # Disabled due to slowness
         ]
+
         self.rate_limiters = {
             p: RateLimiter(PROVIDER_CONFIG[p]["min_delay"])
             for p in self.providers
@@ -207,21 +222,43 @@ class ParallelBatchProcessor:
         prompt = generate_ai_prompt(messages)
         model = config["model"]
 
+        # US-002: Determine Timeout based on Tier
+        # Tier 1: 5s, Tier 2: 20s. Hard Cap: 25s
+        tier = config.get("tier", 2)
+        if tier == 1:
+            timeout = TIMEOUT_TIER_1_SOFT
+        else:
+            timeout = TIMEOUT_TIER_2_SOFT
+
+        # Ensure we never exceed global hard limit
+        timeout = int(min(timeout, TIMEOUT_GLOBAL_HARD))
+
         try:
             # Execute
             if provider == "groq":
-                return groq_text_completion(prompt, model=model, timeout=30)
+                return groq_text_completion(prompt, model=model, timeout=timeout)
             elif provider == "openrouter":
-                return openrouter_completion(prompt, model=model, timeout=45)
+                return openrouter_completion(prompt, model=model, timeout=timeout)
             elif provider == "mistral":
-                return mistral_completion(prompt, model=model, timeout=30)
+                return mistral_completion(prompt, model=model, timeout=timeout)
             elif provider == "cerebras":
-                return cerebras_completion(prompt, model=model, timeout=30)
+                return cerebras_completion(prompt, model=model, timeout=timeout)
             elif provider == "gemini":
-                return gemini_text_completion(prompt, model=model, timeout=60)
+                return gemini_text_completion(prompt, model=model, timeout=timeout)
             else:
                 raise ValueError(f"Unknown provider: {provider}")
         except Exception as e:
+            # US-002: Catch timeouts explicitly
+            # Note: Clients currently swallow RequestException and return None (except 429)
+            # We need to catch 'Timeout' if it bubbles up, or 'ReadTimeout', etc.
+            # If clients return None on timeout, we might miss the specific log.
+            # However, we will modify clients to bubble up timeouts.
+
+            error_str = str(e).lower()
+            if "timeout" in error_str or isinstance(e, requests.Timeout):
+                logger.error(f"Timeout Failure: {provider} exceeded {timeout}s limit")
+                raise e  # Re-raise to be handled by caller as error
+
             if "429" in str(e):
                 with self.status_lock:
                     # Set 60s cooldown for rate limits
@@ -359,12 +396,11 @@ class ParallelBatchProcessor:
             # Determine fallback order (prioritize working providers)
             # CRITICAL OPTIMIZATION: Deprioritize OpenRouter (Slow)
             base_fallback_order = [
-                "mistral",
-                "gemini",
                 "cerebras",
+                "mistral",
                 "groq",
-                "openrouter",
             ]
+
 
             fallback_order = [
                 p for p in base_fallback_order if p in self.providers and p != "groq"
@@ -410,18 +446,20 @@ class ParallelBatchProcessor:
 
     def process_batches_groq_priority(self, batches: List[List[dict]]) -> List[Any]:
         """
-        Groq-first strategy: Blast all requests to Groq (16 concurrent), use others as fallback.
-        MAXIMUM SPEED mode - Groq handles 1000 RPM, so we can push 16 concurrent easily.
+        Groq-first strategy: Blast all requests to Groq (Configured concurrent), use others as fallback.
+        MAXIMUM SPEED mode - Groq handles 1000 RPM, so we can push high concurrency if limits allow.
         """
         total = len(batches)
-        logger.info(f"Processing {total} batches (GROQ-PRIORITY, 16 concurrent)...")
 
         results = [None] * total
         failed_batches = []
 
-        # Phase 1: Blast through with Groq (16 concurrent workers)
+        # Phase 1: Blast through with Groq (Using Configured Concurrency)
         groq_config = PROVIDER_CONFIG["groq"]
-        with ThreadPoolExecutor(max_workers=groq_config["max_concurrent"]) as executor:
+        concurrency = groq_config.get("max_concurrent", 2)
+        logger.info(f"Processing {total} batches (GROQ-PRIORITY, {concurrency} concurrent)...")
+
+        with ThreadPoolExecutor(max_workers=concurrency) as executor:
             futures = {
                 executor.submit(self._process_batch, i, batch, "groq"): i
                 for i, batch in enumerate(batches)
@@ -436,12 +474,13 @@ class ParallelBatchProcessor:
                 else:
                     failed_batches.append((batch_id, batches[batch_id]))
 
-        # Phase 2: Retry failures with fallback providers (Gemini > Cerebras > Mistral)
+        # Phase 2: Retry failures with fallback providers (Cerebras > Mistral)
         if failed_batches:
             logger.info(
                 f"Retrying {len(failed_batches)} failed batches with fallbacks..."
             )
-            fallback_providers = ["gemini", "cerebras", "mistral"]
+            fallback_providers = ["cerebras", "mistral"]
+
 
             for batch_id, batch in failed_batches:
                 for provider in fallback_providers:

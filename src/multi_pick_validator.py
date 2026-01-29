@@ -328,6 +328,6 @@ def validate_and_flag_missing(
         )
 
         if result.needs_reparse:
-            needs_reparse.append(mid)
+            needs_reparse.append(mid_str) # Return string ID
 
     return parsed_picks, needs_reparse

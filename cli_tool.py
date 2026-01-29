@@ -13,9 +13,10 @@ load_dotenv()
 # Ensure src is in path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from config import TARGET_TELEGRAM_CHANNEL_ID, OUTPUT_DIR, LOG_DIR
+from config import TARGET_TELEGRAM_CHANNEL_ID, TARGET_DISCORD_CHANNEL_ID, OUTPUT_DIR, LOG_DIR
 from src.telegram_client import TelegramManager
 from src.twitter_client import TwitterManager
+from src.discord_client import DiscordScraper
 from src.deduplicator import Deduplicator
 from src.ocr_handler import extract_text_batch
 from src.auto_processor import auto_select_messages
@@ -110,8 +111,26 @@ async def main():
     tw_msgs = await tw.fetch_tweets(target_date=target_date)
     logging.info(f"Fetched {len(tw_msgs)} Tweets.")
 
+    # Fetch Discord
+    discord_msgs = []
+    if TARGET_DISCORD_CHANNEL_ID:
+        logging.info("Fetching Discord messages...")
+        ds = DiscordScraper()
+        
+        # Support multiple comma-separated channel IDs
+        discord_ids = [did.strip() for did in TARGET_DISCORD_CHANNEL_ID.split(",") if did.strip()]
+        
+        for did in discord_ids:
+             logging.info(f"Fetching from Discord Channel: {did}...")
+             msgs = ds.fetch_messages(did, limit=50)
+             discord_msgs.extend(msgs)
+        
+        logging.info(f"Fetched {len(discord_msgs)} Discord messages.")
+    else:
+        logging.info("Skipping Discord fetch (No TARGET_DISCORD_CHANNEL_ID).")
+
     # Combine
-    all_msgs = tg_msgs + tw_msgs
+    all_msgs = tg_msgs + tw_msgs + discord_msgs
 
     # 3. DEDUPLICATION
     logging.info("Deduplicating messages...")

@@ -241,11 +241,15 @@ class PickParser:
         text_clean = text
         odds = None
 
-        # Pattern 1: Parentheses with odds, e.g. (-110), (+150)
-        paren_match = re.search(r"\(\s*([+-]?\d{3,})\s*\)", text)
+        # Pattern 1: Parentheses with odds, e.g. (-110), (+150), (- 120)
+        paren_match = re.search(r"\(\s*([+-]?)\s*(\d{3,})\s*\)", text)
         if paren_match:
             try:
-                odds = int(paren_match.group(1))
+                # Reconstruct full number
+                sign = paren_match.group(1) or ""
+                num = paren_match.group(2)
+                odds = int(sign + num)
+                
                 # Remove from text to avoid confusing line parser
                 text_clean = text.replace(paren_match.group(0), "").strip()
                 return odds, text_clean
@@ -253,19 +257,19 @@ class PickParser:
                 pass
 
         # Pattern 2: Standalone odds at end of string or separated
-        # We look for [+-] and 3+ digits (e.g. -110, +1200)
-        # Or specifically -100 to -199 (common)
-
-        # Regex: boundary, optional sign, 3+ digits, boundary
-        # Note: This might conflict with year 2024, but usually date is not in pick text passed here
-        matches = list(re.finditer(r"(?<!\d)([+-]\d{3,})(?!\d)", text_clean))
+        # We look for [+-] and 3+ digits (e.g. -110, +1200, - 110)
+        
+        # Regex: boundary, optional sign, space?, 3+ digits, boundary
+        matches = list(re.finditer(r"(?<!\d)([+-])\s*(\d{3,})(?!\d)", text_clean))
         if matches:
             # Take the last one as it's usually at the end
             m = matches[-1]
             try:
-                val = int(m.group(1))
+                sign = m.group(1)
+                num = m.group(2)
+                val = int(sign + num)
+                
                 # Heuristic: Odds are usually > 100 or < -100.
-                # Exception: -90? Rarely seen.
                 if abs(val) >= 100:
                     odds = val
                     text_clean = text_clean[: m.start()] + text_clean[m.end() :]
@@ -484,7 +488,8 @@ class PickParser:
 
         # Check for spread number
         # Note: Since we extracted odds (>=100), remaining numbers are likely spreads (-5.5, +3, etc.)
-        spread_match = re.search(r"([+-]?\d+\.?\d*)", text_clean)
+        # Handle " - 5.5" or "-5.5" or "+3"
+        spread_match = re.search(r"([+-])?\s*(\d+\.?\d*)", text_clean)
 
         found_spread_line = None
         if spread_match:
@@ -492,14 +497,24 @@ class PickParser:
             # 1. Has +/- sign
             # 2. Or is followed by 'pt' or 'point'
             # 3. Or text has 'spread'
-            val = float(spread_match.group(1))
+            
+            sign = spread_match.group(1) or ""
+            num = spread_match.group(2)
+            try:
+                # If sign is "-", apply it. If empty or "+", it's positive.
+                val = float(num)
+                if sign == "-":
+                    val = -val
+            except ValueError:
+                val = 0.0
 
-            has_sign = "+" in spread_match.group(0) or "-" in spread_match.group(0)
+            full_match = spread_match.group(0)
+            has_sign = "+" in full_match or "-" in full_match
 
             # Filter out years? 2024. But odds extraction handles >100.
             # Filter out "76ers" -> "76"
             is_part_of_word = re.search(
-                rf"{re.escape(spread_match.group(0))}[a-zA-Z]", text_clean
+                rf"{re.escape(full_match)}[a-zA-Z]", text_clean
             )
 
             if has_sign and not is_part_of_word:

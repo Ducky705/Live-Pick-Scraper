@@ -210,6 +210,9 @@ def mistral_completion(
         except Exception as e:
             if "429" in str(e):
                 raise e
+            # US-002: Raise Timeout to allow enforcement
+            if "timeout" in str(e).lower() or isinstance(e, requests.Timeout):
+                raise e
             logging.error(f"[Mistral] Exception: {e}")
             last_error = str(e)
 

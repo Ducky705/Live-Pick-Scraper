@@ -56,5 +56,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TARGET_TELEGRAM_CHANNEL_ID = os.getenv("TARGET_TELEGRAM_CHANNEL_ID")
+TARGET_DISCORD_CHANNEL_ID = os.getenv("TARGET_DISCORD_CHANNEL_ID")
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 API_ID = os.getenv("TELEGRAM_API_ID") or os.getenv("API_ID")
 API_HASH = os.getenv("TELEGRAM_API_HASH") or os.getenv("API_HASH") 

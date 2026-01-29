@@ -1,622 +1,620 @@
 # Pick Verification Report - 2024-01-01
 
 **Total Messages Processed:** 50
-**Total Picks Extracted:** 9
+**Total Picks Extracted:** 8
 
 ---
 
-## Message ID: 201
+## Message ID: 1
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Lakers -5 ( 974 )
+> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 7552
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Bulls -2.5 @ Pistons ( 318 )
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Lakers -5 | 974 | 1.0 | Spread | - |
+| Bulls -2.5 @ Pistons | 318 | 1.0 | Spread | - |
 
 ---
 
-## Message ID: 202
+## Message ID: 3
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Bulls -2.5 @ Pistons ( 844 )
+> Warriors vs Suns Over 230 ( 924 )
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Bulls -2.5 @ Pistons | 844 | 1.0 | Spread | - |
+| Warriors vs Suns Over 230 ( 924 ) | 924 | 1.0 | Total | - |
 
 ---
 
-## Message ID: 203
+## Message ID: 4
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Celtics -3.5 ( 319 )
+> Celtics -3.5 ( 812 )
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Celtics -3.5 | 319 | 1.0 | Spread | - |
+| Celtics -3.5 | 812 | 1.0 | Spread | - |
 
 ---
 
-## Message ID: 204
+## Message ID: 5
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Celtics -3.5 ( 425 )
+> Warriors vs Suns Over 230 ( 345 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 205
+## Message ID: 6
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Fade the public here. Everyone is on the Knicks but the smart money is on the Sixers +2. - Analysis ID: 7392
+> Celtics -3.5 ( 337 )
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 7
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Lakers -5 ( 410 )
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Sixers +2 | None | 1.0 | Spread | - |
+| Lakers -5 | 410 | 1.0 | Spread | - |
 
 ---
 
-## Message ID: 206
+## Message ID: 8
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Miami Heat ML ( 399 )
+> I'm loving the way the Lakers are playing lately. I think they cover the -5 spread easily against the tired Kings. - Analysis ID: 4723
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 9
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Knicks +4 ( 672 )
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Miami Heat ML | 399 | 1.0 | Moneyline | - |
+| Knicks +4 | 672 | 1.0 | Spread | - |
 
 ---
 
-## Message ID: 207
+## Message ID: 10
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Miami Heat ML ( 309 )
+> Lakers -5 ( 217 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 208
+## Message ID: 11
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Celtics -3.5 ( 827 )
+> Fade the public here. Everyone is on the Knicks but the smart money is on the Sixers +2. - Analysis ID: 4050
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 209
+## Message ID: 12
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Fade the public here. Everyone is on the Knicks but the smart money is on the Sixers +2. - Analysis ID: 7342
+> Fade the public here. Everyone is on the Knicks but the smart money is on the Sixers +2. - Analysis ID: 4595
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 210
+## Message ID: 13
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 7957
+> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 8567
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 14
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Bulls -2.5 @ Pistons ( 221 )
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 15
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 4629
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Miami Heat ML | 150 | 1.0 | Moneyline | - |
+| Warriors vs Opponent Over 230 | None | 1.0 | Total | - |
 
 ---
 
-## Message ID: 211
+## Message ID: 16
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Knicks +4 ( 448 )
+> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 6307
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 17
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 4663
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 18
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 3136
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 19
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Warriors vs Suns Over 230 ( 121 )
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 20
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Celtics -3.5 ( 975 )
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 21
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Nets vs Raptors Under 215.5 ( 293 )
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Knicks +4 | 448 | 1.0 | Spread | - |
+| Nets vs Raptors Under 215.5 ( 293 ) | 293 | 1.0 | Total | - |
 
 ---
 
-## Message ID: 212
+## Message ID: 22
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Lakers -5 ( 509 )
+> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 3576
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 213
+## Message ID: 23
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Knicks +4 ( 673 )
+> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 3851
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 214
+## Message ID: 24
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 4102
+> Bulls -2.5 @ Pistons ( 783 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 215
+## Message ID: 25
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 7799
+> Lakers -5 ( 868 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 216
+## Message ID: 26
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 6376
+> I'm loving the way the Lakers are playing lately. I think they cover the -5 spread easily against the tired Kings. - Analysis ID: 6936
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 217
+## Message ID: 27
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Bulls -2.5 @ Pistons ( 447 )
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 218
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Knicks +4 ( 904 )
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 219
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 1924
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 220
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 4404
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 221
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Miami Heat ML ( 383 )
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 222
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 3147
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 223
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Knicks +4 ( 299 )
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 224
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Lakers -5 ( 451 )
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 225
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Lakers -5 ( 289 )
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 226
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Lakers -5 ( 408 )
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 227
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 5453
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 228
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Celtics -3.5 ( 178 )
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 229
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 8248
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 230
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 7928
-
-### 🎯 Parsed Picks
-> *No picks extracted from this message.*
-
----
-
-## Message ID: 231
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> My model shows significant value on the under 215.5 for Nets/Raptors. Pace should be slow. - Analysis ID: 3201
+> Miami Heat ML ( 336 )
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Nets vs Raptors Under 215.5 | None | 1.0 | Total | - |
+| Miami Heat ML | 336 | 1.0 | Moneyline | - |
 
 ---
 
-## Message ID: 232
+## Message ID: 28
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> My model shows significant value on the under 215.5 for Nets/Raptors. Pace should be slow. - Analysis ID: 3865
+> Miami Heat ML ( 259 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 233
+## Message ID: 29
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Warriors vs Suns Over 230 ( 215 )
-
-### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Warriors vs Suns Over 230 ( 215 ) | 215 | 1.0 | Total | - |
-
----
-
-## Message ID: 234
-
-### 📝 Source Message
-**Date:** 2024-01-01 12:00:00
-**Text:**
-> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 3840
+> Nets vs Raptors Under 215.5 ( 471 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 235
+## Message ID: 30
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Bulls -2.5 @ Pistons ( 818 )
+> I'm loving the way the Lakers are playing lately. I think they cover the -5 spread easily against the tired Kings. - Analysis ID: 9751
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 236
+## Message ID: 31
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> My model shows significant value on the under 215.5 for Nets/Raptors. Pace should be slow. - Analysis ID: 8699
+> Knicks +4 ( 104 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 237
+## Message ID: 32
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Knicks +4 ( 191 )
+> I'm loving the way the Lakers are playing lately. I think they cover the -5 spread easily against the tired Kings. - Analysis ID: 1999
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 238
+## Message ID: 33
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Lakers -5 ( 565 )
+> My model shows significant value on the under 215.5 for Nets/Raptors. Pace should be slow. - Analysis ID: 5023
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 239
+## Message ID: 34
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Warriors vs Suns Over 230 ( 304 )
+> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 5434
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 240
+## Message ID: 35
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> My model shows significant value on the under 215.5 for Nets/Raptors. Pace should be slow. - Analysis ID: 8813
+> Fade the public here. Everyone is on the Knicks but the smart money is on the Sixers +2. - Analysis ID: 4455
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 241
+## Message ID: 36
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> I'm loving the way the Lakers are playing lately. I think they cover the -5 spread easily against the tired Kings. - Analysis ID: 4039
+> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 9433
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 242
+## Message ID: 37
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Bulls -2.5 @ Pistons ( 776 )
+> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 3870
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 243
+## Message ID: 38
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> My model shows significant value on the under 215.5 for Nets/Raptors. Pace should be slow. - Analysis ID: 1820
+> Warriors vs Suns Over 230 ( 271 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 244
+## Message ID: 39
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Knicks +4 ( 514 )
+> Warriors vs Suns Over 230 ( 697 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 245
+## Message ID: 40
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Celtics -3.5 ( 153 )
+> Lakers -5 ( 671 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 246
+## Message ID: 41
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Big play alert: Miami Heat to win outright. Jimmy Butler is back. - Analysis ID: 2810
+> Lakers -5 ( 773 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 247
+## Message ID: 42
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Celtics -3.5 ( 952 )
+> I'm loving the way the Lakers are playing lately. I think they cover the -5 spread easily against the tired Kings. - Analysis ID: 3241
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 248
+## Message ID: 43
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Warriors vs Suns Over 230 ( 269 )
+> Nets vs Raptors Under 215.5 ( 144 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 249
+## Message ID: 44
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> Warriors vs Suns Over 230 ( 108 )
+> My model shows significant value on the under 215.5 for Nets/Raptors. Pace should be slow. - Analysis ID: 2273
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
 
 ---
 
-## Message ID: 250
+## Message ID: 45
 
 ### 📝 Source Message
 **Date:** 2024-01-01 12:00:00
 **Text:**
-> I'm loving the way the Lakers are playing lately. I think they cover the -5 spread easily against the tired Kings. - Analysis ID: 7900
+> Maximum bet on the over in the Warriors game. Curry is hot and the defense is non-existent. 230 is too low. - Analysis ID: 3785
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 46
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Nets vs Raptors Under 215.5 ( 503 )
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 47
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Nets vs Raptors Under 215.5 ( 307 )
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 48
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> My model shows significant value on the under 215.5 for Nets/Raptors. Pace should be slow. - Analysis ID: 4833
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 49
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Warriors vs Suns Over 230 ( 519 )
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 50
+
+### 📝 Source Message
+**Date:** 2024-01-01 12:00:00
+**Text:**
+> Nets vs Raptors Under 215.5 ( 998 )
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*

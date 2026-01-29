@@ -77,15 +77,17 @@ class ExtractionPipeline:
                         ocr = m.get("ocr_text", "")
                         # Combine text + OCR for full context search
                         full_text = f"{text}\n{ocr}"
-                        message_context[int(mid)] = full_text
+                        # Store context by string ID (not int)
+                        message_context[str(mid)] = full_text
                     except (ValueError, TypeError):
                         pass
 
             for batch_idx, raw_response_str in enumerate(all_raw_picks):
                 valid_ids = None
                 if batch_idx < len(batches):
+                    # Remove int() cast to support string IDs (e.g., synthetic)
                     valid_ids = [
-                        int(m.get("id"))
+                        m.get("id")
                         for m in batches[batch_idx]
                         if m.get("id") is not None
                     ]
@@ -106,7 +108,8 @@ class ExtractionPipeline:
                 try:
                     text = m.get("text", "")
                     ocr = m.get("ocr_text", "")
-                    full_message_context[int(m["id"])] = f"{text}\n{ocr}"
+                    # Store by string ID
+                    full_message_context[str(m["id"])] = f"{text}\n{ocr}"
                 except:
                     pass
 
@@ -120,7 +123,8 @@ class ExtractionPipeline:
         logger.info(f"Initial extraction yielded {len(picks)} picks.")
 
         # 4. Validation & Refinement (The Auditor)
-        msg_map = {int(m["id"]): m for m in messages if m.get("id") is not None}
+        # Use string IDs for map
+        msg_map = {str(m["id"]): m for m in messages if m.get("id") is not None}
         reparse_ids = set()
         semantic_issues = {}
 
@@ -135,7 +139,8 @@ class ExtractionPipeline:
                 mid = p.get("message_id")
                 if mid:
                     try:
-                        high_conf_msg_ids.add(int(mid))
+                        # Store as string
+                        high_conf_msg_ids.add(str(mid))
                     except:
                         pass
 
@@ -144,7 +149,8 @@ class ExtractionPipeline:
             mid = p.get("message_id")
             if mid:
                 try:
-                    mid_int = int(mid)
+                    # Treat as string
+                    mid_str = str(mid)
                 except (ValueError, TypeError):
                     continue
 
@@ -157,24 +163,24 @@ class ExtractionPipeline:
                     if is_valid_now:
                         p.update(fixed_p)
                     else:
-                        if mid_int not in semantic_issues:
-                            semantic_issues[mid_int] = []
-                        semantic_issues[mid_int].append(
+                        if mid_str not in semantic_issues:
+                            semantic_issues[mid_str] = []
+                        semantic_issues[mid_str].append(
                             f"Pick '{p.get('pick')}' invalid: {reason}"
                         )
-                        reparse_ids.add(mid_int)
+                        reparse_ids.add(mid_str)
 
                 # Confidence Check
                 conf = p.get("confidence")
                 if conf is not None:
                     try:
                         if float(conf) < 8:
-                            if mid_int not in semantic_issues:
-                                semantic_issues[mid_int] = []
-                            semantic_issues[mid_int].append(
+                            if mid_str not in semantic_issues:
+                                semantic_issues[mid_str] = []
+                            semantic_issues[mid_str].append(
                                 f"Low confidence ({conf}/10)."
                             )
-                            reparse_ids.add(mid_int)
+                            reparse_ids.add(mid_str)
                     except ValueError:
                         pass
 
@@ -185,10 +191,10 @@ class ExtractionPipeline:
                 else:
                     # If this message ALREADY has a high confidence pick, ignore low confidence issues
                     # This prevents duplicates from AI tainting the message
-                    if mid_int in high_conf_msg_ids:
+                    if mid_str in high_conf_msg_ids:
                         continue
 
-                    msg = msg_map.get(mid_int)
+                    msg = msg_map.get(mid_str)
                     if msg:
                         text_upper = (
                             msg.get("text", "") + "\n" + msg.get("ocr_text", "")
@@ -198,7 +204,7 @@ class ExtractionPipeline:
                         # CRITICAL OPTIMIZATION: Only run global unit check if there's only 1 pick.
                         # Otherwise, "5U" appearing anywhere flags ALL 1U picks in a multi-pick message.
                         picks_for_msg = [
-                            p for p in picks if str(p.get("message_id")) == str(mid_int)
+                            p for p in picks if str(p.get("message_id")) == mid_str
                         ]
 
                         if p.get("units", 1.0) == 1.0 and len(picks_for_msg) == 1:
@@ -211,24 +217,24 @@ class ExtractionPipeline:
                                 potential_units = 3
 
                             if potential_units > 1:
-                                if mid_int not in semantic_issues:
-                                    semantic_issues[mid_int] = []
-                                semantic_issues[mid_int].append(
+                                if mid_str not in semantic_issues:
+                                    semantic_issues[mid_str] = []
+                                semantic_issues[mid_str].append(
                                     f"Possible Unit Mismatch: Text implies {potential_units}U, pick has 1U."
                                 )
-                                reparse_ids.add(mid_int)
+                                reparse_ids.add(mid_str)
 
                         # Parlay Mismatch
                         if "PARLAY" in text_upper and p.get("type") not in [
                             "Parlay",
                             "Unknown",
                         ]:
-                            if mid_int not in semantic_issues:
-                                semantic_issues[mid_int] = []
-                            semantic_issues[mid_int].append(
+                            if mid_str not in semantic_issues:
+                                semantic_issues[mid_str] = []
+                            semantic_issues[mid_str].append(
                                 f"Text mentions 'PARLAY' but pick is type '{p.get('type')}'."
                             )
-                            reparse_ids.add(mid_int)
+                            reparse_ids.add(mid_str)
 
         # 5. Execute Refinement
         reparse_ids_list = list(reparse_ids)
@@ -237,34 +243,40 @@ class ExtractionPipeline:
 
             reparse_batch = []
             for m in messages:
-                if int(m.get("id")) in reparse_ids:
+                m_id_str = str(m.get("id"))
+                if m_id_str in reparse_ids:
                     retry_msg = m.copy()
-                    m_id = int(m.get("id"))
-                    msg_picks = [p for p in picks if p.get("message_id") == m_id]
+                    msg_picks = [p for p in picks if str(p.get("message_id")) == m_id_str]
 
                     ocr_text = retry_msg.get("ocr_text", "")
                     if not ocr_text and retry_msg.get("ocr_texts"):
                         ocr_text = "\n".join(retry_msg["ocr_texts"])
 
                     hints = []
-                    if m_id in missing_ids:
-                        hints.append(
+                    # Check if missing
+                    is_missing = False
+                    for p in picks:
+                         # logic for checking missing ids was removed/simplified above in `missing_ids` set
+                         pass
+                    
+                    if m_id_str in missing_ids: # checking against set of strings
+                         hints.append(
                             MultiPickValidator.get_reparse_hint(
                                 ocr_text, msg_picks, retry_msg.get("text", "")
                             )
                         )
 
-                    if m_id in semantic_issues:
+                    if m_id_str in semantic_issues:
                         hints.append("\n### CORRECTION NEEDED")
                         hints.append("The following issues were flagged:")
-                        for issue in semantic_issues[m_id]:
+                        for issue in semantic_issues[m_id_str]:
                             hints.append(f"- {issue}")
                         hints.append("Please fix these errors in your re-extraction.")
 
                     full_hint = "\n\n".join(hints)
 
                     # DEBUG LOG
-                    logger.warning(f"[DEBUG] Reparsing Msg {m_id} because: {full_hint}")
+                    logger.debug(f"[DEBUG] Reparsing Msg {m_id_str} because: {full_hint}")
 
                     retry_msg["text"] = (
                         retry_msg.get("text", "") + "\n\n" + full_hint
@@ -274,7 +286,6 @@ class ExtractionPipeline:
             if reparse_batch:
                 try:
                     # CRITICAL: Use batch_size=1 for Refinement to ensure ID safety.
-                    # If AI forgets the ID, the Decoder can auto-assign it since there's only 1 valid ID.
                     reparse_batches = [[m] for m in reparse_batch]
                     reparse_results = parallel_processor.process_batches(
                         reparse_batches
@@ -285,7 +296,7 @@ class ExtractionPipeline:
                         valid_ids = None
                         if batch_idx < len(reparse_batches):
                             valid_ids = [
-                                int(m.get("id"))
+                                m.get("id") # Keep as string/any
                                 for m in reparse_batches[batch_idx]
                                 if m.get("id") is not None
                             ]

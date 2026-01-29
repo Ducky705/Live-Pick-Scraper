@@ -75,7 +75,8 @@ class SemanticValidator:
         pick_type = pick.get("type", "Unknown")
         line = pick.get("line")
         odds = pick.get("odds")
-        pick_text = pick.get("pick", "")
+        # Ensure pick_text is a string
+        pick_text = str(pick.get("pick") or "")
         
         # 1. Check Sport Consistency (if team name is known)
         # Simple keyword check in pick text

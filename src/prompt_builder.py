@@ -26,8 +26,8 @@ def generate_ai_prompt(selected_data: List[Dict[str, Any]]) -> str:
     # 1. Compress the data into the compact format (### id [T] text...)
     compressed_data = compress_raw_data(selected_data)
     
-    # 2. Build the prompt using the DSL module
-    return get_dsl_extraction_prompt(compressed_data)
+    # 2. Build the prompt using the JSON module (Strict JSON for stability)
+    return get_compact_extraction_prompt(compressed_data)
 
 
 def generate_revision_prompt(failed_items: List[Dict[str, Any]]) -> str:

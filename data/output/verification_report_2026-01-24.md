@@ -1,218 +1,366 @@
 # Pick Verification Report - 2026-01-24
 
-**Total Messages Processed:** 5
-**Total Picks Extracted:** 41
+**Total Messages Processed:** 10
+**Total Picks Extracted:** 83
 
 ---
 
-## Message ID: 12793
+## Message ID: 10889
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
-**Date:** 2026-01-24 12:03 ET
+**Date:** 2026-01-24 12:00 ET
 **Text:**
-> **Big Al**
+> **MARCO D'ANGELO
 > 
-> NHL Selections
-> 1* Oilers -175, 10:05 pm
-> 
-> NBA Selections
-> 4* Magic - 1.5, 7:10 pm
-> NCAA Basketball Selections
-> 4* Minnesota +6, Noon
-> 3* Wofford +2, 11:00 am 
-> 3* Connecticut -10.5, 12:30 pm
-> 
-> **Kyle Anthony UFC 5% 🔥
-> **
-> Paddy Pimblett ML & Jean Silva ML Parlay
-> 
-> **Kyle Hunter** 
-> 
-> 3* Georgia Tech UNDER 144 
-> 12:00 PM EST
-> 3* Denver OVER 161.5
-> 4:00 PM EST
-> 3* Oklahoma St UNDER 163 
-> 3:00 PM EST
-> 
-> **Tokyo Brandon (14-3) **
-> 5% MAX CBB PLAY - Cal St Fullerton Under 172.5
+> 5% SMU-12**
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Oilers | -175 | 1.0 | Moneyline | - |
-| Magic - 1.5 | -110 | 1.0 | Spread | - |
-| Paddy Pimblett | -999 | 1.0 | Moneyline | - |
-| Jean Silva | -999 | 1.0 | Moneyline | - |
-| Georgia Tech vs Opponent Under 144 | -110 | 1.0 | Total | - |
-| Denver vs Opponent Over 161.5 | -110 | 1.0 | Total | - |
-| Oklahoma St vs Opponent Under 163 | -110 | 1.0 | Total | - |
-| Cal St Fullerton vs Opponent Under 172.5 | -110 | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
-## Message ID: 12806
+## Message ID: 12791
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
-**Date:** 2026-01-24 18:28 ET
+**Date:** 2026-01-24 12:00 ET
 **Text:**
-> UFC 324
+> **MARCO D'ANGELO
 > 
-> 👉🏻 BettingWithBush 
-> 
-> Paddy “The Baddy” Pimblett -205 4u⭐
-> Abeta Gautier RD 1 -120 2u⭐
-> Abeta Gautier ITD || Paddy Pimblett -136 2u⭐
-> Ty Miller || Charles Johnson -114 1u
-> Waldo Acosta || Jean Silva -131 1u
-> Rose Namajunas ML +315 1u
-> 
-> 👉🏻 Porterpicks 
-> 
-> Pimblett/Gaethje Over 2.5 (3U)
-> Nikita Krylov ML (2U)
-> Figueiredo/Nurmagomedov Under 2.5 Rounds (1U)
-> 
-> 👉🏻 BrandonTheProfit UFC
-> 
-> Pimblett ML -235 (3u)
-> Pimblett/Natalia Silva MLP -113 (2U) DK
-> Hokit/O' Malley MLP +102 (2U)
-> 
-> 👉🏻 A11Bets
-> 
-> Paddy + Waldo Cortes (-110) 1U
-> Paddy by SUB (+150) 0.5U
-> Sean O Malley ML + Alcaraz ML (-150) 0.5U
-> 
-> 👉🏻 AnalyticsCapper 
-> 
-> Pimblett ML (-230) 3U
+> 5% SMU-12**
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| pick | None | 1.0 | type | - |
-| Paddy “The Baddy” Pimblett ML | -205 | 4.0 | Moneyline | - |
-| Abeta Gautier ITD | -120 | 2.0 | Moneyline | - |
-| Paddy Pimblett ML | -114 | 1.0 | Moneyline | - |
-| Jean Silva ML | -131 | 1.0 | Moneyline | - |
-| Waldo Acosta ML | -110 | 1.0 | Moneyline | - |
-| Rose Namajunas ML | 315 | 1.0 | Moneyline | - |
-| Pimblett/Gaethje Over 2.5 | -110 | 3.0 | Total | - |
-| Nikita Krylov ML | -110 | 2.0 | Moneyline | - |
-| Figueiredo/Nurmagomedov Under 2.5 Rounds | -110 | 1.0 | Total | - |
-| Pimblett ML | -235 | 3.0 | Moneyline | - |
-| Pimblett/Natalia Silva MLP | -113 | 2.0 | Moneyline | - |
-| Hokit/O' Malley MLP | 102 | 2.0 | Moneyline | - |
-| Paddy + Waldo Cortes | -110 | 1.0 | Moneyline | - |
-| Paddy by SUB | 150 | 0.5 | Moneyline | - |
-| Sean O Malley ML | -150 | 0.5 | Moneyline | - |
-| Alcaraz ML | -110 | 0.5 | Moneyline | - |
-| Pimblett ML | -230 | 3.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
-## Message ID: 13001
+## Message ID: 1464630099621052417
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
-**Date:** 2026-01-27 10:00 ET
+**Date:** 2026-01-24 12:00 ET
 **Text:**
-> ⚽️ SOCCER VIP ⚽️
-> 
-> 🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL
-> Arsenal vs Liverpool
-> Pick: Arsenal DNB (-145)
-> 
-> 🇪🇸 La Liga
-> Real Madrid -1.5 AH (+105)
-> 
-> 🇮🇹 Serie A
-> Juventus / AC Milan Over 2.5 Goals (-120)
-> 
-> 🎾 TENNIS LOCKS
-> 
-> Sinner vs Alcaraz
-> Pick: Sinner to win 1st Set (-130)
-> 
-> Djokovic -4.5 Games vs Medvedev (-110)
-> 
-> Rublev/Zverev Over 38.5 Games (-115)
+> Eric Cohen 6-3 nfl run
+> Denv Under41.5
+> Rams +140
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Arsenal Dnb | -145 | 1.0 | Moneyline | - |
-| Real Madrid -1.5 AH | 105 | 1.0 | Spread | - |
-| Juventus vs AC Milan Over 2.5 Goals (-120) | -120 | 1.0 | Total | - |
-| Sinner to win 1st Set ML | -130 | 1.0 | Moneyline | - |
-| Djokovic -4.5 Games vs Medvedev | -110 | 1.0 | Spread | - |
-| Rublev vs Zverev Over 38.5 Games (-115) | -115 | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
-## Message ID: 13002
+## Message ID: 1464645478649172193
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
-**Date:** 2026-01-27 19:00 ET
+**Date:** 2026-01-24 12:00 ET
 **Text:**
-> 🏀 NBA PLAYER PROPS 🏀
+> MARCO D'ANGELO
+> 41-19 on 5%'s
 > 
-> Luka Doncic 45+ PRA (-120)
-> LeBron James Over 7.5 Rebounds (-140)
-> Steph Curry 5+ Threes (+110)
-> 
-> 🎮 ESPORTS
-> 
-> CS2: FaZe vs Navi
-> Map 1 Winner: FaZe (-125)
-> 
-> LoL: T1 -1.5 Maps vs GenG (+150)
+> 5% SMU-12
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Luka Doncic 45+ PRA | -120 | 1.0 | Moneyline | - |
-| LeBron James Over 7.5 Rebounds (-140) | -140 | 1.0 | Total | - |
-| Steph Curry 5+ Threes | 110 | 1.0 | Moneyline | - |
-| Map 1 Winner: FaZe ML | -125 | 1.0 | Moneyline | - |
-| LoL: T1 -1.5 Maps vs GenG (+150) | 150 | 1.0 | Player Prop | - |
+> *No picks extracted from this message.*
 
 ---
 
-## Message ID: 13003
+## Message ID: 2014852997667528902
 
 ### 📝 Source Message
-**Author:** Unknown
-**Channel:** Unknown
-**Date:** 2026-01-27 20:00 ET
+**Date:** 2026-01-24 12:00 ET
 **Text:**
-> 🔥 MAX WHALE PLAYS 🔥
+> Your Daily Capper 
 > 
-> Commanders +3.5 (-115) 5U MAX
-> Ravens Team Total Over 24.5 (-120) 3U
-> 
-> 2-TEAM PARLAY (+260) 2U
-> Chiefs ML
-> Lions -6.5
-> 
-> TEASER (6 Point)
-> Bengals +7.5 / Bills +8.5 (-120)
+> 1u - Michigan -14
+> 1u - Sharks ML
+> 1u - Raptors -2
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Commanders +3.5 | -115 | 5.0 | Spread | - |
-| Ravens: Team Total Over 24.5 | -120 | 3.0 | Team Prop | - |
-| (NFL) Chiefs ML / (NFL) Lions -6.5 | 260 | 2.0 | Parlay | - |
-| (NFL) Bengals +7.5 / (NFL) Bills +8.5 | -120 | 2.0 | Parlay | - |
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2014853069344055341
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Will Rogers
+> 
+> 5% East Tennessee State -17
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015078297160270275
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> 🔮Provenwinner 
+> 
+> 1. BULLS ML | TO WIN 2 UNITS (risking 2.3u to win 2u)
+> 
+> 1. MURRAY STATE ML | TO WIN 2 UNITS (risking 2.2u to
+> win 2u)
+> 
+> 🔮MrBigBets
+> 
+> 1/24 cbb plays
+> Clemson -8.5 - 102 1u
+> Auburn +11.5 - 110 1u
+> Stanford -4.5 -110 1u
+> UNC +6.5 - 102 1u
+> 
+> 🔮 AndersPicks 
+> 
+> CBB:
+> Purdue -2.5 -110 2U
+> Texas ML -115 1U (good to -2/-130)
+> Rhode Island +3-110 1U(Would play to +1.5)
+> 
+> 🔮P4D_Picks4Dayzzz
+> 
+> Full Card saturday
+> Virginia - 7 - 115 3U
+> Texas Tech +1.5 -120 3U
+> Florida -11 -120 3U
+> Alabama -5 - 120 3U
+> NC State -6 -115 2U
+> Nebraska -5.5 -110 2U
+> Texas ML -150 2U
+> Arkansas -10 -110 2U
+> 
+> 🔮 BettingWithBush
+> 
+> Last additions
+> Paddy by sub +145 1.5u
+> Paddy round 2 + .5u
+> 
+> 🔮 TheGamblingGawd
+> 
+> Happy Saturday 
+> 5U POD: Texas MI
+> 5U Plays
+> Miami Hurricanes MI
+> Miami Hurricanes Over 150.5
+> Texas MI
+> Lightning Over 6.5
+> Bruins Over 6.5
+> Oilers Over 6.5
+> 2 Team MI parlay Providence/Oilers
+> 1U Plays:
+> Connor McDavid Goal
+> Providence Over 160.5
+> 
+> 🔮McBets
+> 
+> Saturday NCAAB
+> Texas - 2 (-120) 2u
+> 
+> 🔮ThisGirlBetz
+> 
+> SATURDAY NHL
+> Lightning -120 (2u)
+> Hurricanes - 130 (2u)
+> Bruins -110 (3u)
+> Wild -120 (2u)
+> SATURDAY NCAAB
+> North Carolina +6.5 +100 (2u)
+> Houston -115 (3u)
+> Colgate -7 - 110 (2u)
+> Purdue -5.5 - 110 (3)
+> Canisius +10.5 -115 (2u)
+> 
+> 🔮 Betsharper
+> 
+> NCAAB:
+> Vanderbilt/Miss State 0160.5 (-110)
+> Texas -2.5 (-110)
+> Texas Tech +1 (-110)
+> Winthrop/Presbyterian o146.5 (-110)
+> Oklahoma/Missouri o150.5 (-110)
+> North Dakota State/Oral Roberts o142(-110)
+> Tennessee +6 (-110)
+> 
+> 🔮 Vinny
+> 
+> NCAAB
+> Minnesota +5.5 (2 units)
+> Georgia Tech +7.5 (2 units)
+> Texas Moneyline (2 units)
+> Texas Tech +1.5 (2 units)
+> Florida -11.5 (2 units)
+> VCU -5.5 (2 units)
+> Seton Hall Moneyline (2 units)
+> Utah BYU Over 165.5 (2 units)
+> Alabama -4.5 (2 units)
+> 
+> 🔮 PropJoe
+> 
+> 2U Cincinnati - 1.5 -110
+> 2U North Carolina +7 -110
+> 1U Fresno State +4 - 110
+> 1U Purdue -5.5 -110
+> 1U Georgetown/Providence U162 -110
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015091837036282311
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Cblez
+> 
+> Wisc Green Bay/Rob Morris U 144 - 110 (1u)
+> Dayton/St Josephs O 139½ - (1u)
+> Cornell +2½ -110 (1u)
+> Houston -1 -110 (1u)
+> Coppin St + 13½ - 110 (1u)
+> Delaware/Liberty U 135 - 110 (1u)
+> St Johns/Xavier O 162 -110 (1u)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 31604
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> 🔮Provenwinner 
+> 
+> 1. BULLS ML | TO WIN 2 UNITS (risking 2.3u to win 2u)
+> 
+> 1. MURRAY STATE ML | TO WIN 2 UNITS (risking 2.2u to
+> win 2u)
+> 
+> 🔮MrBigBets
+> 
+> 1/24 cbb plays
+> Clemson -8.5 - 102 1u
+> Auburn +11.5 - 110 1u
+> Stanford -4.5 -110 1u
+> UNC +6.5 - 102 1u
+> 
+> 🔮 AndersPicks 
+> 
+> CBB:
+> Purdue -2.5 -110 2U
+> Texas ML -115 1U (good to -2/-130)
+> Rhode Island +3-110 1U(Would play to +1.5)
+> 
+> 🔮P4D_Picks4Dayzzz
+> 
+> Full Card saturday
+> Virginia - 7 - 115 3U
+> Texas Tech +1.5 -120 3U
+> Florida -11 -120 3U
+> Alabama -5 - 120 3U
+> NC State -6 -115 2U
+> Nebraska -5.5 -110 2U
+> Texas ML -150 2U
+> Arkansas -10 -110 2U
+> 
+> 🔮 BettingWithBush
+> 
+> Last additions
+> Paddy by sub +145 1.5u
+> Paddy round 2 + .5u
+> 
+> 🔮 TheGamblingGawd
+> 
+> Happy Saturday 
+> 5U POD: Texas MI
+> 5U Plays
+> Miami Hurricanes MI
+> Miami Hurricanes Over 150.5
+> Texas MI
+> Lightning Over 6.5
+> Bruins Over 6.5
+> Oilers Over 6.5
+> 2 Team MI parlay Providence/Oilers
+> 1U Plays:
+> Connor McDavid Goal
+> Providence Over 160.5
+> 
+> 🔮McBets
+> 
+> Saturday NCAAB
+> Texas - 2 (-120) 2u
+> 
+> 🔮ThisGirlBetz
+> 
+> SATURDAY NHL
+> Lightning -120 (2u)
+> Hurricanes - 130 (2u)
+> Bruins -110 (3u)
+> Wild -120 (2u)
+> SATURDAY NCAAB
+> North Carolina +6.5 +100 (2u)
+> Houston -115 (3u)
+> Colgate -7 - 110 (2u)
+> Purdue -5.5 - 110 (3)
+> Canisius +10.5 -115 (2u)
+> 
+> 🔮 Betsharper
+> 
+> NCAAB:
+> Vanderbilt/Miss State 0160.5 (-110)
+> Texas -2.5 (-110)
+> Texas Tech +1 (-110)
+> Winthrop/Presbyterian o146.5 (-110)
+> Oklahoma/Missouri o150.5 (-110)
+> North Dakota State/Oral Roberts o142(-110)
+> Tennessee +6 (-110)
+> 
+> 🔮 Vinny
+> 
+> NCAAB
+> Minnesota +5.5 (2 units)
+> Georgia Tech +7.5 (2 units)
+> Texas Moneyline (2 units)
+> Texas Tech +1.5 (2 units)
+> Florida -11.5 (2 units)
+> VCU -5.5 (2 units)
+> Seton Hall Moneyline (2 units)
+> Utah BYU Over 165.5 (2 units)
+> Alabama -4.5 (2 units)
+> 
+> 🔮 PropJoe
+> 
+> 2U Cincinnati - 1.5 -110
+> 2U North Carolina +7 -110
+> 1U Fresno State +4 - 110
+> 1U Purdue -5.5 -110
+> 1U Georgetown/Providence U162 -110
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 31605
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Cblez
+> 
+> Wisc Green Bay/Rob Morris U 144 - 110 (1u)
+> Dayton/St Josephs O 139½ - (1u)
+> Cornell +2½ -110 (1u)
+> Houston -1 -110 (1u)
+> Coppin St + 13½ - 110 (1u)
+> Delaware/Liberty U 135 - 110 (1u)
+> St Johns/Xavier O 162 -110 (1u)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
 

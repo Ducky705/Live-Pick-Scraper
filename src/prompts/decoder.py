@@ -884,7 +884,10 @@ COLLEGE_TEAMS = {
 
 def infer_league_from_entity(entity: str) -> Optional[str]:
     """Infer league from a team/player name."""
-    entity_lower = entity.lower().strip()
+    if not entity:
+        return None
+        
+    entity_lower = str(entity).lower().strip()
 
     # Check tennis first
     if is_tennis_entity(entity_lower):
@@ -2265,48 +2268,44 @@ def validate_and_correct_batch(
 
     # Filter out picks with invalid message IDs (prevents hallucination)
     if valid_message_ids:
-        # CRITICAL: Convert both sides to the same type (int) for comparison
-        # AI often returns IDs as strings, but batches have int IDs
-        valid_set = set(int(mid) for mid in valid_message_ids if mid is not None)
+        # CRITICAL: Use strings for safe comparison to handle synthetic IDs (syn_123)
+        valid_set = set(str(mid) for mid in valid_message_ids if mid is not None)
         before_count = len(validated)
 
-        def get_pick_id_as_int(p: Dict[str, Any]) -> Optional[int]:
-            """Safely extract message_id as int for comparison."""
+        def get_pick_id_str(p: Dict[str, Any]) -> Optional[str]:
+            """Safely extract message_id as str for comparison."""
             # It could be 'message_id' (expanded) or 'i' (compact)
-            # The validation runs AFTER expansion usually, but check both.
             msg_id = p.get("message_id") or p.get("i")
             if msg_id is None:
                 return None
-            try:
-                return int(msg_id)
-            except (ValueError, TypeError):
-                return None
+            return str(msg_id)
 
         # AUTO-RECOVERY: If we only have ONE valid message ID in the batch,
         # assume all orphaned picks belong to it. This handles cases where AI forgets the ID.
         if len(valid_set) == 1:
             single_id = list(valid_set)[0]
             for p in validated:
-                if get_pick_id_as_int(p) is None:
+                if get_pick_id_str(p) is None:
                     logging.debug(
                         f"[Decoder] Auto-assigning ID {single_id} to orphan pick: {p.get('pick', '')[:30]}..."
                     )
                     p["message_id"] = single_id
                     p["i"] = single_id
 
-        validated = [p for p in validated if get_pick_id_as_int(p) in valid_set]
+        validated = [p for p in validated if get_pick_id_str(p) in valid_set]
         if len(validated) < before_count:
             filtered_count = before_count - len(validated)
             logging.warning(
                 f"[Decoder] Filtered {filtered_count} picks with invalid message_ids (cross-contamination prevention)"
             )
             # Log the dropped IDs for debugging
-            dropped = [p for p in picks if get_pick_id_as_int(p) not in valid_set]
+            dropped = [p for p in picks if get_pick_id_str(p) not in valid_set]
             if dropped:
                 logging.warning(
-                    f"Dropped picks sample IDs: {[get_pick_id_as_int(p) for p in dropped[:5]]}"
+                    f"Dropped picks sample IDs: {[get_pick_id_str(p) for p in dropped[:5]]}"
                 )
-                logging.warning(f"Valid set sample: {list(valid_set)[:5]}")
+                if valid_set:
+                    logging.warning(f"Valid set sample: {list(valid_set)[:5]}")
 
     return validated
 

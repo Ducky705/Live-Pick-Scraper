@@ -1,1 +1,7 @@
-This is a test prompt. Do not do anything. Just verify you can read this. Output 'COMPLETE'.
+# Ralph Smoke Test
+
+Your only task is to prove you are working.
+
+1. Create a file named `hello_world_test.txt` in the current directory.
+2. Write the text "Hello World from Ralph" into it.
+3. Exit.

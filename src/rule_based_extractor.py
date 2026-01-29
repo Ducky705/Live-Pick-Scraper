@@ -68,12 +68,14 @@ class RuleBasedExtractor:
                 or "teaser" in full_text.lower()
                 or has_plus_parlay
             )
-            if has_parlay_keyword:
-                remaining_messages.append(msg)
-                logger.debug(
-                    f"[RuleBased] Msg {msg_id} has Parlay/Teaser keyword. Deferring to AI."
-                )
-                continue
+            # EXPERIMENTAL: Don't skip on 'parlay' to allow extracting straight bets from mixed messages.
+            # The AI fallback logic (if extraction is partial) should handle the complex parts if needed.
+            # if has_parlay_keyword:
+            #     remaining_messages.append(msg)
+            #     logger.debug(
+            #         f"[RuleBased] Msg {msg_id} has Parlay/Teaser keyword. Deferring to AI."
+            #     )
+            #     continue
 
             # 3. Line-by-line extraction
             lines = full_text.split("\n")
@@ -92,6 +94,9 @@ class RuleBasedExtractor:
                     line,
                     flags=re.IGNORECASE,
                 )
+                # Remove numbering (e.g. "1. ", "1) ")
+                line = re.sub(r"^\d+[\.\)]\s*", "", line)
+                
                 # Remove quotes and unicode garbage
                 line = (
                     line.strip("\"'")
@@ -101,6 +106,9 @@ class RuleBasedExtractor:
                     .replace("\u2018", "'")
                     .replace("\u2019", "'")  # Smart single quotes
                     .replace("\ufffd", "")
+                    .replace("½", ".5")
+                    .replace("¼", ".25")
+                    .replace("¾", ".75")
                 )
                 # Remove emojis (simplistic regex)
                 line = re.sub(r"[^\x00-\x7F]+", "", line)
@@ -199,9 +207,9 @@ class RuleBasedExtractor:
             return False
 
         # Check for specific patterns
-        # 2. Odds/Spread pattern: -110, +3.5, -7
+        # 2. Odds/Spread pattern: -110, +3.5, -7, - 110 (with space)
         # Needs to be careful not to match dates like 12-10
-        if re.search(r"(?<!\d)[+-]\d{1,4}(?:\.\d+)?", text):
+        if re.search(r"(?<!\d)[+-]\s*\d{1,4}(?:\.\d+)?", text):
             return True
 
         # 3. Total pattern: Over 220

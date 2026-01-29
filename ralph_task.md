@@ -36,3 +36,7 @@ You are an expert Backend Engineer. The previous "Mega-Scale Stress Test" attemp
 ## PHASE 4: FINAL REPORT
 *   Update `benchmark/results/stress_test_report.md` with the run statistics.
 *   If the test passes with >99% success and stable latency, we are ready for Frontend integration.
+
+## COMPLETION INSTRUCTION
+When you have successfully completed all phases and the stress test passes as defined in Phase 4, you MUST output the following string on a new line:
+STRESS_TEST_COMPLETE

@@ -77,8 +77,10 @@ def run_stress_test():
                 chunk, target_date="2024-01-01", batch_size=5, strategy="groq"
             )
             print(f"Extracted {len(picks)} picks from chunk.")
+            sys.stdout.flush()
         except Exception as e:
             print(f"Chunk {chunk_idx + 1} failed: {e}")
+            sys.stdout.flush()
 
         chunk_end = time.time()
         end_mem = monitor_memory()

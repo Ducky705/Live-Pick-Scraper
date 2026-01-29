@@ -104,11 +104,10 @@ def openrouter_completion(
                     logging.warning(f"[OpenRouter] No choices from {current_model}")
 
             except requests.exceptions.Timeout:
-                last_error = Exception(f"Timeout after {timeout}s with {current_model}")
-                logging.warning(
-                    f"[OpenRouter] Timeout with {current_model}, cycling to next..."
+                # US-002: Fail fast on timeout
+                raise requests.exceptions.Timeout(
+                    f"Timeout after {timeout}s with {current_model}"
                 )
-                continue
 
             except requests.exceptions.RequestException as e:
                 # Log full error body if available

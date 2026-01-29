@@ -257,7 +257,9 @@ def run_comparison(golden_set: Dict, scraper_picks: List[Dict]) -> Dict:
             results["all_false_positives"].append({"message_id": msg_id, "pick": fp})
 
     # Calculate accuracy metrics
-    total_with_picks = sum(1 for j in judgments if j.get("has_picks"))
+    total_with_picks_msgs = sum(1 for j in judgments if j.get("has_picks"))
+    total_picks_expected = sum(len(j.get("picks", [])) for j in judgments if j.get("has_picks"))
+    
     total_correct = (
         results["summary"]["perfect_match"] + results["summary"]["true_negative"]
     )
@@ -266,8 +268,8 @@ def run_comparison(golden_set: Dict, scraper_picks: List[Dict]) -> Dict:
     results["metrics"] = {
         "accuracy": round(total_correct / max(total_evaluated, 1) * 100, 2),
         "recall": round(
-            (total_with_picks - len(results["all_false_negatives"]))
-            / max(total_with_picks, 1)
+            (total_picks_expected - len(results["all_false_negatives"]))
+            / max(total_picks_expected, 1)
             * 100,
             2,
         ),
@@ -277,9 +279,7 @@ def run_comparison(golden_set: Dict, scraper_picks: List[Dict]) -> Dict:
             * 100,
             2,
         ),
-        "total_picks_expected": sum(
-            len(j.get("picks", [])) for j in judgments if j.get("has_picks")
-        ),
+        "total_picks_expected": total_picks_expected,
         "total_picks_found": sum(
             len(c.get("scraper_picks", [])) for c in results["comparisons"]
         ),

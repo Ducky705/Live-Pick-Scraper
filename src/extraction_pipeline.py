@@ -57,8 +57,7 @@ class ExtractionPipeline:
                     logger.info(
                         f"Rule-Based Validation: {len(missing_ids)} messages flagged as incomplete. Escalating to AI."
                     )
-                    missing_ids_set = set(missing_ids)
-
+                    
                     # US-001 Safety Net: Do NOT delete picks yet. 
                     # We will replace them only if AI returns a valid result.
                     # Just add messages to AI queue.
@@ -66,8 +65,9 @@ class ExtractionPipeline:
                     # 2. Add messages back to AI queue
                     current_ai_ids = {str(m.get("id")) for m in messages_for_ai}
                     for mid in missing_ids:
-                        if mid not in current_ai_ids and mid in msg_map:
-                            messages_for_ai.append(msg_map[mid])
+                        mid_str = str(mid)
+                        if mid_str not in current_ai_ids and mid_str in msg_map:
+                            messages_for_ai.append(msg_map[mid_str])
 
         if not messages_for_ai:
             logger.info(
@@ -175,11 +175,11 @@ class ExtractionPipeline:
         # Use string IDs for map
         msg_map = {str(m["id"]): m for m in messages if m.get("id") is not None}
         reparse_ids = set()
-        semantic_issues = {}
+        semantic_issues: Dict[str, List[str]] = {}
 
         # 4a. Check for missing picks
         _, missing_ids = validate_and_flag_missing(messages, picks)
-        reparse_ids.update(missing_ids)
+        reparse_ids.update({str(mid) for mid in missing_ids})
 
         # Identify messages that have at least one High Confidence (Rule-Based) pick
         high_conf_msg_ids = set()
@@ -362,20 +362,23 @@ class ExtractionPipeline:
                         )
 
                         # Replace picks
-                        new_picks_by_id = {}
+                        new_picks_by_id: Dict[Any, List[Dict[str, Any]]] = {}
                         for p in new_batch_picks:
                             mid = p.get("message_id")
-                            if mid not in new_picks_by_id:
-                                new_picks_by_id[mid] = []
-                            new_picks_by_id[mid].append(p)
+                            # Normalize key to string
+                            mid_key = str(mid) if mid is not None else None
+                            if mid_key:
+                                if mid_key not in new_picks_by_id:
+                                    new_picks_by_id[mid_key] = []
+                                new_picks_by_id[mid_key].append(p)
 
-                        for mid, msg_new_picks in new_picks_by_id.items():
+                        for mid_key_str, msg_new_picks in new_picks_by_id.items():
                             if msg_new_picks:
                                 # US-001 Safety Net: Only replace if we have new picks
                                 picks = [
                                     p
                                     for p in picks
-                                    if str(p.get("message_id")) != str(mid)
+                                    if str(p.get("message_id")) != mid_key_str
                                 ]
                                 picks.extend(msg_new_picks)
                                 new_picks_count += len(msg_new_picks)
@@ -409,15 +412,16 @@ class ExtractionPipeline:
                 f.write(f"**Total Messages Processed:** {len(msg_map)}\n")
                 f.write(f"**Total Picks Extracted:** {len(picks)}\n\n")
 
-                picks_by_msg = {}
+                picks_by_msg: Dict[str, List[Dict[str, Any]]] = {}
                 for p in picks:
                     mid = p.get("message_id")
                     if mid:
                         try:
-                            mid_int = int(mid)
-                            if mid_int not in picks_by_msg:
-                                picks_by_msg[mid_int] = []
-                            picks_by_msg[mid_int].append(p)
+                            # Use string for consistent lookup
+                            mid_str = str(mid)
+                            if mid_str not in picks_by_msg:
+                                picks_by_msg[mid_str] = []
+                            picks_by_msg[mid_str].append(p)
                         except:
                             pass
 

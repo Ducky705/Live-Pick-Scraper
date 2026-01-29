@@ -216,6 +216,9 @@ class GraderEngine:
             return GradedPick(pick, GradeResult.PENDING, details="Game not found")
 
         # Get period scores
+        if not pick.period:
+             return GradedPick(pick, GradeResult.PENDING, details="Period not specified")
+
         period_scores = self._get_period_scores(game, pick.period)
         if period_scores is None:
             return GradedPick(pick, GradeResult.PENDING, details=f"Period {pick.period} data not available")
@@ -307,6 +310,10 @@ class GraderEngine:
 
         game_id = game.get('id')
         
+        # Ensure subject and stat are present
+        if not pick.subject or not pick.stat:
+             return GradedPick(pick, GradeResult.PENDING, details="Missing subject or stat for prop bet")
+
         # Try to find stat value
         stat_value = None
         found_name = pick.subject

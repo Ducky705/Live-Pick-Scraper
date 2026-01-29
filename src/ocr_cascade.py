@@ -45,13 +45,13 @@ import logging
 import time
 import base64
 from dataclasses import dataclass
-from typing import Optional, List, Dict, Tuple
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Optional, List, Dict, Tuple, cast, Any
+from concurrent.futures import ThreadPoolExecutor, as_completed, Future
 from enum import Enum
 
 # Setup paths
 if getattr(sys, "frozen", False):
-    BASE_DIR = sys._MEIPASS
+    BASE_DIR = cast(Any, sys)._MEIPASS
 else:
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
@@ -684,16 +684,16 @@ class OCRCascade:
             return queue_results
 
         with ThreadPoolExecutor(max_workers=len(providers)) as executor:
-            futures = []
+            vision_futures: List[Future[List[Tuple[int, OCRResult]]]] = []
             for name, func in providers:
                 if provider_queues[name]:
-                    futures.append(
+                    vision_futures.append(
                         executor.submit(
                             process_queue, name, func, provider_queues[name]
                         )
                     )
 
-            for future in as_completed(futures):
+            for future in as_completed(vision_futures):
                 try:
                     queue_results = future.result()
                     for idx, result in queue_results:

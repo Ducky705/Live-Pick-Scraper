@@ -57,18 +57,22 @@ class MultiPickValidator:
     """
 
     # Patterns for detecting picks
+    # Expanded Team Pattern to catch College/International teams (Capitalized words followed by spread/odds)
     TEAM_PATTERN = re.compile(
         r"\b(?:Lakers|Celtics|Warriors|Heat|Nets|Bucks|76ers|Suns|Nuggets|Clippers|"
         r"Chiefs|Eagles|Cowboys|Bills|Ravens|49ers|Dolphins|Lions|"
         r"Yankees|Dodgers|Braves|Astros|Phillies|Padres|"
         r"Bruins|Maple Leafs|Rangers|Oilers|Panthers|Avalanche|"
-        r"[A-Z][a-z]+\s+(?:vs?\.?|@)\s+[A-Z][a-z]+)\b",
+        r"Inter|Real Madrid|Barcelona|Man City|Arsenal|Liverpool|Chelsea|"
+        r"Alabama|Georgia|Michigan|Ohio State|Texas|Tennessee|Purdue|UConn|Houston|"
+        r"[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}(?=\s*(?:[+-]\d|vs|@|over|under|o|u)))\b",
         re.IGNORECASE,
     )
 
     ODDS_PATTERN = re.compile(r"[+-]\s*\d{3,4}(?!\d)")  # -110, +150, +1200
+    # Enhanced Line Pattern to catch -2.5, +7, etc.
     LINE_PATTERN = re.compile(
-        r"[-+]?\d+\.?\d*(?:\s*(?:pts?|points?|reb|ast|yds?|yards?|TDs?|games?))?",
+        r"(?<!\d)[-+]?\d+\.?\d*(?:\s*(?:pts?|points?|reb|ast|yds?|yards?|TDs?|games?))?",
         re.IGNORECASE,
     )
     OVER_UNDER_PATTERN = re.compile(r"\b(?:over|under|o|u)\s*\d+\.?\d*", re.IGNORECASE)
@@ -230,7 +234,9 @@ class MultiPickValidator:
         if actual_count == 0 and estimate.estimated_count > 0:
             tolerance = 0
         else:
-            tolerance = 1 if estimate.confidence > 0.6 else 2
+            # STRICTER TOLERANCE (US-004): If we estimate > actual, always flag it unless confidence is very low.
+            # Reduced tolerance from 1/2 to 0 for high confidence, 1 for med.
+            tolerance = 0 if estimate.confidence > 0.6 else 1
         
         is_valid = missing_count <= tolerance
 

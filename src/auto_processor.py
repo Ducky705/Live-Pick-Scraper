@@ -17,11 +17,11 @@ import sys
 import json
 import logging
 import re
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, cast
 
 # Add project root to path if needed
 if getattr(sys, "frozen", False):
-    BASE_DIR = sys._MEIPASS
+    BASE_DIR = cast(Any, sys)._MEIPASS
 else:
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

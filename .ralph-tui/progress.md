@@ -1,7 +1,7 @@
 # Ralph Progress Log
 
 This file tracks progress across iterations. Agents update this file
-after each iteration and it's included in prompts for context.
+after each iteration and it's included in prompts for connection.
 
 ## Codebase Patterns (Study These First)
 
@@ -22,3 +22,16 @@ after each iteration and it's included in prompts for context.
     - **Gotcha:** `RuleBasedExtractor` handles ~90% of messages but misses complex ones. Without strict validation (counting Team Names), these misses are silent.
     - **Gotcha:** High concurrency on Rate-Limited APIs (Groq/Cerebras) causes 429 loops that are slower than just using a slower provider (Mistral) correctly.
     - **Pattern:** Using `batch_size=10` doubles effective throughput for RPM-limited providers.
+
+## 2026-01-29 - US-004
+- **Implemented:** Final Polish & Verification.
+- **Files Changed:**
+    - `src/extraction_pipeline.py`: Fixed ID typing (int/str) mismatch causing missed lookups. Enforced validation on rule-based picks.
+    - `src/parallel_batch_processor.py`: Fixed type annotations, optimized concurrency (Mistral 10, Groq 1) to prevent 429 death spirals.
+    - `src/multi_pick_validator.py`: Expanded `TEAM_PATTERN` to catch college/international teams. Tightened tolerance for missing picks.
+    - `src/ocr_cascade.py`, `src/grading/engine.py`, `src/auto_processor.py`: Fixed static typing issues and `_MEIPASS` handling.
+    - Added `pyproject.toml` for strict `mypy` configuration.
+- **Learnings:**
+    - **Gotcha:** Mismatched types (int vs str) in dictionary keys can silently drop data in pipelines. Always normalize IDs.
+    - **Pattern:** Aggressive validation (checking for teams/odds in source text) is the only way to catch "RuleBased" false negatives.
+    - **Tradeoff:** High recall (80%+) requires aggressive refinement, which lowers throughput (0.9 msg/sec).

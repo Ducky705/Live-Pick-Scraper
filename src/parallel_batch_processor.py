@@ -47,8 +47,8 @@ PROVIDER_CONFIG = {
         "model": "llama-3.1-8b-instant",  # Iteration 3: Switch to 8b for speed/limits
         "rpm": 500,  # Much higher limits for 8b
         "tpm": 18000,  # CRITICAL: Lowered to 18k to match observed Free Tier limits (avoid 429s)
-        "max_concurrent": 2,  # REDUCED to 2 (Safe limit)
-        "min_delay": 0.5,  # Reduced delay
+        "max_concurrent": 1,  # REDUCED to 1 (Very Safe limit for US-004)
+        "min_delay": 1.0,  # Increased delay
         "priority": 1,  # PRIMARY provider
         "tier": 1,  # US-002: Speed Tier
     },
@@ -57,8 +57,8 @@ PROVIDER_CONFIG = {
         "model": "mistral-large-latest",  # Updated model name
         "rpm": 60,  # 60 requests per minute
         "tpm": 500000,  # 500K TPM - can batch heavily!
-        "max_concurrent": 20,  # INCREASED to 20 (High Bandwidth, Slow Latency)
-        "min_delay": 0.5,  # 2 req/sec
+        "max_concurrent": 10,  # REDUCED to 10 (Stability over Speed)
+        "min_delay": 1.0,  # Increased delay
         "batch_size": 10,  # Bundle 10 messages per call
         "priority": 2,  # PROMOTED to 2 (High Bandwidth)
         "tier": 2,  # US-002: Quality Tier
@@ -86,7 +86,7 @@ PROVIDER_CONFIG = {
         "model": "llama3.1-8b",  # Fast
         "rpm": 30,  # 30 requests per minute
         "tpm": 60000,  # 60K TPM (lower)
-        "max_concurrent": 1,  # Limited by TPM (US-005: Safe)
+        "max_concurrent": 2,  # INCREASED to 2
         "min_delay": 2.0,  # 2s between requests
         "priority": 4,  # Reordered
         "tier": 1,  # US-002: Speed Tier
@@ -172,7 +172,7 @@ class RateLimiter:
 
 
 class ParallelBatchProcessor:
-    def __init__(self, providers: List[str] = None):
+    def __init__(self, providers: List[str] | None = None):
         """
         Initialize processor with MAXIMUM SPEED configuration.
         Priority: Groq (16) > Mistral (4) > Gemini (3) > Cerebras (2) = 25 workers
@@ -194,7 +194,7 @@ class ParallelBatchProcessor:
             p: {"count": 0, "errors": 0, "total_time": 0.0} for p in self.providers
         }
         self.stats_lock = Lock()
-        self.provider_status = {p: "active" for p in self.providers}
+        self.provider_status: Dict[str, Any] = {p: "active" for p in self.providers}
         self.consecutive_errors = {p: 0 for p in self.providers}
         self.status_lock = Lock()
 
@@ -404,7 +404,7 @@ class ParallelBatchProcessor:
         max_workers = len(workers)
         logger.info(f"Using {max_workers} workers: {list(set(workers))}")
 
-        results = [None] * total  # Use list for indexed access
+        results: List[Any] = [None] * total  # Use list for indexed access
         failed_batches = []
         batch_queue = list(enumerate(batches))  # [(id, batch), ...]
 
@@ -443,7 +443,7 @@ class ParallelBatchProcessor:
             )
 
             # Get list of providers that worked (have successful results)
-            working_providers = set()
+            working_providers: set[str] = set()
             for r in results:
                 if r and r.get("status") == "success":
                     working_providers.add(r.get("provider"))
@@ -495,7 +495,7 @@ class ParallelBatchProcessor:
         self._print_summary()
 
         # Return results in order (preserve None for failures to maintain batch mapping)
-        final_results = []
+        final_results: List[Any] = []
         for r in results:
             if r and r.get("status") == "success" and r.get("data"):
                 final_results.append(r["data"])
@@ -512,7 +512,7 @@ class ParallelBatchProcessor:
         logger.info("Redirecting 'Groq Priority' to 'Hybrid Max Speed' (All Providers)")
         return self.process_batches(batches)
 
-    def _print_summary(self):
+    def _print_summary(self) -> None:
         """Print execution stats."""
         print("\n" + "=" * 60)
         print("PARALLEL BATCH PROCESSING SUMMARY")

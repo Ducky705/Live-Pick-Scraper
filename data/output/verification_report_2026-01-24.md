@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-24
 
 **Total Messages Processed:** 50
-**Total Picks Extracted:** 216
+**Total Picks Extracted:** 369
 
 ---
 
@@ -16,7 +16,9 @@
 > 5% SMU-12**
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| % Smu-12** | None | 5.0 | Spread | - |
 
 ---
 
@@ -55,7 +57,18 @@
 > 5% MAX CBB PLAY - Cal St Fullerton Under 172.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Oilers ML | -175 | 1.0 | Moneyline | - |
+| Magic -1.5 | -150 | 4.0 | Spread | - |
+| Minnesota +6, Noon | None | 4.0 | Spread | - |
+| Wofford +2 | -110 | 3.0 | Spread | - |
+| Connecticut -10.5 | -110 | 3.0 | Spread | - |
+| Paddy Pimblett ML / Jean Silva ML Parlay | None | 1.0 | Parlay | - |
+| Georgia Tech Under 144 | 0 | 3.0 | Total | - |
+| Denver Over 161.5 | 0 | 3.0 | Total | - |
+| Oklahoma St Under 163 | 0 | 3.0 | Total | - |
+| % Max Cbb Play - Cal St Fullerton Under 172.5 | None | 5.0 | Total | - |
 
 ---
 
@@ -70,7 +83,9 @@
 > 5% SMU-12**
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| SMU ML | -1200 | 1.0 | Moneyline | - |
 
 ---
 
@@ -109,7 +124,10 @@
 > 5% MAX CBB PLAY - Cal St Fullerton Under 172.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Oilers ML | -175 | 1.0 | Moneyline | - |
+| (UFC) Paddy Pimblett ML / (UFC) Jean Silva ML | 0 | 5.0 | Parlay | - |
 
 ---
 
@@ -124,7 +142,10 @@
 > Rams +140
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Denv Under41.5 ML | None | 1.0 | Moneyline | - |
+| Rams ML | 140 | 1.0 | Moneyline | - |
 
 ---
 
@@ -140,7 +161,9 @@
 > 5% SMU-12
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| % Smu-12 | -109 | 5.0 | Spread | - |
 
 ---
 
@@ -154,7 +177,9 @@
 > 1U Texas -2
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| U Texas -2 | None | 2.0 | Spread | - |
 
 ---
 
@@ -172,7 +197,12 @@
 > Zverev -1.5 sets -115 (3u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Alcaraz vs Paul Over 3.5 sets +106 (3u) | 106 | 3.0 | Total | - |
+| Tien +1.5 sets (3u) | -105 | 3.0 | Spread | - |
+| Bublik +3.5 (3u) | -108 | 3.0 | Spread | - |
+| Zverev -1.5 sets (3u) | -115 | 3.0 | Spread | - |
 
 ---
 
@@ -197,7 +227,17 @@
 > Arizona State  +2.5 -110 (2u, 10:00e)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Minnesota +5.5 (2u, 12:00e) | -110 | 1.0 | Spread | - |
+| Texas -3 (2u, 1:00e) | -105 | 1.0 | Spread | - |
+| Rhode Island ML (2u, 2:00e) ML | 110 | 1.0 | Moneyline | - |
+| Louisville -13.5 (2u, 2:00e) | -105 | 1.0 | Spread | - |
+| Purdue -6 (2u, 3:00e) | -105 | 1.0 | Spread | - |
+| San Diego State -5.5 (2u, 4:00e) | -110 | 1.0 | Spread | - |
+| Memphis Tigers +3 (2u, 4:00e) | -110 | 1.0 | Spread | - |
+| Tennessee +6 (2u, 8:30e) | -105 | 1.0 | Spread | - |
+| Arizona State +2.5 (2u, 10:00e) | -110 | 1.0 | Spread | - |
 
 ---
 
@@ -212,7 +252,9 @@
 > 5% UIC 1H +3.5 (3-0 on the year)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| UIC +3.5 | -150 | 5.0 | Spread | - |
 
 ---
 
@@ -231,7 +273,11 @@
 > 3:00 PM EST
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Georgia Tech Under 144 | 0 | 3.0 | Total | - |
+| Denver Over 161.5 | 0 | 3.0 | Total | - |
+| Oklahoma St Under 163 | 0 | 3.0 | Total | - |
 
 ---
 
@@ -245,7 +291,9 @@
 > 5% MAX CBB PLAY - Cal St Fullerton Under 172.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| % Max Cbb Play - Cal St Fullerton Under 172.5 | None | 5.0 | Total | - |
 
 ---
 
@@ -264,7 +312,12 @@
 > Arnold Allen +225
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| paddy Pimblett ML | -225 | 1.0 | Moneyline | - |
+| Song Yadong ML | 180 | 1.0 | Moneyline | - |
+| Ricky Turcios ML | 167 | 1.0 | Moneyline | - |
+| Arnold Allen ML | 225 | 1.0 | Moneyline | - |
 
 ---
 
@@ -288,7 +341,13 @@
 > 3* Connecticut -10.5, 12:30 pm
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Oilers ML | -175 | 1.0 | Moneyline | - |
+| Magic -1.5 | -150 | 4.0 | Spread | - |
+| Minnesota +6, Noon | None | 4.0 | Spread | - |
+| Wofford +2 | -110 | 3.0 | Spread | - |
+| % Connecticut -9.5 | -110 | 3.0 | Spread | - |
 
 ---
 
@@ -302,7 +361,9 @@
 > Paddy Pimblett ML & Jean Silva ML Parlay
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Paddy Pimblett ML / Jean Silva ML Parlay | None | 1.0 | Parlay | - |
 
 ---
 
@@ -317,7 +378,9 @@
 > Minnesota +5.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Minnesota +5.5 | 0 | 1.0 | Spread | - |
 
 ---
 
@@ -337,7 +400,12 @@
 > Florida -3 / Alabama ML
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Texas ML | 0 | 1.0 | Moneyline | - |
+| Colorado -2 | 0 | 1.0 | Spread | - |
+| Purdue -4 | 0 | 1.0 | Spread | - |
+| (NCAAB) Florida -3 / (NCAAB) Alabama ML | 0 | 1.0 | Parlay | - |
 
 ---
 
@@ -354,7 +422,9 @@
 > CS Fullerton under 172.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| CS Fullerton under 172.5 | None | 1.0 | Total | - |
 
 ---
 
@@ -373,7 +443,10 @@
 > 4% Memphis +3.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Connecticut -9.5 | 0 | 1.0 | Spread | - |
+| Memphis +3.5 | 0 | 1.0 | Spread | - |
 
 ---
 
@@ -396,7 +469,14 @@
 > •Illinois +11.5 / Alabama ML -115 (7.5u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Texas -2.5 (2u) | -110 | 2.0 | Spread | - |
+| Texas Tech +1.5 (1u) | -110 | 1.0 | Spread | - |
+| Kansas State +4.5 (1u) | -110 | 1.0 | Spread | - |
+| Harvard vs Cornell Over 162.5 -110 (1u) | -110 | 1.0 | Total | - |
+| (NCAAB) Illinois +11.5 / (NCAAB) Alabama ML -115 (7.5u) | None | 7.5 | Parlay | - |
+| (NCAAB) Texas -2.5 -110 vs Texas Tech +1.5 -110 / (NCAAB) Kansas State +4.5 -110 / Harvard / Cornell Over 162.5 -110 / (NCAAB) Illinois +11.5 / (NCAAB) Alabama ML -115 | -110 | 7.5 | Parlay | - |
 
 ---
 
@@ -413,7 +493,11 @@
 > 1u - Raptors -2
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| u - Michigan -14 | None | 1.0 | Spread | - |
+| u - Sharks ML | None | 1.0 | Moneyline | - |
+| u - Raptors -2 | None | 1.0 | Spread | - |
 
 ---
 
@@ -428,7 +512,9 @@
 > 5% East Tennessee State -17
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| % East Tennessee State -17 | None | 5.0 | Spread | - |
 
 ---
 
@@ -546,7 +632,60 @@
 > 1U Georgetown/Providence U162 -110
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Bulls ML | -110 | 1.0 | Moneyline | - |
+| Murray State ML | -110 | 1.0 | Moneyline | - |
+| Clemson -8.5 1u | -102 | 1.0 | Spread | - |
+| Auburn +11.5 1u | -110 | 1.0 | Spread | - |
+| Stanford -4.5 1u | -110 | 1.0 | Spread | - |
+| Unc +6.5 1u | -102 | 1.0 | Spread | - |
+| Purdue -5.5 (3) | -110 | 2.0 | Spread | - |
+| (NCAAB) Texas ML -115 1U (good to -2 / (NCAAB) -130) | None | 1.0 | Parlay | - |
+| Rhode Island +3-110 1U(Would play to +1.5) | None | 1.0 | Spread | - |
+| Virginia -7 3U | -115 | 3.0 | Spread | - |
+| Texas Tech +1.5 (2 units) | -120 | 3.0 | Spread | - |
+| Florida -11 3U | -120 | 3.0 | Spread | - |
+| Alabama -5 3U | -120 | 3.0 | Spread | - |
+| NC State -6 2U | -115 | 2.0 | Spread | - |
+| Nebraska -5.5 2U | -110 | 2.0 | Spread | - |
+| Texas ML (2 units) ML | -150 | 2.0 | Moneyline | - |
+| Arkansas -10 2U | -110 | 2.0 | Spread | - |
+| Paddy by sub 1.5u ML | 145 | 1.5 | Moneyline | - |
+| U Pod: Texas ML | None | 5.0 | Player Prop | - |
+| Miami Hurricanes ML | None | 1.0 | Moneyline | - |
+| Miami Hurricanes Over 150.5 | 0 | 1.0 | Total | - |
+| Texas ML | -150 | 1.0 | Moneyline | - |
+| Lightning Over 6.5 | 0 | 1.0 | Total | - |
+| Bruins Over 6.5 | 0 | 1.0 | Total | - |
+| Oilers Over 6.5 | 0 | 1.0 | Total | - |
+| (NCAAB) Team ML parlay Providence / (NHL) Oilers | None | 1.0 | Parlay | - |
+| Providence Over 160.5 | 0 | 1.0 | Total | - |
+| Lightning (2u) ML | -120 | 2.0 | Moneyline | - |
+| Hurricanes (2u) ML | -130 | 2.0 | Moneyline | - |
+| Bruins (3u) ML | -110 | 3.0 | Moneyline | - |
+| Wild (2u) ML | -120 | 2.0 | Moneyline | - |
+| North Carolina +6.5 (2u) | 100 | 2.0 | Spread | - |
+| Houston (3u) ML | -115 | 3.0 | Moneyline | - |
+| Colgate -7 (2u) | -110 | 2.0 | Spread | - |
+| Canisius +10.5 (2u) | -115 | 2.0 | Spread | - |
+| Vanderbilt / Miss State 0160.5 (-110) | None | 1.0 | Parlay | - |
+| Texas -2.5 | -110 | 1.0 | Spread | - |
+| Winthrop vs Presbyterian Over 146.5 (-110) | -110 | 1.0 | Total | - |
+| Oklahoma vs Missouri Over 150.5 (-110) | -110 | 1.0 | Total | - |
+| North Dakota State vs Oral Roberts Over 142(-110) | -110 | 1.0 | Total | - |
+| Tennessee +6 | -110 | 1.0 | Spread | - |
+| Minnesota +5.5 (2 units) | -110 | 1.0 | Spread | - |
+| Georgia Tech +7.5 (2 units) | None | 1.0 | Spread | - |
+| Florida -11.5 (2 units) | None | 1.0 | Spread | - |
+| Vcu -5.5 (2 units) | None | 1.0 | Spread | - |
+| Seton Hall ML (2 units) ML | None | 1.0 | Moneyline | - |
+| Utah Byu Over 165.5 (2 units) | None | 1.0 | Total | - |
+| Alabama -4.5 (2 units) | None | 1.0 | Spread | - |
+| U Cincinnati -1.5 | -110 | 2.0 | Spread | - |
+| U North Carolina +7 | -110 | 2.0 | Spread | - |
+| U Fresno State +4 | -110 | 1.0 | Spread | - |
+| U Georgetown vs Providence Under 162 -110 | -110 | 1.0 | Total | - |
 
 ---
 
@@ -567,7 +706,15 @@
 > St Johns/Xavier O 162 -110 (1u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Wisc Green Bay vs Rob Morris Under 144 -110 (1u) | None | 1.0 | Parlay | - |
+| Dayton vs St Josephs Over 139.5 - (1u) | None | 1.0 | Parlay | - |
+| Cornell +2.5 (1u) | -110 | 1.0 | Spread | - |
+| Houston -1 (1u) | -110 | 1.0 | Spread | - |
+| Coppin St +13.5 (1u) | -110 | 1.0 | Spread | - |
+| Delaware vs Liberty Under 135 -110 (1u) | None | 1.0 | Parlay | - |
+| St Johns vs Xavier Over 162 -110 (1u) | None | 1.0 | Parlay | - |
 
 ---
 
@@ -583,7 +730,10 @@
 > Purdue -5.5 ML -110
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Texas ML | -160 | 1.0 | Moneyline | - |
+| Purdue -5.5 | -110 | 1.0 | Spread | - |
 
 ---
 
@@ -604,7 +754,15 @@
 > Tennessee +6
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Vanderbilt vs Miss State Over 160.5 | None | 1.0 | Total | - |
+| Texas -2.5 | -110 | 1.0 | Spread | - |
+| Texas Tech +1 | -110 | 1.0 | Spread | - |
+| Winthrop vs Presbyterian Over 146.5 | None | 1.0 | Total | - |
+| Oklahoma vs Missouri Over 150.5 | None | 1.0 | Total | - |
+| North Dakota State vs Oral Roberts Over 142 | None | 1.0 | Total | - |
+| u - Tennessee +6 | -110 | 2.0 | Spread | - |
 
 ---
 
@@ -624,7 +782,13 @@
 > Georgetown/Providence u162 (1u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Cincinnati -1.5 (2u) | None | 2.0 | Spread | - |
+| North Carolina +7 (2u) | None | 2.0 | Spread | - |
+| Fresno State +4 (1u) | None | 1.0 | Spread | - |
+| Purdue -5.5 (1u) | None | 4.0 | Spread | - |
+| Georgetown vs Providence Under 162 (1u) | None | 1.0 | Total | - |
 
 ---
 
@@ -646,7 +810,15 @@
 > St Johns/Xavier o162 (1u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Wisconsin Green Bay vs Robert Morris Under 144 (1u) | None | 1.0 | Total | - |
+| Dayton vs St Josephs Over 139.5 (1u) | None | 1.0 | Total | - |
+| Cornell +2.5 (1u) | -110 | 1.0 | Spread | - |
+| Houston -1 (1u) | -110 | 1.0 | Spread | - |
+| Coppin St +13.5 (1u) | -110 | 1.0 | Spread | - |
+| Delaware vs Liberty Under 135 (1u) | None | 1.0 | Total | - |
+| St Johns vs Xavier Over 162 (1u) | None | 1.0 | Total | - |
 
 ---
 
@@ -662,7 +834,10 @@
 > 4% Memphis +3.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| % Connecticut -9.5 | -110 | 3.0 | Spread | - |
+| % Memphis +3.5 | None | 4.0 | Spread | - |
 
 ---
 
@@ -681,7 +856,12 @@
 > 3% Arnold Allen +225
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Paddy Pimblett ML | -225 | 0.5 | Moneyline | - |
+| Song Yadong ML | 180 | 0.3 | Moneyline | - |
+| Ricky Turcios ML | 167 | 0.3 | Moneyline | - |
+| Arnold Allen ML | 225 | 0.3 | Moneyline | - |
 
 ---
 
@@ -696,7 +876,9 @@
 > 5% SMU -12 (-109)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| % Smu -12 | -109 | 5.0 | Spread | - |
 
 ---
 
@@ -711,7 +893,9 @@
 > 5% Cal St Fullerton/Cal Poly u172.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| % Cal St Fullerton vs Cal Poly Under 172.5 | None | 5.0 | Total | - |
 
 ---
 
@@ -791,7 +975,11 @@
 > 3u - Arkansas -11
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Texas -3 | 0 | 4.0 | Spread | - |
+| Purdue -5.5 | 0 | 4.0 | Spread | - |
+| Arkansas -11 | 0 | 3.0 | Spread | - |
 
 ---
 
@@ -804,7 +992,9 @@
 > Fezzy UFC🏆🔥 https://t.co/vNDvPU06rH
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Event: Selection | -110 | 1.0 | Future | - |
 
 ---
 
@@ -819,7 +1009,10 @@
 > Villarreal vs Real Madrid O2.5 / PSV Tt Over 1.5 (3u Parlay)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Fredo Villarreal vs Real Madrid O 2.5 | 0 | 3.0 | Total | - |
+| PSV: Tt O 1.5 | 0 | 3.0 | Team Prop | - |
 
 ---
 
@@ -842,7 +1035,15 @@
 > 2u - Arizona State  +2.5 -110
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| u - Minnesota +5.5 | -110 | 2.0 | Spread | - |
+| u - Rhode Island ML | 110 | 2.0 | Moneyline | - |
+| u - Louisville -13.5 | -105 | 2.0 | Spread | - |
+| u - Purdue -6 | -105 | 2.0 | Spread | - |
+| u - San Diego State -5.5 | -110 | 2.0 | Spread | - |
+| u - Memphis Tigers +3 | -110 | 2.0 | Spread | - |
+| u - Arizona State +2.5 | -110 | 2.0 | Spread | - |
 
 ---
 
@@ -875,7 +1076,24 @@
 > South Carolina +10.5 2U
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Rhode Island ML | 110 | 2.0 | Moneyline | - |
+| Minnesota Golden Gophers +5.5 (2u, 12:00e) | -110 | 1.0 | Spread | - |
+| Texas Longhorns -3 (2u, 1:00e) | -105 | 1.0 | Spread | - |
+| Rhode Island ML (2u, 2:00e) ML | 110 | 1.0 | Moneyline | - |
+| Louisville Cardinals -13.5 (2u, 2:00e) | -105 | 1.0 | Spread | - |
+| Purdue Boilermakers -6 (2u, 3:00e) | -105 | 1.0 | Spread | - |
+| San Diego State Aztecs -5.5 (2u, 4:00e) | -110 | 1.0 | Spread | - |
+| Memphis Tigers +3 (2u, 4:00e) | -110 | 1.0 | Spread | - |
+| Tennessee Volunteers +6 (2u, 8:30e) | -105 | 1.0 | Spread | - |
+| Arizona State Sun Devils +2.5 (2u, 10:00e) | -110 | 1.0 | Spread | - |
+| Villanova +11.5 3U | None | 3.0 | Spread | - |
+| Mississippi State +8 2U | None | 2.0 | Spread | - |
+| South Carolina +10.5 2U | None | 2.0 | Spread | - |
+| Villanova +11.5 | 0 | 3.0 | Spread | - |
+| Mississippi State +8 | 0 | 2.0 | Spread | - |
+| South Carolina +10.5 | 0 | 2.0 | Spread | - |
 
 ---
 
@@ -890,7 +1108,9 @@
 > 2* Indiana St. -2.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Indiana St. -2.5 | None | 2.0 | Spread | - |
 
 ---
 
@@ -910,7 +1130,12 @@
 > Texas tech ml 1.5 +100
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Wright state ML 2.5u ML | -145 | 1.0 | Moneyline | - |
+| (NCAAB) Princeton ml / (NCAAB) Clemson ML 1.5u -125 | None | 1.0 | Parlay | - |
+| Oklahoma state +10.5 1.5u | -110 | 1.0 | Spread | - |
+| Texas tech ml 1.5 ML | 100 | 1.0 | Moneyline | - |
 
 ---
 
@@ -1028,7 +1253,128 @@
 > 1U Georgetown/Providence U162 -110
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Bulls ML | -110 | 1.0 | Moneyline | - |
+| Murray State ML | -110 | 1.0 | Moneyline | - |
+| Clemson -8.5 1u | -102 | 1.0 | Spread | - |
+| Auburn +11.5 1u | -110 | 1.0 | Spread | - |
+| Stanford -4.5 1u | -110 | 1.0 | Spread | - |
+| Unc +6.5 1u | -102 | 1.0 | Spread | - |
+| Purdue -5.5 (3) | -110 | 2.0 | Spread | - |
+| (NCAAB) Texas ML -115 1U (good to -2 / (NCAAB) -130) | None | 1.0 | Parlay | - |
+| Rhode Island +3-110 1U(Would play to +1.5) | None | 1.0 | Spread | - |
+| Virginia -7 3U | -115 | 3.0 | Spread | - |
+| Texas Tech +1.5 (2 units) | -120 | 3.0 | Spread | - |
+| Florida -11 3U | -120 | 3.0 | Spread | - |
+| Alabama -5 3U | -120 | 3.0 | Spread | - |
+| NC State -6 2U | -115 | 2.0 | Spread | - |
+| Nebraska -5.5 2U | -110 | 2.0 | Spread | - |
+| Texas ML (2 units) ML | -150 | 2.0 | Moneyline | - |
+| Arkansas -10 2U | -110 | 2.0 | Spread | - |
+| Paddy by sub 1.5u ML | 145 | 1.5 | Moneyline | - |
+| U Pod: Texas ML | None | 5.0 | Player Prop | - |
+| Miami Hurricanes ML | None | 1.0 | Moneyline | - |
+| Miami Hurricanes Over 150.5 | 0 | 1.0 | Total | - |
+| Texas ML | -150 | 1.0 | Moneyline | - |
+| Lightning Over 6.5 | 0 | 1.0 | Total | - |
+| Bruins Over 6.5 | 0 | 1.0 | Total | - |
+| Oilers Over 6.5 | 0 | 1.0 | Total | - |
+| (NCAAB) Team ML parlay Providence / (NHL) Oilers | None | 1.0 | Parlay | - |
+| Providence Over 160.5 | 0 | 1.0 | Total | - |
+| Lightning (2u) ML | -120 | 2.0 | Moneyline | - |
+| Hurricanes (2u) ML | -130 | 2.0 | Moneyline | - |
+| Bruins (3u) ML | -110 | 3.0 | Moneyline | - |
+| Wild (2u) ML | -120 | 2.0 | Moneyline | - |
+| North Carolina +6.5 (2u) | 100 | 2.0 | Spread | - |
+| Houston (3u) ML | -115 | 3.0 | Moneyline | - |
+| Colgate -7 (2u) | -110 | 2.0 | Spread | - |
+| Canisius +10.5 (2u) | -115 | 2.0 | Spread | - |
+| Vanderbilt / Miss State 0160.5 (-110) | None | 1.0 | Parlay | - |
+| Texas -2.5 | -110 | 1.0 | Spread | - |
+| Winthrop vs Presbyterian Over 146.5 (-110) | -110 | 1.0 | Total | - |
+| Oklahoma vs Missouri Over 150.5 (-110) | -110 | 1.0 | Total | - |
+| North Dakota State vs Oral Roberts Over 142(-110) | -110 | 1.0 | Total | - |
+| Tennessee +6 | -110 | 1.0 | Spread | - |
+| Minnesota +5.5 (2 units) | -110 | 1.0 | Spread | - |
+| Georgia Tech +7.5 (2 units) | None | 1.0 | Spread | - |
+| Florida -11.5 (2 units) | None | 1.0 | Spread | - |
+| Vcu -5.5 (2 units) | None | 1.0 | Spread | - |
+| Seton Hall ML (2 units) ML | None | 1.0 | Moneyline | - |
+| Utah Byu Over 165.5 (2 units) | None | 1.0 | Total | - |
+| Alabama -4.5 (2 units) | None | 1.0 | Spread | - |
+| U Cincinnati -1.5 | -110 | 2.0 | Spread | - |
+| U North Carolina +7 | -110 | 2.0 | Spread | - |
+| Fresno State +4 1U | -110 | 1.0 | Spread | - |
+| U Georgetown vs Providence Under 162 -110 | -110 | 1.0 | Total | - |
+| Bulls ML | -110 | 2.0 | Moneyline | - |
+| Murray State ML | -110 | 2.0 | Moneyline | - |
+| Clemson -8.5 | -102 | 1.0 | Spread | - |
+| Auburn +11.5 | -110 | 1.0 | Spread | - |
+| Stanford -4.5 | -110 | 1.0 | Spread | - |
+| UNC +6.5 | -102 | 1.0 | Spread | - |
+| Purdue ML | -115 | 2.0 | Moneyline | - |
+| Rhode Island +3 | -110 | 1.0 | Spread | - |
+| Virginia -7 | -115 | 3.0 | Spread | - |
+| Texas Tech +1.5 | -120 | 3.0 | Spread | - |
+| Florida -11 | -120 | 3.0 | Spread | - |
+| Alabama -5 | -120 | 3.0 | Spread | - |
+| NC State -6 | -115 | 2.0 | Spread | - |
+| Nebraska -5.5 | -110 | 2.0 | Spread | - |
+| Texas ML | -150 | 2.0 | Moneyline | - |
+| Arkansas -10 | -110 | 2.0 | Spread | - |
+| Paddy by sub +145 | 145 | 1.5 | Spread | - |
+| Paddy round 2 + .5u | 0 | 0.5 | Spread | - |
+| Lightning Over 6.5 | 0 | 2.0 | Total | - |
+| Bruins Over 6.5 | 0 | 3.0 | Total | - |
+| Oilers Over 6.5 | 0 | 2.0 | Total | - |
+| Texas MI Over 150.5 | 0 | 5.0 | Total | - |
+| Miami Hurricanes Over 150.5 | 0 | 5.0 | Total | - |
+| Providence/Oilers | 0 | 1.0 | Parlay | - |
+| Connor McDavid Goal | 0 | 1.0 | Spread | - |
+| Providence Over 160.5 | 0 | 1.0 | Total | - |
+| Texas - 2 (-120) | -120 | 2.0 | Spread | - |
+| Lightning -120 | -120 | 2.0 | Spread | - |
+| Hurricanes - 130 | -130 | 2.0 | Spread | - |
+| Bruins -110 | -110 | 3.0 | Spread | - |
+| Wild -120 | -120 | 2.0 | Spread | - |
+| North Carolina +6.5 +100 | 100 | 2.0 | Spread | - |
+| Houston -115 | -115 | 3.0 | Spread | - |
+| Colgate -7 - 110 | -110 | 2.0 | Spread | - |
+| Purdue -5.5 - 110 | -110 | 3.0 | Spread | - |
+| Canisius +10.5 -115 | -115 | 2.0 | Spread | - |
+| Vanderbilt/Miss State 0160.5 | -110 | 2.0 | Total | - |
+| Texas -2.5 | -110 | 2.0 | Spread | - |
+| Texas Tech +1 | -110 | 2.0 | Spread | - |
+| Winthrop/Presbyterian o146.5 | -110 | 2.0 | Total | - |
+| Oklahoma/Missouri o150.5 | -110 | 2.0 | Total | - |
+| North Dakota State/Oral Roberts o142 | -110 | 2.0 | Total | - |
+| Tennessee +6 | -110 | 2.0 | Spread | - |
+| Minnesota +5.5 | -110 | 2.0 | Spread | - |
+| Georgia Tech +7.5 | -110 | 2.0 | Spread | - |
+| Texas ML | -150 | 2.0 | Moneyline | - |
+| Texas Tech +1.5 | -110 | 2.0 | Spread | - |
+| Florida -11.5 | -110 | 2.0 | Spread | - |
+| VCU -5.5 | -110 | 2.0 | Spread | - |
+| Seton Hall ML | 0 | 2.0 | Moneyline | - |
+| Utah BYU Over 165.5 | 0 | 2.0 | Total | - |
+| Alabama -4.5 | -110 | 2.0 | Spread | - |
+| Cincinnati - 1.5 -110 | -110 | 2.0 | Spread | - |
+| North Carolina +7 -110 | -110 | 1.0 | Spread | - |
+| Fresno State +4 - 110 | -110 | 1.0 | Spread | - |
+| Purdue -5.5 -110 | -110 | 1.0 | Spread | - |
+| Georgetown/Providence U162 | 0 | 1.0 | Total | - |
+| Oilers -175 | -175 | 1.0 | Spread | - |
+| Magic - 1.5 | -150 | 4.0 | Spread | - |
+| Minnesota +6 | -110 | 4.0 | Spread | - |
+| Wofford +2 | -110 | 3.0 | Spread | - |
+| Connecticut -10.5 | -110 | 3.0 | Spread | - |
+| Paddy Pimblett ML | -225 | 5.0 | Moneyline | - |
+| Jean Silva ML | 180 | 3.0 | Moneyline | - |
+| Georgia Tech UNDER 144 | 0 | 3.0 | Total | - |
+| Denver OVER 161.5 | 0 | 4.0 | Total | - |
+| Oklahoma St UNDER 163 | 0 | 3.0 | Total | - |
+| Cal St Fullerton Under 172.5 | 0 | 5.0 | Total | - |
 
 ---
 
@@ -1049,7 +1395,15 @@
 > St Johns/Xavier O 162 -110 (1u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Wisc Green Bay vs Rob Morris Under 144 -110 (1u) | None | 1.0 | Parlay | - |
+| Dayton vs St Josephs Over 139.5 - (1u) | None | 1.0 | Parlay | - |
+| Cornell +2.5 (1u) | -110 | 1.0 | Spread | - |
+| Houston -1 (1u) | -110 | 1.0 | Spread | - |
+| Coppin St +13.5 (1u) | -110 | 1.0 | Spread | - |
+| Delaware vs Liberty Under 135 -110 (1u) | None | 1.0 | Parlay | - |
+| St Johns vs Xavier Over 162 -110 (1u) | None | 1.0 | Parlay | - |
 
 ---
 
@@ -1069,7 +1423,20 @@
 > Rhode Island Rams +1.5 -110 2U
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Virginia Cavaliers -6.5 2U | -110 | 2.0 | Spread | - |
+| Minnesota Golden Gophers +5.5 (2u, 12:00e) | -110 | 2.0 | Spread | - |
+| Colorado Buffaloes -3 2U | -110 | 2.0 | Spread | - |
+| Texas Longhorns -3 (2u, 1:00e) | -110 | 2.0 | Spread | - |
+| Oklahoma Sooners +4.5 1.5U | -105 | 1.5 | Spread | - |
+| Rhode Island Rams +1.5 2U | -110 | 2.0 | Spread | - |
+| Virginia Cavaliers -6.5 -110 | -110 | 2.0 | Spread | - |
+| Minnesota Gophers +5.5 -110 | -110 | 2.0 | Spread | - |
+| Colorado Buffaloes -3 -110 | -110 | 2.0 | Spread | - |
+| Texas Longhorns -2.5 -110 | -110 | 2.0 | Spread | - |
+| Oklahoma Sooners +4.5 -105 | -105 | 1.5 | Spread | - |
+| Rhode Island Rams +1.5 -110 | -110 | 2.0 | Spread | - |
 
 ---
 
@@ -1097,7 +1464,25 @@
 > Lakers -3.5 -110 (2u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| U.Nurmagomedov via decision (2u) ML | -105 | 2.0 | Moneyline | - |
+| Derrick Lewis (2u) ML | 270 | 2.0 | Moneyline | - |
+| P.Pimblett Tko / Sub (Finish) -150 (2u) | None | 2.0 | Parlay | - |
+| ML Parlay ML | None | 1.0 | Moneyline | - |
+| Silva / Silva -110 (3u) | None | 3.0 | Parlay | - |
+| ers (2u) ML | -110 | 2.0 | Moneyline | - |
+| Timberwolves -6-105 (3u) | None | 3.0 | Spread | - |
+| Celtics +1.5 (2u) | -110 | 2.0 | Spread | - |
+| Lakers -3.5 (2u) | -110 | 2.0 | Spread | - |
+| U.Nurmagomedov via decision - 105 | -105 | 2.0 | Future | - |
+| Derrick Lewis +270 | 270 | 2.0 | Future | - |
+| P.Pimblett TKO/SUB (finish) -150 | -150 | 2.0 | Future | - |
+| Silva/Silva -110 | -110 | 3.0 | Parlay | - |
+| 76ers -110 | -110 | 2.0 | Spread | - |
+| Timberwolves -6-105 | -105 | 3.0 | Spread | - |
+| Celtics +1.5 -110 | -110 | 2.0 | Spread | - |
+| Lakers -3.5 -110 | -110 | 2.0 | Spread | - |
 
 ---
 
@@ -1115,7 +1500,14 @@
 > Texas -2 (-125) 1U
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Texas Tech +2 1U | -110 | 1.0 | Spread | - |
+| Texas -2 1U | -125 | 1.0 | Spread | - |
+| Minnesota +5.5 | -110 | 1.0 | Spread | - |
+| Texas Tech +2 | -110 | 1.0 | Spread | - |
+| Virginia -6 | -120 | 1.0 | Spread | - |
+| Texas -2 | -125 | 1.0 | Spread | - |
 
 ---
 
@@ -1132,7 +1524,9 @@
 > 3.5 is fine
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Fresno State +4 | -110 | 1.0 | Spread | - |
 
 ---
 
@@ -1148,7 +1542,9 @@
 > Kentucky -9.5 -120 3U
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Kentucky -9.5 3U | -120 | 3.0 | Spread | - |
 
 ---
 
@@ -1172,7 +1568,24 @@
 > Arizona State Sun Devils +2.5 -110 (2u, 10:00e)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Rhode Island ML (2u, 2:00e) ML | 110 | 1.0 | Moneyline | - |
+| Louisville Cardinals -13.5 (2u, 2:00e) | -105 | 1.0 | Spread | - |
+| Purdue Boilermakers -6 (2u, 3:00e) | -105 | 1.0 | Spread | - |
+| San Diego State Aztecs -5.5 (2u, 4:00e) | -110 | 1.0 | Spread | - |
+| Memphis Tigers +3 (2u, 4:00e) | -110 | 1.0 | Spread | - |
+| Tennessee Volunteers +6 (2u, 8:30e) | -105 | 1.0 | Spread | - |
+| Arizona State Sun Devils +2.5 (2u, 10:00e) | -110 | 1.0 | Spread | - |
+| Minnesota Golden Gophers +5.5 -110 | -110 | 2.0 | Spread | - |
+| Texas Longhorns -3 -105 | -105 | 2.0 | Spread | - |
+| Rhode Island ML | 110 | 2.0 | Moneyline | - |
+| Louisville Cardinals -13.5 -105 | -105 | 2.0 | Spread | - |
+| Purdue Boilermakers -6 -105 | -105 | 2.0 | Spread | - |
+| San Diego State Aztecs -5.5 -110 | -110 | 2.0 | Spread | - |
+| Memphis Tigers +3 -110 | -110 | 2.0 | Spread | - |
+| Tennessee Volunteers +6 -105 | -105 | 2.0 | Spread | - |
+| Arizona State Sun Devils +2.5 -110 | -110 | 2.0 | Spread | - |
 
 ---
 
@@ -1190,5 +1603,9 @@
 > South Carolina +10.5 2U
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Villanova +11.5 3U | None | 3.0 | Spread | - |
+| Mississippi State +8 2U | None | 2.0 | Spread | - |
+| South Carolina +10.5 2U | None | 2.0 | Spread | - |
 

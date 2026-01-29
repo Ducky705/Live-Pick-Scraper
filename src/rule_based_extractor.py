@@ -114,6 +114,16 @@ class RuleBasedExtractor:
                     .replace("\u2014", "-")  # Em dash
                     .replace("\u2212", "-")  # Minus sign
                 )
+                
+                # NORMALIZE: Fix common OCR/Typo issues
+                # 1. "MI" -> "ML" (common OCR error for Moneyline)
+                line = re.sub(r"\bMI\b", "ML", line)
+                # 2. Fix spaced odds/lines: "- 110" -> "-110", "+ 7" -> "+7"
+                line = re.sub(r"(?<!\w)([+-])\s+(\d)", r"\1\2", line)
+                # 3. Fix "U162" -> "Under 162", "o145" -> "Over 145"
+                line = re.sub(r"\b([Uu])(\d+(\.\d+)?)", r"Under \2", line)
+                line = re.sub(r"\b([Oo])(\d+(\.\d+)?)", r"Over \2", line)
+
                 # Remove emojis (simplistic regex) - Keep ASCII + standard punctuation
                 line = re.sub(r"[^\x00-\x7F]+", "", line)
                 

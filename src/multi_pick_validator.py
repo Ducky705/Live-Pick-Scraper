@@ -149,6 +149,12 @@ class MultiPickValidator:
         if has_multiple_cappers:
             signals.append(f"{capper_count} potential cappers detected")
 
+        # 8. Count Team Names (Significant for leagues like NBA/NFL/NHL)
+        team_matches = cls.TEAM_PATTERN.findall(combined_text)
+        if team_matches:
+            signals.append(f"{len(team_matches)} team names")
+            estimates.append(len(team_matches))
+
         # Calculate best estimate
         if not estimates:
             return PickCountEstimate(
@@ -188,15 +194,6 @@ class MultiPickValidator:
     ) -> ValidationResult:
         """
         Validate that extracted picks match expected count.
-
-        Args:
-            ocr_text: Raw OCR text from image
-            parsed_picks: List of picks extracted by AI
-            caption: Optional message caption
-            message_id: Optional message ID for logging
-
-        Returns:
-            ValidationResult indicating if extraction is complete
         """
         estimate = cls.estimate_pick_count(ocr_text, caption)
         actual_count = len(parsed_picks)
@@ -204,9 +201,32 @@ class MultiPickValidator:
         # Calculate missing
         missing_count = max(0, estimate.estimated_count - actual_count)
 
+        # Check for Uncovered Teams
+        combined_text = f"{ocr_text}\n{caption}"
+        team_matches = cls.TEAM_PATTERN.findall(combined_text)
+        uncovered_teams = []
+        
+        parsed_teams = set()
+        for p in parsed_picks:
+            sel = p.get("pick", "").lower()
+            parsed_teams.add(sel)
+
+        for tm in team_matches:
+            tm_lower = tm.lower()
+            parts = tm_lower.split()
+            found = False
+            for part in parts:
+                 if len(part) < 3: continue 
+                 for p_sel in parsed_teams:
+                     if part in p_sel:
+                         found = True
+                         break
+                 if found: break
+            if not found:
+                uncovered_teams.append(tm)
+
         # Determine if valid
         # Allow some tolerance based on confidence
-        # BUT: If we found 0 picks and expect > 0, we MUST reparse.
         if actual_count == 0 and estimate.estimated_count > 0:
             tolerance = 0
         else:
@@ -215,18 +235,25 @@ class MultiPickValidator:
         is_valid = missing_count <= tolerance
 
         # Determine if we should retry
-        # Retry if missing > tolerance AND confidence is decent
         needs_reparse = (
             missing_count > tolerance
             and estimate.confidence > 0.4  # Lowered threshold to catch more misses
             and estimate.estimated_count >= 1
         )
 
-        # Build reason
+        reason_parts = []
         if is_valid:
-            reason = f"Extraction complete: {actual_count} picks (expected ~{estimate.estimated_count})"
+            reason_parts.append(f"Extraction complete: {actual_count} picks (expected ~{estimate.estimated_count})")
         else:
-            reason = f"Potential missing picks: got {actual_count}, expected ~{estimate.estimated_count}. Signals: {', '.join(estimate.signals[:3])}"
+            reason_parts.append(f"Potential missing picks: got {actual_count}, expected ~{estimate.estimated_count}. Signals: {', '.join(estimate.signals[:3])}")
+
+        # Override validity if uncovered teams found
+        if uncovered_teams:
+             # Only flag if we care about high recall
+             needs_reparse = True
+             reason_parts.append(f"Uncovered Teams: {len(uncovered_teams)} ({', '.join(uncovered_teams[:2])}...)")
+
+        reason = " | ".join(reason_parts)
 
         if needs_reparse:
             logging.warning(f"[MultiPickValidator] Message {message_id}: {reason}")

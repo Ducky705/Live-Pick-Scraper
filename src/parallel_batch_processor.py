@@ -47,8 +47,8 @@ PROVIDER_CONFIG = {
         "model": "llama-3.1-8b-instant",  # Iteration 3: Switch to 8b for speed/limits
         "rpm": 500,  # Much higher limits for 8b
         "tpm": 18000,  # CRITICAL: Lowered to 18k to match observed Free Tier limits (avoid 429s)
-        "max_concurrent": 1,  # REDUCED to 1 (Low Bandwidth, Fast Latency)
-        "min_delay": 1.0,  # 1s delay to be safe
+        "max_concurrent": 2,  # REDUCED to 2 (Safe limit)
+        "min_delay": 0.5,  # Reduced delay
         "priority": 1,  # PRIMARY provider
         "tier": 1,  # US-002: Speed Tier
     },
@@ -76,7 +76,7 @@ PROVIDER_CONFIG = {
         "model": "gemini-1.5-flash",  # Reverted to stable model that definitely exists
         "rpm": 15,  # 15 requests per minute
         "tpm": 250000,  # 250K TPM
-        "max_concurrent": 10,  # INCREASED to 10 (High Bandwidth)
+        "max_concurrent": 3,  # Set to 3 (Safe limit for free tier)
         "min_delay": 4.0,  # 4s between requests (15 RPM)
         "batch_size": 5,  # Bundle 5 messages per call
         "priority": 3,  # PROMOTED to 3
@@ -86,7 +86,7 @@ PROVIDER_CONFIG = {
         "model": "llama3.1-8b",  # Fast
         "rpm": 30,  # 30 requests per minute
         "tpm": 60000,  # 60K TPM (lower)
-        "max_concurrent": 2,  # Limited by TPM
+        "max_concurrent": 1,  # Limited by TPM (US-005: Safe)
         "min_delay": 2.0,  # 2s between requests
         "priority": 4,  # Reordered
         "tier": 1,  # US-002: Speed Tier
@@ -181,7 +181,7 @@ class ParallelBatchProcessor:
             "groq",
             "cerebras",
             "mistral",
-            # "gemini",  # Disabled due to 404s/Auth issues
+            "gemini",  # Re-enabled (US-005)
             # "openrouter", # Disabled due to slowness
         ]
 
@@ -506,74 +506,11 @@ class ParallelBatchProcessor:
 
     def process_batches_groq_priority(self, batches: List[List[dict]]) -> List[Any]:
         """
-        Groq-first strategy: Blast all requests to Groq (Configured concurrent), use others as fallback.
-        MAXIMUM SPEED mode - Groq handles 1000 RPM, so we can push high concurrency if limits allow.
+        Groq-first strategy -> Now mapped to HYBRID MAX SPEED for US-005.
+        Uses all providers with weighted allocation (Groq > Mistral > Cerebras > Gemini).
         """
-        total = len(batches)
-
-        results = [None] * total
-        failed_batches = []
-
-        # Phase 1: Blast through with Groq (Using Configured Concurrency)
-        groq_config = PROVIDER_CONFIG["groq"]
-        concurrency = groq_config.get("max_concurrent", 2)
-        logger.info(f"Processing {total} batches (GROQ-PRIORITY, {concurrency} concurrent)...")
-
-        with ThreadPoolExecutor(max_workers=concurrency) as executor:
-            futures = {
-                executor.submit(self._process_batch, i, batch, "groq"): i
-                for i, batch in enumerate(batches)
-            }
-
-            for future in as_completed(futures):
-                batch_id = futures[future]
-                result = future.result()
-
-                if result["status"] == "success":
-                    results[batch_id] = result
-                else:
-                    failed_batches.append((batch_id, batches[batch_id]))
-
-        # Phase 2: Retry failures with fallback providers (Cerebras > Mistral)
-        if failed_batches:
-            logger.info(
-                f"Retrying {len(failed_batches)} failed batches with fallbacks..."
-            )
-            fallback_providers = ["cerebras", "mistral"]
-
-            # US-002: Parallelize Phase 2 Retries
-            with ThreadPoolExecutor(max_workers=len(fallback_providers) * 2) as executor:
-                futures_retry = {
-                    executor.submit(
-                        self._retry_batch, batch_id, batch, "groq", fallback_providers
-                    ): batch_id
-                    for batch_id, batch in failed_batches
-                }
-
-                for future in as_completed(futures_retry):
-                    batch_id = futures_retry[future]
-                    try:
-                        result = future.result()
-                        results[batch_id] = result
-                    except Exception as e:
-                        logger.error(f"Retry thread failed for Batch {batch_id}: {e}")
-                        results[batch_id] = {
-                            "batch_id": batch_id,
-                            "status": "error",
-                            "data": None,
-                        }
-
-        self._print_summary()
-        
-        # Return results in order (preserve None for failures)
-        final_results = []
-        for r in results:
-            if r and r.get("status") == "success" and r.get("data"):
-                final_results.append(r["data"])
-            else:
-                final_results.append(None)
-                
-        return final_results
+        logger.info("Redirecting 'Groq Priority' to 'Hybrid Max Speed' (All Providers)")
+        return self.process_batches(batches)
 
     def _print_summary(self):
         """Print execution stats."""

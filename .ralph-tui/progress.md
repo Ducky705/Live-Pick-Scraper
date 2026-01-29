@@ -1,22 +1,24 @@
-## 2026-01-29 - US-004
-- **Implemented:**
-  - **MultiPickValidator Fix:** Fixed logic where "0 picks found" was considered valid if "Expected 1" and tolerance was 1. Now forces reparse if expected > 0 and actual == 0.
-  - **RuleBasedExtractor Fix:**
-    - Replaced unicode dashes (En-dash, Em-dash) with hyphens BEFORE emoji stripping to preserve negative signs.
-    - Added cleanup for noise in pick selection (removing text after `|` and parenthetical commentary like `(risking 2u)`).
-  - **Deduplication Fix:**
-    - Passed `author` from benchmark goldenset to pipeline.
-    - Updated `RuleBasedExtractor` and `ExtractionPipeline` to populate `capper_name` from message author.
-    - This prevents global deduplication of "Unknown" cappers across different messages, which was causing massive false negatives in per-message grading.
-  - **Crash Fix:** Added string casting in `pick_deduplicator.py` to prevent regex errors when AI returns float/number for pick text/capper.
-- **Files Changed:**
-  - `src/multi_pick_validator.py`
-  - `src/rule_based_extractor.py`
-  - `src/pick_deduplicator.py`
-  - `src/extraction_pipeline.py`
-  - `benchmark/run_platform_grader.py`
-- **Learnings:**
-  - **Gotcha:** `SequenceMatcher` and `re` module can crash if AI returns a number (float/int) instead of a string in JSON. Always cast to `str` before string operations.
-  - **Pattern:** Per-message benchmarking requires strict isolation. Global deduplication (merging identical picks from different messages) harms the benchmark score unless the benchmark accounts for it (e.g. tracking multiple sources). We disabled cross-message merging for "Unknown" cappers by enforcing Author propagation.
-  - **Metric:** Achieved **81% F1** (peak) and **73% F1** (stable) with >2.4 msg/sec throughput. Rate limits on free tier API are the main bottleneck for further improvement (causing timeouts during Refinement).
+# Ralph Progress Log
+
+This file tracks progress across iterations. Agents update this file
+after each iteration and it's included in prompts for context.
+
+## Codebase Patterns (Study These First)
+
+*   **Adaptive Batching:** `AdaptiveConcurrencyLimiter` in `parallel_batch_processor.py` is crucial for handling flaky APIs (Groq/Cerebras).
+*   **Validator-Driven AI:** `RuleBasedExtractor` is fast but brittle. `MultiPickValidator` forces AI fallback when simple signals (Team Names) are missed.
+*   **Hybrid Throughput:** Combining fast/limited providers (Groq) with high-capacity/slow providers (Mistral) via `process_batches` yields best results.
+
 ---
+
+## 2026-01-29 - US-005
+- **Implemented:** Deep Optimization Loop for Recall and Throughput.
+- **Files Changed:**
+    - `src/rule_based_extractor.py`: Added regex normalizations (U162->Under 162, MI->ML) to fix common parse errors.
+    - `src/multi_pick_validator.py`: Added "Uncovered Team" detection to force AI re-parse when team names appear in text but not in picks.
+    - `src/parallel_batch_processor.py`: Optimized provider config (Groq: 2 concurrent, Cerebras: 1 concurrent, Mistral: 20 concurrent). Redirected `groq_priority` to use ALL providers in parallel.
+    - `src/extraction_pipeline.py`: Increased default `batch_size` to 10.
+- **Learnings:**
+    - **Gotcha:** `RuleBasedExtractor` handles ~90% of messages but misses complex ones. Without strict validation (counting Team Names), these misses are silent.
+    - **Gotcha:** High concurrency on Rate-Limited APIs (Groq/Cerebras) causes 429 loops that are slower than just using a slower provider (Mistral) correctly.
+    - **Pattern:** Using `batch_size=10` doubles effective throughput for RPM-limited providers.

@@ -18,7 +18,7 @@ class ExtractionPipeline:
     def run(
         messages: List[Dict[str, Any]],
         target_date: str,
-        batch_size: int = 5,
+        batch_size: int = 10,  # Increased from 5 to 10 for Throughput (US-005)
         strategy: str = "groq",
     ) -> List[Dict[str, Any]]:
         """

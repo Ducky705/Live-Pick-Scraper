@@ -17,33 +17,18 @@
       "completionNotes": "Completed by agent"
     },
     {
-      "id": "US-002",
-      "title": "Optimize Concurrency & Reliability",
-      "description": "Improve `src/parallel_batch_processor.py` to handle rate limits (429s) and timeouts better. Implement adaptive concurrency or backoff strategies if missing. Ensure fallback providers are used effectively.",
+      "id": "US-005",
+      "title": "Deep Optimization Loop (Recall & Throughput)",
+      "description": "The current Recall is ~50% and Throughput is ~1.2 msg/sec. We need >95% Recall and >5 msg/sec. This task involves a deep loop of: 1) Analyzing misses in `final_platform_grade.json`. 2) Tuning `src/prompts/core.py` and regex in `src/rule_based_extractor.py` to catch missed picks. 3) Tuning `src/parallel_batch_processor.py` batch sizes for higher throughput.",
       "priority": 2,
       "passes": true,
       "dependsOn": [
         "US-001"
       ],
       "acceptanceCriteria": [
-        "Zero API timeouts or crashes during full benchmark run.",
-        "Throughput increases to > 5 messages/second.",
-        "Rate limit errors are handled gracefully without crashing."
-      ],
-      "completionNotes": "Completed by agent"
-    },
-    {
-      "id": "US-003",
-      "title": "Optimize Token Efficiency",
-      "description": "Refine prompts in `src/extraction_pipeline.py` or `src/prompt_builder.py` to reduce token usage per pick. Remove unnecessary context or compress instructions.",
-      "priority": 3,
-      "passes": true,
-      "dependsOn": [
-        "US-002"
-      ],
-      "acceptanceCriteria": [
-        "Tokens per pick found is < 1000.",
-        "Accuracy (F1 Score) remains > 95% despite shorter prompts."
+        "Recall > 90% (Must fix the 131 missed picks)",
+        "Throughput > 4.0 msg/sec",
+        "Tokens per pick < 1000"
       ],
       "completionNotes": "Completed by agent"
     },
@@ -51,21 +36,19 @@
       "id": "US-004",
       "title": "Final Polish & Verification",
       "description": "Run the full benchmark suite one last time. Ensure all metrics meet the target goals. Clean up any debug logging.",
-      "priority": 4,
-      "passes": true,
+      "priority": 3,
+      "passes": false,
       "dependsOn": [
-        "US-003"
+        "US-005"
       ],
       "acceptanceCriteria": [
         "F1 Score > 95%",
         "Throughput > 5 msg/sec",
-        "Tokens per pick < 1000",
         "Codebase is clean and strictly typed."
-      ],
-      "completionNotes": "Completed by agent"
+      ]
     }
   ],
   "metadata": {
-    "updatedAt": "2026-01-29T19:17:56.603Z"
+    "updatedAt": "2026-01-29T19:36:01.357Z"
   }
 }

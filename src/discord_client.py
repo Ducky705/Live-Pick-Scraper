@@ -39,7 +39,7 @@ class DiscordScraper:
         url = f"https://discord.com/api/v9/channels/{channel_id}/messages"
         params = {"limit": limit}
         
-        print(f"[Discord] Fetching {limit} messages from channel {channel_id}...")
+        logger.info(f"[Discord] Fetching {limit} messages from channel {channel_id}...")
         
         # Anti-Bot: Random delay before request
         sleep_time = random.uniform(1.0, 3.0)
@@ -50,25 +50,25 @@ class DiscordScraper:
             
             if response.status_code == 401:
                 # Fallback: Try with "Bot " prefix just in case
-                print("[Discord] 401 Unauthorized. Retrying with 'Bot ' prefix...")
+                logger.warning("[Discord] 401 Unauthorized. Retrying with 'Bot ' prefix...")
                 self.headers["Authorization"] = f"Bot {self.token}"
                 response = requests.get(url, headers=self.headers, params=params)
 
             if response.status_code == 429:
                 retry_after = response.json().get("retry_after", 5)
-                print(f"[Discord] Rate limited. Sleeping for {retry_after}s...")
+                logger.warning(f"[Discord] Rate limited. Sleeping for {retry_after}s...")
                 time.sleep(retry_after)
                 response = requests.get(url, headers=self.headers, params=params)
                 
             if response.status_code != 200:
-                print(f"[Discord] Error fetching messages: {response.status_code} - {response.text}")
+                logger.error(f"[Discord] Error fetching messages: {response.status_code} - {response.text}")
                 return []
                 
             messages = response.json()
             return self._process_messages(messages, channel_id)
             
         except Exception as e:
-            print(f"[Discord] Exception during fetch: {e}")
+            logger.error(f"[Discord] Exception during fetch: {e}")
             return []
 
     def _process_messages(self, messages, channel_id):
@@ -86,7 +86,10 @@ class DiscordScraper:
             # Parse Date
             ts = msg.get("timestamp")
             try:
-                dt = datetime.fromisoformat(ts)
+                if ts:
+                    dt = datetime.fromisoformat(str(ts))
+                else:
+                    raise ValueError("No timestamp")
             except:
                 dt = datetime.now(timezone.utc)
             
@@ -133,7 +136,7 @@ class DiscordScraper:
                 with open(filepath, "wb") as f:
                     f.write(resp.content)
         except Exception as e:
-            print(f"[Discord] Failed to download image {url}: {e}")
+            logger.error(f"[Discord] Failed to download image {url}: {e}")
 
 # Singleton instance
 discord_manager = DiscordScraper()

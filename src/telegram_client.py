@@ -2,7 +2,10 @@
 import os
 import asyncio
 import random
+import logging
 from datetime import datetime, timedelta, timezone
+
+logger = logging.getLogger(__name__)
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError, FloodWaitError
 from telethon.tl.types import MessageMediaPhoto
@@ -29,17 +32,17 @@ class TelegramManager:
             try:
                 self.progress_callback(percent, status)
             except Exception as e:
-                print(f"Progress Error: {e}")
+                logger.error(f"Progress Error: {e}")
 
     async def get_client(self):
         """
         Ensures the client is initialized on the CURRENT event loop (Background Thread).
         """
         if self.client is None:
-            print(
+            logger.debug(
                 f"[DEBUG] Initializing Telegram Client on Loop: {id(asyncio.get_running_loop())}"
             )
-            print(f"[DEBUG] Session Path: {SESSION_FILE_PATH}")
+            logger.debug(f"[DEBUG] Session Path: {SESSION_FILE_PATH}")
 
             # Force integer ID
             try:
@@ -71,25 +74,25 @@ class TelegramManager:
         try:
             client = await self.get_client()
             authorized = await client.is_user_authorized()
-            print(f"[DEBUG] Authorized: {authorized}")
+            logger.debug(f"[DEBUG] Authorized: {authorized}")
             return authorized
         except Exception as e:
-            print(f"[ERROR] Connect Error: {e}")
+            logger.error(f"[ERROR] Connect Error: {e}")
             return False
 
     async def send_code(self, phone):
         self.phone = phone
         try:
             client = await self.get_client()
-            print(f"[DEBUG] Sending code to {phone}...")
+            logger.debug(f"[DEBUG] Sending code to {phone}...")
 
             sent = await client.send_code_request(phone)
             self.phone_code_hash = sent.phone_code_hash
 
-            print("[DEBUG] Code sent successfully.")
+            logger.debug("[DEBUG] Code sent successfully.")
             return True
         except Exception as e:
-            print(f"[ERROR] Send Code Failed: {e}")
+            logger.error(f"[ERROR] Send Code Failed: {e}")
             # Reset client on major error to force reconnect
             if "database is locked" in str(e) or "auth key" in str(e).lower():
                 if self.client:
@@ -107,7 +110,7 @@ class TelegramManager:
             else:
                 return "2FA_REQUIRED"
         except Exception as e:
-            print(f"[ERROR] Sign In Failed: {e}")
+            logger.error(f"[ERROR] Sign In Failed: {e}")
             return str(e)
         return "SUCCESS"
 
@@ -145,7 +148,7 @@ class TelegramManager:
                         if os.path.exists(fpath):
                             photo_path = fpath  # Use absolute path for OCR
                     except Exception as e:
-                        print(f"Failed to download photo for {d.name}: {e}")
+                        logger.warning(f"Failed to download photo for {d.name}: {e}")
 
                     channels.append(
                         {
@@ -158,7 +161,7 @@ class TelegramManager:
             await self._report_progress(100, "Complete")
             return channels
         except Exception as e:
-            print(f"[ERROR] Get Channels Failed: {e}")
+            logger.error(f"[ERROR] Get Channels Failed: {e}")
             return []
 
     async def fetch_messages(self, channel_ids, target_date_str):
@@ -176,7 +179,7 @@ class TelegramManager:
             target_date_obj = (datetime.now() - timedelta(days=1)).date()
 
         ET_OFFSET = timezone(timedelta(hours=-5))
-        print(f"Fetching for Date: {target_date_obj}")
+        logger.info(f"Fetching for Date: {target_date_obj}")
 
         all_messages = []
         download_tasks = []
@@ -196,7 +199,7 @@ class TelegramManager:
                         await client.download_media(message, path, thumb="x")
                     except Exception:
                         # Thumbnail not available (common for older messages), try full image
-                        print(
+                        logger.warning(
                             f"[Fallback] Thumbnail unavailable for {filename}, downloading full image..."
                         )
                         await client.download_media(
@@ -205,7 +208,7 @@ class TelegramManager:
 
                     return path if os.path.exists(path) else None
                 except FloodWaitError as e:
-                    print(f"[Anti-Flood] Sleeping {e.seconds}s...")
+                    logger.warning(f"[Anti-Flood] Sleeping {e.seconds}s...")
                     await asyncio.sleep(e.seconds + 1)
                     try:
                         await client.download_media(
@@ -215,7 +218,7 @@ class TelegramManager:
                     except:
                         return None
                 except Exception as e:
-                    print(f"Download failed for {filename}: {e}")
+                    logger.error(f"Download failed for {filename}: {e}")
                     return None
 
         for i, channel_id in enumerate(channel_ids):
@@ -347,7 +350,7 @@ class TelegramManager:
                         del msg["pending_downloads"]  # Cleanup logic dict
 
             except Exception as e:
-                print(f"Error fetching channel {channel_id}: {e}")
+                logger.error(f"Error fetching channel {channel_id}: {e}")
                 continue
 
         # Media downloading gets 10-95% of the bar with per-file progress

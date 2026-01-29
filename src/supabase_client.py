@@ -1,6 +1,9 @@
 # src/supabase_client.py
 import os
+import logging
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 # Lazy import: supabase module is loaded on first use
 # from supabase import create_client, Client  # Moved to get_supabase()
 
@@ -48,10 +51,10 @@ def get_supabase():
 
             _supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
         else:
-            print("Supabase Config Error: Credentials missing in config.py")
+            logger.error("Supabase Config Error: Credentials missing in config.py")
             _supabase = None
     except Exception as e:
-        print(f"Supabase Init Error: {e}")
+        logger.error(f"Supabase Init Error: {e}")
         _supabase = None
 
     return _supabase
@@ -116,12 +119,12 @@ def refresh_caches():
         res_types = supabase.table("bet_types").select("id, name").execute()
         _bet_type_map = {t["name"].lower().strip(): t["id"] for t in res_types.data}
 
-        print(
+        logger.info(
             f"Cached: {len(_capper_map)} Cappers ({len(_active_capper_ids)} Active), {len(_league_map)} Leagues, {len(_bet_type_map)} Bet Types."
         )
 
     except Exception as e:
-        print(f"Error refreshing caches: {e}")
+        logger.error(f"Error refreshing caches: {e}")
 
 
 def get_capper_cache():
@@ -198,7 +201,7 @@ def get_or_create_capper_id(name):
 
     if matches:
         best = matches[0]
-        print(
+        logger.info(
             f"[Match] '{name}' -> '{best['name']}' (ID: {best['id']}, Score: {best['score']}, Type: {best['type']})"
         )
         return best["id"]
@@ -211,7 +214,7 @@ def get_or_create_capper_id(name):
 
     if matches_all:
         best = matches_all[0]
-        print(
+        logger.info(
             f"[Match-Inactive] '{name}' -> '{best['name']}' (ID: {best['id']}, Score: {best['score']})"
         )
         return best["id"]
@@ -220,7 +223,7 @@ def get_or_create_capper_id(name):
     clean_insert_name = str(name).strip()
     supabase = get_supabase()
     try:
-        print(f"[DB] No match found. Creating new capper: {clean_insert_name}")
+        logger.info(f"[DB] No match found. Creating new capper: {clean_insert_name}")
         res = (
             supabase.table("capper_directory")
             .insert({"canonical_name": clean_insert_name})
@@ -233,7 +236,7 @@ def get_or_create_capper_id(name):
             _capper_map[clean_insert_name.lower()] = new_id
             return new_id
     except Exception as e:
-        print(f"Error creating capper '{name}': {e}")
+        logger.error(f"Error creating capper '{name}': {e}")
         return None
     return None
 

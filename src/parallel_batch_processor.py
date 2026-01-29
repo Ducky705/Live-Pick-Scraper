@@ -73,7 +73,7 @@ PROVIDER_CONFIG = {
         "tier": 2,  # US-002: Quality Tier
     },
     "gemini": {
-        "model": "gemini-2.0-flash-exp",  # Updated to experimental model as 1.5-flash was 404ing
+        "model": "gemini-1.5-flash",  # Revert to stable model
         "rpm": 15,  # 15 requests per minute
         "tpm": 250000,  # 250K TPM
         "max_concurrent": 3,  # Set to 3 (Safe limit for free tier)
@@ -522,22 +522,22 @@ class ParallelBatchProcessor:
 
     def _print_summary(self) -> None:
         """Print execution stats."""
-        print("\n" + "=" * 60)
-        print("PARALLEL BATCH PROCESSING SUMMARY")
-        print("=" * 60)
-        print(
+        logger.info("=" * 60)
+        logger.info("PARALLEL BATCH PROCESSING SUMMARY")
+        logger.info("=" * 60)
+        logger.info(
             f"{'Provider':<12} | {'Batches':>8} | {'Errors':>7} | {'Avg Time':>10} | {'RPM Used':>10}"
         )
-        print("-" * 60)
+        logger.info("-" * 60)
 
         for p in self.providers:
             s = self.stats.get(p, {"count": 0, "errors": 0, "total_time": 0})
             avg_time = s["total_time"] / s["count"] if s["count"] > 0 else 0
             rpm = PROVIDER_CONFIG.get(p, {}).get("rpm", 0)
-            print(
+            logger.info(
                 f"{p:<12} | {s['count']:>8} | {s['errors']:>7} | {avg_time:>8.2f}s | {rpm:>10}"
             )
-        print("=" * 60 + "\n")
+        logger.info("=" * 60)
 
 
 # Singleton instance

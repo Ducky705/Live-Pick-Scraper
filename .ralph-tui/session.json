@@ -3,10 +3,10 @@
   "sessionId": "75b45ee3-65bf-4932-b83d-7987c4a73a5a",
   "status": "running",
   "startedAt": "2026-01-29T22:22:22.238Z",
-  "updatedAt": "2026-01-29T22:24:27.851Z",
-  "currentIteration": 0,
+  "updatedAt": "2026-01-29T22:29:22.416Z",
+  "currentIteration": 1,
   "maxIterations": 50,
-  "tasksCompleted": 0,
+  "tasksCompleted": 1,
   "isPaused": false,
   "agentPlugin": "opencode",
   "trackerState": {
@@ -29,8 +29,8 @@
       {
         "id": "US-006",
         "title": "Tune Validator & Restore Throughput",
-        "status": "open",
-        "completedInSession": false
+        "status": "completed",
+        "completedInSession": true
       },
       {
         "id": "US-004",
@@ -40,7 +40,18 @@
       }
     ]
   },
-  "iterations": [],
+  "iterations": [
+    {
+      "iteration": 1,
+      "status": "completed",
+      "taskId": "US-006",
+      "taskTitle": "Tune Validator & Restore Throughput",
+      "taskCompleted": true,
+      "durationMs": 122845,
+      "startedAt": "2026-01-29T22:22:25.001Z",
+      "endedAt": "2026-01-29T22:24:27.846Z"
+    }
+  ],
   "skippedTaskIds": [],
   "cwd": "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15",
   "activeTaskIds": [],

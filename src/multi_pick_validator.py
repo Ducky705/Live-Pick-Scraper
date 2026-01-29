@@ -212,7 +212,9 @@ class MultiPickValidator:
         
         parsed_teams = set()
         for p in parsed_picks:
-            sel = p.get("pick", "").lower()
+            # Handle potential None values safely
+            val = p.get("pick")
+            sel = str(val).lower() if val is not None else ""
             parsed_teams.add(sel)
 
         for tm in team_matches:

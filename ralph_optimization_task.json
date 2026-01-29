@@ -4,20 +4,65 @@
   "userStories": [
     {
       "id": "US-001",
-      "title": "Establish Baseline & Optimize Loop",
-      "description": "Run the platform grader benchmark and iteratively improve the codebase to maximize accuracy, speed, and efficiency. Goal: F1 > 95%, Speed > 5 msg/sec.",
+      "title": "Establish Baseline & Analyze Metrics",
+      "description": "Run the platform grader benchmark (benchmark/run_platform_grader.py) to get initial metrics. Analyze the `benchmark/reports/final_platform_grade.json` to identify bottlenecks in speed, accuracy, or efficiency.",
       "priority": 1,
       "passes": true,
       "dependsOn": [],
       "acceptanceCriteria": [
-        "F1 Score > 95%",
-        "Throughput > 5 msg/sec",
-        "Tokens per pick < 1000"
+        "Benchmark run completes successfully without errors.",
+        "Baseline report exists in `benchmark/reports/final_platform_grade.json`.",
+        "Current F1, Throughput, and Cost metrics are logged."
       ],
       "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-002",
+      "title": "Optimize Concurrency & Reliability",
+      "description": "Improve `src/parallel_batch_processor.py` to handle rate limits (429s) and timeouts better. Implement adaptive concurrency or backoff strategies if missing. Ensure fallback providers are used effectively.",
+      "priority": 2,
+      "passes": false,
+      "dependsOn": [
+        "US-001"
+      ],
+      "acceptanceCriteria": [
+        "Zero API timeouts or crashes during full benchmark run.",
+        "Throughput increases to > 5 messages/second.",
+        "Rate limit errors are handled gracefully without crashing."
+      ]
+    },
+    {
+      "id": "US-003",
+      "title": "Optimize Token Efficiency",
+      "description": "Refine prompts in `src/extraction_pipeline.py` or `src/prompt_builder.py` to reduce token usage per pick. Remove unnecessary context or compress instructions.",
+      "priority": 3,
+      "passes": false,
+      "dependsOn": [
+        "US-002"
+      ],
+      "acceptanceCriteria": [
+        "Tokens per pick found is < 1000.",
+        "Accuracy (F1 Score) remains > 95% despite shorter prompts."
+      ]
+    },
+    {
+      "id": "US-004",
+      "title": "Final Polish & Verification",
+      "description": "Run the full benchmark suite one last time. Ensure all metrics meet the target goals. Clean up any debug logging.",
+      "priority": 4,
+      "passes": false,
+      "dependsOn": [
+        "US-003"
+      ],
+      "acceptanceCriteria": [
+        "F1 Score > 95%",
+        "Throughput > 5 msg/sec",
+        "Tokens per pick < 1000",
+        "Codebase is clean and strictly typed."
+      ]
     }
   ],
   "metadata": {
-    "updatedAt": "2026-01-29T18:11:39.876Z"
+    "updatedAt": "2026-01-29T18:44:49.804Z"
   }
 }

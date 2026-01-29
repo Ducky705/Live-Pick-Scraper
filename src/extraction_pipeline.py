@@ -18,7 +18,7 @@ class ExtractionPipeline:
     def run(
         messages: List[Dict[str, Any]],
         target_date: str,
-        batch_size: int = 1,
+        batch_size: int = 5,
         strategy: str = "groq",
     ) -> List[Dict[str, Any]]:
         """
@@ -37,6 +37,37 @@ class ExtractionPipeline:
 
         rule_picks, messages_for_ai = RuleBasedExtractor.extract(messages)
         picks = list(rule_picks)  # Initialize with rule picks
+
+        # US-001: Validate Rule-Based Picks
+        # If RuleBased found SOME picks but Validator expects MORE, send to AI.
+        if rule_picks:
+            # Identify messages handled by RuleBased
+            all_msg_ids = {str(m.get("id")) for m in messages if m.get("id") is not None}
+            ai_msg_ids = {str(m.get("id")) for m in messages_for_ai if m.get("id") is not None}
+            rule_handled_ids = all_msg_ids - ai_msg_ids
+
+            if rule_handled_ids:
+                msg_map = {str(m.get("id")): m for m in messages if m.get("id") is not None}
+                rule_handled_msgs = [msg_map[mid] for mid in rule_handled_ids if mid in msg_map]
+
+                # Run validation on just the rule-based outcomes
+                _, missing_ids = validate_and_flag_missing(rule_handled_msgs, picks)
+
+                if missing_ids:
+                    logger.info(
+                        f"Rule-Based Validation: {len(missing_ids)} messages flagged as incomplete. Escalating to AI."
+                    )
+                    missing_ids_set = set(missing_ids)
+
+                    # US-001 Safety Net: Do NOT delete picks yet. 
+                    # We will replace them only if AI returns a valid result.
+                    # Just add messages to AI queue.
+                    
+                    # 2. Add messages back to AI queue
+                    current_ai_ids = {str(m.get("id")) for m in messages_for_ai}
+                    for mid in missing_ids:
+                        if mid not in current_ai_ids and mid in msg_map:
+                            messages_for_ai.append(msg_map[mid])
 
         if not messages_for_ai:
             logger.info(
@@ -83,6 +114,9 @@ class ExtractionPipeline:
                         pass
 
             for batch_idx, raw_response_str in enumerate(all_raw_picks):
+                if raw_response_str is None:
+                    continue
+
                 valid_ids = None
                 if batch_idx < len(batches):
                     # Remove int() cast to support string IDs (e.g., synthetic)
@@ -285,14 +319,21 @@ class ExtractionPipeline:
 
             if reparse_batch:
                 try:
-                    # CRITICAL: Use batch_size=1 for Refinement to ensure ID safety.
-                    reparse_batches = [[m] for m in reparse_batch]
+                    # Refinement Batching (US-001: Optimization)
+                    refine_batch_sz = 2 # Reduced from 5 to avoid Rate Limits (Token overflow)
+                    reparse_batches = [
+                        reparse_batch[i : i + refine_batch_sz]
+                        for i in range(0, len(reparse_batch), refine_batch_sz)
+                    ]
                     reparse_results = parallel_processor.process_batches(
                         reparse_batches
                     )
 
                     new_picks_count = 0
                     for batch_idx, raw_response_str in enumerate(reparse_results):
+                        if raw_response_str is None:
+                            continue
+
                         valid_ids = None
                         if batch_idx < len(reparse_batches):
                             valid_ids = [
@@ -315,6 +356,7 @@ class ExtractionPipeline:
 
                         for mid, msg_new_picks in new_picks_by_id.items():
                             if msg_new_picks:
+                                # US-001 Safety Net: Only replace if we have new picks
                                 picks = [
                                     p
                                     for p in picks

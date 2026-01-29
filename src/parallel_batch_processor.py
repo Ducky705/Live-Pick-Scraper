@@ -46,9 +46,9 @@ PROVIDER_CONFIG = {
     "groq": {
         "model": "llama-3.1-8b-instant",  # Iteration 3: Switch to 8b for speed/limits
         "rpm": 500,  # Much higher limits for 8b
-        "tpm": 30000,  # Lowered to 30k for safety (Free Tier)
-        "max_concurrent": 1,  # CRITICAL: Reduced to 1 to avoid TPM limits
-        "min_delay": 5.0,  # Slow down: 12 RPM max
+        "tpm": 18000,  # CRITICAL: Lowered to 18k to match observed Free Tier limits (avoid 429s)
+        "max_concurrent": 2,  # Reduced concurrency to prevent burst limit hits
+        "min_delay": 1.0,  # 1s delay to be safe
         "priority": 1,  # PRIMARY provider
         "tier": 1,  # US-002: Speed Tier
     },
@@ -437,12 +437,15 @@ class ParallelBatchProcessor:
 
         self._print_summary()
 
-        # Return successful results only (filter None and errors)
-        return [
-            r["data"]
-            for r in results
-            if r and r.get("status") == "success" and r.get("data")
-        ]
+        # Return results in order (preserve None for failures to maintain batch mapping)
+        final_results = []
+        for r in results:
+            if r and r.get("status") == "success" and r.get("data"):
+                final_results.append(r["data"])
+            else:
+                final_results.append(None)
+        
+        return final_results
 
     def process_batches_groq_priority(self, batches: List[List[dict]]) -> List[Any]:
         """
@@ -496,7 +499,16 @@ class ParallelBatchProcessor:
                     }
 
         self._print_summary()
-        return [r["data"] for r in results if r and r.get("status") == "success"]
+        
+        # Return results in order (preserve None for failures)
+        final_results = []
+        for r in results:
+            if r and r.get("status") == "success" and r.get("data"):
+                final_results.append(r["data"])
+            else:
+                final_results.append(None)
+                
+        return final_results
 
     def _print_summary(self):
         """Print execution stats."""

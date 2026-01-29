@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-24
 
-**Total Messages Processed:** 10
-**Total Picks Extracted:** 83
+**Total Messages Processed:** 50
+**Total Picks Extracted:** 169
 
 ---
 
@@ -19,6 +19,44 @@
 
 ---
 
+## Message ID: 10891
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> **Big Al**
+> 
+> NHL Selections
+> 1* Oilers -175, 10:05 pm
+> 
+> NBA Selections
+> 4* Magic - 1.5, 7:10 pm
+> NCAA Basketball Selections
+> 4* Minnesota +6, Noon
+> 3* Wofford +2, 11:00 am 
+> 3* Connecticut -10.5, 12:30 pm
+> 
+> **Kyle Anthony UFC 5% 🔥
+> **
+> Paddy Pimblett ML & Jean Silva ML Parlay
+> 
+> **Kyle Hunter** 
+> 
+> 3* Georgia Tech UNDER 144 
+> 12:00 PM EST
+> 3* Denver OVER 161.5
+> 4:00 PM EST
+> 3* Oklahoma St UNDER 163 
+> 3:00 PM EST
+> 
+> **Tokyo Brandon (14-3) **
+> 5% MAX CBB PLAY - Cal St Fullerton Under 172.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
 ## Message ID: 12791
 
 ### 📝 Source Message
@@ -27,6 +65,44 @@
 > **MARCO D'ANGELO
 > 
 > 5% SMU-12**
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 12793
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> **Big Al**
+> 
+> NHL Selections
+> 1* Oilers -175, 10:05 pm
+> 
+> NBA Selections
+> 4* Magic - 1.5, 7:10 pm
+> NCAA Basketball Selections
+> 4* Minnesota +6, Noon
+> 3* Wofford +2, 11:00 am 
+> 3* Connecticut -10.5, 12:30 pm
+> 
+> **Kyle Anthony UFC 5% 🔥
+> **
+> Paddy Pimblett ML & Jean Silva ML Parlay
+> 
+> **Kyle Hunter** 
+> 
+> 3* Georgia Tech UNDER 144 
+> 12:00 PM EST
+> 3* Denver OVER 161.5
+> 4:00 PM EST
+> 3* Oklahoma St UNDER 163 
+> 3:00 PM EST
+> 
+> **Tokyo Brandon (14-3) **
+> 5% MAX CBB PLAY - Cal St Fullerton Under 172.5
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -56,6 +132,248 @@
 > 41-19 on 5%'s
 > 
 > 5% SMU-12
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464653596745400578
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> TMS
+> 1U Texas -2
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464654875336904917
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> ✅NewmarkTennis
+> 
+> Alcaraz/Paul O3.5 sets +106 (3u)
+> Tien +1.5 sets -105 (3u)
+> Bublik +3.5 -108 (3u)
+> Zverev -1.5 sets -115 (3u)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464660776504529130
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> ===
+> Smart Money Sports
+> 
+> NCAAB
+> Minnesota  +5.5 -110 (2u, 12:00e)
+> Texas -3 -105 (2u, 1:00e)
+> Rhode Island ML +110 (2u, 2:00e)
+> Louisville  -13.5 -105 (2u, 2:00e)
+> Purdue  -6 -105 (2u, 3:00e)
+> San Diego State  -5.5 -110 (2u, 4:00e)
+> Memphis Tigers +3 -110 (2u, 4:00e)
+> Tennessee  +6 -105 (2u, 8:30e)
+> Arizona State  +2.5 -110 (2u, 10:00e)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464660856343363626
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Ralph Michaels 
+> 
+> 5% UIC 1H +3.5 (3-0 on the year)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464663934270308353
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Kyle Hunter 
+> 3* Georgia Tech UNDER 144 
+> 12:00 PM EST
+> 3* Denver OVER 161.5
+> 4:00 PM EST
+> 3* Oklahoma St UNDER 163 
+> 3:00 PM EST
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464664001999929477
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Tokyo Brandon
+> 5% MAX CBB PLAY - Cal St Fullerton Under 172.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464664628926742820
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> 👍 Gianni The Greek:
+> Max 
+> paddy Pimblett -225
+> 3Us
+> Song Yadong +180
+> Ricky Turcios +167
+> Arnold Allen +225
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464665301156368506
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Big Al
+> 
+> NHL Selections
+> 1* Oilers -175, 10:05 pm
+> 
+> NBA Selections
+> 4* Magic - 1.5, 7:10 pm
+> . 
+> NCAA Basketball Selections
+> 4* Minnesota +6, Noon
+> 3* Wofford +2, 11:00 am 
+> 3* Connecticut -10.5, 12:30 pm
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464665682120544348
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Kyle Anthony 5% 
+> Paddy Pimblett ML & Jean Silva ML Parlay
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464666797620859198
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> ISW
+> 1U CBB
+> Minnesota +5.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464667314380079129
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> ====
+> Your daily Capper 
+> 2U Texas ML
+> 1U Colorado -2
+> 1U Purdue -4
+> 
+> Parlay 
+> Florida -3 / Alabama ML
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464669178576240700
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> ====
+> 
+> Tokyo Brandon 
+> 5% CBB 
+> CS Fullerton under 172.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464672333536166059
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> ..
+> 
+> 
+> Ben burns 🔥🔥🔥
+> 
+> 3% Connecticut -9.5
+> 4% Memphis +3.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 1464673962532409456
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Zach's Bets NCAAB:
+> 
+> •Texas -2.5 -110 (2u)
+> 
+> •Texas Tech +1.5 -110 (1u)
+> 
+> •Kansas State +4.5 -110 (1u)
+> 
+> •Harvard/Cornell over 162.5 -110 (1u)
+> 
+> •Illinois +11.5 / Alabama ML -115 (7.5u)
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -229,6 +547,332 @@
 
 ---
 
+## Message ID: 2015104132424548519
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> 🏀 CBB Cappers Consensus:
+> 
+> Texas ML -160 
+> Purdue -5.5 ML -110
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015112285795262578
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Bet Sharper
+> 
+> Vanderbilt/Miss State o160.5
+> Texas -2.5
+> Texas Tech +1
+> Winthrop/Presbyterian o146.5
+> Oklahoma/Missouri o150.5
+> North Dakota State/Oral Roberts o142
+> Tennessee +6
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015112637978394887
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Prop Joe
+> 
+> CBB
+> Cincinnati -1.5 (2u)
+> North Carolina +7 (2u)
+> Fresno State +4 (1u)
+> Purdue -5.5 (1u)
+> Georgetown/Providence u162 (1u)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015112825925238860
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Cblez
+> 
+> CBB
+> Wisconsin Green Bay/Robert Morris u144 (1u)
+> Dayton/St Josephs o139.5 (1u)
+> Cornell +2.5 (1u)
+> Houston -1 (1u)
+> Coppin St +13.5 (1u)
+> Delaware/Liberty u135 (1u)
+> St Johns/Xavier o162 (1u)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015113176019591264
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Ben burns
+> 
+> 3% Connecticut -9.5
+> 4% Memphis +3.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015113321666802065
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Gianni the Greek
+> 
+> UFC
+> 5% Paddy Pimblett -225  
+> 3% Song Yadong +180 
+> 3% Ricky Turcios +167
+> 3% Arnold Allen +225
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015113466470969651
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Marco D’Angelo
+> 
+> 5% SMU -12 (-109)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015114437271925194
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Tokyo Brandon
+> 
+> 5% Cal St Fullerton/Cal Poly u172.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015115794125090973
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> #BigAl🔥
+> 
+> NHL Selections
+> 1* Oilers -175, 10:05 pm
+> 
+> NBA Selections
+> 4* Magic - 1.5, 7:10 pm
+> NCAA Basketball Selections
+> 4* Minnesota +6, Noon
+> 3* Wofford +2, 11:00 am 
+> 3* Connecticut -10.5, 12:30 pm
+> 
+> Kyle Anthony UFC 5% 🔥
+> 
+> Paddy Pimblett ML & Jean Silva ML Parlay
+> 
+> Kyle Hunter 
+> 
+> 3* Georgia Tech UNDER 144 
+> 12:00 PM EST
+> 3* Denver OVER 161.5
+> 4:00 PM EST
+> 3* Oklahoma St UNDER 163 
+> 3:00 PM EST
+> 
+> Tokyo Brandon (14-3) 
+> 5% MAX CBB PLAY - Cal St Fullerton Under 172.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015115866669793409
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Big Al
+> 
+> NHL
+> 1* Oilers -175
+> 
+> NBA
+> 4* Magic - 1.5
+> 
+> CBB
+> 4* Minnesota +6
+> 3* Wofford +2
+> 3* Connecticut -10.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015115935578001412
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Strike Point Sports
+> 
+> 4u - Texas -3
+> 4u - Purdue -5.5
+> 3u - Arkansas -11
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015116068604502256
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Fezzy UFC🏆🔥 https://t.co/vNDvPU06rH
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015116109851267539
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> ⚽️ Fredo 
+> 
+> Villarreal vs Real Madrid O2.5 / PSV Tt Over 1.5 (3u Parlay)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015116235252654394
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Smart Money Sports
+> 
+> 2u - Minnesota  +5.5 -110
+> 2u - Texas -3 -105
+> 2u - Rhode Island ML +110 
+> 2u - Louisville  -13.5 -105 
+> 2u - Purdue  -6 -105 
+> 2u - San Diego State  -5.5 -110 
+> 2u - Memphis Tigers +3 -110 
+> 2u - Tennessee  +6 -105 
+> 2u - Arizona State  +2.5 -110
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015116338759614915
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> 24/01
+> 
+> #SmartMoneySports
+> 
+> NCAAB
+> Minnesota Golden Gophers +5.5 -110 (2u, 12:00e)
+> Texas Longhorns -3 -105 (2u, 1:00e)
+> Rhode Island ML +110 (2u, 2:00e)
+> Louisville Cardinals -13.5 -105 (2u, 2:00e)
+> Purdue Boilermakers -6 -105 (2u, 3:00e)
+> San Diego State Aztecs -5.5 -110 (2u, 4:00e)
+> Memphis Tigers +3 -110 (2u, 4:00e)
+> Tennessee Volunteers +6 -105 (2u, 8:30e)
+> Arizona State Sun Devils +2.5 -110 (2u, 10:00e)
+> 
+> #HammeringHank
+> 
+> Early CBB Card
+> Villanova +11.5 3U
+> Mississippi State +8 2U
+> South Carolina +10.5 2U
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015116639927509388
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Stephen Nover 
+> 
+> 2* Indiana St. -2.5
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 2015116848984215979
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> #LEARLOCKS🔥
+> 
+> Card
+> NCAAB
+> Wright state ML 2.5u -145
+> Princeton ml/ Clemson ML 1.5u -125
+> Oklahoma state +10.5 1.5u -110
+> Texas tech ml 1.5 +100
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
 ## Message ID: 31604
 
 ### 📝 Source Message
@@ -360,6 +1004,140 @@
 > Coppin St + 13½ - 110 (1u)
 > Delaware/Liberty U 135 - 110 (1u)
 > St Johns/Xavier O 162 -110 (1u)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 31606
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> NickyCashin
+> 
+> Virginia Cavaliers -6.5 -110 2U
+> Minnesota Gophers +5.5 -110 2U
+> Colorado Buffaloes -3 -110 2U
+> Texas Longhorns -2.5 -110 2U
+> Oklahoma Sooners +4.5 -105 1.5U
+> Rhode Island Rams +1.5 -110 2U
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 31608
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> ThisGirlBetz
+> 
+> SATURDAY UFC324
+> U.Nurmagomedov via decision - 105 (2u)
+> Derrick Lewis +270 (2u)
+> P.Pimblett TKO/SUB (finish) -150 (2u)
+> ML PARLAY
+> Silva/Silva -110 (3u)
+> 
+> SATURDAY NBA
+> Huge (5u) win yesterday outright.
+> 16-4 run.
+> 76ers -110 (2u)
+> Timberwolves -6-105 (3u)
+> Celtics +1.5 -110 (2u)
+> Lakers -3.5 -110 (2u)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 31609
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> DirtyBubbleBets 
+> 
+> Minnesota +5.5 (-110) 1U
+> Texas Tech +2 (-110) 1U
+> Virginia -6 (-120) 1U
+> Texas -2 (-125) 1U
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 31610
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> AndersPicks
+> 
+> CBB Add
+> Fresno State +4 -110 1U
+> 3.5 is fine
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 31611
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> OutofLineBets
+> 
+> CBB
+> Kentucky -9.5 -120 3U
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 31613
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> Smart Money Sports
+> 
+> NCAAB
+> Minnesota Golden Gophers +5.5 -110 (2u, 12:00e)
+> Texas Longhorns -3 -105 (2u, 1:00e)
+> Rhode Island ML +110 (2u, 2:00e)
+> Louisville Cardinals -13.5 -105 (2u, 2:00e)
+> Purdue Boilermakers -6 -105 (2u, 3:00e)
+> San Diego State Aztecs -5.5 -110 (2u, 4:00e)
+> Memphis Tigers +3 -110 (2u, 4:00e)
+> Tennessee Volunteers +6 -105 (2u, 8:30e)
+> Arizona State Sun Devils +2.5 -110 (2u, 10:00e)
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
+
+---
+
+## Message ID: 31614
+
+### 📝 Source Message
+**Date:** 2026-01-24 12:00 ET
+**Text:**
+> HammeringHank
+> 
+> Early CBB Card
+> Villanova +11.5 3U
+> Mississippi State +8 2U
+> South Carolina +10.5 2U
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*

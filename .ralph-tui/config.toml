@@ -6,7 +6,8 @@ tracker = "json"
 subagentTracingDetail = "full"
 
 [agentOptions]
-model = "google/gemini-2.0-flash-exp"
+model = "google/gemini-3-pro-preview"
+
 
 [trackerOptions]
 path = "ralph_optimization_task.json"

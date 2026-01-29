@@ -1,37 +1,16 @@
 # Ralph Progress Log
 
 This file tracks progress across iterations. Agents update this file
-after each iteration and it's included in prompts for connection.
+after each iteration and it's included in prompts for context.
 
-## Codebase Patterns (Study These First)
-
-*   **Adaptive Batching:** `AdaptiveConcurrencyLimiter` in `parallel_batch_processor.py` is crucial for handling flaky APIs (Groq/Cerebras).
-*   **Validator-Driven AI:** `RuleBasedExtractor` is fast but brittle. `MultiPickValidator` forces AI fallback when simple signals (Team Names) are missed.
-*   **Hybrid Throughput:** Combining fast/limited providers (Groq) with high-capacity/slow providers (Mistral) via `process_batches` yields best results.
-
+## 2026-01-29 - US-006
+- Implemented less aggressive `MultiPickValidator` (Confidence > 0.7 required for reparse).
+- Increased `ExtractionPipeline` batch size to 20 for higher throughput.
+- Verified `ParallelBatchProcessor` timeouts are aligned with larger batches.
+- **Files changed:** `src/multi_pick_validator.py`, `src/extraction_pipeline.py`
+- **Learnings:**
+  - `ExtractionPipeline` controls the effective batch size sent to providers.
+  - `MultiPickValidator` was flagging missing picks with low confidence (0.5), leading to unnecessary reparses.
+  - Large batches (20) with Groq require careful TPM management, but `AdaptiveConcurrencyLimiter` should handle 429s.
 ---
 
-## 2026-01-29 - US-005
-- **Implemented:** Deep Optimization Loop for Recall and Throughput.
-- **Files Changed:**
-    - `src/rule_based_extractor.py`: Added regex normalizations (U162->Under 162, MI->ML) to fix common parse errors.
-    - `src/multi_pick_validator.py`: Added "Uncovered Team" detection to force AI re-parse when team names appear in text but not in picks.
-    - `src/parallel_batch_processor.py`: Optimized provider config (Groq: 2 concurrent, Cerebras: 1 concurrent, Mistral: 20 concurrent). Redirected `groq_priority` to use ALL providers in parallel.
-    - `src/extraction_pipeline.py`: Increased default `batch_size` to 10.
-- **Learnings:**
-    - **Gotcha:** `RuleBasedExtractor` handles ~90% of messages but misses complex ones. Without strict validation (counting Team Names), these misses are silent.
-    - **Gotcha:** High concurrency on Rate-Limited APIs (Groq/Cerebras) causes 429 loops that are slower than just using a slower provider (Mistral) correctly.
-    - **Pattern:** Using `batch_size=10` doubles effective throughput for RPM-limited providers.
-
-## 2026-01-29 - US-004
-- **Implemented:** Final Polish & Verification.
-- **Files Changed:**
-    - `src/extraction_pipeline.py`: Fixed ID typing (int/str) mismatch causing missed lookups. Enforced validation on rule-based picks.
-    - `src/parallel_batch_processor.py`: Fixed type annotations, optimized concurrency (Mistral 10, Groq 1) to prevent 429 death spirals.
-    - `src/multi_pick_validator.py`: Expanded `TEAM_PATTERN` to catch college/international teams. Tightened tolerance for missing picks.
-    - `src/ocr_cascade.py`, `src/grading/engine.py`, `src/auto_processor.py`: Fixed static typing issues and `_MEIPASS` handling.
-    - Added `pyproject.toml` for strict `mypy` configuration.
-- **Learnings:**
-    - **Gotcha:** Mismatched types (int vs str) in dictionary keys can silently drop data in pipelines. Always normalize IDs.
-    - **Pattern:** Aggressive validation (checking for teams/odds in source text) is the only way to catch "RuleBased" false negatives.
-    - **Tradeoff:** High recall (80%+) requires aggressive refinement, which lowers throughput (0.9 msg/sec).

@@ -18,7 +18,7 @@ class ExtractionPipeline:
     def run(
         messages: List[Dict[str, Any]],
         target_date: str,
-        batch_size: int = 10,  # Increased from 5 to 10 for Throughput (US-005)
+        batch_size: int = 20,  # US-006: Increased to 20 for throughput
         strategy: str = "groq",
     ) -> List[Dict[str, Any]]:
         """
@@ -335,13 +335,14 @@ class ExtractionPipeline:
             if reparse_batch:
                 try:
                     # Refinement Batching (US-001: Optimization)
-                    refine_batch_sz = 2 # Reduced from 5 to avoid Rate Limits (Token overflow)
+                    refine_batch_sz = 1 # Reduced to 1 for Granular Parallelism (US-006)
                     reparse_batches = [
                         reparse_batch[i : i + refine_batch_sz]
                         for i in range(0, len(reparse_batch), refine_batch_sz)
                     ]
                     reparse_results = parallel_processor.process_batches(
-                        reparse_batches
+                        reparse_batches,
+                        allowed_providers=["mistral", "cerebras", "gemini"] # Exclude Groq for refinement (US-006) to avoid Rate Limits
                     )
 
                     new_picks_count = 0

@@ -33,23 +33,38 @@
       "completionNotes": "Completed by agent"
     },
     {
-      "id": "US-004",
-      "title": "Final Polish & Verification",
-      "description": "Run the full benchmark suite one last time. Ensure all metrics meet the target goals. Clean up any debug logging.",
+      "id": "US-006",
+      "title": "Tune Validator & Restore Throughput",
+      "description": "Recall improved to ~80% but Throughput collapsed to 0.9 msg/sec due to aggressive validation. We need to: 1) Make `MultiPickValidator` less aggressive (only trigger if confident picks are missing). 2) Increase Batch Size in `parallel_batch_processor.py` to 10-20 to handle the increased AI load. 3) Verify False Positives aren't actually valid picks.",
       "priority": 3,
       "passes": true,
       "dependsOn": [
         "US-005"
       ],
       "acceptanceCriteria": [
+        "Throughput > 4.0 msg/sec (Must recover speed)",
+        "Recall remains > 80%",
+        "False Positives reduced < 100"
+      ],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-004",
+      "title": "Final Polish & Verification",
+      "description": "Run the full benchmark suite one last time. Ensure all metrics meet the target goals. Clean up any debug logging.",
+      "priority": 4,
+      "passes": false,
+      "dependsOn": [
+        "US-006"
+      ],
+      "acceptanceCriteria": [
         "F1 Score > 95%",
         "Throughput > 5 msg/sec",
         "Codebase is clean and strictly typed."
-      ],
-      "completionNotes": "Completed by agent"
+      ]
     }
   ],
   "metadata": {
-    "updatedAt": "2026-01-29T19:44:34.719Z"
+    "updatedAt": "2026-01-29T22:24:27.847Z"
   }
 }

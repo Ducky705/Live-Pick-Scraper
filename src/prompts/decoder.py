@@ -2187,7 +2187,7 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
     # RULE 1: If type is Moneyline but pick contains a spread number (e.g. -4), force change to Spread
     # Ignore odds like +140, look for small numbers (-10 to +20 typically)
     if result.get("type") == "Moneyline":
-        p_str = result.get("pick", "")
+        p_str = result.get("pick") or ""
         # Check for spread number (negative or positive small number) NOT odds
         # Match -X or +X where X < 50 (ignoring odds > 100)
         spread_match = re.search(r"[+-](\d+\.?\d*)", p_str)
@@ -2206,7 +2206,7 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
 
     # RULE 2: If type is Total but pick looks like a Parlay (has "ML" or "/"), force change to Parlay
     if result.get("type") == "Total":
-        p_str = result.get("pick", "")
+        p_str = result.get("pick") or ""
         if "ML" in p_str or (" / " in p_str and "vs" not in p_str.lower()):
             logging.debug(
                 f"[Decoder] Strict Rule: Total '{p_str}' looks like Parlay, changing Total -> Parlay"

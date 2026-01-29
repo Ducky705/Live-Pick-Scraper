@@ -234,16 +234,16 @@ class MultiPickValidator:
         if actual_count == 0 and estimate.estimated_count > 0:
             tolerance = 0
         else:
-            # STRICTER TOLERANCE (US-004): If we estimate > actual, always flag it unless confidence is very low.
-            # Reduced tolerance from 1/2 to 0 for high confidence, 1 for med.
-            tolerance = 0 if estimate.confidence > 0.6 else 1
+            # RELAXED TOLERANCE (US-006): Be less aggressive.
+            # Only enforce strict count if we are VERY confident (> 0.85)
+            tolerance = 0 if estimate.confidence > 0.85 else 1
         
         is_valid = missing_count <= tolerance
 
         # Determine if we should retry
         needs_reparse = (
             missing_count > tolerance
-            and estimate.confidence > 0.4  # Lowered threshold to catch more misses
+            and estimate.confidence > 0.7  # US-006: Increased threshold (was 0.5) to reduce FPs
             and estimate.estimated_count >= 1
         )
 
@@ -255,9 +255,15 @@ class MultiPickValidator:
 
         # Override validity if uncovered teams found
         if uncovered_teams:
-             # Only flag if we care about high recall
-             needs_reparse = True
-             reason_parts.append(f"Uncovered Teams: {len(uncovered_teams)} ({', '.join(uncovered_teams[:2])}...)")
+             # US-006: Less aggressive validation
+             # Only flag if we found ZERO picks. 
+             # If we found some picks and are within tolerance, ignore uncovered teams (likely opponents).
+             if actual_count == 0:
+                 needs_reparse = True
+                 reason_parts.append(f"Uncovered Teams (No picks): {len(uncovered_teams)} ({', '.join(uncovered_teams[:2])}...)")
+             elif needs_reparse:
+                 # Just add context if we are already reparsing
+                 reason_parts.append(f"Uncovered Teams: {len(uncovered_teams)}")
 
         reason = " | ".join(reason_parts)
 

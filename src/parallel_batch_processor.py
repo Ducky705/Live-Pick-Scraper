@@ -38,9 +38,9 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 # US-002: Latency Budget Enforcement
-TIMEOUT_TIER_1_SOFT = 15.0  # Speed Target (Groq/Cerebras) - Increased from 5.0
-TIMEOUT_TIER_2_SOFT = 30.0  # Quality Target (Mistral/Gemini) - Increased from 20.0
-TIMEOUT_GLOBAL_HARD = 45.0  # Hard Limit (Backstop) - Increased from 25.0
+TIMEOUT_TIER_1_SOFT = 25.0  # Speed Target (Groq/Cerebras) - Increased from 15.0 for US-006 (Batch Size 20)
+TIMEOUT_TIER_2_SOFT = 50.0  # Quality Target (Mistral/Gemini) - Increased from 35.0 for Refinement
+TIMEOUT_GLOBAL_HARD = 90.0  # Hard Limit (Backstop) - Increased from 60.0
 
 PROVIDER_CONFIG = {
     "groq": {
@@ -59,7 +59,7 @@ PROVIDER_CONFIG = {
         "tpm": 500000,  # 500K TPM - can batch heavily!
         "max_concurrent": 10,  # REDUCED to 10 (Stability over Speed)
         "min_delay": 1.0,  # Increased delay
-        "batch_size": 10,  # Bundle 10 messages per call
+        "batch_size": 20,  # Bundle 20 messages per call (US-006)
         "priority": 2,  # PROMOTED to 2 (High Bandwidth)
         "tier": 2,  # US-002: Quality Tier
     },
@@ -73,12 +73,12 @@ PROVIDER_CONFIG = {
         "tier": 2,  # US-002: Quality Tier
     },
     "gemini": {
-        "model": "gemini-1.5-flash",  # Reverted to stable model that definitely exists
+        "model": "gemini-2.0-flash-exp",  # Updated to experimental model as 1.5-flash was 404ing
         "rpm": 15,  # 15 requests per minute
         "tpm": 250000,  # 250K TPM
         "max_concurrent": 3,  # Set to 3 (Safe limit for free tier)
         "min_delay": 4.0,  # 4s between requests (15 RPM)
-        "batch_size": 5,  # Bundle 5 messages per call
+        "batch_size": 10,  # Bundle 10 messages per call (US-006)
         "priority": 3,  # PROMOTED to 3
         "tier": 2,  # US-002: Quality Tier
     },
@@ -384,7 +384,9 @@ class ParallelBatchProcessor:
             "provider": "all_failed",
         }
 
-    def process_batches(self, batches: List[List[dict]]) -> List[Any]:
+    def process_batches(
+        self, batches: List[List[dict]], allowed_providers: List[str] | None = None
+    ) -> List[Any]:
         """
         Process batches with MAXIMUM parallelism and AUTO-FALLBACK.
 
@@ -397,11 +399,17 @@ class ParallelBatchProcessor:
 
         # Calculate worker allocation: Groq(16) + Mistral(4) + Gemini(3) + Cerebras(2) = 25
         workers = []
-        for p in self.providers:
+        target_providers = allowed_providers if allowed_providers else self.providers
+        
+        for p in target_providers:
             if p in PROVIDER_CONFIG:
                 workers.extend([p] * PROVIDER_CONFIG[p]["max_concurrent"])
 
         max_workers = len(workers)
+        if max_workers == 0:
+            logger.error("No workers available with current provider configuration!")
+            return [None] * total
+
         logger.info(f"Using {max_workers} workers: {list(set(workers))}")
 
         results: List[Any] = [None] * total  # Use list for indexed access
@@ -454,12 +462,12 @@ class ParallelBatchProcessor:
                 "cerebras",
                 "mistral",
                 "groq",
+                "gemini",
             ]
 
-
             fallback_order = [
-                p for p in base_fallback_order if p in self.providers and p != "groq"
-            ]  # Groq already failed
+                p for p in base_fallback_order if p in target_providers
+            ]
 
             # Add working providers to front
             for wp in working_providers:

@@ -1,21 +1,21 @@
 {
   "speed": {
-    "duration": 61.35029911994934,
-    "throughput": 0.814991951420518,
-    "latency_ms": 1227.0059823989868
+    "duration": 43.317954301834106,
+    "throughput": 1.1542558000686327,
+    "latency_ms": 866.3590860366821
   },
   "efficiency": {
-    "total_requests": 11,
-    "requests_per_msg": 0.22,
-    "total_tokens": 8741.0
+    "total_requests": 12,
+    "requests_per_msg": 0.24,
+    "total_tokens": 6845.5
   },
   "accuracy": {
-    "accuracy": 16.0,
-    "recall": 59.23,
-    "precision": 94.59,
+    "accuracy": 14.0,
+    "recall": 45.0,
+    "precision": 97.06,
     "total_picks_expected": 260,
-    "total_picks_found": 222,
-    "total_missed": 106,
-    "total_false_positives": 68
+    "total_picks_found": 163,
+    "total_missed": 143,
+    "total_false_positives": 46
   }
 }

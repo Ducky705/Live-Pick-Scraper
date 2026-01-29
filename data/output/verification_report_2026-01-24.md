@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-01-24
 
 **Total Messages Processed:** 50
-**Total Picks Extracted:** 223
+**Total Picks Extracted:** 163
 
 ---
 

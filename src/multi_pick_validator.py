@@ -66,7 +66,7 @@ class MultiPickValidator:
         re.IGNORECASE,
     )
 
-    ODDS_PATTERN = re.compile(r"[+-]\d{3,4}(?!\d)")  # -110, +150, +1200
+    ODDS_PATTERN = re.compile(r"[+-]\s*\d{3,4}(?!\d)")  # -110, +150, +1200
     LINE_PATTERN = re.compile(
         r"[-+]?\d+\.?\d*(?:\s*(?:pts?|points?|reb|ast|yds?|yards?|TDs?|games?))?",
         re.IGNORECASE,

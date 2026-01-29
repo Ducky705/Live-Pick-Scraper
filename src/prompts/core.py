@@ -131,25 +131,15 @@ NOISE_FILTER = """MARKETING: Ignore headers/words like 'VIP','WHALE','MAX BET','
 
 # Negative constraints (new)
 NEGATIVE_CONSTRAINTS = """CONSTRAINTS:
-1.DO NOT use "80K", "VIP", "MAX" as picks. These are noise.
-2.DO NOT use "@cappersfree" or watermarks as capper name.
-3.If "80K" is present, u=80000.
-4.If no clear bet, p=null.
-5.CRITICAL MESSAGE ISOLATION: Each pick MUST use the exact "i" (message_id) from its source message.
-  -NEVER mix teams/entities from one message into another message's picks
-  -NEVER carry over context (team names, player names) between ### message blocks
-  -If Message A mentions "Oilers" and Message B mentions "60-MIN", do NOT output Oilers for Message B
-  -Treat each ### block as completely independent. Reset your context after each message.
-6.OUTPUT EVERY PICK: If message has Parlay 1-7, output 7 separate rows. Never skip items in lists.
-7.POLARITY LOCK: If source says "UNDER", output must contain "Under". NEVER flip to "Over".
-8.ODDS IN FIELD: +/-100+ numbers are odds, put in "o" field. Do NOT put in pick string.
-9.GAME PROPS: "Team 60-Min ML" or "Team Regulation" must include team name in pick.
-10.FUTURE BETS: Use "Event: Selection" format. (e.g. "Super Bowl: Rams").
-  -Do NOT treat futures as Moneyline. t=FT.
-  -Extract odds (e.g. +225) into "o" field.
-11.PERIOD FORMAT: "1H Team -X". Prefix 1H/1Q is MANDATORY in pick string.
-12.CAPPER NAME: DO NOT use 'Text', 'Caption', 'OCR', 'Content', 'T' as capper name. Look at the FIRST LINE of [CONTENT].
-13.PARLAY SUMMARIES: If text lists "Team A + Team B" but also lists separate lines for "Team A" and "Team B", IGNORE the combined line. Only output the detailed legs or the parlay object if it is the ONLY bet."""
+1.NOISE: Ignore "VIP", "80K", "MAX", "@cappersfree", "Promo".
+2.ISOLATION: Picks MUST match their source "i". RESET context per message. NEVER cross-contaminate teams/odds between messages.
+3.ALL PICKS: If message lists 10 picks, output 10 objects. SCAN ENTIRE TEXT.
+4.POLARITY: "Under" -> "Under". NEVER flip.
+5.ODDS: +/-100+ goes in "o". <20 goes in "p".
+6.PROPS: "Team 60-Min" -> Include Team Name.
+7.FUTURES: "Event: Selection". t=FT.
+8.PERIOD: Start pick with "1H"/"1Q".
+9.CAPPER: Use FIRST LINE. Ignore 'Text'/'Caption'."""
 
 
 # =============================================================================
@@ -176,7 +166,7 @@ def get_compact_extraction_prompt(
         current_date = datetime.now().strftime("%Y-%m-%d")
 
     return f"""TEMP:0 OUTPUT:JSON(1 line,no markdown)
-Extract betting picks from data below.
+Extract ALL betting picks.
 
 {SCHEMA_DOC}
 {PICK_FORMAT_RULES}
@@ -184,27 +174,17 @@ Extract betting picks from data below.
 {NEGATIVE_CONSTRAINTS}
 
 RULES:
-1.c=capper (ANCHOR): Look at the VERY FIRST LINE of the [CONTENT] block. That is usually the capper/channel name. Ignore "Content"/"Caption".
-2.l=league (ANCHOR): Infer from the teams/players. Lakers->NBA, Chiefs->NFL, Chelsea->EPL, FaZe/T1->ESPORTS. Do NOT use "Other" if you can infer the sport.
-3.o=American odds int(-110,+150). Extract "Team -175" -> o=-175. NO parentheses needed.
-4.u=units float. Look for "X u", "(Xu)", "X%", "X*". If header "Max Bet", u=5. If "Whale", u=10. Default 1.
-5.Separate picks per capper.
-6.Period bets:if text has 1H/1Q/F5/P1, t=PD.
-7.Parlay:each leg prefixed with (LEAGUE). If text implies Parlay, set t=PL.
-8.Reasoning:Add 1 sentence "r".
-9.LISTS: Scan FULL message. Extract items 1 to N. EACH LINE IS A SEPARATE PICK. Do NOT parlay them unless it says "Parlay" OR is under a PARLAY header.
+1.i=id: COPY EXACT ID from "### id".
+2.c=capper: FIRST LINE (default). If headers present (e.g. 🔮), use header for section.
+3.l=league: Infer (Lakers->NBA).
+4.o=odds (int): -110, +150.
+5.u=units: "5u"->5. "Max"->5. "Whale"->10. Default 1.
+6.LISTS: Scan FULL message. 10 lines = 10 picks.
+7.PARLAYS: "Team A + Team B" = t=PL. Legs: (LG) Leg1 / (LG) Leg2.
+8.SPLIT: "Team +8 & ML" = 2 picks.
+9.CONFIDENCE (q): 1-10.
 
-10.SPLIT PICKS: "Team +8 & ML" = 2 picks.
-11.Tennis: NO "ML" on sets/games.
-12.PARLAY PROPS: Expand "Player 23+ Pts" inside parlay legs.
-13.SEASON: JAN/FEB is BASKETBALL (NCAAB). NCAAF is over.
-14.CONFIDENCE (q): 1-10.
-15.UK TYPE: Use t=UK for vague picks like "NBA EXCLUSIVE PLAY" or "WHAMMY".
-16.NOISE: Remove "Early Max", "Lock".
-17.PARLAY VS SEPARATE: "Leg1 + Leg2" on ONE line is a PARLAY (t=PL).
-18.ODDS VALIDATION: Odds <100 (> -100) are LINES.
-
-OUTPUT:{{"picks":[{{"i":123,"c":"Name","l":"NBA","t":"PP","p":"LeBron: Pts O 25.5","o":-110,"u":1,"r":"Found LeBron prop in OCR text"}}]}}
+OUTPUT:{{"picks":[{{"i":12345,"c":"Name","l":"NBA","t":"PP","p":"LeBron: Pts O 25.5","o":-110,"u":1,"r":"Found prop"}},{{"i":12345,"c":"Name","l":"NBA","t":"ML","p":"Lakers ML","o":-150,"u":1}}]}}
 
 DATA:
 {raw_data}"""
@@ -228,7 +208,7 @@ def get_compact_revision_prompt(failed_items: List[Dict[str, Any]]) -> str:
         entry = {
             "i": item.get("message_id") or item.get("id"),
             "fails": item.get("fails", []),
-            "ctx": (item.get("original_text", "") or item.get("context", ""))[:600],
+            "ctx": (item.get("original_text", "") or item.get("context", ""))[:3000],
         }
         if item.get("pick"):
             entry["p"] = item.get("pick")
@@ -240,15 +220,16 @@ def get_compact_revision_prompt(failed_items: List[Dict[str, Any]]) -> str:
 Re-analyze failed fields using context.
 
 TIPS:
-1.c=capper at top of image/text
-2.l=league from team names
-3.p=pick "Team -7.5" or "Team ML"
+1.i=id: COPY FROM INPUT.
+2.c=capper at top of image/text
+3.l=league from team names
+4.p=pick "Team -7.5" or "Team ML"
 
 NOISE:If p has "80K","VIP","MAX BET"->find real bet or p=null
 
 INPUT:{items_json}
 
-OUTPUT:[{{"i":123,"c":"Name","l":"NBA","p":"Team -5"}}]"""
+OUTPUT:[{{"i":12345,"c":"Name","l":"NBA","p":"Team -5"}}]"""
 
 
 def get_dsl_extraction_prompt(raw_data: str, current_date: Optional[str] = None) -> str:

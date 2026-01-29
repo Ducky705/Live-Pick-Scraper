@@ -451,7 +451,7 @@ def clean_text_for_ai(text):
     # 8. Normalize Double Chance / OR separators
     text = text.replace("||", " / ")
 
-    return text[:2500]  # Safe clamp
+    return text[:5000]  # Safe clamp (increased for digest messages)
 
 
 def auto_group_parlays(picks, message_context):

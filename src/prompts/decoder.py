@@ -419,7 +419,7 @@ def extract_json_from_response(text: str) -> Optional[Union[Dict, List]]:
 def normalize_response(
     response: str,
     expand: bool = True,
-    valid_message_ids: Optional[List[int]] = None,
+    valid_message_ids: Optional[List[Union[int, str]]] = None,
     message_context: Optional[Dict[int, str]] = None,
 ) -> List[Dict[str, Any]]:
     """
@@ -2250,7 +2250,7 @@ def validate_and_correct_pick(pick: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def validate_and_correct_batch(
-    picks: List[Dict[str, Any]], valid_message_ids: Optional[List[int]] = None
+    picks: List[Dict[str, Any]], valid_message_ids: Optional[List[Union[int, str]]] = None
 ) -> List[Dict[str, Any]]:
     """
     Apply post-processing validation to a batch of picks.

@@ -1,14 +1,14 @@
 import logging
-import time
-from typing import List, Dict, Any
-from src.parallel_batch_processor import parallel_processor
-from src.prompts.decoder import normalize_response
-from src.utils import backfill_odds, auto_group_parlays
+from typing import Any
+
 from src.game_enricher import enrich_picks
+from src.multi_pick_validator import MultiPickValidator, validate_and_flag_missing
+from src.parallel_batch_processor import parallel_processor
 from src.pick_deduplicator import deduplicate_by_capper
-from src.multi_pick_validator import validate_and_flag_missing, MultiPickValidator
+from src.prompts.decoder import normalize_response
 from src.semantic_validator import SemanticValidator
 from src.two_pass_verifier import TwoPassVerifier
+from src.utils import auto_group_parlays, backfill_odds
 
 logger = logging.getLogger(__name__)
 
@@ -16,11 +16,11 @@ logger = logging.getLogger(__name__)
 class ExtractionPipeline:
     @staticmethod
     def run(
-        messages: List[Dict[str, Any]],
+        messages: list[dict[str, Any]],
         target_date: str,
         batch_size: int = 20,  # US-006: Increased to 20 for throughput
         strategy: str = "groq",
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Runs the full AI extraction pipeline:
         1. Parallel AI Processing
@@ -57,11 +57,11 @@ class ExtractionPipeline:
                     logger.info(
                         f"Rule-Based Validation: {len(missing_ids)} messages flagged as incomplete. Escalating to AI."
                     )
-                    
-                    # US-001 Safety Net: Do NOT delete picks yet. 
+
+                    # US-001 Safety Net: Do NOT delete picks yet.
                     # We will replace them only if AI returns a valid result.
                     # Just add messages to AI queue.
-                    
+
                     # 2. Add messages back to AI queue
                     current_ai_ids = {str(m.get("id")) for m in messages_for_ai}
                     for mid in missing_ids:
@@ -148,7 +148,7 @@ class ExtractionPipeline:
                     full_message_context[str_id] = f"{text}\n{ocr}"
                 except:
                     pass
-                
+
                 if m.get("author"):
                     msg_author_map[str_id] = m.get("author")
 
@@ -175,7 +175,7 @@ class ExtractionPipeline:
         # Use string IDs for map
         msg_map = {str(m["id"]): m for m in messages if m.get("id") is not None}
         reparse_ids = set()
-        semantic_issues: Dict[str, List[str]] = {}
+        semantic_issues: dict[str, list[str]] = {}
 
         # 4a. Check for missing picks
         _, missing_ids = validate_and_flag_missing(messages, picks)
@@ -307,7 +307,7 @@ class ExtractionPipeline:
                     for p in picks:
                          # logic for checking missing ids was removed/simplified above in `missing_ids` set
                          pass
-                    
+
                     if m_id_str in missing_ids: # checking against set of strings
                          hints.append(
                             MultiPickValidator.get_reparse_hint(
@@ -363,7 +363,7 @@ class ExtractionPipeline:
                         )
 
                         # Replace picks
-                        new_picks_by_id: Dict[Any, List[Dict[str, Any]]] = {}
+                        new_picks_by_id: dict[Any, list[dict[str, Any]]] = {}
                         for p in new_batch_picks:
                             mid = p.get("message_id")
                             # Normalize key to string
@@ -398,10 +398,29 @@ class ExtractionPipeline:
         if not TwoPassVerifier.verify_parsing_result(picks):
             logger.warning("Low confidence in parsing result structure.")
 
+        # US-012: Final Filtering (False Positive Cleanup)
+        # Remove picks that are still invalid after refinement (Impossible Odds, No Team Name)
+        final_valid_picks = []
+        dropped_count = 0
+        for p in picks:
+            is_valid, reason = SemanticValidator.validate(p)
+            if is_valid:
+                final_valid_picks.append(p)
+            else:
+                # Log the drop
+                dropped_count += 1
+                mid = p.get("message_id", "unknown")
+                logger.info(f"Dropping Invalid Pick (Msg {mid}): '{p.get('pick')}' - Reason: {reason}")
+
+        if dropped_count > 0:
+            logger.info(f"Final Filtering dropped {dropped_count} invalid picks.")
+            picks = final_valid_picks
+
         # 7.4 Verification Report (Pre-Grading)
         # GENERATE REPORT FOR ALL MESSAGES (Even those with no picks)
         # This is essential for the "Audit Dry Run" the user requested.
         import os
+
         from config import OUTPUT_DIR
 
         report_file = os.path.join(OUTPUT_DIR, f"verification_report_{target_date}.md")
@@ -413,7 +432,7 @@ class ExtractionPipeline:
                 f.write(f"**Total Messages Processed:** {len(msg_map)}\n")
                 f.write(f"**Total Picks Extracted:** {len(picks)}\n\n")
 
-                picks_by_msg: Dict[str, List[Dict[str, Any]]] = {}
+                picks_by_msg: dict[str, list[dict[str, Any]]] = {}
                 for p in picks:
                     mid = p.get("message_id")
                     if mid:
@@ -434,7 +453,7 @@ class ExtractionPipeline:
                     msg_picks = picks_by_msg.get(mid, [])
                     msg = msg_map.get(mid)
 
-                    f.write(f"---\n\n")
+                    f.write("---\n\n")
                     f.write(f"## Message ID: {mid}\n\n")
 
                     if msg:
@@ -462,19 +481,19 @@ class ExtractionPipeline:
                             [msg.get("image")] if msg.get("image") else []
                         )
                         if images:
-                            f.write(f"**Images:**\n")
+                            f.write("**Images:**\n")
                             for img in images:
                                 f.write(f"- `{img}`\n")
                             f.write("\n")
                     else:
                         f.write("**⚠️ Source Message Not Found**\n\n")
 
-                    f.write(f"### 🎯 Parsed Picks\n")
+                    f.write("### 🎯 Parsed Picks\n")
                     if msg_picks:
                         f.write("| Pick | Odds | Units | Type | Result |\n")
                         f.write("| :--- | :--- | :--- | :--- | :--- |\n")
                         for p in msg_picks:
-                            pick_str = str(p.get("pick", "-")).replace("|", "\|")
+                            pick_str = str(p.get("pick", "-")).replace("|", r"\|")
                             odds_str = str(p.get("odds", "-"))
                             units_str = str(p.get("units", "-"))
                             type_str = str(p.get("type", "-"))

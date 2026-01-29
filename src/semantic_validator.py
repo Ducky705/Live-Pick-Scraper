@@ -6,14 +6,24 @@ Prevents hallucinations like "Lakers +500 Spread" or "NFL Total Over 150".
 """
 
 import re
-from typing import Dict, Any, Optional, Tuple, List
-import logging
+from typing import Any
+
+from src.team_aliases import TEAM_ALIASES
+
 
 class SemanticValidator:
     """
     Validates betting picks against sport-specific logic rules.
     """
-    
+
+    # Flatten TEAM_ALIASES for fast lookup
+    # Normalize keys to lowercase for case-insensitive matching
+    VALID_TEAMS: set[str] = set()
+    for canonical, aliases in TEAM_ALIASES.items():
+        VALID_TEAMS.add(canonical.lower())
+        for alias in aliases:
+            VALID_TEAMS.add(alias.lower())
+
     # Sport-specific thresholds
     RULES = {
         "NBA": {
@@ -66,7 +76,7 @@ class SemanticValidator:
     }
 
     @staticmethod
-    def validate(pick: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
+    def validate(pick: dict[str, Any]) -> tuple[bool, str | None]:
         """
         Validate a single pick.
         Returns (is_valid, reason_if_invalid).
@@ -77,8 +87,59 @@ class SemanticValidator:
         odds = pick.get("odds")
         # Ensure pick_text is a string
         pick_text = str(pick.get("pick") or "")
-        
-        # 1. Check Sport Consistency (if team name is known)
+
+        # 0. Check Odds (US-012)
+        # Filter impossible odds (> +5000 or < -5000)
+        # This catches OCR errors like "+12345" or hallucinated odds
+        if odds is not None and isinstance(odds, (int, float)):
+            try:
+                odds_val = float(odds)
+                if odds_val > 5000 or odds_val < -5000:
+                    return False, f"Impossible odds: {odds_val} (Range: -5000 to +5000)"
+            except ValueError:
+                pass
+
+        # 1. Check Team Name Validity (US-012)
+        # Ensure the pick references a known team (unless it's a Player Prop or Parlay)
+        # This filters out noise like "Join my VIP" classified as a pick.
+        # Only enforce for Team Sports where we have a complete DB.
+        team_sports = {"NBA", "NFL", "NCAAF", "NCAAB", "NHL", "MLB"}
+
+        # If league is unknown/other, we try to guess if it's a team sport?
+        # Or just enforce it if it LOOKS like a team pick?
+        # If league is NOT in team_sports, we skip this check (e.g. UFC, Tennis, Soccer if not in DB)
+        should_check_team = sport in team_sports
+
+        if should_check_team and pick_type in ("Spread", "Moneyline", "Total", "Team Total"):
+            # Check if any valid team name is present in the pick text
+            found_team = False
+            pick_lower = pick_text.lower()
+
+            # Optimization: Create a regex pattern for all teams?
+            # Or just iterate and use regex for each?
+            # Creating one giant regex is faster.
+            # We can cache this pattern at class level if needed, but for now just do it.
+            # Note: escaping regex special chars in team names
+
+            # Construct pattern only once ideally, but here per pick is okay-ish or cache it?
+            # Let's simple check: iterate and use \b
+
+            for team in SemanticValidator.VALID_TEAMS:
+                # Use word boundary check to avoid partial matches (e.g. "sun" in "sunday")
+                # Pre-compile or use re.search
+                # Escape team name just in case (e.g. "A's")
+                pattern = rf"\b{re.escape(team)}\b"
+                if re.search(pattern, pick_lower):
+                    found_team = True
+                    break
+
+            if not found_team:
+                # Double check: Is it an "Over/Under" without team name?
+                # If so, it's technically invalid as we don't know the game,
+                # UNLESS it's a "Grand Salami" or specific league prop, but we'll flag it.
+                return False, f"No valid team name found in pick text: '{pick_text}'"
+
+        # 2. Check Sport Consistency (if team name is known)
         # Simple keyword check in pick text
         for team, team_sport in SemanticValidator.TEAM_LEAGUES.items():
             if team.lower() in pick_text.lower():
@@ -94,7 +155,7 @@ class SemanticValidator:
         # 2. Check Numeric Ranges
         if sport in SemanticValidator.RULES:
             rules = SemanticValidator.RULES[sport]
-            
+
             # TOTALS
             if pick_type == "Total" and line is not None:
                 if line < rules["min_total"] or line > rules["max_total"]:
@@ -105,7 +166,7 @@ class SemanticValidator:
             if pick_type == "Spread" and line is not None:
                 if abs(line) > rules["max_spread"]:
                     return False, f"Suspicious Spread: {line} for {sport} (Expected max {rules['max_spread']})"
-                
+
                 # Check for "Moneyline-like" odds on a Spread
                 # e.g., Spread -5 with +500 odds is extremely unlikely (unless it's a heavily alt line)
                 if odds is not None:
@@ -127,7 +188,7 @@ class SemanticValidator:
             # If line is > 100 (except maybe rushing yards), suspicious for most sports
             if line is not None and line > 300: # 300+ passing yards is possible, but >500 is rare
                 return False, f"Suspicious Player Prop Line: {line}"
-            
+
             # Check for team names in player prop subject
             # e.g. Subject: "Lakers" Market: "Points" -> Should be Team Prop
             subject = pick.get("subject", "")
@@ -138,7 +199,7 @@ class SemanticValidator:
         return True, None
 
     @staticmethod
-    def fix_pick(pick: Dict[str, Any], reason: str) -> Dict[str, Any]:
+    def fix_pick(pick: dict[str, Any], reason: str) -> dict[str, Any]:
         """
         Attempt simple heuristic fixes before asking AI.
         """
@@ -149,5 +210,5 @@ class SemanticValidator:
             correct_sport = match.group(1)
             pick["league"] = correct_sport
             return pick
-            
+
         return pick

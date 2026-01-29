@@ -11,10 +11,9 @@ This module deduplicates PARSED picks by normalizing and comparing:
 When confidence is low, it can optionally use AI to resolve.
 """
 
-import re
 import logging
+import re
 from difflib import SequenceMatcher
-from typing import List, Dict, Any, Tuple
 
 # Similarity thresholds
 CAPPER_SIMILARITY_THRESHOLD = 0.85  # "HammeringHank" vs "Hammering Hank"
@@ -81,7 +80,7 @@ def similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, a, b).ratio()
 
 
-def extract_spread_number(pick: str) -> Tuple[str, float | None]:
+def extract_spread_number(pick: str) -> tuple[str, float | None]:
     """Extract the spread/total number from a pick for comparison."""
     # Match patterns like "-5.5", "+3", "over 215.5", "under 48"
     match = re.search(r"([+-]?\d+\.?\d*)", pick)
@@ -93,7 +92,7 @@ def extract_spread_number(pick: str) -> Tuple[str, float | None]:
     return pick, None
 
 
-def are_picks_equivalent(pick1: Dict, pick2: Dict) -> Tuple[bool, float]:
+def are_picks_equivalent(pick1: dict, pick2: dict) -> tuple[bool, float]:
     """
     Determine if two picks are duplicates.
 
@@ -119,15 +118,26 @@ def are_picks_equivalent(pick1: Dict, pick2: Dict) -> Tuple[bool, float]:
                 return key
         return lg
 
-    if get_league_group(league1) != get_league_group(league2):
-        return False, 0.0
+    g1 = get_league_group(league1)
+    g2 = get_league_group(league2)
+
+    # US-012: Allow matching if one league is unknown/other to catch duplicates where AI missed the league in one pass
+    if g1 != g2:
+        if g1 not in ("Other", "Unknown", "") and g2 not in ("Other", "Unknown", ""):
+            return False, 0.0
 
     # Normalize capper names
     capper1 = normalize_capper_name(pick1.get("capper_name", ""))
     capper2 = normalize_capper_name(pick2.get("capper_name", ""))
 
     capper_sim = similarity(capper1, capper2)
-    if capper_sim < CAPPER_SIMILARITY_THRESHOLD:
+
+    # Check strict duplicate in same message (US-012)
+    mid1 = pick1.get("message_id")
+    mid2 = pick2.get("message_id")
+    is_same_message = mid1 and mid2 and str(mid1) == str(mid2)
+
+    if not is_same_message and capper_sim < CAPPER_SIMILARITY_THRESHOLD:
         return False, 0.0
 
     # Normalize pick text
@@ -137,6 +147,15 @@ def are_picks_equivalent(pick1: Dict, pick2: Dict) -> Tuple[bool, float]:
     pick_sim = similarity(p1, p2)
 
     # High similarity = definite duplicate
+    # US-012: If same message, be more aggressive with duplicates (0.75 captures "Bulls ML" vs "BULLS")
+    if is_same_message:
+        if pick_sim >= 0.75:
+            return True, 1.0
+        # Substring check for same message (e.g. "Bulls" vs "Bulls ML")
+        if len(p1) > 4 and len(p2) > 4: # Avoid merging short noise like "ML" vs "Team ML"
+            if p1 in p2 or p2 in p1:
+                return True, 0.95
+
     if pick_sim >= PICK_SIMILARITY_THRESHOLD:
         confidence = (capper_sim + pick_sim) / 2
         return True, confidence
@@ -157,7 +176,7 @@ def are_picks_equivalent(pick1: Dict, pick2: Dict) -> Tuple[bool, float]:
     return False, 0.0
 
 
-def merge_duplicate_picks(pick1: Dict, pick2: Dict) -> Dict:
+def merge_duplicate_picks(pick1: dict, pick2: dict) -> dict:
     """
     Merge two duplicate picks, keeping the best data from each.
     """
@@ -185,7 +204,7 @@ def merge_duplicate_picks(pick1: Dict, pick2: Dict) -> Dict:
     return merged
 
 
-def remove_parlay_redundancy(picks: List[Dict]) -> List[Dict]:
+def remove_parlay_redundancy(picks: list[dict]) -> list[dict]:
     """
     Remove straight picks that are already contained in a Parlay pick
     within the same message.
@@ -254,7 +273,7 @@ def remove_parlay_redundancy(picks: List[Dict]) -> List[Dict]:
     return final_picks
 
 
-def deduplicate_picks(picks: List[Dict], use_ai_fallback: bool = False) -> List[Dict]:
+def deduplicate_picks(picks: list[dict], use_ai_fallback: bool = False) -> list[dict]:
     """
     Deduplicate a list of parsed picks.
 
@@ -348,7 +367,7 @@ def deduplicate_picks(picks: List[Dict], use_ai_fallback: bool = False) -> List[
     return result
 
 
-def deduplicate_by_capper(picks: List[Dict]) -> List[Dict]:
+def deduplicate_by_capper(picks: list[dict]) -> list[dict]:
     """
     Group picks by capper and deduplicate within each group.
     More efficient for large lists.

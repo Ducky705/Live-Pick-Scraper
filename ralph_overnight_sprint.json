@@ -37,14 +37,15 @@
       "title": "False Positive Cleanup & Noise Filtering",
       "description": "We currently have 70-160 False Positives. Many are 'noise' (chat, headers). Update `src/pick_normalizer.py` or `src/semantic_validator.py` to filter out: 1) Picks with impossible odds (e.g. > +5000 or < -5000). 2) Picks where team names aren't in our league database. 3) Duplicate picks from the same author in the same message.",
       "priority": 3,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-011"
       ],
       "acceptanceCriteria": [
         "False Positives reduced to < 20 picks.",
         "Precision remains > 95%."
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     },
     {
       "id": "US-013",
@@ -63,6 +64,6 @@
     }
   ],
   "metadata": {
-    "updatedAt": "2026-01-29T23:00:33.177Z"
+    "updatedAt": "2026-01-29T23:10:20.449Z"
   }
 }

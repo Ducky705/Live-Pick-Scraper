@@ -12,7 +12,17 @@ after each iteration and it's included in prompts for context.
 
 ---
 
-## 2026-01-29 - US-011
+## 2026-01-30 - US-012
+- Implemented **False Positive Cleanup & Noise Filtering**.
+- **Files Changed:** `src/semantic_validator.py`, `src/pick_deduplicator.py`, `src/extraction_pipeline.py`.
+- **Learnings:**
+  - **Benchmark Metrics:** "False Positives" in the platform grader often include "Extra Picks" (valid picks not in the Golden Set), leading to confusing metrics when Precision is high (>95%).
+  - **Validation Strategy:** `SemanticValidator` now strictly enforces team name presence using `\b` regex boundaries to avoid "sun" matching "Sunday".
+  - **Deduplication:** Strict same-message deduplication requires lower thresholds (0.75) and substring checks to catch "Team ML" vs "Team" duplicates effectively.
+  - **Filtering:** Added a final filtering step in `extraction_pipeline.py` to actively drop picks flagged as invalid by `SemanticValidator` after the refinement loop.
+
+---
+
 - Implemented **Extreme Throughput** batch processing strategy.
 - **Files Changed:** `src/parallel_batch_processor.py`, `src/extraction_pipeline.py`, `src/multi_pick_validator.py`, `src/gemini_client.py`.
 - **Learnings:**

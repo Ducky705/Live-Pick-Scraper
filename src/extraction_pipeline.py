@@ -310,17 +310,17 @@ class ExtractionPipeline:
             if reparse_batch:
                 try:
                     # Refinement Batching (US-001: Optimization)
-                    refine_batch_sz = 5  # Increased to 5 for Throughput (US-011)
+                    refine_batch_sz = 5  # US-200: Optimized for throughput (fewer requests)
                     reparse_batches = [
                         reparse_batch[i : i + refine_batch_sz] for i in range(0, len(reparse_batch), refine_batch_sz)
                     ]
                     reparse_results = parallel_processor.process_batches(
                         reparse_batches,
                         allowed_providers=[
-                            "mistral",
-                            "cerebras",
-                            "gemini",
-                        ],  # Exclude Groq for refinement (US-006) to avoid Rate Limits
+                            # "groq", # US-200: Disabled to avoid 429s
+                            "cerebras",  # US-200: Primary for refinement (Stable 2s delay)
+                            # "mistral", # US-200: Disabled to avoid latency spikes
+                        ],
                     )
 
                     new_picks_count = 0

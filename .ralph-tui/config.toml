@@ -6,8 +6,7 @@ tracker = "json"
 subagentTracingDetail = "full"
 
 [agentOptions]
-model = "google/gemini-3-pro-preview"
-
+model = "google/antigravity-gemini-3-pro"
 
 [trackerOptions]
-path = "ralph_optimization_task.json"
+path = "ralph_recovery_plan.json"

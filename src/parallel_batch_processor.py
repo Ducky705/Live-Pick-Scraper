@@ -47,47 +47,28 @@ PROVIDER_CONFIG = {
         "model": "llama-3.1-8b-instant",
         "rpm": 500,
         "tpm": 18000,
-        "max_concurrent": 1,  # US-011: Reduced due to 403 errors (Don't waste threads)
+        "max_concurrent": 1,  # US-200: Minimized to avoid TPM limits/429s
         "min_delay": 0.2,
         "priority": 1,
         "tier": 1,
-    },
-    "mistral": {
-        "model": "open-mistral-nemo",  # US-011: Fastest Mistral model
-        "rpm": 60,
-        "tpm": 500000,
-        "max_concurrent": 15,  # US-011: Increased
-        "min_delay": 1.0,  # 1s delay (60 RPM)
-        "batch_size": 20,
-        "priority": 2,
-        "tier": 2,
-    },
-    "cerebras": {
-        "model": "llama3.1-8b",
-        "rpm": 30,
-        "tpm": 60000,
-        "max_concurrent": 10,  # US-011: Increased, rely on Cerebras speed
-        "min_delay": 2.0,  # 2s delay (30 RPM)
-        "priority": 3,
-        "tier": 1,
-    },
-    "gemini": {
-        "model": "gemini-2.0-flash-exp",  # US-011: Use new fast model
-        "rpm": 15,
-        "tpm": 250000,
-        "max_concurrent": 6,  # US-011: Push limits
-        "min_delay": 4.0,  # 4s delay
-        "batch_size": 10,
-        "priority": 4,
-        "tier": 2,
     },
     "openrouter": {
         "model": "meta-llama/llama-3.3-70b-instruct:free",
         "rpm": 100,
         "tpm": 100000,
-        "max_concurrent": 2,
+        "max_concurrent": 5,  # US-200: Good capacity
+        "min_delay": 0.6,
+        "priority": 3,
+        "tier": 2,
+    },
+    "mistral": {
+        "model": "open-mistral-nemo",
+        "rpm": 60,
+        "tpm": 500000,
+        "max_concurrent": 8,
         "min_delay": 1.0,
-        "priority": 5,
+        "batch_size": 20,
+        "priority": 4,  # US-200: Lowest priority
         "tier": 2,
     },
 }
@@ -174,10 +155,10 @@ class ParallelBatchProcessor:
         Initialize processor with EXTREME SPEED configuration.
         """
         self.providers = providers or [
-            # "groq", # Disabled due to 403 blocks
+            "groq",  # Disabled due to 403 blocks -> RE-ENABLED (US-200)
             "cerebras",
             "mistral",
-            "gemini",
+            # "gemini", # Disabled due to 404 errors/timeouts
         ]
 
         self.rate_limiters = {
@@ -259,12 +240,12 @@ class ParallelBatchProcessor:
                     self.provider_status[provider] = time.time() + backoff
                 raise e
 
-            if "429" in str(e):
+            if "429" in str(e) or "403" in str(e):
                 with self.status_lock:
                     self.consecutive_errors[provider] += 1
                     backoff = min(60.0, 5.0 * (2 ** (self.consecutive_errors[provider] - 1)))
                     self.provider_status[provider] = time.time() + backoff
-                logger.warning(f"[{provider}] MARKED RATE LIMITED (Backoff {backoff}s)")
+                logger.warning(f"[{provider}] MARKED RATE LIMITED/BLOCKED (Backoff {backoff}s)")
             raise e
 
     def _process_batch(self, batch_id: int, messages: list[dict], provider: str) -> dict:
@@ -361,9 +342,18 @@ class ParallelBatchProcessor:
         workers = []
         target_providers = allowed_providers if allowed_providers else self.providers
 
-        for p in target_providers:
-            if p in PROVIDER_CONFIG:
-                workers.extend([p] * PROVIDER_CONFIG[p]["max_concurrent"])
+        # Balanced Striping (Interleaved)
+        # Instead of [A, A, B, B], create [A, B, A, B] to smooth load
+        max_slots = max(
+            (PROVIDER_CONFIG[p]["max_concurrent"] for p in target_providers if p in PROVIDER_CONFIG), default=1
+        )
+
+        for i in range(max_slots):
+            for p in target_providers:
+                if p in PROVIDER_CONFIG:
+                    count = PROVIDER_CONFIG[p]["max_concurrent"]
+                    if i < count:
+                        workers.append(p)
 
         max_workers = len(workers)
         if max_workers == 0:
@@ -414,8 +404,13 @@ class ParallelBatchProcessor:
             base_fallback_order = ["groq", "cerebras", "mistral", "gemini"]
             fallback_order = [p for p in base_fallback_order if p in target_providers]
 
-            # Prioritize working
-            for wp in working_providers:
+            # Prioritize working, respecting configuration priority
+            sorted_working = sorted(
+                list(working_providers), key=lambda p: PROVIDER_CONFIG.get(p, {}).get("priority", 99)
+            )
+
+            # Insert in reverse order so highest priority ends up at index 0
+            for wp in reversed(sorted_working):
                 if wp in fallback_order:
                     fallback_order.remove(wp)
                     fallback_order.insert(0, wp)

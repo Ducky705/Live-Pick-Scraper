@@ -1,14 +1,14 @@
 {
-  "id": "e3f66baf-c8eb-474e-8d1e-4c9618ecb886",
+  "id": "34d9bb10-8d3e-4d80-af79-1c0d7abfbf93",
   "status": "running",
-  "startedAt": "2026-01-29T22:47:16.522Z",
-  "updatedAt": "2026-01-29T23:10:20.796Z",
+  "startedAt": "2026-01-30T15:08:20.928Z",
+  "updatedAt": "2026-01-30T15:08:20.928Z",
   "agentPlugin": "opencode",
   "trackerPlugin": "json",
-  "prdPath": "ralph_overnight_sprint.json",
-  "currentIteration": 3,
-  "maxIterations": 100,
+  "prdPath": "ralph_recovery_plan.json",
+  "currentIteration": 0,
+  "maxIterations": 50,
   "totalTasks": 0,
-  "tasksCompleted": 3,
+  "tasksCompleted": 0,
   "cwd": "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15"
 }

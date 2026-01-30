@@ -21,6 +21,29 @@ class RuleBasedExtractor:
     Extracts picks using deterministic rules and the existing PickParser.
     """
 
+    # Compiled Regex Patterns
+    RE_REMOVE_PREFIX = re.compile(r"^(?:Pick|Selection|My Pick|My Play):\s*", re.IGNORECASE)
+    RE_REMOVE_NUMBERING = re.compile(r"^\d+[\.\)]\s*")
+    RE_NORM_ML_OCR = re.compile(r"\bMI\b")
+    RE_FIX_SPACED_ODDS = re.compile(r"(?<!\w)([+-])\s+(\d)")
+    RE_FIX_UNDER = re.compile(r"\b([Uu])(\d+(\.\d+)?)")
+    RE_FIX_OVER = re.compile(r"\b([Oo])(\d+(\.\d+)?)")
+    RE_FIX_MONEYLINE = re.compile(r"Money\s*Line", re.IGNORECASE)
+    RE_PROP_AGS_CHECK = re.compile(r"\b(Anytime Goal Scorer|AGS|Score|Scorer)\b", re.IGNORECASE)
+    RE_PROP_AGS_FIX = re.compile(r"\s+(Anytime Goal Scorer|AGS|Anytime Goal|To Score)\b", re.IGNORECASE)
+    RE_NON_ASCII = re.compile(r"[^\x00-\x7F]+")
+    RE_REMOVE_PAREN_COMMENTARY = re.compile(r"\((?=[^)]*(?:risk|win|profit|analysis|writeup)).*?\)", re.IGNORECASE)
+    RE_START_NOISE = re.compile(r"^(?:http|www|t\.me|@)")
+    RE_CONTINUATION_ODDS = re.compile(r"^[+-]\d+")
+    RE_CONTINUATION_OU = re.compile(r"^(?:Over|Under|O|U)\s*\d", re.IGNORECASE)
+    RE_CONTINUATION_ML = re.compile(r"^ML|Moneyline", re.IGNORECASE)
+    RE_ML_WORD = re.compile(r"\bml\b")
+    RE_ODDS_PATTERN = re.compile(r"(?<!\d)[+-]\s*\d{1,4}(?:\.\d+)?")
+    RE_OU_PATTERN = re.compile(r"\b(o|u|over|under)\s*\d", re.IGNORECASE)
+    RE_UNITS_PREFIX = re.compile(r"^(\d+(?:\.\d+)?)(?:\*|u|%|unit)\s*", re.IGNORECASE)
+    RE_UNITS_SUFFIX = re.compile(r"[\s\(](\d+(?:\.\d+)?)\s*(?:u|unit|%)[\)]?\s*[\u2b50\ufe0f]*$", re.IGNORECASE)
+    RE_PARENS = re.compile(r"\(.*?\)")
+
     @staticmethod
     def extract(
         messages: list[dict[str, Any]],
@@ -85,14 +108,9 @@ class RuleBasedExtractor:
 
                 # CLEANUP: Remove common noise prefixes and bad characters
                 # Remove "Pick:", "Selection:", "My Pick:"
-                line = re.sub(
-                    r"^(?:Pick|Selection|My Pick|My Play):\s*",
-                    "",
-                    line,
-                    flags=re.IGNORECASE,
-                )
+                line = RuleBasedExtractor.RE_REMOVE_PREFIX.sub("", line)
                 # Remove numbering (e.g. "1. ", "1) ")
-                line = re.sub(r"^\d+[\.\)]\s*", "", line)
+                line = RuleBasedExtractor.RE_REMOVE_NUMBERING.sub("", line)
 
                 # Remove quotes and unicode garbage
                 line = (
@@ -114,45 +132,39 @@ class RuleBasedExtractor:
 
                 # NORMALIZE: Fix common OCR/Typo issues
                 # 1. "MI" -> "ML" (common OCR error for Moneyline)
-                line = re.sub(r"\bMI\b", "ML", line)
+                line = RuleBasedExtractor.RE_NORM_ML_OCR.sub("ML", line)
                 # 2. Fix spaced odds/lines: "- 110" -> "-110", "+ 7" -> "+7"
-                line = re.sub(r"(?<!\w)([+-])\s+(\d)", r"\1\2", line)
+                line = RuleBasedExtractor.RE_FIX_SPACED_ODDS.sub(r"\1\2", line)
                 # 3. Fix "U162" -> "Under 162", "o145" -> "Over 145"
-                line = re.sub(r"\b([Uu])(\d+(\.\d+)?)", r"Under \2", line)
-                line = re.sub(r"\b([Oo])(\d+(\.\d+)?)", r"Over \2", line)
+                line = RuleBasedExtractor.RE_FIX_UNDER.sub(r"Under \2", line)
+                line = RuleBasedExtractor.RE_FIX_OVER.sub(r"Over \2", line)
 
                 # 4. Fix "Money Line" -> "Moneyline" -> "ML"
-                line = re.sub(r"Money\s*Line", "Moneyline", line, flags=re.IGNORECASE)
+                line = RuleBasedExtractor.RE_FIX_MONEYLINE.sub("Moneyline", line)
 
                 # 5. Fix "Anytime Goal Scorer" -> "Name: Anytime Goal Scorer" (for Prop Parser)
                 # If we see AGS pattern but no colon, inject one before the keyword
-                if ":" not in line and re.search(r"\b(Anytime Goal Scorer|AGS|Score|Scorer)\b", line, re.IGNORECASE):
-                    line = re.sub(
-                        r"\s+(Anytime Goal Scorer|AGS|Anytime Goal|To Score)\b",
-                        r": Anytime Goal Scorer",
-                        line,
-                        flags=re.IGNORECASE,
-                    )
+                if ":" not in line and RuleBasedExtractor.RE_PROP_AGS_CHECK.search(line):
+                    line = RuleBasedExtractor.RE_PROP_AGS_FIX.sub(r": Anytime Goal Scorer", line)
 
                 # Remove emojis (simplistic regex) - Keep ASCII + standard punctuation
-                line = re.sub(r"[^\x00-\x7F]+", "", line)
+                line = RuleBasedExtractor.RE_NON_ASCII.sub("", line)
 
                 # Clean specific noise patterns
                 # 1. Remove everything after pipe |
-                line = line.split("|")[0]
+                if "|" in line:
+                    line = line.split("|")[0]
 
                 # 2. Remove parenthetical commentary (e.g. "(risking 2u)")
                 # Be careful not to remove (2u) or (-110)
                 # Strategy: Remove (...) if it contains "risk", "win", "to win", "profit"
                 if "(" in line:
-                    line = re.sub(
-                        r"\((?=[^)]*(?:risk|win|profit|analysis|writeup)).*?\)", "", line, flags=re.IGNORECASE
-                    )
+                    line = RuleBasedExtractor.RE_REMOVE_PAREN_COMMENTARY.sub("", line)
 
                 line = line.strip()
 
                 # Skip likely noise
-                if line.lower().startswith(("http", "www", "t.me", "@")):
+                if RuleBasedExtractor.RE_START_NOISE.match(line.lower()):
                     continue
                 if len(line) < 5:
                     continue
@@ -163,16 +175,16 @@ class RuleBasedExtractor:
                 if i < len(lines) and not RuleBasedExtractor._has_pick_indicators(line):
                     next_line = lines[i].strip()
                     # Clean next line slightly to check it
-                    next_line_clean = re.sub(r"[^\x00-\x7F]+", "", next_line).strip()
+                    next_line_clean = RuleBasedExtractor.RE_NON_ASCII.sub("", next_line).strip()
 
                     # If next line looks like odds/line (e.g. "-110", "+145", "Over 220")
                     # Strict check: Start with +/-, or "Over/Under", or "ML"
                     is_continuation = False
-                    if re.match(r"^[+-]\d+", next_line_clean):
+                    if RuleBasedExtractor.RE_CONTINUATION_ODDS.match(next_line_clean):
                         is_continuation = True
-                    elif re.match(r"^(Over|Under|O|U)\s*\d", next_line_clean, re.IGNORECASE):
+                    elif RuleBasedExtractor.RE_CONTINUATION_OU.match(next_line_clean):
                         is_continuation = True
-                    elif re.match(r"^ML|Moneyline", next_line_clean, re.IGNORECASE):
+                    elif RuleBasedExtractor.RE_CONTINUATION_ML.match(next_line_clean):
                         is_continuation = True
 
                     if is_continuation:
@@ -198,7 +210,7 @@ class RuleBasedExtractor:
                     # AGGRESSIVE CLEANUP: Remove all parenthetical content before parsing
                     # We already extracted units, and 'PickParser' doesn't need the noise.
                     # This fixes "Texas ML (good to -2)" crashing the parser.
-                    line_clean = re.sub(r"\(.*?\)", "", line).strip()
+                    line_clean = RuleBasedExtractor.RE_PARENS.sub("", line).strip()
 
                     # Also remove trailing text after odds if separated by space?
                     # e.g. "Texas -3 -110 for the win" -> "Texas -3 -110"
@@ -265,43 +277,39 @@ class RuleBasedExtractor:
         # 1. Explicit bet type keywords (Strongest signal)
         # If these are present, we might not need digits (e.g. "Lakers ML", "Parlay")
         # Added "ml" (must be whole word)
-        if any(k in text_lower for k in ["moneyline", "spread", "parlay"]):
+        if "moneyline" in text_lower or "spread" in text_lower or "parlay" in text_lower:
             return True
-        if re.search(r"\bml\b", text_lower):
+        if RuleBasedExtractor.RE_ML_WORD.search(text_lower):
             return True
 
         # Must have at least one numeric digit (lines, odds)
-        if not any(c.isdigit() for c in text):
+        # Optimized check: any(map(str.isdigit, text)) is slow
+        has_digit = False
+        for c in text:
+            if c.isdigit():
+                has_digit = True
+                break
+        if not has_digit:
             return False
 
         # Check for specific patterns
         # 2. Odds/Spread pattern: -110, +3.5, -7, - 110 (with space)
         # Needs to be careful not to match dates like 12-10
-        if re.search(r"(?<!\d)[+-]\s*\d{1,4}(?:\.\d+)?", text):
+        if RuleBasedExtractor.RE_ODDS_PATTERN.search(text):
             return True
 
         # 3. Total pattern: Over 220
-        if re.search(r"\b(o|u|over|under)\s*\d", text_lower):
+        if RuleBasedExtractor.RE_OU_PATTERN.search(text_lower):
             return True
 
         # 4. Prop pattern: Name: Stat
         # Added goal/score/scorer patterns
         if ":" in text or "goal" in text_lower or "score" in text_lower:
-            if any(
-                k in text_lower
-                for k in [
-                    "pts",
-                    "reb",
-                    "ast",
-                    "threes",
-                    "yards",
-                    "td",
-                    "goal",
-                    "score",
-                    "scorer",
-                ]
-            ):
-                return True
+            # Fast check for keywords
+            keywords = ["pts", "reb", "ast", "threes", "yards", "td", "goal", "score", "scorer"]
+            for k in keywords:
+                if k in text_lower:
+                    return True
 
         return False
 
@@ -337,7 +345,7 @@ class RuleBasedExtractor:
     def _extract_units(text: str) -> float:
         """Extract units from prefix like '3* ...' or suffix like '... 4u'"""
         # Prefix match: '3* ', '5% ', '10U '
-        match = re.match(r"^(\d+(?:\.\d+)?)(?:\*|u|%|unit)\s*", text, re.IGNORECASE)
+        match = RuleBasedExtractor.RE_UNITS_PREFIX.match(text)
         if match:
             try:
                 val = float(match.group(1))
@@ -348,11 +356,7 @@ class RuleBasedExtractor:
 
         # Suffix match: '... 4u', '... (3U)'
         # Look for unit marker at end of string
-        suffix_match = re.search(
-            r"[\s\(](\d+(?:\.\d+)?)\s*(?:u|unit|%)[\)]?\s*[\u2b50\ufe0f]*$",
-            text,
-            re.IGNORECASE,
-        )
+        suffix_match = RuleBasedExtractor.RE_UNITS_SUFFIX.search(text)
         if suffix_match:
             try:
                 val = float(suffix_match.group(1))

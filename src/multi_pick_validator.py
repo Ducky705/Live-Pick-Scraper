@@ -58,6 +58,7 @@ class MultiPickValidator:
 
     # Patterns for detecting picks
     # Expanded Team Pattern to catch College/International teams (Capitalized words followed by spread/odds)
+    # Optimized: Removed excessive lookaheads and simplified common team names
     TEAM_PATTERN = re.compile(
         r"\b(?:Lakers|Celtics|Warriors|Heat|Nets|Bucks|76ers|Suns|Nuggets|Clippers|"
         r"Chiefs|Eagles|Cowboys|Bills|Ravens|49ers|Dolphins|Lions|"
@@ -80,6 +81,8 @@ class MultiPickValidator:
     BULLET_PATTERN = re.compile(r"^[\s]*[-•●◦▪︎★✓✔☑✅❌]\s*\S", re.MULTILINE)
     NUMBERED_PATTERN = re.compile(r"^\s*\d+[.):\-]\s*\S", re.MULTILINE)
     CHECKMARK_PATTERN = re.compile(r"[✓✔☑✅❌⭕🔴🟢]")
+    CAPPER_PATTERN_1 = re.compile(r"@\w+")
+    CAPPER_PATTERN_2 = re.compile(r"(?:^|\n)\s*[A-Z][a-z]+(?:Bets?|Picks?|Plays?|Cap(?:per)?s?)")
 
     @classmethod
     def estimate_pick_count(cls, ocr_text: str, caption: str = "") -> PickCountEstimate:
@@ -138,14 +141,8 @@ class MultiPickValidator:
             has_parlay = True
 
         # 7. Check for multiple capper indicators
-        capper_patterns = [
-            r"@\w+",  # @mentions
-            r"(?:^|\n)\s*[A-Z][a-z]+(?:Bets?|Picks?|Plays?|Cap(?:per)?s?)",  # CapperName patterns
-        ]
-        capper_count = 0
-        for pattern in capper_patterns:
-            matches = re.findall(pattern, combined_text)
-            capper_count += len(matches)
+        capper_count = len(cls.CAPPER_PATTERN_1.findall(combined_text))
+        capper_count += len(cls.CAPPER_PATTERN_2.findall(combined_text))
 
         has_multiple_cappers = capper_count > 1
         if has_multiple_cappers:
@@ -206,28 +203,27 @@ class MultiPickValidator:
         team_matches = cls.TEAM_PATTERN.findall(combined_text)
         uncovered_teams = []
 
-        parsed_teams = set()
-        for p in parsed_picks:
-            # Handle potential None values safely
-            val = p.get("pick")
-            sel = str(val).lower() if val is not None else ""
-            parsed_teams.add(sel)
+        if team_matches:
+            # OPTIMIZED: Pre-process parsed teams into a set of lower-case words for faster lookup
+            parsed_team_words = set()
+            for p in parsed_picks:
+                val = p.get("pick")
+                if val:
+                    # Split into words, ignore small words
+                    parsed_team_words.update(w for w in str(val).lower().split() if len(w) >= 3)
 
-        for tm in team_matches:
-            tm_lower = tm.lower()
-            parts = tm_lower.split()
-            found = False
-            for part in parts:
-                if len(part) < 3:
-                    continue
-                for p_sel in parsed_teams:
-                    if part in p_sel:
+            for tm in team_matches:
+                tm_lower = tm.lower()
+                parts = tm_lower.split()
+                found = False
+                for part in parts:
+                    if len(part) < 3:
+                        continue
+                    if part in parsed_team_words:
                         found = True
                         break
-                if found:
-                    break
-            if not found:
-                uncovered_teams.append(tm)
+                if not found:
+                    uncovered_teams.append(tm)
 
         # Determine if valid
         # Allow some tolerance based on confidence

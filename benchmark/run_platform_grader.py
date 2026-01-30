@@ -133,6 +133,13 @@ def run_grader():
     # PRINT DETAILED REPORT
     autotest.print_report(accuracy_results)
 
+    # Check for --save-failures flag
+    if "--save-failures" in sys.argv:
+        failures_path = os.path.join(BASE_DIR, "benchmark", "reports", "failures.json")
+        with open(failures_path, "w", encoding="utf-8") as f:
+            json.dump(accuracy_results, f, indent=2)
+        print(f"\nFailures saved to {failures_path}")
+
     # 4. Generate Report
     print("\n" + "=" * 60)
     print("FINAL GRADING REPORT")

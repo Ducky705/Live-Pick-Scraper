@@ -1,0 +1,3212 @@
+{
+  "total_messages": 50,
+  "comparisons": [
+    {
+      "message_id": "2014853069344055341",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "East Tennessee State -17"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "% East Tennessee State -17"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "East Tennessee State -17",
+          "scraper": "% East Tennessee State -17",
+          "similarity": 0.96
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "2014852997667528902",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Raptors -2",
+        "Sharks ML",
+        "Michigan -14"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "u - Michigan -14",
+        "u - Sharks ML",
+        "u - Raptors -2"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Raptors -2",
+          "scraper": "u - Raptors -2",
+          "similarity": 0.8333333333333334
+        },
+        {
+          "judge": "Sharks ML",
+          "scraper": "u - Sharks ML",
+          "similarity": 0.8181818181818182
+        },
+        {
+          "judge": "Michigan -14",
+          "scraper": "u - Michigan -14",
+          "similarity": 0.8571428571428571
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "1464630099621052417",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "nfl run\nDenv Under41.5"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "Denv Under41.5 ML",
+        "Rams ML"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "nfl run\nDenv Under41.5",
+          "scraper": "Denv Under41.5 ML",
+          "similarity": 0.717948717948718
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "Rams ML"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "110\n1U Purdue -5.5 -110",
+        "Oilers Over 6.5",
+        "2U\nArkansas -10 -110",
+        "110\n2U North Carolina +7 -110",
+        "Stanford -4.5",
+        "Auburn +11.5",
+        "Bruins Over 6.5",
+        "Providence U162",
+        "Canisius +10.5 -115",
+        "North Carolina +7",
+        "Connor McDavid Goal\nProvidence Over 160.5",
+        "Texas MI\nLightning Over 6.5",
+        "2U\nTexas ML -115",
+        "Tennessee +6 -110",
+        "Alabama -5",
+        "Utah BYU Over 165.5",
+        "Purdue -2.5 -110",
+        "U Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150.5",
+        "Presbyterian o146.5",
+        "3U\nFlorida -11 -120",
+        "Texas -2.5 -110",
+        "UNC +6.5",
+        "Texas ML -115",
+        "Arkansas -10",
+        "2U\nNebraska -5.5 -110",
+        "NC State -6",
+        "110 1u\nStanford -4.5 -110",
+        "Texas Tech +1 -110",
+        "2U\nTexas ML -150",
+        "Missouri o150.5",
+        "Oral Roberts o142",
+        "Purdue -5.5",
+        "Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150",
+        "Nebraska -5.5",
+        "Fresno State +4",
+        "120 3U\nNC State -6 -115",
+        "Florida -11",
+        "Texas ML -150",
+        "Rhode Island +3 -110",
+        "Texas Tech +1.5",
+        "115 3U\nTexas Tech +1.5 -120"
+      ],
+      "judge_capper": "@allpicksarefree",
+      "scraper_picks": [
+        "BULLS ML",
+        "MURRAY STATE ML",
+        "Clemson -8.5",
+        "Auburn +11.5",
+        "Stanford -4.5",
+        "UNC +6.5",
+        "Purdue -2.5",
+        "Texas ML",
+        "Rhode Island +3",
+        "Virginia -7",
+        "Texas Tech +1.5",
+        "Florida -11",
+        "Alabama -5",
+        "NC State -6",
+        "Nebraska -5.5",
+        "Arkansas -10",
+        "Texas MI",
+        "Lightning Over 6.5",
+        "Bruins Over 6.5",
+        "Oilers Over 6.5",
+        "Providence/Oilers",
+        "Connor McDavid Goal",
+        "Providence Over 160.5",
+        "Texas -2",
+        "Lightning -120",
+        "Hurricanes -130",
+        "Bruins -110",
+        "Wild -120",
+        "North Carolina +6.5",
+        "Houston -115",
+        "Colgate -7",
+        "Purdue -5.5",
+        "Canisius +10.5",
+        "Vanderbilt/Miss State Over 160.5",
+        "Texas -2.5",
+        "Texas Tech +1",
+        "Winthrop/Presbyterian Over 146.5",
+        "Oklahoma/Missouri Over 150.5",
+        "North Dakota State/Oral Roberts Over 142",
+        "Tennessee +6",
+        "Minnesota +5.5",
+        "Georgia Tech +7.5",
+        "Texas Tech +1.5",
+        "Florida -11.5",
+        "VCU -5.5",
+        "Seton Hall ML",
+        "Utah BYU Over 165.5",
+        "Alabama -4.5",
+        "Cincinnati -1.5",
+        "North Carolina +7",
+        "Fresno State +4",
+        "Purdue -5.5",
+        "Georgetown/Providence Under 162"
+      ],
+      "scraper_cappers": [
+        "MrBigBets",
+        "PropJoe",
+        "TheGamblingGawd",
+        "ThisGirlBetz",
+        "Vinny",
+        "Betsharper",
+        "McBets",
+        "AndersPicks",
+        "P4D_Picks4Dayzzz",
+        "Provenwinner"
+      ],
+      "matched_picks": [
+        {
+          "judge": "110\n1U Purdue -5.5 -110",
+          "scraper": "Purdue -5.5",
+          "similarity": 0.7586206896551724
+        },
+        {
+          "judge": "Oilers Over 6.5",
+          "scraper": "Oilers Over 6.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "2U\nArkansas -10 -110",
+          "scraper": "Arkansas -10",
+          "similarity": 0.8888888888888888
+        },
+        {
+          "judge": "110\n2U North Carolina +7 -110",
+          "scraper": "North Carolina +7",
+          "similarity": 0.8292682926829268
+        },
+        {
+          "judge": "Stanford -4.5",
+          "scraper": "Stanford -4.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Auburn +11.5",
+          "scraper": "Auburn +11.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Bruins Over 6.5",
+          "scraper": "Bruins Over 6.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Providence U162",
+          "scraper": "Providence Over 160.5",
+          "similarity": 0.7222222222222222
+        },
+        {
+          "judge": "Canisius +10.5 -115",
+          "scraper": "Canisius +10.5",
+          "similarity": 0.8484848484848485
+        },
+        {
+          "judge": "North Carolina +7",
+          "scraper": "North Carolina +6.5",
+          "similarity": 0.8888888888888888
+        },
+        {
+          "judge": "Connor McDavid Goal\nProvidence Over 160.5",
+          "scraper": "Connor McDavid Goal",
+          "similarity": 0.6333333333333333
+        },
+        {
+          "judge": "Texas MI\nLightning Over 6.5",
+          "scraper": "Lightning Over 6.5",
+          "similarity": 0.8
+        },
+        {
+          "judge": "2U\nTexas ML -115",
+          "scraper": "Texas ML",
+          "similarity": 0.6666666666666666
+        },
+        {
+          "judge": "Tennessee +6 -110",
+          "scraper": "Tennessee +6",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Alabama -5",
+          "scraper": "Alabama -5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Utah BYU Over 165.5",
+          "scraper": "Utah BYU Over 165.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Purdue -2.5 -110",
+          "scraper": "Purdue -2.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Presbyterian o146.5",
+          "scraper": "Winthrop/Presbyterian Over 146.5",
+          "similarity": 0.7450980392156863
+        },
+        {
+          "judge": "3U\nFlorida -11 -120",
+          "scraper": "Florida -11",
+          "similarity": 0.7333333333333333
+        },
+        {
+          "judge": "Texas -2.5 -110",
+          "scraper": "Texas -2.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "UNC +6.5",
+          "scraper": "UNC +6.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Texas ML -115",
+          "scraper": "Texas MI",
+          "similarity": 0.6666666666666666
+        },
+        {
+          "judge": "Arkansas -10",
+          "scraper": "Hurricanes -130",
+          "similarity": 0.5925925925925926
+        },
+        {
+          "judge": "2U\nNebraska -5.5 -110",
+          "scraper": "Nebraska -5.5",
+          "similarity": 0.896551724137931
+        },
+        {
+          "judge": "NC State -6",
+          "scraper": "NC State -6",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Texas Tech +1 -110",
+          "scraper": "Texas Tech +1",
+          "similarity": 1.0
+        },
+        {
+          "judge": "2U\nTexas ML -150",
+          "scraper": "Texas -2",
+          "similarity": 0.5833333333333334
+        },
+        {
+          "judge": "Missouri o150.5",
+          "scraper": "Oklahoma/Missouri Over 150.5",
+          "similarity": 0.6976744186046512
+        },
+        {
+          "judge": "Oral Roberts o142",
+          "scraper": "North Dakota State/Oral Roberts Over 142",
+          "similarity": 0.5964912280701754
+        },
+        {
+          "judge": "Purdue -5.5",
+          "scraper": "Purdue -5.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Nebraska -5.5",
+          "scraper": "Minnesota +5.5",
+          "similarity": 0.5925925925925926
+        },
+        {
+          "judge": "Fresno State +4",
+          "scraper": "Fresno State +4",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Florida -11",
+          "scraper": "Florida -11.5",
+          "similarity": 0.9166666666666666
+        },
+        {
+          "judge": "Texas ML -150",
+          "scraper": "Texas Tech +1.5",
+          "similarity": 0.6428571428571429
+        },
+        {
+          "judge": "Rhode Island +3 -110",
+          "scraper": "Rhode Island +3",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Texas Tech +1.5",
+          "scraper": "Texas Tech +1.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "115 3U\nTexas Tech +1.5 -120",
+          "scraper": "Georgia Tech +7.5",
+          "similarity": 0.5
+        }
+      ],
+      "false_negatives": [
+        "U Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150.5",
+        "110 1u\nStanford -4.5 -110",
+        "Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150",
+        "120 3U\nNC State -6 -115"
+      ],
+      "false_positives": [
+        "BULLS ML",
+        "MURRAY STATE ML",
+        "Clemson -8.5",
+        "Virginia -7",
+        "Providence/Oilers",
+        "Lightning -120",
+        "Bruins -110",
+        "Wild -120",
+        "Houston -115",
+        "Colgate -7",
+        "Vanderbilt/Miss State Over 160.5",
+        "VCU -5.5",
+        "Seton Hall ML",
+        "Alabama -4.5",
+        "Cincinnati -1.5",
+        "Georgetown/Providence Under 162"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "31604",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "110\n1U Purdue -5.5 -110",
+        "Oilers Over 6.5",
+        "2U\nArkansas -10 -110",
+        "110\n2U North Carolina +7 -110",
+        "Stanford -4.5",
+        "Auburn +11.5",
+        "Bruins Over 6.5",
+        "Providence U162",
+        "Canisius +10.5 -115",
+        "North Carolina +7",
+        "Connor McDavid Goal\nProvidence Over 160.5",
+        "Texas MI\nLightning Over 6.5",
+        "2U\nTexas ML -115",
+        "Tennessee +6 -110",
+        "Alabama -5",
+        "Utah BYU Over 165.5",
+        "Purdue -2.5 -110",
+        "U Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150.5",
+        "Presbyterian o146.5",
+        "3U\nFlorida -11 -120",
+        "Texas -2.5 -110",
+        "UNC +6.5",
+        "Texas ML -115",
+        "Arkansas -10",
+        "2U\nNebraska -5.5 -110",
+        "NC State -6",
+        "110 1u\nStanford -4.5 -110",
+        "Texas Tech +1 -110",
+        "2U\nTexas ML -150",
+        "Missouri o150.5",
+        "Oral Roberts o142",
+        "Purdue -5.5",
+        "Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150",
+        "Nebraska -5.5",
+        "Fresno State +4",
+        "120 3U\nNC State -6 -115",
+        "Florida -11",
+        "Texas ML -150",
+        "Rhode Island +3 -110",
+        "Texas Tech +1.5",
+        "115 3U\nTexas Tech +1.5 -120"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "Bulls ML",
+        "Murray State ML",
+        "Clemson -8.5 1u",
+        "Auburn +11.5 1u",
+        "Stanford -4.5 1u",
+        "Unc +6.5 1u",
+        "Purdue -2.5 2U",
+        "Texas ML 1U ML",
+        "Rhode Island +3-110 1U",
+        "Virginia -7 3U",
+        "Texas Tech +1.5 3U",
+        "Florida -11 3U",
+        "Alabama -5 3U",
+        "NC State -6 2U",
+        "Nebraska -5.5 2U",
+        "Arkansas -10 2U",
+        "Paddy by sub 1.5u ML",
+        "U Pod: Texas ML",
+        "Miami Hurricanes Over 150.5",
+        "Lightning Over 6.5",
+        "Bruins Over 6.5",
+        "Oilers Over 6.5",
+        "(NCAAB) Team ML parlay Providence / (NHL) Oilers",
+        "Providence Over 160.5",
+        "Texas -2 2u",
+        "Wild ML",
+        "North Carolina +6.5",
+        "Houston ML",
+        "Colgate -7",
+        "Canisius +10.5",
+        "Vanderbilt / Miss State 0160.5",
+        "Winthrop vs Presbyterian Over 146.5",
+        "Oklahoma vs Missouri Over 150.5",
+        "North Dakota State vs Oral Roberts Over 142",
+        "Tennessee +6",
+        "Minnesota +5.5 1U",
+        "Georgia Tech +7.5",
+        "Vcu -5.5",
+        "Seton Hall ML",
+        "Utah Byu Over 165.5",
+        "U Cincinnati -1.5",
+        "Fresno State +4 1U",
+        "U Purdue -5.5",
+        "U Georgetown vs Providence Under 162 -110"
+      ],
+      "scraper_cappers": [
+        "Telegram"
+      ],
+      "matched_picks": [
+        {
+          "judge": "110\n1U Purdue -5.5 -110",
+          "scraper": "U Purdue -5.5",
+          "similarity": 0.8387096774193549
+        },
+        {
+          "judge": "Oilers Over 6.5",
+          "scraper": "Oilers Over 6.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "2U\nArkansas -10 -110",
+          "scraper": "Arkansas -10 2U",
+          "similarity": 0.8
+        },
+        {
+          "judge": "110\n2U North Carolina +7 -110",
+          "scraper": "North Carolina +6.5",
+          "similarity": 0.7441860465116279
+        },
+        {
+          "judge": "Stanford -4.5",
+          "scraper": "Stanford -4.5 1u",
+          "similarity": 0.896551724137931
+        },
+        {
+          "judge": "Auburn +11.5",
+          "scraper": "Auburn +11.5 1u",
+          "similarity": 0.8888888888888888
+        },
+        {
+          "judge": "Bruins Over 6.5",
+          "scraper": "Bruins Over 6.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Providence U162",
+          "scraper": "Providence Over 160.5",
+          "similarity": 0.7222222222222222
+        },
+        {
+          "judge": "Canisius +10.5 -115",
+          "scraper": "Canisius +10.5",
+          "similarity": 0.8484848484848485
+        },
+        {
+          "judge": "Connor McDavid Goal\nProvidence Over 160.5",
+          "scraper": "U Georgetown vs Providence Under 162 -110",
+          "similarity": 0.5454545454545454
+        },
+        {
+          "judge": "Texas MI\nLightning Over 6.5",
+          "scraper": "Lightning Over 6.5",
+          "similarity": 0.8
+        },
+        {
+          "judge": "2U\nTexas ML -115",
+          "scraper": "Texas ML 1U ML",
+          "similarity": 0.6666666666666666
+        },
+        {
+          "judge": "Tennessee +6 -110",
+          "scraper": "Tennessee +6",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Alabama -5",
+          "scraper": "Alabama -5 3U",
+          "similarity": 0.8695652173913043
+        },
+        {
+          "judge": "Utah BYU Over 165.5",
+          "scraper": "Utah Byu Over 165.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Purdue -2.5 -110",
+          "scraper": "Purdue -2.5 2U",
+          "similarity": 0.88
+        },
+        {
+          "judge": "U Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150.5",
+          "scraper": "Miami Hurricanes Over 150.5",
+          "similarity": 0.6585365853658537
+        },
+        {
+          "judge": "Presbyterian o146.5",
+          "scraper": "Winthrop vs Presbyterian Over 146.5",
+          "similarity": 0.7037037037037037
+        },
+        {
+          "judge": "3U\nFlorida -11 -120",
+          "scraper": "Florida -11 3U",
+          "similarity": 0.7272727272727273
+        },
+        {
+          "judge": "Texas -2.5 -110",
+          "scraper": "Texas -2 2u",
+          "similarity": 0.7619047619047619
+        },
+        {
+          "judge": "UNC +6.5",
+          "scraper": "Unc +6.5 1u",
+          "similarity": 0.8421052631578947
+        },
+        {
+          "judge": "Texas ML -115",
+          "scraper": "Texas Tech +1.5 3U",
+          "similarity": 0.5806451612903226
+        },
+        {
+          "judge": "2U\nNebraska -5.5 -110",
+          "scraper": "Nebraska -5.5 2U",
+          "similarity": 0.8125
+        },
+        {
+          "judge": "NC State -6",
+          "scraper": "NC State -6 2U",
+          "similarity": 0.88
+        },
+        {
+          "judge": "Texas Tech +1 -110",
+          "scraper": "Georgia Tech +7.5",
+          "similarity": 0.6
+        },
+        {
+          "judge": "2U\nTexas ML -150",
+          "scraper": "U Pod: Texas ML",
+          "similarity": 0.6451612903225806
+        },
+        {
+          "judge": "Missouri o150.5",
+          "scraper": "Oklahoma vs Missouri Over 150.5",
+          "similarity": 0.6521739130434783
+        },
+        {
+          "judge": "Oral Roberts o142",
+          "scraper": "North Dakota State vs Oral Roberts Over 142",
+          "similarity": 0.5666666666666667
+        },
+        {
+          "judge": "Purdue -5.5",
+          "scraper": "Vcu -5.5",
+          "similarity": 0.631578947368421
+        },
+        {
+          "judge": "Nebraska -5.5",
+          "scraper": "Minnesota +5.5 1U",
+          "similarity": 0.5333333333333333
+        },
+        {
+          "judge": "Fresno State +4",
+          "scraper": "Fresno State +4 1U",
+          "similarity": 0.9090909090909091
+        },
+        {
+          "judge": "120 3U\nNC State -6 -115",
+          "scraper": "U Cincinnati -1.5",
+          "similarity": 0.5
+        },
+        {
+          "judge": "Rhode Island +3 -110",
+          "scraper": "Rhode Island +3-110 1U",
+          "similarity": 0.9090909090909091
+        }
+      ],
+      "false_negatives": [
+        "North Carolina +7",
+        "Arkansas -10",
+        "110 1u\nStanford -4.5 -110",
+        "Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150",
+        "Florida -11",
+        "Texas ML -150",
+        "Texas Tech +1.5",
+        "115 3U\nTexas Tech +1.5 -120"
+      ],
+      "false_positives": [
+        "Bulls ML",
+        "Murray State ML",
+        "Clemson -8.5 1u",
+        "Virginia -7 3U",
+        "Paddy by sub 1.5u ML",
+        "(NCAAB) Team ML parlay Providence / (NHL) Oilers",
+        "Wild ML",
+        "Houston ML",
+        "Colgate -7",
+        "Vanderbilt / Miss State 0160.5",
+        "Seton Hall ML"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "1464645478649172193",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "ANGELO\n41",
+        "SMU-12"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "% Smu-12"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "SMU-12",
+          "scraper": "% Smu-12",
+          "similarity": 0.8571428571428571
+        }
+      ],
+      "false_negatives": [
+        "ANGELO\n41"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "10889",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "ANGELO\n\n5",
+        "SMU-12"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "% Smu-12**"
+      ],
+      "scraper_cappers": [
+        "Telegram"
+      ],
+      "matched_picks": [
+        {
+          "judge": "SMU-12",
+          "scraper": "% Smu-12**",
+          "similarity": 0.75
+        }
+      ],
+      "false_negatives": [
+        "ANGELO\n\n5"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "12791",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "ANGELO\n\n5",
+        "SMU-12"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [],
+      "scraper_cappers": [],
+      "matched_picks": [],
+      "false_negatives": [
+        "ANGELO\n\n5",
+        "SMU-12"
+      ],
+      "false_positives": [],
+      "status": "false_negative"
+    },
+    {
+      "message_id": "2015091837036282311",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Houston -1 -110",
+        "Liberty U 135",
+        "St Josephs O 139",
+        "Xavier O 162",
+        "Rob Morris U 144"
+      ],
+      "judge_capper": "@allpicksarefree",
+      "scraper_picks": [
+        "Wisc Green Bay vs Rob Morris Under 144 -110",
+        "Dayton vs St Josephs Over 139.5 -",
+        "Cornell +2.5",
+        "Coppin St +13.5",
+        "Delaware vs Liberty Under 135 -110",
+        "St Johns vs Xavier Over 162 -110"
+      ],
+      "scraper_cappers": [
+        "@allpicksarefree"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Liberty U 135",
+          "scraper": "Delaware vs Liberty Under 135 -110",
+          "similarity": 0.6190476190476191
+        },
+        {
+          "judge": "St Josephs O 139",
+          "scraper": "Dayton vs St Josephs Over 139.5 -",
+          "similarity": 0.6530612244897959
+        },
+        {
+          "judge": "Xavier O 162",
+          "scraper": "St Johns vs Xavier Over 162 -110",
+          "similarity": 0.6153846153846154
+        },
+        {
+          "judge": "Rob Morris U 144",
+          "scraper": "Wisc Green Bay vs Rob Morris Under 144 -110",
+          "similarity": 0.5925925925925926
+        }
+      ],
+      "false_negatives": [
+        "Houston -1 -110"
+      ],
+      "false_positives": [
+        "Cornell +2.5",
+        "Coppin St +13.5"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "31605",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Houston -1 -110",
+        "Liberty U 135",
+        "St Josephs O 139",
+        "Xavier O 162",
+        "Rob Morris U 144"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "Wisc Green Bay vs Rob Morris Under 144 -110",
+        "Dayton vs St Josephs Over 139.5 -",
+        "Cornell +2.5",
+        "Coppin St +13.5",
+        "Delaware vs Liberty Under 135 -110",
+        "St Johns vs Xavier Over 162 -110"
+      ],
+      "scraper_cappers": [
+        "Telegram"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Liberty U 135",
+          "scraper": "Delaware vs Liberty Under 135 -110",
+          "similarity": 0.6190476190476191
+        },
+        {
+          "judge": "St Josephs O 139",
+          "scraper": "Dayton vs St Josephs Over 139.5 -",
+          "similarity": 0.6530612244897959
+        },
+        {
+          "judge": "Xavier O 162",
+          "scraper": "St Johns vs Xavier Over 162 -110",
+          "similarity": 0.6153846153846154
+        },
+        {
+          "judge": "Rob Morris U 144",
+          "scraper": "Wisc Green Bay vs Rob Morris Under 144 -110",
+          "similarity": 0.5925925925925926
+        }
+      ],
+      "false_negatives": [
+        "Houston -1 -110"
+      ],
+      "false_positives": [
+        "Cornell +2.5",
+        "Coppin St +13.5"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "31606",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "NickyCashin\n\nVirginia Cavaliers -6.5 -110",
+        "2U\nTexas Longhorns -2.5 -110",
+        "Oklahoma Sooners +4.5",
+        "Minnesota Gophers +5.5",
+        "2U\nColorado Buffaloes -3 -110",
+        "Texas Longhorns -2.5",
+        "2U\nOklahoma Sooners +4.5 -105",
+        "5U\nRhode Island Rams +1.5 -110",
+        "Rhode Island Rams +1.5",
+        "Colorado Buffaloes -3",
+        "2U\nMinnesota Gophers +5.5 -110"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "Virginia Cavaliers -6.5 2U",
+        "Minnesota Golden Gophers +5.5",
+        "Colorado Buffaloes -3 2U",
+        "Texas Longhorns -2.5 2U",
+        "Oklahoma Sooners +4.5 1.5U",
+        "Rhode Island Rams +1.5 2U"
+      ],
+      "scraper_cappers": [
+        "Telegram"
+      ],
+      "matched_picks": [
+        {
+          "judge": "NickyCashin\n\nVirginia Cavaliers -6.5 -110",
+          "scraper": "Virginia Cavaliers -6.5 2U",
+          "similarity": 0.7540983606557377
+        },
+        {
+          "judge": "2U\nTexas Longhorns -2.5 -110",
+          "scraper": "Texas Longhorns -2.5 2U",
+          "similarity": 0.8695652173913043
+        },
+        {
+          "judge": "Oklahoma Sooners +4.5",
+          "scraper": "Oklahoma Sooners +4.5 1.5U",
+          "similarity": 0.8936170212765957
+        },
+        {
+          "judge": "Minnesota Gophers +5.5",
+          "scraper": "Minnesota Golden Gophers +5.5",
+          "similarity": 0.8627450980392157
+        },
+        {
+          "judge": "2U\nColorado Buffaloes -3 -110",
+          "scraper": "Colorado Buffaloes -3 2U",
+          "similarity": 0.875
+        },
+        {
+          "judge": "5U\nRhode Island Rams +1.5 -110",
+          "scraper": "Rhode Island Rams +1.5 2U",
+          "similarity": 0.88
+        }
+      ],
+      "false_negatives": [
+        "Texas Longhorns -2.5",
+        "2U\nOklahoma Sooners +4.5 -105",
+        "Rhode Island Rams +1.5",
+        "Colorado Buffaloes -3",
+        "2U\nMinnesota Gophers +5.5 -110"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "31608",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Celtics +1.5 -110",
+        "Timberwolves -6 -105",
+        "Lakers -3.5 -110"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "U.Nurmagomedov via decision ML",
+        "Derrick Lewis ML",
+        "P.Pimblett Tko / Sub -150",
+        "ML Parlay ML",
+        "Silva / Silva -110",
+        "ers ML",
+        "Timberwolves -6-105",
+        "Celtics +1.5",
+        "Lakers -3.5"
+      ],
+      "scraper_cappers": [
+        "Telegram"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Celtics +1.5 -110",
+          "scraper": "Celtics +1.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Timberwolves -6 -105",
+          "scraper": "Timberwolves -6-105",
+          "similarity": 0.9743589743589743
+        },
+        {
+          "judge": "Lakers -3.5 -110",
+          "scraper": "Lakers -3.5",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "U.Nurmagomedov via decision ML",
+        "Derrick Lewis ML",
+        "P.Pimblett Tko / Sub -150",
+        "ML Parlay ML",
+        "Silva / Silva -110",
+        "ers ML"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "31609",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "DirtyBubbleBets \n\nMinnesota +5.5 -110",
+        "1U\nTexas Tech +2 -110",
+        "Texas Tech +2",
+        "1U\nVirginia -6 -120",
+        "Texas -2",
+        "Virginia -6",
+        "1U\nTexas -2 -125"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "Minnesota +5.5",
+        "Texas Tech +2",
+        "Virginia -6",
+        "Texas -2"
+      ],
+      "scraper_cappers": [
+        "DirtyBubbleBets"
+      ],
+      "matched_picks": [
+        {
+          "judge": "DirtyBubbleBets \n\nMinnesota +5.5 -110",
+          "scraper": "Minnesota +5.5",
+          "similarity": 0.6363636363636364
+        },
+        {
+          "judge": "1U\nTexas Tech +2 -110",
+          "scraper": "Texas Tech +2",
+          "similarity": 0.896551724137931
+        },
+        {
+          "judge": "Texas Tech +2",
+          "scraper": "Texas -2",
+          "similarity": 0.6666666666666666
+        },
+        {
+          "judge": "1U\nVirginia -6 -120",
+          "scraper": "Virginia -6",
+          "similarity": 0.7333333333333333
+        }
+      ],
+      "false_negatives": [
+        "Texas -2",
+        "Virginia -6",
+        "1U\nTexas -2 -125"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "31611",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "OutofLineBets\n\nCBB\nKentucky -9.5 -120"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "Kentucky -9.5 3U"
+      ],
+      "scraper_cappers": [
+        "Telegram"
+      ],
+      "matched_picks": [
+        {
+          "judge": "OutofLineBets\n\nCBB\nKentucky -9.5 -120",
+          "scraper": "Kentucky -9.5 3U",
+          "similarity": 0.5384615384615384
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "31610",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "AndersPicks\n\nCBB Add\nFresno State +4 -110"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [],
+      "scraper_cappers": [],
+      "matched_picks": [],
+      "false_negatives": [
+        "AndersPicks\n\nCBB Add\nFresno State +4 -110"
+      ],
+      "false_positives": [],
+      "status": "false_negative"
+    },
+    {
+      "message_id": "1464653596745400578",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Texas -2"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "U Texas -2"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Texas -2",
+          "scraper": "U Texas -2",
+          "similarity": 0.8888888888888888
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "1464654875336904917",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Bublik +3.5 -108",
+        "Paul O3.5"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "Alcaraz vs Paul Over 3.5 sets +106",
+        "Tien +1.5 sets",
+        "Bublik +3.5",
+        "Zverev -1.5 sets"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Bublik +3.5 -108",
+          "scraper": "Bublik +3.5",
+          "similarity": 0.8148148148148148
+        }
+      ],
+      "false_negatives": [
+        "Paul O3.5"
+      ],
+      "false_positives": [
+        "Alcaraz vs Paul Over 3.5 sets +106",
+        "Tien +1.5 sets",
+        "Zverev -1.5 sets"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "31613",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Arizona State Sun Devils +2.5 -110",
+        "San Diego State Aztecs -5.5 -110",
+        "Smart Money Sports\n\nNCAAB\nMinnesota Golden Gophers +5.5 -110",
+        "Louisville Cardinals -13.5 -105",
+        "Purdue Boilermakers -6 -105",
+        "Tennessee Volunteers +6 -105",
+        "Memphis Tigers +3 -110",
+        "Texas Longhorns -3 -105"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "Rhode Island ML",
+        "Louisville Cardinals -13.5",
+        "Purdue Boilermakers -6",
+        "San Diego State Aztecs -5.5",
+        "Memphis Tigers +3",
+        "Tennessee Volunteers +6",
+        "Arizona State Sun Devils +2.5"
+      ],
+      "scraper_cappers": [
+        "Telegram"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Arizona State Sun Devils +2.5 -110",
+          "scraper": "Arizona State Sun Devils +2.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "San Diego State Aztecs -5.5 -110",
+          "scraper": "San Diego State Aztecs -5.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Louisville Cardinals -13.5 -105",
+          "scraper": "Louisville Cardinals -13.5",
+          "similarity": 0.9122807017543859
+        },
+        {
+          "judge": "Purdue Boilermakers -6 -105",
+          "scraper": "Purdue Boilermakers -6",
+          "similarity": 0.8979591836734694
+        },
+        {
+          "judge": "Tennessee Volunteers +6 -105",
+          "scraper": "Tennessee Volunteers +6",
+          "similarity": 0.9019607843137255
+        },
+        {
+          "judge": "Memphis Tigers +3 -110",
+          "scraper": "Memphis Tigers +3",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [
+        "Smart Money Sports\n\nNCAAB\nMinnesota Golden Gophers +5.5 -110",
+        "Texas Longhorns -3 -105"
+      ],
+      "false_positives": [
+        "Rhode Island ML"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "1464660856343363626",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "UIC 1H +3.5"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [],
+      "scraper_cappers": [],
+      "matched_picks": [],
+      "false_negatives": [
+        "UIC 1H +3.5"
+      ],
+      "false_positives": [],
+      "status": "false_negative"
+    },
+    {
+      "message_id": "1464660776504529130",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "San Diego State  -5.5 -110",
+        "Purdue  -6 -105",
+        "Arizona State  +2.5 -110",
+        "Texas -3 -105",
+        "Tennessee  +6 -105",
+        "Louisville  -13.5 -105",
+        "Smart Money Sports\n\nNCAAB\nMinnesota  +5.5 -110",
+        "Memphis Tigers +3 -110"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "Minnesota +5.5",
+        "Texas -3",
+        "Rhode Island ML",
+        "Louisville -13.5",
+        "U Purdue -4",
+        "San Diego State -5.5",
+        "Memphis Tigers +3",
+        "Tennessee +6",
+        "Arizona State +2.5"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "San Diego State  -5.5 -110",
+          "scraper": "San Diego State -5.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Purdue  -6 -105",
+          "scraper": "U Purdue -4",
+          "similarity": 0.64
+        },
+        {
+          "judge": "Arizona State  +2.5 -110",
+          "scraper": "Arizona State +2.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Texas -3 -105",
+          "scraper": "Texas -3",
+          "similarity": 0.7619047619047619
+        },
+        {
+          "judge": "Tennessee  +6 -105",
+          "scraper": "Tennessee +6",
+          "similarity": 0.8275862068965517
+        },
+        {
+          "judge": "Louisville  -13.5 -105",
+          "scraper": "Louisville -13.5",
+          "similarity": 0.8648648648648649
+        },
+        {
+          "judge": "Smart Money Sports\n\nNCAAB\nMinnesota  +5.5 -110",
+          "scraper": "Minnesota +5.5",
+          "similarity": 0.5283018867924528
+        },
+        {
+          "judge": "Memphis Tigers +3 -110",
+          "scraper": "Memphis Tigers +3",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "Rhode Island ML"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "2015104132424548519",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Purdue -5.5 -110",
+        "Texas ML -160"
+      ],
+      "judge_capper": "@allpicksarefree",
+      "scraper_picks": [
+        "Texas ML"
+      ],
+      "scraper_cappers": [
+        "@allpicksarefree"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Texas ML -160",
+          "scraper": "Texas ML",
+          "similarity": 0.7619047619047619
+        }
+      ],
+      "false_negatives": [
+        "Purdue -5.5 -110"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "1464664001999929477",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Cal St Fullerton Under 172.5"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "% Max Cbb Play - Cal St Fullerton Under 172.5"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Cal St Fullerton Under 172.5",
+          "scraper": "% Max Cbb Play - Cal St Fullerton Under 172.5",
+          "similarity": 0.7671232876712328
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "1464663934270308353",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Denver OVER 161",
+        "Denver OVER 161.5",
+        "Oklahoma St UNDER 163",
+        "Georgia Tech UNDER 144"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "Georgia Tech Under 144",
+        "Denver Over 161.5",
+        "Oklahoma St Under 163"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Denver OVER 161",
+          "scraper": "Denver Over 161.5",
+          "similarity": 0.9375
+        },
+        {
+          "judge": "Oklahoma St UNDER 163",
+          "scraper": "Oklahoma St Under 163",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Georgia Tech UNDER 144",
+          "scraper": "Georgia Tech Under 144",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [
+        "Denver OVER 161.5"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "1464664628926742820",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "s\nSong Yadong +180"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "paddy Pimblett ML",
+        "Song Yadong ML",
+        "Ricky Turcios ML",
+        "Arnold Allen ML"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "s\nSong Yadong +180",
+          "scraper": "Song Yadong ML",
+          "similarity": 0.75
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "paddy Pimblett ML",
+        "Ricky Turcios ML",
+        "Arnold Allen ML"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "1464665301156368506",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Oilers -175",
+        "Wofford +2",
+        "Connecticut -10.5",
+        "Minnesota +6"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "Oilers ML",
+        "Magic -1.5",
+        "Minnesota +6, Noon",
+        "Wofford +2",
+        "% Connecticut -9.5"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Oilers -175",
+          "scraper": "Oilers ML",
+          "similarity": 0.7
+        },
+        {
+          "judge": "Wofford +2",
+          "scraper": "Wofford +2",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Connecticut -10.5",
+          "scraper": "% Connecticut -9.5",
+          "similarity": 0.8571428571428571
+        },
+        {
+          "judge": "Minnesota +6",
+          "scraper": "Minnesota +6, Noon",
+          "similarity": 0.8
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "Magic -1.5"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "31614",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "South Carolina +10.5",
+        "Mississippi State +8"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "Villanova +11.5 3U",
+        "Mississippi State +8 2U",
+        "South Carolina +10.5 2U"
+      ],
+      "scraper_cappers": [
+        "Telegram"
+      ],
+      "matched_picks": [
+        {
+          "judge": "South Carolina +10.5",
+          "scraper": "South Carolina +10.5 2U",
+          "similarity": 0.9302325581395349
+        },
+        {
+          "judge": "Mississippi State +8",
+          "scraper": "Mississippi State +8 2U",
+          "similarity": 0.9302325581395349
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "Villanova +11.5 3U"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "1464665682120544348",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Paddy Pimblett ML & Jean Silva ML"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "Paddy Pimblett ML / Jean Silva ML Parlay"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Paddy Pimblett ML & Jean Silva ML",
+          "scraper": "Paddy Pimblett ML / Jean Silva ML Parlay",
+          "similarity": 0.8767123287671232
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "1464666797620859198",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "CBB\nMinnesota +5.5"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [],
+      "scraper_cappers": [],
+      "matched_picks": [],
+      "false_negatives": [
+        "CBB\nMinnesota +5.5"
+      ],
+      "false_positives": [],
+      "status": "false_negative"
+    },
+    {
+      "message_id": "10891",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Denver OVER 161",
+        "Denver OVER 161.5",
+        "Georgia Tech UNDER 144",
+        "Oklahoma St UNDER 163",
+        "Wofford +2",
+        "Minnesota +6",
+        "Cal St Fullerton Under 172.5",
+        "Oilers -175",
+        "Connecticut -10.5"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "Oilers ML",
+        "Magic -1.5",
+        "Minnesota +6, Noon",
+        "Wofford +2",
+        "Connecticut -10.5",
+        "Paddy Pimblett ML / Jean Silva ML Parlay",
+        "Georgia Tech Under 144",
+        "Denver Over 161.5",
+        "Oklahoma St Under 163",
+        "% Max Cbb Play - Cal St Fullerton Under 172.5"
+      ],
+      "scraper_cappers": [
+        "Telegram"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Denver OVER 161",
+          "scraper": "Denver Over 161.5",
+          "similarity": 0.9375
+        },
+        {
+          "judge": "Georgia Tech UNDER 144",
+          "scraper": "Georgia Tech Under 144",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Oklahoma St UNDER 163",
+          "scraper": "Oklahoma St Under 163",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Wofford +2",
+          "scraper": "Wofford +2",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Minnesota +6",
+          "scraper": "Minnesota +6, Noon",
+          "similarity": 0.8
+        },
+        {
+          "judge": "Cal St Fullerton Under 172.5",
+          "scraper": "% Max Cbb Play - Cal St Fullerton Under 172.5",
+          "similarity": 0.7671232876712328
+        },
+        {
+          "judge": "Oilers -175",
+          "scraper": "Oilers ML",
+          "similarity": 0.7
+        },
+        {
+          "judge": "Connecticut -10.5",
+          "scraper": "Connecticut -10.5",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [
+        "Denver OVER 161.5"
+      ],
+      "false_positives": [
+        "Magic -1.5",
+        "Paddy Pimblett ML / Jean Silva ML Parlay"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "12793",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Denver OVER 161",
+        "Denver OVER 161.5",
+        "Georgia Tech UNDER 144",
+        "Oklahoma St UNDER 163",
+        "Wofford +2",
+        "Minnesota +6",
+        "Cal St Fullerton Under 172.5",
+        "Oilers -175",
+        "Connecticut -10.5"
+      ],
+      "judge_capper": "Telegram",
+      "scraper_picks": [
+        "Oilers -175",
+        "Magic -1.5",
+        "Minnesota +6",
+        "Wofford +2",
+        "Connecticut -10.5",
+        "Paddy Pimblett ML & Jean Silva ML",
+        "Georgia Tech UNDER 144",
+        "Denver OVER 161.5",
+        "Oklahoma St UNDER 163",
+        "Cal St Fullerton Under 172.5"
+      ],
+      "scraper_cappers": [
+        "Kyle Hunter",
+        "Tokyo Brandon",
+        "Big Al",
+        "Kyle Anthony"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Denver OVER 161",
+          "scraper": "Denver OVER 161.5",
+          "similarity": 0.9375
+        },
+        {
+          "judge": "Georgia Tech UNDER 144",
+          "scraper": "Georgia Tech UNDER 144",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Oklahoma St UNDER 163",
+          "scraper": "Oklahoma St UNDER 163",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Wofford +2",
+          "scraper": "Wofford +2",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Minnesota +6",
+          "scraper": "Minnesota +6",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Cal St Fullerton Under 172.5",
+          "scraper": "Cal St Fullerton Under 172.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Oilers -175",
+          "scraper": "Oilers -175",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Connecticut -10.5",
+          "scraper": "Connecticut -10.5",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [
+        "Denver OVER 161.5"
+      ],
+      "false_positives": [
+        "Magic -1.5",
+        "Paddy Pimblett ML & Jean Silva ML"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "1464667314380079129",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Purdue -4",
+        "Texas ML\n1U Colorado -2"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "U Colorado -2",
+        "Parlay ML",
+        "(NCAAB) Florida -3 / (NCAAB) Alabama ML"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Texas ML\n1U Colorado -2",
+          "scraper": "U Colorado -2",
+          "similarity": 0.7222222222222222
+        }
+      ],
+      "false_negatives": [
+        "Purdue -4"
+      ],
+      "false_positives": [
+        "Parlay ML",
+        "(NCAAB) Florida -3 / (NCAAB) Alabama ML"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "1464669178576240700",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "CBB \nCS Fullerton under 172",
+        "CBB \nCS Fullerton under 172.5"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "CS Fullerton under 172.5"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "CBB \nCS Fullerton under 172",
+          "scraper": "CS Fullerton under 172.5",
+          "similarity": 0.88
+        }
+      ],
+      "false_negatives": [
+        "CBB \nCS Fullerton under 172.5"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "2015112285795262578",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Missouri o150.5",
+        "Oral Roberts o142",
+        "Presbyterian o146.5",
+        "Miss State o160.5"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "Vanderbilt vs Miss State Over 160.5",
+        "Texas -2.5",
+        "Texas Tech +1",
+        "Winthrop vs Presbyterian Over 146.5",
+        "Oklahoma vs Missouri Over 150.5",
+        "North Dakota State vs Oral Roberts Over 142",
+        "u - Tennessee +6"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Missouri o150.5",
+          "scraper": "Oklahoma vs Missouri Over 150.5",
+          "similarity": 0.6521739130434783
+        },
+        {
+          "judge": "Oral Roberts o142",
+          "scraper": "North Dakota State vs Oral Roberts Over 142",
+          "similarity": 0.5666666666666667
+        },
+        {
+          "judge": "Presbyterian o146.5",
+          "scraper": "Winthrop vs Presbyterian Over 146.5",
+          "similarity": 0.7037037037037037
+        },
+        {
+          "judge": "Miss State o160.5",
+          "scraper": "Vanderbilt vs Miss State Over 160.5",
+          "similarity": 0.6538461538461539
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "Texas -2.5",
+        "Texas Tech +1",
+        "u - Tennessee +6"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "2015112825925238860",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Xavier o162",
+        "Robert Morris u144",
+        "St Josephs o139.5",
+        "Liberty u135"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "Wisconsin Green Bay vs Robert Morris Under 144",
+        "Dayton vs St Josephs Over 139.5",
+        "Cornell +2.5",
+        "Houston -1",
+        "Coppin St +13.5",
+        "Delaware vs Liberty Under 135",
+        "St Johns vs Xavier Over 162"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Xavier o162",
+          "scraper": "St Johns vs Xavier Over 162",
+          "similarity": 0.5789473684210527
+        },
+        {
+          "judge": "Robert Morris u144",
+          "scraper": "Wisconsin Green Bay vs Robert Morris Under 144",
+          "similarity": 0.5625
+        },
+        {
+          "judge": "St Josephs o139.5",
+          "scraper": "Dayton vs St Josephs Over 139.5",
+          "similarity": 0.7083333333333334
+        },
+        {
+          "judge": "Liberty u135",
+          "scraper": "Delaware vs Liberty Under 135",
+          "similarity": 0.5853658536585366
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "Cornell +2.5",
+        "Houston -1",
+        "Coppin St +13.5"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "2015112637978394887",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Providence u162"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "Cincinnati -1.5",
+        "North Carolina +7",
+        "Fresno State +4",
+        "u - Purdue -5.5",
+        "Georgetown vs Providence Under 162"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Providence u162",
+          "scraper": "Georgetown vs Providence Under 162",
+          "similarity": 0.6122448979591837
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "Cincinnati -1.5",
+        "North Carolina +7",
+        "Fresno State +4",
+        "u - Purdue -5.5"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "2015113321666802065",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Paddy Pimblett -225",
+        "Ricky Turcios +167",
+        "Arnold Allen +225",
+        "Song Yadong +180"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "% Paddy Pimblett ML",
+        "% Song Yadong ML",
+        "% Ricky Turcios ML",
+        "% Arnold Allen ML",
+        "-225",
+        "+180",
+        "+167"
+      ],
+      "scraper_cappers": [
+        "Gianni the Greek",
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Paddy Pimblett -225",
+          "scraper": "% Paddy Pimblett ML",
+          "similarity": 0.7894736842105263
+        },
+        {
+          "judge": "Ricky Turcios +167",
+          "scraper": "% Ricky Turcios ML",
+          "similarity": 0.7777777777777778
+        },
+        {
+          "judge": "Arnold Allen +225",
+          "scraper": "% Arnold Allen ML",
+          "similarity": 0.7647058823529411
+        },
+        {
+          "judge": "Song Yadong +180",
+          "scraper": "% Song Yadong ML",
+          "similarity": 0.75
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "-225",
+        "+180",
+        "+167"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "2015113176019591264",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Connecticut -9.5",
+        "Memphis +3.5"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "% Connecticut -9.5",
+        "% Memphis +3.5"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Connecticut -9.5",
+          "scraper": "% Connecticut -9.5",
+          "similarity": 0.9411764705882353
+        },
+        {
+          "judge": "Memphis +3.5",
+          "scraper": "% Memphis +3.5",
+          "similarity": 0.9230769230769231
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "1464672333536166059",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Connecticut -9.5",
+        "Memphis +3.5"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "% Memphis +3.5"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Memphis +3.5",
+          "scraper": "% Memphis +3.5",
+          "similarity": 0.9230769230769231
+        }
+      ],
+      "false_negatives": [
+        "Connecticut -9.5"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "2015113466470969651",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "SMU -12 -109",
+        "SMU -12",
+        "Angelo\n\n5"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "% Smu -12"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "SMU -12 -109",
+          "scraper": "% Smu -12",
+          "similarity": 0.6666666666666666
+        }
+      ],
+      "false_negatives": [
+        "SMU -12",
+        "Angelo\n\n5"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "2015114437271925194",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Cal Poly u172.5"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "% Cal St Fullerton vs Cal Poly Under 172.5"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Cal Poly u172.5",
+          "scraper": "% Cal St Fullerton vs Cal Poly Under 172.5",
+          "similarity": 0.5263157894736842
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "1464673962532409456",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Texas -2.5 -110",
+        "Cornell over 162.5",
+        "Texas Tech +1.5 -110",
+        "Alabama ML -115",
+        "Kansas State +4.5 -110"
+      ],
+      "judge_capper": "Discord",
+      "scraper_picks": [
+        "Texas Tech +1.5",
+        "Kansas State +4.5",
+        "Harvard vs Cornell Over 162.5 -110",
+        "(NCAAB) Illinois +11.5 / (NCAAB) Alabama ML -115"
+      ],
+      "scraper_cappers": [
+        "Discord"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Texas -2.5 -110",
+          "scraper": "Texas Tech +1.5",
+          "similarity": 0.64
+        },
+        {
+          "judge": "Cornell over 162.5",
+          "scraper": "Harvard vs Cornell Over 162.5 -110",
+          "similarity": 0.7659574468085106
+        },
+        {
+          "judge": "Texas Tech +1.5 -110",
+          "scraper": "Kansas State +4.5",
+          "similarity": 0.5625
+        }
+      ],
+      "false_negatives": [
+        "Alabama ML -115",
+        "Kansas State +4.5 -110"
+      ],
+      "false_positives": [
+        "(NCAAB) Illinois +11.5 / (NCAAB) Alabama ML -115"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "2015115794125090973",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Denver OVER 161",
+        "Denver OVER 161.5",
+        "Georgia Tech UNDER 144",
+        "Oklahoma St UNDER 163",
+        "Wofford +2",
+        "Minnesota +6",
+        "Cal St Fullerton Under 172.5",
+        "Oilers -175",
+        "Connecticut -10.5"
+      ],
+      "judge_capper": "@allcappersfreee",
+      "scraper_picks": [
+        "Oilers ML",
+        "Magic -1.5",
+        "Minnesota +6, Noon",
+        "Wofford +2",
+        "Connecticut -10.5",
+        "Paddy Pimblett ML / Jean Silva ML Parlay",
+        "Georgia Tech Under 144",
+        "Denver Over 161.5",
+        "Oklahoma St Under 163",
+        "% Max Cbb Play - Cal St Fullerton Under 172.5"
+      ],
+      "scraper_cappers": [
+        "@allcappersfreee"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Denver OVER 161",
+          "scraper": "Denver Over 161.5",
+          "similarity": 0.9375
+        },
+        {
+          "judge": "Georgia Tech UNDER 144",
+          "scraper": "Georgia Tech Under 144",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Oklahoma St UNDER 163",
+          "scraper": "Oklahoma St Under 163",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Wofford +2",
+          "scraper": "Wofford +2",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Minnesota +6",
+          "scraper": "Minnesota +6, Noon",
+          "similarity": 0.8
+        },
+        {
+          "judge": "Cal St Fullerton Under 172.5",
+          "scraper": "% Max Cbb Play - Cal St Fullerton Under 172.5",
+          "similarity": 0.7671232876712328
+        },
+        {
+          "judge": "Oilers -175",
+          "scraper": "Oilers ML",
+          "similarity": 0.7
+        },
+        {
+          "judge": "Connecticut -10.5",
+          "scraper": "Connecticut -10.5",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [
+        "Denver OVER 161.5"
+      ],
+      "false_positives": [
+        "Magic -1.5",
+        "Paddy Pimblett ML / Jean Silva ML Parlay"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "2015115866669793409",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Oilers -175",
+        "Wofford +2",
+        "Connecticut -10.5",
+        "Minnesota +6"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "Oilers ML",
+        "Magic -1.5",
+        "Minnesota +6",
+        "Wofford +2"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Oilers -175",
+          "scraper": "Oilers ML",
+          "similarity": 0.7
+        },
+        {
+          "judge": "Wofford +2",
+          "scraper": "Wofford +2",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Connecticut -10.5",
+          "scraper": "Magic -1.5",
+          "similarity": 0.5185185185185185
+        },
+        {
+          "judge": "Minnesota +6",
+          "scraper": "Minnesota +6",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [],
+      "status": "perfect_match"
+    },
+    {
+      "message_id": "2015116109851267539",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "PSV Tt Over 1.5",
+        "Fredo \n\nVillarreal vs Real Madrid O2.5"
+      ],
+      "judge_capper": "@ItsCappersPicks",
+      "scraper_picks": [
+        "Villarreal vs Real Madrid Over 2.5 / Psv Tt Over 1.5",
+        "O2.5"
+      ],
+      "scraper_cappers": [
+        "Fredo Villarreal",
+        "@ItsCappersPicks"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Fredo \n\nVillarreal vs Real Madrid O2.5",
+          "scraper": "Villarreal vs Real Madrid Over 2.5 / Psv Tt Over 1.5",
+          "similarity": 0.6818181818181818
+        }
+      ],
+      "false_negatives": [
+        "PSV Tt Over 1.5"
+      ],
+      "false_positives": [
+        "O2.5"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "2015116068604502256",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "vNDvPU06"
+      ],
+      "judge_capper": "@allcappersfreee",
+      "scraper_picks": [
+        "Paddy Pimblett ML"
+      ],
+      "scraper_cappers": [
+        "Fezzy"
+      ],
+      "matched_picks": [],
+      "false_negatives": [
+        "vNDvPU06"
+      ],
+      "false_positives": [
+        "Paddy Pimblett ML"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "2015115935578001412",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Arkansas -11",
+        "Texas -3",
+        "Purdue -5.5"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "Texas -3",
+        "Purdue -5.5"
+      ],
+      "scraper_cappers": [
+        "Strike Point Sports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Texas -3",
+          "scraper": "Texas -3",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Purdue -5.5",
+          "scraper": "Purdue -5.5",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [
+        "Arkansas -11"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "2015116338759614915",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "SmartMoneySports\n\nNCAAB\nMinnesota Golden Gophers +5.5 -110",
+        "Arizona State Sun Devils +2.5 -110",
+        "San Diego State Aztecs -5.5 -110",
+        "Louisville Cardinals -13.5 -105",
+        "Purdue Boilermakers -6 -105",
+        "Mississippi State +8",
+        "Tennessee Volunteers +6 -105",
+        "Memphis Tigers +3 -110",
+        "South Carolina +10.5",
+        "Texas Longhorns -3 -105"
+      ],
+      "judge_capper": "@allcappersfreee",
+      "scraper_picks": [
+        "Minnesota Golden Gophers +5.5",
+        "Texas Longhorns -3",
+        "Rhode Island ML",
+        "Louisville Cardinals -13.5",
+        "Purdue Boilermakers -6",
+        "San Diego State Aztecs -5.5",
+        "Memphis Tigers +3",
+        "Tennessee Volunteers +6",
+        "Arizona State Sun Devils +2.5",
+        "Villanova +11.5 3U",
+        "Mississippi State +8 2U",
+        "South Carolina +10.5 2U"
+      ],
+      "scraper_cappers": [
+        "@allcappersfreee"
+      ],
+      "matched_picks": [
+        {
+          "judge": "SmartMoneySports\n\nNCAAB\nMinnesota Golden Gophers +5.5 -110",
+          "scraper": "Minnesota Golden Gophers +5.5",
+          "similarity": 0.7160493827160493
+        },
+        {
+          "judge": "Arizona State Sun Devils +2.5 -110",
+          "scraper": "Arizona State Sun Devils +2.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "San Diego State Aztecs -5.5 -110",
+          "scraper": "San Diego State Aztecs -5.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Louisville Cardinals -13.5 -105",
+          "scraper": "Louisville Cardinals -13.5",
+          "similarity": 0.9122807017543859
+        },
+        {
+          "judge": "Purdue Boilermakers -6 -105",
+          "scraper": "Purdue Boilermakers -6",
+          "similarity": 0.8979591836734694
+        },
+        {
+          "judge": "Mississippi State +8",
+          "scraper": "Mississippi State +8 2U",
+          "similarity": 0.9302325581395349
+        },
+        {
+          "judge": "Tennessee Volunteers +6 -105",
+          "scraper": "Tennessee Volunteers +6",
+          "similarity": 0.9019607843137255
+        },
+        {
+          "judge": "Memphis Tigers +3 -110",
+          "scraper": "Memphis Tigers +3",
+          "similarity": 1.0
+        },
+        {
+          "judge": "South Carolina +10.5",
+          "scraper": "South Carolina +10.5 2U",
+          "similarity": 0.9302325581395349
+        },
+        {
+          "judge": "Texas Longhorns -3 -105",
+          "scraper": "Texas Longhorns -3",
+          "similarity": 0.8780487804878049
+        }
+      ],
+      "false_negatives": [],
+      "false_positives": [
+        "Rhode Island ML",
+        "Villanova +11.5 3U"
+      ],
+      "status": "extra_picks"
+    },
+    {
+      "message_id": "2015116235252654394",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Minnesota  +5.5",
+        "San Diego State  -5.5 -110",
+        "Purdue  -6 -105",
+        "Arizona State  +2.5 -110",
+        "Texas -3 -105",
+        "Tennessee  +6 -105",
+        "Louisville  -13.5",
+        "Louisville  -13.5 -105",
+        "Texas -3",
+        "Rhode Island ML +110",
+        "Purdue  -6",
+        "Memphis Tigers +3",
+        "Tennessee  +6",
+        "Arizona State  +2.5",
+        "Memphis Tigers +3 -110",
+        "Minnesota  +5.5 -110",
+        "San Diego State  -5.5"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "Minnesota +5.5",
+        "Texas -3",
+        "Rhode Island ML",
+        "Louisville -13.5",
+        "Purdue -6",
+        "San Diego State -5.5",
+        "Memphis Tigers +3",
+        "Tennessee +6",
+        "Arizona State +2.5"
+      ],
+      "scraper_cappers": [
+        "Smart Money Sports"
+      ],
+      "matched_picks": [
+        {
+          "judge": "Minnesota  +5.5",
+          "scraper": "Minnesota +5.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "San Diego State  -5.5 -110",
+          "scraper": "San Diego State -5.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Purdue  -6 -105",
+          "scraper": "Purdue -6",
+          "similarity": 0.782608695652174
+        },
+        {
+          "judge": "Arizona State  +2.5 -110",
+          "scraper": "Arizona State +2.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Texas -3 -105",
+          "scraper": "Texas -3",
+          "similarity": 0.7619047619047619
+        },
+        {
+          "judge": "Tennessee  +6 -105",
+          "scraper": "Tennessee +6",
+          "similarity": 0.8275862068965517
+        },
+        {
+          "judge": "Louisville  -13.5",
+          "scraper": "Louisville -13.5",
+          "similarity": 1.0
+        },
+        {
+          "judge": "Rhode Island ML +110",
+          "scraper": "Rhode Island ML",
+          "similarity": 0.8571428571428571
+        },
+        {
+          "judge": "Memphis Tigers +3",
+          "scraper": "Memphis Tigers +3",
+          "similarity": 1.0
+        }
+      ],
+      "false_negatives": [
+        "Louisville  -13.5 -105",
+        "Texas -3",
+        "Purdue  -6",
+        "Tennessee  +6",
+        "Arizona State  +2.5",
+        "Memphis Tigers +3 -110",
+        "Minnesota  +5.5 -110",
+        "San Diego State  -5.5"
+      ],
+      "false_positives": [],
+      "status": "missed_picks"
+    },
+    {
+      "message_id": "2015116848984215979",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "125\nOklahoma state +10.5",
+        "145\nPrinceton ml",
+        "110\nTexas tech ml"
+      ],
+      "judge_capper": "@allcappersfreee",
+      "scraper_picks": [
+        "Wright state ML 2.5u ML",
+        "(NCAAB) Princeton ml / (NCAAB) Clemson ML 1.5u -125",
+        "Oklahoma state +10.5 1.5u",
+        "Texas tech ml 1.5 ML"
+      ],
+      "scraper_cappers": [
+        "@allcappersfreee"
+      ],
+      "matched_picks": [
+        {
+          "judge": "125\nOklahoma state +10.5",
+          "scraper": "Oklahoma state +10.5 1.5u",
+          "similarity": 0.8163265306122449
+        },
+        {
+          "judge": "110\nTexas tech ml",
+          "scraper": "Texas tech ml 1.5 ML",
+          "similarity": 0.7027027027027027
+        }
+      ],
+      "false_negatives": [
+        "145\nPrinceton ml"
+      ],
+      "false_positives": [
+        "Wright state ML 2.5u ML",
+        "(NCAAB) Princeton ml / (NCAAB) Clemson ML 1.5u -125"
+      ],
+      "status": "partial_match"
+    },
+    {
+      "message_id": "2015116639927509388",
+      "judge_has_picks": true,
+      "judge_picks": [
+        "Stephen Nover \n\n2"
+      ],
+      "judge_capper": "@EZMSports",
+      "scraper_picks": [
+        "Indiana St. -2.5"
+      ],
+      "scraper_cappers": [
+        "@EZMSports"
+      ],
+      "matched_picks": [],
+      "false_negatives": [
+        "Stephen Nover \n\n2"
+      ],
+      "false_positives": [
+        "Indiana St. -2.5"
+      ],
+      "status": "partial_match"
+    }
+  ],
+  "summary": {
+    "perfect_match": 9,
+    "partial_match": 15,
+    "missed_picks": 11,
+    "extra_picks": 11,
+    "false_negative": 4,
+    "false_positive": 0,
+    "true_negative": 0,
+    "judge_failed": 0
+  },
+  "all_false_negatives": [
+    {
+      "message_id": "2015078297160270275",
+      "pick": "U Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150.5",
+      "judge_capper": "@allpicksarefree"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "110 1u\nStanford -4.5 -110",
+      "judge_capper": "@allpicksarefree"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150",
+      "judge_capper": "@allpicksarefree"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "120 3U\nNC State -6 -115",
+      "judge_capper": "@allpicksarefree"
+    },
+    {
+      "message_id": "31604",
+      "pick": "North Carolina +7",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Arkansas -10",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31604",
+      "pick": "110 1u\nStanford -4.5 -110",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Florida -11",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Texas ML -150",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Texas Tech +1.5",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31604",
+      "pick": "115 3U\nTexas Tech +1.5 -120",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "1464645478649172193",
+      "pick": "ANGELO\n41",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "10889",
+      "pick": "ANGELO\n\n5",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "12791",
+      "pick": "ANGELO\n\n5",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "12791",
+      "pick": "SMU-12",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "2015091837036282311",
+      "pick": "Houston -1 -110",
+      "judge_capper": "@allpicksarefree"
+    },
+    {
+      "message_id": "31605",
+      "pick": "Houston -1 -110",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31606",
+      "pick": "Texas Longhorns -2.5",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31606",
+      "pick": "2U\nOklahoma Sooners +4.5 -105",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31606",
+      "pick": "Rhode Island Rams +1.5",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31606",
+      "pick": "Colorado Buffaloes -3",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31606",
+      "pick": "2U\nMinnesota Gophers +5.5 -110",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31609",
+      "pick": "Texas -2",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31609",
+      "pick": "Virginia -6",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31609",
+      "pick": "1U\nTexas -2 -125",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31610",
+      "pick": "AndersPicks\n\nCBB Add\nFresno State +4 -110",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "1464654875336904917",
+      "pick": "Paul O3.5",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "31613",
+      "pick": "Smart Money Sports\n\nNCAAB\nMinnesota Golden Gophers +5.5 -110",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "31613",
+      "pick": "Texas Longhorns -3 -105",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "1464660856343363626",
+      "pick": "UIC 1H +3.5",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "2015104132424548519",
+      "pick": "Purdue -5.5 -110",
+      "judge_capper": "@allpicksarefree"
+    },
+    {
+      "message_id": "1464663934270308353",
+      "pick": "Denver OVER 161.5",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "1464666797620859198",
+      "pick": "CBB\nMinnesota +5.5",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "10891",
+      "pick": "Denver OVER 161.5",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "12793",
+      "pick": "Denver OVER 161.5",
+      "judge_capper": "Telegram"
+    },
+    {
+      "message_id": "1464667314380079129",
+      "pick": "Purdue -4",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "1464669178576240700",
+      "pick": "CBB \nCS Fullerton under 172.5",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "1464672333536166059",
+      "pick": "Connecticut -9.5",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "2015113466470969651",
+      "pick": "SMU -12",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015113466470969651",
+      "pick": "Angelo\n\n5",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "1464673962532409456",
+      "pick": "Alabama ML -115",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "1464673962532409456",
+      "pick": "Kansas State +4.5 -110",
+      "judge_capper": "Discord"
+    },
+    {
+      "message_id": "2015115794125090973",
+      "pick": "Denver OVER 161.5",
+      "judge_capper": "@allcappersfreee"
+    },
+    {
+      "message_id": "2015116109851267539",
+      "pick": "PSV Tt Over 1.5",
+      "judge_capper": "@ItsCappersPicks"
+    },
+    {
+      "message_id": "2015116068604502256",
+      "pick": "vNDvPU06",
+      "judge_capper": "@allcappersfreee"
+    },
+    {
+      "message_id": "2015115935578001412",
+      "pick": "Arkansas -11",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015116235252654394",
+      "pick": "Louisville  -13.5 -105",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015116235252654394",
+      "pick": "Texas -3",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015116235252654394",
+      "pick": "Purdue  -6",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015116235252654394",
+      "pick": "Tennessee  +6",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015116235252654394",
+      "pick": "Arizona State  +2.5",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015116235252654394",
+      "pick": "Memphis Tigers +3 -110",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015116235252654394",
+      "pick": "Minnesota  +5.5 -110",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015116235252654394",
+      "pick": "San Diego State  -5.5",
+      "judge_capper": "@EZMSports"
+    },
+    {
+      "message_id": "2015116848984215979",
+      "pick": "145\nPrinceton ml",
+      "judge_capper": "@allcappersfreee"
+    },
+    {
+      "message_id": "2015116639927509388",
+      "pick": "Stephen Nover \n\n2",
+      "judge_capper": "@EZMSports"
+    }
+  ],
+  "all_false_positives": [
+    {
+      "message_id": "1464630099621052417",
+      "pick": "Rams ML"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "BULLS ML"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "MURRAY STATE ML"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Clemson -8.5"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Virginia -7"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Providence/Oilers"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Lightning -120"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Bruins -110"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Wild -120"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Houston -115"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Colgate -7"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Vanderbilt/Miss State Over 160.5"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "VCU -5.5"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Seton Hall ML"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Alabama -4.5"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Cincinnati -1.5"
+    },
+    {
+      "message_id": "2015078297160270275",
+      "pick": "Georgetown/Providence Under 162"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Bulls ML"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Murray State ML"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Clemson -8.5 1u"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Virginia -7 3U"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Paddy by sub 1.5u ML"
+    },
+    {
+      "message_id": "31604",
+      "pick": "(NCAAB) Team ML parlay Providence / (NHL) Oilers"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Wild ML"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Houston ML"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Colgate -7"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Vanderbilt / Miss State 0160.5"
+    },
+    {
+      "message_id": "31604",
+      "pick": "Seton Hall ML"
+    },
+    {
+      "message_id": "2015091837036282311",
+      "pick": "Cornell +2.5"
+    },
+    {
+      "message_id": "2015091837036282311",
+      "pick": "Coppin St +13.5"
+    },
+    {
+      "message_id": "31605",
+      "pick": "Cornell +2.5"
+    },
+    {
+      "message_id": "31605",
+      "pick": "Coppin St +13.5"
+    },
+    {
+      "message_id": "31608",
+      "pick": "U.Nurmagomedov via decision ML"
+    },
+    {
+      "message_id": "31608",
+      "pick": "Derrick Lewis ML"
+    },
+    {
+      "message_id": "31608",
+      "pick": "P.Pimblett Tko / Sub -150"
+    },
+    {
+      "message_id": "31608",
+      "pick": "ML Parlay ML"
+    },
+    {
+      "message_id": "31608",
+      "pick": "Silva / Silva -110"
+    },
+    {
+      "message_id": "31608",
+      "pick": "ers ML"
+    },
+    {
+      "message_id": "1464654875336904917",
+      "pick": "Alcaraz vs Paul Over 3.5 sets +106"
+    },
+    {
+      "message_id": "1464654875336904917",
+      "pick": "Tien +1.5 sets"
+    },
+    {
+      "message_id": "1464654875336904917",
+      "pick": "Zverev -1.5 sets"
+    },
+    {
+      "message_id": "31613",
+      "pick": "Rhode Island ML"
+    },
+    {
+      "message_id": "1464660776504529130",
+      "pick": "Rhode Island ML"
+    },
+    {
+      "message_id": "1464664628926742820",
+      "pick": "paddy Pimblett ML"
+    },
+    {
+      "message_id": "1464664628926742820",
+      "pick": "Ricky Turcios ML"
+    },
+    {
+      "message_id": "1464664628926742820",
+      "pick": "Arnold Allen ML"
+    },
+    {
+      "message_id": "1464665301156368506",
+      "pick": "Magic -1.5"
+    },
+    {
+      "message_id": "31614",
+      "pick": "Villanova +11.5 3U"
+    },
+    {
+      "message_id": "10891",
+      "pick": "Magic -1.5"
+    },
+    {
+      "message_id": "10891",
+      "pick": "Paddy Pimblett ML / Jean Silva ML Parlay"
+    },
+    {
+      "message_id": "12793",
+      "pick": "Magic -1.5"
+    },
+    {
+      "message_id": "12793",
+      "pick": "Paddy Pimblett ML & Jean Silva ML"
+    },
+    {
+      "message_id": "1464667314380079129",
+      "pick": "Parlay ML"
+    },
+    {
+      "message_id": "1464667314380079129",
+      "pick": "(NCAAB) Florida -3 / (NCAAB) Alabama ML"
+    },
+    {
+      "message_id": "2015112285795262578",
+      "pick": "Texas -2.5"
+    },
+    {
+      "message_id": "2015112285795262578",
+      "pick": "Texas Tech +1"
+    },
+    {
+      "message_id": "2015112285795262578",
+      "pick": "u - Tennessee +6"
+    },
+    {
+      "message_id": "2015112825925238860",
+      "pick": "Cornell +2.5"
+    },
+    {
+      "message_id": "2015112825925238860",
+      "pick": "Houston -1"
+    },
+    {
+      "message_id": "2015112825925238860",
+      "pick": "Coppin St +13.5"
+    },
+    {
+      "message_id": "2015112637978394887",
+      "pick": "Cincinnati -1.5"
+    },
+    {
+      "message_id": "2015112637978394887",
+      "pick": "North Carolina +7"
+    },
+    {
+      "message_id": "2015112637978394887",
+      "pick": "Fresno State +4"
+    },
+    {
+      "message_id": "2015112637978394887",
+      "pick": "u - Purdue -5.5"
+    },
+    {
+      "message_id": "2015113321666802065",
+      "pick": "-225"
+    },
+    {
+      "message_id": "2015113321666802065",
+      "pick": "+180"
+    },
+    {
+      "message_id": "2015113321666802065",
+      "pick": "+167"
+    },
+    {
+      "message_id": "1464673962532409456",
+      "pick": "(NCAAB) Illinois +11.5 / (NCAAB) Alabama ML -115"
+    },
+    {
+      "message_id": "2015115794125090973",
+      "pick": "Magic -1.5"
+    },
+    {
+      "message_id": "2015115794125090973",
+      "pick": "Paddy Pimblett ML / Jean Silva ML Parlay"
+    },
+    {
+      "message_id": "2015116109851267539",
+      "pick": "O2.5"
+    },
+    {
+      "message_id": "2015116068604502256",
+      "pick": "Paddy Pimblett ML"
+    },
+    {
+      "message_id": "2015116338759614915",
+      "pick": "Rhode Island ML"
+    },
+    {
+      "message_id": "2015116338759614915",
+      "pick": "Villanova +11.5 3U"
+    },
+    {
+      "message_id": "2015116848984215979",
+      "pick": "Wright state ML 2.5u ML"
+    },
+    {
+      "message_id": "2015116848984215979",
+      "pick": "(NCAAB) Princeton ml / (NCAAB) Clemson ML 1.5u -125"
+    },
+    {
+      "message_id": "2015116639927509388",
+      "pick": "Indiana St. -2.5"
+    }
+  ],
+  "metrics": {
+    "accuracy": 18.0,
+    "recall": 78.08,
+    "precision": 95.65,
+    "total_picks_expected": 260,
+    "total_picks_found": 280,
+    "total_missed": 57,
+    "total_false_positives": 77
+  }
+}

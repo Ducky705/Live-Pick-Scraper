@@ -8,7 +8,7 @@ from src.pick_deduplicator import deduplicate_by_capper
 from src.prompts.decoder import normalize_response
 from src.semantic_validator import SemanticValidator
 from src.two_pass_verifier import TwoPassVerifier
-from src.utils import auto_group_parlays, backfill_odds
+from src.utils import auto_group_parlays, backfill_odds, safe_write_progress
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +31,10 @@ class ExtractionPipeline:
         """
         if not messages:
             return []
+
+        # Initialize progress log (US-202)
+        progress_log = [f"# Extraction Pipeline Progress - {target_date}", f"Started with {len(messages)} messages."]
+        safe_write_progress("\n".join(progress_log))
 
         # 0. Rule Based Extraction (Fast Path)
         from src.rule_based_extractor import RuleBasedExtractor
@@ -120,6 +124,9 @@ class ExtractionPipeline:
                     message_context=message_context,
                 )
                 picks.extend(batch_picks)
+
+            progress_log.append(f"- [x] AI Processing complete. Total picks so far: {len(picks)}")
+            safe_write_progress("\n".join(progress_log))
 
         # 2.5 Auto-Group Parlays
         # Ensure we have context for all messages (even rule-based ones)
@@ -370,21 +377,30 @@ class ExtractionPipeline:
 
         # US-012: Final Filtering (False Positive Cleanup)
         # Remove picks that are still invalid after refinement (Impossible Odds, No Team Name)
-        final_valid_picks = []
-        dropped_count = 0
-        for p in picks:
-            is_valid, reason = SemanticValidator.validate(p)
-            if is_valid:
-                final_valid_picks.append(p)
-            else:
-                # Log the drop
-                dropped_count += 1
-                mid = p.get("message_id", "unknown")
-                logger.info(f"Dropping Invalid Pick (Msg {mid}): '{p.get('pick')}' - Reason: {reason}")
+        try:
+            final_valid_picks = []
+            dropped_count = 0
+            for p in picks:
+                is_valid, reason = SemanticValidator.validate(p)
+                if is_valid:
+                    final_valid_picks.append(p)
+                else:
+                    # Log the drop
+                    dropped_count += 1
+                    mid = p.get("message_id", "unknown")
+                    logger.info(f"Dropping Invalid Pick (Msg {mid}): '{p.get('pick')}' - Reason: {reason}")
 
-        if dropped_count > 0:
-            logger.info(f"Final Filtering dropped {dropped_count} invalid picks.")
-            picks = final_valid_picks
+            if dropped_count > 0:
+                logger.info(f"Final Filtering dropped {dropped_count} invalid picks.")
+                picks = final_valid_picks
+
+            progress_log.append(f"- [x] Final Filtering complete. Dropped {dropped_count} picks.")
+        except Exception as e:
+            logger.error(f"Final Filtering crashed: {e}", exc_info=True)
+            progress_log.append(f"- [!] Final Filtering crashed: {e}")
+            # Resilience: Continue with original picks
+
+        safe_write_progress("\n".join(progress_log))
 
         # 7.4 Verification Report (Pre-Grading)
         # GENERATE REPORT FOR ALL MESSAGES (Even those with no picks)
@@ -473,7 +489,11 @@ class ExtractionPipeline:
                     f.write("\n")
 
             logger.info(f"Verification report saved to: {report_file}")
+            progress_log.append(f"- [x] Verification report generated: {report_file}")
         except Exception as e:
             logger.error(f"Failed to generate verification report: {e}")
+            progress_log.append(f"- [!] Verification report generation failed: {e}")
+
+        safe_write_progress("\n".join(progress_log))
 
         return picks

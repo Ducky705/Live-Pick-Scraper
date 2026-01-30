@@ -3,10 +3,10 @@
   "sessionId": "21c83b65-f363-4646-a330-8dac1ca77e59",
   "status": "running",
   "startedAt": "2026-01-30T15:24:17.499Z",
-  "updatedAt": "2026-01-30T15:34:54.344Z",
-  "currentIteration": 0,
+  "updatedAt": "2026-01-30T15:39:23.545Z",
+  "currentIteration": 1,
   "maxIterations": 50,
-  "tasksCompleted": 0,
+  "tasksCompleted": 1,
   "isPaused": false,
   "agentPlugin": "opencode",
   "trackerState": {
@@ -23,8 +23,8 @@
       {
         "id": "US-201",
         "title": "Recall Preservation: Regex Auditing",
-        "status": "open",
-        "completedInSession": false
+        "status": "completed",
+        "completedInSession": true
       },
       {
         "id": "US-202",
@@ -34,7 +34,18 @@
       }
     ]
   },
-  "iterations": [],
+  "iterations": [
+    {
+      "iteration": 1,
+      "status": "completed",
+      "taskId": "US-201",
+      "taskTitle": "Recall Preservation: Regex Auditing",
+      "taskCompleted": true,
+      "durationMs": 635877,
+      "startedAt": "2026-01-30T15:24:18.445Z",
+      "endedAt": "2026-01-30T15:34:54.322Z"
+    }
+  ],
   "skippedTaskIds": [],
   "cwd": "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15",
   "activeTaskIds": [],

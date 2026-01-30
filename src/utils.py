@@ -521,3 +521,19 @@ def auto_group_parlays(picks, message_context):
             final_picks.extend(msg_picks)
 
     return final_picks
+
+
+def safe_write_progress(content: str, filename: str = "progress.md"):
+    """
+    Safely writes progress to a file by writing to a temp file first, then renaming.
+    This prevents file corruption if the process crashes during write.
+    """
+    temp_filename = f"{filename}.tmp"
+    try:
+        with open(temp_filename, "w", encoding="utf-8") as f:
+            f.write(content)
+
+        # atomic rename (on POSIX) / replace (on Windows with os.replace)
+        os.replace(temp_filename, filename)
+    except Exception as e:
+        print(f"Failed to write progress: {e}")

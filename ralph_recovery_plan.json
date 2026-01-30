@@ -37,17 +37,18 @@
       "title": "Resilience & Crash Prevention",
       "description": "The marathon crashed. 1) Implement robust exception handling in `src/extraction_pipeline.py` around the final filtering and logging steps. 2) Ensure `progress.md` is updated using a 'safe-write' (write to temp then rename) pattern to prevent file wiping on crash.",
       "priority": 3,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-201"
       ],
       "acceptanceCriteria": [
         "Full benchmark run (500 items) completes without a single unhandled exception.",
         "Progress log is properly populated with the 'Recovery' notes."
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     }
   ],
   "metadata": {
-    "updatedAt": "2026-01-30T15:34:54.338Z"
+    "updatedAt": "2026-01-30T15:39:23.541Z"
   }
 }

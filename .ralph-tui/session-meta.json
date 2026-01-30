@@ -1,8 +1,8 @@
 {
-  "id": "34d9bb10-8d3e-4d80-af79-1c0d7abfbf93",
+  "id": "21c83b65-f363-4646-a330-8dac1ca77e59",
   "status": "running",
-  "startedAt": "2026-01-30T15:08:20.928Z",
-  "updatedAt": "2026-01-30T15:08:20.928Z",
+  "startedAt": "2026-01-30T15:24:16.895Z",
+  "updatedAt": "2026-01-30T15:24:16.895Z",
   "agentPlugin": "opencode",
   "trackerPlugin": "json",
   "prdPath": "ralph_recovery_plan.json",

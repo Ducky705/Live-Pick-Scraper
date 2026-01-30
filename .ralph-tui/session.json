@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "sessionId": "34d9bb10-8d3e-4d80-af79-1c0d7abfbf93",
+  "sessionId": "21c83b65-f363-4646-a330-8dac1ca77e59",
   "status": "running",
-  "startedAt": "2026-01-30T15:08:21.487Z",
-  "updatedAt": "2026-01-30T15:22:42.292Z",
+  "startedAt": "2026-01-30T15:24:17.499Z",
+  "updatedAt": "2026-01-30T15:34:54.344Z",
   "currentIteration": 0,
   "maxIterations": 50,
   "tasksCompleted": 0,
@@ -17,7 +17,7 @@
       {
         "id": "US-200",
         "title": "Throughput Recovery: Identifying the Slow-Path",
-        "status": "open",
+        "status": "completed",
         "completedInSession": false
       },
       {

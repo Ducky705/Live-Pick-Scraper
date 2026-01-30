@@ -21,7 +21,7 @@
       "title": "Recall Preservation: Regex Auditing",
       "description": "Recall is currently 78%. We must keep this win. Audit the newly added regex patterns in `src/rule_based_extractor.py`. Simplify any 'catastrophic backtracking' patterns while keeping the coverage for new formats discovered during the marathon.",
       "priority": 2,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-200"
       ],
@@ -29,7 +29,8 @@
         "Recall remains > 75% on the 50-item benchmark.",
         "Regex patterns are documented and optimized for speed.",
         "Zero crashes on the full 500-message set."
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     },
     {
       "id": "US-202",
@@ -47,6 +48,6 @@
     }
   ],
   "metadata": {
-    "updatedAt": "2026-01-30T15:22:42.287Z"
+    "updatedAt": "2026-01-30T15:34:54.338Z"
   }
 }

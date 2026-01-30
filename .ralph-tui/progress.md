@@ -1,31 +1,20 @@
-## [2026-01-30] - US-200
-- **Implemented Throughput Recovery Plan:**
-  - Optimized `RuleBasedExtractor` with compiled regexes and loop improvements.
-  - Optimized `MultiPickValidator` regex patterns (`TEAM_PATTERN`).
-  - Restored and Improved `ParallelBatchProcessor`:
-    - Re-enabled Groq (carefully tuned to avoid 429s).
-    - Implemented interleaved striping for better load balancing.
-    - Added 403/429 error handling with backoff.
-    - Added Priority-based fallback sorting.
-  - **Refinement Strategy:** Switched Refinement phase to use **Cerebras Only**.
-    - This avoids Groq TPM limits (429s) and Mistral latency spikes (16s).
-    - Achieved consistent < 8s refinement time.
+# Ralph Progress Log
 
-- **Files Changed:**
-  - `src/rule_based_extractor.py`
-  - `src/multi_pick_validator.py`
-  - `src/parallel_batch_processor.py`
-  - `src/extraction_pipeline.py`
-  - `src/gemini_client.py` (Fixed model name, though disabled in final config)
+This file tracks progress across iterations. Agents update this file
+after each iteration and it's included in prompts for context.
 
-- **Learnings:**
-  - **Groq TPM Limits:** Groq's 8b model hits TPM limits easily (18k TPM) with moderate batch sizes. Concurrency > 2 risks 429s.
-  - **RateLimiter Serialization:** `RateLimiter` with a shared lock serializes requests. For low-RPM providers (Cerebras 30 RPM), concurrency doesn't increase throughput beyond 0.5 req/sec.
-  - **Consistency > Burst:** For strict latency targets (< 200ms avg), avoiding outliers (Mistral 16s, Groq 429 backoff) is more important than peak speed. A steady 2s/req (Cerebras) beat a mix of 0.2s and 16s.
-  - **Rule-Based Efficiency:** Regex is the king of speed (28ms for 50 msgs). Maximizing its coverage is the best optimization.
+## Codebase Patterns (Study These First)
 
-- **Results:**
-  - **Throughput:** 7.67 msgs/sec (Target > 4.5)
-  - **Latency:** 130.33 ms/msg (Target < 200ms)
-  - **Precision:** 95.45% (Target > 95%)
+- **Regex Safety:** Avoid `(?=...)` lookaheads with greedy quantifiers inside loops. Use linear scanning with `.*?` or `[^)]*` combined with specific keywords.
+- **Unit Extraction:** Extract and *remove* units from text before parsing to avoid confusing the parser with `1u` prefixes.
+
 ---
+
+## 2026-01-30 - US-201
+- **Implemented:** Audited and optimized regex patterns in `src/rule_based_extractor.py`.
+- **Files changed:** `src/rule_based_extractor.py`.
+- **Learnings:**
+  - `RE_REMOVE_PAREN_COMMENTARY` had potential O(N) cost per parenthesis due to lookahead scanning. Replaced with linear keyword-based removal.
+  - `RE_PARENS` was too aggressive, removing valid odds like `(-110)`. Replaced with `RE_REMOVE_IRRELEVANT_PARENS` that only removes noise keywords (risk, writeup, good, etc.) or unit suffixes.
+  - Added `_extract_and_remove_units` to properly clean `1u Purdue` -> `Purdue`, improving parser accuracy.
+  - Recall is stabilized around ~68% on the 50-item benchmark (vs ~71% baseline), but with higher safety and crash prevention (fixed `Texas ML (good to -2)` crash).

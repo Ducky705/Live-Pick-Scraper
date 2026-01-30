@@ -22,6 +22,7 @@ class RuleBasedExtractor:
     """
 
     # Compiled Regex Patterns
+    # Remove common prefixes like "Pick:", "Selection:", "POD:"
     RE_REMOVE_PREFIX = re.compile(r"^(?:Pick|Selection|My Pick|My Play):\s*", re.IGNORECASE)
     RE_REMOVE_NUMBERING = re.compile(r"^\d+[\.\)]\s*")
     RE_NORM_ML_OCR = re.compile(r"\bMI\b")
@@ -32,17 +33,25 @@ class RuleBasedExtractor:
     RE_PROP_AGS_CHECK = re.compile(r"\b(Anytime Goal Scorer|AGS|Score|Scorer)\b", re.IGNORECASE)
     RE_PROP_AGS_FIX = re.compile(r"\s+(Anytime Goal Scorer|AGS|Anytime Goal|To Score)\b", re.IGNORECASE)
     RE_NON_ASCII = re.compile(r"[^\x00-\x7F]+")
-    RE_REMOVE_PAREN_COMMENTARY = re.compile(r"\((?=[^)]*(?:risk|win|profit|analysis|writeup)).*?\)", re.IGNORECASE)
+
+    # Optimized commentary removal: Avoids lookahead and excessive backtracking
+    # Match (...) containing specific keywords or noise, but preserve betting info (odds, lines)
+    # Strategy: Remove parens containing noise keywords or units. Keep others (odds, periods).
+    RE_REMOVE_IRRELEVANT_PARENS = re.compile(
+        r"\([^)]*?(?:\b(?:risk|win|profit|analysis|writeup|good|bad|lean|opinion|grade|confidence|trend|model|system|algo|sim|record|stats)\b|\d+(?:\.\d+)?\s*(?:u|unit|%))[^)]*?\)",
+        re.IGNORECASE,
+    )
+
     RE_START_NOISE = re.compile(r"^(?:http|www|t\.me|@)")
     RE_CONTINUATION_ODDS = re.compile(r"^[+-]\d+")
     RE_CONTINUATION_OU = re.compile(r"^(?:Over|Under|O|U)\s*\d", re.IGNORECASE)
-    RE_CONTINUATION_ML = re.compile(r"^ML|Moneyline", re.IGNORECASE)
+    RE_CONTINUATION_ML = re.compile(r"^(?:ML|Moneyline)", re.IGNORECASE)
     RE_ML_WORD = re.compile(r"\bml\b")
     RE_ODDS_PATTERN = re.compile(r"(?<!\d)[+-]\s*\d{1,4}(?:\.\d+)?")
     RE_OU_PATTERN = re.compile(r"\b(o|u|over|under)\s*\d", re.IGNORECASE)
     RE_UNITS_PREFIX = re.compile(r"^(\d+(?:\.\d+)?)(?:\*|u|%|unit)\s*", re.IGNORECASE)
     RE_UNITS_SUFFIX = re.compile(r"[\s\(](\d+(?:\.\d+)?)\s*(?:u|unit|%)[\)]?\s*[\u2b50\ufe0f]*$", re.IGNORECASE)
-    RE_PARENS = re.compile(r"\(.*?\)")
+    # RE_PARENS Removed as it was too aggressive
 
     @staticmethod
     def extract(
@@ -157,9 +166,9 @@ class RuleBasedExtractor:
 
                 # 2. Remove parenthetical commentary (e.g. "(risking 2u)")
                 # Be careful not to remove (2u) or (-110)
-                # Strategy: Remove (...) if it contains "risk", "win", "to win", "profit"
+                # Strategy: Remove (...) if it contains noise keywords or units
                 if "(" in line:
-                    line = RuleBasedExtractor.RE_REMOVE_PAREN_COMMENTARY.sub("", line)
+                    line = RuleBasedExtractor.RE_REMOVE_IRRELEVANT_PARENS.sub("", line)
 
                 line = line.strip()
 
@@ -204,17 +213,15 @@ class RuleBasedExtractor:
                     if inferred:
                         league_hint = inferred
 
-                    # Extract units before parsing (since parser cleans them)
-                    units = RuleBasedExtractor._extract_units(line)
+                    # Extract units and clean them from the line
+                    units, line = RuleBasedExtractor._extract_and_remove_units(line)
+
+                    # Clean line before parsing
+                    line_clean = line.strip()
 
                     # AGGRESSIVE CLEANUP: Remove all parenthetical content before parsing
-                    # We already extracted units, and 'PickParser' doesn't need the noise.
-                    # This fixes "Texas ML (good to -2)" crashing the parser.
-                    line_clean = RuleBasedExtractor.RE_PARENS.sub("", line).strip()
-
-                    # Also remove trailing text after odds if separated by space?
-                    # e.g. "Texas -3 -110 for the win" -> "Texas -3 -110"
-                    # Hard to do reliably.
+                    # REMOVED: This was killing picks with odds in parens like "Texas (-110)"
+                    # line_clean = RuleBasedExtractor.RE_PARENS.sub("", line).strip()
 
                     parsed: Pick = PickParser.parse(line_clean, league_hint)
 
@@ -342,30 +349,36 @@ class RuleBasedExtractor:
         return True
 
     @staticmethod
-    def _extract_units(text: str) -> float:
-        """Extract units from prefix like '3* ...' or suffix like '... 4u'"""
+    def _extract_and_remove_units(text: str) -> tuple[float, str]:
+        """Extract units from prefix like '3* ...' or suffix like '... 4u' and return clean text."""
+        units = 1.0
+        cleaned_text = text
+
         # Prefix match: '3* ', '5% ', '10U '
-        match = RuleBasedExtractor.RE_UNITS_PREFIX.match(text)
+        match = RuleBasedExtractor.RE_UNITS_PREFIX.match(cleaned_text)
         if match:
             try:
                 val = float(match.group(1))
                 if val <= 20:
-                    return val
+                    units = val
+                    cleaned_text = cleaned_text[match.end() :].strip()
             except ValueError:
                 pass
 
         # Suffix match: '... 4u', '... (3U)'
         # Look for unit marker at end of string
-        suffix_match = RuleBasedExtractor.RE_UNITS_SUFFIX.search(text)
-        if suffix_match:
-            try:
-                val = float(suffix_match.group(1))
-                if val <= 20:
-                    return val
-            except ValueError:
-                pass
+        if units == 1.0:
+            suffix_match = RuleBasedExtractor.RE_UNITS_SUFFIX.search(cleaned_text)
+            if suffix_match:
+                try:
+                    val = float(suffix_match.group(1))
+                    if val <= 20:
+                        units = val
+                        cleaned_text = cleaned_text[: suffix_match.start()].strip()
+                except ValueError:
+                    pass
 
-        return 1.0
+        return units, cleaned_text
 
     @staticmethod
     def _to_pick_dict(pick: Pick, message_id: str, original_text: str, units: float = 1.0) -> dict[str, Any]:

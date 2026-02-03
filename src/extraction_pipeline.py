@@ -369,8 +369,14 @@ class ExtractionPipeline:
 
                         for mid_key_str, msg_new_picks in new_picks_by_id.items():
                             if msg_new_picks:
-                                # US-001 Safety Net: Only replace if we have new picks
-                                picks = [p for p in picks if str(p.get("message_id")) != mid_key_str]
+                                # US-003: Protect high-confidence rule-based picks (> 9.0)
+                                # We remove all picks for this message EXCEPT those with high confidence.
+                                # These high-conf picks will then be merged with AI results during deduplication.
+                                picks = [
+                                    p
+                                    for p in picks
+                                    if str(p.get("message_id")) != mid_key_str or float(p.get("confidence") or 0) > 9.0
+                                ]
                                 picks.extend(msg_new_picks)
                                 new_picks_count += len(msg_new_picks)
 

@@ -182,6 +182,19 @@ def merge_duplicate_picks(pick1: dict, pick2: dict) -> dict:
     """
     merged = pick1.copy()
 
+    # Prefer higher confidence
+    conf1 = float(pick1.get("confidence") or 0)
+    conf2 = float(pick2.get("confidence") or 0)
+    if conf2 > conf1:
+        merged["confidence"] = conf2
+        # If we take pick2's confidence, we should also prefer its pick text/league
+        # as it's likely more accurate.
+        merged["pick"] = pick2.get("pick", merged["pick"])
+        merged["league"] = pick2.get("league", merged["league"])
+        merged["type"] = pick2.get("type", merged["type"])
+    else:
+        merged["confidence"] = conf1
+
     # Prefer non-null odds
     if not merged.get("odds") and pick2.get("odds"):
         merged["odds"] = pick2["odds"]
@@ -192,8 +205,8 @@ def merge_duplicate_picks(pick1: dict, pick2: dict) -> dict:
     if len(name2) > len(name1) and name2.lower() != "unknown":
         merged["capper_name"] = name2
 
-    # Prefer more complete pick text
-    if len(pick2.get("pick", "")) > len(pick1.get("pick", "")):
+    # Prefer more complete pick text (only if confidence is not lower)
+    if len(pick2.get("pick", "")) > len(merged.get("pick", "")) and conf2 >= conf1:
         merged["pick"] = pick2["pick"]
 
     # Take higher units (assume it's the real confidence)

@@ -3,10 +3,10 @@
   "sessionId": "5e526701-8d16-45ca-a854-4654cb06047d",
   "status": "running",
   "startedAt": "2026-02-03T18:20:35.474Z",
-  "updatedAt": "2026-02-03T18:30:48.871Z",
-  "currentIteration": 1,
+  "updatedAt": "2026-02-03T18:33:03.864Z",
+  "currentIteration": 2,
   "maxIterations": 50,
-  "tasksCompleted": 1,
+  "tasksCompleted": 2,
   "isPaused": false,
   "agentPlugin": "opencode",
   "trackerState": {
@@ -23,8 +23,8 @@
       {
         "id": "US-002",
         "title": "Expanded Prop Regex",
-        "status": "open",
-        "completedInSession": false
+        "status": "completed",
+        "completedInSession": true
       },
       {
         "id": "US-003",
@@ -50,6 +50,16 @@
       "durationMs": 366231,
       "startedAt": "2026-02-03T18:20:36.596Z",
       "endedAt": "2026-02-03T18:26:42.827Z"
+    },
+    {
+      "iteration": 2,
+      "status": "completed",
+      "taskId": "US-002",
+      "taskTitle": "Expanded Prop Regex",
+      "taskCompleted": true,
+      "durationMs": 244677,
+      "startedAt": "2026-02-03T18:26:44.189Z",
+      "endedAt": "2026-02-03T18:30:48.866Z"
     }
   ],
   "skippedTaskIds": [],

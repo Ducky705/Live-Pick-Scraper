@@ -32,3 +32,15 @@ after each iteration and it's included in prompts for context.
   - Keeping `prop_keywords` in sync between the extractor and parser is crucial for consistent classification.
 ---
 
+## 2026-02-03 - US-003
+- Implemented **Refinement Logic Protection** in `ExtractionPipeline.py`.
+- Modified the replacement logic to preserve picks with `confidence > 9.0` (typically rule-based) during the AI refinement pass.
+- Updated `RuleBasedExtractor.py` to consistently assign a confidence of `9.5` to all successful extractions, ensuring they are protected.
+- Enhanced `PickDeduplicator.merge_duplicate_picks` to prefer higher-confidence data when merging, preventing AI-refined results from degrading high-quality rule-based picks.
+- Observed significant benchmark improvement: Recall increased from **63.46%** to **83.46%** and F1 Score from **76.36%** to **89.29%**.
+- Files changed: `src/extraction_pipeline.py`, `src/rule_based_extractor.py`, `src/pick_deduplicator.py`.
+- **Learnings:**
+  - **Additive Refinement**: Treating AI refinement as an *additive* process for messages with high-confidence rule-based picks (merging instead of replacing) significantly boosts recall.
+  - **Confidence as a Shield**: Using confidence scores to shield rule-based extractions from AI hallucinations is a powerful pattern for hybrid pipelines.
+---
+

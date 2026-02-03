@@ -6,7 +6,7 @@ tracker = "json"
 subagentTracingDetail = "full"
 
 [agentOptions]
-model = "google/antigravity-gemini-3-pro"
+model = "google/antigravity-gemini-3-flash"
 
 [trackerOptions]
 path = "ralph_recovery_plan.json"

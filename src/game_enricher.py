@@ -19,7 +19,7 @@ def enrich_picks(picks: list[dict[str, Any]], target_date: str) -> list[dict[str
     Returns:
         Updated list of picks with 'opponent' and 'game_date' fields populated where found.
     """
-    if not picks:
+    if not picks or not target_date:
         return picks
 
     # 1. Identify relevant leagues

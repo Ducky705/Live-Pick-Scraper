@@ -12,6 +12,7 @@ from typing import Any
 from src.grading.parser import PickParser
 from src.grading.schema import BetType, Pick
 from src.prompts.decoder import infer_league_from_entity, normalize_pick_format
+from src.utils import normalize_to_ascii
 
 logger = logging.getLogger(__name__)
 
@@ -118,31 +119,17 @@ class RuleBasedExtractor:
                 if not line:
                     continue
 
-                # CLEANUP: Remove common noise prefixes and bad characters
+                # CLEANUP: Remove common noise prefixes and ASCII-normalize
                 # Remove "Pick:", "Selection:", "My Pick:"
                 line = RuleBasedExtractor.RE_REMOVE_PREFIX.sub("", line)
                 # Remove numbering (e.g. "1. ", "1) ")
                 line = RuleBasedExtractor.RE_REMOVE_NUMBERING.sub("", line)
 
-                # Remove quotes and unicode garbage
-                line = (
-                    line.strip("\"'")
-                    .replace("\u00a0", " ")
-                    .replace("\u201c", '"')
-                    .replace("\u201d", '"')  # Smart quotes
-                    .replace("\u2018", "'")
-                    .replace("\u2019", "'")  # Smart single quotes
-                    .replace("\ufffd", "")
-                    .replace("½", ".5")
-                    .replace("¼", ".25")
-                    .replace("¾", ".75")
-                    # Replace unicode dashes with standard hyphen
-                    .replace("\u2013", "-")  # En dash
-                    .replace("\u2014", "-")  # Em dash
-                    .replace("\u2212", "-")  # Minus sign
-                )
+                # Robust ASCII Normalization (Handles smart quotes, dashes, accents)
+                line = normalize_to_ascii(line.strip("\"'"))
 
                 # NORMALIZE: Fix common OCR/Typo issues
+
                 # 1. "MI" -> "ML" (common OCR error for Moneyline)
                 line = RuleBasedExtractor.RE_NORM_ML_OCR.sub("ML", line)
                 # 2. Fix spaced odds/lines: "- 110" -> "-110", "+ 7" -> "+7"
@@ -157,12 +144,10 @@ class RuleBasedExtractor:
                 # 5. Fix "Anytime Goal Scorer" -> "Name: Anytime Goal Scorer" (for Prop Parser)
                 # If we see AGS pattern but no colon, inject one before the keyword
                 if ":" not in line and RuleBasedExtractor.RE_PROP_AGS_CHECK.search(line):
-                    line = RuleBasedExtractor.RE_PROP_AGS_FIX.sub(r": Anytime Goal Scorer", line)
-
-                # Remove emojis (simplistic regex) - Keep ASCII + standard punctuation
-                line = RuleBasedExtractor.RE_NON_ASCII.sub("", line)
+                    line = RuleBasedExtractor.RE_PROP_AGS_FIX.sub(r": \1", line)
 
                 # Clean specific noise patterns
+
                 # 1. Remove everything after pipe |
                 if "|" in line:
                     line = line.split("|")[0]
@@ -187,9 +172,10 @@ class RuleBasedExtractor:
                 if i < len(lines) and not RuleBasedExtractor._has_pick_indicators(line):
                     next_line = lines[i].strip()
                     # Clean next line slightly to check it
-                    next_line_clean = RuleBasedExtractor.RE_NON_ASCII.sub("", next_line).strip()
+                    next_line_clean = normalize_to_ascii(next_line)
 
                     # If next line looks like odds/line (e.g. "-110", "+145", "Over 220")
+
                     # Strict check: Start with +/-, or "Over/Under", or "ML"
                     is_continuation = False
                     if RuleBasedExtractor.RE_CONTINUATION_ODDS.match(next_line_clean):

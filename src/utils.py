@@ -15,6 +15,50 @@ import unicodedata
 from collections import Counter
 
 
+def normalize_to_ascii(text: str | None) -> str:
+    """
+    Normalizes a string to ASCII, handling smart quotes, dashes, and accents.
+
+    Args:
+        text: Input string to normalize
+
+    Returns:
+        ASCII-only string
+    """
+    if not text:
+        return ""
+
+    # 1. Manual mapping for common characters that don't decompose nicely to ASCII
+    mapping = {
+        "\u201c": '"',
+        "\u201d": '"',  # Smart double quotes
+        "\u2018": "'",
+        "\u2019": "'",  # Smart single quotes
+        "\u02bc": "'",  # Modifier letter apostrophe
+        "\u00b4": "'",  # Acute accent as apostrophe
+        "\u2013": "-",
+        "\u2014": "-",  # En/Em dashes
+        "\u2212": "-",  # Minus sign
+        "\u00a0": " ",
+        "\u202f": " ",  # Non-breaking spaces
+        "½": ".5",
+        "¼": ".25",
+        "¾": ".75",
+        "\ufffd": "'",  # Replacement character
+    }
+
+    result = str(text)
+    for char, replacement in mapping.items():
+        result = result.replace(char, replacement)
+
+    # 2. Normalize accents (e.g., Café -> Cafe)
+    result = unicodedata.normalize("NFKD", result)
+    # 3. Encode to ASCII, ignoring characters that can't be converted
+    result = result.encode("ascii", "ignore").decode("ascii")
+
+    return result
+
+
 def normalize_string(text: str | None, remove_spaces: bool = False) -> str:
     """
     Normalize a string for comparison purposes.

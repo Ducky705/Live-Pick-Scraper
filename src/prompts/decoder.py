@@ -1381,9 +1381,9 @@ def normalize_pick_format(
         Normalized pick string
     """
     if not pick_str:
-        return pick_str
+        return str(pick_str) if pick_str is not None else ""
 
-    result = pick_str.strip()
+    result = str(pick_str).strip()
 
     # PRIORITY -1: Remove noise words from start of string
     # "Early Max De Minaur" -> "De Minaur"
@@ -1860,8 +1860,9 @@ def extract_structured_fields(pick: dict[str, Any]) -> dict[str, Any]:
         Pick dict with additional structured fields populated
     """
     result = dict(pick)
-    pick_str = result.get("pick", "")
-    original_pick = result.get("_original_pick", pick_str)  # For polarity validation
+    # CRITICAL FIX: Ensure pick is string (handle float/int from JSON)
+    pick_str = str(result.get("pick", "") or "")
+    original_pick = str(result.get("_original_pick", pick_str) or "")  # For polarity validation
     bet_type = result.get("type", "Unknown")
 
     if not pick_str:

@@ -38,9 +38,9 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 # US-011: Aggressive Timeouts for < 2.0s Avg Response
-TIMEOUT_TIER_1_SOFT = 5.0  # Speed Target (Groq/Cerebras) - Aggressive Fail Fast
-TIMEOUT_TIER_2_SOFT = 25.0  # Quality Target (Mistral/Gemini) - Increased for stability
-TIMEOUT_GLOBAL_HARD = 60.0  # Hard Limit
+TIMEOUT_TIER_1_SOFT = 15.0  # Speed Target (Groq) - Increased for stability
+TIMEOUT_TIER_2_SOFT = 40.0  # Quality Target (Mistral/Gemini) - Increased for stability
+TIMEOUT_GLOBAL_HARD = 90.0  # Hard Limit
 
 PROVIDER_CONFIG = {
     "groq": {
@@ -48,12 +48,30 @@ PROVIDER_CONFIG = {
         "rpm": 500,
         "tpm": 18000,
         "max_concurrent": 1,  # US-200: Minimized to avoid TPM limits/429s
-        "min_delay": 0.2,
-        "priority": 1,
+        "min_delay": 2.0,  # Increased delay
+        "priority": 3,  # Lower priority
         "tier": 1,
     },
+    "gemini": {
+        "model": "gemini-1.5-flash-latest",
+        "rpm": 15,
+        "tpm": 1000000,
+        "max_concurrent": 3,
+        "min_delay": 4.0,
+        "priority": 1,  # Primary priority
+        "tier": 2,
+    },
+    "chimera": {
+        "model": "openrouter/free",
+        "rpm": 10,
+        "tpm": 100000,
+        "max_concurrent": 2,
+        "min_delay": 2.0,
+        "priority": 1,
+        "tier": 2,
+    },
     "openrouter": {
-        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "model": "openrouter/free",
         "rpm": 100,
         "tpm": 100000,
         "max_concurrent": 5,  # US-200: Good capacity
@@ -69,6 +87,24 @@ PROVIDER_CONFIG = {
         "min_delay": 1.0,
         "batch_size": 20,
         "priority": 4,  # US-200: Lowest priority
+        "tier": 2,
+    },
+    "cerebras": {
+        "model": "llama-3.3-70b",
+        "rpm": 30,
+        "tpm": 60000,
+        "max_concurrent": 5,
+        "min_delay": 2.0,
+        "priority": 2,
+        "tier": 1,
+    },
+    "deepseek_r1": {
+        "model": "tngtech/deepseek-r1t2-chimera:free",
+        "rpm": 4,  # Strict Rate Limit (15s delay)
+        "tpm": 60000,
+        "max_concurrent": 1,  # Sequential
+        "min_delay": 15.0,  # 15s delay between requests
+        "priority": 1,
         "tier": 2,
     },
 }
@@ -155,15 +191,17 @@ class ParallelBatchProcessor:
         Initialize processor with EXTREME SPEED configuration.
         """
         self.providers = providers or [
-            "groq",  # Disabled due to 403 blocks -> RE-ENABLED (US-200)
+            "gemini",  # Primary
+            "mistral",  # Secondary
+            "groq",  # Fallback/Tertiary
+            "chimera",
             "cerebras",
-            "mistral",
-            # "gemini", # Disabled due to 404 errors/timeouts
+            "openrouter",
+            "deepseek_r1",
         ]
 
-        self.rate_limiters = {
-            p: RateLimiter(PROVIDER_CONFIG[p]["min_delay"]) for p in self.providers if p in PROVIDER_CONFIG
-        }
+        # Initialize limiters for ALL config providers, not just active ones
+        self.rate_limiters = {p: RateLimiter(PROVIDER_CONFIG[p]["min_delay"]) for p in PROVIDER_CONFIG}
         self.stats = {p: {"count": 0, "errors": 0, "total_time": 0.0} for p in self.providers}
         self.stats_lock = Lock()
         self.provider_status: dict[str, Any] = {p: "active" for p in self.providers}
@@ -212,12 +250,18 @@ class ParallelBatchProcessor:
                 result = groq_text_completion(prompt, model=model, timeout=timeout)
             elif provider == "openrouter":
                 result = openrouter_completion(prompt, model=model, timeout=timeout)
+            elif provider == "chimera":
+                result = openrouter_completion(prompt, model=model, timeout=timeout)
             elif provider == "mistral":
                 result = mistral_completion(prompt, model=model, timeout=timeout)
             elif provider == "cerebras":
                 result = cerebras_completion(prompt, model=model, timeout=timeout)
             elif provider == "gemini":
                 result = gemini_text_completion(prompt, model=model, timeout=timeout)
+            elif provider == "deepseek_r1":
+                # DeepSeek R1 (via Chimera/OpenRouter)
+                # Note: OpenRouter client handles the specific model via the 'model' kwarg
+                result = openrouter_completion(prompt, model=model, timeout=timeout)
             else:
                 raise ValueError(f"Unknown provider: {provider}")
 

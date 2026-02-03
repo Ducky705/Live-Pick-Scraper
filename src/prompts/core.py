@@ -177,7 +177,7 @@ RULES:
 3.l=league: Infer (Lakers->NBA).
 4.o=odds (int): -110, +150.
 5.u=units: "5u"->5. "Max"->5. "Whale"->10. Default 1.
-6.LISTS: Scan FULL message. 10 lines = 10 picks.
+6.LISTS: EXTRACT EVERY SINGLE PICK. If 50 items, output 50 items. DO NOT SUMMARIZE.
 7.PARLAYS: "Team A + Team B" = t=PL. Legs: (LG) Leg1 / (LG) Leg2.
 8.SPLIT: "Team +8 & ML" = 2 picks.
 9.CONFIDENCE (q): 1-10.

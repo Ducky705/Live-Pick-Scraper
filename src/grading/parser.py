@@ -68,6 +68,33 @@ class PickParser:
 
         # 5. TOTAL DETECTION (Over/Under without colon)
         if PickParser._is_total(text):
+            # INNOVATION: Check if it's actually a Player Prop misclassified as a Total
+            # e.g. "Zion Williamson Over 22.5 Points"
+            prop_keywords = [
+                "pts",
+                "points",
+                "reb",
+                "rebounds",
+                "ast",
+                "assists",
+                "goal",
+                "score",
+                "sog",
+                "shot",
+                "hit",
+                "base",
+            ]
+            if any(k in text.lower() for k in prop_keywords):
+                # Attempt to parse as prop by injecting a colon before the Over/Under
+                # Pattern: Find first occurrence of Over/Under/o/u/O/U
+                match = re.search(r"\b(over|under|o/u|[ou])\b", text, re.IGNORECASE)
+                if match:
+                    subject = text[: match.start()].strip()
+                    rest = text[match.start() :].strip()
+                    # Synthetic colon injection
+                    synthetic_text = f"{subject}: {rest}"
+                    return PickParser._parse_prop(synthetic_text, league_norm, date)
+
             return PickParser._parse_total(text, league_norm, date)
 
         # 6. SPREAD vs MONEYLINE

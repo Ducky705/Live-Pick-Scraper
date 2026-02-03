@@ -253,14 +253,25 @@ class MultiPickValidator:
 
         # Override validity if uncovered teams found
         if uncovered_teams:
-            # US-006: Less aggressive validation
-            # Only flag if we found ZERO picks.
-            # If we found some picks and are within tolerance, ignore uncovered teams (likely opponents).
+            # Logic:
+            # If we found ZERO picks, any team mention is a strong signal -> Reparse.
+            # If we found picks, usually 1 pick covers 1-2 teams.
+            # If we have many uncovered teams relative to picks, we likely missed entire games.
+
+            # Strictness Update (Ralph Iteration 1):
+            # If we have significantly more uncovered teams than picks, we are likely missing items in a list.
+            # Example: Digest message with 40 teams, but we only found 5 picks.
+            # We allow 1 uncovered team (opponent) per pick.
+            # Threshold: Uncovered > Actual + 3 (Buffer for noise)
+
             if actual_count == 0:
                 needs_reparse = True
                 reason_parts.append(
                     f"Uncovered Teams (No picks): {len(uncovered_teams)} ({', '.join(uncovered_teams[:2])}...)"
                 )
+            elif len(uncovered_teams) > actual_count + 3:
+                needs_reparse = True
+                reason_parts.append(f"Excessive Uncovered Teams: {len(uncovered_teams)} (vs {actual_count} picks)")
             elif needs_reparse:
                 # Just add context if we are already reparsing
                 reason_parts.append(f"Uncovered Teams: {len(uncovered_teams)}")

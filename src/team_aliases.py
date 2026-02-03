@@ -32,7 +32,6 @@ TEAM_ALIASES = {
     "padres": ["padres", "san diego padres"],
     "rockies": ["rockies", "colorado rockies"],
     "diamondbacks": ["diamondbacks", "arizona diamondbacks", "dbacks", "arizona dbacks"],
-
     # NBA
     "hawks": ["hawks", "atlanta hawks"],
     "celtics": ["celtics", "boston celtics"],
@@ -64,7 +63,6 @@ TEAM_ALIASES = {
     "raptors": ["raptors", "toronto raptors"],
     "jazz": ["jazz", "utah jazz"],
     "wizards": ["wizards", "washington wizards"],
-
     # NFL
     "falcons": ["falcons", "atlanta falcons"],
     "ravens": ["ravens", "baltimore ravens"],
@@ -97,7 +95,6 @@ TEAM_ALIASES = {
     "titans": ["titans", "tennessee titans"],
     "commanders": ["commanders", "washington commanders"],
     "arizona cardinals": ["cardinals", "arizona cardinals"],
-
     # NHL
     "ducks": ["ducks", "anaheim ducks"],
     "coyotes": ["coyotes", "arizona coyotes"],
@@ -132,7 +129,6 @@ TEAM_ALIASES = {
     "winnipeg jets": ["jets", "winnipeg jets"],
     "florida panthers": ["panthers", "florida panthers"],
     "los angeles kings": ["kings", "los angeles kings", "la kings"],
-
     # WNBA
     "dream": ["dream", "atlanta dream"],
     "sky": ["sky", "chicago sky"],
@@ -147,7 +143,6 @@ TEAM_ALIASES = {
     "storm": ["storm", "seattle storm"],
     "mystics": ["mystics", "washington mystics"],
     "valkyries": ["valkyries", "golden state valkyries"],
-
     # NCAA
     "abilene christian wildcats": ["abilene christian", "abilene christian wildcats", "acu"],
     "air force falcons": ["af", "air force", "air force falcons"],
@@ -491,11 +486,18 @@ TEAM_ALIASES = {
     "rutgers scarlet knights": ["rutgers", "rutgers scarlet knights", "rutg", "scarlet knights"],
     "sacramento state hornets": ["sacramento st hornets", "sacramento state", "sacramento state hornets", "sac"],
     "sacred heart pioneers": ["sacred heart", "sacred heart pioneers", "sh"],
-    "saint francis (pa) red flash": ["red flash", "saint francis (pa)", "saint francis (pa) red flash", "sfpa"],
-    "saint joseph's hawks": ["saint joseph's", "saint joseph's hawks", "sju"],
-    "saint louis bilikens": ["bilikens", "saint louis", "saint louis bilikens", "slu"],
-    "saint mary's gaels": ["saint mary's", "saint mary's gaels", "smc"],
-    "saint peter's peacocks": ["saint peter's", "saint peter's peacocks", "sp"],
+    "saint francis (pa) red flash": [
+        "red flash",
+        "saint francis (pa)",
+        "st. francis (pa)",
+        "st francis (pa)",
+        "saint francis (pa) red flash",
+        "sfpa",
+    ],
+    "saint joseph's hawks": ["saint joseph's", "st. joseph's", "st joseph's", "saint joseph's hawks", "sju"],
+    "saint louis bilikens": ["bilikens", "saint louis", "st. louis", "st louis", "saint louis bilikens", "slu"],
+    "saint mary's gaels": ["saint mary's", "st. mary's", "st mary's", "saint mary's gaels", "smc"],
+    "saint peter's peacocks": ["saint peter's", "st. peter's", "st peter's", "saint peter's peacocks", "sp"],
     "sam houston bearkats": ["sam houston", "sam houston bearkats", "shsu"],
     "samford bulldogs": ["samford", "samford bulldogs", "sam"],
     "san diego state aztecs": [

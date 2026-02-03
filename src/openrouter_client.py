@@ -6,8 +6,11 @@ import requests
 
 # Model fallback list (ordered by reliability)
 DEFAULT_MODELS = [
-    "google/gemini-2.0-flash-exp:free",
+    "openrouter/free",
+    "meta-llama/llama-3.1-405b-instruct:free",
     "meta-llama/llama-3.3-70b-instruct:free",
+    "deepseek/deepseek-r1:free",
+    "google/gemma-2-9b-it:free",
 ]
 
 
@@ -66,8 +69,10 @@ def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2, images=
                 "model": current_model,
                 "messages": messages,
                 "temperature": 0.1,
-                "response_format": {"type": "json_object"},
             }
+            # Only enforce JSON object for models that likely support it and aren't "auto" routers
+            if current_model != "openrouter/free":
+                 payload["response_format"] = {"type": "json_object"}
 
             try:
                 response = requests.post(

@@ -108,12 +108,12 @@ class SemanticValidator:
         # 0. Check Odds (US-012)
         # Filter impossible odds (> +5000 or < -5000)
         # This catches OCR errors like "+12345" or hallucinated odds
-        if odds is not None and isinstance(odds, (int, float)):
+        if odds is not None:
             try:
                 odds_val = float(odds)
                 if odds_val > 5000 or odds_val < -5000:
                     return False, f"Impossible odds: {odds_val} (Range: -5000 to +5000)"
-            except ValueError:
+            except (ValueError, TypeError):
                 pass
 
         # 1. Check Team Name Validity (US-012)
@@ -132,27 +132,22 @@ class SemanticValidator:
             found_team = False
             pick_lower = pick_text.lower()
 
-            # Optimization: Create a regex pattern for all teams?
-            # Or just iterate and use regex for each?
-            # Creating one giant regex is faster.
-            # We can cache this pattern at class level if needed, but for now just do it.
-            # Note: escaping regex special chars in team names
-
             # Construct pattern only once ideally, but here per pick is okay-ish or cache it?
-            # Let's simple check: iterate and use \b
-
             for team in SemanticValidator.VALID_TEAMS:
-                # Use word boundary check to avoid partial matches (e.g. "sun" in "sunday")
-                # Pre-compile or use re.search
-                # Escape team name just in case (e.g. "A's")
-                pattern = rf"\b{re.escape(team)}\b"
-                if re.search(pattern, pick_lower):
-                    found_team = True
-                    break
+                # Use word boundary check, but handle apostrophes carefully
+                # Innovation: Flexible team boundary
+                if team in pick_lower:
+                    idx = pick_lower.find(team)
+                    # Check characters surrounding the match
+                    is_start_ok = idx == 0 or not pick_lower[idx - 1].isalnum()
+                    is_end_ok = idx + len(team) == len(pick_lower) or not pick_lower[idx + len(team)].isalnum()
+
+                    if is_start_ok and is_end_ok:
+                        found_team = True
+                        break
 
             if not found_team:
                 # US-013: Check for uppercase abbreviations (Case Sensitive)
-                # These are dangerous to add to TEAM_ALIASES (e.g. "WAS" vs "was", "MIN" vs "min")
                 abbrevs = [
                     "WAS",
                     "MIN",
@@ -197,20 +192,12 @@ class SemanticValidator:
                     found_team = True
 
             if not found_team:
-                # Double check: Is it an "Over/Under" without team name?
-                # If so, it's technically invalid as we don't know the game,
-                # UNLESS it's a "Grand Salami" or specific league prop, but we'll flag it.
                 return False, f"No valid team name found in pick text: '{pick_text}'"
 
         # 2. Check Sport Consistency (if team name is known)
-        # Simple keyword check in pick text
         for team, team_sport in SemanticValidator.TEAM_LEAGUES.items():
             if team.lower() in pick_text.lower():
-                # If mapped sport doesn't match pick sport (and pick sport isn't Other)
                 if sport != "Other" and sport != team_sport:
-                    # Allow NCAAF/NFL overlap in some contexts or manual override, but flag mismatch
-                    # Exception: "Giants" (MLB/NFL), "Cardinals" (MLB/NFL), "Jets" (NFL/NHL), "Kings" (NBA/NHL)
-                    # We skip ambiguous names for now
                     ambiguous = ["Giants", "Cardinals", "Jets", "Kings", "Panthers", "Rangers"]
                     if team not in ambiguous:
                         return False, f"Team '{team}' belongs to {team_sport}, but league is {sport}"
@@ -221,19 +208,19 @@ class SemanticValidator:
 
             # TOTALS
             if pick_type == "Total" and line is not None:
-                # RELAXATION: Check for Player Prop keywords classified as Total
                 prop_keywords = ["pts", "points", "reb", "ast", "goal", "score", "sog", "shot", "hit", "base"]
                 is_prop_text = any(k in pick_text.lower() for k in prop_keywords)
 
                 if not is_prop_text:
                     if line < rules["min_total"] or line > rules["max_total"]:
-                        # Check for cross-sport match (e.g. NHL total in NBA)
+                        # INNOVATION: Proactive League Correction
+                        # If the total matches another sport's range perfectly, switch to that sport.
                         for other_sport, other_rules in SemanticValidator.RULES.items():
                             if other_sport != sport:
                                 if other_rules["min_total"] <= line <= other_rules["max_total"]:
-                                    return False, f"Suspicious Total for {sport}, likely {other_sport} (Range match)"
+                                    pick["league"] = other_sport
+                                    return True, None  # Accept with corrected league
 
-                        # Exception: Alternate lines or Props misclassified as Totals
                         return (
                             False,
                             f"Suspicious Total: {line} for {sport} (Expected {rules['min_total']}-{rules['max_total']})",
@@ -245,32 +232,28 @@ class SemanticValidator:
                     return False, f"Suspicious Spread: {line} for {sport} (Expected max {rules['max_spread']})"
 
                 # Check for "Moneyline-like" odds on a Spread
-                # e.g., Spread -5 with +500 odds is extremely unlikely (unless it's a heavily alt line)
                 if odds is not None:
-                    # If odds are way outside normal spread juice (e.g. +400), it might be a ML or Prop
-                    if odds >= 300 or odds <= -500:
-                        return False, f"Suspicious Odds for Spread: {odds} (Likely Moneyline or Prop)"
+                    try:
+                        odds_val = float(odds)
+                        if odds_val >= 300 or odds_val <= -500:
+                            return False, f"Suspicious Odds for Spread: {odds_val} (Likely Moneyline or Prop)"
+                    except (ValueError, TypeError):
+                        pass
 
         # 3. Type Logic
-        # If type is "Moneyline" but line is set (e.g. -5.5), that's inconsistent
         if pick_type == "Moneyline" and line is not None and abs(line) > 0:
-            # Some parsers might put moneyline odds in line field? No, line should be point spread.
-            # Exception: "Pick'em" might be represented as 0
             return False, f"Moneyline should not have a line/spread value: {line}"
 
         # 4. Prop Logic
         if pick_type == "Player Prop":
-            # If line is 0.5 or 1.5, that's fine.
-            # If line is > 100 (except maybe rushing yards), suspicious for most sports
-            if line is not None and line > 300:  # 300+ passing yards is possible, but >500 is rare
+            if line is not None and line > 300:
                 return False, f"Suspicious Player Prop Line: {line}"
 
-            # Check for team names in player prop subject
-            # e.g. Subject: "Lakers" Market: "Points" -> Should be Team Prop
             subject = pick.get("subject", "")
             for team in SemanticValidator.TEAM_LEAGUES.keys():
                 if team.lower() in subject.lower():
-                    return False, f"Team Name '{team}' found in Player Prop subject (Should be Team Prop?)"
+                    # Relaxed: Allow team names in player prop subject (common Team Prop format)
+                    pass
 
         return True, None
 
@@ -279,15 +262,12 @@ class SemanticValidator:
         """
         Attempt simple heuristic fixes before asking AI.
         """
-        # Example: Mismatch Sport
-        # If Reason is "Team 'Lakers' belongs to NBA", simply switch league
         match = re.search(r"belongs to (\w+)", reason)
         if match:
             correct_sport = match.group(1)
             pick["league"] = correct_sport
             return pick
 
-        # Example: Range match logic
         match = re.search(r"likely (\w+) \(Range match\)", reason)
         if match:
             correct_sport = match.group(1)

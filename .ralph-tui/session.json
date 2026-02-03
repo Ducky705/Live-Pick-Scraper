@@ -1,51 +1,46 @@
 {
   "version": 1,
-  "sessionId": "21c83b65-f363-4646-a330-8dac1ca77e59",
+  "sessionId": "5e526701-8d16-45ca-a854-4654cb06047d",
   "status": "running",
-  "startedAt": "2026-01-30T15:24:17.499Z",
-  "updatedAt": "2026-01-30T15:39:23.545Z",
-  "currentIteration": 1,
+  "startedAt": "2026-02-03T18:20:35.474Z",
+  "updatedAt": "2026-02-03T18:26:42.833Z",
+  "currentIteration": 0,
   "maxIterations": 50,
-  "tasksCompleted": 1,
+  "tasksCompleted": 0,
   "isPaused": false,
   "agentPlugin": "opencode",
   "trackerState": {
     "plugin": "json",
-    "prdPath": "ralph_recovery_plan.json",
-    "totalTasks": 3,
+    "prdPath": "tasks/prd.json",
+    "totalTasks": 4,
     "tasks": [
       {
-        "id": "US-200",
-        "title": "Throughput Recovery: Identifying the Slow-Path",
-        "status": "completed",
+        "id": "US-001",
+        "title": "Robust Text Normalization",
+        "status": "open",
         "completedInSession": false
       },
       {
-        "id": "US-201",
-        "title": "Recall Preservation: Regex Auditing",
-        "status": "completed",
-        "completedInSession": true
+        "id": "US-002",
+        "title": "Expanded Prop Regex",
+        "status": "open",
+        "completedInSession": false
       },
       {
-        "id": "US-202",
-        "title": "Resilience & Crash Prevention",
+        "id": "US-003",
+        "title": "Refinement Logic Protection",
+        "status": "open",
+        "completedInSession": false
+      },
+      {
+        "id": "US-004",
+        "title": "Final 95% Verification",
         "status": "open",
         "completedInSession": false
       }
     ]
   },
-  "iterations": [
-    {
-      "iteration": 1,
-      "status": "completed",
-      "taskId": "US-201",
-      "taskTitle": "Recall Preservation: Regex Auditing",
-      "taskCompleted": true,
-      "durationMs": 635877,
-      "startedAt": "2026-01-30T15:24:18.445Z",
-      "endedAt": "2026-01-30T15:34:54.322Z"
-    }
-  ],
+  "iterations": [],
   "skippedTaskIds": [],
   "cwd": "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15",
   "activeTaskIds": [],

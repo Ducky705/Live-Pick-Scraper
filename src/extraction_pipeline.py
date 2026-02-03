@@ -8,7 +8,8 @@ from src.pick_deduplicator import deduplicate_by_capper
 from src.prompts.decoder import normalize_response
 from src.semantic_validator import SemanticValidator
 from src.two_pass_verifier import TwoPassVerifier
-from src.utils import auto_group_parlays, backfill_odds, safe_write_progress
+from src.utils import auto_group_parlays, backfill_odds, normalize_to_ascii, safe_write_progress
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,17 @@ class ExtractionPipeline:
         progress_log = [f"# Extraction Pipeline Progress - {target_date}", f"Started with {len(messages)} messages."]
         safe_write_progress("\n".join(progress_log))
 
+        # US-001: Normalize Unicode characters (St Mary's, etc.)
+        for m in messages:
+            if m.get("text"):
+                m["text"] = normalize_to_ascii(m["text"])
+            if m.get("ocr_text"):
+                m["ocr_text"] = normalize_to_ascii(m["ocr_text"])
+            if m.get("ocr_texts"):
+                m["ocr_texts"] = [normalize_to_ascii(t) for t in m["ocr_texts"]]
+
         # 0. Rule Based Extraction (Fast Path)
+
         from src.rule_based_extractor import RuleBasedExtractor
 
         rule_picks, messages_for_ai = RuleBasedExtractor.extract(messages)

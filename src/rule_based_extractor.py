@@ -34,8 +34,17 @@ class RuleBasedExtractor:
     RE_FIX_UNDER = re.compile(r"\b([Uu])(\d+(\.\d+)?)")
     RE_FIX_OVER = re.compile(r"\b([Oo])(\d+(\.\d+)?)")
     RE_FIX_MONEYLINE = re.compile(r"Money\s*Line", re.IGNORECASE)
+    RE_PROP_CHECK = re.compile(
+        r"\b(pts|points|reb|rebounds|ast|assists|threes|3s|yards|td|touchdown|goal|score|scorer|sog|shots|shot|hits|hit|bases|base|ks|strikeouts)\b",
+        re.IGNORECASE,
+    )
     RE_PROP_AGS_CHECK = re.compile(r"\b(Anytime Goal Scorer|AGS|Score|Scorer)\b", re.IGNORECASE)
     RE_PROP_AGS_FIX = re.compile(r"\s+(Anytime Goal Scorer|AGS|Anytime Goal|To Score)\b", re.IGNORECASE)
+    # Generic prop fix: inject colon if missing in "Subject Over/Under X Stat" pattern
+    RE_PROP_FIX_PATTERN = re.compile(
+        r"^([^:]+?)\s+\b(Over|Under|O/U|[OU])\b\s+(\d+\.?\d*)\s+\b(pts|points|reb|rebounds|ast|assists|threes|3s|yards|td|touchdown|goal|score|scorer|sog|shots|shot|hits|hit|bases|base|ks|strikeouts)\b",
+        re.IGNORECASE,
+    )
     RE_NON_ASCII = re.compile(r"[^\x00-\x7F]+")
 
     # Optimized commentary removal: Avoids lookahead and excessive backtracking
@@ -145,6 +154,10 @@ class RuleBasedExtractor:
                 # If we see AGS pattern but no colon, inject one before the keyword
                 if ":" not in line and RuleBasedExtractor.RE_PROP_AGS_CHECK.search(line):
                     line = RuleBasedExtractor.RE_PROP_AGS_FIX.sub(r": \1", line)
+
+                # 6. Expanded Prop Fix: Target "PlayerName Over X Stats"
+                if ":" not in line and RuleBasedExtractor.RE_PROP_CHECK.search(line):
+                    line = RuleBasedExtractor.RE_PROP_FIX_PATTERN.sub(r"\1: \2 \3 \4", line)
 
                 # Clean specific noise patterns
 
@@ -284,6 +297,8 @@ class RuleBasedExtractor:
             return True
         if RuleBasedExtractor.RE_ML_WORD.search(text_lower):
             return True
+        if RuleBasedExtractor.RE_PROP_CHECK.search(text_lower):
+            return True
 
         # Must have at least one numeric digit (lines, odds)
         # Optimized check: any(map(str.isdigit, text)) is slow
@@ -305,14 +320,9 @@ class RuleBasedExtractor:
         if RuleBasedExtractor.RE_OU_PATTERN.search(text_lower):
             return True
 
-        # 4. Prop pattern: Name: Stat
-        # Added goal/score/scorer patterns
-        if ":" in text or "goal" in text_lower or "score" in text_lower:
-            # Fast check for keywords
-            keywords = ["pts", "reb", "ast", "threes", "yards", "td", "goal", "score", "scorer"]
-            for k in keywords:
-                if k in text_lower:
-                    return True
+        # 4. Prop pattern: Name: Stat or keywords
+        if ":" in text or RuleBasedExtractor.RE_PROP_CHECK.search(text_lower):
+            return True
 
         return False
 

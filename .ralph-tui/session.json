@@ -3,10 +3,10 @@
   "sessionId": "5e526701-8d16-45ca-a854-4654cb06047d",
   "status": "running",
   "startedAt": "2026-02-03T18:20:35.474Z",
-  "updatedAt": "2026-02-03T18:26:42.833Z",
-  "currentIteration": 0,
+  "updatedAt": "2026-02-03T18:30:48.871Z",
+  "currentIteration": 1,
   "maxIterations": 50,
-  "tasksCompleted": 0,
+  "tasksCompleted": 1,
   "isPaused": false,
   "agentPlugin": "opencode",
   "trackerState": {
@@ -17,8 +17,8 @@
       {
         "id": "US-001",
         "title": "Robust Text Normalization",
-        "status": "open",
-        "completedInSession": false
+        "status": "completed",
+        "completedInSession": true
       },
       {
         "id": "US-002",
@@ -40,7 +40,18 @@
       }
     ]
   },
-  "iterations": [],
+  "iterations": [
+    {
+      "iteration": 1,
+      "status": "completed",
+      "taskId": "US-001",
+      "taskTitle": "Robust Text Normalization",
+      "taskCompleted": true,
+      "durationMs": 366231,
+      "startedAt": "2026-02-03T18:20:36.596Z",
+      "endedAt": "2026-02-03T18:26:42.827Z"
+    }
+  ],
   "skippedTaskIds": [],
   "cwd": "D:\\Programs\\Sports Betting\\TelegramScraper\\v0.0.15",
   "activeTaskIds": [],

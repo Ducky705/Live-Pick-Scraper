@@ -77,12 +77,23 @@ class PickParser:
                 "rebounds",
                 "ast",
                 "assists",
+                "threes",
+                "3s",
+                "yards",
+                "td",
+                "touchdown",
                 "goal",
                 "score",
                 "sog",
+                "shots",
                 "shot",
                 "hit",
+                "hits",
                 "base",
+                "bases",
+                "ks",
+                "strikeouts",
+                "scorer",
             ]
             if any(k in text.lower() for k in prop_keywords):
                 # Attempt to parse as prop by injecting a colon before the Over/Under

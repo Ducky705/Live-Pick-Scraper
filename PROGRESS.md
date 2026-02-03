@@ -1,4 +1,5 @@
-# Extraction Pipeline Progress - 2026-02-02
-Started with 103 messages.
-- [x] AI Processing complete. Total picks so far: 171
-- [x] Final Filtering complete. Dropped 3 picks.
+# Extraction Pipeline Progress - 2026-01-24
+Started with 50 messages.
+- [x] AI Processing complete. Total picks so far: 339
+- [x] Final Filtering complete. Dropped 1 picks.
+- [x] Verification report generated: D:\Programs\Sports Betting\TelegramScraper\v0.0.15\data\output\verification_report_2026-01-24.md

@@ -101,32 +101,32 @@ STAT_KEY_MAP = {
     "blk": ["blocks", "blk"],
     "stl": ["steals", "stl"],
     "to": ["turnovers", "to"],
-    "3pm": ["threepointfieldgoalsmade", "3pm", "fg3m", "threepointersmade"],
-    "pra": ["pts+reb+ast"],  # Calculated
-    "pts+reb+ast": ["pts+reb+ast"],  # Calculated
+    "3pm": ["threepointfieldgoalsmade", "3pm", "fg3m", "threepointersmade", "threes", "3s"],
+    "pra": ["pts+reb+ast", "pra"],  # Calculated
+    "pts+reb+ast": ["pts+reb+ast", "pra"],  # Calculated
     # FOOTBALL
     "passyds": ["passingyards", "passyds", "passyards"],
     "rushyds": ["rushingyards", "rushyds", "rushyards"],
     "recyds": ["receivingyards", "recyds", "recyards"],
-    "passtd": ["passingtouchdowns", "passtd", "passtds"],
-    "rushtd": ["rushingtouchdowns", "rushtd"],
-    "rectd": ["receivingtouchdowns", "rectd"],
+    "passtd": ["passingtouchdowns", "passtd", "passtds", "passingtds"],
+    "rushtd": ["rushingtouchdowns", "rushtd", "rushtds", "rushingtds", "td", "tds", "touchdown", "touchdowns"],
+    "rectd": ["receivingtouchdowns", "rectd", "rectds", "receivingtds"],
     "rec": ["receptions", "rec"],
     "comp": ["completions", "comp", "passingcompletions"],
     "int": ["interceptions", "int", "passinginterceptions"],
     "att": ["attempts", "att", "rushingcarries", "carries"],
     # BASEBALL
-    "k": ["strikeouts", "k", "pitchingstrikeouts", "batterstrikeouts"],
+    "k": ["strikeouts", "k", "pitchingstrikeouts", "batterstrikeouts", "ks"],
     "h": ["hits", "h"],
     "hr": ["homeruns", "hr"],
     "rbi": ["runsbattedin", "rbi"],
     "r": ["runs", "r"],
-    "tb": ["totalbases", "tb"],
-    "totalbases": ["totalbases", "tb"],
+    "tb": ["totalbases", "tb", "bases"],
+    "totalbases": ["totalbases", "tb", "bases"],
     "bb": ["walks", "bb", "baseonballs"],
     "sb": ["stolenbases", "sb"],
     # HOCKEY
-    "g": ["goals", "g"],
+    "g": ["goals", "g", "goal", "score", "scorer", "anytimegoalscorer", "ags"],
     "a": ["assists", "a"],
     "sog": ["shotsongoal", "shots", "sog"],
     "p": ["points", "p"],

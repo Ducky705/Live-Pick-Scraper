@@ -1,452 +1,1238 @@
 [
   {
-    "id": 12806,
-    "channel_id": "unknown",
-    "date": "2026-01-24 18:28 ET",
-    "text": "UFC 324\n\n👉🏻 BettingWithBush \n\nPaddy “The Baddy” Pimblett -205 4u⭐\nAbeta Gautier RD 1 -120 2u⭐\nAbeta Gautier ITD || Paddy Pimblett -136 2u⭐\nTy Miller || Charles Johnson -114 1u\nWaldo Acosta || Jean Silva -131 1u\nRose Namajunas ML +315 1u\n\n👉🏻 Porterpicks \n\nPimblett/Gaethje Over 2.5 (3U)\nNikita Krylov ML (2U)\nFigueiredo/Nurmagomedov Under 2.5 Rounds (1U)\n\n👉🏻 BrandonTheProfit UFC\n\nPimblett ML -235 (3u)\nPimblett/Natalia Silva MLP -113 (2U) DK\nHokit/O' Malley MLP +102 (2U)\n\n👉🏻 A11Bets\n\nPaddy + Waldo Cortes (-110) 1U\nPaddy by SUB (+150) 0.5U\nSean O Malley ML + Alcaraz ML (-150) 0.5U\n\n👉🏻 AnalyticsCapper \n\nPimblett ML (-230) 3U",
-    "images": [],
-    "source": "Telegram",
+    "id": "31621",
+    "source": "telegram",
+    "text": "McBets\nAfternoon NCAAB\n\nTexas Tech +1.5 (-110) 1u\nColorado - 3 (-120) 1u\nOklahoma State +10.5 (-110) 1u\nTexas Southern ML (-105) 1.5u\nSMU -11 (-120) 1u",
     "expected_picks": [
       {
-        "pick": "Paddy Pimblett Moneyline",
-        "league": "UFC",
-        "odds": -205,
-        "units": 4.0,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Abeta Gautier Round 1",
-        "league": "UFC",
-        "odds": -120,
-        "units": 2.0,
-        "type": "Prop",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Abeta Gautier ITD || Paddy Pimblett",
-        "league": "UFC",
-        "odds": -136,
-        "units": 2.0,
-        "type": "Prop",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Charles Johnson Moneyline",
-        "league": "UFC",
-        "odds": -114,
-        "units": 1.0,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Jean Silva Moneyline",
-        "league": "UFC",
-        "odds": -131,
-        "units": 1.0,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Rose Namajunas Moneyline",
-        "league": "UFC",
-        "odds": 315,
-        "units": 1.0,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Pimblett/Gaethje Over 2.5 Rounds",
-        "league": "UFC",
-        "odds": null,
-        "units": 3.0,
-        "type": "Total",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Nikita Krylov Moneyline",
-        "league": "UFC",
-        "odds": null,
-        "units": 2.0,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Figueiredo/Nurmagomedov Under 2.5 Rounds",
-        "league": "UFC",
+        "pick": "1u - Colorado -2",
         "odds": null,
         "units": 1.0,
-        "type": "Total",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Spread"
       },
       {
-        "pick": "Paddy Pimblett Moneyline",
-        "league": "UFC",
-        "odds": -235,
-        "units": 3.0,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Pimblett/Natalia Silva MLP",
-        "league": "UFC",
-        "odds": -113,
-        "units": 2.0,
-        "type": "Prop",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Hokit/O' Malley MLP",
-        "league": "UFC",
-        "odds": 102,
-        "units": 2.0,
-        "type": "Prop",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Paddy Pimblett Moneyline",
-        "league": "UFC",
-        "odds": -230,
-        "units": 3.0,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Paddy Pimblett by SUB",
-        "league": "UFC",
-        "odds": 150,
-        "units": 0.5,
-        "type": "Prop",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Sean O Malley Moneyline",
-        "league": "UFC",
+        "pick": "1u Oklahoma State +10.5",
         "odds": null,
-        "units": 0.5,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "1.5u Texas Southern ML",
+        "odds": null,
+        "units": 1.5,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "1u Smu -11",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
       }
-    ]
+    ],
+    "label_source": "hybrid_pipeline_v1"
   },
   {
-    "id": 12793,
-    "channel_id": "unknown",
-    "date": "2026-01-24 12:03 ET",
-    "text": "**Big Al**\n\nNHL Selections\n1* Oilers -175, 10:05 pm\n\nNBA Selections\n4* Magic - 1.5, 7:10 pm\nNCAA Basketball Selections\n4* Minnesota +6, Noon\n3* Wofford +2, 11:00 am \n3* Connecticut -10.5, 12:30 pm\n\n**Kyle Anthony UFC 5% 🔥\n**\nPaddy Pimblett ML & Jean Silva ML Parlay\n\n**Kyle Hunter** \n\n3* Georgia Tech UNDER 144 \n12:00 PM EST\n3* Denver OVER 161.5\n4:00 PM EST\n3* Oklahoma St UNDER 163 \n3:00 PM EST\n\n**Tokyo Brandon (14-3) **\n5% MAX CBB PLAY - Cal St Fullerton Under 172.5",
-    "images": [],
-    "source": "Telegram",
+    "id": "31632",
+    "source": "telegram",
+    "text": "HammeringHank\n\nCBB CATE Card\nCalifornia +4.5 \u0417U\nNevada +8.5 2U\nCincinnati -2.5 2U",
     "expected_picks": [
       {
-        "pick": "Oilers -175",
-        "league": "NHL",
-        "odds": -175,
+        "pick": "California +4.5 U",
+        "odds": null,
         "units": 1.0,
-        "type": "Moneyline",
-        "verified_grade": "UNKNOWN",
-        "verification_proof": "Team mapping ambiguous",
-        "game_id": "401803169"
+        "type": "Spread"
       },
       {
-        "pick": "Magic -1.5",
-        "league": "NBA",
+        "pick": "2U Nevada +8.5",
         "odds": null,
-        "units": 4.0,
-        "type": "Spread",
-        "verified_grade": "UNKNOWN",
-        "verification_proof": "Team mapping ambiguous",
-        "game_id": "401810501"
+        "units": 2.0,
+        "type": "Spread"
       },
       {
-        "pick": "Minnesota +6",
-        "league": "NCAAB",
-        "odds": null,
-        "units": 4.0,
-        "type": "Spread",
-        "verified_grade": "UNKNOWN",
-        "verification_proof": "Team mapping ambiguous",
-        "game_id": "401810499"
-      },
-      {
-        "pick": "Wofford +2",
-        "league": "NCAAB",
-        "odds": null,
-        "units": 3.0,
-        "type": "Spread",
-        "verified_grade": "UNKNOWN",
-        "verification_proof": "Team mapping ambiguous",
-        "game_id": "401809342"
-      },
-      {
-        "pick": "Connecticut -10.5",
-        "league": "NCAAB",
-        "odds": null,
-        "units": 3.0,
-        "type": "Spread",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Paddy Pimblett ML & Jean Silva ML Parlay",
-        "league": "UFC",
-        "odds": null,
-        "units": 5.0,
-        "type": "Parlay",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Georgia Tech UNDER 144",
-        "league": "NCAAB",
-        "odds": null,
-        "units": 3.0,
-        "type": "Total",
-        "verified_grade": "LOSS",
-        "verification_proof": "Total: 193.0 vs 144.0",
-        "game_id": "401805179"
-      },
-      {
-        "pick": "Denver OVER 161.5",
-        "league": "NCAAB",
-        "odds": null,
-        "units": 3.0,
-        "type": "Total",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Oklahoma St UNDER 163",
-        "league": "NCAAB",
-        "odds": null,
-        "units": 3.0,
-        "type": "Total",
-        "verified_grade": "WIN",
-        "verification_proof": "Total: 155.0 vs 163.0",
-        "game_id": "401827645"
-      },
-      {
-        "pick": "Cal St Fullerton UNDER 172.5",
-        "league": "NCAAB",
-        "odds": null,
-        "units": 5.0,
-        "type": "Total",
-        "verified_grade": "WIN",
-        "verification_proof": "Total: 171.0 vs 172.5",
-        "game_id": "401809158"
+        "pick": "2U Cincinnati -2.5",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
       }
-    ]
+    ],
+    "label_source": "hybrid_pipeline_v1"
   },
   {
-    "id": 13001,
-    "channel_id": "unknown",
-    "date": "2026-01-27 10:00 ET",
-    "text": "⚽️ SOCCER VIP ⚽️\n\n🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL\nArsenal vs Liverpool\nPick: Arsenal DNB (-145)\n\n🇪🇸 La Liga\nReal Madrid -1.5 AH (+105)\n\n🇮🇹 Serie A\nJuventus / AC Milan Over 2.5 Goals (-120)\n\n🎾 TENNIS LOCKS\n\nSinner vs Alcaraz\nPick: Sinner to win 1st Set (-130)\n\nDjokovic -4.5 Games vs Medvedev (-110)\n\nRublev/Zverev Over 38.5 Games (-115)",
-    "images": [],
-    "source": "Telegram",
+    "id": "31611",
+    "source": "telegram",
+    "text": "OutofLineBets\n\nCBB\nKentucky -9.5 -120 3U",
     "expected_picks": [
       {
-        "pick": "Arsenal DNB",
-        "league": "EPL",
-        "odds": -145,
-        "units": 1.0,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Real Madrid -1.5 AH",
-        "league": "SOCCER",
-        "odds": 105,
-        "units": 1.0,
-        "type": "Spread",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Juventus vs AC Milan Over 2.5",
-        "league": "SOCCER",
+        "pick": "3U Kentucky -9.5",
         "odds": -120,
+        "units": 3.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_12794_8373",
+    "source": "telegram",
+    "text": "FeezyUFC\n\nSynthetic Add: Ilia Topuria -3.5\nPanthers ML -110",
+    "expected_picks": [
+      {
+        "pick": "Synthetic Add: Ilia Topuria -3.5",
+        "odds": null,
         "units": 1.0,
-        "type": "Total",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Player Prop"
       },
       {
-        "pick": "Sinner to win 1st Set",
-        "league": "TENNIS",
-        "odds": -130,
-        "units": 1.0,
-        "type": "Period",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Djokovic -4.5 Games",
-        "league": "TENNIS",
+        "pick": "Panthers ML",
         "odds": -110,
         "units": 1.0,
-        "type": "Spread",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "Rublev vs Zverev Over 38.5 Games",
-        "league": "TENNIS",
-        "odds": -115,
-        "units": 1.0,
-        "type": "Total",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Moneyline"
       }
-    ]
+    ],
+    "label_source": "hybrid_pipeline_v1"
   },
   {
-    "id": 13002,
-    "channel_id": "unknown",
-    "date": "2026-01-27 19:00 ET",
-    "text": "🏀 NBA PLAYER PROPS 🏀\n\nLuka Doncic 45+ PRA (-120)\nLeBron James Over 7.5 Rebounds (-140)\nSteph Curry 5+ Threes (+110)\n\n🎮 ESPORTS\n\nCS2: FaZe vs Navi\nMap 1 Winner: FaZe (-125)\n\nLoL: T1 -1.5 Maps vs GenG (+150)",
-    "images": [],
-    "source": "Telegram",
+    "id": "31626",
+    "source": "telegram",
+    "text": "DarthFader\n\nSick Saturday Nuke Whales \n3-Unit Fades:\nPurdue -5.5\nTCU +3.5\n2-Unit Fades:\nCeltics +1\nKings/Blues U5.5 (-130)\n1-Unit Fade:\nAuburn +11.5",
     "expected_picks": [
       {
-        "pick": "Luka Doncic: PRA Over 44.5",
-        "league": "NBA",
-        "odds": -120,
+        "pick": "Tcu +3.5",
+        "odds": null,
         "units": 1.0,
-        "type": "Player Prop",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Spread"
       },
       {
-        "pick": "LeBron James: Rebounds Over 7.5",
-        "league": "NBA",
-        "odds": -140,
-        "units": 1.0,
-        "type": "Player Prop",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "pick": "(2u) Celtics +1.5",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
       },
       {
-        "pick": "Steph Curry: Threes Over 4.5",
-        "league": "NBA",
-        "odds": 110,
+        "pick": "Kings vs Blues Under 5.5",
+        "odds": null,
         "units": 1.0,
-        "type": "Player Prop",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Total"
       },
       {
-        "pick": "FaZe Map 1 Winner",
-        "league": "ESPORTS",
-        "odds": -125,
+        "pick": "1u Auburn +11.5",
+        "odds": -110,
         "units": 1.0,
-        "type": "Moneyline",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
-      },
-      {
-        "pick": "T1 -1.5 Maps",
-        "league": "ESPORTS",
-        "odds": 150,
-        "units": 1.0,
-        "type": "Spread",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Spread"
       }
-    ]
+    ],
+    "label_source": "hybrid_pipeline_v1"
   },
   {
-    "id": 13003,
-    "channel_id": "unknown",
-    "date": "2026-01-27 20:00 ET",
-    "text": "🔥 MAX WHALE PLAYS 🔥\n\nCommanders +3.5 (-115) 5U MAX\nRavens Team Total Over 24.5 (-120) 3U\n\n2-TEAM PARLAY (+260) 2U\nChiefs ML\nLions -6.5\n\nTEASER (6 Point)\nBengals +7.5 / Bills +8.5 (-120)",
-    "images": [],
-    "source": "Telegram",
+    "id": "31633",
+    "source": "telegram",
+    "text": "Porterpicks \n\nTENNESSEE/ALABAMA\nOVER 167.5\n(3-UNITS)",
     "expected_picks": [
       {
-        "pick": "Commanders +3.5",
-        "league": "NFL",
-        "odds": -115,
+        "pick": "Tennessee vs Alabama Over 167.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "12791",
+    "source": "telegram",
+    "text": "**MARCO D'ANGELO\n\n5% SMU-12**",
+    "expected_picks": [
+      {
+        "pick": "5% Smu-12**",
+        "odds": null,
         "units": 5.0,
-        "type": "Spread",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "12806",
+    "source": "telegram",
+    "text": "UFC 324\n\n\ud83d\udc49\ud83c\udffb BettingWithBush \n\nPaddy \u201cThe Baddy\u201d Pimblett -205 4u\u2b50\nAbeta Gautier RD 1 -120 2u\u2b50\nAbeta Gautier ITD || Paddy Pimblett -136 2u\u2b50\nTy Miller || Charles Johnson -114 1u\nWaldo Acosta || Jean Silva -131 1u\nRose Namajunas ML +315 1u\n\n\ud83d\udc49\ud83c\udffb Porterpicks \n\nPimblett/Gaethje Over 2.5 (3U)\nNikita Krylov ML (2U)\nFigueiredo/Nurmagomedov Under 2.5 Rounds (1U)\n\n\ud83d\udc49\ud83c\udffb BrandonTheProfit UFC\n\nPimblett ML -235 (3u)\nPimblett/Natalia Silva MLP -113 (2U) DK\nHokit/O' Malley MLP +102 (2U)\n\n\ud83d\udc49\ud83c\udffb A11Bets\n\nPaddy + Waldo Cortes (-110) 1U\nPaddy by SUB (+150) 0.5U\nSean O Malley ML + Alcaraz ML (-150) 0.5U\n\n\ud83d\udc49\ud83c\udffb AnalyticsCapper \n\nPimblett ML (-230) 3U",
+    "expected_picks": [
+      {
+        "pick": "4u Paddy \"The Baddy\" Pimblett ML",
+        "odds": -205,
+        "units": 4.0,
+        "type": "Moneyline"
       },
       {
-        "pick": "Ravens Team Total Over 24.5",
-        "league": "NFL",
+        "pick": "2u Abeta Gautier RD 1 ML",
+        "odds": -120,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "2u Paddy Pimblett ML",
+        "odds": -136,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "1u Charles Johnson ML",
+        "odds": -114,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "1u Jean Silva ML",
+        "odds": -131,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "1u Rose Namajunas ML",
+        "odds": 315,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(3 U Pimblett vs Gaethje Over 2.5 Rounds",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total"
+      },
+      {
+        "pick": "(2U) Nikita Krylov ML",
+        "odds": null,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(1U) Figueiredo vs Nurmagomedov Under 2.5 Rounds",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "31604",
+    "source": "telegram",
+    "text": "\ud83d\udd2eProvenwinner \n\n1. BULLS ML | TO WIN 2 UNITS (risking 2.3u to win 2u)\n\n1. MURRAY STATE ML | TO WIN 2 UNITS (risking 2.2u to\nwin 2u)\n\n\ud83d\udd2eMrBigBets\n\n1/24 cbb plays\nClemson -8.5 - 102 1u\nAuburn +11.5 - 110 1u\nStanford -4.5 -110 1u\nUNC +6.5 - 102 1u\n\n\ud83d\udd2e AndersPicks \n\nCBB:\nPurdue -2.5 -110 2U\nTexas ML -115 1U (good to -2/-130)\nRhode Island +3-110 1U(Would play to +1.5)\n\n\ud83d\udd2eP4D_Picks4Dayzzz\n\nFull Card saturday\nVirginia - 7 - 115 3U\nTexas Tech +1.5 -120 3U\nFlorida -11 -120 3U\nAlabama -5 - 120 3U\nNC State -6 -115 2U\nNebraska -5.5 -110 2U\nTexas ML -150 2U\nArkansas -10 -110 2U\n\n\ud83d\udd2e BettingWithBush\n\nLast additions\nPaddy by sub +145 1.5u\nPaddy round 2 + .5u\n\n\ud83d\udd2e TheGamblingGawd\n\nHappy Saturday \n5U POD: Texas MI\n5U Plays\nMiami Hurricanes MI\nMiami Hurricanes Over 150.5\nTexas MI\nLightning Over 6.5\nBruins Over 6.5\nOilers Over 6.5\n2 Team MI parlay Providence/Oilers\n1U Plays:\nConnor McDavid Goal\nProvidence Over 160.5\n\n\ud83d\udd2eMcBets\n\nSaturday NCAAB\nTexas - 2 (-120) 2u\n\n\ud83d\udd2eThisGirlBetz\n\nSATURDAY NHL\nLightning -120 (2u)\nHurricanes - 130 (2u)\nBruins -110 (3u)\nWild -120 (2u)\nSATURDAY NCAAB\nNorth Carolina +6.5 +100 (2u)\nHouston -115 (3u)\nColgate -7 - 110 (2u)\nPurdue -5.5 - 110 (3)\nCanisius +10.5 -115 (2u)\n\n\ud83d\udd2e Betsharper\n\nNCAAB:\nVanderbilt/Miss State 0160.5 (-110)\nTexas -2.5 (-110)\nTexas Tech +1 (-110)\nWinthrop/Presbyterian o146.5 (-110)\nOklahoma/Missouri o150.5 (-110)\nNorth Dakota State/Oral Roberts o142(-110)\nTennessee +6 (-110)\n\n\ud83d\udd2e Vinny\n\nNCAAB\nMinnesota +5.5 (2 units)\nGeorgia Tech +7.5 (2 units)\nTexas Moneyline (2 units)\nTexas Tech +1.5 (2 units)\nFlorida -11.5 (2 units)\nVCU -5.5 (2 units)\nSeton Hall Moneyline (2 units)\nUtah BYU Over 165.5 (2 units)\nAlabama -4.5 (2 units)\n\n\ud83d\udd2e PropJoe\n\n2U Cincinnati - 1.5 -110\n2U North Carolina +7 -110\n1U Fresno State +4 - 110\n1U Purdue -5.5 -110\n1U Georgetown/Providence U162 -110",
+    "expected_picks": [
+      {
+        "pick": "1u Clemson -8.5",
+        "odds": -102,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "1u Stanford -4.5",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "1u Unc +6.5",
+        "odds": -102,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "2U Purdue -2.5",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2 u Texas ML",
+        "odds": -115,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "1U Rhode Island +3-110",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "3U Virginia -7",
+        "odds": -115,
+        "units": 3.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2 u Alabama -4.5",
         "odds": -120,
         "units": 3.0,
-        "type": "Team Prop",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Spread"
       },
       {
-        "pick": "Chiefs ML / Lions -6.5",
-        "league": "NFL",
-        "odds": 260,
+        "pick": "2U NC State -6",
+        "odds": -115,
         "units": 2.0,
-        "type": "Parlay",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Spread"
       },
       {
-        "pick": "Bengals +7.5 / Bills +8.5",
-        "league": "NFL",
-        "odds": -120,
+        "pick": "2U Nebraska -5.5",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "2U Arkansas -10",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Miami Hurricanes Over 150.5",
+        "odds": null,
         "units": 1.0,
-        "type": "Teaser",
-        "verified_grade": "PENDING",
-        "verification_proof": "No game found",
-        "game_id": null
+        "type": "Moneyline"
+      },
+      {
+        "pick": "Lightning Over 6.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "Bruins Over 6.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "Oilers Over 6.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "(NCAAB) Team ML parlay Providence / (NHL) Oilers",
+        "odds": null,
+        "units": 1.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "Providence Over 160.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "(2u) Texas -2.5",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u) Lightning ML",
+        "odds": -120,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(2u) Hurricanes ML",
+        "odds": -130,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(2u) Wild ML",
+        "odds": -120,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(2u) North Carolina +6.5",
+        "odds": 100,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(3u) Houston ML",
+        "odds": -115,
+        "units": 3.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(2u) Colgate -7",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u) Canisius +10.5",
+        "odds": -115,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Vanderbilt / Miss State 0160.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "Texas Tech +1",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Winthrop vs Presbyterian Over 146.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "Oklahoma vs Missouri Over 150.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "North Dakota State vs Oral Roberts Over 142",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "Tennessee +6",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2 u Minnesota +5.5",
+        "odds": null,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2 u Georgia Tech +7.5",
+        "odds": null,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2 u Vcu -5.5",
+        "odds": null,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2 u Seton Hall ML",
+        "odds": null,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(2 u Utah Byu Over 165.5",
+        "odds": null,
+        "units": 2.0,
+        "type": "Total"
+      },
+      {
+        "pick": "1U Fresno State +4",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "1U Georgetown vs Providence Under 162 -110",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Total"
       }
-    ]
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_12789_7190",
+    "source": "telegram",
+    "text": "**BetSharper** \ud83d\udd25\n\nSynthetic Add: Celtics Over 45",
+    "expected_picks": [
+      {
+        "pick": "Synthetic Add: Celtics Over 45",
+        "odds": null,
+        "units": 1.0,
+        "type": "Player Prop"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "10891",
+    "source": "telegram",
+    "text": "**Big Al**\n\nNHL Selections\n1* Oilers -175, 10:05 pm\n\nNBA Selections\n4* Magic - 1.5, 7:10 pm\nNCAA Basketball Selections\n4* Minnesota +6, Noon\n3* Wofford +2, 11:00 am \n3* Connecticut -10.5, 12:30 pm\n\n**Kyle Anthony UFC 5% \ud83d\udd25\n**\nPaddy Pimblett ML & Jean Silva ML Parlay\n\n**Kyle Hunter** \n\n3* Georgia Tech UNDER 144 \n12:00 PM EST\n3* Denver OVER 161.5\n4:00 PM EST\n3* Oklahoma St UNDER 163 \n3:00 PM EST\n\n**Tokyo Brandon (14-3) **\n5% MAX CBB PLAY - Cal St Fullerton Under 172.5",
+    "expected_picks": [
+      {
+        "pick": "1* Oilers ML",
+        "odds": -175,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "4* Magic -1.5",
+        "odds": null,
+        "units": 4.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "4* Minnesota +6, Noon",
+        "odds": null,
+        "units": 4.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "3* Wofford +2",
+        "odds": null,
+        "units": 3.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "3* Connecticut -10.5",
+        "odds": null,
+        "units": 3.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Paddy Pimblett ML / Jean Silva ML Parlay",
+        "odds": null,
+        "units": 1.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "3* Georgia Tech Under 144",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total"
+      },
+      {
+        "pick": "3* Denver Over 161.5",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total"
+      },
+      {
+        "pick": "3* Oklahoma St Under 163",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total"
+      },
+      {
+        "pick": "5% Cbb Play - Cal St Fullerton Under 172.5",
+        "odds": null,
+        "units": 5.0,
+        "type": "Total"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "31614",
+    "source": "telegram",
+    "text": "HammeringHank\n\nEarly CBB Card\nVillanova +11.5 3U\nMississippi State +8 2U\nSouth Carolina +10.5 2U",
+    "expected_picks": [
+      {
+        "pick": "3U Villanova +11.5",
+        "odds": null,
+        "units": 3.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "2U Mississippi State +8",
+        "odds": null,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "2U South Carolina +10.5",
+        "odds": null,
+        "units": 2.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "31613",
+    "source": "telegram",
+    "text": "Smart Money Sports\n\nNCAAB\nMinnesota Golden Gophers +5.5 -110 (2u, 12:00e)\nTexas Longhorns -3 -105 (2u, 1:00e)\nRhode Island ML +110 (2u, 2:00e)\nLouisville Cardinals -13.5 -105 (2u, 2:00e)\nPurdue Boilermakers -6 -105 (2u, 3:00e)\nSan Diego State Aztecs -5.5 -110 (2u, 4:00e)\nMemphis Tigers +3 -110 (2u, 4:00e)\nTennessee Volunteers +6 -105 (2u, 8:30e)\nArizona State Sun Devils +2.5 -110 (2u, 10:00e)",
+    "expected_picks": [
+      {
+        "pick": "(2u Minnesota Golden Gophers +5.5",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u Texas Longhorns -3",
+        "odds": -105,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u Rhode Island ML",
+        "odds": 110,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(2u Louisville Cardinals -13.5",
+        "odds": -105,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u Purdue Boilermakers -6",
+        "odds": -105,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u San Diego State Aztecs -5.5",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u Memphis Tigers +3",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u Tennessee Volunteers +6",
+        "odds": -105,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u Arizona State Sun Devils +2.5",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "31627",
+    "source": "telegram",
+    "text": "Nicky Cashin\n\n5U CBB \ud83d\udc8e\nFlorida Gators -11 -112 5U",
+    "expected_picks": [
+      {
+        "pick": "5U Florida Gators -11",
+        "odds": -112,
+        "units": 5.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_12791_8530",
+    "source": "telegram",
+    "text": "**MARCO D'ANGELO\n\n6.0% SMU-13.0**",
+    "expected_picks": [
+      {
+        "pick": "0% Smu-13.0**",
+        "odds": null,
+        "units": 0.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "31608",
+    "source": "telegram",
+    "text": "ThisGirlBetz\n\nSATURDAY UFC324\nU.Nurmagomedov via decision - 105 (2u)\nDerrick Lewis +270 (2u)\nP.Pimblett TKO/SUB (finish) -150 (2u)\nML PARLAY\nSilva/Silva -110 (3u)\n\nSATURDAY NBA\nHuge (5u) win yesterday outright.\n16-4 run.\n76ers -110 (2u)\nTimberwolves -6-105 (3u)\nCeltics +1.5 -110 (2u)\nLakers -3.5 -110 (2u)",
+    "expected_picks": [
+      {
+        "pick": "(2u) U.Nurmagomedov via decision ML",
+        "odds": -105,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(2u) Derrick Lewis ML",
+        "odds": 270,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(2u) P.Pimblett Tko / Sub -150",
+        "odds": null,
+        "units": 2.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "ML Parlay ML",
+        "odds": null,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(3u) Silva / Silva -110",
+        "odds": null,
+        "units": 3.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "(2u) ers ML",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(3u) Timberwolves -6-105",
+        "odds": null,
+        "units": 3.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2u) Lakers -3.5",
+        "odds": -110,
+        "units": 2.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "31622",
+    "source": "telegram",
+    "text": "BeezoWins\n\nNCAA College Basketball\nKansas -4.5 (3-Unit)\nNebraska -5.5 (3-Unit)\nTexas Tech +1.5 (3-Unit)\nPurdue -5.5 (2-Unit)\nVirginia - 6.5 (2-Unit)\nFlorida -11.5 (2-Unit)\nAlabama -5.5 (2-Unit)\nTexas Moneyline (2-Unit)\nGeorgia Tech +7.5 (2-Unit)\nWake Forrest +17.5 (2-Unit)\nNCAA Basketball Props\nSmith (Purdue) over 14.5 pts (1-Unit)\nToppin (Texas Tech) over 18.5 pts (1-Unit)\nCeltics +1.5 (2-Unit)\nOilers Moneyline (1-Unit)\nLightning Moneyline (1-Unit)",
+    "expected_picks": [
+      {
+        "pick": "Kansas -4.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Virginia -6.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Alabama -5.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Texas ML",
+        "odds": null,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "Wake Forrest +17.5",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Toppin  over 18.: Points Over 5.5",
+        "odds": 0,
+        "units": 1.0,
+        "type": "Player Prop"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_1464673962532409456_8516",
+    "source": "discord",
+    "text": "Zach's Bets NCAAB:\n\n\u2022Texas -1.5 -107 (1.0u)\n\n\u2022Texas Tech +0.5 -109 (0.0u)\n\n\u2022Kansas State +3.5 -105 (0.0u)\n\n\u2022Harvard/Cornell over 166 -107 (2.0u)\n\n\u2022Illinois +12.5 / Alabama ML -119 (8.5u)",
+    "expected_picks": [
+      {
+        "pick": "(1.0u) Texas -1.5",
+        "odds": -107,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(0.0u) Texas Tech +0.5",
+        "odds": -109,
+        "units": 3.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(0.0u) Kansas State +3.5",
+        "odds": -105,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2.0u) Harvard vs Cornell Over 166 -107",
+        "odds": -107,
+        "units": 2.0,
+        "type": "Total"
+      },
+      {
+        "pick": "(8.5u) (NCAAB) Illinois +12.5 / (NCAAB) Alabama ML -119",
+        "odds": null,
+        "units": 8.5,
+        "type": "Parlay"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_1464775667907297465_8027",
+    "source": "discord",
+    "text": "Jacavalier\n\nCAR ML (50*)\n\nThe Hurricanes are one of the most disciplined and structurally sound teams in the NHL, and their success tonight is heavily tied to their defensive health. A critical statistic to note is that Carolina has not lost a single game in regulation this season when top defenseman Jaccob Slavin is in the lineup, boasting an 7.0--1.0-4.0 record in those contests. Slavin\u2019s ability to neutralize top-tier opposing forwards will be vital against an Ottawa team that relies heavily on the offensive production of Tim St\u00fctzleTim St\u00fctzle and Brady Tkachuk. Carolina goaltending has been top 6.0 in the NHL and Ottawa is only producing 20-23 shots. We are getting a great price to take a top team here. Ottawa, conversely, is struggling with significant defensive instability. The Senators currently rank in the bottom five of the league with a 4.4 Goals Against Average (GAA). This defensive vulnerability is further exacerbated by the absence of their primary netminder, Linus Ullmark, who is currently on Injured Reserve. Without Ullmark, the Senators have struggled to find consistent puck-stopping,\nKansas ML -110",
+    "expected_picks": [
+      {
+        "pick": "Car ML",
+        "odds": null,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "The Hurricanes are one of the most disciplined and structurally sound teams in the NHL, and their success tonight is heavily tied to their defensive health. A critical statistic to note is that Carolina has not lost a single game in regulation this season when top defenseman Jaccob Slavin is in the lineup, boasting an 7.0--1.0-4.: RE Over 0.5",
+        "odds": 0,
+        "units": 1.0,
+        "type": "Player Prop"
+      },
+      {
+        "pick": "Kansas ML",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Moneyline"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "1464767187876315408",
+    "source": "discord",
+    "text": "UFC 324\n\n\ud83d\udc49\ud83c\udffb BettingWithBush \n\nPaddy \u201cThe Baddy\u201d Pimblett -205 4u\u2b50\nAbeta Gautier RD 1 -120 2u\u2b50\nAbeta Gautier ITD || Paddy -136 2u\u2b50\nTy Miller || Charles Johnson -114 1u\nWaldo Acosta || Jean Silva -131 1u\nRose Namajunas ML +315 1u\n\n\ud83d\udc49\ud83c\udffb Porterpicks \n\nPimblett/Gaethje Over 2.5 (3U)\nNikita Krylov ML (2U)\nFigueiredo/Nurmagomedov Under 2.5 Rounds (1U)\n\n\ud83d\udc49\ud83c\udffb BrandonTheProfit UFC\n\nPimblett ML -235 (3u)\nPimblett/Natalia Silva MLP -113 (2U) DK\nHokit/O' Malley MLP +102 (2U)\n\n\ud83d\udc49\ud83c\udffb A11Bets\n\nPaddy + Waldo Cortes (-110) 1U\nPaddy by SUB (+150) 0.5U\nSean O Malley ML + Alcaraz ML (-150) 0.5U\n\n\ud83d\udc49\ud83c\udffb AnalyticsCapper \n\nPimblett ML (-230) 3U",
+    "expected_picks": [
+      {
+        "pick": "2u Paddy ML",
+        "odds": -136,
+        "units": 2.0,
+        "type": "Moneyline"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_1464617855348900012_6500",
+    "source": "discord",
+    "text": "Gianni the Greek MMA PICKS\n\n6.0% Odds: Paddy Pimblett -226 \n2.0% Odds: Song Yadong +179 \n4.0% Odds: Ricky Turcios +170\n2.0% Odds: Arnold Allen +220\nBulls ML -110",
+    "expected_picks": [
+      {
+        "pick": "0% Odds: Paddy Pimblett -226",
+        "odds": -226,
+        "units": 0.0,
+        "type": "Player Prop"
+      },
+      {
+        "pick": "0% Odds: Song Yadong +179",
+        "odds": 179,
+        "units": 0.0,
+        "type": "Player Prop"
+      },
+      {
+        "pick": "0% Odds: Ricky Turcios +170",
+        "odds": 170,
+        "units": 0.0,
+        "type": "Player Prop"
+      },
+      {
+        "pick": "0% Odds: Arnold Allen +220",
+        "odds": 220,
+        "units": 0.0,
+        "type": "Player Prop"
+      },
+      {
+        "pick": "Bulls ML",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Moneyline"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "1464654875336904917",
+    "source": "discord",
+    "text": "\u2705NewmarkTennis\n\nAlcaraz/Paul O3.5 sets +106 (3u)\nTien +1.5 sets -105 (3u)\nBublik +3.5 -108 (3u)\nZverev -1.5 sets -115 (3u)",
+    "expected_picks": [
+      {
+        "pick": "(3u) Alcaraz vs Paul Over 3.5 sets +106",
+        "odds": 106,
+        "units": 3.0,
+        "type": "Total"
+      },
+      {
+        "pick": "(3u) Tien +1.5 sets",
+        "odds": -105,
+        "units": 3.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(3u) Bublik +3.5",
+        "odds": -108,
+        "units": 3.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(3u) Zverev -1.5 sets",
+        "odds": -115,
+        "units": 3.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "1464672333536166059",
+    "source": "discord",
+    "text": "..\n\n\nBen burns \ud83d\udd25\ud83d\udd25\ud83d\udd25\n\n3% Connecticut -9.5\n4% Memphis +3.5",
+    "expected_picks": [
+      {
+        "pick": "4% Memphis +3.5",
+        "odds": null,
+        "units": 4.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_1464678247596822672_4147",
+    "source": "discord",
+    "text": "Tournament Leaders\n\n66- Texas -3.5 / 23-14.0 \ud83d\udd25\ud83d\udd25\ud83d\udd25\n\n67- Sabres ML / 22-13.0 \ud83d\udd25\ud83d\udd25\nMaple Leafs ML -110",
+    "expected_picks": [
+      {
+        "pick": "(NCAAB) - Texas -3.5 / (NCAAB) 23-14.0",
+        "odds": null,
+        "units": 1.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "(NHL) - Sabres ML / (NHL) 22-13.0",
+        "odds": null,
+        "units": 1.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "Maple Leafs ML",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Moneyline"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_1464713392689254565_7726",
+    "source": "discord",
+    "text": "Monumental\n\nSATURDAY EARLY PREMIUM PLAYS ARE ATTACHED:\n\nBOTH NCAAB\n\nPURDUE -3.0\n\nFLORIDA -10.5\nJon Jones ML -110",
+    "expected_picks": [
+      {
+        "pick": "Purdue -3.0",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(2 u Florida -11.5",
+        "odds": -120,
+        "units": 3.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Jon Jones ML",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Moneyline"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "1464681029389258763",
+    "source": "discord",
+    "text": "Pick Don\n\nKnicks +1.5* POD\n\nKansas State +5.5\nTexas ML",
+    "expected_picks": [
+      {
+        "pick": "Knicks +1.5* Pod",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_1464640721440084182_3069",
+    "source": "discord",
+    "text": "Proven Winner \n\nRisking 1.2 units \nMurray St ML\n\nRisking 3.3 units \nChicago Bulls ML\nBruins ML -110",
+    "expected_picks": [
+      {
+        "pick": "Murray State ML",
+        "odds": null,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "Chicago Bulls ML",
+        "odds": null,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(3u) Bruins ML",
+        "odds": -110,
+        "units": 3.0,
+        "type": "Moneyline"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "1464678286662828259",
+    "source": "discord",
+    "text": "August Young \n\n4-Unit Play - (609) Maryland/Michigan State OVER 141 -110\n4-Unit Play - (682) Richmond/George Washington UNDER 159.5 -110 \n4-Unit Play - (827) Southern Utah/Utah Tech OVER 149 -110\n\nIndian Cowboy\n7-Unit Play New York Knicks +100",
+    "expected_picks": [
+      {
+        "pick": "-Unit Play - Maryland vs Michigan State Over 141 -110",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "-Unit Play - Richmond vs George Washington Under 159.5 -110",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "-Unit Play - Southern Utah vs Utah Tech Over 149 -110",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Total"
+      },
+      {
+        "pick": "-Unit Play New York Knicks ML",
+        "odds": 100,
+        "units": 1.0,
+        "type": "Moneyline"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "1464771848465154141",
+    "source": "discord",
+    "text": "Monumental \n\nOWNER'S SELECTION EXCLUSIVE PLAY OF\nTHE DAY IS ATTACHED:\n\nMAVERICKS +6 (NBA)\n\n====\n\nHammeringHank\n\nCBB Late Card\nCalifornia +4.5 \u0417U\nNevada +8.5 2U\nCincinnati -2.5 2U",
+    "expected_picks": [
+      {
+        "pick": "Mavericks +6",
+        "odds": 6,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Mavericks +6",
+        "odds": 6,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "California +4.5",
+        "odds": 4.5,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Nevada +8.5",
+        "odds": 8.5,
+        "units": 2.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Cincinnati -2.5",
+        "odds": -2.5,
+        "units": 2.0,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "2015121817187627407",
+    "source": "twitter",
+    "text": "Kyle Hunter \n\n3* Northern Dakota/Denver o161.5\n3* Iowa State/Oklahoma State u163",
+    "expected_picks": [
+      {
+        "pick": "3* Northern Dakota vs Denver Over 161.5",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total"
+      },
+      {
+        "pick": "3* Iowa State vs Oklahoma State Under 163",
+        "odds": null,
+        "units": 3.0,
+        "type": "Total"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "2015123634323439899",
+    "source": "twitter",
+    "text": "Trends (1/4)\n\u2796\u2796\u2796\u2796\u2796\nGame/Time League Signal Play Win% Units Score SameSideCount Verdict Tier\n1/24/26 CBB Steam American Eagles 56% 55.7 5.8 2 Lean Follow \u26a0\ufe0f\n1/24/26 CBB Steam BUCK -3.5-118 56% 55.7 5.8 2 Lean Follow \u26a0\ufe0f\n1/24/26 CBB Steam BUCK -3.5-110 56% 55.7 5.8 2 Lean Fol\u2026",
+    "expected_picks": [
+      {
+        "pick": "/ 24 / 26 Cbb Steam Buck -3.5-118 56% 55.7 5.8 2 Lean Follow",
+        "odds": null,
+        "units": 1.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "American Eagles ML",
+        "odds": -118,
+        "units": 5.7,
+        "type": "Spread"
+      },
+      {
+        "pick": "BUCK -3.5",
+        "odds": -110,
+        "units": 5.7,
+        "type": "Spread"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "2015122981853225383",
+    "source": "twitter",
+    "text": "LucrativeMMA (2/3)\n\u2796\u2796\u2796\u2796\u2796\nCameron Smotherman wins in\n\u2022 round 3 - 0.5 unit bet @ +1600\nUmar Nurmagomedov wins by\n\u2022 submission - 1.5 unit bet @ +190\nWaldo Cortes-Acosta vs Derrick\nLewis OVER 1.5 rounds - 3 unit bet\n\u2022 @ -140\nNikita Krylov vs Modestas\nBukauskas fight goes to\u2026",
+    "expected_picks": [
+      {
+        "pick": "round 3 -0.5 unit bet @ ML",
+        "odds": 1600,
+        "units": 1.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "submission -1.5 unit bet @",
+        "odds": 190,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "Lewis Over 1.5 rounds -3 unit bet",
+        "odds": null,
+        "units": 1.0,
+        "type": "Total"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "2015120151835004983",
+    "source": "twitter",
+    "text": "Your Daily Capper\n\n2u - Texas ML\n1u - Colorado -2\n1u - Purdue -4\n\nParlay\nFlorida -3 + Alabama ML",
+    "expected_picks": [
+      {
+        "pick": "1u - Purdue -4",
+        "odds": null,
+        "units": 1.0,
+        "type": "Spread"
+      },
+      {
+        "pick": "(NCAAB) Florida -3 / (NCAAB) Alabama ML",
+        "odds": null,
+        "units": 1.0,
+        "type": "Parlay"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_2015194789558309289_8013",
+    "source": "twitter",
+    "text": "BrandonTheProfit\n\u2796\u2796\u2796\u2796\u2796\nBrandonTheProfit\nUFC Play \ud83e\udd4b\nHokit/O'Malley MLP +100 (3.0U) FD\nHokit vs. Freeman\nArizona ML -110",
+    "expected_picks": [
+      {
+        "pick": "(3.0U) Hokit / O' Malley MLP +102",
+        "odds": null,
+        "units": 3.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "Arizona ML",
+        "odds": -110,
+        "units": 1.0,
+        "type": "Moneyline"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "syn_2015203980352376915_9041",
+    "source": "twitter",
+    "text": "\u2665\ufe0f for more UFC 327 \u2705\n\n\ud83d\udc49\ud83c\udffb BrandonTheProfit UFC\n\nPimblett ML -233 (4.0u)\nPimblett/Natalia Silva MLP -110 (1.0U) DK\nHokit/O' Malley MLP +102 (3.0U)\n\n\ud83d\udc49\ud83c\udffb A10.0Bets\n\nPaddy + Waldo Cortes (-105) 2.0U\nPaddy by SUB (+149) 1.5U\nSean O Malley ML + Alcaraz ML (-145) 1.5U\n\n\ud83d\udc49\ud83c\udffb AnalyticsCapper \n\nPimblett ML (-231) 4.0U",
+    "expected_picks": [
+      {
+        "pick": "(4.0u) Pimblett ML",
+        "odds": -233,
+        "units": 4.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "(1.0U) Pimblett / Natalia Silva MLP -110",
+        "odds": null,
+        "units": 2.0,
+        "type": "Parlay"
+      },
+      {
+        "pick": "2.0U Paddy + Waldo Cortes ML",
+        "odds": null,
+        "units": 2.0,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "1.5U Paddy by Sub ML",
+        "odds": 145,
+        "units": 1.5,
+        "type": "Moneyline"
+      },
+      {
+        "pick": "1.5U (TENNIS) Sean O Malley ML / (TENNIS) Alcaraz ML",
+        "odds": null,
+        "units": 1.5,
+        "type": "Parlay"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
+  },
+  {
+    "id": "2015114437271925194",
+    "source": "twitter",
+    "text": "Tokyo Brandon\n\n5% Cal St Fullerton/Cal Poly u172.5",
+    "expected_picks": [
+      {
+        "pick": "5% Cal St Fullerton vs Cal Poly Under 172.5",
+        "odds": null,
+        "units": 5.0,
+        "type": "Total"
+      }
+    ],
+    "label_source": "hybrid_pipeline_v1"
   }
 ]

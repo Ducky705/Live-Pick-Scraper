@@ -1,0 +1,107 @@
+def normalize_response(
+    response: str,
+    expand: bool = True,
+    valid_message_ids: Sequence[int | str] | None = None,
+    message_context: dict[int, str] | None = None,
+) -> list[dict[str, Any]]:
+    """
+    Normalize AI response to a list of pick dicts.
+
+    This is the main entry point for processing AI responses.
+    It handles JSON extraction, picks array extraction, and optional expansion.
+
+    Args:
+        response: Raw AI response text
+        expand: Whether to expand compact keys to full names (default True)
+        valid_message_ids: Optional list of message IDs that were in the input batch.
+        message_context: Optional map of message_id -> full source text (caption + OCR) for verification.
+
+    Returns:
+        List of pick dicts (expanded if expand=True)
+    """
+    if not response:
+        return []
+
+    # Strip <analysis> block (CoT)
+    response = re.sub(r"<analysis>.*?</analysis>", "", response, flags=re.DOTALL).strip()
+
+    # Try DSL parsing first if it looks like DSL (contains pipes, no JSON brackets at start)
+    trimmed = response.strip()
+
+    if trimmed and not trimmed.startswith("{") and not trimmed.startswith("[") and "|" in trimmed:
+        picks = parse_dsl_response(trimmed)
+        if picks:
+            # Inject message context if available (for source verification)
+            if message_context:
+                for p in picks:
+                    mid = p.get("i") or p.get("message_id") or p.get("id")
+                    if mid:
+                        mid_str = str(mid)
+                        if mid_str in message_context:
+                            p["_source_text"] = message_context[mid_str]
+
+            if expand:
+                return validate_and_correct_batch(
+                    picks,
+                    list(valid_message_ids) if valid_message_ids is not None else None,
+                )
+            return picks
+
+    # DSL HANDLING: If response looks like DSL (pipe-separated), parse it
+    if "|" in response and "picks" not in response and not response.strip().startswith("{"):
+        picks = parse_dsl_response(response)
+        if picks:
+            if expand:
+                return validate_and_correct_batch(
+                    [expand_compact_pick(p) for p in picks],
+                    list(valid_message_ids) if valid_message_ids is not None else None,
+                )
+            return picks
+
+    # JSON HANDLING
+    # 1. Clean the response text (remove markdown, comments)
+    # cleaned_text = _clean_json_response(response)
+
+    # Extract JSON
+    data = extract_json_from_response(response)
+
+    if data is None:
+        logging.warning(f"[Decoder] Failed to extract JSON from response: {response[:100]}...")
+        return []
+
+    # Handle different response structures
+    picks = []
+
+    if isinstance(data, dict):
+        # Standard format: {"picks": [...]}
+        if "picks" in data:
+            picks = data["picks"]
+        # Single pick returned as dict
+        elif any(k in data for k in ["p", "pick", "i", "id"]):
+            picks = [data]
+        else:
+            logging.warning(f"[Decoder] Unknown dict structure: {list(data.keys())}")
+            return []
+    elif isinstance(data, list):
+        picks = data
+    else:
+        logging.warning(f"[Decoder] Unexpected data type: {type(data)}")
+        return []
+
+    if not isinstance(picks, list):
+        return []
+
+    # Inject message context if available (for source verification)
+    if message_context:
+        for p in picks:
+            # Handle compact key 'i' or expanded 'message_id'
+            mid = p.get("i") or p.get("message_id") or p.get("id")
+            if mid:
+                mid_str = str(mid)
+                if mid_str in message_context:
+                    p["_source_text"] = message_context[mid_str]
+
+    if expand:
+        return validate_and_correct_batch(picks, list(valid_message_ids) if valid_message_ids is not None else None)
+
+    return picks

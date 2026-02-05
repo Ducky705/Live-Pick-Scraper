@@ -10,7 +10,7 @@ from telethon import TelegramClient
 from telethon.errors import FloodWaitError, SessionPasswordNeededError
 from telethon.tl.types import MessageMediaPhoto
 
-from config import API_HASH, API_ID, SESSION_FILE_PATH, TEMP_IMG_DIR
+from config import API_HASH, API_ID, SESSION_FILE_PATH, TEMP_IMG_DIR, PROXY_URL
 
 
 class TelegramManager:
@@ -49,6 +49,35 @@ class TelegramManager:
             except:
                 real_api_id = API_ID
 
+            # PROXY CONFIGURATION
+            proxy_config = None
+            if PROXY_URL:
+                try:
+                    # Parse Proxy URL: http://user:pass@host:port or http://host:port
+                    # Telethon expects tuple/dict: (python_socks.PROXY_TYPE_HTTP, '1.1.1.1', 8080, True, 'user', 'pass')
+                    # We'll use a simple dict format if possible or manual parsing
+                    from urllib.parse import urlparse
+                    import python_socks
+
+                    parsed = urlparse(PROXY_URL)
+                    scheme = python_socks.PROXY_TYPE_HTTP
+                    if "socks5" in parsed.scheme:
+                        scheme = python_socks.PROXY_TYPE_SOCKS5
+                    elif "socks4" in parsed.scheme:
+                        scheme = python_socks.PROXY_TYPE_SOCKS4
+                    
+                    proxy_config = {
+                        'proxy_type': scheme,
+                        'addr': parsed.hostname,
+                        'port': parsed.port,
+                        'username': parsed.username,
+                        'password': parsed.password,
+                        'rdns': True
+                    }
+                    logger.info(f"Using Proxy: {parsed.scheme}://****@{parsed.hostname}:{parsed.port}")
+                except Exception as e:
+                    logger.error(f"Failed to parse PROXY_URL: {e}")
+
             # Create client attached to the CURRENT running loop
             # STEALTH MODE: Mimic iPhone 15 Pro
             self.client = TelegramClient(
@@ -61,6 +90,7 @@ class TelegramManager:
                 app_version="10.12.0",
                 lang_code="en",
                 system_lang_code="en-US",
+                proxy=proxy_config
             )
             await self.client.connect()
 
@@ -183,11 +213,12 @@ class TelegramManager:
         all_messages = []
         download_tasks = []
 
-        sem = asyncio.Semaphore(3)
+        # Optimization: Increased concurrency from 3 to 10
+        sem = asyncio.Semaphore(10)
 
         async def download_image_task(message, filename):
             async with sem:
-                await asyncio.sleep(random.uniform(0.2, 0.8))
+                await asyncio.sleep(random.uniform(0.1, 0.4)) # Reduced artificial delay
                 try:
                     path = os.path.join(TEMP_IMG_DIR, filename)
                     if os.path.exists(path):

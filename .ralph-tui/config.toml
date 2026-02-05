@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 configVersion = "2.1"
 maxIterations = 50
 autoCommit = true
@@ -10,3 +11,17 @@ model = "google/antigravity-gemini-3-flash"
 
 [trackerOptions]
 path = "ralph_recovery_plan.json"
+=======
+configVersion = "2.1"
+maxIterations = 50
+autoCommit = true
+agent = "opencode"
+tracker = "json"
+subagentTracingDetail = "full"
+
+[agentOptions]
+model = "google/antigravity-gemini-3-pro"
+
+[trackerOptions]
+path = "ralph_recovery_plan.json"
+>>>>>>> Stashed changes

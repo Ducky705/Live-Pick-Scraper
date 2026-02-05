@@ -2,11 +2,11 @@ import logging
 import os
 import random
 import time
+import asyncio
+import aiohttp
 from datetime import UTC, datetime, timedelta, timezone
 
-import requests
-
-from config import TEMP_IMG_DIR
+from config import TEMP_IMG_DIR, PROXY_URL, USER_AGENTS
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -21,8 +21,9 @@ class DiscordScraper:
 
         self.auth_header = self.token
 
-        # User-Agent to mimic browser (Anti-Detection)
-        self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        # User-Agent to mimic browser (Anti-Detection) - Rotate on init or per request?
+        # Let's pick one for the session.
+        self.user_agent = random.choice(USER_AGENTS)
 
         self.headers = {
             "Authorization": self.auth_header,
@@ -30,50 +31,58 @@ class DiscordScraper:
             "Content-Type": "application/json",
         }
 
-    def fetch_messages(self, channel_id, limit=50):
+    async def fetch_messages(self, channel_id, limit=50):
         """
-        Fetches the last 'limit' messages from a channel.
+        Fetches the last 'limit' messages from a channel (Async).
         """
         if not self.token:
             logger.error("Cannot fetch: No DISCORD_TOKEN.")
             return []
 
         url = f"https://discord.com/api/v9/channels/{channel_id}/messages"
-        params = {"limit": limit}
+        params = {"limit": str(limit)}
 
         logger.info(f"[Discord] Fetching {limit} messages from channel {channel_id}...")
 
         # Anti-Bot: Random delay before request
-        sleep_time = random.uniform(1.0, 3.0)
-        time.sleep(sleep_time)
+        await asyncio.sleep(random.uniform(1.0, 3.0))
 
         try:
-            response = requests.get(url, headers=self.headers, params=params)
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=self.headers, params=params, proxy=PROXY_URL) as response:
+                    
+                    if response.status == 401:
+                        # Fallback: Try with "Bot " prefix just in case
+                        logger.warning("[Discord] 401 Unauthorized. Retrying with 'Bot ' prefix...")
+                        self.headers["Authorization"] = f"Bot {self.token}"
+                        async with session.get(url, headers=self.headers, params=params, proxy=PROXY_URL) as response2:
+                            response = response2 # Override response
+                            if response.status != 200:
+                                text = await response.text()
+                                logger.error(f"[Discord] Retry Error: {response.status} - {text}")
+                                return []
 
-            if response.status_code == 401:
-                # Fallback: Try with "Bot " prefix just in case
-                logger.warning("[Discord] 401 Unauthorized. Retrying with 'Bot ' prefix...")
-                self.headers["Authorization"] = f"Bot {self.token}"
-                response = requests.get(url, headers=self.headers, params=params)
+                    if response.status == 429:
+                        data = await response.json()
+                        retry_after = data.get("retry_after", 5)
+                        logger.warning(f"[Discord] Rate limited. Sleeping for {retry_after}s...")
+                        await asyncio.sleep(retry_after)
+                        # Recursive retry (simple) implementation
+                        return await self.fetch_messages(channel_id, limit)
 
-            if response.status_code == 429:
-                retry_after = response.json().get("retry_after", 5)
-                logger.warning(f"[Discord] Rate limited. Sleeping for {retry_after}s...")
-                time.sleep(retry_after)
-                response = requests.get(url, headers=self.headers, params=params)
+                    if response.status != 200:
+                        text = await response.text()
+                        logger.error(f"[Discord] Error fetching messages: {response.status} - {text}")
+                        return []
 
-            if response.status_code != 200:
-                logger.error(f"[Discord] Error fetching messages: {response.status_code} - {response.text}")
-                return []
-
-            messages = response.json()
-            return self._process_messages(messages, channel_id)
+                    messages = await response.json()
+                    return await self._process_messages(messages, channel_id)
 
         except Exception as e:
             logger.error(f"[Discord] Exception during fetch: {e}")
             return []
 
-    def _process_messages(self, messages, channel_id):
+    async def _process_messages(self, messages, channel_id):
         processed = []
 
         # Ensure directory exists
@@ -82,6 +91,9 @@ class DiscordScraper:
 
         ET_OFFSET = timezone(timedelta(hours=-5))
 
+        download_tasks = []
+
+        # Gather all basic data first
         for msg in messages:
             if not isinstance(msg, dict):
                 continue
@@ -108,12 +120,12 @@ class DiscordScraper:
                     url = att.get("url")
                     filename = f"discord_{msg['id']}_{att['id']}.jpg"
                     filepath = os.path.join(TEMP_IMG_DIR, filename)
-
-                    # Download if not exists
+                    
+                    # Add to download queue if not exists
                     if not os.path.exists(filepath):
-                        self._download_image(url, filepath)
-
-                    if os.path.exists(filepath):
+                        download_tasks.append(self._download_image(url, filepath))
+                        image_paths.append(filepath) # Assume it succeeds for metadata
+                    else:
                         image_paths.append(filepath)
 
             # Construct standard dict
@@ -129,15 +141,27 @@ class DiscordScraper:
                 "do_ocr": True if image_paths else False,
             }
             processed.append(msg_dict)
+        
+        # Run downloads concurrently
+        # Limit concurrency to 5 downloads at once
+        if download_tasks:
+            sem = asyncio.Semaphore(5)
+            async def semaphore_download(task):
+                 async with sem:
+                     await task
+            
+            await asyncio.gather(*[semaphore_download(t) for t in download_tasks])
 
         return processed
 
-    def _download_image(self, url, filepath):
+    async def _download_image(self, url, filepath):
         try:
-            resp = requests.get(url, headers={"User-Agent": self.user_agent}, timeout=10)
-            if resp.status_code == 200:
-                with open(filepath, "wb") as f:
-                    f.write(resp.content)
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers={"User-Agent": self.user_agent}, proxy=PROXY_URL, timeout=10) as resp:
+                    if resp.status == 200:
+                        content = await resp.read()
+                        with open(filepath, "wb") as f:
+                            f.write(content)
         except Exception as e:
             logger.error(f"[Discord] Failed to download image {url}: {e}")
 

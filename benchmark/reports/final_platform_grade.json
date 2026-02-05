@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 {
   "speed": {
     "duration": 5.809808254241943,
@@ -18,4 +19,26 @@
     "total_missed": 43,
     "total_false_positives": 89
   }
+=======
+{
+  "speed": {
+    "duration": 7.403300523757935,
+    "throughput": 6.753744473771527,
+    "latency_ms": 148.0660104751587
+  },
+  "efficiency": {
+    "total_requests": 1,
+    "requests_per_msg": 0.02,
+    "total_tokens": 396.75
+  },
+  "accuracy": {
+    "accuracy": 18.0,
+    "recall": 71.15,
+    "precision": 95.45,
+    "total_picks_expected": 260,
+    "total_picks_found": 261,
+    "total_missed": 75,
+    "total_false_positives": 76
+  }
+>>>>>>> Stashed changes
 }

@@ -5,12 +5,14 @@ from datetime import UTC, datetime, timedelta, timezone
 
 from twikit import Client
 
-from config import SESSIONS_DIR, TEMP_IMG_DIR
+from config import SESSIONS_DIR, TEMP_IMG_DIR, PROXY_URL, USER_AGENTS
 
 # Check for credentials in env
 TWITTER_USERNAME = os.getenv("TWITTER_USERNAME")
 TWITTER_EMAIL = os.getenv("TWITTER_EMAIL")
 TWITTER_PASSWORD = os.getenv("TWITTER_PASSWORD")
+TWITTER_AUTH_TOKEN = os.getenv("TWITTER_AUTH_TOKEN")
+TWITTER_CT0 = os.getenv("TWITTER_CT0")
 COOKIES_PATH = os.path.join(SESSIONS_DIR, "twitter_cookies.json")
 
 
@@ -21,9 +23,25 @@ class TwitterManager:
 
     async def get_client(self):
         if self.client is None:
-            # Use a standard browser user agent to avoid detection
-            ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            self.client = Client("en-US", user_agent=ua)
+            # Use a random user agent to avoid detection
+            ua = random.choice(USER_AGENTS)
+            
+            # Twikit supports proxy string usage
+            print(f"[Twitter] Initializing Client. Proxy: {bool(PROXY_URL)}")
+            self.client = Client("en-US", user_agent=ua, proxy=PROXY_URL)
+
+            # Manual Cookie Injection (Bypass Cloudflare Login)
+            if not os.path.exists(COOKIES_PATH) and TWITTER_AUTH_TOKEN and TWITTER_CT0:
+                print(f"[Twitter] Creating cookies from .env tokens...")
+                import json
+                cookies = {
+                    "auth_token": TWITTER_AUTH_TOKEN,
+                    "ct0": TWITTER_CT0
+                }
+                # Ensure dir exists
+                os.makedirs(os.path.dirname(COOKIES_PATH), exist_ok=True)
+                with open(COOKIES_PATH, "w") as f:
+                    json.dump(cookies, f)
 
             # Try loading cookies first
             if os.path.exists(COOKIES_PATH):

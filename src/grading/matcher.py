@@ -114,6 +114,59 @@ class Matcher:
             elif target_league in ["atp", "wta", "tennis"]:
                 league_games = [g for g in games if g.get("league", "").lower() in ["atp", "wta"]]
 
+        # --- VECTORIZED LOOKUP START ---
+        games_to_search = league_games if league_games else games
+        
+        # Use Vector Search if we have enough games to justify the overhead
+        if len(games_to_search) > 50:
+            from src.grading.vector_index import VectorIndex
+            
+            # Simple caching key based on first game ID + length
+            # (Crude, but avoids rebuilding for same game list)
+            cache_key = f"{len(games_to_search)}_{games_to_search[0].get('id', '')}"
+            
+            if not hasattr(Matcher, "_vector_index_cache"):
+                Matcher._vector_index_cache = {}
+                
+            index = Matcher._vector_index_cache.get(cache_key)
+            if not index:
+                index = VectorIndex()
+                for game in games_to_search:
+                    # Index Team 1
+                    t1 = Matcher.normalize(game.get("team1", ""))
+                    index.add(t1, game)
+                    # Index Team 2
+                    t2 = Matcher.normalize(game.get("team2", ""))
+                    index.add(t2, game)
+                    
+                    # Index Aliases
+                    for alias in Matcher._get_team_aliases(t1):
+                        index.add(Matcher.normalize(alias), game)
+                    for alias in Matcher._get_team_aliases(t2):
+                         index.add(Matcher.normalize(alias), game)
+                         
+                index.build()
+                Matcher._vector_index_cache[cache_key] = index
+            
+            # Query Index
+            results = index.query(Matcher.normalize(pick_text), top_k=3, threshold=0.4)
+            if results:
+                best_game, best_score = results[0]
+                
+                # AMBIGUITY CHECK:
+                # If we have multiple results, check if the second best is also very good (close to best)
+                if len(results) > 1:
+                    second_game, second_score = results[1]
+                    # If both scores are high (e.g. > 0.8) and similar (within 0.1), it's ambiguous
+                    # e.g. "Kings" matches "Sacramento Kings" (1.0) and "LA Kings" (1.0)
+                    if best_score > 0.8 and second_score > 0.8 and (best_score - second_score < 0.1):
+                        pass # Fallback to context-aware logic
+                    elif best_score > 0.8:
+                        return best_game
+                elif best_score > 0.8:
+                     return best_game
+        # --- VECTORIZED LOOKUP END ---
+
         # 1. Try to find in league-filtered games first
         if league_games:
             result = Matcher._find_best_match(pick_text, league_games)
@@ -564,3 +617,16 @@ class Matcher:
                         return leader, cat_name
 
         return None, None
+
+    @staticmethod
+    def _get_team_aliases(team_name: str) -> list[str]:
+        """Get all aliases for a team name."""
+        team_norm = Matcher.normalize(team_name)
+        aliases = []
+        
+        for canonical, team_aliases in TEAM_ALIASES.items():
+            if Matcher.normalize(canonical) == team_norm:
+                aliases.extend(team_aliases)
+            # Reverse check? usually aliases map canonical -> multiple
+            
+        return aliases

@@ -534,6 +534,18 @@ class OCRCascade:
                 error=f"Image not found: {image_path}",
             )
 
+        # Step 0: Pre-Filtering (Skip garbage)
+        from src.image_classifier import classifier
+        if not classifier.is_betting_slip(image_path):
+             return OCRResult(
+                text="",
+                method=OCRMethod.FAILED, # Or a new status SKIPPED
+                confidence=0.0,
+                time_ms=0,
+                prompt_type=prompt_type,
+                error="Filtered by ImageClassifier (low text density)",
+            )
+
         # Step 1: Try RapidOCR (fast path)
         logging.debug(f"[OCR Cascade] Step 1: RapidOCR for {os.path.basename(image_path)}")
         local_result = _run_local_ocr(image_path)
@@ -594,6 +606,40 @@ class OCRCascade:
 
         if not needs_vision:
             return [r for r in results if r is not None]
+            
+        # Step 1.5: Filter out non-betting slips from Vision Queue
+        # We don't want to waste expensive Vision API calls on garbage that RapidOCR failed on.
+        from src.image_classifier import classifier
+        filtered_vision_queue = []
+        for idx, path in needs_vision:
+            if classifier.is_betting_slip(path):
+                filtered_vision_queue.append((idx, path))
+            else:
+                logging.info(f"[OCR Cascade] Filtered by Classifier: {path}")
+                results[idx] = OCRResult(
+                    text="",
+                    method=OCRMethod.FAILED,
+                    confidence=0.0,
+                    time_ms=0,
+                    prompt_type=prompt_type,
+                    error="Filtered by ImageClassifier",
+                )
+                
+        needs_vision = filtered_vision_queue
+        if not needs_vision:
+             return [
+                r
+                if r is not None
+                else OCRResult(
+                    text="",
+                    method=OCRMethod.FAILED,
+                    confidence=0.0,
+                    time_ms=0,
+                    prompt_type=prompt_type,
+                    error="Filtered",
+                )
+                for r in results
+            ]
 
         # Step 2: Distribute Vision calls across providers
         prompt = STRUCTURED_PROMPT if prompt_type == "structured" else RAW_PROMPT

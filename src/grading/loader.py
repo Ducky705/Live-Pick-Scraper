@@ -33,14 +33,26 @@ class DataLoader:
         """
         try:
             from src.score_fetcher import fetch_scores_for_date
+            import concurrent.futures
 
             all_games = []
             unique_dates = list(set(dates))
 
-            for date_str in unique_dates:
-                logger.info(f"Fetching scores for {date_str}...")
-                games = fetch_scores_for_date(date_str, requested_leagues=leagues)
-                all_games.extend(games)
+            # Fetch dates in parallel to speed up multi-day grading
+            with concurrent.futures.ThreadPoolExecutor(max_workers=min(len(unique_dates), 10)) as executor:
+                future_to_date = {
+                    executor.submit(fetch_scores_for_date, date_str, leagues): date_str 
+                    for date_str in unique_dates
+                }
+                
+                for future in concurrent.futures.as_completed(future_to_date):
+                    date_str = future_to_date[future]
+                    try:
+                        games = future.result()
+                        logger.info(f"Fetched {len(games)} games for {date_str}")
+                        all_games.extend(games)
+                    except Exception as e:
+                        logger.error(f"Error fetching scores for {date_str}: {e}")
 
             return all_games
 

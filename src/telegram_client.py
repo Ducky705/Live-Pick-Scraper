@@ -211,175 +211,165 @@ class TelegramManager:
         logger.info(f"Fetching for Date: {target_date_obj}")
 
         all_messages = []
-        download_tasks = []
-
-        # Optimization: Increased concurrency from 3 to 10
-        sem = asyncio.Semaphore(10)
-
-        async def download_image_task(message, filename):
-            async with sem:
-                await asyncio.sleep(random.uniform(0.1, 0.4)) # Reduced artificial delay
+        
+        # --- PARALLEL IMAGE DOWNLOADING QUEUE ---
+        download_queue = asyncio.Queue()
+        
+        # Worker function
+        async def image_worker():
+            while True:
+                item = await download_queue.get()
+                msg_dict, message, filename = item
+                
                 try:
                     path = os.path.join(TEMP_IMG_DIR, filename)
+                    
+                    if not os.path.exists(path):
+                        # Try thumbnail first ('x' = 800px), fallback to full image
+                        try:
+                            # Artificial jitter to avoid instant-ban behavior if too fast
+                            await asyncio.sleep(random.uniform(0.05, 0.2))
+                            await client.download_media(message, path, thumb="x")
+                        except Exception:
+                            # logger.debug(f"Thumbnail failed for {filename}, trying full...")
+                            await client.download_media(message, path)
+                    
                     if os.path.exists(path):
-                        return path
-
-                    # Try thumbnail first ('x' = 800px), fallback to full image for older posts
-                    try:
-                        await client.download_media(message, path, thumb="x")
-                    except Exception:
-                        # Thumbnail not available (common for older messages), try full image
-                        logger.warning(f"[Fallback] Thumbnail unavailable for {filename}, downloading full image...")
-                        await client.download_media(message, path)  # No thumb = full image
-
-                    return path if os.path.exists(path) else None
+                        # Update the shared dictionary (Thread-safe in asyncio since single-threaded loop)
+                        msg_dict["images"].append(path)
+                        if not msg_dict["image"]:
+                            msg_dict["image"] = path
+                            
                 except FloodWaitError as e:
-                    logger.warning(f"[Anti-Flood] Sleeping {e.seconds}s...")
-                    await asyncio.sleep(e.seconds + 1)
-                    try:
-                        await client.download_media(message, path)  # Retry with full image
-                        return path if os.path.exists(path) else None
-                    except:
-                        return None
-                except Exception as e:
-                    logger.error(f"Download failed for {filename}: {e}")
-                    return None
-
-        for i, channel_id in enumerate(channel_ids):
-            # Report Progress - Channel reading gets 0-10% of the bar (fast)
-            percent = int((i / len(channel_ids)) * 10)
-            await self._report_progress(percent, f"Reading Channel {i + 1}/{len(channel_ids)}...")
-
-            if i > 0:
-                await asyncio.sleep(random.uniform(1.5, 3.5))
-
-            try:
-                try:
-                    entity = await client.get_entity(int(channel_id))
-                except:
-                    entity = await client.get_entity(channel_id)
-
-                channel_name = entity.title if hasattr(entity, "title") else "Unknown"
-
-                # GROUPING LOGIC
-                grouped_buffer = {}  # grouped_id -> { 'main_msg': msg_dict, 'images': [] }
-
-                try:
-                    # Calculate offset_date: Start of the day AFTER target date (in ET)
-                    # This ensures we fetch messages starting from midnight after target date, going backwards
-                    offset_dt = datetime.combine(target_date_obj + timedelta(days=1), datetime.min.time())
-                    offset_dt = offset_dt.replace(tzinfo=ET_OFFSET)
-
-                    async for message in client.iter_messages(entity, limit=500, offset_date=offset_dt):
-                        if not message.date:
-                            continue
-
-                        msg_et = message.date.astimezone(ET_OFFSET)
-                        msg_date = msg_et.date()
-
-                        if msg_date > target_date_obj:
-                            continue
-                        if msg_date < target_date_obj:
-                            break
-
-                        # Determine if message is part of a group
-                        gid = message.grouped_id
-
-                        # Base Message Dict
-                        msg_dict = {
-                            "id": message.id,
-                            "channel_name": "Telegram",  # Anonymized as per user request
-                            "date": msg_et.strftime("%Y-%m-%d %H:%M ET"),
-                            "text": message.text or "",
-                            "images": [],  # NEW: List of all images
-                            "image": None,  # Legacy compatibility (thumbnail)
-                            "grouped_id": gid,
-                            "selected": True,
-                            "do_ocr": True,
-                        }
-
-                        # IMAGE HANDLING
-                        if message.media and isinstance(message.media, MessageMediaPhoto):
-                            filename = f"{channel_id}_{message.id}.jpg"
-                            task = asyncio.create_task(download_image_task(message, filename))
-                            # We store the task/metadata temporarily
-                            msg_dict["pending_download"] = (task, filename)
-
-                        # GROUPING STRATEGY
-                        if gid:
-                            if gid not in grouped_buffer:
-                                # New Group
-                                grouped_buffer[gid] = msg_dict
-                            else:
-                                # Existing Group - Merge
-                                existing = grouped_buffer[gid]
-                                # Prefer the ID of the message with text (usually first)
-                                if msg_dict["text"] and not existing["text"]:
-                                    existing["text"] = msg_dict["text"]
-                                    existing["id"] = msg_dict[
-                                        "id"
-                                    ]  # Use ID of text message? Or keep first? Telethon usually sends text with first.
-
-                                # Add image to existing group
-                                if "pending_download" in msg_dict:
-                                    # If existing already has a pending download, we need to handle multiple
-                                    # We need a structure to hold multiple pending downloads
-                                    if "pending_downloads" not in existing:
-                                        existing["pending_downloads"] = []
-                                        if "pending_download" in existing:
-                                            existing["pending_downloads"].append(existing["pending_download"])
-                                            del existing["pending_download"]
-
-                                    existing["pending_downloads"].append(msg_dict["pending_download"])
-                        else:
-                            # Single Message - Add immediately (but handle deferred download)
-                            if "pending_download" in msg_dict:
-                                msg_dict["pending_downloads"] = [msg_dict["pending_download"]]
-                                del msg_dict["pending_download"]
-                            all_messages.append(msg_dict)
-
-                except FloodWaitError as e:
-                    print(f"[Anti-Flood] Wait {e.seconds}s")
+                    logger.warning(f"[Anti-Flood] Worker sleeping {e.seconds}s...")
                     await asyncio.sleep(e.seconds + 2)
+                    # Put back in queue to retry
+                    await download_queue.put(item)
+                except Exception as e:
+                    logger.error(f"Download worker failed for {filename}: {e}")
+                finally:
+                    download_queue.task_done()
 
-                # FLUSH GROUPS
-                for gid, group_msg in grouped_buffer.items():
-                    # Ensure pending_downloads is list
-                    if "pending_download" in group_msg:
-                        group_msg["pending_downloads"] = [group_msg["pending_download"]]
-                        del group_msg["pending_download"]
-                    all_messages.append(group_msg)
+        # Start 20 parallel workers
+        workers = [asyncio.create_task(image_worker()) for _ in range(20)]
+        
+        try:
+            for i, channel_id in enumerate(channel_ids):
+                # Report Progress 
+                percent = int((i / len(channel_ids)) * 95)
+                await self._report_progress(percent, f"Reading Channel {i + 1}/{len(channel_ids)}...")
 
-                # PROCESS DOWNLOADS
-                for msg in all_messages:
-                    if "pending_downloads" in msg:
-                        for task, filename in msg.get("pending_downloads", []):
-                            download_tasks.append((msg, task, filename))
-                        del msg["pending_downloads"]  # Cleanup logic dict
+                # Small sleep between channels to be polite
+                if i > 0:
+                    await asyncio.sleep(random.uniform(1.0, 2.0))
 
-            except Exception as e:
-                logger.error(f"Error fetching channel {channel_id}: {e}")
-                continue
+                try:
+                    try:
+                        entity = await client.get_entity(int(channel_id))
+                    except:
+                        entity = await client.get_entity(channel_id)
 
-        # Media downloading gets 10-95% of the bar with per-file progress
-        if download_tasks:
-            total_downloads = len(download_tasks)
-            completed = 0
+                    channel_name = entity.title if hasattr(entity, "title") else "Unknown"
 
-            for i, (msg_dict, task, filename) in enumerate(download_tasks):
-                # Update progress for each file (10% to 95%)
-                percent = 10 + int((i / total_downloads) * 85)
-                await self._report_progress(percent, f"Downloading {i + 1}/{total_downloads}...")
+                    # GROUPING LOGIC
+                    grouped_buffer = {}  # grouped_id -> msg_dict
 
-                result = await task
-                if result:
-                    path = result  # Use absolute path for OCR compatibility
-                    msg_dict["images"].append(path)
-                    if not msg_dict["image"]:
-                        msg_dict["image"] = path  # Thumbnail / Backwards Compat
+                    try:
+                        offset_dt = datetime.combine(target_date_obj + timedelta(days=1), datetime.min.time())
+                        offset_dt = offset_dt.replace(tzinfo=ET_OFFSET)
 
+                        async for message in client.iter_messages(entity, limit=500, offset_date=offset_dt):
+                            if not message.date:
+                                continue
+
+                            msg_et = message.date.astimezone(ET_OFFSET)
+                            msg_date = msg_et.date()
+
+                            if msg_date > target_date_obj:
+                                continue
+                            if msg_date < target_date_obj:
+                                break
+
+                            gid = message.grouped_id
+                            
+                            # Determine the target dictionary
+                            target_dict = None
+                            
+                            # Standard fields relative to THIS message
+                            msg_text = message.text or ""
+                            
+                            if gid:
+                                if gid in grouped_buffer:
+                                    # Existing Group - Merge
+                                    target_dict = grouped_buffer[gid]
+                                    # If this message has text and existing doesn't, update it
+                                    if msg_text and not target_dict["text"]:
+                                        target_dict["text"] = msg_text
+                                        target_dict["id"] = message.id # Prefer ID with text?
+                                else:
+                                    # New Group
+                                    target_dict = {
+                                        "id": message.id,
+                                        "channel_name": "Telegram",
+                                        "date": msg_et.strftime("%Y-%m-%d %H:%M ET"),
+                                        "text": msg_text,
+                                        "images": [],
+                                        "image": None,
+                                        "grouped_id": gid,
+                                        "selected": True,
+                                        "do_ocr": True,
+                                    }
+                                    grouped_buffer[gid] = target_dict
+                            else:
+                                # Single Message
+                                target_dict = {
+                                    "id": message.id,
+                                    "channel_name": "Telegram",
+                                    "date": msg_et.strftime("%Y-%m-%d %H:%M ET"),
+                                    "text": msg_text,
+                                    "images": [],
+                                    "image": None,
+                                    "grouped_id": None,
+                                    "selected": True,
+                                    "do_ocr": True,
+                                }
+                                all_messages.append(target_dict)
+                            
+                            # QUEUE IMAGE DOWNLOAD IMMEDIATELY
+                            if message.media and isinstance(message.media, MessageMediaPhoto):
+                                filename = f"{channel_id}_{message.id}.jpg"
+                                # We pass the target_dict ref so worker can update it
+                                download_queue.put_nowait((target_dict, message, filename))
+
+                    except Exception as e:
+                        logger.error(f"Iter error: {e}")
+
+                    # FLUSH GROUPS
+                    # They are already in grouped_buffer, just add them to all_messages
+                    # BUT, we need to add them ONLY ONCE.
+                    # Wait, if we added them to all_messages inside the loop, we'd duplicate.
+                    # My logic above: 'Single Message -> all_messages.append'. 'Grouped -> grouped_buffer'.
+                    # So we need to append values of grouped_buffer to all_messages now.
+                    for group_msg in grouped_buffer.values():
+                        all_messages.append(group_msg)
+
+                except Exception as e:
+                    logger.error(f"Error fetching channel {channel_id}: {e}")
+                    continue
+
+            # End of Channel Loop
+            # Now we just wait for the download queue to finish
+            await self._report_progress(95, "Finishing downloads...")
+            await download_queue.join()
+
+        finally:
+            # Cancel workers
+            for w in workers:
+                w.cancel()
+            
         await self._report_progress(100, "Complete")
         return all_messages
+
 
 
 tg_manager = TelegramManager()

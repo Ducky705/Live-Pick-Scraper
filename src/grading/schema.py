@@ -62,6 +62,7 @@ class Pick:
 
     # Original odds if provided
     odds: int | None = None
+    units: float | str | None = None
 
 
 @dataclass
@@ -86,6 +87,7 @@ class GradedPick:
         return {
             "pick": self.pick.raw_text,
             "league": self.pick.league,
+            "date": self.pick.date,
             "bet_type": self.pick.bet_type.value,
             "grade": self.grade.value,
             "score_summary": self.score_summary,

@@ -62,13 +62,17 @@ class VectorIndex:
         if len(cosine_sim) > top_k:
              top_indices = np.argpartition(-cosine_sim, top_k)[:top_k]
              # Sort these top k precisely
-             top_indices = top_indices[np.argsort(-cosine_sim[top_indices])]
+             # indices into top_indices
+             subset_indices = np.argsort(-cosine_sim[top_indices])
+             top_indices = top_indices[subset_indices]
         else:
              top_indices = np.argsort(-cosine_sim)
              
         results = []
         for idx in top_indices:
             score = cosine_sim[idx]
+            # Debug Log
+            # logger.info(f"Vector Match: {self.corpus[idx]} -> {score:.4f} (Meta: {self.metadata[idx].get('team1')})")
             if score >= threshold:
                 results.append((self.metadata[idx], float(score)))
                 

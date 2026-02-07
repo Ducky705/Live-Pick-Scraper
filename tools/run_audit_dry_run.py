@@ -20,9 +20,12 @@ from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
 # Add project root to path
+# Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src"))) # Add src explicitly for inner imports
+sys.path.append(os.path.abspath(os.path.dirname(__file__))) # Add tools dir? No, config is in root.
 
-from config import OUTPUT_DIR, TARGET_TELEGRAM_CHANNEL_ID
+from src.config import OUTPUT_DIR, TARGET_TELEGRAM_CHANNEL_ID
 from src.auto_processor import auto_select_messages
 from src.deduplicator import Deduplicator
 from src.extraction_pipeline import ExtractionPipeline
@@ -53,8 +56,7 @@ async def main():
 
     # 2. FETCH DATA (Yesterday/Today)
     ET = timezone(timedelta(hours=-5))
-    now_et = datetime.now(ET)
-    target_date = now_et.strftime("%Y-%m-%d")
+    target_date = "2026-02-05" # now_et.strftime("%Y-%m-%d")
 
     print(f"\nTarget Date: {target_date} (ET)")
 

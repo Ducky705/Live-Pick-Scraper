@@ -2,6 +2,8 @@ import concurrent.futures
 import datetime
 import logging
 import time
+import asyncio
+import aiohttp
 
 import requests
 import urllib3
@@ -61,6 +63,17 @@ LEAGUES_TO_SCRAPE = {
         "ita.1": "seriea",
         "fra.1": "ligue1",
         "usa.nwsl": "nwsl",
+        "mex.1": "liga_mx",
+        "ned.1": "eredivisie",
+    },
+    "rugby": {
+        "rugby-union": "rugby",
+    },
+    "cricket": {
+        "cricket": "cricket",
+    },
+    "boxing": {
+        "boxing": "boxing",
     },
     "mma": {"ufc": "ufc"},
     "golf": {
@@ -108,8 +121,10 @@ NCAAB_CONFERENCE_GROUPS = [
     "30",
     "31",
     "32",
+    "62",  # Possible AAC
     "59",
     "100",
+    "151", # American Athletic Conference (Confirmed via search)
 ]
 
 
@@ -271,6 +286,142 @@ def fetch_scores_for_date(date_str, requested_leagues=None, current_scores=None,
     return all_scores
 
 
+async def async_fetch_url(session, url, league_name, retries=2):
+    """Async helper for fetching."""
+    for i in range(retries):
+        try:
+            async with session.get(url, timeout=5) as response:
+                response.raise_for_status()
+                data = await response.json()
+                return data.get("events", [])
+        except Exception:
+             if i == retries - 1:
+                return []
+             await asyncio.sleep(0.2)
+    return []
+
+
+async def async_fetch_scores_for_date(date_str, requested_leagues=None, current_scores=None, force_refresh=False, final_only=True):
+    """
+    Async version of fetch_scores_for_date using aiohttp.
+    Can be run in parallel with other heavy tasks (like OCR/Extraction).
+    """
+    from src.score_cache import get_cache
+
+    # Cache is sync, but fast enough to run on main loop? 
+    # Or wrap in to_thread? SQLite is usually fast.
+    cache = get_cache()
+
+    if requested_leagues:
+        requested_leagues = {l.lower() for l in requested_leagues}
+
+    existing_leagues = set()
+    if current_scores:
+        for game in current_scores:
+            if "league" in game:
+                existing_leagues.add(game["league"].lower())
+
+    try:
+        if "-" in date_str:
+            d = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+        else:
+            d = datetime.datetime.strptime(date_str, "%m/%d/%Y")
+        api_date = d.strftime("%Y%m%d")
+    except ValueError:
+        logger.error(f"Invalid date format: {date_str}")
+        return []
+
+    all_scores = list(current_scores) if current_scores else []
+    processed_game_ids = {g["id"] for g in all_scores}
+
+    urls_to_fetch = []
+    leagues_from_cache = []
+
+    # Prepare URL list
+    for sport_key, leagues in LEAGUES_TO_SCRAPE.items():
+        for league_key_url, sheet_league_name in leagues.items():
+            norm_league = sheet_league_name.lower()
+
+            if norm_league in existing_leagues:
+                continue
+            if requested_leagues and norm_league not in requested_leagues:
+                continue
+
+            if not force_refresh:
+                cached_games = cache.get_scores(api_date, norm_league)
+                if cached_games is not None:
+                    for game in cached_games:
+                         if game.get("id") not in processed_game_ids:
+                            all_scores.append(game)
+                            processed_game_ids.add(game["id"])
+                    leagues_from_cache.append(norm_league)
+                    continue
+
+            # --- NCAAB ---
+            if league_key_url == "mens-college-basketball":
+                for group_id in NCAAB_CONFERENCE_GROUPS:
+                     url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_key}/{league_key_url}/scoreboard?dates={api_date}&groups={group_id}&limit=100"
+                     urls_to_fetch.append((url, sheet_league_name))
+            # --- STANDARD ---
+            else:
+                url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_key}/{league_key_url}/scoreboard?dates={api_date}&limit=300"
+                urls_to_fetch.append((url, sheet_league_name))
+
+    if leagues_from_cache:
+        logger.info(f"Cache HIT for {len(leagues_from_cache)} leagues.")
+
+    if not urls_to_fetch:
+        return all_scores
+
+    logger.info(f"Fetching scores from {len(urls_to_fetch)} endpoints (Async)...")
+
+    games_by_league = {} # Thread safety not needed in async unless await yields in critical section
+
+    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) as session:
+        # Create tasks
+        tasks = []
+        for url, lname in urls_to_fetch:
+            tasks.append(async_fetch_url(session, url, lname))
+        
+        # Gather results
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # Process results
+        for i, res in enumerate(results):
+            if isinstance(res, Exception):
+                logger.error(f"Async fetch failed: {res}")
+                continue
+            
+            # Map back to league name
+            league_name = urls_to_fetch[i][1]
+            events = res
+            
+            # _parse_espn_event is sync/CPU bound. 
+            # If 100s of events, might block loop briefly. Accepted for now.
+            for game in events:
+                if game["id"] not in processed_game_ids:
+                    game_objs = _parse_espn_event(game, league_name, final_only=final_only)
+                    if game_objs:
+                        if isinstance(game_objs, list):
+                            all_scores.extend(game_objs)
+                            if league_name.lower() not in games_by_league:
+                                games_by_league[league_name.lower()] = []
+                            games_by_league[league_name.lower()].extend(game_objs)
+                        else:
+                            all_scores.append(game_objs)
+                            if league_name.lower() not in games_by_league:
+                                games_by_league[league_name.lower()] = []
+                            games_by_league[league_name.lower()].append(game_objs)
+                        processed_game_ids.add(game["id"])
+
+    # Update cache
+    for league, games in games_by_league.items():
+         if games:
+             cache.set_scores(api_date, league, games)
+
+    return all_scores
+
+
 def _parse_espn_event(game_data, league_name, final_only=True):
     """
     Parses a raw ESPN event JSON object into a list of standardized dictionaries.
@@ -290,8 +441,8 @@ def _parse_espn_event(game_data, league_name, final_only=True):
         # Check game status
         status_state = game_data.get("status", {}).get("type", {}).get("state", "")
 
-        # Skip pre-game (not started)
-        if status_state == "pre":
+        # Skip pre-game (not started) only if final_only is requested
+        if final_only and status_state == "pre":
             return []
 
         # Skip in-progress games if final_only is True

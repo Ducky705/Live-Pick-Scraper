@@ -275,6 +275,7 @@ class Matcher:
 
         best_match = None
         best_score = 0
+        tie_count = 0
         pick_norm = Matcher.normalize(pick_text)
 
         for game in games:
@@ -291,12 +292,19 @@ class Matcher:
             if score > best_score:
                 best_score = score
                 best_match = game
+                tie_count = 1
+            elif score == best_score and score > 0:
+                tie_count += 1
 
             # Perfect match optimization
             if best_score >= 2:
                 return best_match
 
         # Return if at least one team matched
+        # Return if at least one team matched AND unique
+        if tie_count > 1:
+            return None
+
         return best_match if best_score >= 1 else None
 
     @staticmethod
@@ -408,7 +416,21 @@ class Matcher:
             is_match = team_norm == Matcher.normalize(canonical)
             if not is_match:
                 for alias in aliases:
-                    if Matcher.normalize(alias) in team_norm or team_norm in Matcher.normalize(alias):
+                    alias_norm = Matcher.normalize(alias)
+                    if not alias_norm:
+                        continue
+                        
+                    # CRITICAL FIX: Use word boundary for alias association check
+                    # "ana" should not match "indiana", but "indiana" should match "indiana pacers"
+                    
+                    # 1. Is alias a word in team_name? (e.g. "Hoosiers" in "Indiana Hoosiers")
+                    if re.search(r"\b" + re.escape(alias_norm) + r"\b", team_norm):
+                        is_match = True
+                        break
+                        
+                    # 2. Is team_name a substring of alias? (e.g. "Indiana" in "Indiana Pacers")
+                    # This is safe because team_name is usually the specific entity we are checking
+                    if team_norm in alias_norm:
                         is_match = True
                         break
 

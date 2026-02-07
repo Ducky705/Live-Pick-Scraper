@@ -1,0 +1,2781 @@
+[
+    {
+        "desc": "Fix: (1.1U) Mavs +8.5** **...",
+        "pick": "(1.1U) Mavs +8.5** **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1Q Spurs -1.5 **...",
+        "pick": "1Q Spurs -1.5 **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Norte Dame +18 **...",
+        "pick": "Norte Dame +18 **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Torino TT O.5** ** ** ML...",
+        "pick": "Torino TT O.5** ** ** ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Celtics +5...",
+        "pick": "Celtics +5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Stanford +3.5...",
+        "pick": "Stanford +3.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: NBA Raptors -7-118...",
+        "pick": "NBA Raptors -7-118",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: NBA Mavs +8.5...",
+        "pick": "NBA Mavs +8.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Cbb Memphis +2...",
+        "pick": "Cbb Memphis +2",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: NHL Vegas Knights ML...",
+        "pick": "NHL Vegas Knights ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Saint Peter's ML...",
+        "pick": "Saint Peter's ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (2U) Michigan -23.5...",
+        "pick": "(2U) Michigan -23.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (2U) Cincinnati -5.5...",
+        "pick": "(2U) Cincinnati -5.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (2U) Ohio State -7.5...",
+        "pick": "(2U) Ohio State -7.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (2U) UT Martin -10.5...",
+        "pick": "(2U) UT Martin -10.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 3u -76ers +4.5 ML...",
+        "pick": "3u -76ers +4.5 ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (2U) Pistons -14.5...",
+        "pick": "(2U) Pistons -14.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (2u) Mavericks +7 -11...",
+        "pick": "(2u) Mavericks +7 -11",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Flagg  over 35.: Points Over 5...",
+        "pick": "Flagg  over 35.: Points Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (2U) Lightning ML...",
+        "pick": "(2U) Lightning ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5u Mavericks +8.5 v. Spurs...",
+        "pick": "5u Mavericks +8.5 v. Spurs",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5u ers +3.5 v. Lakers...",
+        "pick": "5u ers +3.5 v. Lakers",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5u Warriors +6 v. Suns...",
+        "pick": "5u Warriors +6 v. Suns",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: J Johnson [ATL] over 18.: Rebo...",
+        "pick": "J Johnson [ATL] over 18.: Rebounds Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Hawks vs Jazz Under 245...",
+        "pick": "Hawks vs Jazz Under 245",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (2u) Rockets -3...",
+        "pick": "(2u) Rockets -3",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Suns ML...",
+        "pick": "Suns ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Nhl: Devils ML...",
+        "pick": "Nhl: Devils ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Maryland +7.5...",
+        "pick": "Maryland +7.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Kings ML...",
+        "pick": "Kings ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Sabers ML...",
+        "pick": "Sabers ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2u - Elon ML...",
+        "pick": "2u - Elon ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Over 6.5...",
+        "pick": "Over 6.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1U Magic vs Nets Over 214 -110...",
+        "pick": "1U Magic vs Nets Over 214 -110",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 0.75U Nba: Jazz +9.5...",
+        "pick": "0.75U Nba: Jazz +9.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1U 1H Cincy -3 -110...",
+        "pick": "1U 1H Cincy -3 -110",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Raptors +3.5...",
+        "pick": "Raptors +3.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Minnesota +8.5...",
+        "pick": "Minnesota +8.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Fau +2.5 **...",
+        "pick": "Fau +2.5 **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: **Nuggets +7.5...",
+        "pick": "**Nuggets +7.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Wild Ml** ML...",
+        "pick": "Wild Ml** ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2u blue jackets ml...",
+        "pick": "2u blue jackets ml",
+        "league": "NHL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Army +12.5...",
+        "pick": "Army +12.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Ulm +15.5...",
+        "pick": "Ulm +15.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: $10,000 **Knocks vs Nuggets ov...",
+        "pick": "$10,000 **Knocks vs Nuggets over 226",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1U St Thomas over 156.5 -105...",
+        "pick": "1U St Thomas over 156.5 -105",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2U Blue jackets ML...",
+        "pick": "2U Blue jackets ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1U Iowa ML...",
+        "pick": "1U Iowa ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (3U) Stars ML @ ML...",
+        "pick": "(3U) Stars ML @ ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1U) Stars -1.5 @...",
+        "pick": "(1U) Stars -1.5 @",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Penguins vs Sabres Under 6.5 +...",
+        "pick": "Penguins vs Sabres Under 6.5 +155",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Wvu +5.5...",
+        "pick": "Wvu +5.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: **Yue Yuan ML...",
+        "pick": "**Yue Yuan ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Mavericks ML...",
+        "pick": "Mavericks ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Buffalo / Penguins OV 6.5 -120...",
+        "pick": "Buffalo / Penguins OV 6.5 -120",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Wizards +15...",
+        "pick": "Wizards +15",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: If 1P ends 0:0 I'm taking Over...",
+        "pick": "If 1P ends 0:0 I'm taking Over 4.5 full game",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: So far 1P Over 1.5 has hit in ...",
+        "pick": "So far 1P Over 1.5 has hit in every game except for Avs",
+        "league": "NHL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Montana St ML...",
+        "pick": "Montana St ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2.5U Penn State vs Michigan Ov...",
+        "pick": "2.5U Penn State vs Michigan Over 161.5 =",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2U Raptors -6.5 =...",
+        "pick": "2U Raptors -6.5 =",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Embid  over 41.: Points Over 5...",
+        "pick": "Embid  over 41.: Points Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Hornets 1Q +1.5 / 25-23...",
+        "pick": "- Hornets 1Q +1.5 / 25-23",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (NBA) - San Antonio -7 / 26-22...",
+        "pick": "(NBA) - San Antonio -7 / 26-22",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Uc Santa Barbra -2.5 s / 24-...",
+        "pick": "- Uc Santa Barbra -2.5 s / 24-24",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Cincinnati -4.5 / 24-24...",
+        "pick": "- Cincinnati -4.5 / 24-24",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Le moyne-1.5 / 23-25...",
+        "pick": "- Le moyne-1.5 / 23-25",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Utah valley -12.5 / 22-26...",
+        "pick": "- Utah valley -12.5 / 22-26",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Kings under 6 / 27-20-1...",
+        "pick": "- Kings under 6 / 27-20-1",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Marist Under 133.5 / 23-25...",
+        "pick": "- Marist Under 133.5 / 23-25",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - senators ml nhl / 29-19...",
+        "pick": "- senators ml nhl / 29-19",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Vegas ml. / 24-24...",
+        "pick": "- Vegas ml. / 24-24",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - hornets vs Rockets Under 217...",
+        "pick": "- hornets vs Rockets Under 217.5 / 28-20",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Stoney Brook -3.5 / 26-18-4...",
+        "pick": "- Stoney Brook -3.5 / 26-18-4",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Utah tech -1.5 / 24-23-1...",
+        "pick": "- Utah tech -1.5 / 24-23-1",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Monmouth +3.5 / 23-24-1...",
+        "pick": "- Monmouth +3.5 / 23-24-1",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (NBA) - Raptors -7.5 vs Bulls ...",
+        "pick": "(NBA) - Raptors -7.5 vs Bulls / 20-28",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Over 144.5 Abilene Christian...",
+        "pick": "- Over 144.5 Abilene Christian @ Utah Valley / 22-28",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Charleston -11.5 / 28-20...",
+        "pick": "- Charleston -11.5 / 28-20",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Senators Vs Flyers Over 6 / ...",
+        "pick": "- Senators Vs Flyers Over 6 / 24-23-1",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Montana first half -3.5 / 24...",
+        "pick": "- Montana first half -3.5 / 24-24",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Tarleton st +10.5 / 31-17...",
+        "pick": "- Tarleton st +10.5 / 31-17",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Bulls +7.5 / 27-21...",
+        "pick": "- Bulls +7.5 / 27-21",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Hurricanes 3way ML / 28-20...",
+        "pick": "- Hurricanes 3way ML / 28-20",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Rockets over 216 / 22-26...",
+        "pick": "- Rockets over 216 / 22-26",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: - Uab ML / 29-19...",
+        "pick": "- Uab ML / 29-19",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1.5u Mavs UN 230.5 // ML...",
+        "pick": "1.5u Mavs UN 230.5 // ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1.5u Panthers OV 6 // ML...",
+        "pick": "1.5u Panthers OV 6 // ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 0.5U Kings UN 6 // ML...",
+        "pick": "0.5U Kings UN 6 // ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: [Corner Master Vip] ** 10,45 *...",
+        "pick": "[Corner Master Vip] ** 10,45 **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: [ / ] ** -1,52 **...",
+        "pick": "[ / ] ** -1,52 **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: [+ Vip] ** -1,93 **...",
+        "pick": "[+ Vip] ** -1,93 **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: [Dungeon Live Vip] ** -2,17 **...",
+        "pick": "[Dungeon Live Vip] ** -2,17 **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: [ Pro Vip] ** -3,85 **...",
+        "pick": "[ Pro Vip] ** -3,85 **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: [Bebeshka_VIP] ** -10,74 **...",
+        "pick": "[Bebeshka_VIP] ** -10,74 **",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Navy ML...",
+        "pick": "5U Navy ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1H Spurs -4...",
+        "pick": "1H Spurs -4",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Stars ML...",
+        "pick": "Stars ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Fiu +7.5...",
+        "pick": "Fiu +7.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Byu -5.5...",
+        "pick": "Byu -5.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: George Washington ML...",
+        "pick": "George Washington ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Clemson -2.5...",
+        "pick": "Clemson -2.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Sengun over 15.: Rebounds Over...",
+        "pick": "Sengun over 15.: Rebounds Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Ty Jerome over 20.5 Points / A...",
+        "pick": "Ty Jerome over 20.5 Points / Assists -110",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Arizona State vs Utah over 159...",
+        "pick": "Arizona State vs Utah over 159.5 -130",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Bucks +6.5...",
+        "pick": "Bucks +6.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: -19 Cbb dog spreads...",
+        "pick": "-19 Cbb dog spreads",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Duquesne +8...",
+        "pick": "Duquesne +8",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Louisiana Tech ML...",
+        "pick": "Louisiana Tech ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Tulsa ML...",
+        "pick": "Tulsa ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 4U New Mexico ML...",
+        "pick": "4U New Mexico ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Navy -3.5 ish...",
+        "pick": "Navy -3.5 ish",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1.5U) Perth Wildcats -16.5...",
+        "pick": "(1.5U) Perth Wildcats -16.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1U) Tasmania JackJumpers -10...",
+        "pick": "(1U) Tasmania JackJumpers -10",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1U) Mobis Phoebus vs Seoul SK...",
+        "pick": "(1U) Mobis Phoebus vs Seoul SK Knights Under 154.5 -115",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1U) Ulsan Mobis Phoebus +5.5...",
+        "pick": "(1U) Ulsan Mobis Phoebus +5.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Anadolu Efes TT Over 82.5...",
+        "pick": "Anadolu Efes TT Over 82.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1u) Gea ML...",
+        "pick": "(1u) Gea ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1u) Bejlek +3.5...",
+        "pick": "(1u) Bejlek +3.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1u) Boulter ML...",
+        "pick": "(1u) Boulter ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (5u) Faa ML / Griekspoor +1.5 ...",
+        "pick": "(5u) Faa ML / Griekspoor +1.5 sets",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (4u) Damm ML...",
+        "pick": "(4u) Damm ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (3u) Mannarino ML...",
+        "pick": "(3u) Mannarino ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (3u) Droguet +3.5...",
+        "pick": "(3u) Droguet +3.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1u) Droguet ML...",
+        "pick": "(1u) Droguet ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Paolo Banchero over 4.: AS Ove...",
+        "pick": "Paolo Banchero over 4.: AS Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Jabari Smith Jr over 19.: Poin...",
+        "pick": "Jabari Smith Jr over 19.: Points Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Luka Doncic over 16.: Rebounds...",
+        "pick": "Luka Doncic over 16.: Rebounds Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Collin Murray-Boyles over 9.: ...",
+        "pick": "Collin Murray-Boyles over 9.: Rebounds Over 5.5",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1u) AB Christian +13...",
+        "pick": "(1u) AB Christian +13",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Rockets vs Hornets Under 219.5...",
+        "pick": "Rockets vs Hornets Under 219.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: William &amp; Mary +4.5 7pm...",
+        "pick": "William &amp; Mary +4.5 7pm",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: ers +5.5...",
+        "pick": "ers +5.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: ers TT Over 112.5...",
+        "pick": "ers TT Over 112.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Campbell ML...",
+        "pick": "Campbell ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Austin Reaves Over 18.5 P vs a...",
+        "pick": "Austin Reaves Over 18.5 P vs amp;R",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (3u) Wvu vs Cincinnati Under 1...",
+        "pick": "(3u) Wvu vs Cincinnati Under 128 -110",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (7.5u) Iowa W -3.5...",
+        "pick": "(7.5u) Iowa W -3.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: &gt; Philadelphia 76ers +6.5 M...",
+        "pick": "&gt; Philadelphia 76ers +6.5 ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Spread ML...",
+        "pick": "Spread ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1U 1H Memphis +0.5...",
+        "pick": "1U 1H Memphis +0.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2U Albany +1.5...",
+        "pick": "2U Albany +1.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2.5u Citadel +14...",
+        "pick": "2.5u Citadel +14",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1.5u Lindenwood ML...",
+        "pick": "1.5u Lindenwood ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1.5u Vegas ML...",
+        "pick": "1.5u Vegas ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: [836] UC San Diego -10 Long ML...",
+        "pick": "[836] UC San Diego -10 Long ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: [523] Under 217 -115...",
+        "pick": "[523] Under 217 -115",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: [515] Brooklyn Nets +12 ( Buy ...",
+        "pick": "[515] Brooklyn Nets +12 ( Buy Pt. ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: +0.5) Brooklyn Nets @ Orlando...",
+        "pick": "+0.5) Brooklyn Nets @ Orlando",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Line Over 115.0 - 115 Philadel...",
+        "pick": "Line Over 115.0 - 115 Philadelphia 76ers Total",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2U Upgrading Utah Tech ML from...",
+        "pick": "2U Upgrading Utah Tech ML from ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Phx / Gsw G #8 +2...",
+        "pick": "Phx / Gsw G #8 +2",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Profit Beasts...",
+        "pick": "Profit Beasts",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: NBA C Kispert over 16.: PRA Ov...",
+        "pick": "NBA C Kispert over 16.: PRA Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: NBA A Horford under 18.: PRA O...",
+        "pick": "NBA A Horford under 18.: PRA Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: NBA J Johnson: over 23.5 point...",
+        "pick": "NBA J Johnson: over 23.5 points",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Bing +12.5...",
+        "pick": "5U Bing +12.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Uvm Maine Over 129.5 -115...",
+        "pick": "5U Uvm Maine Over 129.5 -115",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Alba Bry Over 133.5 -112...",
+        "pick": "5U Alba Bry Over 133.5 -112",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Psu Mich Under 162.5 -115...",
+        "pick": "5U Psu Mich Under 162.5 -115",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Wvu Cin Over 126.5 -120...",
+        "pick": "5U Wvu Cin Over 126.5 -120",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Rider +14.5...",
+        "pick": "Rider +14.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Bkn Orl Over 214.5 -112...",
+        "pick": "5U Bkn Orl Over 214.5 -112",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Bkn +9.5...",
+        "pick": "5U Bkn +9.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Uta +9.5...",
+        "pick": "5U Uta +9.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Uta Atl Under 244.5 -120...",
+        "pick": "5U Uta Atl Under 244.5 -120",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Chi +8.5...",
+        "pick": "5U Chi +8.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1.5U) New Jersey devils ml...",
+        "pick": "(1.5U) New Jersey devils ml",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1U) Detroit Pistons -14...",
+        "pick": "(1U) Detroit Pistons -14",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1U) Chicago Bulls +7.5...",
+        "pick": "(1U) Chicago Bulls +7.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: (1U) Vegas knights vs La Kings...",
+        "pick": "(1U) Vegas knights vs La Kings under 5.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1u Corey Kispert: Over 10.5 po...",
+        "pick": "1u Corey Kispert: Over 10.5 points",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Atlanta Hawks. 11.5 .8u, would...",
+        "pick": "Atlanta Hawks. 11.5 .8u, would split with 15.: PRA Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: N. Arizona +7.5...",
+        "pick": "N. Arizona +7.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Unit 1.0 33-10 in Last 43 NCAA...",
+        "pick": "Unit 1.0 33-10 in Last 43 NCAAB Picks",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 22-9 in Last 31 NCAAB Ats Pick...",
+        "pick": "22-9 in Last 31 NCAAB Ats Picks",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 4U Wawrinka Over 22.5 -125...",
+        "pick": "4U Wawrinka Over 22.5 -125",
+        "league": "ATP",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Burrachaga / Dellien MLP -1...",
+        "pick": "5U Burrachaga / Dellien MLP -159",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Stevenson: RE Over 24.5...",
+        "pick": "Stevenson: RE Over 24.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: JSN Under 95.: RE Over 5.5...",
+        "pick": "JSN Under 95.: RE Over 5.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Walker III: RE Over 3.5...",
+        "pick": "Walker III: RE Over 3.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Henry: RE Over 4.5...",
+        "pick": "Henry: RE Over 4.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Hollins: RE Over 25.5...",
+        "pick": "Hollins: RE Over 25.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1U Sam Darnold 1+ Ints ML...",
+        "pick": "1U Sam Darnold 1+ Ints ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Maye Over 6.5...",
+        "pick": "Maye Over 6.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2U Utah Tech ML...",
+        "pick": "2U Utah Tech ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1U Iona +8...",
+        "pick": "1U Iona +8",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1U Wawrinka +3.5 Games...",
+        "pick": "1U Wawrinka +3.5 Games",
+        "league": "ATP",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1.5u Clara Tauson ML...",
+        "pick": "1.5u Clara Tauson ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1.5u Katie Boulter ML...",
+        "pick": "1.5u Katie Boulter ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Navy ML...",
+        "pick": "Navy ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 5U Baylor -7.5...",
+        "pick": "5U Baylor -7.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: New Mexico ML...",
+        "pick": "New Mexico ML",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 4U California -8.5...",
+        "pick": "4U California -8.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 3U Umkc +2...",
+        "pick": "3U Umkc +2",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Toronto Raptors +3.5...",
+        "pick": "Toronto Raptors +3.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Oklahoma Sooners +8.5...",
+        "pick": "Oklahoma Sooners +8.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Byu vs Oklahoma State Over 167...",
+        "pick": "Byu vs Oklahoma State Over 167.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Denver vs New York Under 223.5...",
+        "pick": "Denver vs New York Under 223.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2U Byu -7.5...",
+        "pick": "2U Byu -7.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1.5u Florida Atlantic +3...",
+        "pick": "1.5u Florida Atlantic +3",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1.5u Arkansas State -4...",
+        "pick": "1.5u Arkansas State -4",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1u South Dakota St ML...",
+        "pick": "1u South Dakota St ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1u Duquense +7.5...",
+        "pick": "1u Duquense +7.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1u Wichita State -9...",
+        "pick": "1u Wichita State -9",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 10* Seahawks vs Patriots Over ...",
+        "pick": "10* Seahawks vs Patriots Over 45.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 3* Patriots +5...",
+        "pick": "3* Patriots +5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 20* Seahawks -4.5...",
+        "pick": "20* Seahawks -4.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2* 1Q S Darnold Under 51.5 pas...",
+        "pick": "2* 1Q S Darnold Under 51.5 pass yards -116",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 3* 2H Seahawks vs Patriots Ove...",
+        "pick": "3* 2H Seahawks vs Patriots Over 22.5 -110",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2* D Maye: Over 36.5 rush yard...",
+        "pick": "2* D Maye: Over 36.5 rush yards",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Dime - Seahawks -4.5...",
+        "pick": "Dime - Seahawks -4.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: George Holani  Over 1.: RE Ove...",
+        "pick": "George Holani  Over 1.: RE Over 0.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Hornets +3.5...",
+        "pick": "Hornets +3.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 2u - Penguins vs Sabres Over 6...",
+        "pick": "2u - Penguins vs Sabres Over 6.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 7* Uab ML...",
+        "pick": "7* Uab ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 1u 1H - Cincinnati -3...",
+        "pick": "1u 1H - Cincinnati -3",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 3u - Penguins ML...",
+        "pick": "3u - Penguins ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 3* North Florida vs West Georg...",
+        "pick": "3* North Florida vs West Georgia Over 167.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Uncw -4.5...",
+        "pick": "Uncw -4.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 4% Islanders ML...",
+        "pick": "4% Islanders ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: ers +4...",
+        "pick": "ers +4",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 4% Sahith Theegala ML...",
+        "pick": "4% Sahith Theegala ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 4% Collin Morikawa ML...",
+        "pick": "4% Collin Morikawa ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 4% Brian Harman ML...",
+        "pick": "4% Brian Harman ML",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Hofstra -9...",
+        "pick": "Hofstra -9",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Marist -15...",
+        "pick": "Marist -15",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Rider vs Marist Under 136.5...",
+        "pick": "Rider vs Marist Under 136.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: West Virginia +5.5...",
+        "pick": "West Virginia +5.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: West Virginia vs Cincinnati Ov...",
+        "pick": "West Virginia vs Cincinnati Over 126.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Lindenwood -1...",
+        "pick": "Lindenwood -1",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Lindenwood vs Ualr Under 152.5...",
+        "pick": "Lindenwood vs Ualr Under 152.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Morehead State vs Southeast Mi...",
+        "pick": "Morehead State vs Southeast Missouri State Under 146",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Uab -1.5...",
+        "pick": "Uab -1.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Memphis vs Uab Under 152...",
+        "pick": "Memphis vs Uab Under 152",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: UT Arlington +1.5...",
+        "pick": "UT Arlington +1.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Cal Poly +1.5...",
+        "pick": "Cal Poly +1.5",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Csun vs Cal Poly Under 177...",
+        "pick": "Csun vs Cal Poly Under 177",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Tarleton vs CA Baptist Over 14...",
+        "pick": "Tarleton vs CA Baptist Over 141",
+        "league": "",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML,Team A vs B O/U X...",
+        "pick": "Team ML,Team A vs B O/U X",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: UNCW...",
+        "pick": "UNCW",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: William & Mary +4.5...",
+        "pick": "William & Mary +4.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Name: Stat O/U X...",
+        "pick": "Name: Stat O/U X",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Corey Kispert o10.5 points...",
+        "pick": "Corey Kispert o10.5 points",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Draymond Green u5.5 assists...",
+        "pick": "Draymond Green u5.5 assists",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Leg1 / Leg2...",
+        "pick": "Leg1 / Leg2",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Michigan -24.5...",
+        "pick": "Michigan -24.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Bills ML...",
+        "pick": "Bills ML",
+        "league": "NFL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Patriots -7...",
+        "pick": "Patriots -7",
+        "league": "NFL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Packers -7...",
+        "pick": "Packers -7",
+        "league": "NFL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Michigan -24.5...",
+        "pick": "Michigan -24.5",
+        "league": "NCAAF",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Campbell -4.5...",
+        "pick": "Campbell -4.5",
+        "league": "NCAAF",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Little Rock ML...",
+        "pick": "Little Rock ML",
+        "league": "NCAAF",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Siena ML / Ohio State ML...",
+        "pick": "Siena ML / Ohio State ML",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Michigan -24.5...",
+        "pick": "Michigan -24.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Campbell -4.5...",
+        "pick": "Campbell -4.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Little Rock ML...",
+        "pick": "Little Rock ML",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Draper ML...",
+        "pick": "Draper ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Fils ML...",
+        "pick": "Fils ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Uchida ML...",
+        "pick": "Uchida ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Ugo Carabelli ML...",
+        "pick": "Ugo Carabelli ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Draper 2-0 + Fils...",
+        "pick": "Draper 2-0 + Fils",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Uchida ML...",
+        "pick": "Uchida ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Ugo Carabelli ML...",
+        "pick": "Ugo Carabelli ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Player ML...",
+        "pick": "Player ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Player ML...",
+        "pick": "Player ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Hornets: Wins O 7.5...",
+        "pick": "Hornets: Wins O 7.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Oilers ML...",
+        "pick": "Oilers ML",
+        "league": "NHL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 76ers + 4.5...",
+        "pick": "76ers + 4.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Jabari Smith Jr over 19.5 pts+...",
+        "pick": "Jabari Smith Jr over 19.5 pts+rebs",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Collin Murray-Boyles over 9.5 ...",
+        "pick": "Collin Murray-Boyles over 9.5 rebs+asts",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Hampton + 1.5...",
+        "pick": "Hampton + 1.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: CS Bakersfield +16.5...",
+        "pick": "CS Bakersfield +16.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 76ers +4...",
+        "pick": "76ers +4",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Griekspoor ML...",
+        "pick": "Griekspoor ML",
+        "league": "Tennis",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: FAA ML...",
+        "pick": "FAA ML",
+        "league": "Tennis",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Kovacevic ML...",
+        "pick": "Kovacevic ML",
+        "league": "Tennis",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Cobolli ML...",
+        "pick": "Cobolli ML",
+        "league": "Tennis",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Leg1 / Leg2...",
+        "pick": "Leg1 / Leg2",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "NBL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Event: Selection...",
+        "pick": "Event: Selection",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Found 0 picks, expected ~1...",
+        "pick": "Found 0 picks, expected ~1",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Signals: 3 bullet points, 1 ch...",
+        "pick": "Signals: 3 bullet points, 1 checkmarks/status icons, 1 team names",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: ACTION: Extract ALL picks/legs...",
+        "pick": "ACTION: Extract ALL picks/legs",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Look closely at image/text...",
+        "pick": "Look closely at image/text",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Found 1 picks, expected ~2...",
+        "pick": "Found 1 picks, expected ~2",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Signals: 1 bullet points, 2 ch...",
+        "pick": "Signals: 1 bullet points, 2 checkmarks/status icons",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: ACTION: Extract ALL picks/legs...",
+        "pick": "ACTION: Extract ALL picks/legs",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Look closely at image/text...",
+        "pick": "Look closely at image/text",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Drexel/Campbell U143.5...",
+        "pick": "Drexel/Campbell U143.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: De Minaur: Sets O 1.5...",
+        "pick": "De Minaur: Sets O 1.5",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team/Event: Prop...",
+        "pick": "Team/Event: Prop",
+        "league": "NFL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team: Stat O/U X...",
+        "pick": "Team: Stat O/U X",
+        "league": "NFL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team/Event: Prop...",
+        "pick": "Team/Event: Prop",
+        "league": "NFL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: UMass Lowell +2.5...",
+        "pick": "UMass Lowell +2.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Jacksonville vs Queens Over 14...",
+        "pick": "Jacksonville vs Queens Over 146.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Campbell ML...",
+        "pick": "Campbell ML",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: UC Santa Barbara ML...",
+        "pick": "UC Santa Barbara ML",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Campbell ML...",
+        "pick": "Campbell ML",
+        "league": "NCAAF",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: MICHIGAN (-24.5) over Penn Sta...",
+        "pick": "MICHIGAN (-24.5) over Penn State",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Michigan vs Penn State O 151...",
+        "pick": "Michigan vs Penn State O 151",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 76ers +4.5...",
+        "pick": "76ers +4.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: +1.5...",
+        "pick": "+1.5",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Blue jackets ML...",
+        "pick": "Blue jackets ML",
+        "league": "NHL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: App State money line...",
+        "pick": "App State money line",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LA Lakers money line...",
+        "pick": "LA Lakers money line",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Queens money line...",
+        "pick": "Queens money line",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Willlam & Mary alternate +8.5...",
+        "pick": "Willlam & Mary alternate +8.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: +3.5...",
+        "pick": "+3.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: ML...",
+        "pick": "ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Oilers ML...",
+        "pick": "Oilers ML",
+        "league": "NHL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Oilers ML...",
+        "pick": "Oilers ML",
+        "league": "NHL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 76ers +3.5...",
+        "pick": "76ers +3.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: J Johnson [ATL] over 18.5 REB+...",
+        "pick": "J Johnson [ATL] over 18.5 REB+AST",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: TMS / ISW / BESTBET / CHAMBA /...",
+        "pick": "TMS / ISW / BESTBET / CHAMBA / FIVESTAR / PARLAYTRAVY / YOURDAILYCAPPER",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: MAZI EXCLUSIVE PLAY / VIP CHAN...",
+        "pick": "MAZI EXCLUSIVE PLAY / VIP CHANNEL / BEST PRICES + BONUSES",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Kings ML...",
+        "pick": "Kings ML",
+        "league": "NCAAF",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Kings ML...",
+        "pick": "Kings ML",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 76ers +4...",
+        "pick": "76ers +4",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Fairfield vs Sacred Heart Over...",
+        "pick": "Fairfield vs Sacred Heart Over 155.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Northeastern vs Hofstra Over 1...",
+        "pick": "Northeastern vs Hofstra Over 155.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Sacred Heart +2.5...",
+        "pick": "Sacred Heart +2.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 76ers +3.5...",
+        "pick": "76ers +3.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: J Johnson [ATL] over 18.5 REB+...",
+        "pick": "J Johnson [ATL] over 18.5 REB+AST",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Team ML...",
+        "pick": "Team ML",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: February 4th Cappers Intel Pre...",
+        "pick": "February 4th Cappers Intel Premium Cappers Recap",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: App State ML...",
+        "pick": "App State ML",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: over 156.5...",
+        "pick": "over 156.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Michigan -24.5...",
+        "pick": "Michigan -24.5",
+        "league": "NCAAF",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Mojo FAA ML...",
+        "pick": "Mojo FAA ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Griekspoor +1.5 sets...",
+        "pick": "Griekspoor +1.5 sets",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Mannarino ML...",
+        "pick": "Mannarino ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Droguet +3.5...",
+        "pick": "Droguet +3.5",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Gea ML...",
+        "pick": "Gea ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Bejlek +3.5...",
+        "pick": "Bejlek +3.5",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Boulter ML...",
+        "pick": "Boulter ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Droguet +3.5...",
+        "pick": "Droguet +3.5",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Gea ML...",
+        "pick": "Gea ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Bejlek +3.5...",
+        "pick": "Bejlek +3.5",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Boulter ML...",
+        "pick": "Boulter ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Griekspoor +1.5 sets...",
+        "pick": "Griekspoor +1.5 sets",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Mannarino ML...",
+        "pick": "Mannarino ML",
+        "league": "TENNIS",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: UCSB Gauchos -2...",
+        "pick": "UCSB Gauchos -2",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Stony Brook Seawolves -3...",
+        "pick": "Stony Brook Seawolves -3",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Hampton +1.5...",
+        "pick": "Hampton +1.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Michigan -24.5...",
+        "pick": "Michigan -24.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Vermont -7...",
+        "pick": "Vermont -7",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Montana -6...",
+        "pick": "Montana -6",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 76ers +4.5...",
+        "pick": "76ers +4.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Campbell ML...",
+        "pick": "Campbell ML",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: UC Santa Barbara ML...",
+        "pick": "UC Santa Barbara ML",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: 76ers +4.5...",
+        "pick": "76ers +4.5",
+        "league": "NBA",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: LeBron: Pts O 25.5...",
+        "pick": "LeBron: Pts O 25.5",
+        "league": "Other",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Seahawks/Patriots u47.0...",
+        "pick": "Seahawks/Patriots u47.0",
+        "league": "NFL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Seahawks/Patriots o45.5...",
+        "pick": "Seahawks/Patriots o45.5",
+        "league": "NFL",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Stetson +4.5...",
+        "pick": "Stetson +4.5",
+        "league": "NCAAF",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Mercer -4.5...",
+        "pick": "Mercer -4.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: Siena -7.5...",
+        "pick": "Siena -7.5",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    },
+    {
+        "desc": "Fix: NAVY...",
+        "pick": "NAVY",
+        "league": "NCAAB",
+        "expected": "RESOLVED",
+        "game_id": "ANY"
+    }
+]

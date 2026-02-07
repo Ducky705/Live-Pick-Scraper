@@ -32,6 +32,107 @@ class PickParser:
         # Clean text
         text = pick_text.strip()
         
+        # --- ADAPTIVE PARSING LAYER ---
+        from src.parsing.fingerprinter import Fingerprinter
+        from src.parsing.registry import TemplateRegistry
+        
+        # Instantiate Registry (Singleton-ish typically, but load cheap here)
+        # TODO: Move to class level or singleton to avoid reload
+        registry = TemplateRegistry()
+        
+        fp = Fingerprinter.fingerprint(text)
+        tmpl = registry.get_template(fp)
+        
+        if tmpl:
+            # FAST PATH: Logic from Template
+            pattern, mapping = tmpl
+            match = pattern.match(text)
+            if match:
+                # Construct Pick from Match
+                groups = match.groupdict()
+                
+                # Default Fields
+                selection = groups.get(mapping.get("selection", "selection"), text)
+                line_val = None
+                odds_val = None
+                
+                if "line" in groups and groups["line"]:
+                    try:
+                        line_val = float(groups["line"])
+                    except: pass
+                    
+                if "odds" in groups and groups["odds"]:
+                    try:
+                        odds_val = int(groups["odds"])
+                    except: pass
+                    
+                units_val = None
+                if "units" in groups and groups["units"]:
+                    units_val = groups["units"]
+                    
+                # Simplistic return for now - assumes Spread/ML/Total based on fields
+                return Pick(
+                    raw_text=text,
+                    league=league,
+                    date=date,
+                    bet_type=BetType.SPREAD if line_val else BetType.MONEYLINE,
+                    selection=selection,
+                    line=line_val,
+                    odds=odds_val,
+                    units=units_val
+                )
+        else:
+            # AUTO-LEARNING (Cache Miss)
+            # Only attempt to learn if text seems "pick-like" (length > 5, has numbers?)
+            # Heuristic: Don't learn extremely short or long texts
+            if 5 < len(text) < 200:
+                from src.parsing.learner import Learner
+                try:
+                    learner = Learner()
+                    # Synchronous Learning (Safety: fallback on fail)
+                    # NOTE: This adds latency on the *first* unseen format!
+                    result = learner.learn_format(text)
+                    if result:
+                        regex, mapping = result
+                        # Register immediately
+                        registry.register_template(fp, regex, mapping, example=text)
+                        
+                        # Recursive call to use the new template immediately
+                        # return PickParser.parse(text, league, date)
+                        # Actually, just regex match here to avoid recursion stack issues
+                        pattern = re.compile(regex, re.IGNORECASE)
+                        match = pattern.match(text)
+                        if match:
+                            groups = match.groupdict()
+                            selection = groups.get(mapping.get("selection", "selection"), text)
+                            line_val = None
+                            odds_val = None
+                            if "line" in groups and groups["line"]:
+                                try: line_val = float(groups["line"])
+                                except: pass
+                            if "odds" in groups and groups["odds"]:
+                                try: odds_val = int(groups["odds"])
+                                except: pass
+                            units_val = None
+                            if "units" in groups and groups["units"]:
+                                units_val = groups["units"]
+                                
+                            return Pick(
+                                raw_text=text,
+                                league=league,
+                                date=date,
+                                bet_type=BetType.SPREAD if line_val else BetType.MONEYLINE,
+                                selection=selection,
+                                line=line_val,
+                                odds=odds_val,
+                                units=units_val
+                            )
+                except Exception as e:
+                    # Log but continue to legacy parser
+                    pass
+
+        # ------------------------------
+        
         # 0. Strip Win/Loss Records (e.g. " / 24-24")
         # Pattern: Slash followed by digits-digits
         text = re.sub(r"\s*/\s*\d+-\d+(?:-\d+)?.*$", "", text)
@@ -170,7 +271,9 @@ class PickParser:
     def _is_parlay(text: str) -> bool:
         """Check if text is a parlay."""
         # Check for explicit Parlay marker
-        if "parlay" in text.lower() and ":" in text:
+        # Check for explicit Parlay marker
+        # Fix: Ensure "parlay" is followed by colon, not just somewhere in text
+        if re.search(r"\bparlay\b.*:", text, re.IGNORECASE):
             return True
 
         # Slash separator with multiple legs
@@ -398,7 +501,17 @@ class PickParser:
         all_same_league = True
         detected_leagues = set()
 
+        # Recursion Guard: If we didn't split and didn't strip anything, parsing the same text again causes infinite loop.
+        if len(legs_raw) == 1 and legs_raw[0] == text:
+            # We failed to split the parlay. Fallback to spread/ML parse to avoid recursion.
+            return PickParser._parse_spread_or_ml(text, league, date)
+
         for leg_text in legs_raw:
+            # Recursion Guard 2: If leg text is almost strictly shorter than original, it's safe.
+            # But if it's identical, skip.
+            if len(leg_text) >= len(text) and leg_text == text:
+                 return PickParser._parse_spread_or_ml(text, league, date)
+
             # Extract (League) prefix if present
             leg_league = league
             clean_leg = leg_text

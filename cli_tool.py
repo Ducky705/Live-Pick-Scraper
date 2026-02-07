@@ -131,6 +131,12 @@ async def main():
 
     # 4. OCR & IMAGE PROCESSING
     logging.info("Starting OCR processing (Smart Mode)...")
+    
+    # 4b. START ASYNC SCORE FETCHING EARLY (Parallel Optimization)
+    # We fetch ALL leagues to be safe and populate cache while OCR/LLM runs.
+    from src.score_fetcher import async_fetch_scores_for_date
+    logging.info("Starting background score fetching for all leagues...")
+    score_fetch_task = asyncio.create_task(async_fetch_scores_for_date(target_date))
 
     # Prepare batch
     ocr_tasks = []  # (msg_index, image_path)
@@ -177,6 +183,9 @@ async def main():
 
     if not selected_msgs:
         logging.warning("No picks detected after classification.")
+        # Determine if we should wait for scores or just cancel
+        if not score_fetch_task.done():
+            score_fetch_task.cancel()
         return
 
     # 6. EXTRACTION PIPELINE (Rule-Based + AI + Validation)
@@ -190,21 +199,10 @@ async def main():
     try:
         from src.grader import grade_picks
         from src.grading.constants import LEAGUE_ALIASES_MAP
-        from src.score_fetcher import fetch_scores_for_date
+        # from src.score_fetcher import fetch_scores_for_date # Deprecated sync call
 
-        # OPTIMIZATION: Extract leagues from picks to fetch only what's needed
-        relevant_leagues = set()
-        for p in picks:
-            lg = (p.get("league") or p.get("lg") or "").lower()
-            if lg:
-                # Normalize to canonical league name
-                relevant_leagues.add(LEAGUE_ALIASES_MAP.get(lg, lg))
-
-        logging.info(f"Fetching scores for leagues: {', '.join(sorted(relevant_leagues)) or 'all'}")
-        scores = fetch_scores_for_date(
-            target_date,
-            requested_leagues=list(relevant_leagues) if relevant_leagues else None,
-        )
+        logging.info(f"Waiting for score fetching to complete...")
+        scores = await score_fetch_task
         logging.info(f"Fetched {len(scores)} game scores")
 
         picks = grade_picks(picks, scores)

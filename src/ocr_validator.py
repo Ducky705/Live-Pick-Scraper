@@ -41,6 +41,7 @@ class OCRValidationResult:
     pick_patterns_found: int
     garbage_patterns_found: int
     word_quality_ratio: float
+    team_names_found: int = 0
 
 
 # --- PICK PATTERN DETECTION ---
@@ -379,6 +380,16 @@ def validate_ocr_detailed(text: str) -> OCRValidationResult:
         score += 0.1
         reasons.append(f"Good structure ({line_count} lines)")
 
+    # 6. Team Name Verification (Sanity Check)
+    team_count = check_team_overlap(text)
+    if team_count >= 2:
+        score += 0.25 # Huge boost for finding real teams
+        reasons.append(f"Teams found: {team_count}")
+        # If we have teams, we are almost certainly looking at a bet
+    elif team_count == 1:
+        score += 0.1
+        reasons.append(f"Team found: {team_count}")
+
     # Clamp score
     score = max(0.0, min(1.0, score))
 
@@ -403,6 +414,7 @@ def validate_ocr_detailed(text: str) -> OCRValidationResult:
         pick_patterns_found=pick_count,
         garbage_patterns_found=garbage_count,
         word_quality_ratio=word_ratio,
+        team_names_found=team_count,
     )
 
 
@@ -429,3 +441,35 @@ def quick_validate(text: str) -> bool:
     # Fallback: check word count
     words = text.split()
     return len(words) >= 5
+
+
+
+
+def check_team_overlap(text: str) -> int:
+    """
+    Check if text contains known team names/aliases.
+    Returns count of unique teams found.
+    """
+    from src.team_aliases import TEAM_ALIASES
+    
+    if not text:
+        return 0
+        
+    text_lower = text.lower()
+    found_teams = set()
+    
+    # We flatten the aliases for efficient searching? 
+    # Or just iterate. The alias list is ~200 items, not too bad.
+    # To be safer/faster, we could pre-compile this, but lazy import is fine for now.
+    
+    for team_key, aliases in TEAM_ALIASES.items():
+        for alias in aliases:
+            # simple substring check, or regex for word boundary?
+            # word boundary is safer: \bknicks\b
+            # But some aliases might be multi-word: "new york knicks"
+            if alias in text_lower:
+                 found_teams.add(team_key)
+                 break # Found this team, move to next string
+                 
+    return len(found_teams)
+

@@ -382,7 +382,14 @@
     "source": "telegram",
     "text": "CashCing \n\n3u, Indiana -7 -110\n\n2u, Ole Miss +7 - 115",
     "ocr_text": "",
-    "expected_picks": []
+    "expected_picks": [
+      {
+        "pick": "Indiana -7"
+      },
+      {
+        "pick": "Ole Miss +7"
+      }
+    ]
   },
   {
     "id": "30935",

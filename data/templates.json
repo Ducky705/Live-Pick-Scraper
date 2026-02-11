@@ -918,5 +918,381 @@
       "units": "units"
     },
     "example": "Middle Tennessee ML -120 | to WIN 2 UNITS (risking 2.4u to win 2u)"
+  },
+  "<TEXT> . <NUM> <TEXT>": {
+    "regex": "^\\s*(?P<selection>[\\w\\s]+)\\s*(?P<line>O\\.\\d+|TT|ML)?\\s*(?P<odds>-?\\d+(?:\\.\\d+)?|\\+\\d+(?:\\.\\d+)?)?\\s*(?P<units>[\\w\\s\\*]+)?\\s*$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "Torino TT O.5** ** ** ML"
+  },
+  "<TEXT> <LINE> <LINE>": {
+    "regex": "^(?P<selection>[a-zA-Z\\s]+)\\s+(?P<line>-?\\d+(?:\\.\\d+)?|-?\\d+\\.?\\d*)\\s*(?P<odds>-?\\d+(?:\\.\\d+)?|-?\\d+\\.?\\d*)\\s*(?P<units>[\\w\\s\\*u]+)?$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "NBA Raptors -7-118"
+  },
+  "<TEXT> <NUM> .: <TEXT> <NUM>": {
+    "regex": "^(?P<selection>[\\w\\s]+)\\s+over\\s+(?P<line>\\d+(?:\\.\\d+)?)\\.:\\s*Points\\s*(?P<line2>Over\\s*\\d+(?:\\.\\d+)?)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "line2": "line"
+    },
+    "example": "Flagg  over 35.: Points Over 5.5"
+  },
+  "<TEXT> <LINE> <TEXT> . <TEXT>": {
+    "regex": "^(?P<selection>[a-zA-Z\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s+v\\.\\s+(?P<selection2>[a-zA-Z\\s]+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "Mavericks +8.5 v. Spurs"
+  },
+  "<TEXT> : <TEXT>": {
+    "regex": "^(?P<sport>[a-zA-Z]+):\\s*(?P<selection>[a-zA-Z\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?|[a-zA-Z\\s]+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "Nhl: Devils ML"
+  },
+  "<UNITS> <TEXT> : <TEXT> <LINE>": {
+    "regex": "^(?P<units>\\d+[u\\*])\\s+.*:\\s+(?P<selection>[a-zA-Z\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "units": "units"
+    },
+    "example": "75U Nba: Jazz +9.5"
+  },
+  "<NUM> <TEXT> <LINE> <ODDS>": {
+    "regex": "^\\d+H\\s+(?P<selection>[\\w\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s+(?P<odds>[+-]?\\d+)\\s*$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds"
+    },
+    "example": "1H Cincy -3 -110"
+  },
+  "<NUM> <TEXT> <NUM>": {
+    "regex": "^\\$(?P<units>\\d+(?:,\\d+)*)\\s+\\*\\*(?P<selection>[a-zA-Z\\s]+)\\s+vs\\s+[a-zA-Z\\s]+\\s+over\\s+(?P<line>\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "units": "units"
+    },
+    "example": "$10,000 **Knocks vs Nuggets over 226"
+  },
+  "<TEXT> / <TEXT> <NUM> <ODDS>": {
+    "regex": "^(?P<selection>[a-zA-Z\\s]+)\\s*\\/\\s*(?P<selection2>[a-zA-Z\\s]+)\\s+(?P<line>OV\\s*\\d+(?:\\.\\d+)?)\\s+(?P<odds>[+-]?\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds"
+    },
+    "example": "Buffalo / Penguins OV 6.5 -120"
+  },
+  "<TEXT> <NUM> <TEXT> <NUM> : <NUM> <TEXT> <NUM> <TEXT>": {
+    "regex": "^If\\s+(?P<selection>\\d+P)\\s+ends\\s+(?P<line>\\d+:\\d+)\\s+I'm\\s+taking\\s+(?P<odds>Over|Under)\\s+(?P<line2>\\d+\\.\\d+)\\s+full\\s+game$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "line2": "line"
+    },
+    "example": "If 1P ends 0:0 I'm taking Over 4.5 full game"
+  },
+  "- <TEXT> <NUM> <TEXT> <LINE> / <NUM> <LINE>": {
+    "regex": "^-(?P<selection>[\\w\\s]+)\\s+(?P<period>[\\w\\d]+)\\s*(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s*/\\s*(?P<score>[\\d-]+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "period": null,
+      "score": null
+    },
+    "example": "- Hornets 1Q +1.5 / 25-23"
+  },
+  "<LINE> <TEXT> <LINE> <TEXT>": {
+    "regex": "^-(?P<selection>[\\w\\s]+)\\s*(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s*(?P<odds>ML)?\\s*(?P<units>[\\w\\s\\*u]*)?$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "-76ers +4.5 ML"
+  },
+  "- <TEXT>": {
+    "regex": "^\\s*-(\\s*)?(?P<selection>[\\w\\s]+)(\\s*)?(?P<line>-?\\d+(?:\\.\\d+)?)?(\\s*)?(?P<odds>-?\\d+)?(\\s*)?(?P<units>[\\w\\s\\*u]+)?\\s*$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "- Elon ML"
+  },
+  "<LINE> <TEXT>": {
+    "regex": "^(?P<line>[+-]?\\d+)\\s+(?P<selection>[a-zA-Z\\s]+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "+69 ME GUSTAS"
+  },
+  "<ODDS> <TEXT>": {
+    "regex": "^__\\*{4}____\\*{4}__\\s*(?P<selection>[\\w\\s]+)?\\s*\\+?(?P<odds>\\d+K\\s*GANADOS)?\\s*__\\*{4}____\\*{4}____\\*{4}__\\s*(?P<units>[\\w\\s]+)?\\s*$",
+    "mapping": {
+      "selection": "selection",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "__****____****__ +376K GANADOS __****____****____****__"
+  },
+  "<TEXT> <LINE> <TEXT> .": {
+    "regex": "^.*?(?P<selection>[a-zA-Z\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s+and\\s+up\\s+when\\s+available.*$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "Adding another one here lines will be moving grab anything +6.5 and up when available."
+  },
+  "<TEXT> -<TEXT> <LINE>": {
+    "regex": "^(?P<selection>[a-zA-Z\\s-]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "Loyola-Chicago +11.5"
+  },
+  "<TEXT> / <TEXT> <NUM>": {
+    "regex": "^(?P<selection>[A-Z\\s]+)\\s*\\/\\s*(?P<selection2>[A-Z\\s]+)\\s+(?P<line>\\d+\\.\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "MIAMI HEAT / BOSTON CELTICS UNDER 229.5"
+  },
+  "<TEXT> . <TEXT> <LINE>": {
+    "regex": "^(?P<selection>[a-zA-Z\\.\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "St. Johns +1.5"
+  },
+  "<TEXT> <NUM> / <TEXT> <NUM>": {
+    "regex": "^(?P<selection>[A-Z]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s*/\\s*(?:OVER|UNDER)\\s+(?P<total>[+-]?\\d+(?:\\.\\d+)?)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "PATRIOTS 10.5 / OVER 39.5"
+  },
+  "<TEXT> <NUM> <TEXT> <NUM> <UNITS>": {
+    "regex": "^\\s*(?P<selection>[\\w\\s]+)\\s*(?P<line>[\\d\\.]+)?\\s*(?P<odds>[\\d\\+\\-]+)?\\s*(?P<units>[\\w\\s\\*u]+)?\\s*$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "St Johns 1H u 68 1U"
+  },
+  "<TEXT> <NUM> <TEXT> <LINE>": {
+    "regex": "^(?P<selection>[a-zA-Z\\s]+)\\s*(?P<period>[0-9H]+)?\\s*(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s*$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "Illinois Chicago 1H +15"
+  },
+  "<TEXT> . <TEXT> <LINE> <TEXT> . <TEXT>": {
+    "regex": "^(?P<selection>[a-zA-Z\\.\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s+v\\.\\s+(?P<selection2>[a-zA-Z\\.\\s]+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "St. Johns +1.5  v. UConn"
+  },
+  "<TEXT> :": {
+    "regex": "^(?P<selection>[a-zA-Z\\s]+)\\s*:\\s*$",
+    "mapping": {
+      "selection": "selection"
+    },
+    "example": "Parlay :"
+  },
+  "<TEXT> <NUM> <TEXT> <NUM> <LINE> <TEXT> <ODDS> <TEXT> <LINE> <TEXT> <NUM> <LINE> <TEXT> <NUM> <TEXT> <NUM> <TEXT> <NUM> <TEXT> % <NUM> <TEXT> <NUM>": {
+    "regex": "^home\\?betId=[\\w-]+&source=[\\w_]+&modal=[\\w_]+&iid=[\\w%3A]+(?:&selection=(?P<selection>[\\w\\s]+))?(?:&line=(?P<line>[+-]?\\d+(?:\\.\\d+)?))?(?:&odds=(?P<odds>[+-]?\\d+))?(?:&units=(?P<units>[\\w\\s]+))?$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "home?betId=bd5a0718-022a-466e-89a0-6634cb0c1b0e&source=link_shared&modal=bet&iid=sport%3A515702288"
+  },
+  "<TEXT> -<TEXT> <NUM> <TEXT>": {
+    "regex": "^(?P<selection>[a-zA-Z\\s-]+)\\s+(?:over|under|above|below)?\\s*(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s+(?:points|rebounds|assists|steals|blocks|turnovers|threes|fouls|minutes|plus-minus|hits|runs|hits|rbi|home runs|strikeouts|wins|saves|era|whip|k|bb|hr|r|sb|avg|obp|slg|ops|war|fip|xFIP|dRA|FIP-|SIERA|ERA-|FIP|xFIP|dRA|FIP-|SIERA|ERA-)?$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "Kentavious Caldwell-Pope over 8.5 points"
+  },
+  "<TEXT> <LINE> -<TEXT> <ODDS>": {
+    "regex": "^(?P<selection>[a-zA-Z\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s+(?:-(?P<units>[\\w\\s]+))?\\s+(?P<odds>[+-]?\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "Droguet +2.5 -Games -110"
+  },
+  "<TEXT> . <TEXT> <ODDS>": {
+    "regex": "^(?P<selection>[a-zA-Z\\.\\s]+)\\s+(?P<odds>[+-]?\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "odds": "odds"
+    },
+    "example": "X. Schauffele +140"
+  },
+  "<TEXT> <NUM> <TEXT> <NUM> <TEXT> <NUM> <TEXT> <NUM> <TEXT>": {
+    "regex": "^.*?(?P<selection>[A-Za-z\\s]+)\\s+scores\\s+(?P<line1>[+-]?\\d+(?:\\.\\d+)?)\\s+goals\\s*&\\s+allows\\s+(?P<line2>[+-]?\\d+(?:\\.\\d+)?)\\s+goals\\s+on\\s+average\\s+while\\s+(?P<selection2>[A-Za-z\\s]+)\\s+scores\\s+(?P<line3>[+-]?\\d+(?:\\.\\d+)?)\\s+goals\\s*&\\s+allows\\s+(?P<line4>[+-]?\\d+(?:\\.\\d+)?)\\s+goals.*$",
+    "mapping": {
+      "selection": "selection",
+      "line1": "line",
+      "line2": "line",
+      "selection2": "selection",
+      "line3": "line",
+      "line4": "line"
+    },
+    "example": "This season, Bologna scores 1.4 goals & allows 1.3 goals on average while Parma scores 0.7 goals & allows 1.3 goals"
+  },
+  "<TEXT> / <TEXT> <NUM> - <TEXT>": {
+    "regex": "^(?P<selection>[a-zA-Z\\s]+)\\s*\\/\\s*(?P<selection2>[a-zA-Z\\s]+)\\s+(?P<line>under\\s+\\d+(?:\\.\\d+)?)\\s+.*$",
+    "mapping": {
+      "selection": "selection",
+      "selection2": "selection",
+      "line": "line"
+    },
+    "example": "Bologna / Parma under 2.5  - game is on Sunday in the AM"
+  },
+  "<TEXT> // <TEXT> <NUM>": {
+    "regex": "^(?P<selection>[a-zA-Z\\s]+)\\s*(?P<line>ML|\\d+(?:\\.\\d+)?)\\s*//\\s*to\\s*win\\s*(?P<odds>\\d+(?:\\.\\d+)?)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds"
+    },
+    "example": "PELICANS ML  // to win 8.57"
+  },
+  "<TEXT> <NUM> //": {
+    "regex": "^(?P<selection>[a-zA-Z\\s]+)\\s+(?P<line>[\\d\\.]+)\\s*//\\s*$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "CELTICS UN 226.5  //"
+  },
+  "<NUM> - <TEXT> <LINE> / <NUM> <LINE>": {
+    "regex": "^\\d+\\s*-(?P<selection>[\\w\\s]+)\\s*(?P<line>-?\\d+(?:\\.\\d+)?)\\s*\\/\\s*(?P<odds>\\d+-\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds"
+    },
+    "example": "1- Celtics -3.5 /26-23"
+  },
+  "<NUM> - <TEXT> / <NUM> <LINE>": {
+    "regex": "^(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s*-\\s*(?P<selection>[a-zA-Z\\s]+)\\s+(?P<odds>[a-zA-Z]+)\\s*\\/\\s*(?P<units>[\\d-]+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "9- Uconn ML ncaab / 24-25"
+  },
+  "<NUM> - <TEXT> <NUM> / <NUM> <LINE> <LINE>": {
+    "regex": "^(?P<selection>\\d+-\\s*[a-zA-Z\\s]+)\\s+(?:over|under)\\s+(?P<line>\\d+\\.\\d+)\\s*/\\s*(?P<odds>\\d+-\\d+-\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds"
+    },
+    "example": "31- St Johns under 143.5 / 26-19-4"
+  },
+  "<NUM> - <TEXT> <LINE> / <NUM> <LINE> <LINE>": {
+    "regex": "^(?P<selection>\\d+-\\s*[\\w\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s*/\\s*(?P<odds>\\d+-\\d+-\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds"
+    },
+    "example": "38- Evansville +10.5 / 24-24-1"
+  },
+  "<NUM> - <TEXT> <LINE> <TEXT> / <NUM> <LINE>": {
+    "regex": "^(?P<selection>\\d+-\\s*[\\w\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s+s/\\s+(?P<odds>\\d+-\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds"
+    },
+    "example": "58- Bradley +4.5 s/ 32-17"
+  },
+  "<NUM> - <TEXT> <NUM> / <NUM> <LINE>": {
+    "regex": "^(?P<units>\\d+-\\s*)?(?P<selection>[A-Z]+)\\s+vs\\s+(?P<selection2>[A-Z]+)\\s+(?:Under|Over)\\s+(?P<line>\\d+\\.\\d+)\\s*/\\s*(?P<odds>\\d+-\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "66- MIA vs BOS Under 226.5 / 32-17"
+  },
+  "<NUM> - <TEXT> <LINE> // <NUM> <LINE>": {
+    "regex": "^(?P<units>\\d+)\\s*-\\s*(?P<selection>[a-zA-Z\\s]+)\\s+(?P<line>[+-]?\\d+(?:\\.\\d+)?)\\s*//\\s*(?P<odds>\\d+-\\d+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "68- UConn -2 // 22-27"
+  },
+  "<NUM> <ODDS> %": {
+    "regex": "^\\s*(?P<selection>\\d+)\\s*\\[\\s*\\]\\s*\\*\\*\\s*(?P<odds>[+-]?\\d+(?:,\\d+)?%)\\s*\\*\\*\\s*$",
+    "mapping": {
+      "selection": "selection",
+      "odds": "odds"
+    },
+    "example": "7    [  ]     **  -2,38%  **"
+  },
+  "<NUM> <TEXT> <ODDS> %": {
+    "regex": "^\\s*(?P<units>\\d+)\\s+\\[(?P<selection>[^\\]]+)\\]\\s+\\*\\*\\s+(?P<odds>[+-]?\\d+(?:,\\d+)?%)\\s+\\*\\*\\s*$",
+    "mapping": {
+      "selection": "selection",
+      "odds": "odds",
+      "units": "units"
+    },
+    "example": "10    [Que pasa]    **  -6,00%  **"
+  },
+  "<TEXT> + <TEXT> <NUM>": {
+    "regex": "^(?P<selection>BTTS)\\s*\\+\\s*(?P<line>Over\\s*[0-9\\.]+)$",
+    "mapping": {
+      "selection": "selection",
+      "line": "line"
+    },
+    "example": "BTTS + Over 2.5"
   }
 }

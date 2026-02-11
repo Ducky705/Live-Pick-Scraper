@@ -7,7 +7,7 @@ from src.prompts.core import (
 )
 
 
-def generate_ai_prompt(selected_data: list[dict[str, Any]]) -> str:
+def generate_ai_prompt(selected_data: list[dict[str, Any]], schedule_context: str | None = None, style_context: str | None = None) -> str:
     """
     Generates the AI prompt using the ultra-compact, high-efficiency core prompts.
 
@@ -17,6 +17,8 @@ def generate_ai_prompt(selected_data: list[dict[str, Any]]) -> str:
 
     Args:
         selected_data: List of message dictionaries
+        schedule_context: Optional string listing games for the day
+        style_context: Optional string containing capper-specific examples
 
     Returns:
         The complete prompt string ready for the AI model
@@ -25,7 +27,7 @@ def generate_ai_prompt(selected_data: list[dict[str, Any]]) -> str:
     compressed_data = compress_raw_data(selected_data)
 
     # 2. Build the prompt using the JSON module (Strict JSON for stability)
-    return get_compact_extraction_prompt(compressed_data)
+    return get_compact_extraction_prompt(compressed_data, schedule_context=schedule_context, style_context=style_context)
 
 
 def generate_revision_prompt(failed_items: list[dict[str, Any]]) -> str:

@@ -6,9 +6,15 @@ import requests
 
 # Model fallback list (ordered by reliability)
 DEFAULT_MODELS = [
-    "google/gemini-2.0-flash-exp:free",
-    "meta-llama/llama-3.3-70b-instruct:free",
+    "google/gemini-2.0-pro-exp-02-05:free",
+    "google/gemini-2.0-flash-lite-preview-02-05:free",
+    "meta-llama/llama-3.2-3b-instruct:free",
+    "meta-llama/llama-3-8b-instruct:free",
+    "mistralai/mistral-7b-instruct:free",
+    "huggingfaceh4/zephyr-7b-beta:free",
 ]
+
+
 
 
 def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2, images=None, validate_json=False):
@@ -66,7 +72,7 @@ def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2, images=
                 "model": current_model,
                 "messages": messages,
                 "temperature": 0.1,
-                "response_format": {"type": "json_object"},
+                # "response_format": {"type": "json_object"},
             }
 
             try:

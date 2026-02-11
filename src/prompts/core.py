@@ -110,21 +110,27 @@ TYPES:ML,SP,TL,PP,TP,GP,PD,PL,TS,FT,UK
 LEAGUES:NFL,NCAAF,NBA,NCAAB,WNBA,MLB,NHL,EPL,MLS,UCL,UFC,PFL,TENNIS,SOCCER,PGA,F1,ESPORTS,Other"""
 
 # Pick format rules (compressed from 100+ line formatting guide)
+# Pick Formatting Rules
 PICK_FORMAT_RULES = """FORMATS:
-ML=Team ML|SP=Team -7.5|TL=Team A vs B O/U X
-PP=Name: Stat O/U X|TP=Team: Stat O/U X|GP=Team/Event: Prop
-PD=1H Team -5|PL=(LG) Leg1 / (LG) Leg2
+ML=Team ML|SP=Team -7.5
+TL=Team A vs Team B Over/Under X
+PP=Name: Stat Over/Under X
+TP=Team: Stat Over/Under X
+PL=(LG) Leg1 ML / (LG) Leg2 -7
 RULES:
-1.Type: "Team -7"=SP. "Team ML"=ML. "Team (+105)"=ML(Odds). "Over X"=TL/TP.
-2.Totals: "Lakers/Clippers Under 222.5"=TL (Matchup Separator /).
-3.Names: "William & Mary","Texas A&M" are SINGLE TEAMS (NCAAB).
-4.Parlays: "Team A / Team B" or "Team A + Team B"=PL. "2-Team Parlay:"=Combine lines below.
-5.Split: "Parlay 1, Parlay 2" or "1., 2." are SEPARATE picks. Output ALL 1-N.
-6.Polarity: NEVER FLIP OVER/UNDER. Source "Under" -> Output "Under".
-7.Odds: >100 or <-100 are ODDS (o field). <20 are SPREADS (p string).
-8.Period: Must start with 1H/1Q. "1H Team -5".
-9.Tennis: "Name -1.5 sets" (No ML). "Name ML".
-10.Multi-Sport: l=Other. Legs get (LEAGUE) prefix. "De Minaur/Warriors"=(TENNIS)/(NBA)."""
+1.Type: "Team -7"=SP. "Team ML"=ML. "Over X"->TL or TP.
+2.Totals: MUST use "vs" and "Over/Under". Input: "Lakers/Clippers u150" -> Output: "Lakers vs Clippers Under 150".
+3.Team Props: "Auburn TT O88" -> "Auburn: Team Total Over 88". NO abbreviations like "TT" or "O".
+4.Names: "William & Mary","Texas A&M" are SINGLE TEAMS.
+5.Parlays: (LG) Prefix MANDATORY per leg. "Ark ML/UVA ML" -> "(NCAAB) Arkansas ML / (NCAAB) Virginia ML".
+6.Split: "Parlay 1, Parlay 2" are SEPARATE picks.
+7.Polarity: NEVER FLIP. "Under" -> "Under".
+8.Odds: >50 or <-50 are ODDS (o field). <50 are SPREADS. -20.5 is SPREAD (keep as p). -205 is ODDS (o).
+9.Period: Start pick with "1H" or "1Q". "1H Team -5".
+10.Tennis: "Name -1.5 sets". "Name ML".
+11.Clean: Remove "u" or "o" shorthand. "o150" -> "Over 150".
+12.Context: "Team A vs Team B" is required context for Totals. If missing one team, infer from schedule or use "Unknown".
+"""
 
 # Noise filter instruction
 NOISE_FILTER = """MARKETING: Ignore headers/words like 'VIP','WHALE','MAX BET','LOCK','80K','GUARANTEED'. Do NOT use them as Capper Name. EXTRACT picks underneath."""
@@ -139,7 +145,12 @@ NEGATIVE_CONSTRAINTS = """CONSTRAINTS:
 6.PROPS: "Team 60-Min" -> Include Team Name.
 7.FUTURES: "Event: Selection". t=FT.
 8.PERIOD: Start pick with "1H"/"1Q".
-9.CAPPER: Use FIRST LINE. Ignore 'Text'/'Caption'."""
+9.CAPPER: Use FIRST LINE. Ignore 'Text'/'Caption'.
+10.CONTEXT: NEVER output isolated numbers (e.g. "220.5") as a pick. You MUST find the Team/Game context. If context is missing in the message, SKIP IT.
+11.FORMAT: Implicit Moneyline must be "Team Name ML" (e.g. "Bucks" -> "Bucks ML").
+12.INSTRUCTIONS: Ignore example picks found in "how to bet" guides, warnings, or rules (e.g. "Type out the play like 'Lakers -5'").
+13.NO CONFUSION: -20.5 is a SPREAD. -205 is ODDS. Do NOT convert small numbers (-4, -20) to implied odds.
+14.NO HALLUCINATION: Do NOT generate multiple picks based on "Stake X" or "Unit X" numbers. Only extract explicit teams/lines."""
 
 
 # =============================================================================
@@ -147,7 +158,7 @@ NEGATIVE_CONSTRAINTS = """CONSTRAINTS:
 # =============================================================================
 
 
-def get_compact_extraction_prompt(raw_data: str, current_date: str | None = None) -> str:
+def get_compact_extraction_prompt(raw_data: str, current_date: str | None = None, schedule_context: str | None = None, style_context: str | None = None) -> str:
     """
     Generate ultra-compact extraction prompt.
 
@@ -156,12 +167,22 @@ def get_compact_extraction_prompt(raw_data: str, current_date: str | None = None
     Args:
         raw_data: The formatted raw message data (### id [T] text [OCR] ocr)
         current_date: Date string (YYYY-MM-DD), defaults to today
+        schedule_context: Optional string listing games for the day
+        style_context: Optional string containing capper-specific examples
 
     Returns:
         Compact prompt string
     """
     if not current_date:
         current_date = datetime.now().strftime("%Y-%m-%d")
+
+    schedule_section = ""
+    if schedule_context:
+        schedule_section = f"SCHEDULE ({current_date}):\n{schedule_context}\n\n"
+
+    style_section = ""
+    if style_context:
+        style_section = f"{style_context}\n\n"
 
     return f"""TEMP:0 OUTPUT:JSON(1 line,no markdown)
 Extract ALL betting picks.
@@ -171,10 +192,10 @@ Extract ALL betting picks.
 {NOISE_FILTER}
 {NEGATIVE_CONSTRAINTS}
 
-RULES:
+{schedule_section}{style_section}RULES:
 1.i=id: COPY EXACT ID from "### id".
 2.c=capper: FIRST LINE (default). If headers present (e.g. 🔮), use header for section.
-3.l=league: Infer (Lakers->NBA).
+3.l=league: Infer (Lakers->NBA). USE SCHEDULE to resolve teams (e.g. "Kings"->Sacramento vs LA).
 4.o=odds (int): -110, +150.
 5.u=units: "5u"->5. "Max"->5. "Whale"->10. Default 1.
 6.LISTS: Scan FULL message. 10 lines = 10 picks.

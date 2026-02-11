@@ -24,6 +24,39 @@ class ValidityFilter:
         if pick_text.replace(".", "").replace("-", "").isdigit():
              return False, "Numeric only"
 
+        # Heuristic: Rejects obvious non-picks (Marketing, URLs, noise)
+        lower_text = pick_text.lower()
+        garbage_phrases = ["vip", "subscribe", "link in bio", "dm for", "promo", "discount", "package", "guaranteed", "bankroll"]
+        if any(g in lower_text for g in garbage_phrases):
+             return False, "Marketing/Garbage detected"
+             
+        # Heuristic: Must contain at least one digit OR a betting keyword
+        # Valid picks: "Lakers -5", "Over 210", "Lakers ML"
+        # Invalid: "Lakers", "Austin", "Analysis below"
+        betting_keywords = ["over", "under", "ml", "moneyline", "spread", "pts", "reb", "ast", "win", "u", "unit"]
+        has_digit = any(c.isdigit() for c in pick_text)
+        has_keyword = any(k in lower_text for k in betting_keywords)
+        
+        
+        # NFL/NHL/MLB/Soccer common aliases could be added here
+        # For now, we trust the LLM if it's not a digit pick but looks like a team.
+        
+        known_teams = ["bucks", "lakers", "warriors", "heat", "celtics", "nuggets", "suns", "clippers", "mavericks", "kings", "thunder", "wolves", "timberwolves", "knicks", "nets", "sixers", "76ers", "pacers", "bulls", "pistons", "magic", "hornets", "wizards", "hawks", "spurs", "rockets", "grizzlies", "pelicans", "jazz", "blazers", "trail blazers", "raptors",
+                       "chiefs", "49ers", "ravens", "lions", "bills", "packers", "cowboys", "eagles", "dolphins", "browns", "texans", "steelers", "bengals", "jaguars", "colts", "titans", "broncos", "raiders", "chargers", "giants", "commanders", "bears", "vikings", "falcons", "saints", "buccaneers", "panthers", "cardinals", "rams", "seahawks", "jets", "patriots",
+                       "canadiens", "maple leafs", "leafs", "senators", "bruins", "sabres", "wings", "red wings", "panthers", "lightning", "hurricanes", "capitals", "devils", "islanders", "rangers", "flyers", "penguins", "jackets", "blue jackets", "avalanche", "stars", "wild", "predators", "blues", "coyotes", "ducks", "flames", "oilers", "kings", "sharks", "kraken", "canucks", "knights", "golden knights",
+                       "yankees", "red sox", "orioles", "rays", "jays", "blue jays", "guardians", "tigers", "twins", "royals", "white sox", "mariners", "angels", "astros", "athletics", "rangers", "braves", "marlins", "mets", "phillies", "nationals", "cubs", "reds", "brewers", "pirates", "cardinals", "diamondbacks", "rockies", "dodgers", "padres", "giants"]
+
+        # RELAXED HEURISTIC:
+        # If no digits/keywords, BUT it is a known team name, allow it.
+        is_known_team = lower_text in known_teams or lower_text.split(" ")[0] in known_teams
+        
+        if not has_digit and not has_keyword and not is_known_team:
+             # Final check: Is it roughly 1-3 words and not garbage?
+             # Might be a team we missed. 
+             # Let's be strict on "no digits/keywords" UNLESS it's a known team or specifically whitelisted.
+             # User specifically mentioned "Bucks".
+             return False, "No betting structure (digits/keywords) found and not a known team alias"
+
         # Construct Prompt
         prompt = f"""
 You are a Sports Betting Validator. Your job is to determine if the following text is a VALID betting pick that contains enough information to be graded (Team/Player AND Bet Type/Spread/Total).
@@ -37,6 +70,7 @@ Rules:
 3. ACCEPT valid picks even if they use nicknames (e.g., "Lakers -5", "LeBron O 25.5").
 4. ACCEPT if it refers to a specific game context implied (e.g. "Over 215" might be invalid without teams, but "Lakers/Suns Over 215" is valid).
 5. ACCEPT "Lakers vs Celtics Over 215.5" (Standard Format).
+6. ACCEPT single team names (e.g. "Bucks", "Lakers", "Kansas City") as IMPLIED MONEYLINE bets. This is a common shorthand.
 
 Respond in JSON format:
 {{

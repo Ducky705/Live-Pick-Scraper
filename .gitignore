@@ -1,3 +1,4 @@
+
 # Python
 __pycache__/
 *.py[cod]
@@ -89,6 +90,7 @@ htmlcov/
 # Application Data
 data/cache/
 data/temp_images/
+src/data/temp_images/
 data/sessions/
 cache/
 *.db

@@ -612,29 +612,13 @@ SOCCER_LEAGUES = {"epl", "mls", "ucl", "championship", "laliga", "bundesliga", "
 def fetch_odds_for_date(date_str: str) -> dict:
     """
     Fetches odds for all games on a given date.
+    Optimized to fetch individual game odds in parallel.
 
     Args:
         date_str: Date in "YYYY-MM-DD" or "MM/DD/YYYY" format
 
     Returns:
-        Dictionary mapping game keys to odds data:
-        {
-            "league:event_id:comp_id": {
-                "home_team": str,
-                "away_team": str,
-                "moneyline_home": int or None,
-                "moneyline_away": int or None,
-                "moneyline_draw": int or None,  # Soccer only
-                "spread_home": float or None,
-                "spread_away": float or None,
-                "spread_home_odds": int or None,
-                "spread_away_odds": int or None,
-                "total": float or None,
-                "over_odds": int or None,
-                "under_odds": int or None,
-                "provider": str
-            }
-        }
+        Dictionary mapping game keys to odds data
     """
     # Standardize date format
     try:
@@ -648,52 +632,108 @@ def fetch_odds_for_date(date_str: str) -> dict:
         return {}
 
     odds_by_game = {}
+    tasks = []
+    
+    # Session for pooling
+    session = get_session()
 
-    # Fetch scoreboards first to get event/competition IDs
+    # 1. First, fetch all scoreboards to get the list of events
+    # We can do this serially or parallel, but parallel is better for 20+ leagues
+    
+    scoreboard_urls = []
     for league_name, (sport, league_key) in ODDS_LEAGUE_MAPPING.items():
+        url = f"https://site.api.espn.com/apis/site/v2/sports/{sport}/{league_key}/scoreboard?dates={api_date}&limit=300"
+        scoreboard_urls.append((url, league_name, sport, league_key))
+
+    competitions_to_fetch = []
+
+    def fetch_scoreboard(args):
+        url, league_name, sport, league_key = args
         try:
-            # Fetch scoreboard for this league
-            scoreboard_url = f"https://site.api.espn.com/apis/site/v2/sports/{sport}/{league_key}/scoreboard?dates={api_date}&limit=300"
-
-            resp = requests.get(scoreboard_url, timeout=10, verify=False)
+            resp = session.get(url, timeout=10)
             if resp.status_code != 200:
-                continue
-
+                return []
+            
             data = resp.json()
             events = data.get("events", [])
-
-            # For each event, fetch odds for each competition
+            local_comps = []
+            
             for event in events:
                 event_id = event.get("id")
-                if not event_id:
-                    continue
-
-                competitions = event.get("competitions", [])
-
-                # Handle Tennis groupings
-                if not competitions and "groupings" in event:
-                    for group in event.get("groupings", []):
-                        competitions.extend(group.get("competitions", []))
-
-                for comp in competitions:
+                if not event_id: continue
+                
+                # Setup competitions
+                comps = event.get("competitions", [])
+                if not comps and "groupings" in event:
+                     for group in event.get("groupings", []):
+                        comps.extend(group.get("competitions", []))
+                
+                for comp in comps:
                     comp_id = comp.get("id", event_id)
-
-                    # Fetch odds for this competition
-                    odds_data = _fetch_competition_odds(sport, league_key, event_id, comp_id, league_name)
-
-                    if odds_data:
-                        # Extract team/athlete names from competition
-                        competitors = comp.get("competitors", [])
-                        home_name, away_name = _extract_competitor_names(competitors, league_name)
-
-                        game_key = f"{league_name}:{event_id}:{comp_id}"
-                        odds_data["home_team"] = home_name
-                        odds_data["away_team"] = away_name
-                        odds_by_game[game_key] = odds_data
-
+                    # Extract competitor names once here to avoid needing lookup later?
+                    # Actually _fetch_competition_odds doesn't return names. 
+                    # We need to pass them or extract them later. 
+                    # The original code extracted them AFTER fetching odds. 
+                    # We can store the comp object to extract names later.
+                    local_comps.append({
+                        "sport": sport,
+                        "league_key": league_key,
+                        "event_id": event_id,
+                        "comp_id": comp_id,
+                        "league_name": league_name,
+                        "comp_data": comp 
+                    })
+            return local_comps
         except Exception as e:
-            logger.debug(f"Error fetching odds for {league_name}: {e}")
-            continue
+            logger.debug(f"Error fetching scoreboard for {league_name}: {e}")
+            return []
+
+    # Fetch scoreboards in parallel
+    logger.info("Fetching scoreboards to identify games for odds...")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
+        results = executor.map(fetch_scoreboard, scoreboard_urls)
+        
+    for res in results:
+        competitions_to_fetch.extend(res)
+
+    if not competitions_to_fetch:
+        logger.info(f"No games found on {date_str} to fetch odds for.")
+        return {}
+
+    logger.info(f"Found {len(competitions_to_fetch)} competitions. Fetching odds in parallel...")
+
+    # 2. Fetch odds for all competitions in parallel
+    def fetch_single_odd(item):
+        o = _fetch_competition_odds(
+            item["sport"], 
+            item["league_key"], 
+            item["event_id"], 
+            item["comp_id"], 
+            item["league_name"]
+        )
+        if o:
+            # Extract names from the passed comp_data
+            competitors = item["comp_data"].get("competitors", [])
+            home, away = _extract_competitor_names(competitors, item["league_name"])
+            
+            o["home_team"] = home
+            o["away_team"] = away
+            
+            key = f"{item['league_name']}:{item['event_id']}:{item['comp_id']}"
+            return key, o
+        return None
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=30) as executor:
+        future_to_item = {executor.submit(fetch_single_odd, item): item for item in competitions_to_fetch}
+        
+        for future in concurrent.futures.as_completed(future_to_item):
+            try:
+                result = future.result()
+                if result:
+                    k, v = result
+                    odds_by_game[k] = v
+            except Exception:
+                pass
 
     logger.info(f"Fetched odds for {len(odds_by_game)} games on {date_str}")
     return odds_by_game

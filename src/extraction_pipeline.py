@@ -6,9 +6,12 @@ from src.multi_pick_validator import MultiPickValidator, validate_and_flag_missi
 from src.parallel_batch_processor import parallel_processor
 from src.pick_deduplicator import deduplicate_by_capper
 from src.prompts.decoder import normalize_response
+from src.schedule_manager import ScheduleManager
+from src.style_gallery import StyleGallery
 from src.semantic_validator import SemanticValidator
 from src.two_pass_verifier import TwoPassVerifier
 from src.utils import auto_group_parlays, backfill_odds, safe_write_progress
+from src.consensus_engine import ConsensusEngine
 
 logger = logging.getLogger(__name__)
 
@@ -133,17 +136,48 @@ class ExtractionPipeline:
                 logger.info("All messages handled by Rule-Based Extractor! Skipping AI pipeline.")
             else:
                 logger.info(f"Generating AI Prompts for {len(messages_for_ai)} remaining messages...")
-                # Split into batches
-                batches = [messages_for_ai[i : i + batch_size] for i in range(0, len(messages_for_ai), batch_size)]
+                
+                # US-007: Fetch Schedule Context for Soft Filtering
+                schedule_context = ScheduleManager.get_context_string(target_date)
+                
+                # Proposal 2: Group by Capper for Style Injection
+                # We group messages by channel/capper to provide specific few-shot examples
+                capper_groups = {}
+                for msg in messages_for_ai:
+                    capper = msg.get("channel_name", "Unknown")
+                    if capper not in capper_groups:
+                        capper_groups[capper] = []
+                    capper_groups[capper].append(msg)
+                
+                batches = []
+                for capper, inputs in capper_groups.items():
+                    # Fetch examples for this capper (RAG)
+                    examples = StyleGallery.get_examples(capper)
+                    formatted_examples = StyleGallery.format_examples_for_prompt(examples)
+                    
+                    style_context_dict = {}
+                    if formatted_examples:
+                        style_context_dict["style_context"] = formatted_examples
+                        logger.info(f"[{capper}] Injected {len(examples)} style examples.")
+
+                    # Create batches for this capper
+                    for i in range(0, len(inputs), batch_size):
+                        batch = inputs[i : i + batch_size]
+                        # Append as (batch, context) tuple
+                        batches.append((batch, style_context_dict))
     
                 # 1. AI Processing
                 try:
                     if strategy == "round_robin":
-                        logger.info("Using Strategy: ROUND ROBIN (Mixed Providers)")
-                        all_raw_picks = parallel_processor.process_batches(batches)
+                        logger.info(f"Using Strategy: ROUND ROBIN (Mixed Providers) | Batches: {len(batches)}")
+                        all_raw_picks = parallel_processor.process_batches(
+                            batches, schedule_context=schedule_context
+                        )
                     else:
-                        logger.info("Using Strategy: GROQ PRIORITY (16 concurrent)")
-                        all_raw_picks = parallel_processor.process_batches_groq_priority(batches)
+                        logger.info(f"Using Strategy: GROQ PRIORITY (16 concurrent) | Batches: {len(batches)}")
+                        all_raw_picks = parallel_processor.process_batches_groq_priority(
+                            batches, schedule_context=schedule_context
+                        )
                 except Exception as e:
                     logger.error(f"Parallel processing failed: {e}")
                     all_raw_picks = []
@@ -164,14 +198,25 @@ class ExtractionPipeline:
                         except (ValueError, TypeError):
                             pass
     
+                # DEBUG LOGGING FOR DRY RUN ANALYSIS
+                # We need to store: Batch ID -> Raw Response -> Parsed Picks
+                extraction_debug_log = []
+
                 for batch_idx, raw_response_str in enumerate(all_raw_picks):
                     if raw_response_str is None:
                         continue
     
                     valid_ids = None
                     if batch_idx < len(batches):
+                        # Handle new batch structure which might be (batch_list, context_dict)
+                        batch_data = batches[batch_idx]
+                        if isinstance(batch_data, tuple):
+                            current_batch, _ = batch_data
+                        else:
+                            current_batch = batch_data
+                            
                         # Remove int() cast to support string IDs (e.g., synthetic)
-                        valid_ids = [str(m.get("id")) for m in batches[batch_idx] if m.get("id") is not None]
+                        valid_ids = [str(m.get("id")) for m in current_batch if m.get("id") is not None]
     
                     batch_picks = normalize_response(
                         raw_response_str,
@@ -179,10 +224,33 @@ class ExtractionPipeline:
                         valid_message_ids=valid_ids,
                         message_context=message_context,
                     )
+                    
+                    # Store debug info
+                    extraction_debug_log.append({
+                        "batch_index": batch_idx,
+                        "raw_response": raw_response_str,
+                        "parsed_picks": batch_picks,
+                        "message_ids": valid_ids,
+                        "input_batch": [m.get("text", "") + "\n" + m.get("ocr_text", "") for m in current_batch]
+                    })
+
                     fresh_picks.extend(batch_picks)
     
                 progress_log.append(f"- [x] AI Processing complete. Total picks so far: {len(fresh_picks)}")
                 safe_write_progress("\n".join(progress_log))
+                
+                # Save debug log to disk if we are in a dry run context
+                # We check for a marker or just save it always since it's cheap text
+                try:
+                    import os
+                    import json
+                    from src.config import DATA_DIR
+                    debug_file = os.path.join(DATA_DIR, f"debug_extraction_log_{target_date}.json")
+                    with open(debug_file, "w", encoding="utf-8") as f:
+                        json.dump(extraction_debug_log, f, indent=2, default=str)
+                    logger.info(f"Saved extraction debug log to {debug_file}")
+                except Exception as e:
+                    logger.warning(f"Failed to save extraction debug log: {e}")
  
             # Update Cache with fresh picks
             # Group picks by message ID first
@@ -222,13 +290,29 @@ class ExtractionPipeline:
 
         # US-004: Ensure capper_name is populated from message author if missing
         # This prevents "Unknown" cappers from different messages being merged.
+        # UPDATE: User requested to NEVER use twitter poster (leaker) as capper name.
+        # We use channel_name starting with '@' as a proxy for Twitter/Leaker accounts.
+        
+        # Build a map of ID -> Channel Name for this check
+        msg_channel_map = {}
+        for m in messages:
+            if m.get("id"):
+                msg_channel_map[str(m["id"])] = m.get("channel_name", "")
+
         for p in picks:
             mid = str(p.get("message_id", ""))
             if mid in msg_author_map:
                 current_capper = p.get("capper_name", "Unknown")
+                
                 # Trust the source metadata if the pick doesn't have a specific capper
+                # BUT ONLY if it's not a leaker account (starts with @)
                 if current_capper.lower() == "unknown":
-                    p["capper_name"] = msg_author_map[mid]
+                    channel_name = msg_channel_map.get(mid, "")
+                    if channel_name.startswith("@"):
+                        # Skip filling author for twitter/leaker accounts
+                        pass
+                    else:
+                        p["capper_name"] = msg_author_map[mid]
 
         picks = auto_group_parlays(picks, full_message_context)
 
@@ -390,57 +474,30 @@ class ExtractionPipeline:
 
             if reparse_batch:
                 try:
-                    # Refinement Batching (US-001: Optimization)
-                    refine_batch_sz = 5  # US-200: Optimized for throughput (fewer requests)
-                    reparse_batches = [
-                        reparse_batch[i : i + refine_batch_sz] for i in range(0, len(reparse_batch), refine_batch_sz)
-                    ]
-                    reparse_results = parallel_processor.process_batches(
-                        reparse_batches,
-                        allowed_providers=[
-                            # "groq", # US-200: Disabled to avoid 429s
-                            "cerebras",  # US-200: Primary for refinement (Stable 2s delay)
-                            # "mistral", # US-200: Disabled to avoid latency spikes
-                        ],
-                    )
+                    # PROPOSAL 3: Autonomous Consensus (The Council)
+                    # Instead of a single retry, query multiple models and vote.
+                    logger.info(f"Escalating {len(reparse_batch)} messages to Consensus Council.")
+                    
+                    consensus_picks = ConsensusEngine.run_consensus(reparse_batch, target_date=target_date)
+                    
+                    # Strict Replacement Logic:
+                    # 1. Identify all messages that were sent to consensus
+                    sent_ids = {str(m.get("id")) for m in reparse_batch}
+                    
+                    # 2. Remove ALL original picks for these messages (Auto-Discard if no consensus)
+                    before_count = len(picks)
+                    picks = [p for p in picks if str(p.get("message_id")) not in sent_ids]
+                    removed_count = before_count - len(picks)
+                    
+                    # 3. Add only the Consensus-Approved picks
+                    picks.extend(consensus_picks)
+                    
+                    logger.info(f"Consensus Result: Removed {removed_count} tentative picks, Added {len(consensus_picks)} approved picks.")
 
-                    new_picks_count = 0
-                    for batch_idx, raw_response_str in enumerate(reparse_results):
-                        if raw_response_str is None:
-                            continue
-
-                        valid_ids = None
-                        if batch_idx < len(reparse_batches):
-                            valid_ids = [
-                                str(m.get("id"))  # Keep as string/any
-                                for m in reparse_batches[batch_idx]
-                                if m.get("id") is not None
-                            ]
-
-                        new_batch_picks = normalize_response(raw_response_str, expand=True, valid_message_ids=valid_ids)
-
-                        # Replace picks
-                        new_picks_by_id: dict[Any, list[dict[str, Any]]] = {}
-                        for p in new_batch_picks:
-                            mid = p.get("message_id")
-                            # Normalize key to string
-                            mid_key = str(mid) if mid is not None else None
-                            if mid_key:
-                                if mid_key not in new_picks_by_id:
-                                    new_picks_by_id[mid_key] = []
-                                new_picks_by_id[mid_key].append(p)
-
-                        for mid_key_str, msg_new_picks in new_picks_by_id.items():
-                            if msg_new_picks:
-                                # US-001 Safety Net: Only replace if we have new picks
-                                picks = [p for p in picks if str(p.get("message_id")) != mid_key_str]
-                                picks.extend(msg_new_picks)
-                                new_picks_count += len(msg_new_picks)
-
-                    logger.info(f"Refinement complete. Replaced with {new_picks_count} refined picks.")
                     picks = backfill_odds(picks)
                     picks = enrich_picks(picks, target_date)
                     picks = deduplicate_by_capper(picks)
+
 
                 except Exception as e:
                     logger.error(f"Refinement failed: {e}")
@@ -476,12 +533,37 @@ class ExtractionPipeline:
 
         safe_write_progress("\n".join(progress_log))
 
+        # Proposal 2: Save Successful Parses to Style Gallery (Auto-Learning)
+        try:
+            # Map message ID to Channel Name for consistent keying
+            id_to_channel = {str(m.get("id")): m.get("channel_name", "Unknown") for m in messages if m.get("id")}
+            
+            saved_count = 0
+            for p in picks:
+                mid = p.get("message_id")
+                
+                # key by Channel Name (Metadata) not extracted name (Content)
+                # This ensures we can find these examples again using the channel name
+                if mid:
+                    str_id = str(mid)
+                    capper_key = id_to_channel.get(str_id, "Unknown")
+                    orig_text = full_message_context.get(str_id)
+                    
+                    # Only learn if we have a valid channel key and text
+                    if capper_key != "Unknown" and orig_text:
+                        StyleGallery.save_example(capper_key, orig_text, p)
+                        saved_count += 1
+            
+            if saved_count > 0:
+                logger.info(f"StyleGallery: Learned {saved_count} new examples from validated picks.")
+        except Exception as e:
+            logger.warning(f"Failed to save style examples: {e}")
+
         # 7.4 Verification Report (Pre-Grading)
         # GENERATE REPORT FOR ALL MESSAGES (Even those with no picks)
         # This is essential for the "Audit Dry Run" the user requested.
         import os
-
-        from config import OUTPUT_DIR
+        from src.config import OUTPUT_DIR
 
         report_file = os.path.join(OUTPUT_DIR, f"verification_report_{target_date}.md")
         logger.info(f"Generating verification report: {report_file}")

@@ -32,157 +32,9 @@ class PickParser:
         # Clean text
         text = pick_text.strip()
         
-        # --- ADAPTIVE PARSING LAYER ---
-        from src.parsing.fingerprinter import Fingerprinter
-        from src.parsing.registry import TemplateRegistry
+        # 0. Extract Units globally
+        units_val, text = PickParser._extract_units(text)
         
-        # Instantiate Registry (Singleton-ish typically, but load cheap here)
-        # TODO: Move to class level or singleton to avoid reload
-        registry = TemplateRegistry()
-        
-        fp = Fingerprinter.fingerprint(text)
-        tmpl = registry.get_template(fp)
-        
-        if tmpl:
-            # FAST PATH: Logic from Template
-            pattern, mapping = tmpl
-            match = pattern.match(text)
-            if match:
-                # Construct Pick from Match
-                groups = match.groupdict()
-                
-                # Default Fields
-                selection = groups.get(mapping.get("selection", "selection"), text)
-                line_val = None
-                odds_val = None
-                
-                if "line" in groups and groups["line"]:
-                    try:
-                        line_val = float(groups["line"])
-                    except: pass
-                    
-                if "odds" in groups and groups["odds"]:
-                    try:
-                        odds_val = int(groups["odds"])
-                    except: pass
-                    
-                units_val = None
-                if "units" in groups and groups["units"]:
-                    units_val = groups["units"]
-                    
-                # Simplistic return for now - assumes Spread/ML/Total based on fields
-                return Pick(
-                    raw_text=text,
-                    league=league,
-                    date=date,
-                    bet_type=BetType.SPREAD if line_val else BetType.MONEYLINE,
-                    selection=selection,
-                    line=line_val,
-                    odds=odds_val,
-                    units=units_val
-                )
-        else:
-            # AUTO-LEARNING (Cache Miss)
-            # Only attempt to learn if text seems "pick-like" (length > 5, has numbers?)
-            # Heuristic: Don't learn extremely short or long texts
-            if 5 < len(text) < 200:
-                from src.parsing.learner import Learner
-                try:
-                    learner = Learner()
-                    # Synchronous Learning (Safety: fallback on fail)
-                    # NOTE: This adds latency on the *first* unseen format!
-                    result = learner.learn_format(text)
-                    if result:
-                        regex, mapping = result
-                        # Register immediately
-                        registry.register_template(fp, regex, mapping, example=text)
-                        
-                        # Recursive call to use the new template immediately
-                        # return PickParser.parse(text, league, date)
-                        # Actually, just regex match here to avoid recursion stack issues
-                        pattern = re.compile(regex, re.IGNORECASE)
-                        match = pattern.match(text)
-                        if match:
-                            groups = match.groupdict()
-                            selection = groups.get(mapping.get("selection", "selection"), text)
-                            line_val = None
-                            odds_val = None
-                            if "line" in groups and groups["line"]:
-                                try: line_val = float(groups["line"])
-                                except: pass
-                            if "odds" in groups and groups["odds"]:
-                                try: odds_val = int(groups["odds"])
-                                except: pass
-                            units_val = None
-                            if "units" in groups and groups["units"]:
-                                units_val = groups["units"]
-                                
-                            return Pick(
-                                raw_text=text,
-                                league=league,
-                                date=date,
-                                bet_type=BetType.SPREAD if line_val else BetType.MONEYLINE,
-                                selection=selection,
-                                line=line_val,
-                                odds=odds_val,
-                                units=units_val
-                            )
-                except Exception as e:
-                    # Log but continue to legacy parser
-                    pass
-
-        # ------------------------------
-        
-        # 0. Strip Win/Loss Records (e.g. " / 24-24")
-        # Pattern: Slash followed by digits-digits
-        text = re.sub(r"\s*/\s*\d+-\d+(?:-\d+)?.*$", "", text)
-
-
-        # Clean up common prefixes like "1* " or "5% " or "GOW "
-        # Keep it simple: remove digit+star or digit+% at start
-        # text = re.sub(r"^\d+\*?(?![a-zA-Z])\s*", "", text)
-        # Actually, let's combine/simplify.
-        # Remove digit+* or digit+% ONLY if not followed by a letter (like Q, H, P)
-        # Clean up common prefixes like "1* " or "5% "
-        # FIX: Only strip if followed by whitespace.
-        # ALSO: Be careful with teams like "100 Thieves".
-        # Strategy:
-        # 1. If followed by * or %, always strip.
-        # 2. If just digits, only strip if value < 50 (Confidence usually 1-10, maybe 20).
-        #    100 Thieves -> 100 > 50 -> Keep.
-        #    10 Lakers -> 10 < 50 -> Strip.
-        match = re.match(r"^(\d+)(?:\*|%)?\s+", text)
-        if match:
-             val_str = match.group(1)
-             full_match = match.group(0)
-             if "*" in full_match or "%" in full_match:
-                 text = text[len(full_match):]
-             else:
-                 try:
-                     if int(val_str) < 50:
-                         text = text[len(full_match):]
-                 except ValueError:
-                     pass
-        
-        # Strip unit sizes like "(2u)" or "5U "
-        text = re.sub(r"^\(?\d+(?:\.\d+)?u\)?\s*", "", text, flags=re.IGNORECASE)
-
-        # Remove timestamps like "10:05 pm" or "7:00 ET" to avoid confusing the Prop parser
-        # Be careful not to remove "Over 2:30" (Prop?) No, usually Over 2.5
-        # Regex: digit:digit followed optionally by am/pm/et/pt
-        text = re.sub(
-            r"\b\d{1,2}:\d{2}\s*(?:am|pm|et|est|pt|pst|ct|cst|mt|mst)?\b",
-            "",
-            text,
-            flags=re.IGNORECASE,
-        )
-
-        # Clean up difficult noise characters at the end (e.g. "**", "*")
-        text = re.sub(r"[\*]+$", "", text).strip()
-
-        # Clean up trailing punctuation (commas, etc)
-        text = text.strip().rstrip(",").strip()
-
         league_norm = LEAGUE_ALIASES_MAP.get(league.lower(), league.lower())
 
         # If league is unknown, try to infer from team names
@@ -193,16 +45,25 @@ class PickParser:
 
         # 1. PARLAY DETECTION (Slash separator or explicit Parlay marker)
         if PickParser._is_parlay(text):
-            return PickParser._parse_parlay(text, league_norm, date)
+            pick = PickParser._parse_parlay(text, league_norm, date)
+            if pick:
+                pick.units = units_val
+            return pick
 
         # 2. TEASER DETECTION
         if PickParser._is_teaser(text):
-            return PickParser._parse_teaser(text, league_norm, date)
+            pick = PickParser._parse_teaser(text, league_norm, date)
+            if pick:
+                pick.units = units_val
+            return pick
 
         # 3. PROP DETECTION (Colon separator: "Player: Stat Over X")
         # Moved before Period detection to avoid "3P" (3 Pointers) being caught as Period "3P" (3rd Period)
         if PickParser._is_prop(text):
-            return PickParser._parse_prop(text, league_norm, date)
+            pick = PickParser._parse_prop(text, league_norm, date)
+            if pick:
+                pick.units = units_val
+            return pick
 
         # 4. PERIOD DETECTION (1H, 1Q, F5, etc.)
         period = PickParser._detect_period(text)
@@ -211,7 +72,12 @@ class PickParser:
             if league_norm in ["unknown", "", "other"]:
                 if period in ["1Q", "2Q", "3Q", "4Q"]:
                     league_norm = "nba"
-            return PickParser._parse_period_bet(text, league_norm, date, period)
+            if period in ["1Q", "2Q", "3Q", "4Q"]:
+                    league_norm = "nba"
+            pick = PickParser._parse_period_bet(text, league_norm, date, period)
+            if pick:
+                pick.units = units_val
+            return pick
 
         # 5. TOTAL DETECTION (Over/Under without colon)
         if PickParser._is_total(text):
@@ -256,12 +122,97 @@ class PickParser:
                     rest = text[match.start() :].strip()
                     # Synthetic colon injection
                     synthetic_text = f"{subject}: {rest}"
-                    return PickParser._parse_prop(synthetic_text, league_norm, date)
+                    synthetic_text = f"{subject}: {rest}"
+                    pick = PickParser._parse_prop(synthetic_text, league_norm, date)
+                    if pick:
+                        pick.units = units_val
+                    return pick
 
-            return PickParser._parse_total(text, league_norm, date)
+            pick = PickParser._parse_total(text, league_norm, date)
+            if pick:
+                pick.units = units_val
+            return pick
 
+        # --- ADAPTIVE PARSING LAYER ---
+        from src.parsing.fingerprinter import Fingerprinter
+        from src.parsing.registry import TemplateRegistry
+        
+        # Instantiate Registry (Singleton-ish typically, but load cheap here)
+        # TODO: Move to class level or singleton to avoid reload
+        registry = TemplateRegistry()
+        
+        fp = Fingerprinter.fingerprint(text)
+        tmpl = registry.get_template(fp)
+        
+        if tmpl:
+            # FAST PATH: Logic from Template
+            pattern, mapping = tmpl
+            match = pattern.match(text)
+            if match:
+                # Construct Pick from Match
+                groups = match.groupdict()
+                
+                # Default Fields
+                selection = groups.get(mapping.get("selection", "selection"), text)
+                line_val = None
+                odds_val = None
+                
+                if "line" in groups and groups["line"]:
+                    try:
+                        line_val = float(groups["line"])
+                    except: pass
+                    
+                if "odds" in groups and groups["odds"]:
+                    try:
+                        odds_val = int(groups["odds"])
+                    except: pass
+                    
+                units_val = None
+                if "units" in groups and groups["units"]:
+                    units_val = groups["units"]
+                    
+                # Simplistic return for now - assumes Spread/ML/Total based on fields
+                pick = Pick(
+                    raw_text=text,
+                    league=league,
+                    date=date,
+                    bet_type=BetType.SPREAD if line_val else BetType.MONEYLINE,
+                    selection=selection,
+                    line=line_val,
+                    odds=odds_val,
+                    units=units_val
+                )
+                
+                # Format Compliance: Ensure "Team ML" format
+                if pick.bet_type == BetType.MONEYLINE:
+                    if "ml" not in pick.selection.lower() and "moneyline" not in pick.selection.lower():
+                        if not any(c.isdigit() for c in pick.selection):
+                             pick.selection = f"{pick.selection} ML"
+                
+                if pick:
+                     pick.units = units_val
+                return pick
+        else:
+            # AUTO-LEARNING (Cache Miss)
+            # Only attempt to learn if text seems "pick-like" (length > 5, has numbers?)
+            # Heuristic: Don't learn extremely short or long texts
+            if 5 < len(text) < 200:
+                # OPTIMIZATION: Only attempt to learn if text contains at least one digit.
+                # All valid bets (Odds, Lines, Units) contain digits.
+                if not re.search(r"\d", text):
+                    return None
+
+                # LEARNER DISABLED
+                pass
+
+        # ------------------------------
+        
         # 6. SPREAD vs MONEYLINE
-        return PickParser._parse_spread_or_ml(text, league_norm, date)
+        # 6. SPREAD vs MONEYLINE
+        pick = PickParser._parse_spread_or_ml(text, league_norm, date)
+        if pick:
+            pick.units = units_val
+        return pick
 
     # -------------------------------------------------------------------------
     # Detection Helpers
@@ -465,6 +416,32 @@ class PickParser:
                 pass
 
         return odds, text_clean
+
+    @staticmethod
+    def _extract_units(text: str) -> tuple[str | None, str]:
+        """
+        Extract units from text (e.g. '2u', '(2U)', '1.5 units').
+        Returns (units, clean_text).
+        """
+        text_clean = text
+        units = None
+        
+        # Regex for units: 
+        # Optional parens, number, "u" or "unit(s)", optional parens
+        # Case insensitive
+        match = re.search(r"(?:\(|^|\s)(\d+(?:\.\d+)?)\s*(?:u|units?)(?:\)|$|\s)", text, re.IGNORECASE)
+        
+        if match:
+             try:
+                 units = match.group(1)
+                 # Remove the full match from text
+                 text_clean = text.replace(match.group(0).strip(), "", 1).strip()
+                 # Clean up any Double Spaces
+                 text_clean = re.sub(r"\s+", " ", text_clean).strip()
+             except:
+                 pass
+                 
+        return units, text_clean
 
     @staticmethod
     def _parse_parlay(text: str, league: str, date: str | None) -> Pick:
@@ -730,12 +707,21 @@ class PickParser:
             # 1. Explicit ML -> ML
             # 2. No spread line found, but odds found (-175) -> ML (odds extracted above)
             # 3. No spread, no ml, no odds -> ML (default)
+            
+            # Format Compliance: Ensure "Team ML" format
+            selection = text_clean.strip()
+            if "ml" not in selection.lower() and "moneyline" not in selection.lower():
+                # Only append if it's not a Draw or specific prop-like string
+                # If it looks like a team name (no digits), append ML
+                if not any(c.isdigit() for c in selection):
+                     selection = f"{selection} ML"
+
             return Pick(
                 raw_text=text,
                 league=league.upper(),
                 date=date,
                 bet_type=BetType.MONEYLINE,
-                selection=text_clean.strip(),  # Cleaned text is the selection
+                selection=selection,  # Cleaned text is the selection
                 odds=odds,
             )
         else:

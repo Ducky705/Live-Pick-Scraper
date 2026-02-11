@@ -1,4 +1,4 @@
-Total Requests: 720
-Total Time: 66.8780
-Avg Latency: 0.0929
-Throughput: 10.7659
+Total Requests: 1190
+Total Time: 236.3138
+Avg Latency: 0.1986
+Throughput: 5.0357

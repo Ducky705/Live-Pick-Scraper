@@ -17,6 +17,30 @@ class Matcher:
     Matches pick text to games and players using aliases and heuristics.
     """
 
+    _ALIAS_INDEX: dict[str, set[str]] | None = None
+
+    @classmethod
+    def _get_expanded_aliases(cls, team_name: str) -> set[str]:
+        """Get all variations/aliases for a team name using a cached index."""
+        if cls._ALIAS_INDEX is None:
+            cls._ALIAS_INDEX = {}
+            for canonical, aliases in TEAM_ALIASES.items():
+                # Normalize canonical
+                canon_norm = cls.normalize(canonical)
+                # Normalize all aliases
+                norm_aliases = {cls.normalize(a) for a in aliases if cls.normalize(a)}
+                norm_aliases.add(canon_norm)
+                
+                # Map every variation to the full set (merging if collision)
+                for var in norm_aliases:
+                    if var not in cls._ALIAS_INDEX:
+                        cls._ALIAS_INDEX[var] = set()
+                    cls._ALIAS_INDEX[var].update(norm_aliases)
+        
+        team_norm = cls.normalize(team_name)
+        # Return index hits, or just the team itself if not found
+        return cls._ALIAS_INDEX.get(team_norm, {team_norm})
+
     @staticmethod
     def _fuzzy_match(target: str, candidates: list[str], threshold: float = 0.85) -> str | None:
         """
@@ -404,63 +428,26 @@ class Matcher:
         if not team_name:
             return False
 
-        team_norm = Matcher.normalize(team_name)
-
-        # 1. Direct word boundary match
-        if re.search(r"\b" + re.escape(team_norm) + r"\b", text):
-            return True
-
-        # 2. Check all aliases
-        for canonical, aliases in TEAM_ALIASES.items():
-            # Check if this team matches the canonical or any alias
-            is_match = team_norm == Matcher.normalize(canonical)
-            if not is_match:
-                for alias in aliases:
-                    alias_norm = Matcher.normalize(alias)
-                    if not alias_norm:
-                        continue
-                        
-                    # CRITICAL FIX: Use word boundary for alias association check
-                    # "ana" should not match "indiana", but "indiana" should match "indiana pacers"
-                    
-                    # 1. Is alias a word in team_name? (e.g. "Hoosiers" in "Indiana Hoosiers")
-                    if re.search(r"\b" + re.escape(alias_norm) + r"\b", team_norm):
-                        is_match = True
-                        break
-                        
-                    # 2. Is team_name a substring of alias? (e.g. "Indiana" in "Indiana Pacers")
-                    # This is safe because team_name is usually the specific entity we are checking
-                    if team_norm in alias_norm:
-                        is_match = True
-                        break
-
-            if is_match:
-                # Check if any alias is in the text
-                for alias in aliases:
-                    alias_norm = Matcher.normalize(alias)
-                    if alias_norm and re.search(r"\b" + re.escape(alias_norm) + r"\b", text):
-                        return True
-                    # Also check if text contains significant part of alias
-                    alias_words = alias_norm.split()
-                    if len(alias_words) >= 2:
-                        # Try matching first two words (e.g., "golden state")
-                        partial = " ".join(alias_words[:2])
-                        if len(partial) > 5 and re.search(r"\b" + re.escape(partial) + r"\b", text):
-                            return True
-
-        # 3. Last word fallback (e.g., "Lakers" from "Los Angeles Lakers")
-        words = team_norm.split()
-        if len(words) > 1:
-            last = words[-1]
-            if len(last) > 2 and re.search(r"\b" + re.escape(last) + r"\b", text):
+        # Get all possible names for this team (O(1) lookup)
+        all_names = Matcher._get_expanded_aliases(team_name)
+        
+        for name in all_names:
+            if not name: continue
+            
+            # Check 1: Direct match with boundary
+            # Note: name is already normalized
+            if re.search(r"\b" + re.escape(name) + r"\b", text):
                 return True
-
-        # 4. First significant words fallback (e.g., "Golden State" from "Golden State Warriors")
-        if len(words) >= 2:
-            first_two = " ".join(words[:2])
-            if len(first_two) > 5 and re.search(r"\b" + re.escape(first_two) + r"\b", text):
-                return True
-
+                
+            # Check 2: Partial/Multi-word matching (from original logic)
+            # Original heuristics checks for "first two words" etc.
+            words = name.split()
+            if len(words) >= 2:
+                # Heuristics for "First Two Words" (e.g. "Golden State" from "Golden State Warriors")
+                first_two = " ".join(words[:2])
+                if len(first_two) > 5 and re.search(r"\b" + re.escape(first_two) + r"\b", text):
+                    return True
+        
         return False
 
     @staticmethod
@@ -473,29 +460,29 @@ class Matcher:
         if not team_name:
             return -1, ""
 
-        team_norm = Matcher.normalize(team_name)
+        # Get all aliases in O(1)
+        # Use a list to ensure potential determinism? Sets are unordered.
+        # But we want to find ANY match. Best match might be longest?
+        # Let's iterate sorted by length descending to match longest alias first?
+        # Original logic stopped at first found.
+        aliases = sorted(Matcher._get_expanded_aliases(team_name), key=len, reverse=True)
         
-        # 1. Direct match
-        idx = text.find(team_norm)
-        if idx != -1:
-            return idx, team_norm
-
-        # 2. Check Aliases
-        for canonical, aliases in TEAM_ALIASES.items():
-            if Matcher.normalize(canonical) == team_norm:
-                # Found the team entry
-                for alias in aliases:
-                    alias_norm = Matcher.normalize(alias)
-                    idx = text.find(alias_norm)
-                    if idx != -1:
-                        # Ensure word boundary for short aliases to avoid partial matches
-                        if len(alias_norm) <= 3:
-                            # Strict boundary check simulated
-                            # (Simple find isn't enough for "ers" inside "players")
-                            # But for now, let's trust the alias list isn't too generic
-                            pass
-                        return idx, alias_norm
-                break
+        for alias_norm in aliases:
+            if not alias_norm: continue
+            
+            # Direct find
+            idx = text.find(alias_norm)
+            if idx != -1:
+                # Ensure word boundary for short aliases to avoid partial matches
+                if len(alias_norm) <= 3:
+                    # Quick boundary check
+                    # Check char before and after
+                    valid_start = (idx == 0) or (not text[idx-1].isalnum())
+                    valid_end = (idx + len(alias_norm) == len(text)) or (not text[idx+len(alias_norm)].isalnum())
+                    
+                    if not (valid_start and valid_end):
+                        continue
+                return idx, alias_norm
         
         return -1, ""
 
@@ -643,12 +630,4 @@ class Matcher:
     @staticmethod
     def _get_team_aliases(team_name: str) -> list[str]:
         """Get all aliases for a team name."""
-        team_norm = Matcher.normalize(team_name)
-        aliases = []
-        
-        for canonical, team_aliases in TEAM_ALIASES.items():
-            if Matcher.normalize(canonical) == team_norm:
-                aliases.extend(team_aliases)
-            # Reverse check? usually aliases map canonical -> multiple
-            
-        return aliases
+        return list(Matcher._get_expanded_aliases(team_name))

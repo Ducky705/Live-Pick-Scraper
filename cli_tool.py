@@ -11,7 +11,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Ensure src is in path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+root_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(root_dir)
+sys.path.append(os.path.join(root_dir, "src"))
 
 from config import LOG_DIR, OUTPUT_DIR, TARGET_DISCORD_CHANNEL_ID, TARGET_TELEGRAM_CHANNEL_ID
 from src.auto_processor import auto_select_messages

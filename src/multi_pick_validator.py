@@ -188,6 +188,7 @@ class MultiPickValidator:
         parsed_picks: list[dict[str, Any]],
         caption: str = "",
         message_id: int | None = None,
+        strict: bool = False,
     ) -> ValidationResult:
         """
         Validate that extracted picks match expected count.
@@ -232,7 +233,11 @@ class MultiPickValidator:
         else:
             # RELAXED TOLERANCE (US-006): Be less aggressive.
             # Only enforce strict count if we are VERY confident (> 0.85)
-            tolerance = 0 if estimate.confidence > 0.85 else 1
+            # UNLESS strict mode is enabled (Paranoid Mode)
+            if strict:
+                tolerance = 0
+            else:
+                tolerance = 0 if estimate.confidence > 0.85 else 1
 
         is_valid = missing_count <= tolerance
 
@@ -307,7 +312,9 @@ class MultiPickValidator:
 
 
 def validate_and_flag_missing(
-    messages: list[dict[str, Any]], parsed_picks: list[dict[str, Any]]
+    messages: list[dict[str, Any]], 
+    parsed_picks: list[dict[str, Any]],
+    strict: bool = False
 ) -> tuple[list[dict[str, Any]], list[int]]:
     """
     Validate all messages and flag those with potentially missing picks.
@@ -351,6 +358,7 @@ def validate_and_flag_missing(
             parsed_picks=msg_picks,
             caption=caption,
             message_id=mid,
+            strict=strict,
         )
 
         if result.needs_reparse:

@@ -114,7 +114,9 @@ class ExtractionPipeline:
                     rule_handled_msgs = [msg_map[mid] for mid in rule_handled_ids if mid in msg_map]
     
                     # Run validation on just the rule-based outcomes
-                    _, missing_ids = validate_and_flag_missing(rule_handled_msgs, fresh_picks)
+                    # US-015: PARANOID MODE - Strict=True
+                    # Any discrepancy between Rule Picks and Validator Estimate MUST trigger AI.
+                    _, missing_ids = validate_and_flag_missing(rule_handled_msgs, fresh_picks, strict=True)
     
                     if missing_ids:
                         logger.info(

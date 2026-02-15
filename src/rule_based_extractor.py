@@ -46,7 +46,10 @@ class RuleBasedExtractor:
     )
 
     RE_PROP_SHORTHAND = re.compile(r"(\d+)\+?\s*(PRA|pts?|reb?|ast?|threes?|3pm)", re.IGNORECASE)
+    RE_PROP_WIN = re.compile(r"Win\s+(3pt|Slam Dunk|Event|Match|Set)", re.IGNORECASE)
+    RE_PROP_ANYTIME = re.compile(r"^(.*?)\s+(assist|goal|score)s?", re.IGNORECASE)
     RE_PARLAY_SEP = re.compile(r"\s*\|\|\s*") # Double pipe separator
+    RE_SPLIT_PLUS = re.compile(r"\s+\+\s+(?=[A-Z])") # Space + Space followed by capital letter (e.g. "Shelton ML + Aliassime")
 
     RE_START_NOISE = re.compile(r"^(?:http|www|t\.me|@)")
     RE_CONTINUATION_ODDS = re.compile(r"^[+-]\d+")
@@ -55,7 +58,7 @@ class RuleBasedExtractor:
     RE_ML_WORD = re.compile(r"\bml\b")
     RE_ODDS_PATTERN = re.compile(r"(?<!\d)[+-]\s*\d{1,4}(?:\.\d+)?")
     RE_OU_PATTERN = re.compile(r"\b(o|u|over|under)\s*\d", re.IGNORECASE)
-    RE_UNITS_PREFIX = re.compile(r"^(\d+(?:\.\d+)?)(?:\*|u|%|unit)\s*", re.IGNORECASE)
+    RE_UNITS_PREFIX = re.compile(r"^[\(]?(\d+(?:\.\d+)?)(?:\*|u|%|unit)[\)]?\s*", re.IGNORECASE)
     RE_UNITS_SUFFIX = re.compile(r"[\s\(](\d+(?:\.\d+)?)\s*(?:u|unit|%)[\)]?", re.IGNORECASE) # Removed $ anchor
     RE_PARENS = re.compile(r"\(.*?\)")
 
@@ -112,6 +115,13 @@ class RuleBasedExtractor:
             # Pre-split on Parlay Separators (||)
             if "||" in full_text:
                 full_text = full_text.replace("||", "\n")
+            
+            # SPLITTER: Handle multiple picks on one line with "+" (e.g. "Shelton ML + Aliassime ML")
+            # Only split if BOTH sides look like picks or names.
+            if "+" in full_text and "ML" in full_text:
+                 # Check for "Team A ML + Team B ML" pattern
+                 if re.search(r"ML\s*\+\s*\w+", full_text):
+                     full_text = full_text.replace("+", "\n")
 
             # 3. Regex Extraction
             # US-013: Extract Capper Name from bold header (e.g. **Big Al**)
@@ -134,10 +144,16 @@ class RuleBasedExtractor:
                     continue
 
                 # CLEANUP: Remove common noise prefixes and bad characters
-                # Remove "Pick:", "Selection:", "My Pick:"
+                # Remove "Pick:", "Selection:", "My Pick:", "MAX BET"
+                if "MAX BET" in line:
+                    line = line.replace("MAX BET", "")
+                
                 line = RuleBasedExtractor.RE_REMOVE_PREFIX.sub("", line)
                 # Remove numbering (e.g. "1. ", "1) ")
                 line = RuleBasedExtractor.RE_REMOVE_NUMBERING.sub("", line)
+
+                # Normalize " at " to " vs " for better parsing
+                line = line.replace(" at ", " vs ").replace(" @ ", " vs ").replace("/", " vs ")
 
                 # Remove quotes and unicode garbage
                 line = (
@@ -167,7 +183,13 @@ class RuleBasedExtractor:
                 line = RuleBasedExtractor.RE_FIX_OVER.sub(r"Over \2", line)
 
                 # 4. Fix "Money Line" -> "Moneyline" -> "ML"
-                line = RuleBasedExtractor.RE_FIX_MONEYLINE.sub("Moneyline", line)
+                line = RuleBasedExtractor.RE_FIX_MONEYLINE.sub("ML", line)
+                line = line.replace("money line", "ML").replace("Money Line", "ML") # Explicit fallback
+
+                # 5. Fix "Team-Line" missing space (e.g. "Packers-3", "BusanKCCEgis-5.5")
+                # Look for Letter followed immediately by [+-] and Digit
+                line = re.sub(r"([a-zA-Z])([+-]\d)", r"\1 \2", line)
+
 
                 # 5. Fix "Anytime Goal Scorer" -> "Name: Anytime Goal Scorer" (for Prop Parser)
                 # If we see AGS pattern but no colon, inject one before the keyword
@@ -196,31 +218,91 @@ class RuleBasedExtractor:
                 if len(line) < 5:
                     continue
 
-                # --- MULTILINE MERGE LOGIC ---
-                # Check if this line is likely a team/player name but lacks bet info,
-                # and the NEXT line is just odds/line.
-                if i < len(lines) and not RuleBasedExtractor._has_pick_indicators(line):
-                    next_line = lines[i].strip()
-                    # Clean next line slightly to check it
-                    next_line_clean = RuleBasedExtractor.RE_NON_ASCII.sub("", next_line).strip()
 
-                    # If next line looks like odds/line (e.g. "-110", "+145", "Over 220")
-                    # Strict check: Start with +/-, or "Over/Under", or "ML"
+                # Loop to merge multiple lines if needed (e.g. Team \n Odds \n Units)
+                while i < len(lines):
+                    next_line = lines[i].strip()
+                    next_line_clean = RuleBasedExtractor.RE_NON_ASCII.sub("", next_line).strip()
+                    
+                    if not next_line:
+                        i += 1
+                        continue
+
+                    # Check if next line is a STRICT continuation (Price, Line, Units)
+                    # It should NOT contain a new Team Name or Prop Description.
                     is_continuation = False
-                    if RuleBasedExtractor.RE_CONTINUATION_ODDS.match(next_line_clean):
+                    
+                    # 1. Price/Odds: -110, +200, +105, -120 (start with +/-)
+                    if re.match(r"^[+-]\d+", next_line_clean):
                         is_continuation = True
+                    # 2. Total: Over 220, U 150
                     elif RuleBasedExtractor.RE_CONTINUATION_OU.match(next_line_clean):
                         is_continuation = True
+                    # 3. ML explicit: ML, Moneyline
                     elif RuleBasedExtractor.RE_CONTINUATION_ML.match(next_line_clean):
                         is_continuation = True
+                    # 4. Units only: (1U), 5U
+                    elif RuleBasedExtractor.RE_UNITS_PREFIX.match(next_line_clean):
+                        is_continuation = True
+                    
+                    # Merge Decision
+                    current_has_ind = RuleBasedExtractor._has_pick_indicators(line)
+                    next_has_ind = RuleBasedExtractor._has_pick_indicators(next_line)
+                    
+                    should_merge = False
 
-                    if is_continuation:
-                        # MERGE
-                        line = f"{line} {next_line_clean}"
-                        i += 1  # Consume next line
+                    if not current_has_ind:
+                        # Current is just text (Team Name?). Always merge if next has info.
+                        # But stop if next line also looks like a Team Name (No indicators)?
+                        # "Team A" \n "Team B" -> Don't merge.
+                        if next_has_ind or is_continuation:
+                            should_merge = True
+                    else:
+                        # Current HAS indicators (Pick).
+                        # Only merge if next line is a continuation (Price/Line/Units).
+                        # Do NOT merge if next line is another Pick (Indicator + Not Just Price).
+                        if is_continuation:
+                            should_merge = True
+
+                    if should_merge:
+                         line = f"{line} {next_line_clean}"
+                         i += 1
+                    else:
+                         break
+
+
 
                 # Attempt parse
                 try:
+                    # CHECK FOR "Win Event" PROPS
+                    win_match = RuleBasedExtractor.RE_PROP_WIN.search(line)
+                    if win_match:
+                        # Extract Player (before verify)
+                        player_name = line[:win_match.start()].strip()
+                        event = win_match.group(1).title()
+                        if len(player_name) > 3:
+                             p_dict = {
+                                "message_id": str(msg_id) if msg_id else "unknown",
+                                "capper_name": msg.get("author") or "Unknown",
+                                "league": infer_league_from_entity(player_name) or "Unknown",
+                                "type": "Player Prop",
+                                "pick": f"{player_name}: Win {event}",
+                                "odds": -110, # Default or extraction needed
+                                "units": 1.0,
+                                "line": 0.5,
+                                "is_over": True,
+                                "stat": "Win",
+                                "reasoning": "Extracted via Rule-Based Regex (Win Event Prop)",
+                                "_source_text": line,
+                                "confidence": 9.0
+                            }
+                             # Try extract units/odds from remainder
+                             rem = line[win_match.end():]
+                             u, _, _ = RuleBasedExtractor._extract_and_remove_units(rem)
+                             p_dict["units"] = u
+                             msg_picks.append(p_dict)
+                             continue
+
                     # PRIORITY: Check for Prop Shorthand (e.g. "Luka 45+ PRA")
                     prop_match = RuleBasedExtractor.RE_PROP_SHORTHAND.search(line)
                     if prop_match:
@@ -273,6 +355,34 @@ class RuleBasedExtractor:
                             }
                             msg_picks.append(p_dict)
                             continue
+
+
+                    # CHECK FOR "XS" Pattern (Anytime strings)
+                    # "Jack Eichel assist" -> Over 0.5 Assist
+                    at_match = RuleBasedExtractor.RE_PROP_ANYTIME.match(line)
+                    if at_match:
+                         player = at_match.group(1).strip()
+                         stat_raw = at_match.group(2).lower()
+                         if len(player) > 3:
+                             stat_map = {"assist": "Assists", "goal": "Goals", "score": "Goals"}
+                             stat = stat_map.get(stat_raw, "Points")
+                             p_dict = {
+                                "message_id": str(msg_id) if msg_id else "unknown",
+                                "capper_name": msg.get("author") or "Unknown",
+                                "league": infer_league_from_entity(player) or "NHL", # Likely NHL/Soccer
+                                "type": "Player Prop",
+                                "pick": f"{player}: {stat} Over 0.5",
+                                "odds": -110,
+                                "units": 1.0,
+                                "line": 0.5,
+                                "is_over": True,
+                                "stat": stat,
+                                "reasoning": "Extracted via Rule-Based Regex (Anytime Stat)",
+                                "_source_text": line,
+                                "confidence": 8.5
+                            }
+                             msg_picks.append(p_dict)
+                             continue
 
                     # Check for keywords that strongly suggest a pick
                     if not RuleBasedExtractor._has_pick_indicators(line):
@@ -335,23 +445,18 @@ class RuleBasedExtractor:
             # 4. Decision Logic
             if msg_picks:
                 # SPECIAL CASE: If we found individual picks but the text said "Parlay",
-                # and we didn't find a "Parlay" type pick, we might have split a parlay.
-                # In this case, it's safer to let AI handle it to group them.
-                found_parlay_type = any(p["type"] == "Parlay" for p in msg_picks)
+                # previously we deferred to AI. 
+                # NOW: We accept them. Better to have "Straight" bets extracted than nothing if AI fails.
+                # We can optionally tag them as "Potential Parlay Leg" in reasoning if needed, but for now just accept.
+                
+                # If we found multiple picks and "Parlay" is mentioned, trust it's a list of legs.
+                extracted_picks.extend(msg_picks)
+                handled_msgs += 1
+                logger.debug(f"[RuleBased] Extracted {len(msg_picks)} picks from msg {msg_id} (Parlay keyword ignored)")
 
-                if has_parlay_keyword and not found_parlay_type:
-                    # Risk of splitting a parlay into straight bets.
-                    # E.g. "2-Team Parlay:\nLakers ML\nHeat ML" -> Found 2 MLs.
-                    # Fallback to AI for accuracy.
-                    remaining_messages.append(msg)
-                    logger.warning(f"[RuleBased] Msg {msg_id} has 'Parlay' but found straight bets. Deferring to AI.")
-                else:
-                    # Success
-                    extracted_picks.extend(msg_picks)
-                    handled_msgs += 1
-                    logger.debug(f"[RuleBased] Extracted {len(msg_picks)} picks from msg {msg_id}")
             else:
                 remaining_messages.append(msg)
+
 
         logger.info(
             f"[RuleBased] Processed {handled_msgs}/{total_msgs} messages via Regex ({len(extracted_picks)} picks)"
@@ -395,7 +500,7 @@ class RuleBasedExtractor:
         # Added goal/score/scorer patterns
         if ":" in text or "goal" in text_lower or "score" in text_lower:
             # Fast check for keywords
-            keywords = ["pts", "reb", "ast", "threes", "yards", "td", "goal", "score", "scorer"]
+            keywords = ["pts", "reb", "ast", "threes", "yards", "td", "goal", "score", "scorer", "win"]
             for k in keywords:
                 if k in text_lower:
                     return True
@@ -426,6 +531,11 @@ class RuleBasedExtractor:
 
         # Reject if selection is too short
         if len(pick.selection) < 3:
+            return False
+
+        # Reject generic "ML" or "Moneyline" selections if they lack team context
+        sel = pick.selection.strip().lower()
+        if sel in ["ml", "moneyline", "money line", "game", "match", "pick", "play", "parlay"]:
             return False
 
         return True

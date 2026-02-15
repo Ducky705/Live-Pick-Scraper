@@ -3,6 +3,7 @@ import logging
 from typing import Tuple
 
 from src.provider_pool import pooled_completion
+from src.team_aliases import TEAM_ALIASES
 
 class ValidityFilter:
     """
@@ -11,6 +12,11 @@ class ValidityFilter:
 
     def __init__(self, model: str = "auto"):
         self.model = model
+        # Flatten aliases for fast lookup
+        self.known_aliases = set()
+        for aliases in TEAM_ALIASES.values():
+            for alias in aliases:
+                self.known_aliases.add(alias.lower())
 
     def is_valid(self, pick_text: str, league: str = "Unknown") -> Tuple[bool, str]:
         """
@@ -41,14 +47,28 @@ class ValidityFilter:
         # NFL/NHL/MLB/Soccer common aliases could be added here
         # For now, we trust the LLM if it's not a digit pick but looks like a team.
         
-        known_teams = ["bucks", "lakers", "warriors", "heat", "celtics", "nuggets", "suns", "clippers", "mavericks", "kings", "thunder", "wolves", "timberwolves", "knicks", "nets", "sixers", "76ers", "pacers", "bulls", "pistons", "magic", "hornets", "wizards", "hawks", "spurs", "rockets", "grizzlies", "pelicans", "jazz", "blazers", "trail blazers", "raptors",
-                       "chiefs", "49ers", "ravens", "lions", "bills", "packers", "cowboys", "eagles", "dolphins", "browns", "texans", "steelers", "bengals", "jaguars", "colts", "titans", "broncos", "raiders", "chargers", "giants", "commanders", "bears", "vikings", "falcons", "saints", "buccaneers", "panthers", "cardinals", "rams", "seahawks", "jets", "patriots",
-                       "canadiens", "maple leafs", "leafs", "senators", "bruins", "sabres", "wings", "red wings", "panthers", "lightning", "hurricanes", "capitals", "devils", "islanders", "rangers", "flyers", "penguins", "jackets", "blue jackets", "avalanche", "stars", "wild", "predators", "blues", "coyotes", "ducks", "flames", "oilers", "kings", "sharks", "kraken", "canucks", "knights", "golden knights",
-                       "yankees", "red sox", "orioles", "rays", "jays", "blue jays", "guardians", "tigers", "twins", "royals", "white sox", "mariners", "angels", "astros", "athletics", "rangers", "braves", "marlins", "mets", "phillies", "nationals", "cubs", "reds", "brewers", "pirates", "cardinals", "diamondbacks", "rockies", "dodgers", "padres", "giants"]
-
         # RELAXED HEURISTIC:
         # If no digits/keywords, BUT it is a known team name, allow it.
-        is_known_team = lower_text in known_teams or lower_text.split(" ")[0] in known_teams
+        # Clean text first: remove (2u), units, punctuation
+        clean_text = pick_text.lower().replace("(", "").replace(")", "").replace("units", "").replace("unit", "").replace("u ", " ")
+        clean_text = clean_text.strip()
+        
+        # Check if entire cleaned text is a known alias
+        # OR if any 2+ word substring is a known alias (e.g. "arizona wildcats")
+        is_known_team = clean_text in self.known_aliases
+        
+        if not is_known_team:
+             # Check words (e.g. "lowa" might be in there, but "(2 u lowa" wasn't)
+             words = clean_text.split()
+             for w in words:
+                 if len(w) >= 3 and w in self.known_aliases:
+                     is_known_team = True
+                     break
+        
+        # FAST PATH: If it's a known team, valid.
+        # This prevents LLM from over-analyzing and rejecting messy but valid team names.
+        if is_known_team:
+            return True, "Known Team Alias Detected (Fast Path)"
         
         if not has_digit and not has_keyword and not is_known_team:
              # Final check: Is it roughly 1-3 words and not garbage?
@@ -65,12 +85,13 @@ Text: "{pick_text}"
 Context League: {league}
 
 Rules:
-1. REJECT generic fragments like "Over 6.5", "-7.5", "Team ML", "Player Prop" if no specific team/player is named.
+1. REJECT generic fragments like "-7.5", "Team ML", "Player Prop" if no specific team/player is named. (EXCEPTION: See Rule 7 for Totals).
 2. REJECT garbage strings, marketing fluff, or non-pick text.
 3. ACCEPT valid picks even if they use nicknames (e.g., "Lakers -5", "LeBron O 25.5").
 4. ACCEPT if it refers to a specific game context implied (e.g. "Over 215" might be invalid without teams, but "Lakers/Suns Over 215" is valid).
 5. ACCEPT "Lakers vs Celtics Over 215.5" (Standard Format).
 6. ACCEPT single team names (e.g. "Bucks", "Lakers", "Kansas City") as IMPLIED MONEYLINE bets. This is a common shorthand.
+7. ACCEPT "Over [Number]" or "Under [Number]" as valid structure (context may be provided later).
 
 Respond in JSON format:
 {{

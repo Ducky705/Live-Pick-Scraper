@@ -194,11 +194,11 @@ Extract ALL betting picks.
 
 {schedule_section}{style_section}RULES:
 1.i=id: COPY EXACT ID from "### id".
-2.c=capper: FIRST LINE (default). If headers present (e.g. 🔮), use header for section.
+2.c=capper: Use HEADER/NAME above picks. IF message lists "Name1", then picks, then "Name2", then picks -> SWITCH capper to Name2 for those picks.
 3.l=league: Infer (Lakers->NBA). USE SCHEDULE to resolve teams (e.g. "Kings"->Sacramento vs LA).
-4.o=odds (int): -110, +150.
-5.u=units: "5u"->5. "Max"->5. "Whale"->10. Default 1.
-6.LISTS: Scan FULL message. 10 lines = 10 picks.
+4.o=odds (int): -110, +150. Use null if not found.
+5.u=units: "5u"->5. "Max"->5. "Whale"->10. Use null if not found.
+6.LISTS: EXTRACT EVERY SINGLE PICK. If 50 items, output 50 items. DO NOT SUMMARIZE.
 7.PARLAYS: "Team A + Team B" = t=PL. Legs: (LG) Leg1 / (LG) Leg2.
 8.SPLIT: "Team +8 & ML" = 2 picks.
 9.CONFIDENCE (q): 1-10.

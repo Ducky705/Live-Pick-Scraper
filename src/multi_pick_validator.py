@@ -60,14 +60,14 @@ class MultiPickValidator:
     # Expanded Team Pattern to catch College/International teams (Capitalized words followed by spread/odds)
     # Optimized: Removed excessive lookaheads and simplified common team names
     TEAM_PATTERN = re.compile(
-        r"\b(?:Lakers|Celtics|Warriors|Heat|Nets|Bucks|76ers|Suns|Nuggets|Clippers|"
+        r"\b(?:"
+        r"(?i:Lakers|Celtics|Warriors|Heat|Nets|Bucks|76ers|Suns|Nuggets|Clippers|"
         r"Chiefs|Eagles|Cowboys|Bills|Ravens|49ers|Dolphins|Lions|"
         r"Yankees|Dodgers|Braves|Astros|Phillies|Padres|"
         r"Bruins|Maple Leafs|Rangers|Oilers|Panthers|Avalanche|"
         r"Inter|Real Madrid|Barcelona|Man City|Arsenal|Liverpool|Chelsea|"
-        r"Alabama|Georgia|Michigan|Ohio State|Texas|Tennessee|Purdue|UConn|Houston|"
-        r"[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}(?=\s*(?:[+-]\d|vs|@|over|under|o|u)))\b",
-        re.IGNORECASE,
+        r"Alabama|Georgia|Michigan|Ohio State|Texas|Tennessee|Purdue|UConn|Houston)|"
+        r"[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}(?=\s*(?i:[+-]\d|vs|@|over|under|\bo\b|\bu\b)))\b"
     )
 
     ODDS_PATTERN = re.compile(r"[+-]\s*\d{3,4}(?!\d)")  # -110, +150, +1200

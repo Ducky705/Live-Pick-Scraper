@@ -201,6 +201,11 @@ def merge_duplicate_picks(pick1: dict, pick2: dict) -> dict:
     units2 = pick2.get("units") or 1.0
     merged["units"] = max(units1, units2)
 
+    # Prefer valid message_id (US-013 Refinement Resilience)
+    # If merged pick has None ID but pick2 has valid ID, take pick2's ID.
+    if not merged.get("message_id") and pick2.get("message_id"):
+        merged["message_id"] = pick2["message_id"]
+
     return merged
 
 
@@ -367,6 +372,7 @@ def deduplicate_by_capper(picks: list[dict]) -> list[dict]:
         by_capper[key].append(pick)
 
     result = []
+    
     for capper, capper_picks in by_capper.items():
         # Deduplicate within this capper's picks
         deduped = deduplicate_picks(capper_picks)

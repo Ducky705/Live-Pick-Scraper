@@ -173,6 +173,12 @@ async def main():
 
     logging.info("OCR Complete.")
 
+    # DEBUG: Save messages for feedback loop
+    debug_file = os.path.join(OUTPUT_DIR, "debug_msgs.json")
+    with open(debug_file, "w", encoding="utf-8") as f:
+        json.dump(unique_msgs, f, indent=2, default=str)
+    logging.info(f"Saved debug messages to {debug_file}")
+
     # 5. AUTO-CLASSIFICATION
     logging.info("Classifying messages...")
     classified_msgs = auto_select_messages(unique_msgs, use_ai=True)

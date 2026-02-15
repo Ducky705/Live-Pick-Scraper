@@ -248,7 +248,7 @@ def expand_compact_pick(compact: dict[str, Any]) -> dict[str, Any]:
             try:
                 value = float(value)
             except (ValueError, TypeError):
-                value = 1.0
+                value = None
 
         # Special handling for confidence (ensure float and normalize 0-1 -> 1-10)
         elif full_key == "confidence":
@@ -264,7 +264,7 @@ def expand_compact_pick(compact: dict[str, Any]) -> dict[str, Any]:
         result[full_key] = value
 
     # Apply defaults
-    result.setdefault("units", 1.0)
+    result.setdefault("units", None)
     result.setdefault("capper_name", "Unknown")
     result.setdefault("league", "Other")
     result.setdefault("type", "Unknown")

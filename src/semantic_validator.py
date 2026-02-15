@@ -140,8 +140,6 @@ class SemanticValidator:
              # Exception: "Whale Play" might be followed by a real pick?
              # Usually the extractor puts the pick separately. If the pick TEXT itself contains this, 
              # and it's short, it's likely garbage.
-             # If pick text > 50 chars, maybe it's "Whale Play: Lakers -5".
-             # But Extractor should have cleaned it.
              return False, f"Garbage text detected: '{pick_text}' contains blocked phrase"
 
         # 1. Check Team Name Validity (US-012)
@@ -150,85 +148,59 @@ class SemanticValidator:
         # Only enforce for Team Sports where we have a complete DB.
         team_sports = {"NBA", "NFL", "NCAAF", "NCAAB", "NHL", "MLB"}
 
-        # If league is unknown/other, we try to guess if it's a team sport?
-        # Or just enforce it if it LOOKS like a team pick?
         # If league is NOT in team_sports, we skip this check (e.g. UFC, Tennis, Soccer if not in DB)
         should_check_team = sport in team_sports
 
         if should_check_team and pick_type in ("Spread", "Moneyline", "Total", "Team Total"):
-            # Check if any valid team name is present in the pick text
-            found_team = False
-            pick_lower = pick_text.lower()
+            # SKIP if we already enriched the game (game_id or opponent found)
+            # This handles cases like "Over 45.5" where enrichment found the game from context
+            if pick.get("game_id") or pick.get("opponent"):
+                pass  # Trust the enrichment
+            else:
+                # Check URL/Noise first
+                if "http" in pick_text or "t.me" in pick_text:
+                     return False, f"Pick text contains URL/Link: '{pick_text}'"
 
-            # Optimization: Create a regex pattern for all teams?
-            # Or just iterate and use regex for each?
-            # Creating one giant regex is faster.
-            # We can cache this pattern at class level if needed, but for now just do it.
-            # Note: escaping regex special chars in team names
-
-            # Construct pattern only once ideally, but here per pick is okay-ish or cache it?
-            # Let's simple check: iterate and use \b
-
-            for team in SemanticValidator.VALID_TEAMS:
-                # Use word boundary check to avoid partial matches (e.g. "sun" in "sunday")
-                # Pre-compile or use re.search
-                # Escape team name just in case (e.g. "A's")
-                pattern = rf"\b{re.escape(team)}\b"
-                if re.search(pattern, pick_lower):
-                    found_team = True
-                    break
-
-            if not found_team:
-                # US-013: Check for uppercase abbreviations (Case Sensitive)
-                # These are dangerous to add to TEAM_ALIASES (e.g. "WAS" vs "was", "MIN" vs "min")
-                abbrevs = [
-                    "WAS",
-                    "MIN",
-                    "PHI",
-                    "DAL",
-                    "CHI",
-                    "MIA",
-                    "HOU",
-                    "TEN",
-                    "SF",
-                    "CIN",
-                    "BUF",
-                    "PIT",
-                    "CLE",
-                    "IND",
-                    "JAX",
-                    "DET",
-                    "GB",
-                    "NE",
-                    "NY",
-                    "LV",
-                    "KC",
-                    "LAC",
-                    "LAL",
-                    "GSW",
-                    "OKC",
-                    "NOP",
-                    "SAS",
-                    "MIL",
-                    "TOR",
-                    "BOS",
-                    "ATL",
-                    "CHA",
-                    "ORL",
-                    "BKN",
-                    "DEN",
-                    "UTA",
-                    "POR",
-                    "SAC",
+                # Check if any valid team name is present in the pick text
+                found_team = False
+                pick_lower = pick_text.lower()
+                
+                # Check for Player Prop keywords - if present, this might be a misclassified prop
+                # In that case, we shouldn't enforce Team Name (matches "Kenneth Walker: Rush Yds")
+                prop_keywords = [
+                    "pts", "points", "reb", "ast", "goal", "score", "sog", "shot", "hit", "base", 
+                    "yds", "yards", "att", "attempts", "threes", "3pm", "tackles", "int", "pass", 
+                    "rush", "rec", "reception"
                 ]
-                if any(re.search(rf"\b{a}\b", pick_text) for a in abbrevs):
+                is_prop_like = any(k in pick_lower for k in prop_keywords)
+                
+                if is_prop_like:
+                    # It's likely a prop. Skip team name check.
                     found_team = True
 
-            if not found_team:
-                # Double check: Is it an "Over/Under" without team name?
-                # If so, it's technically invalid as we don't know the game,
-                # UNLESS it's a "Grand Salami" or specific league prop, but we'll flag it.
-                return False, f"No valid team name found in pick text: '{pick_text}'"
+                if not found_team:
+                    for team in SemanticValidator.VALID_TEAMS:
+                        # Use word boundary check to avoid partial matches
+                        # Escape team name just in case
+                        pattern = rf"\b{re.escape(team)}\b"
+                        if re.search(pattern, pick_lower):
+                            found_team = True
+                            break
+
+                if not found_team:
+                    # US-013: Check for uppercase abbreviations (Case Sensitive)
+                    abbrevs = [
+                        "WAS", "MIN", "PHI", "DAL", "CHI", "MIA", "HOU", "TEN", "SF", "CIN",
+                        "BUF", "PIT", "CLE", "IND", "JAX", "DET", "GB", "NE", "NY", "LV",
+                        "KC", "LAC", "LAL", "GSW", "OKC", "NOP", "SAS", "MIL", "TOR", "BOS",
+                        "ATL", "CHA", "ORL", "BKN", "DEN", "UTA", "POR", "SAC"
+                    ]
+                    if any(re.search(rf"\b{a}\b", pick_text) for a in abbrevs):
+                        found_team = True
+
+                if not found_team:
+                    # Double check: Is it an "Over/Under" without team name?
+                    return False, f"No valid team name found in pick text: '{pick_text}'"
 
         # 2. Check Sport Consistency (if team name is known)
         # Simple keyword check in pick text
@@ -236,25 +208,50 @@ class SemanticValidator:
             if team.lower() in pick_text.lower():
                 # If mapped sport doesn't match pick sport (and pick sport isn't Other)
                 if sport != "Other" and sport != team_sport:
-                    # Allow NCAAF/NFL overlap in some contexts or manual override, but flag mismatch
-                    # Exception: "Giants" (MLB/NFL), "Cardinals" (MLB/NFL), "Jets" (NFL/NHL), "Kings" (NBA/NHL)
-                    # We skip ambiguous names for now
+                    # Skip ambiguous names for now
                     ambiguous = ["Giants", "Cardinals", "Jets", "Kings", "Panthers", "Rangers"]
                     if team not in ambiguous:
                         return False, f"Team '{team}' belongs to {team_sport}, but league is {sport}"
 
-        # 2. Check Numeric Ranges
+        # 3. Check Numeric Ranges
         if sport in SemanticValidator.RULES:
             rules = SemanticValidator.RULES[sport]
 
             # TOTALS
-            if pick_type == "Total" and line is not None:
+            if pick_type in ("Total", "Team Total") and line is not None:
+                # Check for Team Total Indicator
+                is_team_total = (
+                    "team total" in pick_text.lower()
+                    or "tt" in pick_text.lower()
+                    or pick_type == "Team Total"
+                    or "1h" in pick_text.lower()  # 1st Half totals are lower
+                    or "2h" in pick_text.lower()
+                    or "1q" in pick_text.lower()
+                )
+
                 # RELAXATION: Check for Player Prop keywords classified as Total
-                prop_keywords = ["pts", "points", "reb", "ast", "goal", "score", "sog", "shot", "hit", "base"]
+                prop_keywords = [
+                    "pts", "points", "reb", "ast", "goal", "score", "sog", "shot", "hit", "base", 
+                    "yds", "yards", "att", "attempts", "threes", "3pm", "tackles", "int", "pass", 
+                    "rush", "rec", "reception"
+                ]
                 is_prop_text = any(k in pick_text.lower() for k in prop_keywords)
 
                 if not is_prop_text:
-                    if line < rules["min_total"] or line > rules["max_total"]:
+                    if is_team_total:
+                        # Relaxed limits for Team Totals / Halves
+                        # Heuristic: Min is 0.25x of Game Total Min, Max is 0.85x of Game Total Max
+                        tt_min = rules["min_total"] * 0.25
+                        tt_max = rules["max_total"] * 0.85
+                        
+                        if line < tt_min or line > tt_max:
+                             # Should we stricter? 
+                             if sport == "NFL" and line < 6.0: # TD props?
+                                 pass
+                             elif line < tt_min or line > tt_max:
+                                 return False, f"Suspicious Team Total: {line} for {sport} (Expected {tt_min}-{tt_max})"
+
+                    elif line < rules["min_total"] or line > rules["max_total"]:
                         # Check for cross-sport match (e.g. NHL total in NBA)
                         for other_sport, other_rules in SemanticValidator.RULES.items():
                             if other_sport != sport:
@@ -273,28 +270,20 @@ class SemanticValidator:
                     return False, f"Suspicious Spread: {line} for {sport} (Expected max {rules['max_spread']})"
 
                 # Check for "Moneyline-like" odds on a Spread
-                # e.g., Spread -5 with +500 odds is extremely unlikely (unless it's a heavily alt line)
                 if odds is not None:
-                    # If odds are way outside normal spread juice (e.g. +400), it might be a ML or Prop
                     if odds >= 300 or odds <= -500:
                         return False, f"Suspicious Odds for Spread: {odds} (Likely Moneyline or Prop)"
 
-        # 3. Type Logic
+        # 4. Type Logic
         # If type is "Moneyline" but line is set (e.g. -5.5), that's inconsistent
         if pick_type == "Moneyline" and line is not None and abs(line) > 0:
-            # Some parsers might put moneyline odds in line field? No, line should be point spread.
-            # Exception: "Pick'em" might be represented as 0
             return False, f"Moneyline should not have a line/spread value: {line}"
 
-        # 4. Prop Logic
+        # 5. Prop Logic
         if pick_type == "Player Prop":
-            # If line is 0.5 or 1.5, that's fine.
-            # If line is > 100 (except maybe rushing yards), suspicious for most sports
-            if line is not None and line > 300:  # 300+ passing yards is possible, but >500 is rare
+            if line is not None and line > 300:  # 300+ passing yards is possible, but >300 is high for others
                 return False, f"Suspicious Player Prop Line: {line}"
 
-            # Check for team names in player prop subject
-            # e.g. Subject: "Lakers" Market: "Points" -> Should be Team Prop
             subject = pick.get("subject", "")
             for team in SemanticValidator.TEAM_LEAGUES.keys():
                 if team.lower() in subject.lower():
@@ -308,7 +297,6 @@ class SemanticValidator:
         Attempt simple heuristic fixes before asking AI.
         """
         # Example: Mismatch Sport
-        # If Reason is "Team 'Lakers' belongs to NBA", simply switch league
         match = re.search(r"belongs to (\w+)", reason)
         if match:
             correct_sport = match.group(1)

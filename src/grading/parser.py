@@ -72,8 +72,6 @@ class PickParser:
             if league_norm in ["unknown", "", "other"]:
                 if period in ["1Q", "2Q", "3Q", "4Q"]:
                     league_norm = "nba"
-            if period in ["1Q", "2Q", "3Q", "4Q"]:
-                    league_norm = "nba"
             pick = PickParser._parse_period_bet(text, league_norm, date, period)
             if pick:
                 pick.units = units_val
@@ -121,7 +119,6 @@ class PickParser:
                     subject = text[: match.start()].strip()
                     rest = text[match.start() :].strip()
                     # Synthetic colon injection
-                    synthetic_text = f"{subject}: {rest}"
                     synthetic_text = f"{subject}: {rest}"
                     pick = PickParser._parse_prop(synthetic_text, league_norm, date)
                     if pick:
@@ -208,7 +205,6 @@ class PickParser:
         # ------------------------------
         
         # 6. SPREAD vs MONEYLINE
-        # 6. SPREAD vs MONEYLINE
         pick = PickParser._parse_spread_or_ml(text, league_norm, date)
         if pick:
             pick.units = units_val
@@ -221,7 +217,6 @@ class PickParser:
     @staticmethod
     def _is_parlay(text: str) -> bool:
         """Check if text is a parlay."""
-        # Check for explicit Parlay marker
         # Check for explicit Parlay marker
         # Fix: Ensure "parlay" is followed by colon, not just somewhere in text
         if re.search(r"\bparlay\b.*:", text, re.IGNORECASE):
@@ -535,20 +530,18 @@ class PickParser:
         text_clean = text
         text_lower = text.lower()
 
-        # Remove period identifiers
-        # Remove period identifiers
-        # Fix: Use regex to replace ALL occurrences ensuring we don't recurse infinitely
+        # Remove period identifiers (handle anywhere in string)
         for pattern in PERIOD_PATTERNS.keys():
-            if pattern in text_lower:
-                # simple replace might miss case, use regex
-                # We use word boundary if possible, but fallback to simple replace if pattern is symbolic like "1h"
-                # Actually, simply removing the pattern (case insensitive) is safest to break recursion
-                text_clean = re.sub(re.escape(pattern), "", text_clean, flags=re.IGNORECASE).strip()
-                # Continue cleaning? Usually only one period marker.
-                # But "1H 1H" might exist? one pass is probably enough to change the string.
+            pattern_regex = r"\b" + re.escape(pattern) + r"\b"
+            if re.search(pattern_regex, text_lower):
+                text_clean = re.sub(pattern_regex, "", text, count=1, flags=re.IGNORECASE).strip()
+                # Clean double spaces
+                text_clean = re.sub(r"\s+", " ", text_clean)
                 break
 
-        # Remove compact period format (1H, 1Q, etc.)
+        # Remove compact period format (1H, 1Q, etc.) if still present (e.g. at start without space)
+        # The above loop handles "2h " or " 2h ", but maybe not "2hPatriots" (unlikely with \b)
+        # Keep the start regex as fallback or cleanup
         text_clean = re.sub(
             r"^[12][hq]\s+|^[1-4][qp]\s+|^f[135]\s+",
             "",
@@ -588,7 +581,7 @@ class PickParser:
         line = None
         is_over = None
         stat = rest
-
+        
         # Pattern: "Pts Over 25.5" or "Over 25.5 Pts" or "O 25.5"
         # Added [ou] to support single letter abbreviations
         line_match = re.search(r"(?:over|under|o/u|[ou]|>|<)\s*(\d+\.?\d*)", rest_lower)

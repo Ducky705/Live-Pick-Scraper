@@ -109,10 +109,18 @@ class RuleBasedExtractor:
             #     )
             #     continue
 
-            # 3. Line-by-line extraction
             # Pre-split on Parlay Separators (||)
             if "||" in full_text:
                 full_text = full_text.replace("||", "\n")
+
+            # 3. Regex Extraction
+            # US-013: Extract Capper Name from bold header (e.g. **Big Al**)
+            capper_name_from_text = None
+            capper_match = re.search(r"^\s*\*\*([^\*]+)\*\*", full_text)
+            if capper_match:
+                candidate = capper_match.group(1).strip()
+                if len(candidate) < 30:
+                    capper_name_from_text = candidate
 
             lines = full_text.split("\n")
             msg_picks = []
@@ -304,8 +312,8 @@ class RuleBasedExtractor:
                             parsed.selection = f"{extracted_unit_str} {parsed.selection}"
 
                         # Convert to standard dict format
-                        capper = msg.get("author") or "Unknown"
-
+                        capper = capper_name_from_text or msg.get("author") or "Unknown"
+                        
                         pick_dict = RuleBasedExtractor._to_pick_dict(
                             parsed, str(msg_id) if msg_id else "unknown", line, units
                         )

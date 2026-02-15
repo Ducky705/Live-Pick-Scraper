@@ -11,7 +11,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Add src to path if needed (it is in root, so should be fine)
-sys.path.append(os.path.join(os.getcwd(), ".."))  # Append parent dir if running from scripts/
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(project_root)
+sys.path.append(os.path.join(project_root, "src"))
 
 from src.openrouter_client import openrouter_completion
 from src.prompt_builder import generate_ai_prompt

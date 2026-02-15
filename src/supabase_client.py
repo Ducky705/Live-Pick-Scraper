@@ -162,60 +162,84 @@ def get_or_create_capper_id(name):
     # Import here to avoid circular dependency
     from src.capper_matcher import capper_matcher
 
-    clean_lookup = str(name).lower().strip()
-
-    if clean_lookup in MANUAL_ALIASES:
-        corrected_name = MANUAL_ALIASES[clean_lookup]
-        # Recursively call to handle the corrected name
+    clean_lookup = str(name).strip() # Keep case for display if new, but use normalized for matching
+    
+    # 0. Manual Alias Check
+    if clean_lookup.lower() in MANUAL_ALIASES:
+        corrected_name = MANUAL_ALIASES[clean_lookup.lower()]
         return get_or_create_capper_id(corrected_name)
 
     # Prepare candidates
     candidates = get_matcher_candidates()
 
-    # 1. Try Exact Match (Fast)
-    # The new CapperMatcher handles exact matching too, but we can do a quick check here if we wanted.
-    # We will let CapperMatcher handle everything to be consistent.
-
-    # 2. Run Fuzzy Match
-    # First, try to match against ACTIVE cappers with strict threshold (90)
-    # Filter candidates to active only
+    # 1. Try Smart Match against ACTIVE cappers first (Priority)
+    # We want to match to an active capper if possible
     active_candidates = [c for c in candidates if c["is_active"]]
+    match = capper_matcher.smart_match(clean_lookup, active_candidates)
 
-    # Try active match first
-    matches = capper_matcher.match_name(clean_lookup, active_candidates, limit=1, threshold=90)
+    if match:
+        _handle_match_result(match, clean_lookup)
+        return match["id"]
 
-    if matches:
-        best = matches[0]
-        logger.info(
-            f"[Match] '{name}' -> '{best['name']}' (ID: {best['id']}, Score: {best['score']}, Type: {best['type']})"
-        )
-        return best["id"]
+    # 2. If no active match, try ALL cappers
+    match_all = capper_matcher.smart_match(clean_lookup, candidates)
+    
+    if match_all:
+        _handle_match_result(match_all, clean_lookup)
+        return match_all["id"]
 
-    # 3. If no active match, try matching against ALL cappers (including inactive)
-    # Still strict threshold
-    matches_all = capper_matcher.match_name(clean_lookup, candidates, limit=1, threshold=90)
-
-    if matches_all:
-        best = matches_all[0]
-        logger.info(f"[Match-Inactive] '{name}' -> '{best['name']}' (ID: {best['id']}, Score: {best['score']})")
-        return best["id"]
-
-    # 4. If still no match, Create New Capper (User Preference: Auto-Create)
-    clean_insert_name = str(name).strip()
+    # 3. If still no match, Create New Capper
     supabase = get_supabase()
     try:
-        logger.info(f"[DB] No match found. Creating new capper: {clean_insert_name}")
-        res = supabase.table("capper_directory").insert({"canonical_name": clean_insert_name}).execute()
+        logger.info(f"[DB] No match found. Creating new capper: {clean_lookup}")
+        res = supabase.table("capper_directory").insert({"canonical_name": clean_lookup}).execute()
 
         if res.data and len(res.data) > 0:
             new_id = res.data[0]["id"]
             # Update cache immediately
-            _capper_map[clean_insert_name.lower()] = new_id
+            _capper_map[clean_lookup.lower()] = new_id
             return new_id
     except Exception as e:
         logger.error(f"Error creating capper '{name}': {e}")
         return None
     return None
+
+
+def _handle_match_result(match, raw_name):
+    """
+    Helper to log match and auto-learn variants if AI verified.
+    """
+    logger.info(
+        f"[Match] '{raw_name}' -> '{match['name']}' (ID: {match['id']}, Score: {match['score']}, Type: {match['type']})"
+    )
+    
+    # Self-Learning: If AI verified this, save it as a variant so we don't pay for AI next time
+    if match["type"] == "ai_verified":
+        try:
+            supabase = get_supabase()
+            # Check if variant exists (shouldn't if valid new match)
+            # But maybe another thread added it?
+            # We trust simple insert with exception handling or ignore
+            # "variant_name" is unique per capper? No, global unique?
+            # Schema says: variant_name UNIQUE constraint.
+            
+            logger.info(f"[Self-Learning] Adding new variant '{raw_name}' -> Capper {match['id']}")
+            
+            # Use upsert or ignore conflict?
+            # raw_name might differ in casing, we store as is? 
+            # Canonical variant usually title case?
+            
+            supabase.table("capper_variants").insert({
+                "capper_id": match["id"],
+                "variant_name": raw_name  # Store exact raw form usually
+            }).execute()
+            
+            # Update local variant map
+            _variant_map[raw_name.lower().strip()] = match["id"]
+            
+        except Exception as e:
+            logger.warning(f"Failed to save variant '{raw_name}': {e}")
+
 
 
 def get_league_id(name):

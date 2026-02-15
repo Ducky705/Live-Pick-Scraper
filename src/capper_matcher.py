@@ -1,92 +1,152 @@
+import logging
 from rapidfuzz import fuzz, process
+from src.provider_pool import pooled_completion
+from src.utils import normalize_string
 
+logger = logging.getLogger(__name__)
+
+# Calibrated Thresholds
+AUTO_MATCH_THRESHOLD = 95  # 100% Precision in calibration
+AI_VERIFY_THRESHOLD = 80   # Capture variants like "Bobby" vs "Bob"
 
 class CapperMatcher:
     def __init__(self):
         pass
 
-    def match_name(self, raw_name, candidates, limit=5, threshold=90):
+    def smart_match(self, raw_name, candidates):
         """
-        Returns a list of matches based on strict fuzzy matching rules.
-
+        Smart matching with AI verification for ambiguous cases.
+        
         Args:
             raw_name (str): The name to match.
             candidates (list): List of dicts [{'name': 'Canonical', 'id': 1, 'type': 'canonical'|'variant', 'is_active': bool}].
-            limit (int): Max number of results.
-            threshold (int): Minimum score (0-100) to consider a match.
-
+            
         Returns:
-            list: List of dicts.
+            dict or None: The best match dict directly, or None if "New Capper".
         """
         if not raw_name or not candidates:
-            return []
+            return None
 
-        raw_lower = str(raw_name).lower().strip()
-        matches = []
-
-        # Optimize: Create name map for quick lookup
-        # We process candidates to ensure keys are lowercase
-        name_to_candidate = {}
+        clean_raw = normalize_string(raw_name)
+        
+        # 1. Exact Match (Fastest) - Check strict equality
         for c in candidates:
-            k = c["name"].lower().strip()
-            # Prioritize canonical if duplicates exist in list (shouldn't happen if list is well formed)
-            if k not in name_to_candidate:
-                name_to_candidate[k] = c
-            elif c.get("type") == "canonical":
-                name_to_candidate[k] = c
-
-        # 1. Exact Match
-        if raw_lower in name_to_candidate:
-            cand = name_to_candidate[raw_lower]
-            matches.append(
-                {
-                    "name": cand["name"],
+            if normalize_string(c["name"]) == clean_raw:
+                return {
+                    "name": c["name"],
+                    "id": c["id"],
                     "score": 100,
-                    "type": f"exact_{cand.get('type', 'canonical')}",
-                    "id": cand["id"],
-                    "is_active": cand.get("is_active", False),
+                    "type": "exact",
+                    "reason": "Exact string match"
                 }
-            )
-            return matches
 
-        # 2. Fuzzy Match
-        choices = list(name_to_candidate.keys())
+        # 2. Strong Fuzzy Match (High Confidence)
+        # Normalize candidates for consistent matching
+        # Create a map to retrieve original candidate from normalized string
+        norm_map = {}
+        for c in candidates:
+            norm = normalize_string(c["name"])
+            if norm not in norm_map:
+                norm_map[norm] = c
+            # If multiple candidates normalize to same string (unlikely with IDs), keep first or canonical
+            elif c.get("type") == "canonical":
+                norm_map[norm] = c
+                
+        choices = list(norm_map.keys())
+        
+        # Use WRatio for best overall matching
+        match = process.extractOne(clean_raw, choices, scorer=fuzz.WRatio, score_cutoff=AI_VERIFY_THRESHOLD)
+        
+        if not match:
+            # Score < 80 -> Treat as New Capper
+            logger.info(f"[SmartMatch] No match found for '{raw_name}' (Max Score < {AI_VERIFY_THRESHOLD})")
+            return None
+            
+        matched_norm, score, _ = match
+        best_candidate = norm_map.get(matched_norm)
+        
+        if score >= AUTO_MATCH_THRESHOLD:
+            # Score >= 95 -> Auto Accept
+            logger.info(f"[SmartMatch] Auto-Match: '{raw_name}' == '{best_candidate['name']}' (Score: {score})")
+            return {
+                "name": best_candidate["name"],
+                "id": best_candidate["id"],
+                "score": score,
+                "type": "fuzzy_auto",
+                "reason": f"High confidence fuzzy match ({score})"
+            }
+            
+        # 3. Ambiguous Match (80 <= Score < 95) -> AI Verification
+        # We have a decent candidate, but it might be a false positive (e.g. "Don Best" vs "Don Buster")
+        logger.info(f"[SmartMatch] Ambiguous Match: '{raw_name}' ~ '{best_candidate['name']}' (Score: {score}). Asking AI...")
+        
+        is_match, reasoning = self._verify_with_ai(raw_name, best_candidate["name"])
+        
+        if is_match:
+            logger.info(f"[SmartMatch] AI CONFIRMED: '{raw_name}' is '{best_candidate['name']}'. Reason: {reasoning}")
+            return {
+                "name": best_candidate["name"],
+                "id": best_candidate["id"],
+                "score": score,
+                "type": "ai_verified",
+                "reason": f"AI Verification: {reasoning}"
+            }
+        else:
+            logger.info(f"[SmartMatch] AI REJECTED: '{raw_name}' is NOT '{best_candidate['name']}'. Reason: {reasoning}")
+            # If AI rejects the best match, we assume it's a NEW CAPPER (or try 2nd best? For now, New is safer)
+            return None
 
-        # Use WRatio as it handles partial matches and case well
-        raw_matches = process.extract(raw_lower, choices, scorer=fuzz.WRatio, limit=limit, score_cutoff=threshold)
+    def _verify_with_ai(self, raw_input, candidate_name):
+        """
+        Asks the LLM if two names refer to the same sports bettor/entity.
+        Returns: (bool, str_reasoning)
+        """
+        prompt = f"""
+        You are a Data Cleaning Assistant for a Sports Betting platform.
+        Your job is to determine if a raw scraped name refers to an existing capper in our database.
 
-        for match_name, score, _ in raw_matches:
-            cand = name_to_candidate[match_name]
+        Raw Input Name: "{raw_input}"
+        Existing Database Name: "{candidate_name}"
 
-            # Deduplicate by ID (keep highest score)
-            existing = next((x for x in matches if x["id"] == cand["id"]), None)
+        Task:
+        1. Analyze if these likely refer to the SAME person/entity.
+        2. Account for typos, nicknames (Bob/Robert), handle/display name variations.
+        3. Be STRICT. If they are different people (e.g. "Don Best" vs "Don Buster"), say NO.
+        
+        Return JSON ONLY:
+        {{
+            "is_same_person": boolean,
+            "reasoning": "short explanation"
+        }}
+        """
+        
+        try:
+            # Use 'groq' (Llama 3) for speed, it's good at this reasoning
+            response = pooled_completion(prompt, provider="groq", timeout=10)
+            
+            if not response:
+                # Fallback to simple heuristics if AI fails
+                # If score was > 90, assume YES. If < 90, assume NO.
+                # Since we are in 80-95 range, let's be conservative and say NO to avoid false merges.
+                return False, "AI Request Failed - Defaulting to No"
+                
+            import json
+            # Clean response (sometimes models add markdown code blocks)
+            clean_resp = response.replace("```json", "").replace("```", "").strip()
+            data = json.loads(clean_resp)
+            
+            return data.get("is_same_person", False), data.get("reasoning", "No reasoning provided")
+            
+        except Exception as e:
+            logger.error(f"[SmartMatch] AI Error: {e}")
+            return False, f"Error: {e}"
 
-            if existing:
-                if score > existing["score"]:
-                    existing["score"] = score
-                    existing["name"] = cand["name"]
-            else:
-                matches.append(
-                    {
-                        "name": cand["name"],
-                        "score": score,
-                        "type": "fuzzy",
-                        "id": cand["id"],
-                        "is_active": cand.get("is_active", False),
-                    }
-                )
-
-        # Sort by score desc
-        matches.sort(key=lambda x: -x["score"])
-
-        return matches
-
-    def match_names_bulk(self, names, candidates):
-        results = {}
-        unique_names = set(str(n).strip() for n in names if n)
-        for name in unique_names:
-            results[name] = self.match_name(name, candidates)
-        return results
-
+    def match_name(self, raw_name, candidates, limit=5, threshold=90):
+        """Legacy wrapper for backward compatibility if needed."""
+        # We map the new logic to the old return format (list of matches)
+        result = self.smart_match(raw_name, candidates)
+        if result:
+            return [result]
+        return []
 
 capper_matcher = CapperMatcher()

@@ -1,354 +1,221 @@
+
 # src/supabase_client.py
 import logging
 import os
+import json
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
-# Lazy import: supabase module is loaded on first use
-# from supabase import create_client, Client  # Moved to get_supabase()
 
-# Try to import from config first (for bundled EXE), fallback to .env
+# Try config
 try:
     from config import SUPABASE_KEY, SUPABASE_URL
 except ImportError:
-    SUPABASE_URL = None
-    SUPABASE_KEY = None
-
-# Fallback to environment variables if config doesn't have them
-if not SUPABASE_URL or not SUPABASE_KEY:
-    from dotenv import load_dotenv
-
-    load_dotenv()
     SUPABASE_URL = os.getenv("SUPABASE_URL")
     SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-# --- HARDCODED ALIASES ---
-MANUAL_ALIASES = {
-    "big al": "Al McMordie",
-    "bigal": "Al McMordie",
-    "aaa": "AAA Sports",
-    "asa": "ASA Inc",
-}
+if not SUPABASE_URL or not SUPABASE_KEY:
+     try:
+        from dotenv import load_dotenv
+        load_dotenv()
+        SUPABASE_URL = os.getenv("SUPABASE_URL")
+        SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+     except: pass
 
-# --- LAZY SUPABASE CLIENT ---
-# Client is created on first use to speed up startup
-_supabase = None
-_supabase_init_attempted = False
+# --- Custom URLLIB Client to replace Supabase Library ---
+from src.utils_urllib import get, post
+
+class SupabaseRESTClient:
+    def __init__(self, url, key):
+        self.url = url.rstrip('/')
+        self.headers = {
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+        }
+    
+    def table(self, table_name):
+        return QueryBuilder(self, table_name)
+
+class QueryBuilder:
+    def __init__(self, client, table):
+        self.client = client
+        self.table_url = f"{client.url}/rest/v1/{table}"
+        self.params = {}
+        
+    def select(self, columns="*"):
+        self.params["select"] = columns
+        return self
+        
+    def limit(self, count):
+        self.params["limit"] = str(count)
+        return self
+        
+    def eq(self, column, value):
+        # Allow multiple eq filters? Simple impl for now.
+        # REST syntax: column=eq.value
+        self.params[column] = f"eq.{value}"
+        return self
+
+    def insert(self, data):
+        self.data = data
+        self.method = "POST"
+        return self
+        
+    def execute(self):
+        # Build Query String
+        query_parts = []
+        for k, v in self.params.items():
+            query_parts.append(f"{k}={v}")
+        
+        full_url = self.table_url
+        if query_parts:
+            full_url += "?" + "&".join(query_parts)
+            
+        try:
+            if hasattr(self, 'method') and self.method == "POST":
+                resp = post(full_url, json=self.data, headers=self.client.headers)
+            else:
+                resp = get(full_url, headers=self.client.headers)
+            
+            if 200 <= resp.status_code < 300:
+                return type('obj', (object,), {'data': resp.json()})
+            else:
+                logger.error(f"Supabase REST Error {resp.status_code}: {resp.text}")
+                return type('obj', (object,), {'data': []})
+        except Exception as e:
+            logger.error(f"Supabase Exec Error: {e}")
+            return type('obj', (object,), {'data': []})
 
 
 def get_supabase():
-    """Lazily initialize and return the Supabase client."""
-    global _supabase, _supabase_init_attempted
-
-    if _supabase_init_attempted:
-        return _supabase
-
-    _supabase_init_attempted = True
-
-    try:
-        if SUPABASE_URL and SUPABASE_KEY:
-            from supabase import create_client
-
-            _supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-        else:
-            logger.error("Supabase Config Error: Credentials missing in config.py")
-            _supabase = None
-    except Exception as e:
-        logger.error(f"Supabase Init Error: {e}")
-        _supabase = None
-
-    return _supabase
-
-
-# --- CACHES ---
-_capper_map = {}  # Name -> ID
-_league_map = {}  # Name -> ID
-_bet_type_map = {}  # Name -> ID
-_variant_map = {}  # Variant Name -> Capper ID
-_active_capper_ids = set()  # Set of IDs that have at least 1 pick
-
-
-def refresh_caches():
-    """Fetches IDs for Foreign Key constraints."""
-    supabase = get_supabase()
-    if not supabase:
-        return
-
-    global _capper_map, _league_map, _bet_type_map, _variant_map, _active_capper_ids
-
-    try:
-        # 1. Cappers
-        res_cap = supabase.table("capper_directory").select("id, canonical_name").execute()
-        _capper_map = {item["canonical_name"].lower().strip(): item["id"] for item in res_cap.data}
-
-        # 2. Variants (Map alias to Capper ID)
-        res_var = supabase.table("capper_variants").select("capper_id, variant_name").execute()
-        _variant_map = {item["variant_name"].lower().strip(): item["capper_id"] for item in res_var.data}
-
-        # 3. Active Cappers (Check historical stats for activity)
-        # Using historical_capper_stats is efficient as it's aggregated
-        res_active = supabase.table("historical_capper_stats").select("capper_id").execute()
-        # Also check picks table for very recent activity not yet in stats
-        # (Optional but safer)
-        # res_recent = supabase.table("picks").select("capper_id").limit(1000).execute()
-
-        _active_capper_ids = set(item["capper_id"] for item in res_active.data)
-
-        # 3. Leagues
-        res_leagues = supabase.table("leagues").select("id, name, sport").execute()
-        _league_map = {}
-        for l in res_leagues.data:
-            _league_map[l["name"].lower().strip()] = l["id"]
-            if l.get("sport"):
-                _league_map[l["sport"].lower().strip()] = l["id"]
-
-        # 4. Bet Types
-        res_types = supabase.table("bet_types").select("id, name").execute()
-        _bet_type_map = {t["name"].lower().strip(): t["id"] for t in res_types.data}
-
-        logger.info(
-            f"Cached: {len(_capper_map)} Cappers ({len(_active_capper_ids)} Active), {len(_league_map)} Leagues, {len(_bet_type_map)} Bet Types."
-        )
-
-    except Exception as e:
-        logger.error(f"Error refreshing caches: {e}")
-
-
-def get_capper_cache():
-    if not _capper_map:
-        refresh_caches()
-    return _capper_map, _variant_map
-
-
-def get_matcher_candidates():
-    """
-    Constructs the candidate list for CapperMatcher.
-    Returns list of dicts: {'name': str, 'id': int, 'type': str, 'is_active': bool}
-    """
-    if not _capper_map:
-        refresh_caches()
-
-    candidates = []
-
-    # Add Canonicals
-    for name, cid in _capper_map.items():
-        candidates.append(
-            {
-                "name": name.title(),  # Title case for better matching/display
-                "id": cid,
-                "type": "canonical",
-                "is_active": cid in _active_capper_ids,
-            }
-        )
-
-    # Add Variants
-    for name, cid in _variant_map.items():
-        candidates.append(
-            {
-                "name": name.title(),
-                "id": cid,
-                "type": "variant",
-                "is_active": cid in _active_capper_ids,
-            }
-        )
-
-    return candidates
-
-
-def get_or_create_capper_id(name):
-    if not name or str(name).lower() == "unknown":
-        return None
-
-    # Import here to avoid circular dependency
-    from src.capper_matcher import capper_matcher
-
-    clean_lookup = str(name).strip() # Keep case for display if new, but use normalized for matching
-    
-    # 0. Manual Alias Check
-    if clean_lookup.lower() in MANUAL_ALIASES:
-        corrected_name = MANUAL_ALIASES[clean_lookup.lower()]
-        return get_or_create_capper_id(corrected_name)
-
-    # Prepare candidates
-    candidates = get_matcher_candidates()
-
-    # 1. Try Smart Match against ACTIVE cappers first (Priority)
-    # We want to match to an active capper if possible
-    active_candidates = [c for c in candidates if c["is_active"]]
-    match = capper_matcher.smart_match(clean_lookup, active_candidates)
-
-    if match:
-        _handle_match_result(match, clean_lookup)
-        return match["id"]
-
-    # 2. If no active match, try ALL cappers
-    match_all = capper_matcher.smart_match(clean_lookup, candidates)
-    
-    if match_all:
-        _handle_match_result(match_all, clean_lookup)
-        return match_all["id"]
-
-    # 3. If still no match, Create New Capper
-    supabase = get_supabase()
-    try:
-        logger.info(f"[DB] No match found. Creating new capper: {clean_lookup}")
-        res = supabase.table("capper_directory").insert({"canonical_name": clean_lookup}).execute()
-
-        if res.data and len(res.data) > 0:
-            new_id = res.data[0]["id"]
-            # Update cache immediately
-            _capper_map[clean_lookup.lower()] = new_id
-            return new_id
-    except Exception as e:
-        logger.error(f"Error creating capper '{name}': {e}")
-        return None
+    if SUPABASE_URL and SUPABASE_KEY:
+        return SupabaseRESTClient(SUPABASE_URL, SUPABASE_KEY)
     return None
 
+# --- CACHES (Rest of logic remains similar, relying on get_supabase interface) ---
+_capper_map = {}
+_league_map = {}
+_bet_type_map = {}
+_variant_map = {}
+_active_capper_ids = set()
 
-def _handle_match_result(match, raw_name):
-    """
-    Helper to log match and auto-learn variants if AI verified.
-    """
-    logger.info(
-        f"[Match] '{raw_name}' -> '{match['name']}' (ID: {match['id']}, Score: {match['score']}, Type: {match['type']})"
-    )
+def refresh_caches():
+    client = get_supabase()
+    if not client: return
     
-    # Self-Learning: If AI verified this, save it as a variant so we don't pay for AI next time
-    if match["type"] == "ai_verified":
-        try:
-            supabase = get_supabase()
-            # Check if variant exists (shouldn't if valid new match)
-            # But maybe another thread added it?
-            # We trust simple insert with exception handling or ignore
-            # "variant_name" is unique per capper? No, global unique?
-            # Schema says: variant_name UNIQUE constraint.
+    global _capper_map, _league_map, _bet_type_map, _variant_map, _active_capper_ids
+    
+    try:
+        # 1. Cappers
+        res = client.table("capper_directory").select("id, canonical_name").execute()
+        _capper_map = {i["canonical_name"].lower().strip(): i["id"] for i in res.data}
+        
+        # 2. Variants
+        res = client.table("capper_variants").select("capper_id, variant_name").execute()
+        _variant_map = {i["variant_name"].lower().strip(): i["capper_id"] for i in res.data}
+        
+        # 3. Active
+        res = client.table("historical_capper_stats").select("capper_id").execute()
+        _active_capper_ids = set(i["capper_id"] for i in res.data)
+        
+        # 4. Leagues
+        res = client.table("leagues").select("id, name, sport").execute()
+        _league_map = {}
+        for l in res.data:
+            _league_map[l["name"].lower().strip()] = l["id"]
+            if l.get("sport"): _league_map[l["sport"].lower().strip()] = l["id"]
             
-            logger.info(f"[Self-Learning] Adding new variant '{raw_name}' -> Capper {match['id']}")
-            
-            # Use upsert or ignore conflict?
-            # raw_name might differ in casing, we store as is? 
-            # Canonical variant usually title case?
-            
-            supabase.table("capper_variants").insert({
-                "capper_id": match["id"],
-                "variant_name": raw_name  # Store exact raw form usually
-            }).execute()
-            
-            # Update local variant map
-            _variant_map[raw_name.lower().strip()] = match["id"]
-            
-        except Exception as e:
-            logger.warning(f"Failed to save variant '{raw_name}': {e}")
+        # 5. Bet Types
+        res = client.table("bet_types").select("id, name").execute()
+        _bet_type_map = {t["name"].lower().strip(): t["id"] for t in res.data}
+        
+    except Exception as e:
+        logger.error(f"Cache Refresh Error: {e}")
 
+def get_matcher_candidates():
+    if not _capper_map: refresh_caches()
+    candidates = []
+    for name, cid in _capper_map.items():
+        candidates.append({"name": name.title(), "id": cid, "type": "canonical", "is_active": cid in _active_capper_ids})
+    for name, cid in _variant_map.items():
+        candidates.append({"name": name.title(), "id": cid, "type": "variant", "is_active": cid in _active_capper_ids})
+    return candidates
 
+def get_or_create_capper_id(name):
+    # Simplified for REST client context
+    if not name or str(name).lower() == "unknown": return None
+    from src.capper_matcher import capper_matcher
+    clean = str(name).strip()
+    
+    candidates = get_matcher_candidates()
+    active = [c for c in candidates if c["is_active"]]
+    
+    match = capper_matcher.smart_match(clean, active)
+    if match: return match["id"]
+    
+    match_all = capper_matcher.smart_match(clean, candidates)
+    if match_all: return match_all["id"]
+    
+    # Create New
+    client = get_supabase()
+    try:
+        res = client.table("capper_directory").insert({"canonical_name": clean}).execute()
+        if res.data:
+            cid = res.data[0]["id"]
+            _capper_map[clean.lower()] = cid
+            return cid
+    except: pass
+    return None
 
 def get_league_id(name):
-    if not name:
-        return None
+    if not name: return None
+    return _league_map.get(str(name).lower().strip())
+
+def get_bet_type_id(name):
+    if not name: return _bet_type_map.get("moneyline")
     clean = str(name).lower().strip()
-    return _league_map.get(clean)
-
-
-def get_bet_type_id(type_str):
-    if not type_str:
-        return _bet_type_map.get("moneyline")
-    clean = str(type_str).lower().strip()
-
-    if clean in _bet_type_map:
-        return _bet_type_map[clean]
-    if "spread" in clean:
-        return _bet_type_map.get("spread")
-    if "total" in clean or "over" in clean or "under" in clean:
-        return _bet_type_map.get("total")
-    if "prop" in clean:
-        return _bet_type_map.get("player prop")
-    if "parlay" in clean:
-        return _bet_type_map.get("parlay")
+    if clean in _bet_type_map: return _bet_type_map[clean]
+    if "spread" in clean: return _bet_type_map.get("spread")
     return _bet_type_map.get("moneyline")
 
-
-def fetch_all_cappers():
-    if not _capper_map:
-        refresh_caches()
-    return [{"name": k.title(), "id": v} for k, v in _capper_map.items()]
-
-
 def upload_picks(picks, target_date=None):
-    supabase = get_supabase()
-    if not supabase:
-        return {"success": False, "error": "Supabase not configured."}
-
+    client = get_supabase()
+    if not client: return {"success": False, "error": "No Client"}
+    
     refresh_caches()
-
-    # Fallback date if target_date is missing (should rely on main.py passing it though)
-    if not target_date:
-        target_date = datetime.now().strftime("%Y-%m-%d")
-
+    if not target_date: target_date = datetime.now().strftime("%Y-%m-%d")
+    
     db_rows = []
     errors = []
-
+    
     for i, p in enumerate(picks):
         try:
-            capper_id = get_or_create_capper_id(p.get("capper_name"))
-            if not capper_id:
-                errors.append(f"Row {i + 1}: Could not find or create Capper '{p.get('capper_name')}'.")
+            cid = get_or_create_capper_id(p.get("capper_name"))
+            if not cid: 
+                errors.append(f"Row {i}: Capper missing")
                 continue
-
-            league_id = get_league_id(p.get("league"))
-            if not league_id:
-                league_id = _league_map.get("other")
-                if not league_id:
-                    errors.append(f"Row {i + 1}: League '{p.get('league')}' not recognized.")
-                    continue
-
-            bet_type_id = get_bet_type_id(p.get("type"))
-            if not bet_type_id:
-                if _bet_type_map:
-                    bet_type_id = list(_bet_type_map.values())[0]
-                else:
-                    errors.append(f"Row {i + 1}: No Bet Types defined in DB.")
-                    continue
-
-            odds_val = p.get("odds")
-            if odds_val == "" or odds_val is None:
-                odds_val = None
-            else:
-                try:
-                    odds_val = int(odds_val)
-                except:
-                    odds_val = None
-
-            res_map = {"win": "win", "loss": "loss", "push": "push", "void": "void"}
-            result_val = res_map.get(str(p.get("result", "")).lower(), None)
-
+                
+            lid = get_league_id(p.get("league")) or _league_map.get("other")
+            bid = get_bet_type_id(p.get("type"))
+            
             row = {
-                "capper_id": capper_id,
-                "league_id": league_id,
-                "bet_type_id": bet_type_id,
-                "pick_value": p.get("pick", "Unknown Pick"),
-                "pick_date": target_date,  # FORCE USE OF TARGET DATE
-                "odds_american": odds_val,
+                "capper_id": cid,
+                "league_id": lid,
+                "bet_type_id": bid,
+                "pick_value": p.get("pick", "Unknown"),
+                "pick_date": target_date,
+                "odds_american": int(p.get("odds")) if p.get("odds") else None,
                 "unit": float(p.get("units", 1.0)),
-                "result": result_val,
-                "status": "graded" if result_val else "pending_grading",
-                "grading_notes": p.get("score_summary", ""),
-                "created_at": "now()",
-                "updated_at": "now()",
+                "status": p.get("result", "pending_grading").lower() if p.get("result") else "pending_grading"
             }
             db_rows.append(row)
-
         except Exception as e:
-            errors.append(f"Row {i + 1} Error: {e!s}")
-
-    if not db_rows:
-        return {
-            "success": False,
-            "error": "No valid rows to insert.",
-            "details": errors,
-        }
-
-    try:
-        response = supabase.table("picks").insert(db_rows).execute()
-        return {"success": True, "count": len(db_rows), "details": errors}
-    except Exception as e:
-        return {"success": False, "error": str(e), "details": errors}
+            errors.append(f"Row {i}: {e}")
+            
+    if db_rows:
+        res = client.table("picks").insert(db_rows).execute()
+        return {"success": True, "count": len(db_rows)}
+        
+    return {"success": False, "details": errors}

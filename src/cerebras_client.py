@@ -17,13 +17,13 @@ GLOBAL_CEREBRAS_SEMAPHORE = Semaphore(CEREBRAS_CONCURRENCY_LIMIT)
 LOCK_ACQUIRE_TIMEOUT = 30  # Reduced for faster failure
 
 # Model Configuration - User-specified high-performance model
-DEFAULT_TEXT_MODEL = "llama-3.3-70b"
+DEFAULT_TEXT_MODEL = "llama3.1-70b"
 
 # Available models with rate limits (30 RPM, 60K TPM each)
 CEREBRAS_MODELS = {
-    "llama-3.3-70b": {"rpm": 30, "tpm": 60000},
+    "llama3.1-70b": {"rpm": 30, "tpm": 60000},
     "llama3.1-8b": {"rpm": 30, "tpm": 60000},
-    "qwen-3-32b": {"rpm": 30, "tpm": 60000},
+    "qwen-2.5-72b-instruct": {"rpm": 30, "tpm": 60000},  # Updated Qwen
     "gpt-oss-120b": {"rpm": 30, "tpm": 60000},
 }
 

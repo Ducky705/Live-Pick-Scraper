@@ -6,12 +6,10 @@ import requests
 
 # Model fallback list (ordered by reliability)
 DEFAULT_MODELS = [
-    "google/gemini-2.0-pro-exp-02-05:free",
-    "google/gemini-2.0-flash-lite-preview-02-05:free",
-    "meta-llama/llama-3.2-3b-instruct:free",
-    "meta-llama/llama-3-8b-instruct:free",
-    "mistralai/mistral-7b-instruct:free",
-    "huggingfaceh4/zephyr-7b-beta:free",
+    "meta-llama/llama-3.3-70b-instruct:free", # Primary
+    "mistralai/mistral-7b-instruct:free",     # Solid Backup
+    "meta-llama/llama-3-8b-instruct:free",    # Fast Backup
+    "huggingfaceh4/zephyr-7b-beta:free",      # Last Resort
 ]
 
 
@@ -105,8 +103,18 @@ def openrouter_completion(prompt, model=None, timeout=180, max_cycles=2, images=
 
             except requests.exceptions.RequestException as e:
                 # Log full error body if available
-                if hasattr(e, "response") and e.response:
-                    logging.warning(f"[OpenRouter] Request error with {current_model}: {e.response.text}")
+                if hasattr(e, "response") and e.response is not None:
+                    error_msg = e.response.text
+                    status_code = e.response.status_code
+                    logging.warning(f"[OpenRouter] Request error with {current_model}: {status_code} - {error_msg}")
+                    
+                    # Handle 429 Too Many Requests explicitly
+                    if status_code == 429:
+                        logging.warning(f"[OpenRouter] Hit Rate Limit (429) on {current_model}. Sleeping 10s...")
+                        time.sleep(10)
+                        # Retry the SAME model once more before giving up? 
+                        # Or just continue to next model/cycle?
+                        # For now, continue loop, but the sleep helps.
                 else:
                     logging.warning(f"[OpenRouter] Request error with {current_model}: {e}")
 

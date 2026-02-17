@@ -17,7 +17,6 @@ class TelegramManager:
     def __init__(self):
         self.client = None  # Lazy init
         self.phone = None
-        self.phone = None
         self.phone_code_hash = None
         self.progress_callback = None
 
@@ -207,7 +206,11 @@ class TelegramManager:
         except (ValueError, TypeError):
             target_date_obj = (datetime.now() - timedelta(days=1)).date()
 
-        ET_OFFSET = timezone(timedelta(hours=-5))
+        try:
+            from zoneinfo import ZoneInfo
+            ET_OFFSET = ZoneInfo("America/New_York")
+        except ImportError:
+            ET_OFFSET = timezone(timedelta(hours=-5))  # Fallback for Python < 3.9
         logger.info(f"Fetching for Date: {target_date_obj}")
 
         all_messages = []
@@ -310,7 +313,7 @@ class TelegramManager:
                                     # New Group
                                     target_dict = {
                                         "id": message.id,
-                                        "channel_name": "Telegram",
+                                        "channel_name": channel_name,
                                         "date": msg_et.strftime("%Y-%m-%d %H:%M ET"),
                                         "text": msg_text,
                                         "images": [],
@@ -324,7 +327,7 @@ class TelegramManager:
                                 # Single Message
                                 target_dict = {
                                     "id": message.id,
-                                    "channel_name": "Telegram",
+                                    "channel_name": channel_name,
                                     "date": msg_et.strftime("%Y-%m-%d %H:%M ET"),
                                     "text": msg_text,
                                     "images": [],

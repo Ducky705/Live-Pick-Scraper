@@ -43,6 +43,10 @@ COMPACT_TO_FULL = {
     "ty": "type",
     "od": "odds",
     "dt": "date",
+    # New Reasoning Schema Support
+    "bet_type": "type",
+    "selection": "pick",
+    "sport": "league", 
 }
 
 # Type abbreviation -> Full type name
@@ -525,7 +529,10 @@ def normalize_response(
                     pass
 
     if expand:
-        return validate_and_correct_batch(picks, list(valid_message_ids) if valid_message_ids is not None else None)
+        # Step 1: Expand keys (e.g. bet_type -> type, t -> type)
+        expanded_picks = [expand_compact_pick(p) for p in picks]
+        # Step 2: Validate
+        return validate_and_correct_batch(expanded_picks, list(valid_message_ids) if valid_message_ids is not None else None)
 
     return picks
 
@@ -594,8 +601,11 @@ TENNIS_PLAYERS = {
     "hurkacz",
     "rune",
     "tiafoe",
-    "paul",
-    "shelton",
+    "rune",
+    "tiafoe",
+    # "paul", # COLLISION: Chris Paul (NBA), Paul George
+    # "shelton", # COLLISION: Shelton State (NCAAB)
+    # "thompson", # COLLISION: Klay/Amen Thompson (NBA)
     "draper",
     "dimitrov",
     "khachanov",
@@ -605,17 +615,17 @@ TENNIS_PLAYERS = {
     "musetti",
     "cerundolo",
     "humbert",
-    "thompson",
-    "korda",
-    "jarry",
-    "baez",
+    # "thompson",
+    # "korda", # COLLISION: Nelly Korda (Golf)
+    # "jarry", # COLLISION: Tristan Jarry (NHL)
+    # "baez", # COLLISION: Javier Baez (MLB)
     "norrie",
     "wawrinka",
     "monfils",
     "nishikori",
-    "murray",
-    "nadal",
-    "federer",
+    # "murray",  # COLISION: Murray State (NCAAB), Kyler Murray (NFL)
+    "nadal",     # Unique enough
+    "federer",   # Unique enough
     # WTA Top Players
     "swiatek",
     "sabalenka",
@@ -2099,7 +2109,15 @@ def validate_and_correct_pick(pick: dict[str, Any]) -> dict[str, Any]:
         return pick
 
     result = dict(pick)
-    pick_str = result.get("pick", "")
+    
+    # CRITICAL FIX: Handle case where AI returns a list for "pick" instead of string
+    pick_val = result.get("pick")
+    if isinstance(pick_val, list):
+        pick_str = " ".join(str(x) for x in pick_val)
+        result["pick"] = pick_str
+    else:
+        pick_str = str(pick_val) if pick_val is not None else ""
+        
     current_type = result.get("type", "Unknown")
 
     # Step 0: Ensure all keys are available (expand if needed)
@@ -2119,6 +2137,46 @@ def validate_and_correct_pick(pick: dict[str, Any]) -> dict[str, Any]:
     normalized_pick = normalize_pick_format(pick_str, corrected_type, league_context=result.get("league"))
     if normalized_pick != pick_str:
         result["pick"] = normalized_pick
+
+    # Step 2.5: F3 — Strip noise from selection text
+    # The AI sometimes includes timestamps, reaction counts, section headers, etc.
+    cleaned = result.get("pick", "")
+    if cleaned:
+        # Strip timestamps (08:50 am, 2:00pm, 16:19, etc.)
+        cleaned = re.sub(r'\b\d{1,2}:\d{2}\s*(?:am|pm|AM|PM|PST|EST|ET|CT|CST|MT)?\b', '', cleaned)
+        # Strip reaction/view counts (7 👁️, 🔥 24, 172 @, etc.)
+        cleaned = re.sub(r'\d+\s*[👁🔥❤️💯🏀⚽🏈⭐️]+', '', cleaned)
+        cleaned = re.sub(r'[👁🔥❤️💯🏀⚽🏈⭐️]+\s*\d+', '', cleaned)
+        # Strip common noise prefixes that AI includes in selections
+        noise_prefixes = [
+            r'\bNCAAB\s+(?:PLAYS?|ADD|ADDS)\b',
+            r'\bNBA\s+(?:PLAYS?|ADD|ADDS)\b',
+            r'\bNFL\s+(?:PLAYS?|ADD|ADDS)\b',
+            r'\bCBB\s+(?:PLAYS?|ADD|ADDS?)\b',
+            r'\bHOCKEY\s+PLAYS?\b',
+            r'\bFULL\s+CARD\b',
+            r'\bSATURDAY\s+CARD\b',
+            r'\bMAIN\s+CARD\b',
+            r'\bEXCLUSIVE\s+(?:MAX\s+)?PLAY\b',
+            r'\bMAX\s+(?:WHALE)?PLAY\b',
+            r'\bWHALEPLAY\b',
+            r'\bSUPERMAX\b',
+            r'\bPOD\b',
+            r'\bPOTD\b',
+            r'\bNIGHT\s+CBB\s+ADDS?\b',
+            r'\b100K\s+WAGER\b',
+        ]
+        for pattern in noise_prefixes:
+            cleaned = re.sub(pattern, '', cleaned, flags=re.IGNORECASE)
+        # Strip markdown formatting (**, *, #)
+        cleaned = re.sub(r'[*#]+', '', cleaned)
+        # Strip leading/trailing delimiters, brackets, emoji
+        cleaned = re.sub(r'^\s*[\[\]()]+\s*', '', cleaned)
+        cleaned = re.sub(r'\s*[\[\]()]+\s*$', '', cleaned)
+        # Collapse whitespace
+        cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+        if cleaned:
+            result["pick"] = cleaned
 
     # Step 3: Extract structured fields
     # Ensure all required fields are populated

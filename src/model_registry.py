@@ -67,9 +67,9 @@ GEMINI_MODELS = [
 # 30 RPM, 60K TPM, 2 concurrent workers
 # =============================================================================
 CEREBRAS_MODELS = [
-    "llama-3.3-70b",  # Best quality (~2100 t/s)
+    "llama3.1-70b",  # Best quality (~2100 t/s)
     "llama3.1-8b",  # Fast (~2200 t/s)
-    "qwen-3-32b",  # Qwen 3 32B (~2600 t/s)
+    "qwen-2.5-72b-instruct",  # Qwen 2.5 72B (~2600 t/s)
     "gpt-oss-120b",  # GPT OSS 120B (~3000 t/s)
 ]
 

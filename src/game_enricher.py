@@ -2,7 +2,12 @@ import logging
 from typing import Any
 
 from src.grading.constants import LEAGUE_ALIASES_MAP
-from src.score_fetcher import fetch_scores_for_date, fetch_odds_for_date, get_odds_for_pick
+try:
+    from src.score_fetcher import fetch_scores_for_date, fetch_odds_for_date, get_odds_for_pick
+except ImportError:
+    fetch_scores_for_date = None
+    fetch_odds_for_date = None
+    get_odds_for_pick = None
 from src.utils import normalize_string
 
 logger = logging.getLogger(__name__)
@@ -47,6 +52,9 @@ def enrich_picks(picks: list[dict[str, Any]], target_date: str) -> list[dict[str
     # 2. Fetch scores (games) for Enrichment
     # We fetch ALL games (final_only=False) to ensure we catch scheduled games too
     logger.info(f"Fetching games for enrichment from {target_date} for leagues: {', '.join(sorted(relevant_leagues))}")
+    if fetch_scores_for_date is None:
+        logger.warning("Score fetcher unavailable (missing dependencies). Skipping enrichment.")
+        return picks
     try:
         games = fetch_scores_for_date(target_date, requested_leagues=list(relevant_leagues), final_only=False)
     except Exception as e:

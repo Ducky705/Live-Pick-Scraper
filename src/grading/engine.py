@@ -647,8 +647,26 @@ class GraderEngine:
 
     def _grade_total(self, pick: Pick) -> GradedPick:
         """Grade a total (over/under) bet."""
-        # Total line is very useful for disambiguation (NBA vs NHL)
-        result = self._find_game(pick.selection, pick.league, line=pick.line, odds=pick.odds)
+        # F8 Fix: Extract team names from the selection for game-finding.
+        # The selection might be "Iowa vs Purdue Over 142" or just "Over 222.5".
+        # We need to find team names, not pass "Over 222.5" to _find_game.
+        search_text = pick.selection
+        
+        # Try to extract team names from the selection
+        # Patterns: "Team1 vs Team2 Over/Under X", "Team1/Team2 o/u X", "Team Over/Under X (team total)"
+        import re
+        team_match = re.match(
+            r'^(.+?)\s+(?:over|under|[ou])\s+[\d.]+',
+            search_text, re.IGNORECASE
+        )
+        if team_match:
+            search_text = team_match.group(1).strip()
+        
+        # If search_text is just "Over" or "Under" (no team context), try raw_text
+        if search_text.lower() in ("over", "under", "o", "u", ""):
+            search_text = pick.raw_text
+        
+        result = self._find_game(search_text, pick.league, line=pick.line, odds=pick.odds)
         if not result:
             return GradedPick(pick, GradeResult.PENDING, details="Game not found")
         game, resolved_team = result

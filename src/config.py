@@ -16,7 +16,8 @@ if getattr(sys, "frozen", False):
         EXEC_DIR = os.path.dirname(sys.executable)
 else:
     # Running as Python script
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    # Go up one level from 'src' to get project root
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     EXEC_DIR = BASE_DIR
 
 # --- DIRECTORY STRUCTURE ---
@@ -52,9 +53,11 @@ if not os.path.exists(DEBUG_REPORTS_DIR):
 SESSION_FILE_PATH = os.path.join(SESSIONS_DIR, "user_session")
 
 # Load env vars
-from dotenv import load_dotenv
-
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 TARGET_TELEGRAM_CHANNEL_ID = os.getenv("TARGET_TELEGRAM_CHANNEL_ID")
 TARGET_DISCORD_CHANNEL_ID = os.getenv("TARGET_DISCORD_CHANNEL_ID")
@@ -65,6 +68,10 @@ API_HASH = os.getenv("TELEGRAM_API_HASH") or os.getenv("API_HASH")
 # OPTIONAL: Proxy configuration
 # Format: http://user:pass@host:port or http://host:port
 PROXY_URL = os.getenv("PROXY_URL")
+
+# Supabase
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 # Anti-Detect User Agents
 USER_AGENTS = [

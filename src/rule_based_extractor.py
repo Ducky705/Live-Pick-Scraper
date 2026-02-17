@@ -12,6 +12,7 @@ from typing import Any
 from src.grading.parser import PickParser
 from src.grading.schema import BetType, Pick
 from src.prompts.decoder import infer_league_from_entity, normalize_pick_format
+from src.utils import clean_sauce_text
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ class RuleBasedExtractor:
     # Compiled Regex Patterns
     # Remove common prefixes like "Pick:", "Selection:", "POD:", optionally preceded by units "5U POD:"
     RE_REMOVE_PREFIX = re.compile(
-        r"^(?:(?:\d+(?:\.\d+)?(?:u|unit|\*|%)\s*)?)(?:Pick|Selection|My Pick|My Play|POD|Best Bet|Whale Play|Leans?|Plays?):\s*",
+        r"^(?:(?:\d+(?:\.\d+)?(?:u|unit|\*|%)\s*)?)(?:Pick|Selection|My Pick|My Play|POD|Best Bet|Whale Play|Leans?|Plays?|ON EACH|ON|Risk)\s*(?:[A-Z]{2,4})?:?\s*",
         re.IGNORECASE,
     )
     RE_REMOVE_NUMBERING = re.compile(r"^\d+[\.\)]\s*")
@@ -33,7 +34,9 @@ class RuleBasedExtractor:
     RE_FIX_UNDER = re.compile(r"\b([Uu])(\d+(\.\d+)?)")
     RE_FIX_OVER = re.compile(r"\b([Oo])(\d+(\.\d+)?)")
     RE_FIX_MONEYLINE = re.compile(r"Money\s*Line", re.IGNORECASE)
-    RE_PROP_AGS_CHECK = re.compile(r"\b(Anytime Goal Scorer|AGS|Score|Scorer)\b", re.IGNORECASE)
+    RE_PROP_AGS_CHECK = re.compile(r"\b(Anytime Goal Scorer|AGS|Scorer)\b", re.IGNORECASE)
+
+
     RE_PROP_AGS_FIX = re.compile(r"\s+(Anytime Goal Scorer|AGS|Anytime Goal|To Score)\b", re.IGNORECASE)
     RE_NON_ASCII = re.compile(r"[^\x00-\x7F]+")
 
@@ -47,16 +50,67 @@ class RuleBasedExtractor:
 
     RE_PROP_SHORTHAND = re.compile(r"(\d+)\+?\s*(PRA|pts?|reb?|ast?|threes?|3pm)", re.IGNORECASE)
     RE_PROP_WIN = re.compile(r"Win\s+(3pt|Slam Dunk|Event|Match|Set)", re.IGNORECASE)
-    RE_PROP_ANYTIME = re.compile(r"^(.*?)\s+(assist|goal|score)s?", re.IGNORECASE)
-    RE_PARLAY_SEP = re.compile(r"\s*\|\|\s*") # Double pipe separator
-    RE_SPLIT_PLUS = re.compile(r"\s+\+\s+(?=[A-Z])") # Space + Space followed by capital letter (e.g. "Shelton ML + Aliassime")
+    # Updated to handle (2u at start of line
+    RE_UNITS_PREFIX = re.compile(r"^[\(]?(\d+(?:\.\d+)?)(?:\*|u|%|unit)[\)]?\s*", re.IGNORECASE)
+    RE_UNITS_SUFFIX = re.compile(r"[\s\(](\d+(?:\.\d+)?)\s*(?:u|unit|%)[\)]?", re.IGNORECASE) 
+    RE_PARENS = re.compile(r"\(.*?\)")
+
+    # Stricter Anytime Goal match: Must start with a Name (Capitalized word), not just any text
+    # Prevents matching "Game/Time League..." -> "League"
+    RE_PROP_ANYTIME = re.compile(r"^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+(assist|goal|score)s?", re.IGNORECASE)
+
+    @staticmethod
+    def _clean_mashed_text(text: str) -> str:
+        """
+        Inserts delimiters/spaces into mashed text formats like:
+        - "Team-Spread-Odds(Units)" -> "Team -Spread -Odds (Units)"
+        - "Pick(Units)Pick(Units)" -> "Pick (Units)\nPick (Units)"
+        - "MLTeam" -> "ML\nTeam"
+        """
+        if not text:
+            return ""
+            
+        # 1. Space out Units: "(1.5U)" -> " (1.5U) " and add newline after
+        # This handles "Clemson +13 (1u) SMU -2.5 (1u)" -> "Clemson +13 (1u) \n SMU -2.5 (1u)"
+        text = re.sub(r'(\(\d+(?:\.\d+)?u\))', r' \1\n', text, flags=re.IGNORECASE)
+        
+        # 2. Separate ML: "Xavier ML Eastern" -> "Xavier ML\nEastern"
+        text = re.sub(r'\bML\b', 'ML\n', text, flags=re.IGNORECASE)
+        
+        # 3. Space out Odds/Lines mashed with parens: "-118(1.5U)" -> "-118 (1.5U)"
+        text = re.sub(r'(-?\d{3,4})(\()', r'\1 \2', text)
+        
+        # 4. BankrollBill Format: "Team-5.5-118" -> "Team -5.5 -118"
+        # Look for "text-number" where text is letters
+        text = re.sub(r'([a-zA-Z])(-)(\d)', r'\1 \2\3', text)
+
+        # 5. Spread-Odds Mashed: "13.5-110" -> "13.5 -110" or "5+105" -> "5 +105"
+        # Look for digit followed by +/- and 3+ digits (odds)
+        text = re.sub(r'(\d)([+-])(\d{3,})', r'\1 \2\3', text)
+        
+        # 6. Normalize Abbreviations (Phase 3 Fixes)
+        # "TT" -> "Team Total" (Avoids matching inside words like ATT)
+        text = re.sub(r'\bTT\b', 'Team Total', text)
+        
+        # "1P", "2P", "3P" -> "1st Period", "2nd Period", "3rd Period" (Hockey/Basketball)
+        text = re.sub(r'\b1P\b', '1st Period', text, flags=re.IGNORECASE)
+        text = re.sub(r'\b2P\b', '2nd Period', text, flags=re.IGNORECASE)
+        text = re.sub(r'\b3P\b', '3rd Period', text, flags=re.IGNORECASE)
+        
+        # "v." -> "vs" (Handle "Team A v. Team B")
+        # Ensure it's surrounded by spaces or newlines to avoid matching "Av. Ave"
+        text = re.sub(r'\s+v\.\s+', ' vs ', text, flags=re.IGNORECASE)
+
+        # print(f"DEBUG MASHED: {text}") # Uncomment for debugging
+
+        return text
 
     RE_START_NOISE = re.compile(r"^(?:http|www|t\.me|@)")
     RE_CONTINUATION_ODDS = re.compile(r"^[+-]\d+")
     RE_CONTINUATION_OU = re.compile(r"^(?:Over|Under|O|U)\s*\d", re.IGNORECASE)
     RE_CONTINUATION_ML = re.compile(r"^(?:ML|Moneyline)", re.IGNORECASE)
     RE_ML_WORD = re.compile(r"\bml\b")
-    RE_ODDS_PATTERN = re.compile(r"(?<!\d)[+-]\s*\d{1,4}(?:\.\d+)?")
+    RE_ODDS_PATTERN = re.compile(r"(?<!\d)[+-]\s*\d{1,4}(?:\.\d+)?(?!\))") # Added neg lookahead for closing paren (records)
     RE_OU_PATTERN = re.compile(r"\b(o|u|over|under)\s*\d", re.IGNORECASE)
     RE_UNITS_PREFIX = re.compile(r"^[\(]?(\d+(?:\.\d+)?)(?:\*|u|%|unit)[\)]?\s*", re.IGNORECASE)
     RE_UNITS_SUFFIX = re.compile(r"[\s\(](\d+(?:\.\d+)?)\s*(?:u|unit|%)[\)]?", re.IGNORECASE) # Removed $ anchor
@@ -132,13 +186,44 @@ class RuleBasedExtractor:
                 if len(candidate) < 30:
                     capper_name_from_text = candidate
 
-            lines = full_text.split("\n")
+            # Split on newlines OR double spaces (common in Telegram copy-pastes)
+            # ALSO: Pre-process to split "3U TeamB" patterns (Unit suffix followed by new Start)
+            # Regex: Finds digit+unit followed by space and Capital Letter
+            full_text = re.sub(r"(\d+(?:\.\d+)?(?:u|unit|units|%|\*))\s+(?=[A-Z])", r"\1\n", full_text, flags=re.IGNORECASE)
+            
+            # Handle "(2u) Team" or "(2u, time) Team" pattern
+            full_text = re.sub(r"(\)\s*)(?=[A-Z])", r"\1\n", full_text)
+
+            # Clean "Sauce" first
+            full_text = clean_sauce_text(full_text)
+            
+            # Clean mashed text (separating units, MLs)
+            full_text = RuleBasedExtractor._clean_mashed_text(full_text)
+
+            # Split by newlines or double spaces
+            lines = re.split(r'\n|\s{2,}', full_text)
             msg_picks = []
 
+
+
             i = 0
+            if capper_match:
+                 # Skip the first line if it was used for capper extraction
+                 # But verify it matches the start of text
+                 first_line = lines[0].strip()
+                 if first_line.startswith("**") and capper_match.group(1) in first_line:
+                      # CRITICAL FIX: If the header line ACTUALLY contains a pick (e.g. "**Name 5% Pick**"), 
+                       # DO NOT SKIP IT.
+                       if not RuleBasedExtractor._has_pick_indicators(first_line):
+                            i = 1
+
+            pending_units = None
+
             while i < len(lines):
                 line = lines[i].strip()
                 i += 1
+                
+
 
                 if not line:
                     continue
@@ -255,8 +340,24 @@ class RuleBasedExtractor:
                         # Current is just text (Team Name?). Always merge if next has info.
                         # But stop if next line also looks like a Team Name (No indicators)?
                         # "Team A" \n "Team B" -> Don't merge.
-                        if next_has_ind or is_continuation:
-                            should_merge = True
+                        
+                        # SPECIAL CHECK: If continuation is via UNITS, but the line has TEXT (Prop/Team), 
+                        # it's likely a new pick, not a continuation of the previous line (Header).
+                        # e.g. "Header" \n "5u Team -5" -> Don't merge.
+                        # e.g. "Team" \n "5u" -> Merge.
+                        if is_continuation:
+                            # Re-check if it was units
+                            units_match = RuleBasedExtractor.RE_UNITS_PREFIX.match(next_line_clean)
+                            if units_match:
+                                # Check remainder for text
+                                remainder = next_line_clean[units_match.end():].strip()
+                                # If remainder has words (approx 3+ chars), assume new pick
+                                if re.search(r"[a-zA-Z]{3,}", remainder):
+                                    should_merge = False
+                                else:
+                                    should_merge = True
+                            else:
+                                should_merge = True
                     else:
                         # Current HAS indicators (Pick).
                         # Only merge if next line is a continuation (Price/Line/Units).
@@ -384,6 +485,39 @@ class RuleBasedExtractor:
                              msg_picks.append(p_dict)
                              continue
 
+                    # CHECK FOR "TEAM (SPREAD) over TEAM" Format (e.g. PorterPicks)
+                    # "IOWA STATE (-6) over KANSAS"
+                    over_match = re.search(r"^([A-Z\s\.]+)\s*\(\s*([+-]?\d+(?:\.\d+)?)\s*\)\s+over\s+([A-Z\s\.]+)", line, re.IGNORECASE)
+                    if over_match:
+                        team = over_match.group(1).strip()
+                        spread = over_match.group(2).strip()
+                        # opponent = over_match.group(3).strip() # Unused but good for context
+                        
+                        if len(team) > 3:
+                             p_dict = {
+                                "message_id": str(msg_id) if msg_id else "unknown",
+                                "capper_name": msg.get("author") or "Unknown",
+                                "league": infer_league_from_entity(team) or "NCAAB", 
+                                "type": "Spread",
+                                "pick": f"{team} {spread}", 
+                                "odds": -110,
+                                "units": 1.0, # Default (checking for units elsewhere?)
+                                "line": float(spread),
+                                "is_over": False,
+                                "stat": None,
+                                "reasoning": "Extracted via Rule-Based Regex (Over Format)",
+                                "_source_text": line,
+                                "confidence": 9.0
+                            }
+                             # Check for units in the same line (suffix)
+                             rem = line[over_match.end():]
+                             u, _, _ = RuleBasedExtractor._extract_and_remove_units(rem)
+                             if u != 1.0:
+                                 p_dict["units"] = u
+                                 
+                             msg_picks.append(p_dict)
+                             continue
+
                     # Check for keywords that strongly suggest a pick
                     if not RuleBasedExtractor._has_pick_indicators(line):
                         continue
@@ -397,8 +531,21 @@ class RuleBasedExtractor:
                     # Extract units and clean them from the line
                     units, line, extracted_unit_str = RuleBasedExtractor._extract_and_remove_units(line)
 
+                    # HANDLE PENDING UNITS (Carry-over from previous line)
+                    if pending_units is not None:
+                         if units == 1.0: # Only override if current line has no units
+                              units = pending_units
+                              if pending_units > 1.0 or pending_units < 1.0: # If distinct
+                                   extracted_unit_str = f"{pending_units}u" # Approximate assumption for reconstruction
+                         pending_units = None
+
                     # Clean line before parsing
                     line_clean = line.strip()
+
+                    # If line is empty but we extracted units, save them for next line!
+                    if not line_clean and units != 1.0:
+                         pending_units = units
+                         continue
 
                     # AGGRESSIVE CLEANUP: Remove all parenthetical content before parsing
                     # We already extracted units, and 'PickParser' doesn't need the noise.
@@ -429,11 +576,32 @@ class RuleBasedExtractor:
                         )
                         pick_dict["capper_name"] = capper
 
+                        # RECONSTRUCT FULL STRING for Golden Set Matching
+                        # Golden Set expects: "(2u Team -5" or "4* Team +7"
+                        # We have units string + selection. We need to add Line/Odds if they were stripped.
+                        full_pick_str = pick_dict["pick"]
+                        
+                        # Add line if not present (heuristic check)
+                        if parsed.line is not None and str(parsed.line) not in full_pick_str:
+                             # Format line: -5.0 -> -5, +3.5 -> +3.5
+                             line_val = parsed.line
+                             line_str = f"+{line_val}" if line_val > 0 else str(line_val)
+                             if line_str.endswith(".0"): line_str = line_str[:-2]
+                             full_pick_str += f" {line_str}"
+                        
+                        pick_dict["pick"] = full_pick_str
+
                         # Add metadata
                         pick_dict["extraction_method"] = "rule_based"
                         pick_dict["confidence"] = 8.5  # High confidence on 0-10 scale
 
                         msg_picks.append(pick_dict)
+                    
+                    else:
+                        # CRITICAL: If extraction failed but we found units, SAVE THEM for next line!
+                        # This covers the "Header 5% \n Pick" case where Header failed validation
+                        if units != 1.0:
+                             pending_units = units
 
 
                 except Exception:
@@ -505,6 +673,10 @@ class RuleBasedExtractor:
                 if k in text_lower:
                     return True
 
+        # 5. Unit Pattern: 5%, 3u, 10*
+        if RuleBasedExtractor.RE_UNITS_PREFIX.search(text) or RuleBasedExtractor.RE_UNITS_SUFFIX.search(text):
+            return True
+
         return False
 
     @staticmethod
@@ -535,7 +707,11 @@ class RuleBasedExtractor:
 
         # Reject generic "ML" or "Moneyline" selections if they lack team context
         sel = pick.selection.strip().lower()
-        if sel in ["ml", "moneyline", "money line", "game", "match", "pick", "play", "parlay"]:
+        if sel in ["ml", "moneyline", "money line", "game", "match", "pick", "play", "parlay", "parlay ml"]:
+            return False
+
+        # Reject Table Headers (e.g., "Game", "Time", "League")
+        if sel in ["game", "time", "league", "signal", "play", "win%", "units", "score", "verdict", "tier"]:
             return False
 
         return True

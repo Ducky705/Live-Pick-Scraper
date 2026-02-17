@@ -60,27 +60,41 @@ class PickParser:
         # 3. PROP DETECTION (Colon separator: "Player: Stat Over X")
         # Moved before Period detection to avoid "3P" (3 Pointers) being caught as Period "3P" (3rd Period)
         if PickParser._is_prop(text):
-            pick = PickParser._parse_prop(text, league_norm, date)
-            if pick:
-                pick.units = units_val
-            return pick
+            # Guard: If the part before colon is a league/sport label, don't treat as prop
+            if not PickParser._is_league_colon(text):
+                pick = PickParser._parse_prop(text, league_norm, date)
+                if pick:
+                    pick.units = units_val
+                return pick
 
         # 4. PERIOD DETECTION (1H, 1Q, F5, etc.)
         period = PickParser._detect_period(text)
         if period:
-            # Infer League from Period if Unknown
-            if league_norm in ["unknown", "", "other"]:
-                if period in ["1Q", "2Q", "3Q", "4Q"]:
-                    league_norm = "nba"
-            pick = PickParser._parse_period_bet(text, league_norm, date, period)
-            if pick:
-                pick.units = units_val
-            return pick
+            # F6 Guard: If period code collides with a stat keyword, prefer prop/total
+            # e.g. "3P" could mean 3rd Period OR 3-Pointers in basketball context
+            stat_collision_periods = {"3P"}
+            is_stat_collision = (
+                period in stat_collision_periods
+                and PickParser._has_prop_structure(text)
+            )
+            if not is_stat_collision:
+                # Infer League from Period if Unknown
+                if league_norm in ["unknown", "", "other"]:
+                    if period in ["1Q", "2Q", "3Q", "4Q"]:
+                        league_norm = "nba"
+                pick = PickParser._parse_period_bet(text, league_norm, date, period)
+                if pick:
+                    pick.units = units_val
+                return pick
 
         # 5. TOTAL DETECTION (Over/Under without colon)
         if PickParser._is_total(text):
             # INNOVATION: Check if it's actually a Player Prop misclassified as a Total
             # e.g. "Zion Williamson Over 22.5 Points"
+            # NOTE: "goal", "goals", "score", "scorer" are REMOVED from this list.
+            # In context "Denmark/USA O 6.5 Goals", "goals" refers to a GAME TOTAL,
+            # not a player prop. Same with "sog" (shots on goal) when used with
+            # team/game context. Keep only unambiguous individual stat keywords.
             prop_keywords = [
                 "pts",
                 "points",
@@ -93,18 +107,11 @@ class PickParser:
                 "yards",
                 "td",
                 "touchdown",
-                "goal",
-                "score",
-                "sog",
-                "shots",
-                "shot",
                 "hit",
                 "hits",
                 "base",
                 "bases",
-                "ks",
                 "strikeouts",
-                "scorer",
             ]
 
             
@@ -299,12 +306,18 @@ class PickParser:
         """Detect if pick is a period bet and return period identifier."""
         text_lower = text.lower()
 
-        # Check explicit patterns first
+        # Check explicit long patterns first ("first half", "1st half", etc.)
         for pattern, period_id in PERIOD_PATTERNS.items():
-            if pattern in text_lower:
-                return period_id
+            # Only match multi-word patterns via substring; single patterns via word boundary
+            if " " in pattern:
+                if pattern in text_lower:
+                    return period_id
+            else:
+                # Use word boundary to avoid false positives (e.g. "f1" in "diff15")
+                if re.search(r'\b' + re.escape(pattern) + r'\b', text_lower):
+                    return period_id
 
-        # Regex for compact format: "1H", "1Q", "F5", etc. at start
+        # Regex for compact format: "1H", "1Q", "F5", etc. at start of string only
         match = re.match(r"^([12][hq]|[1-4][qp]|f[135])\s+", text_lower)
         if match:
             return PERIOD_PATTERNS.get(match.group(1), match.group(1).upper())
@@ -314,36 +327,25 @@ class PickParser:
     @staticmethod
     def _is_prop(text: str) -> bool:
         """Check if text is a prop bet (Player: Stat format)."""
-        # Must have colon but not be a Future like "Winner: Team"
+        # Must have colon
         if ":" not in text:
             return False
-        if "winner:" in text.lower():
-            return False
-        if "champion:" in text.lower():
+
+        # Reject futures
+        lower = text.lower()
+        if "winner:" in lower or "champion:" in lower:
             return False
 
         # Ignore if the colon is likely a time (e.g. 10:05)
-        # Check if ALL colons are time-like
-        # Regex for time: digit:digit
-        # We want to know if there is a colon that is NOT a time
-        # Split by colon
-        parts = text.split(":")
-        if len(parts) < 2:
-            return False
-
-        # Check around each split point (naive)
-        # Better: find all colons and check surroundings
         non_time_colon_found = False
         for match in re.finditer(r":", text):
             start, end = match.span()
-            # Check char before and after
             is_time = False
             if start > 0 and end < len(text):
                 before = text[start - 1]
                 after = text[end]
                 if before.isdigit() and after.isdigit():
                     is_time = True
-
             if not is_time:
                 non_time_colon_found = True
                 break
@@ -352,6 +354,47 @@ class PickParser:
             return False
 
         return True
+
+    @staticmethod
+    def _is_league_colon(text: str) -> bool:
+        """
+        Check if the colon in text is a league/sport label prefix.
+        e.g. "NCAAB: Iowa State -7" or "CBB: Duke -12.5"
+        These should NOT be parsed as props.
+        """
+        parts = text.split(":", 1)
+        if len(parts) < 2:
+            return False
+        prefix = parts[0].strip().lower()
+
+        # Known league/sport labels that appear before colons
+        league_labels = {
+            "ncaab", "ncaaf", "nba", "nfl", "nhl", "mlb",
+            "cbb", "cfb", "atp", "wta", "ufc", "pga",
+            "epl", "mls", "ucl", "hockey", "soccer", "tennis",
+            "baseball", "basketball", "football",
+            "olympic hockey", "college basketball",
+            "college baseball", "college football",
+            "ncaab plays", "nba plays", "nfl plays",
+            "cbb plays", "hockey plays", "ncaab add",
+            "cbb add", "cbb adds", "ncaab adds",
+            "potd", "ai potd", "parlay",
+        }
+        return prefix in league_labels
+
+    @staticmethod
+    def _has_prop_structure(text: str) -> bool:
+        """
+        Check if text has player-prop-like structure:
+        contains Over/Under + a stat keyword like pts/reb/ast.
+        """
+        lower = text.lower()
+        has_ou = bool(re.search(r'\b(over|under)\b', lower))
+        stat_kw = ["pts", "points", "reb", "rebounds", "ast", "assists",
+                   "threes", "3s", "yards", "td", "touchdown",
+                   "strikeouts", "hits", "bases"]
+        has_stat = any(re.search(r'\b' + re.escape(k) + r'\b', lower) for k in stat_kw)
+        return has_ou and has_stat
 
     @staticmethod
     def _is_total(text: str) -> bool:
@@ -657,76 +700,54 @@ class PickParser:
         text_lower = text_clean.lower()
 
         # Check for explicit ML
-        is_ml = "ml" in text_lower or "moneyline" in text_lower
+        is_ml = bool(re.search(r'\bml\b|\bmoneyline\b', text_lower))
 
         # Check for spread number
         # Note: Since we extracted odds (>=100), remaining numbers are likely spreads (-5.5, +3, etc.)
-        # Handle " - 5.5" or "-5.5" or "+3"
-        spread_match = re.search(r"([+-])?\s*(\d+\.?\d*)", text_clean)
+        # Use a more specific regex that requires +/- sign for spread detection
+        spread_match = re.search(r'(?<![\w.])([+-])\s*(\d+\.?\d*)(?![\w])', text_clean)
 
         found_spread_line = None
         if spread_match:
-            # Enforce that it looks like a line:
-            # 1. Has +/- sign
-            # 2. Or is followed by 'pt' or 'point'
-            # 3. Or text has 'spread'
-
-            sign = spread_match.group(1) or ""
+            sign = spread_match.group(1)
             num = spread_match.group(2)
             try:
-                # If sign is "-", apply it. If empty or "+", it's positive.
                 val = float(num)
                 if sign == "-":
                     val = -val
             except ValueError:
                 val = 0.0
 
+            # Filter out "76ers" -> "76" — check if followed by letters
             full_match = spread_match.group(0)
-            has_sign = "+" in full_match or "-" in full_match
+            end_pos = spread_match.end()
+            is_part_of_word = (end_pos < len(text_clean) and text_clean[end_pos].isalpha())
 
-            # Filter out years? 2024. But odds extraction handles >100.
-            # Filter out "76ers" -> "76"
-            is_part_of_word = re.search(rf"{re.escape(full_match)}[a-zA-Z]", text_clean)
-
-            if has_sign and not is_part_of_word:
+            if not is_part_of_word:
                 found_spread_line = val
-            elif abs(val) < 50 and not is_part_of_word:
-                # Likely a spread like "Lakers 5.5" (implied - or +?)
-                # Dangerous to assume, but we have extracted odds so it's safer.
-                pass
 
-        if is_ml or (not found_spread_line and odds is not None) or (not found_spread_line and not is_ml):
-            # Cases:
-            # 1. Explicit ML -> ML
-            # 2. No spread line found, but odds found (-175) -> ML (odds extracted above)
-            # 3. No spread, no ml, no odds -> ML (default)
-            
-            # Format Compliance: Ensure "Team ML" format
+        if is_ml or (not found_spread_line):
+            # Moneyline: explicit ML, or no spread number found
             selection = text_clean.strip()
+            # Append ML only if not already present and selection is a team name (no digits)
             if "ml" not in selection.lower() and "moneyline" not in selection.lower():
-                # Only append if it's not a Draw or specific prop-like string
-                # If it looks like a team name (no digits), append ML
                 if not any(c.isdigit() for c in selection):
-                     selection = f"{selection} ML"
+                    selection = f"{selection} ML"
 
             return Pick(
                 raw_text=text,
                 league=league.upper(),
                 date=date,
                 bet_type=BetType.MONEYLINE,
-                selection=selection,  # Cleaned text is the selection
+                selection=selection,
                 odds=odds,
             )
         else:
-            # STRIP SPREAD FROM SELECTION
-            # If we found a spread like "-5.5", we want the selection to be just "Celtics"
-            # Text clean still has the spread number in it.
-            # spread_match.group(0) is the text of the spread (e.g. "-5.5")
+            # Spread: strip the spread value from the selection to get just the team name
             final_selection = text_clean
             if spread_match:
-                # Remove the exact spread match substring
-                # Use value trick to avoid removing nested numbers if possible, but exact match is usually safe for spread
-                final_selection = text_clean.replace(spread_match.group(0), "").strip()
+                final_selection = text_clean[:spread_match.start()] + text_clean[spread_match.end():]
+                final_selection = re.sub(r'\s+', ' ', final_selection).strip()
 
             return Pick(
                 raw_text=text,

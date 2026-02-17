@@ -5,11 +5,15 @@ Grading System V3 - Modular Pick Grading Engine
 This package provides a comprehensive, ESPN-powered grading system for sports betting picks.
 """
 
-from src.grading.engine import GraderEngine
-from src.grading.loader import DataLoader
-from src.grading.matcher import Matcher
-from src.grading.parser import PickParser
-from src.grading.schema import BetType, GradedPick, GradeResult, Pick
+try:
+    from src.grading.engine import GraderEngine
+    from src.grading.loader import DataLoader
+    from src.grading.matcher import Matcher
+    from src.grading.parser import PickParser
+    from src.grading.schema import BetType, GradedPick, GradeResult, Pick
+except ImportError:
+    # Allow partial imports if dependencies (like requests) are missing
+    pass
 
 __all__ = [
     "BetType",

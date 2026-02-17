@@ -294,4 +294,8 @@ def preprocess_for_rapidocr_color(img, remove_watermark=True, upscale_target=160
     lab = cv2.merge([l, a, b])
     cv_img = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
 
+
     return cv_img
+
+
+

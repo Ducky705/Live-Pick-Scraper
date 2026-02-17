@@ -539,3 +539,32 @@ def safe_write_progress(content: str, filename: str = "progress.md"):
         os.replace(temp_filename, filename)
     except Exception as e:
         print(f"Failed to write progress: {e}")
+
+
+def clean_sauce_text(text: str) -> str:
+    """
+    Cleans up the 'Sauce' artifact often found in OCR results.
+    'Sauce' appears to be a watermark or repetitive artifact.
+    
+    Removes repetitive artifact words like 'Sauce', 'DirtybubbleBets', etc.
+    that confuse OCR/AI.
+    """
+    if not text:
+        return ""
+    import re
+    # Remove "Sauce", "DirtybubbleBets", "Bankrollbill", "Pardonmypick", "BulliesPicks", "MRBIGBETS", "MrBigBets", "Analyticscapper"
+    # Also remove "Alternate Line" noise, "LADDER CHALLENGE", "MAX PLAY", "EXCLUSIVE", "WHALEPLAY", "Glitch Whale"
+    pattern = r'\b(Sauce|DirtybubbleBets|Bankrollbill|Pardonmypick|BulliesPicks|MRBIGBETS|MrBigBets|Analyticscapper|Alternate Line|LADDER CHALLENGE|MAX PLAY|EXCLUSIVE|Official Play|WHALEPLAY|Glitch Whale)\b'
+    cleaned = re.sub(pattern, '', text, flags=re.IGNORECASE)
+    
+    # Remove "100 TO 10,000" ladder amounts
+    cleaned = re.sub(r'\d+\s+TO\s+[\d,]+', '', cleaned, flags=re.IGNORECASE)
+    
+    # Remove "(1/5)" numbering
+    cleaned = re.sub(r'\(\d+/\d+\)', '', cleaned)
+    
+    # Remove "PLAY #2:" or similar
+    cleaned = re.sub(r'PLAY\s*#\d+:?', '', cleaned, flags=re.IGNORECASE)
+
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    return cleaned

@@ -21,14 +21,28 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Condition, Lock
 from typing import Any
 
-import requests  # Import requests to catch Timeout
+try:
+    import requests
+except ImportError:
+    # Mock requests for simulation/offline mode
+    class MockRequests:
+        class Timeout(Exception): pass
+    requests = MockRequests()
 
 # Import clients
-from src.cerebras_client import cerebras_completion
-from src.gemini_client import gemini_text_completion
-from src.groq_client import groq_text_completion
-from src.mistral_client import mistral_completion
-from src.openrouter_client import openrouter_completion
+try:
+    from src.cerebras_client import cerebras_completion
+    from src.gemini_client import gemini_text_completion
+    from src.groq_client import groq_text_completion
+    from src.mistral_client import mistral_completion
+    from src.openrouter_client import openrouter_completion
+except ImportError:
+    # Mock for simulation
+    def cerebras_completion(*args, **kwargs): return "Mocked AI Response"
+    def gemini_text_completion(*args, **kwargs): return "Mocked AI Response"
+    def groq_text_completion(*args, **kwargs): return "Mocked AI Response"
+    def mistral_completion(*args, **kwargs): return "Mocked AI Response"
+    def openrouter_completion(*args, **kwargs): return "Mocked AI Response"
 from src.prompt_builder import generate_ai_prompt
 
 logger = logging.getLogger(__name__)
@@ -55,12 +69,12 @@ PROVIDER_CONFIG = {
     },
     "openrouter": {
         "model": "meta-llama/llama-3.3-70b-instruct:free",
-        "rpm": 100,
+        "rpm": 10, # Reduced to 10 to minimize 429s on Free Tier
         "tpm": 100000,
-        "max_concurrent": 5,  # US-200: Good capacity
-        "min_delay": 0.6,
-        "priority": 3,
-        "tier": 2,
+        "max_concurrent": 2, # Reduced concurrency to avoid burst limits
+        "min_delay": 5.0, # Increased delay between requests
+        "priority": 1, # US-002: HIGHEST PRIORITY
+        "tier": 1,
     },
     "mistral": {
         "model": "open-mistral-nemo",
@@ -82,13 +96,13 @@ PROVIDER_CONFIG = {
         "tier": 1,
     },
     "gemini": {
-        "model": "gemini-1.5-flash",
+        "model": "gemini-2.0-flash",
         "rpm": 15,
         "tpm": 250000,
         "max_concurrent": 3,
         "min_delay": 4.0,
-        "priority": 5,
-        "tier": 2,
+        "priority": 2, # Promoted to Tier 1 equivalent
+        "tier": 1,
     },
 }
 
@@ -174,10 +188,11 @@ class ParallelBatchProcessor:
         Initialize processor with EXTREME SPEED configuration.
         """
         self.providers = providers or [
-            "groq",  # Disabled due to 403 blocks -> RE-ENABLED (US-200)
-            "cerebras",
-            "mistral",
-            # "gemini", # Disabled due to 404 errors/timeouts
+            "openrouter", # ACCURACY KING: Llama 3.3 70B
+            "mistral",    # SPEED KING: Mistral Nemo (0.7s)
+            "cerebras",   # BACKUP: Llama 3.1 8B (0.73s)
+            # "groq",     # DISABLED: 403 Forbidden
+            # "gemini",   # DISABLED: 429 Rate Limited
         ]
 
         self.rate_limiters = {

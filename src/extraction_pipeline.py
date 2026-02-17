@@ -55,13 +55,27 @@ class ExtractionPipeline:
 
         for m in messages:
             try:
+
                 # Create a stable signature for the message content
                 # We ignore ID/Date/Source - only care about the content
-                text_content = (m.get("text", "") or "") + (m.get("ocr_text", "") or "")
+                text = m.get("text", "") or ""
+                ocr = m.get("ocr_text", "") or ""
+                
+                # Apply Cleaning (US-013: Sauce Removal)
+                from src.utils import clean_sauce_text
+                text = clean_sauce_text(text)
+                ocr = clean_sauce_text(ocr)
+                
+                # Update message with cleaned text so downstream uses it too
+                m["text"] = text
+                m["ocr_text"] = ocr
+
+                text_content = text + ocr
                 if not text_content.strip():
                     # Empty messages can be skipped or processed (likely yield nothing)
                     uncached_messages.append(m)
                     continue
+
 
                 # MD5 hash
                 msg_hash = hashlib.md5(text_content.encode("utf-8")).hexdigest()
@@ -95,11 +109,15 @@ class ExtractionPipeline:
         fresh_picks = []
         
         if uncached_messages:
-            # 0. Rule Based Extraction (Fast Path)
-            from src.rule_based_extractor import RuleBasedExtractor
-    
-            rule_picks, messages_for_ai = RuleBasedExtractor.extract(uncached_messages)
-            fresh_picks = list(rule_picks)  # Initialize with rule picks
+            # 0. Rule Based Extraction (DISABLED for Accuracy)
+            # from src.rule_based_extractor import RuleBasedExtractor
+            # rule_picks, messages_for_ai = RuleBasedExtractor.extract(uncached_messages)
+            
+            # FORCE AI for everything
+            rule_picks = []
+            messages_for_ai = list(uncached_messages)
+            
+            fresh_picks = list(rule_picks)  # Initialize with rule picks (empty)
     
             # US-001: Validate Rule-Based Picks
             # If RuleBased found SOME picks but Validator expects MORE, send to AI.
@@ -432,6 +450,12 @@ class ExtractionPipeline:
                             reparse_ids.add(mid_str)
 
         # 5. Execute Refinement
+        # Gate consensus behind env var / CLI flag (default: OFF)
+        import os
+        enable_consensus = os.getenv("ENABLE_CONSENSUS", "false").lower() == "true" or "--enable-consensus" in __import__("sys").argv
+        if not enable_consensus:
+            reparse_ids = set()
+            logger.info("Consensus engine disabled (set ENABLE_CONSENSUS=true or --enable-consensus to enable).")
         reparse_ids_list = list(reparse_ids)
         if reparse_ids_list:
             logger.info(f"Refining {len(reparse_ids_list)} messages...")

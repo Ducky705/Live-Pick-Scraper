@@ -10,7 +10,10 @@ import logging
 from datetime import datetime, timedelta
 from typing import Any, Optional
 
-from src.score_fetcher import fetch_scores_for_date
+try:
+    from src.score_fetcher import fetch_scores_for_date
+except ImportError:
+    fetch_scores_for_date = None
 
 
 logger = logging.getLogger(__name__)
@@ -39,6 +42,10 @@ class ScheduleManager:
         
         # Fetch for all supported leagues
         # We assume fetch_scores_for_date handles the SQLite caching.
+        if fetch_scores_for_date is None:
+            logger.warning("[ScheduleManager] Score fetcher unavailable. Returning empty schedule.")
+            return []
+            
         games = fetch_scores_for_date(
             target_date, 
             requested_leagues=None, # Fetch all
@@ -80,13 +87,32 @@ class ScheduleManager:
 
         # Build String
         lines = []
+        priorities = ["NBA", "NFL", "NHL", "MLB", "NCAAB", "UFC"]
+        
+        # Add priority leagues first
+        for league in priorities:
+            if league in grouped:
+                matchups = grouped[league]
+                # Limit NCAAB to top 50 games if too many?
+                if league == "NCAAB" and len(matchups) > 50:
+                     matchups = matchups[:50] + [f"... and {len(matchups)-50} more"]
+                
+                matchups_str = ", ".join(matchups)
+                lines.append(f"{league}: {matchups_str}")
+                del grouped[league]
+        
+        # Add remaining leagues
         for league, matchups in grouped.items():
-            # Limit to avoid token overflow? 
-            # Usually a daily slate is fine (15 NBA games max).
-            matchups_str = ", ".join(matchups)
-            lines.append(f"{league}: {matchups_str}")
+             matchups_str = ", ".join(matchups)
+             lines.append(f"{league}: {matchups_str}")
 
-        return "\n".join(lines)
+        full_text = "\n".join(lines)
+        
+        # Hard cap at 3000 chars to save context window
+        if len(full_text) > 3000:
+            full_text = full_text[:3000] + " ... [Truncated Schedule]"
+            
+        return full_text
 
     @staticmethod
     def is_team_playing(team_name: str, target_date: str) -> tuple[bool, Optional[str]]:

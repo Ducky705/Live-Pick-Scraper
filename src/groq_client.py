@@ -1,56 +1,122 @@
-import base64
-import json
+
+# src/groq_client.py
 import logging
 import os
-from threading import Semaphore
+import time
+import json
 
-import requests
+try:
+    from config import GROQ_TOKEN as GROQ_API_KEY
+except ImportError:
+    GROQ_API_KEY = os.getenv("GROQ_TOKEN")
 
-# MAXIMUM SPEED: Groq allows 1000 RPM = 16 concurrent requests
-# Replace single Lock with Semaphore for parallel execution
-GROQ_CONCURRENCY_LIMIT = 16
-GLOBAL_GROQ_SEMAPHORE = Semaphore(GROQ_CONCURRENCY_LIMIT)
-LOCK_ACQUIRE_TIMEOUT = 30  # Reduced from 300s for faster failure
+# Use our URLLIB replacement if installed, else try standard requests (which might fail)
+try:
+    from src.utils_urllib import post
+except ImportError:
+    import requests
+    def post(url, **kwargs):
+        resp = requests.post(url, **kwargs)
+        return resp
 
-# Model Configuration - User-specified high-performance models
-DEFAULT_TEXT_MODEL = "llama-3.3-70b-versatile"  # User's choice - best quality
-DEFAULT_VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"  # Updated to Llama 4 Scout (Preview)
+logger = logging.getLogger(__name__)
 
-# Available models with rate limits (1000 RPM each)
-GROQ_MODELS = {
-    "llama-3.1-8b-instant": {"rpm": 1000, "tpm": 250000, "speed": 560},
-    "llama-3.3-70b-versatile": {"rpm": 1000, "tpm": 300000, "speed": 280},
-    "mixtral-8x7b-32768": {"rpm": 1000, "tpm": 250000, "speed": 500},
-    "gemma2-9b-it": {"rpm": 1000, "tpm": 250000, "speed": 1000},
-}
+DEFAULT_TEXT_MODEL = "llama-3.3-70b-versatile"
+DEFAULT_VISION_MODEL = "llama-3.2-11b-vision-preview"
 
 
-def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, timeout=60):
-    """
-    Calls Groq API (Directly) for Vision tasks.
-    Args:
-        image_input: Can be a file path (str) or base64 string.
-    """
-    api_key = os.getenv("GROQ_TOKEN")
-    if not api_key:
-        raise ValueError("GROQ_TOKEN not found in environment variables.")
+import time
+import random
+
+def groq_text_completion(prompt, model=DEFAULT_TEXT_MODEL, timeout=10, max_retries=3):
+    if not GROQ_API_KEY:
+        logger.error("GROQ_API_KEY not set.")
+        return None
 
     url = "https://api.groq.com/openai/v1/chat/completions"
+    
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.1
+    }
+    
+    for attempt in range(max_retries + 1):
+        try:
+            # Randomize timeout slightly to prevent thundering herd
+            current_timeout = timeout + random.uniform(0, 2)
+            response = post(url, json=payload, headers=headers, timeout=current_timeout)
+            
+            if response.status_code == 200:
+                data = response.json()
+                return data["choices"][0]["message"]["content"]
+            
+            elif response.status_code == 429:
+                # Rate limit - exponential backoff
+                wait = (2 ** attempt) + random.uniform(0, 1)
+                logger.warning(f"Groq 429 Rate Limit. Retrying in {wait:.2f}s...")
+                time.sleep(wait)
+                continue
+                
+            elif response.status_code >= 500:
+                # Server error - strict backoff
+                wait = (2 ** attempt) + random.uniform(0, 1)
+                logger.warning(f"Groq {response.status_code} Error. Retrying in {wait:.2f}s...")
+                time.sleep(wait)
+                continue
+                
+            else:
+                logger.error(f"Groq Text API Error {response.status_code}: {response.text}")
+                return None
+                
+        except Exception as e:
+            logger.error(f"Groq Text Request Failed (Attempt {attempt+1}): {e}")
+            if attempt < max_retries:
+                 time.sleep(1 + attempt)
+            else:
+                 return None
+    
+    return None
 
-    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
 
-    # Encode image (supports file path or base64)
-    try:
-        if isinstance(image_input, str) and (len(image_input) < 1000 or os.path.exists(image_input)):
-            with open(image_input, "rb") as f:
-                image_data = base64.b64encode(f.read()).decode("utf-8")
-        elif isinstance(image_input, bytes):
-            image_data = base64.b64encode(image_input).decode("utf-8")
-        else:
-            image_data = image_input if image_input else ""
-    except Exception as e:
-        logging.error(f"[Groq] Failed to process image input: {e}")
+def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, timeout=30):
+    if not GROQ_API_KEY:
+        logger.error("GROQ_API_KEY not set.")
         return None
+
+    url = "https://api.groq.com/openai/v1/chat/completions"
+    
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    # Handle image input (URL or Base64)
+    image_url_obj = {}
+    if str(image_input).startswith("http"):
+         image_url_obj = {"url": image_input}
+    else:
+         # Assume base64 or file path (if file path, we need to read it)
+         # For simplicity, if it's not http, assume it's base64 or path.
+         # If path, read and strict base64.
+         if os.path.exists(str(image_input)):
+             try:
+                 import base64
+                 with open(image_input, "rb") as f:
+                     b64 = base64.b64encode(f.read()).decode('utf-8')
+                     image_url_obj = {"url": f"data:image/jpeg;base64,{b64}"}
+             except:
+                 logger.error(f"Failed to read image file {image_input}")
+                 return None
+         else:
+             # Assume already base64
+             prefix = "data:image/jpeg;base64," if "data:" not in str(image_input) else ""
+             image_url_obj = {"url": f"{prefix}{image_input}"}
 
     payload = {
         "model": model,
@@ -59,133 +125,23 @@ def groq_vision_completion(prompt, image_input, model=DEFAULT_VISION_MODEL, time
                 "role": "user",
                 "content": [
                     {"type": "text", "text": prompt},
-                    {
-                        "type": "image_url",
-                        "image_url": {"url": f"data:image/jpeg;base64,{image_data}"},
-                    },
-                ],
+                    {"type": "image_url", "image_url": image_url_obj}
+                ]
             }
         ],
-        "temperature": 0.1,
-        "response_format": {"type": "json_object"},
+        "temperature": 0.1
     }
-
-    for attempt in range(3):
-        try:
-            # Use Semaphore for 16 concurrent requests (not Lock which blocks all)
-            if not GLOBAL_GROQ_SEMAPHORE.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error("[Groq] Failed to acquire semaphore slot.")
-                return None
-
-            try:
-                response = requests.post(url, headers=headers, json=payload, timeout=timeout)
-            finally:
-                GLOBAL_GROQ_SEMAPHORE.release()
-
-            if response.status_code == 200:
-                data = response.json()
-                try:
-                    content = data["choices"][0]["message"]["content"]
-                    return content
-                except KeyError:
-                    logging.error(f"[Groq] Unexpected response format: {data}")
-                    return None
-            elif response.status_code == 429:
-                # Log Rate Limit Details
-                remaining_tokens = response.headers.get("x-ratelimit-remaining-tokens")
-                remaining_reqs = response.headers.get("x-ratelimit-remaining-requests")
-                reset_time = response.headers.get("x-ratelimit-reset-tokens")
-
-                logging.warning(
-                    f"[Groq-Vision] Rate limit (429). Headers: "
-                    f"Tokens Rem={remaining_tokens}, Reqs Rem={remaining_reqs}, Reset={reset_time}"
-                )
-                raise Exception("Groq Rate limit 429")
-            else:
-                logging.error(f"[Groq] Error {response.status_code}: {response.text}")
-                return None
-
-        except Exception as e:
-            if "429" in str(e):
-                raise e
-            logging.error(f"[Groq] Exception: {e}")
+    
+    try:
+        response = post(url, json=payload, headers=headers, timeout=timeout)
+        
+        if response.status_code == 200:
+            data = response.json()
+            return data["choices"][0]["message"]["content"]
+        else:
+            logger.error(f"Groq Vision API Error {response.status_code}: {response.text}")
             return None
-
-    return None
-
-
-def groq_text_completion(prompt, model=DEFAULT_TEXT_MODEL, timeout=60, validate_json=True):
-    """
-    Calls Groq API for text-only tasks (parsing).
-    MAXIMUM SPEED: 16 concurrent requests allowed (1000 RPM).
-    """
-    api_key = os.getenv("GROQ_TOKEN")
-    if not api_key:
-        raise ValueError("GROQ_TOKEN not found in environment variables.")
-
-    url = "https://api.groq.com/openai/v1/chat/completions"
-
-    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-
-    payload = {
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.1,
-    }
-
-    # Auto-detect DSL mode
-    if "OUTPUT:TEXT" in prompt:
-        validate_json = False
-
-    if validate_json:
-        payload["response_format"] = {"type": "json_object"}
-
-    for attempt in range(3):
-        try:
-            # Use Semaphore for 16 concurrent requests (not Lock which blocks all)
-            if not GLOBAL_GROQ_SEMAPHORE.acquire(timeout=LOCK_ACQUIRE_TIMEOUT):
-                logging.error("[Groq] Failed to acquire semaphore slot.")
-                return None
-
-            try:
-                response = requests.post(url, headers=headers, json=payload, timeout=timeout)
-            finally:
-                GLOBAL_GROQ_SEMAPHORE.release()
-
-            if response.status_code == 200:
-                data = response.json()
-                try:
-                    content = data["choices"][0]["message"]["content"]
-                    if validate_json:
-                        try:
-                            json.loads(content)
-                            return content
-                        except json.JSONDecodeError:
-                            logging.warning("[Groq] Invalid JSON response. Retrying...")
-                            continue
-                    return content
-                except KeyError:
-                    logging.error(f"[Groq] Unexpected response format: {data}")
-                    return None
-            elif response.status_code == 429:
-                # Log Rate Limit Details
-                remaining_tokens = response.headers.get("x-ratelimit-remaining-tokens")
-                remaining_reqs = response.headers.get("x-ratelimit-remaining-requests")
-                reset_time = response.headers.get("x-ratelimit-reset-tokens")
-
-                logging.warning(
-                    f"[Groq-Text] Rate limit (429). Headers: "
-                    f"Tokens Rem={remaining_tokens}, Reqs Rem={remaining_reqs}, Reset={reset_time}"
-                )
-                raise Exception("Groq Rate limit 429")
-            else:
-                logging.error(f"[Groq] Error {response.status_code}: {response.text}")
-                return None
-
-        except Exception as e:
-            if "429" in str(e):
-                raise e
-            logging.error(f"[Groq] Exception: {e}")
-            return None
-
-    return None
+            
+    except Exception as e:
+        logger.error(f"Groq Vision Request Failed: {e}")
+        return None

@@ -3,3 +3,10 @@ python-dotenv
 twikit
 playwright
 aiohttp
+telethon
+python-socks[asyncio]
+rapidocr-onnxruntime
+Pillow
+numpy
+httpx
+scikit-learn

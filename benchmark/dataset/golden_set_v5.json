@@ -1,0 +1,608 @@
+{
+    "_meta": {
+        "version": 5,
+        "description": "Golden set v5 - Built from real 2026-02-14 verification report messages. Each entry contains the raw source text and manually verified expected picks.",
+        "created": "2026-02-17",
+        "total_entries": 20,
+        "schema": "Full JSON keys (message_id, text, expected_picks[])"
+    },
+    "entries": [
+        {
+            "message_id": "gs001",
+            "text": "Thomas Casale\n\n1u - Tenn -11.5",
+            "expected_picks": [
+                {
+                    "capper_name": "Thomas Casale",
+                    "selection": "Tenn -11.5",
+                    "bet_type": "Spread",
+                    "line": -11.5,
+                    "units": 1.0,
+                    "sport": "NCAAB"
+                }
+            ],
+            "bug_category": "BUG-4",
+            "notes": "Capper name on first line. Must NOT appear in selection."
+        },
+        {
+            "message_id": "gs002",
+            "text": "Marco D'Angelo\n\n3% Colorado State -4",
+            "expected_picks": [
+                {
+                    "capper_name": "Marco D'Angelo",
+                    "selection": "Colorado State -4",
+                    "bet_type": "Spread",
+                    "line": -4.0,
+                    "units": 3.0,
+                    "sport": "NCAAB"
+                }
+            ],
+            "bug_category": "BUG-4",
+            "notes": "3% = 3 units. Capper name must be separated from pick."
+        },
+        {
+            "message_id": "gs003",
+            "text": "Drew Martin \n\n5% Louisville/Baylor o162.5",
+            "expected_picks": [
+                {
+                    "capper_name": "Drew Martin",
+                    "selection": "Louisville/Baylor Over 162.5",
+                    "bet_type": "Total",
+                    "line": 162.5,
+                    "units": 5.0,
+                    "sport": "NCAAB"
+                }
+            ],
+            "bug_category": "BUG-4",
+            "notes": "Capper name as first line. o162.5 = Over 162.5. Must be Total, not ML."
+        },
+        {
+            "message_id": "gs004",
+            "text": "Vernon Croy\n\n8u - Gonzaga -4.5",
+            "expected_picks": [
+                {
+                    "capper_name": "Vernon Croy",
+                    "selection": "Gonzaga -4.5",
+                    "bet_type": "Spread",
+                    "line": -4.5,
+                    "units": 8.0,
+                    "sport": "NCAAB"
+                }
+            ],
+            "bug_category": "BUG-4",
+            "notes": "Capper name on first line, must NOT be extracted as pick."
+        },
+        {
+            "message_id": "gs005",
+            "text": "Carmine Bianco\n\nOlympic Hockey\nUSA TT o5.5 goals",
+            "expected_picks": [
+                {
+                    "capper_name": "Carmine Bianco",
+                    "selection": "USA TT Over 5.5",
+                    "bet_type": "Total",
+                    "line": 5.5,
+                    "units": 1.0,
+                    "sport": "Hockey"
+                }
+            ],
+            "bug_category": "BUG-5",
+            "notes": "TT = Team Total, goals = game context. Must be Total, NOT Player Prop."
+        },
+        {
+            "message_id": "gs006",
+            "text": "ProfiticSports\n➖➖➖➖➖\nOklahoma State ML🐳\nIowa State -4.5\nIowa +2.5\nSt Johns -4.5\nOklahoma ML\nKennesaw State ML\nTexas ML\nGonzaga -2.5\nClemson +14.5\nNC State -2.5\nNavy +1.5\nFlorida -9.5\nUSF ML\nArizona ML\nBaez ML\nDenmark/USA O 6.5 Goals",
+            "expected_picks": [
+                {
+                    "selection": "Oklahoma State ML",
+                    "bet_type": "Moneyline",
+                    "units": 1.0
+                },
+                {
+                    "selection": "Iowa State -4.5",
+                    "bet_type": "Spread",
+                    "line": -4.5
+                },
+                {
+                    "selection": "Iowa +2.5",
+                    "bet_type": "Spread",
+                    "line": 2.5
+                },
+                {
+                    "selection": "St Johns -4.5",
+                    "bet_type": "Spread",
+                    "line": -4.5
+                },
+                {
+                    "selection": "Oklahoma ML",
+                    "bet_type": "Moneyline"
+                },
+                {
+                    "selection": "Kennesaw State ML",
+                    "bet_type": "Moneyline"
+                },
+                {
+                    "selection": "Texas ML",
+                    "bet_type": "Moneyline"
+                },
+                {
+                    "selection": "Gonzaga -2.5",
+                    "bet_type": "Spread",
+                    "line": -2.5
+                },
+                {
+                    "selection": "Clemson +14.5",
+                    "bet_type": "Spread",
+                    "line": 14.5
+                },
+                {
+                    "selection": "NC State -2.5",
+                    "bet_type": "Spread",
+                    "line": -2.5
+                },
+                {
+                    "selection": "Navy +1.5",
+                    "bet_type": "Spread",
+                    "line": 1.5
+                },
+                {
+                    "selection": "Florida -9.5",
+                    "bet_type": "Spread",
+                    "line": -9.5
+                },
+                {
+                    "selection": "USF ML",
+                    "bet_type": "Moneyline"
+                },
+                {
+                    "selection": "Arizona ML",
+                    "bet_type": "Moneyline"
+                },
+                {
+                    "selection": "Baez ML",
+                    "bet_type": "Moneyline"
+                },
+                {
+                    "selection": "Denmark/USA Over 6.5",
+                    "bet_type": "Total",
+                    "line": 6.5
+                }
+            ],
+            "bug_category": "BUG-5,BUG-7",
+            "notes": "16 picks. Denmark/USA O 6.5 Goals must be Total, NOT Player Prop."
+        },
+        {
+            "message_id": "gs007",
+            "text": "Cblez\n\nCBB\nIdaho -6.5 (2u)\nClemson +13 (1u)\nSMU -2.5 (1u)\nMarquette +2.5 (1u)\nTCU/Oklahoma St o156.5 (1u)\nKansas +7 (1u)\nNavy -1 (1u)",
+            "expected_picks": [
+                {
+                    "capper_name": "Cblez",
+                    "selection": "Idaho -6.5",
+                    "bet_type": "Spread",
+                    "line": -6.5,
+                    "units": 2.0
+                },
+                {
+                    "selection": "Clemson +13",
+                    "bet_type": "Spread",
+                    "line": 13.0,
+                    "units": 1.0
+                },
+                {
+                    "selection": "SMU -2.5",
+                    "bet_type": "Spread",
+                    "line": -2.5,
+                    "units": 1.0
+                },
+                {
+                    "selection": "Marquette +2.5",
+                    "bet_type": "Spread",
+                    "line": 2.5,
+                    "units": 1.0
+                },
+                {
+                    "selection": "TCU/Oklahoma St Over 156.5",
+                    "bet_type": "Total",
+                    "line": 156.5,
+                    "units": 1.0
+                },
+                {
+                    "selection": "Kansas +7",
+                    "bet_type": "Spread",
+                    "line": 7.0,
+                    "units": 1.0
+                },
+                {
+                    "selection": "Navy -1",
+                    "bet_type": "Spread",
+                    "line": -1.0,
+                    "units": 1.0
+                }
+            ],
+            "bug_category": "BUG-2",
+            "notes": "Simple capper-name-first format. 7 picks, all well-structured."
+        },
+        {
+            "message_id": "gs008",
+            "text": "Strike Point Sports \n\n4u - Oklahoma State -1.5\n4u - NC State -5.5\n3u - Arizona -9.5",
+            "expected_picks": [
+                {
+                    "capper_name": "Strike Point Sports",
+                    "selection": "Oklahoma State -1.5",
+                    "bet_type": "Spread",
+                    "line": -1.5,
+                    "units": 4.0
+                },
+                {
+                    "selection": "NC State -5.5",
+                    "bet_type": "Spread",
+                    "line": -5.5,
+                    "units": 4.0
+                },
+                {
+                    "selection": "Arizona -9.5",
+                    "bet_type": "Spread",
+                    "line": -9.5,
+                    "units": 3.0
+                }
+            ],
+            "bug_category": "BUG-2",
+            "notes": "Unit-first format (4u - Team). Must extract correctly."
+        },
+        {
+            "message_id": "gs009",
+            "text": "Bill Krackman \n\n2% Marquette +3 \n2% Iowa State -7\n3% Syracuse +3.5\n3% Tartleton +3",
+            "expected_picks": [
+                {
+                    "capper_name": "Bill Krackman",
+                    "selection": "Marquette +3",
+                    "bet_type": "Spread",
+                    "line": 3.0,
+                    "units": 2.0
+                },
+                {
+                    "selection": "Iowa State -7",
+                    "bet_type": "Spread",
+                    "line": -7.0,
+                    "units": 2.0
+                },
+                {
+                    "selection": "Syracuse +3.5",
+                    "bet_type": "Spread",
+                    "line": 3.5,
+                    "units": 3.0
+                },
+                {
+                    "selection": "Tartleton +3",
+                    "bet_type": "Spread",
+                    "line": 3.0,
+                    "units": 3.0
+                }
+            ],
+            "bug_category": "BUG-2",
+            "notes": "Percent-as-units format. 2% = 2u."
+        },
+        {
+            "message_id": "gs010",
+            "text": "Micah Roberts\n\nNavy +1.5 -120\nPurdue ML -139",
+            "expected_picks": [
+                {
+                    "capper_name": "Micah Roberts",
+                    "selection": "Navy +1.5",
+                    "bet_type": "Spread",
+                    "line": 1.5,
+                    "odds": -120,
+                    "units": 1.0
+                },
+                {
+                    "selection": "Purdue ML",
+                    "bet_type": "Moneyline",
+                    "odds": -139,
+                    "units": 1.0
+                }
+            ],
+            "bug_category": "BUG-2",
+            "notes": "Two picks with odds. Must separate odds from spread lines."
+        },
+        {
+            "message_id": "gs011",
+            "text": "Bob Konarski\n\nClemson +13.5 -110",
+            "expected_picks": [
+                {
+                    "capper_name": "Bob Konarski",
+                    "selection": "Clemson +13.5",
+                    "bet_type": "Spread",
+                    "line": 13.5,
+                    "odds": -110,
+                    "units": 1.0,
+                    "sport": "NCAAB"
+                }
+            ],
+            "bug_category": "BUG-4",
+            "notes": "Capper name must NOT appear in selection text."
+        },
+        {
+            "message_id": "gs012",
+            "text": "Ross Benjamin\n\nCBB \n2% Iowa State -6.5 \n2%  Villanova -3.5",
+            "expected_picks": [
+                {
+                    "capper_name": "Ross Benjamin",
+                    "selection": "Iowa State -6.5",
+                    "bet_type": "Spread",
+                    "line": -6.5,
+                    "units": 2.0
+                },
+                {
+                    "selection": "Villanova -3.5",
+                    "bet_type": "Spread",
+                    "line": -3.5,
+                    "units": 2.0
+                }
+            ],
+            "bug_category": "BUG-2",
+            "notes": "CBB header followed by picks. 2% = 2u."
+        },
+        {
+            "message_id": "gs013",
+            "text": "Gianni the Greek\n\n4% Arizona -9.0 (-115)  \n3% Iowa State -7.0 (-120)\n3% Samford/East Tenn State u146.0\n3% St. Francis PA +3.0 (-120)  \n3% Wagner/Stonehill u130.5",
+            "expected_picks": [
+                {
+                    "capper_name": "Gianni the Greek",
+                    "selection": "Arizona -9.0",
+                    "bet_type": "Spread",
+                    "line": -9.0,
+                    "odds": -115,
+                    "units": 4.0
+                },
+                {
+                    "selection": "Iowa State -7.0",
+                    "bet_type": "Spread",
+                    "line": -7.0,
+                    "odds": -120,
+                    "units": 3.0
+                },
+                {
+                    "selection": "Samford/East Tenn State Under 146.0",
+                    "bet_type": "Total",
+                    "line": 146.0,
+                    "units": 3.0
+                },
+                {
+                    "selection": "St. Francis PA +3.0",
+                    "bet_type": "Spread",
+                    "line": 3.0,
+                    "odds": -120,
+                    "units": 3.0
+                },
+                {
+                    "selection": "Wagner/Stonehill Under 130.5",
+                    "bet_type": "Total",
+                    "line": 130.5,
+                    "units": 3.0
+                }
+            ],
+            "bug_category": "BUG-2",
+            "notes": "Mixed spreads and totals. u146.0 = Under 146."
+        },
+        {
+            "message_id": "gs014",
+            "text": "PardonMyPick\n➖➖➖➖➖\n10U CBB MAX WHALEPLAY\n• PURDUE ML -130\n7 👁️ 16:19",
+            "expected_picks": [
+                {
+                    "capper_name": "PardonMyPick",
+                    "selection": "Purdue ML",
+                    "bet_type": "Moneyline",
+                    "odds": -130,
+                    "units": 10.0,
+                    "sport": "NCAAB"
+                }
+            ],
+            "bug_category": "BUG-7",
+            "notes": "10U = 10 units. 'MAX WHALEPLAY', view count '7 👁️ 16:19' are noise. Must NOT appear in selection."
+        },
+        {
+            "message_id": "gs015",
+            "text": "#SEANPERRY\n5U SuperMax\nTexas Tech +10 (CBB)",
+            "expected_picks": [
+                {
+                    "capper_name": "SEANPERRY",
+                    "selection": "Texas Tech +10",
+                    "bet_type": "Spread",
+                    "line": 10.0,
+                    "units": 5.0,
+                    "sport": "NCAAB"
+                }
+            ],
+            "bug_category": "BUG-1",
+            "notes": "Hashtag capper name. 5U SuperMax = 5 units. (CBB) is league context."
+        },
+        {
+            "message_id": "gs016",
+            "text": "McBets\n➖➖➖➖➖\nNEW MESSAGES\nMcBets APP 9:15 AM\nNCAA ADDS\nIowa State -7 (-120) 1.5u\n• Parlay (-135) 1.5u\nIowa State ML\nOregon ML",
+            "expected_picks": [
+                {
+                    "capper_name": "McBets",
+                    "selection": "Iowa State -7",
+                    "bet_type": "Spread",
+                    "line": -7.0,
+                    "odds": -120,
+                    "units": 1.5
+                },
+                {
+                    "capper_name": "McBets",
+                    "selection": "Iowa State ML / Oregon ML",
+                    "bet_type": "Parlay",
+                    "odds": -135,
+                    "units": 1.5
+                }
+            ],
+            "bug_category": "BUG-1",
+            "notes": "Mixed straight + parlay. 'NEW MESSAGES', 'APP 9:15 AM' = noise."
+        },
+        {
+            "message_id": "gs017",
+            "text": "Hammering Hank\n\nFULL CARD \nProvidence +8 5U MAX BET\nNorthwestern +13 4U\nMemphis +13.5 4U\nUCLA +16.5 3U\nFlorida State +5.5 3U\nTexas +2.5 2U\nKentucky +13.5 2U",
+            "expected_picks": [
+                {
+                    "capper_name": "Hammering Hank",
+                    "selection": "Providence +8",
+                    "bet_type": "Spread",
+                    "line": 8.0,
+                    "units": 5.0
+                },
+                {
+                    "selection": "Northwestern +13",
+                    "bet_type": "Spread",
+                    "line": 13.0,
+                    "units": 4.0
+                },
+                {
+                    "selection": "Memphis +13.5",
+                    "bet_type": "Spread",
+                    "line": 13.5,
+                    "units": 4.0
+                },
+                {
+                    "selection": "UCLA +16.5",
+                    "bet_type": "Spread",
+                    "line": 16.5,
+                    "units": 3.0
+                },
+                {
+                    "selection": "Florida State +5.5",
+                    "bet_type": "Spread",
+                    "line": 5.5,
+                    "units": 3.0
+                },
+                {
+                    "selection": "Texas +2.5",
+                    "bet_type": "Spread",
+                    "line": 2.5,
+                    "units": 2.0
+                },
+                {
+                    "selection": "Kentucky +13.5",
+                    "bet_type": "Spread",
+                    "line": 13.5,
+                    "units": 2.0
+                }
+            ],
+            "bug_category": "BUG-1",
+            "notes": "7 spreads. 'FULL CARD' and '5U MAX BET' pattern."
+        },
+        {
+            "message_id": "gs018",
+            "text": "provenwinner\n➖➖➖➖➖\nJames Madison +1.5 | 2 UNIT RISK\nCBB\n2/14 1:00 pm\n2u\n• Straight\n+1.5\n110\nTexas A&M +6.5 | 2 UNIT RISK\nCBB\n2/14 10:00 am\n2u\n• Straight\n+6.5\n110\nSMU ML -145 | 6 UNIT RISK\nPLATINUM\nCBB\n2/14 11:00 am\n6u\n• Straight\n145\nML",
+            "expected_picks": [
+                {
+                    "capper_name": "provenwinner",
+                    "selection": "James Madison +1.5",
+                    "bet_type": "Spread",
+                    "line": 1.5,
+                    "units": 2.0,
+                    "odds": -110
+                },
+                {
+                    "selection": "Texas A&M +6.5",
+                    "bet_type": "Spread",
+                    "line": 6.5,
+                    "units": 2.0,
+                    "odds": -110
+                },
+                {
+                    "selection": "SMU ML",
+                    "bet_type": "Moneyline",
+                    "odds": -145,
+                    "units": 6.0
+                }
+            ],
+            "bug_category": "BUG-1",
+            "notes": "Complex ticket-slip format. Each pick followed by metadata (date, Straight, line, odds). Must extract only the pick headers."
+        },
+        {
+            "message_id": "gs019",
+            "text": "Big Al\n\n4* lowa St. -7\n3* Providence +7.5\n3* Mississippi Valley St. +17.5\n3* UT-Rio Grande Valley +2\n4* N. Colorado -3.5\n3* UTEP +6.5",
+            "expected_picks": [
+                {
+                    "capper_name": "Big Al",
+                    "selection": "Iowa St. -7",
+                    "bet_type": "Spread",
+                    "line": -7.0,
+                    "units": 4.0
+                },
+                {
+                    "selection": "Providence +7.5",
+                    "bet_type": "Spread",
+                    "line": 7.5,
+                    "units": 3.0
+                },
+                {
+                    "selection": "Mississippi Valley St. +17.5",
+                    "bet_type": "Spread",
+                    "line": 17.5,
+                    "units": 3.0
+                },
+                {
+                    "selection": "UT-Rio Grande Valley +2",
+                    "bet_type": "Spread",
+                    "line": 2.0,
+                    "units": 3.0
+                },
+                {
+                    "selection": "N. Colorado -3.5",
+                    "bet_type": "Spread",
+                    "line": -3.5,
+                    "units": 4.0
+                },
+                {
+                    "selection": "UTEP +6.5",
+                    "bet_type": "Spread",
+                    "line": 6.5,
+                    "units": 3.0
+                }
+            ],
+            "bug_category": "BUG-1,BUG-3",
+            "notes": "Star notation for units (4* = 4u). 'lowa' (lowercase L) = Iowa."
+        },
+        {
+            "message_id": "gs020",
+            "text": "A11Bets (1/3)\n➖➖➖➖➖\nA11Bets\nNIGHT CBB ADDS\nArizona -8.5 (-120) 1.5U\nSanta Clara +4.5 (-109) 1U\nSanta Clara ML (+174) 0.25U\nPacific +8.5 (-125) 1U\nPacific ML (+320) 0.25U",
+            "expected_picks": [
+                {
+                    "capper_name": "A11Bets",
+                    "selection": "Arizona -8.5",
+                    "bet_type": "Spread",
+                    "line": -8.5,
+                    "odds": -120,
+                    "units": 1.5
+                },
+                {
+                    "selection": "Santa Clara +4.5",
+                    "bet_type": "Spread",
+                    "line": 4.5,
+                    "odds": -109,
+                    "units": 1.0
+                },
+                {
+                    "selection": "Santa Clara ML",
+                    "bet_type": "Moneyline",
+                    "odds": 174,
+                    "units": 0.25
+                },
+                {
+                    "selection": "Pacific +8.5",
+                    "bet_type": "Spread",
+                    "line": 8.5,
+                    "odds": -125,
+                    "units": 1.0
+                },
+                {
+                    "selection": "Pacific ML",
+                    "bet_type": "Moneyline",
+                    "odds": 320,
+                    "units": 0.25
+                }
+            ],
+            "bug_category": "BUG-7",
+            "notes": "'NIGHT CBB ADDS' and '(1/3)' are noise. 5 picks with mixed spreads and moneylines."
+        }
+    ]
+}

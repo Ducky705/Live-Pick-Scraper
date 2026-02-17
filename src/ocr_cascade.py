@@ -297,10 +297,8 @@ def _call_openrouter(image_path: str, prompt: str, prompt_type: str) -> OCRResul
     try:
         from src.openrouter_client import openrouter_completion
 
-        # Primary: Llama 3.2 11B Vision (smaller, more likely available)
-        # Fallback list handled by client if specific model fails? No, client is simple.
-        # We'll try the most likely to work free model.
-        model = "meta-llama/llama-3.2-11b-vision-instruct:free"
+        # Primary: Gemini 2.0 Flash Lite (Reliable, fast, vision-capable)
+        model = "google/gemini-2.0-flash-lite-preview-02-05:free"
 
         b64 = _encode_image(image_path)
 

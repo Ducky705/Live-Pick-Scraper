@@ -43,6 +43,12 @@ async def main():
     # 1. INITIALIZATION
     logging.info("Initializing Clients...")
 
+    # Early validation of critical env vars
+    if not os.getenv("OPENROUTER_API_KEY"):
+        logging.warning("OPENROUTER_API_KEY not set — AI extraction will fail. Set it in .env or environment.")
+    if not os.getenv("SUPABASE_URL") or not os.getenv("SUPABASE_KEY"):
+        logging.warning("SUPABASE_URL/SUPABASE_KEY not set — uploads will fail if enabled.")
+
     # Telegram
     from config import API_HASH, API_ID
 
@@ -126,6 +132,18 @@ async def main():
     logging.info("Deduplicating messages...")
     unique_msgs = Deduplicator.merge_messages(all_msgs)
     logging.info(f"Unique Messages: {len(unique_msgs)}")
+
+    # Parse --limit
+    limit = None
+    for arg in sys.argv:
+        if arg.startswith("--limit="):
+            try:
+                limit = int(arg.split("=")[1])
+            except: pass
+    
+    if limit and len(unique_msgs) > limit:
+        logging.info(f"Limiting to first {limit} messages (requested via CLI).")
+        unique_msgs = unique_msgs[:limit]
 
     if not unique_msgs:
         logging.warning("No messages found. Exiting.")

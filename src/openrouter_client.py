@@ -7,8 +7,7 @@ import requests
 DEFAULT_MODELS = [
     "stepfun/step-3.5-flash:free",            # PRIMARY: The "Unicorn" (95.3% Recall @ BS=5)
     "meta-llama/llama-3.3-70b-instruct:free", # SECONDARY: Reliable Baseline (81% Recall)
-    "openrouter/aurora-alpha",                # TERTIARY: Fast & Decent (77.4% Recall)
-    "nvidia/llama-3.1-nemotron-70b-instruct:free", # QUATERNARY: Last resort (57% Recall)
+    "nvidia/llama-3.1-nemotron-70b-instruct:free", # TERTIARY: Last resort (57% Recall)
 ]
 
 

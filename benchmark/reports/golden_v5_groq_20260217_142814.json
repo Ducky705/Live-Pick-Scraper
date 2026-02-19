@@ -1,0 +1,47 @@
+{
+  "provider": "groq",
+  "timestamp": "20260217_142814",
+  "summary": {
+    "entries": 5,
+    "total_expected": 5,
+    "total_extracted": 0,
+    "total_matched": 0,
+    "total_missed": 5,
+    "total_extra": 0,
+    "recall_pct": 0.0,
+    "precision_pct": 0,
+    "f1_pct": 0
+  },
+  "entries": [
+    {
+      "msg_id": "gs001",
+      "status": "AI_FAILURE",
+      "expected_count": 1,
+      "matched": 0
+    },
+    {
+      "msg_id": "gs002",
+      "status": "AI_FAILURE",
+      "expected_count": 1,
+      "matched": 0
+    },
+    {
+      "msg_id": "gs003",
+      "status": "AI_FAILURE",
+      "expected_count": 1,
+      "matched": 0
+    },
+    {
+      "msg_id": "gs004",
+      "status": "AI_FAILURE",
+      "expected_count": 1,
+      "matched": 0
+    },
+    {
+      "msg_id": "gs005",
+      "status": "AI_FAILURE",
+      "expected_count": 1,
+      "matched": 0
+    }
+  ]
+}

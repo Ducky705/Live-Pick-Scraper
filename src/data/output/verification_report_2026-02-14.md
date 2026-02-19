@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-02-14
 
-**Total Messages Processed:** 163
-**Total Picks Extracted:** 248
+**Total Messages Processed:** 165
+**Total Picks Extracted:** 370
 
 ---
 
@@ -10,20 +10,19 @@
 ### 📝 Source Message
 **Channel:** Telegram
 **Date:** 2026-02-14 00:37 ET
-**Text:**
-> DirtybubbleBets
-> Bankrollbill
-
 **OCR:**
-> BankrollBill (21-7L28) KBL BusanKCCEgis-5.5-118(1.5U) Wonju DBPromy +6-115(1U)
-> DirtyBubbleBets BETS KBL Daegu K0GAS TT o83.5 (-110) 0.75U KBLLotto (+1186) 4 Pick Parlay Hide Legs^ SGPx +1186 Wonju Dongbu Promy @ Changwon LG Sakers·Sat 2:30AM Changwon LG Sakers-5.5 Spread Under 154.5 Total Goyang Sky Gunners @ Mobis Phoebus·Sat 12:00AM Goyang Sky Gunners Moneyline Daegu KOGAS Pegasus @ Busan KCC Egis·Sat 12:00AM Over 172.5 Total
+> (21-7L28) KBL BusanKCCEgis-5.5-118(1.5U) Wonju DBPromy +6-115(1U) BETS KBL Daegu K0GAS TT o83.5 (-110) 0.75U KBLLotto (+1186) 4 Pick Parlay Hide Legs^ SGPx +1186 Wonju Dongbu Promy @ Changwon LG Sakers·Sat 2:30AM Changwon LG Sakers-5.5 Spread Under 154.5 Total Goyang Sky Gunners @ Mobis Phoebus·Sat 12:00AM Goyang Sky Gunners Moneyline Daegu KOGAS Pegasus @ Busan KCC Egis·Sat 12:00AM Over 172.5 Total
 
 **Images:**
 - `D:\Programs\Sports Betting\TelegramScraper\v0.0.15\src\data\temp_images\-1001560546587_11205.jpg`
 - `D:\Programs\Sports Betting\TelegramScraper\v0.0.15\src\data\temp_images\-1001560546587_11204.jpg`
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (1.5U) Kbl BusanKCCEgis -5.5 | -118 | 1.5 | Spread | - |
+| (1u) Wonju DB Promy +6 | -115 | 1.0 | Spread | - |
+| (0.75u) Dirty Bubble Bets Kbl Daegu Kogas Team Total over 83.5 | None | 0.75 | Total | - |
 
 ---
 
@@ -33,11 +32,10 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 10:50 ET
 **Text:**
-> **Sauce & Empire Algorithm 🔥**
+> ** & Empire Algorithm 🔥**
 
 **OCR:**
-> Sauce UCLA+16.5 -118 2/14 1u -102 Sauce 1u 2/14 Kansas +6.5 -105 2/14 Sauce Syracuse+2.5 1u -110 Sauce 1u 2/14 Florida A&M ML -105 1u Sauce 2/14 UGA/OKLA Under 164.5 -115 Sauce 1u Baylor +7.5 2/14 Baylor ML +275 .5u Sauce 2/14 UNC Greensboro +2.5 -110 Sauce 1u 2/14 Toledo+4.5 Sauce -115 1u 2/14 -110 Sauce 1u 2/14 Purdue-1.5 110 u 2/14 Texas Tech +9.5 Sauce Sauce +400 .5u 2/14 Texas Tech ML Sauce -110 TEX/MIZZOver 150.5 1u 2/14 -110 Sauce Santa Clara +4.5 1u 2/14 -112 1.5u Sauce SCUIZAGSUnder 159.5 2/14 Sauce +100 10 2/15 C.Bell over C.Briscoe Sauce C.Bell over A Cindric +145 10 2/15 A.Bowman over J.Berry -150 1u 2/15 Sauce 1u 2/21 Sauce Mario Barrios ML +198 Past +113 Sauce 10 Sacred Heart ML 2/13 UNLV+9.5 -102 Sauce 1u 2/13
-> Empire Algo Picks, Saturday February 14th 2026 (1u) Clemson +13 (-105) This sets up as a perfect spot for Clemson walking into Cameron Indoor with first place in the ACC on the line. Clemson quietly sits at 10-2 in conference play while Duke is 11-1, and that alone tells you this game matters a lot more than the number next to the spread suggests. When games decide positioning at the top of a conference, effort, focus, and execution level change, and Clemson is coming into this one with real purpose. I expect them to be locked in from the opening tip and to have a legitimate shot to stay inside this number the entire way, and if they shoot it well, they can absolutely make this uncomfortable for Duke. Since 2023, Clemson is 15-3 against the spread on Saturdays and 9-1 in their last 10. This tells you this program consistently shows up in these high-profile weekend games and they've and the results back it up. They won at Georgia 97-94, lost tight games at Alabama and BYU by six and three, and beat SMU at home. Even when they've lost, they've competed, and that's exactly what you want when you're catching a big number on the road. Stylistically, Clemson is built to cover a spread like this. They're comfortable playing slow, getting into half-court sets, and controlling tempo, which naturally keeps games tighter and limits possessions. Now when you look at the matchup through the numbers, you start to see why this isn't as lopsided effective field goal percentage, top 10 in opponent shooting percentage, and top 20 in opponent points allowed. On the other side, Clemson's offense is more than capable of holding its own as they shoot efficiently, rank top 100 in shooting efficiency, and get to the free throw line at a solid rate. Rebounding and turnover control also matter here as Clemson takes care of the ball well, defensive glass to avoid giving Duke endless second chances. That combination is exactly how underdogs hang around in tough road environments.
+> UCLA+16.5 -118 2/14 1u -102 1u 2/14 Kansas +6.5 -105 2/14 Syracuse+2.5 1u -110 1u 2/14 Florida A&M ML -105 1u 2/14 UGA/OKLA Under 164.5 -115 1u Baylor +7.5 2/14 Baylor ML +275 .5u 2/14 UNC Greensboro +2.5 -110 1u 2/14 Toledo+4.5 -115 1u 2/14 -110 1u 2/14 Purdue-1.5 110 u 2/14 Texas Tech +9.5 +400 .5u 2/14 Texas Tech ML -110 TEX/MIZZOver 150.5 1u 2/14 -110 Santa Clara +4.5 1u 2/14 -112 1.5u SCUIZAGSUnder 159.5 2/14 +100 10 2/15 C.Bell over C.Briscoe C.Bell over A Cindric +145 10 2/15 A.Bowman over J.Berry -150 1u 2/15 1u 2/21 Mario Barrios ML +198 Past +113 10 Sacred Heart ML 2/13 UNLV+9.5 -102 1u 2/13 Empire Algo Picks, Saturday February 14th 2026 (1u) Clemson +13 (-105) This sets up as a perfect spot for Clemson walking into Cameron Indoor with first place in the ACC on the line. Clemson quietly sits at 10-2 in conference play while Duke is 11-1, and that alone tells you this game matters a lot more than the number next to the spread suggests. When games decide positioning at the top of a conference, effort, focus, and execution level change, and Clemson is coming into this one with real purpose. I expect them to be locked in from the opening tip and to have a legitimate shot to stay inside this number the entire way, and if they shoot it well, they can absolutely make this uncomfortable for Duke. Since 2023, Clemson is 15-3 against the spread on Saturdays and 9-1 in their last 10. This tells you this program consistently shows up in these high-profile weekend games and they've and the results back it up. They won at Georgia 97-94, lost tight games at Alabama and BYU by six and three, and beat SMU at home. Even when they've lost, they've competed, and that's exactly what you want when you're catching a big number on the road. Stylistically, Clemson is built to cover a spread like this. They're comfortable playing slow, getting into half-court sets, and controlling tempo, which naturally keeps games tighter and limits possessions. Now when you look at the matchup through the numbers, you start to see why this isn't as lopsided effective field goal percentage, top 10 in opponent shooting percentage, and top 20 in opponent points allowed. On the other side, Clemson's offense is more than capable of holding its own as they shoot efficiently, rank top 100 in shooting efficiency, and get to the free throw line at a solid rate. Rebounding and turnover control also matter here as Clemson takes care of the ball well, defensive glass to avoid giving Duke endless second chances. That combination is exactly how underdogs hang around in tough road environments.
 
 **Images:**
 - `D:\Programs\Sports Betting\TelegramScraper\v0.0.15\src\data\temp_images\-1001560546587_11207.jpg`
@@ -46,8 +44,10 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 1u Sauce Ucla+16.5 -118 2 / 14 | None | 1.0 | Parlay | - |
-| (1u) Empire Algo Picks, Saturday February 14th 2026 ML | None | 1.0 | Moneyline | - |
+| 1u ** & Empire Algorithm ** Ucla 16.5 2 vs 14 ML | -118 | 1.0 | Moneyline | - |
+| 14 U 275 .5u 2 vs ML | None | 14.0 | Moneyline | - |
+| 198 Past 113 10 Sacred Heart ML | None | 1.0 | Moneyline | - |
+| 13 U 2 vs ML | None | 13.0 | Moneyline | - |
 
 ---
 
@@ -57,43 +57,18 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 10:51 ET
 **Text:**
-> **🏀 Wayne Root
-> Pinnacle- Kansas +7.5
-> 
-> 🏀 Big Al
-> 
-> CBB 
-> 
-> 4* lowa St. -7, 1:00 pm CONFERENCE FAVORITE OF THE YEAR!
-> 
-> 3* Providence +7.5, 1:00 pm
-> 
-> 3* Miss Valley St. +17.5
-> 5:00 pm
-> 
-> 3* UT-Rio Grande Valley +2, 5:30 pm
-> 
-> 🏀 KyleHunter
-> 
-> 3* New Haven Under 131.5 
-> 3* Ohio St Under 148.5 
-> 3* St Bonny Over 152.5
-> 
-> 🏀 Bob Konarski 
-> CBB  (52-30)
-> Clemson +13.5**
+> **🏀 Wayne Root Pinnacle- Kansas +7.5 🏀 Big Al CBB 4* lowa St. -7, 1:00 pm CONFERENCE FAVORITE OF THE YEAR! 3* Providence +7.5, 1:00 pm 3* Miss Valley St. +17.5 5:00 pm 3* UT-Rio Grande Valley +2, 5:30 pm 🏀 KyleHunter 3* New Haven Under 131.5 3* Ohio St Under 148.5 3* St Bonny Over 152.5 🏀 Bob Konarski CBB (52-30) Clemson +13.5**
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Pinnacle- Kansas | None | 1.0 | Spread | - |
-| 4* lowa St. , 1:00 pm Conference Favorite OF The Year! | None | 4.0 | Spread | - |
-| 3* Providence , 1:00 pm | 275 | 3.0 | Spread | - |
-| 3* Mississippi Valley St. | None | 3.0 | Spread | - |
-| 3* UT-Rio Grande Valley , 5:30 pm | None | 3.0 | Spread | - |
-| 3* New Haven Under 131.5 | None | 3.0 | Total | - |
-| 3* Ohio St Under 148.5 | None | 3.0 | Total | - |
-| 3* St Bonny Over 152.5 | None | 3.0 | Total | - |
+| Kansas +7.5 | -110 | 1.0 | Spread | - |
+| Iowa St. -7 | -115 | 1.0 | Spread | - |
+| Providence +7.5 | -110 | 1.0 | Spread | - |
+| Miss Valley St. +17.5 | -115 | 1.0 | Spread | - |
+| New Haven vs Ohio St Under 148.5 | -110 | 1.0 | Total | - |
+| St Bonny vs St Bonaventure Over 152.5 | -110 | 1.0 | Total | - |
+| Clemson +13.5 | -110 | 1.0 | Spread | - |
 
 ---
 
@@ -106,15 +81,26 @@
 > **BetSharper & MathewP07**
 
 **OCR:**
-> Matthewp07 CBB Plays Mix & Match: Bryce Hopkins over 15.5 points Amani Hansberry over 7.5 rebounds Paul McNeil over 12.5 points JT Toppin under 32.5 PRA Let's get it Personally playing Hopkins pairs on UNDERDOG, Hansberry+Toppin on Chalkboard using a boost, the remaining 2 pairs on Sleeper. That's where I'm getting the bestvalue available to me, as always make sure to line shop. Write ups to come once fully completed
-> Saturday's Picks First losing day in 6 days and one point away from another winning day. Big card today like usual. Drop your unit size to handle the volume if you don't have a bigger bankroll to play with. But you should if you have been tailing for a few weeks to months. Straight Bets Only, No Parlays All Picks 1 Unit NCAAB: lowa State -7 (-110) Kentucky/Florida O154.5 (-110) NC State-5.5(-110) lowa +2.5 (-110) S Carolina/Alabama O167.5(-110) Minnesota/Washington 0138.5 (-110) Montana State/Montana O144.5 (-110)
+> Matthewp07 CBB Plays Mix & Match: Bryce Hopkins over 15.5 points Amani Hansberry over 7.5 rebounds Paul McNeil over 12.5 points JT Toppin under 32.5 PRA Let's get it Personally playing Hopkins pairs on UNDERDOG, Hansberry+Toppin on Chalkboard using a boost, the remaining 2 pairs on Sleeper. That's where I'm getting the bestvalue available to me, as always make sure to line shop. Write ups to come once fully completed Saturday's Picks First losing day in 6 days and one point away from another winning day. Big card today like usual. Drop your unit size to handle the volume if you don't have a bigger bankroll to play with. But you should if you have been tailing for a few weeks to months. Straight Bets Only, No Parlays All Picks 1 Unit NCAAB: lowa State -7 (-110) Kentucky/Florida O154.5 (-110) NC State-5.5(-110) lowa +2.5 (-110) S Carolina/Alabama O167.5(-110) Minnesota/Washington 0138.5 (-110) Montana State/Montana O144.5 (-110)
 
 **Images:**
 - `D:\Programs\Sports Betting\TelegramScraper\v0.0.15\src\data\temp_images\-1001560546587_11210.jpg`
 - `D:\Programs\Sports Betting\TelegramScraper\v0.0.15\src\data\temp_images\-1001560546587_11209.jpg`
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| **BetSharper & MathewP07** Matthewp07 CBB Plays Mix & Match: Bryce Hopkins over 15.5 points Amani Hansberry over 7.: Rebounds Over 5.5 | -7 | 1.0 | Player Prop | - |
+| Bryce Hopkins over 15.5 points | None | 1.0 | Player Prop | - |
+| Amani Hansberry over 7.5 rebounds | None | 1.0 | Player Prop | - |
+| Paul McNeil over 12.5 points | None | 1.0 | Player Prop | - |
+| JT Toppin under 32.5 | None | 1.0 | Player Prop | - |
+| Kentucky vs Florida Over 154.5 | -110 | 1.0 | Total | - |
+| NC State -5.5 | -110 | 1.0 | Spread | - |
+| Iowa +2.5 | -110 | 1.0 | Spread | - |
+| S Carolina vs Alabama Over 167.5 | -110 | 1.0 | Total | - |
+| Minnesota vs Washington Under 138.5 | -110 | 1.0 | Total | - |
+| Montana State vs Montana Over 144.5 | -110 | 1.0 | Total | - |
 
 ---
 
@@ -135,7 +121,7 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Iowa State -6 | -115 | 4.0 | Spread | - |
+| Iowa State vs Kansas Over 142.5 | None | 4.0 | Total | - |
 
 ---
 
@@ -145,14 +131,12 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 18:32 ET
 **Text:**
-> **#NickyCashin**** 4u 💎**
-> 
-> Arizona Wildcats -9
+> **#NickyCashin**** 4u 💎** Arizona Wildcats -9
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Arizona Wildcats | None | 1.0 | Spread | - |
+| 4u **#NickyCashin**** ML | None | 4.0 | Moneyline | - |
 
 ---
 
@@ -162,16 +146,12 @@
 **Channel:** @allpicksarefree
 **Date:** 2026-02-13 19:10 ET
 **Text:**
-> Pardonmypick 
-> 
-> 3-14 last 17 MAX picks
-> 
-> MICHIGAN STATE VS WISCONSIN UNDER 148.5 -112 CBB MAX
+> 3-14 last 17 MAX picks MICHIGAN STATE VS WISCONSIN UNDER 148.5 -112 CBB MAX
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Michigan State VS Wisconsin Under 148.5 -112 Cbb Max | -112 | 1.0 | Total | - |
+| Michigan State vs Wisconsin Under 148.5 | -112 | 3.0 | Total | - |
 
 ---
 
@@ -181,74 +161,12 @@
 **Channel:** @allpicksarefree
 **Date:** 2026-02-14 00:09 ET
 **Text:**
-> 🔮Mojo
-> 
-> ATP Rotterdam
-> Humbert +3.5 (4u)
-> 
-> 🔮Tennis Winners Only
-> 
-> ATP
-> Humbert +3 (2u)
-> 
-> WTA
-> Muchova ML (1u)
-> 
-> 🔮Kims Picks
-> 
-> KBL
-> Changwon vs Wonju over 153.5 (3u Max)
-> Goyang Orions ML (1u)
-> 
-> NBL
-> SE Melbourne Phoenix -11.5 (1u)
-> 
-> 🔮Dormroom Degenerates
-> 
-> Olympic Hockey
-> Sweden 1st period -0.5
-> Sweden TT over 3.5
-> Sweden -2.5
-> 
-> 🔮Caleb Picks
-> 
-> ATP
-> FAA -2.5 (10u Max)
-> Taylor Fritz -2 (3u)
-> Nikoloz Basilashvili +3 (3u)
-> 
-> Olympic Hockey
-> Sweden -2.5 (5u)
-> 
-> 🔮Lear Locks
-> 
-> Tennis
-> Gracheva ML (1.5u)
-> Muchova ML (1.5u)
-> 
-> Soccer
-> Como ML (1.5u)
-> 
-> Olympic Hockey
-> Slovakia +2.5 (1.5u)
-> 
-> 🔮Dirty Bubble Bets
-> 
-> KBL
-> Daegu Kogas TT over 83.5 (0.75u)
-> 
-> 🔮Bankroll Bill
-> 
-> KBL
-> Busan KCC Egis -5.5 (1.5u)
-> Wonju DB Promy +6 (1u)
-> 
-> NBL
-> SE Melbourne Phoenix -11 (1.5u)
-> NZ Breakers vs Adelaide 36ers under 185 (1.5u)
+> 🔮Mojo ATP Rotterdam Humbert +3.5 (4u) 🔮Tennis Winners Only ATP Humbert +3 (2u) WTA Muchova ML (1u) 🔮Kims Picks KBL Changwon vs Wonju over 153.5 (3u Max) Goyang Orions ML (1u) NBL SE Melbourne Phoenix -11.5 (1u) 🔮Dormroom Degenerates Olympic Hockey Sweden 1st period -0.5 Sweden TT over 3.5 Sweden -2.5 🔮Caleb Picks ATP FAA -2.5 (10u Max) Taylor Fritz -2 (3u) Nikoloz Basilashvili +3 (3u) Olympic Hockey Sweden -2.5 (5u) 🔮Lear Locks Tennis Gracheva ML (1.5u) Muchova ML (1.5u) Soccer Como ML (1.5u) Olympic Hockey Slovakia +2.5 (1.5u) 🔮Dirty Bubble Bets KBL Daegu Kogas TT over 83.5 (0.75u) 🔮Bankroll Bill KBL Busan KCC Egis -5.5 (1.5u) Wonju DB Promy +6 (1u) NBL SE Melbourne Phoenix -11 (1.5u) NZ Breakers vs Adelaide 36ers under 185 (1.5u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (1.5u) Muchova ML | None | 1.5 | Moneyline | - |
 
 ---
 
@@ -258,17 +176,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 00:11 ET
 **Text:**
-> Kims Picks
-> 
-> KBL
-> Changwon/Wonju o153.5 (3u)
-> Goyang Orions ML (1u)
-> 
-> NBL
-> SE Melbourne Phoenix -11.5 (1u)
+> Kims Picks KBL Changwon/Wonju o153.5 (3u) Goyang Orions ML (1u) NBL SE Melbourne Phoenix -11.5 (1u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (1u) Goyang Orions ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -278,12 +191,7 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 00:11 ET
 **Text:**
-> Dormroom Degenerates
-> 
-> Olympic Hockey
-> Sweden 1P -0.5
-> Sweden TT o3.5
-> Sweden -2.5
+> Dormroom Degenerates Olympic Hockey Sweden 1P -0.5 Sweden TT o3.5 Sweden -2.5
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -296,18 +204,13 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 00:11 ET
 **Text:**
-> Caleb Picks
-> 
-> ATP
-> FAA -2.5 (10u)
-> Taylor Fritz -2 (3u)
-> Nikoloz Basilashvili +3 (3u)
-> 
-> Olympic Hockey
-> Sweden -2.5 (5u)
+> Caleb Picks ATP FAA -2.5 (10u) Taylor Fritz -2 (3u) Nikoloz Basilashvili +3 (3u) Olympic Hockey Sweden -2.5 (5u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (10u) Caleb Picks Atp Faa -2.5 | None | 10.0 | Spread | - |
+| (3u) Taylor Fritz -2 | None | 3.0 | Spread | - |
 
 ---
 
@@ -317,10 +220,7 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 00:12 ET
 **Text:**
-> Dirty Bubble Bets
-> 
-> KBL
-> Daegu Kogas TT o83.5 (0.75u)
+> Dirty Bubble Bets KBL Daegu Kogas TT o83.5 (0.75u)
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -333,15 +233,7 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 00:12 ET
 **Text:**
-> Bankroll Bill
-> 
-> KBL
-> Busan KCC Egis -5.5 (1.5u)
-> Wonju DB Promy +6 (1u)
-> 
-> NBL
-> SE Melbourne Phoenix -11 (1.5u)
-> NZ Breakers/Adelaide 36ers u185 (1.5u)
+> Bankroll Bill KBL Busan KCC Egis -5.5 (1.5u) Wonju DB Promy +6 (1u) NBL SE Melbourne Phoenix -11 (1.5u) NZ Breakers/Adelaide 36ers u185 (1.5u)
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -354,28 +246,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:33 ET
 **Text:**
-> #TMS ✅
-> TMS CBB Premium Selection
-> Wisconsin ML (2 units)
-> See you at the window!
-> Placed ⬇️
-> Game Date ⬇️
-> Description
-> Risk / Win
-> Ticket #203352076 Feb 13th 2:08 PM
-> Feb 13th 8:00 PM
-> • STRAIGHT BET
-> • [CBB] [882] WISCONSIN +110
-> SCHEDULED
-> Michigan State 0 - 0 Wisconsin
-> Feb 13th 5:00…
+> #TMS ✅ TMS CBB Premium Selection Wisconsin ML (2 units) See you at the window! Placed ⬇️ Game Date ⬇️ Description Risk / Win Ticket #203352076 Feb 13th 2:08 PM Feb 13th 8:00 PM • STRAIGHT BET • [CBB] [882] WISCONSIN +110 SCHEDULED Michigan State 0 - 0 Wisconsin Feb 13th 5:00…
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (2 u Wisconsin ML | None | 2.0 | Moneyline | - |
-| [Cbb] [882] Wisconsin ML | 110 | 1.0 | Moneyline | - |
-| Michigan State 0 -0 Wisconsin ML | -112 | 1.0 | Moneyline | - |
+| #Tms Tms Cbb Premium Selection Wisconsin ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -385,22 +261,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:33 ET
 **Text:**
-> 25Legs
-> ➖➖➖➖➖
-> CBB Duke -12.5 -115 1 unit Hard
-> CBB Chicago st. +7.5 -114 1 unit Fan
-> CBB Iowa St. -6 (buy point) -127 1.5 unit Prop
-> CBB Bucknell +6.5 -115 1 unit Hard
-> CBB Utep +7.5 -115 1 unit Draft
-> Saturday VIP card
+> 25Legs ➖➖➖➖➖ CBB Duke -12.5 -115 1 unit Hard CBB Chicago st. +7.5 -114 1 unit Fan CBB Iowa St. -6 (buy point) -127 1.5 unit Prop CBB Bucknell +6.5 -115 1 unit Hard CBB Utep +7.5 -115 1 unit Draft Saturday VIP card
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 u Cbb Bucknell | -115 | 1.0 | Spread | - |
-| 1 u Cbb Chicago st. | -114 | 1.0 | Spread | - |
-| 1.5 u Cbb Iowa St. | -127 | 1.5 | Spread | - |
-| 1 u Cbb Utep | -115 | 1.0 | Spread | - |
+| 1 u 25Legs Cbb Duke -12.5 ML | -115 | 1.0 | Moneyline | - |
 
 ---
 
@@ -410,18 +276,15 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:37 ET
 **Text:**
-> BrandonTheProfit
-> ➖➖➖➖➖
-> BrandonTheProfit
-> CBB Plays 🏀
-> Iowa +1.5 -105 (2U) Hard Rock
-> Duke -12.5 -115 (2U) Hard Rock
-> Iowa St -6.5 -120 (2U) BetRivers
-> Iowa St/St. John's MLP -153 (1U) MGM
-> NC State -5.5 -110 (1U) Fanatics
+> BrandonTheProfit ➖➖➖➖➖ BrandonTheProfit CBB Plays 🏀 Iowa +1.5 -105 (2U) Hard Rock Duke -12.5 -115 (2U) Hard Rock Iowa St -6.5 -120 (2U) BetRivers Iowa St/St. John's MLP -153 (1U) MGM NC State -5.5 -110 (1U) Fanatics
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (2U) BrandonTheProfit BrandonTheProfit Cbb Plays Iowa +1.5 | -105 | 2.0 | Spread | - |
+| (2U) Hard Rock Duke -12.5 | -115 | 2.0 | Spread | - |
+| (2U) Hard Rock Iowa St -6.5 | -120 | 2.0 | Spread | - |
+| (1U) BetRivers Iowa St vs St. John's MLP ML | -153 | 1.0 | Moneyline | - |
 
 ---
 
@@ -431,15 +294,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:37 ET
 **Text:**
-> HammeringHank
-> ➖➖➖➖➖
-> HammeringHank
-> CBB 🏀
-> UCLA +16.5 3U 🔨
-> Florida State +5.5 3U 🔨
+> HammeringHank ➖➖➖➖➖ HammeringHank CBB 🏀 UCLA +16.5 3U 🔨 Florida State +5.5 3U 🔨
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 3U HammeringHank HammeringHank Cbb Ucla +16.5 | None | 3.0 | Spread | - |
 
 ---
 
@@ -449,14 +309,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:39 ET
 **Text:**
-> 💫VIP Winners From Yesterday ⬆️  💰🎉**
-> STOP MISSING WINNERS Sign up here for instant access 👉 &lt;#1457854154990162064&gt;
-> @everyone
+> 💫VIP Winners From Yesterday ⬆️ 💰🎉** STOP MISSING WINNERS Sign up here for instant access 👉 &lt;#1457854154990162064&gt; @everyone
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Iowa ML | 105 | 1.0 | Moneyline | - |
+| None | None | 1.0 | None | - |
 
 ---
 
@@ -466,16 +324,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:47 ET
 **Text:**
-> A11Bets
-> ➖➖➖➖➖
-> A11Bets
-> 11AM CBB
-> Oklahoma State ML (-102) 0.75U
+> A11Bets ➖➖➖➖➖ A11Bets 11AM CBB Oklahoma State ML (-102) 0.75U
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Oklahoma State ML | -102 | 0.75 | Moneyline | - |
+| A11Bets A11Bets 11Am Cbb Oklahoma State ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -485,15 +339,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:49 ET
 **Text:**
-> BrandonTheProfit
-> ➖➖➖➖➖
-> BrandonTheProfit
-> • CBB/Tennis Lotto Parlay
-> Cilic ML/Shelton ML/St.Johns ML/ Iowa +1.5
-> +820 (0.25U) FD
+> BrandonTheProfit ➖➖➖➖➖ BrandonTheProfit • CBB/Tennis Lotto Parlay Cilic ML/Shelton ML/St.Johns ML/ Iowa +1.5 +820 (0.25U) FD
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (0.25U) vs Iowa +1.5 | 820 | 0.25 | Spread | - |
 
 ---
 
@@ -503,16 +354,11 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:50 ET
 **Text:**
-> OutofLineBets (1/2)
-> ➖➖➖➖➖
-> OutofLineBets
-> CBB
-> Georgia Tech +6 -105 2U
+> OutofLineBets ➖➖➖➖➖ OutofLineBets CBB Georgia Tech +6 -105 2U
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 2U Georgia Tech | -105 | 2.0 | Spread | - |
 | Georgia Tech +6 | -105 | 2.0 | Spread | - |
 
 ---
@@ -523,18 +369,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:50 ET
 **Text:**
-> CashCing (2/2)
-> ➖➖➖➖➖
-> CashCing
-> CBB!
-> • 1.5u, Wichita State ML -120
-> • 1.5u, Navy ML -110
-> • 1.5u, Oklahoma State +1.5 -110
-> • 1.5u, Hofstra +2.5 -110
-> • 1.5u, UTRVG ML -110
+> CashCing ➖➖➖➖➖ CashCing CBB! • 1.5u, Wichita State ML -120 • 1.5u, Navy ML -110 • 1.5u, Oklahoma State +1.5 -110 • 1.5u, Hofstra +2.5 -110 • 1.5u, UTRVG ML -110
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 1.5u CashCing CashCing Cbb! ML | None | 1.5 | Moneyline | - |
 
 ---
 
@@ -544,16 +384,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:52 ET
 **Text:**
-> SetPointBets (1/2)
-> ➖➖➖➖➖
-> LIVE PLAY
-> 08:50 am
-> Schoolkate ML .90 4U
+> SetPointBets ➖➖➖➖➖ LIVE PLAY 08:50 am Schoolkate ML .90 4U
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 4U Schoolkate ML .90 ML | None | 4.0 | Moneyline | - |
+| SetPointBets Live Play 08:50 am Schoolkate ML | None | 1.0 | Moneyline | - |
+| 4U .90 ML | None | 4.0 | Moneyline | - |
 
 ---
 
@@ -563,20 +400,14 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:52 ET
 **Text:**
-> SetPointBets (2/2)
-> ➖➖➖➖➖
-> MAX
-> 08:48 am
-> Prizmic ML / Boscardin +6.5 .67 10U
-> Prizmic -3.5 .67 5U
-> Boscardin +4.5 .80 3U
+> SetPointBets ➖➖➖➖➖ MAX 08:48 am Prizmic ML / Boscardin +6.5 .67 10U Prizmic -3.5 .67 5U Boscardin +4.5 .80 3U
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 10U Prizmic ML / Boscardin +6.5 .67 | None | 10.0 | Parlay | - |
-| 5U Prizmic .67 | None | 5.0 | Spread | - |
-| 3U Boscardin .80 | None | 3.0 | Spread | - |
+| SetPointBets Max 08:48 am Prizmic ML | None | 1.0 | Moneyline | - |
+| 10U vs Boscardin .67 +6.5 | None | 10.0 | Spread | - |
+| None | None | 1.0 | None | - |
 
 ---
 
@@ -586,24 +417,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 11:58 ET
 **Text:**
-> PorterPicks
-> ➖➖➖➖➖
-> PorterPicks 8:55 AM
-> REMAINING COLLEGE BASKETBALL SELECTIONS
-> for SATURDAY
-> NC STATE (-5.5) over MIAMI
-> (3-UNITS) 🏅💰💰
-> 1:00pm PST
-> BAYLOR (+6.5) over Louisville
-> (2-UNITS) 💰🏅
-> 1:00pm PST
-> IOWA (+105) over PURDUE
-> (3-UNITS) 🏅💰💰
-> 2:00pm PST
-> WILL post a couple …
+> PorterPicks ➖➖➖➖➖ PorterPicks 8:55 AM REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY NC STATE (-5.5) over MIAMI (3-UNITS) 🏅💰💰 1:00pm PST BAYLOR (+6.5) over Louisville (2-UNITS) 💰🏅 1:00pm PST IOWA (+105) over PURDUE (3-UNITS) 🏅💰💰 2:00pm PST WILL post a couple …
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Baylor ML | None | 1.0 | Moneyline | - |
+| Iowa +105 | 105 | 3.0 | Spread | - |
 
 ---
 
@@ -613,27 +433,10 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 12:00 ET
 **Text:**
-> HammeringHank
-> ➖➖➖➖➖
-> HammeringHank
-> FULL CARD 💎🔨
-> Providence +8 5U MAX BET💎🔨
-> Northwestern +13 4U 🔨
-> Memphis +13.5 4 🔨
-> UCLA +16.5 3U 🔨
-> Florida State +5.5 3U 🔨
-> Texas +2.5 2U 🔨
-> Kentucky +13.5 2U 🔨
+> HammeringHank ➖➖➖➖➖ HammeringHank FULL CARD 💎🔨 Providence +8 5U MAX BET💎🔨 Northwestern +13 4U 🔨 Memphis +13.5 4 🔨 UCLA +16.5 3U 🔨 Florida State +5.5 3U 🔨 Texas +2.5 2U 🔨 Kentucky +13.5 2U 🔨
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| (5u) Providence | None | 5.0 | Spread | - |
-| (4u) Northwestern | None | 4.0 | Spread | - |
-| (4u) Memphis | None | 4.0 | Spread | - |
-| (3u) Ucla | None | 3.0 | Spread | - |
-| (3u) Florida State | None | 3.0 | Spread | - |
-| (2u) Texas | None | 2.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -643,18 +446,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 12:02 ET
 **Text:**
-> AndersPicks
-> ➖➖➖➖➖
-> AndersPicks
-> CBB ADD
-> Oregon -6 -110 1U(Caesars)
-> 6 -105 at Circa
+> AndersPicks ➖➖➖➖➖ AndersPicks CBB ADD Oregon -6 -110 1U(Caesars) 6 -105 at Circa
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 1U Oregon | -110 | 1.0 | Spread | - |
-| 6 at Circa ML | -105 | 1.0 | Moneyline | - |
+| 1U AndersPicks AndersPicks Cbb Add Oregon -6 | -110 | 1.0 | Spread | - |
+| Oregon -6 | -110 | 1.0 | Spread | - |
 
 ---
 
@@ -664,19 +462,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 12:05 ET
 **Text:**
-> CashItBaby
-> ➖➖➖➖➖
-> ALL PLAYS 2/14/2026
-> NCAAB PLAYS
-> • (5U) MICHIGAN -16.5 -110
-> • (5U) VILLANOVA -2.5 -110
-> • (5U) PURDUE ML -125
-> HOCKEY PLAYS
-> • (5U) USA -3.5 -170
-> Denmark can score here but I really don't see them staying anywhere close to the USA, the USA just has far mor…
+> CashItBaby ➖➖➖➖➖ ALL PLAYS 2/14/2026 NCAAB PLAYS • (5U) MICHIGAN -16.5 -110 • (5U) VILLANOVA -2.5 -110 • (5U) PURDUE ML -125 HOCKEY PLAYS • (5U) USA -3.5 -170 Denmark can score here but I really don't see them staying anywhere close to the USA, the USA just has far mor…
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (5U) CashItBaby All Plays 2 vs 14 vs 2026 NCAAB Plays ML | None | 5.0 | Moneyline | - |
+| (5U) Purdue ML Hockey Plays ML | -125 | 5.0 | Moneyline | - |
 
 ---
 
@@ -686,32 +478,27 @@
 **Channel:** @leakedcaps
 **Date:** 2026-02-14 12:10 ET
 **Text:**
-> SmartMoney
-> Vanderbilt -6.5
-> North Carolina -11
-> Marquette +2.5
-> Florida -7.5
-> NC State -5.5
-> Arizona -9.5
-> UConn 1H -9.5
-> Utah State -13.5
-> 
-> TBQueen 
-> Clemson +13
-> 
-> CashC
-> Iowa State -6
-> NC State -5
-> Purdue ML
-> Clemson +13.5
-> Ohio State +4.5
-> 
-> Bullies 
-> Iowa State -4.5 
-> Florida -11.5
+> SmartMoney Vanderbilt -6.5 North Carolina -11 Marquette +2.5 Florida -7.5 NC State -5.5 Arizona -9.5 UConn 1H -9.5 Utah State -13.5 TBQueen Clemson +13 CashC Iowa State -6 NC State -5 Purdue ML Clemson +13.5 Ohio State +4.5 Bullies Iowa State -4.5 Florida -11.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Vanderbilt -6.5 | -65 | 1.0 | Spread | - |
+| North Carolina -11 | -110 | 1.0 | Spread | - |
+| Marquette +2.5 | -110 | 1.0 | Spread | - |
+| Florida -7.5 | -110 | 1.0 | Spread | - |
+| NC State -5.5 | -110 | 1.0 | Spread | - |
+| Arizona -9.5 | -110 | 1.0 | Spread | - |
+| UConn 1H -9.5 | -110 | 1.0 | Spread | - |
+| Utah State -13.5 | -110 | 1.0 | Spread | - |
+| Clemson +13 | 130 | 1.0 | Spread | - |
+| Iowa State -6 | -110 | 1.0 | Spread | - |
+| NC State -5 | -110 | 1.0 | Spread | - |
+| Purdue ML | -110 | 1.0 | Moneyline | - |
+| Clemson +13.5 | 135 | 1.0 | Spread | - |
+| Ohio State +4.5 | 105 | 1.0 | Spread | - |
+| Iowa State -4.5 | -110 | 1.0 | Spread | - |
+| Florida -11.5 | -110 | 1.0 | Spread | - |
 
 ---
 
@@ -721,25 +508,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 12:14 ET
 **Text:**
-> PorterPicks
-> ➖➖➖➖➖
-> 🕘 9:13
-> #️⃣ | ncaab
-> 🏀 6 5 🦆 5
-> NEW MESSAGES
-> 🔽 PorterPicks REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY 🔽 NC STATE (-5.5) over ...
-> PorterPicks 9:11 AM
-> • MONEYLINE PARLAY
-> IOWA STATE
-> NC STATE
-> ARIZONA
-> ARKANSAS
-> @ (+170)
-> (4-UNITS) 💵💵💵💵
-> Great spot…
+> PorterPicks ➖➖➖➖➖ 🕘 9:13 #️⃣ | ncaab 🏀 6 5 🦆 5 NEW MESSAGES 🔽 PorterPicks REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY 🔽 NC STATE (-5.5) over ... PorterPicks 9:11 AM • MONEYLINE PARLAY IOWA STATE NC STATE ARIZONA ARKANSAS @ (+170) (4-UNITS) 💵💵💵💵 Great spot…
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Iowa State / NC State / Arizona / Arkansas ML | -135 | 4.0 | Parlay | - |
 
 ---
 
@@ -749,49 +523,10 @@
 **Channel:** @allcappersfreee
 **Date:** 2026-02-14 12:18 ET
 **Text:**
-> 14/02
-> 
-> #Porterpicks
-> 
-> IOWA STATE (-6) over KANSAS
-> (4-UNITS)
-> 
-> #Betsharper 
-> 
-> NCAAB:
-> lowa State -7 (-110)
-> Kentucky/Florida o154.5 (-110)
-> NC State -5.5 (-110)
-> lowa +2.5 (-110)
-> S Carolina/Alabama o167.5 (-110)
-> Minnesota/Washington o138.5 (-110)
-> Montana State/Montana o144.5 (-110)
-> 
-> #NickyCashin
-> 
-> Michigan Wolverines - 15.5 (-110) 2U
-> lowa State Cyclones - 5.5 (-120) 3U 
-> 2pm CBB
-> Florida Gators -12.5 (-110) 2U
-> 2pm CBB
-> Oregon Ducks -6.5 (-110) 2U
-> 3pm CBB
-> NC State Wolfpack -5.5 (-105) 2U
-> 3pm
-> Wyoming Cowboys +5 (-112) 1.5U
+> 14/02 #Porterpicks IOWA STATE (-6) over KANSAS (4-UNITS) #Betsharper NCAAB: lowa State -7 (-110) Kentucky/Florida o154.5 (-110) NC State -5.5 (-110) lowa +2.5 (-110) S Carolina/Alabama o167.5 (-110) Minnesota/Washington o138.5 (-110) Montana State/Montana o144.5 (-110) #NickyCashin Michigan Wolverines - 15.5 (-110) 2U lowa State Cyclones - 5.5 (-120) 3U 2pm CBB Florida Gators -12.5 (-110) 2U 2pm CBB Oregon Ducks -6.5 (-110) 2U 3pm CBB NC State Wolfpack -5.5 (-105) 2U 3pm Wyoming Cowboys +5 (-112) 1.5U
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Kentucky vs Florida Over 154.5 | -110 | 1.0 | Total | - |
-| (1U) NC State | -115 | 2.0 | Spread | - |
-| lowa | None | 1.0 | Spread | - |
-| Minnesota vs Washington Over 138.5 | None | 1.0 | Total | - |
-| Montana State vs Montana Over 144.5 | -110 | 1.0 | Total | - |
-| 2U Michigan Wolverines | None | 2.0 | Spread | - |
-| 3U lowa State Cyclones | None | 3.0 | Spread | - |
-| 2U Oregon Ducks | None | 2.0 | Spread | - |
-| 1.5U Wyoming Cowboys | None | 1.5 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -801,38 +536,14 @@
 **Channel:** @allcappersfreee
 **Date:** 2026-02-14 12:19 ET
 **Text:**
-> 14/02
-> 
-> #Cblez
-> 
-> CBB
-> Idaho -6.5 (2u)
-> Clemson +13 (1u)
-> SMU -2.5 (1u)
-> Marquette +2.5 (1u)
-> TCU vs Oklahoma St over 156.5 (1u)
-> Kansas +7 (1u)
-> Navy -1 (1u)
-> 
-> #Betlabs
-> 
-> CBB
-> Iowa State -5.5 (1u)
-> 
-> #PropJoe
-> 
-> CBB
-> Texas Tech +9.5 (4u)
-> South Carolina +18 (2u)
-> Oklahoma -1 (2u)
-> Auburn +8.5 (1u)
-> Oklahoma State -1 (1u)
+> 14/02 #Cblez CBB Idaho -6.5 (2u) Clemson +13 (1u) SMU -2.5 (1u) Marquette +2.5 (1u) TCU vs Oklahoma St over 156.5 (1u) Kansas +7 (1u) Navy -1 (1u) #Betlabs CBB Iowa State -5.5 (1u) #PropJoe CBB Texas Tech +9.5 (4u) South Carolina +18 (2u) Oklahoma -1 (2u) Auburn +8.5 (1u) Oklahoma State -1 (1u)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Idaho -6.5 | -110 | 2.0 | Spread | - |
-| TCU vs Oklahoma St over 156.5 | -110 | 1.0 | Total | - |
+| (2u) 14 vs 02 #Cblez Cbb Idaho -6.5 ML | None | 2.0 | Moneyline | - |
+| (1u) #Betlabs Cbb Iowa State -5.5 | None | 1.0 | Spread | - |
+| (4u) #PropJoe Cbb Texas Tech +9.5 | None | 4.0 | Spread | - |
 
 ---
 
@@ -842,168 +553,37 @@
 **Channel:** @MrLeaked_
 **Date:** 2026-02-14 12:20 ET
 **Text:**
-> Porter Picks
-> 
-> NCAAB
-> Iowa State -6 (4u)
-> 
-> ➖
-> 
-> Cblez
-> 
-> CBB
-> Idaho -6.5 (2u)
-> Clemson +13 (1u)
-> SMU -2.5 (1u)
-> Marquette +2.5 (1u)
-> TCU vs Oklahoma St over 156.5 (1u)
-> Kansas +7 (1u)
-> Navy -1 (1u)
-> 
-> ➖
-> 
-> Nicky Cashin
-> 
-> CBB
-> Wyoming +5 (1.5u)
-> NC State -5.5 (2u)
-> Oregon -6.5 (2u)
-> Florida -12.5 (2u)
-> Iowa State -5.5 (3u)
-> Michigan -15.5 (2u)
-> 
-> ➖
-> 
-> Bet Labs
-> 
-> CBB
-> Iowa State -5.5 (1u)
-> 
-> ➖
-> 
-> Match Point Bets
-> 
-> Tennis
-> Francisco Cerundolo ML (4u)
-> Francisco Cerundolo -2.5 (3u)
-> Shapovalov +3 (6u)
-> Shapovalov ML (1u)
-> Felix Auger Aliassime ML (5u)
-> Schoolkate ML (4u)
-> Vallejo + Prizmic MLP (3u)
-> Mmoh ML (2u)
-> Faria ML (2u)
-> 
-> ➖
-> 
-> Tennis Winners Only
-> 
-> ATP
-> Etcheverry +3 (2u)
-> Shelton ML (1u)
-> 
-> ➖
-> 
-> Anders Picks
-> 
-> CBB
-> Houston -22.5 (1u)
-> Oklahoma 1H ML (1u)
-> Iowa State -5.5 (3u)
-> NC State -4.5 (1u)
-> Florida -11.5 (1u)
-> 
-> ➖
-> 
-> Pardon My Pick
-> 
-> CBB (2u each)
-> Clemson +13.5
-> Navy +1.5
-> Kansas vs Iowa State over 142.5
-> 
-> ➖
-> 
-> Micah Roberts
-> 
-> CBB
-> Navy +1.5 (1u)
-> Purdue ML (1u)
-> 
-> ➖
-> 
-> Thomas Casale
-> 
-> CBB
-> Tennessee -11.5 (1u)
-> 
-> ➖
-> 
-> Bob Konarski
-> 
-> CBB
-> Clemson +13.5 (1u)
-> 
-> ➖
-> 
-> Newmark
-> 
-> ATP Delray R1
-> Michelsen ML (3u)
-> 
-> ➖
-> 
-> Mr Big Bets
-> 
-> CBB
-> Villanova -3.5 (1u)
-> Kentucky +12.5 (1u)
-> Purdue -2.5 (1u) 💎
-> 
-> College Baseball
-> USF ML (0.5u)
-> Arizona ML (0.5u)
-> 
-> ➖
-> 
-> Picks 4 Dayzzz
-> 
-> CBB
-> Iowa State -7 (3u)
-> Florida -12.5 (3u)
-> Duke + Michigan + Nebraska + Tennessee + Arkansas MLP (3u)
-> NC State -5.5 (2u)
-> Texas Tech vs Arizona over 157 (2u)
-> 
-> ➖
-> 
-> Bet Sharper
-> 
-> NCAAB
-> Iowa State -7
-> Kentucky vs Florida over 154.5
-> NC State -5.5
-> Iowa +2.5
-> S Carolina vs Alabama over 167.5
-> Minnesota vs Washington over 138.5
-> Montana State vs Montana over 144.5
-> 
-> ➖
-> 
-> Prop Joe
-> 
-> CBB
-> Texas Tech +9.5 (4u)
-> South Carolina +18 (2u)
-> Oklahoma -1 (2u)
-> Auburn +8.5 (1u)
-> Oklahoma State -1 (1u)
-> 
-> Neee A Bookie?
-> DM @leviathanlocks
+> Porter Picks NCAAB Iowa State -6 (4u) ➖ Cblez CBB Idaho -6.5 (2u) Clemson +13 (1u) SMU -2.5 (1u) Marquette +2.5 (1u) TCU vs Oklahoma St over 156.5 (1u) Kansas +7 (1u) Navy -1 (1u) ➖ Nicky Cashin CBB Wyoming +5 (1.5u) NC State -5.5 (2u) Oregon -6.5 (2u) Florida -12.5 (2u) Iowa State -5.5 (3u) Michigan -15.5 (2u) ➖ Bet Labs CBB Iowa State -5.5 (1u) ➖ Match Point Bets Tennis Francisco Cerundolo ML (4u) Francisco Cerundolo -2.5 (3u) Shapovalov +3 (6u) Shapovalov ML (1u) Felix Auger Aliassime ML (5u) Schoolkate ML (4u) Vallejo + Prizmic MLP (3u) Mmoh ML (2u) Faria ML (2u) ➖ Tennis Winners Only ATP Etcheverry +3 (2u) Shelton ML (1u) ➖ Anders Picks CBB Houston -22.5 (1u) Oklahoma 1H ML (1u) Iowa State -5.5 (3u) NC State -4.5 (1u) Florida -11.5 (1u) ➖ Pardon My Pick CBB (2u each) Clemson +13.5 Navy +1.5 Kansas vs Iowa State over 142.5 ➖ Micah Roberts CBB Navy +1.5 (1u) Purdue ML (1u) ➖ Thomas Casale CBB Tennessee -11.5 (1u) ➖ Bob Konarski CBB Clemson +13.5 (1u) ➖ Newmark ATP Delray R1 Michelsen ML (3u) ➖ Mr Big Bets CBB Villanova -3.5 (1u) Kentucky +12.5 (1u) Purdue -2.5 (1u) 💎 College Baseball USF ML (0.5u) Arizona ML (0.5u) ➖ Picks 4 Dayzzz CBB Iowa State -7 (3u) Florida -12.5 (3u) Duke + Michigan + Nebraska + Tennessee + Arkansas MLP (3u) NC State -5.5 (2u) Texas Tech vs Arizona over 157 (2u) ➖ Bet Sharper NCAAB Iowa State -7 Kentucky vs Florida over 154.5 NC State -5.5 Iowa +2.5 S Carolina vs Alabama over 167.5 Minnesota vs Washington over 138.5 Montana State vs Montana over 144.5 ➖ Prop Joe CBB Texas Tech +9.5 (4u) South Carolina +18 (2u) Oklahoma -1 (2u) Auburn +8.5 (1u) Oklahoma State -1 (1u) Neee A Bookie? DM @leviathanlocks
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (4u) Porter Picks NCAAB Iowa State -6 | None | 4.0 | Spread | - |
+| (1.5u) Nicky Cashin Cbb Wyoming +5 | None | 1.5 | Spread | - |
+| (3u) Iowa State -5.5 | -105 | 3.0 | Spread | - |
+| (2u) Oregon -6.5 | None | 2.0 | Spread | - |
+| (2u) Florida -12.5 | -105 | 3.0 | Spread | - |
+| (2u) Michigan -15.5 | -110 | 5.0 | Spread | - |
+| (3u) Francisco Cerundolo -2.5 | None | 3.0 | Spread | - |
+| (6u) Shapovalov +3 | None | 6.0 | Spread | - |
+| (5u) Felix Auger Aliassime ML | None | 5.0 | Moneyline | - |
+| (4u) Schoolkate ML | None | 4.0 | Moneyline | - |
+| (2u) Mmoh ML | None | 2.0 | Moneyline | - |
+| (2u) Faria ML | None | 2.0 | Moneyline | - |
+| (2u) Tennis Winners Only Atp Etcheverry +3 | None | 2.0 | Spread | - |
+| (1u) Anders Picks Cbb Houston -22.5 | None | 1.0 | Spread | - |
+| (1u) 1H Oklahoma ML | None | 1.0 | Period | - |
+| (1U) Mgm NC State -5.5 | -110 | 2.0 | Spread | - |
+| (2u Pardon My Pick Cbb ML | None | 2.0 | Moneyline | - |
+| (3u) Newmark Atp Delray R1 Michelsen ML | None | 3.0 | Moneyline | - |
+| (1u) Mr Big Bets Cbb Villanova -3.5 | None | 1.0 | Spread | - |
+| (1u) Kentucky +12.5 | None | 2.0 | Spread | - |
+| (1u) Purdue -2.5 | None | 1.0 | Spread | - |
+| (0.5u) College Baseball Usf ML | None | 0.5 | Moneyline | - |
+| (0.5u) Arizona ML | None | 0.5 | Moneyline | - |
+| (3u) Picks 4 Dayzzz Cbb Iowa State -7 ML | None | 3.0 | Moneyline | - |
+| (2u) Texas Tech vs Arizona over 157 +157 | None | 2.0 | Total | - |
+| (2u) Oklahoma -1 | None | 2.0 | Spread | - |
 
 ---
 
@@ -1013,57 +593,10 @@
 **Channel:** @allcappersfreee
 **Date:** 2026-02-14 12:20 ET
 **Text:**
-> 14/02
-> 
-> #P4D_Picks4Dayzzz
-> 
-> lowa State -7 -110 3U
-> Florida -12.5 -115 3U
-> Duke+Michigan+Nebraska+Tennessee+Arkansas ML (-149) 3U
-> NCST -5.5 -110 2U
-> Texas Tech / Arizona o157 -110 2U 
-> 
-> #AnalyticsCapper
-> 
-> 2/14/26
-> Early Card: ATP & PGA
-> Humbert +3.5 (-120) v. De Minaur 4u
-> Round 3 Matchup
-> Finau ML (+140) v. English 3u
-> Burns ML (-125) v. Woo Lee 3u
-> 
-> #AndersPicks
-> 
-> CBB ADDS
-> Houston -22.5 - 105 1U
-> Oklahoma 1H ML -120 1U
-> Was gonna do Houston 1H instead but changed my mind
-> 
-> Saturday Card
-> lowa State -5.5 -110 3U (Full 3U to 6.5)
-> NC State - 4.5 - 115 1U(5.5 or better)
-> Florida -11.5 - 110 1U(13.5 for 5U )
-> 
-> #MrBigBets
-> 
-> Villanova -3.5 -110 1u
-> Kentucky +12.5 - 110 1u
-> Purdue -2.5 -110 1u
-> USF ML -120 .5u
-> Arizona ML +105 .5u
+> 14/02 #P4D_Picks4Dayzzz lowa State -7 -110 3U Florida -12.5 -115 3U Duke+Michigan+Nebraska+Tennessee+Arkansas ML (-149) 3U NCST -5.5 -110 2U Texas Tech / Arizona o157 -110 2U # 2/14/26 Early Card: ATP & PGA Humbert +3.5 (-120) v. De Minaur 4u Round 3 Matchup Finau ML (+140) v. English 3u Burns ML (-125) v. Woo Lee 3u #AndersPicks CBB ADDS Houston -22.5 - 105 1U Oklahoma 1H ML -120 1U Was gonna do Houston 1H instead but changed my mind Saturday Card lowa State -5.5 -110 3U (Full 3U to 6.5) NC State - 4.5 - 115 1U(5.5 or better) Florida -11.5 - 110 1U(13.5 for 5U ) # Villanova -3.5 -110 1u Kentucky +12.5 - 110 1u Purdue -2.5 -110 1u USF ML -120 .5u Arizona ML +105 .5u
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| 2U Ncst | -110 | 2.0 | Spread | - |
-| (2u) Humbert | None | 4.0 | Spread | - |
-| 3u Finau ML v. English ML | None | 3.0 | Moneyline | - |
-| 3u Burns ML v. Woo Lee ML | None | 3.0 | Moneyline | - |
-| 1U Houston | -105 | 1.0 | Spread | - |
-| 1U 1H Oklahoma ML -120 | -120 | 1.0 | Period | - |
-| (2u) Kentucky | -110 | 2.0 | Spread | - |
-| Usf ML .5u ML | -120 | 1.0 | Moneyline | - |
-| Arizona ML .5u ML | 105 | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1073,18 +606,14 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 12:22 ET
 **Text:**
-> McBets
-> ➖➖➖➖➖
-> NEW MESSAGES
-> McBets APP 9:15 AM
-> NCAAB Adds
-> Iowa State -7 (-120) 1.5u
-> • Parlay (-135) 1.5u
-> Iowa State ML
-> Oregon ML
+> McBets ➖➖➖➖➖ NEW MESSAGES McBets APP 9:15 AM NCAAB Adds Iowa State -7 (-120) 1.5u • Parlay (-135) 1.5u Iowa State ML Oregon ML
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 1.5u Oregon ML | None | 1.5 | Moneyline | - |
+| Iowa State -7 | -120 | 1.5 | Spread | - |
+| Iowa State ML / Oregon ML | -135 | 1.5 | Parlay | - |
 
 ---
 
@@ -1094,39 +623,12 @@
 **Channel:** @allcappersfreee
 **Date:** 2026-02-14 12:22 ET
 **Text:**
-> 14/02
-> 
-> #TennisWinnersOnly🎾
-> 
-> February 14th card add ons
-> ATP Tennis Plays
-> (2U) Etcheverry +3 vs Cerundolo (-124)
-> (1U) Shelton ML + Aliassime ML (+135)
-> 
-> #MatchPointBets 🎾
-> 
-> Francisco Cerundolo -179 4U
-> Francisco Cerubdolo -2.5 games 3U
-> Shapovalov +3 - 165 6U
-> Shapovalov +157 1U
-> Felix Auger-Aliassime -195 50
-> Schoolkate -125 4U
-> Vallejo + Prizmic Parlay ЗU
-> Mmoh +110 2U
-> Faria +100 2U
-> 
-> #TailToWin🎾
-> 
-> WTA Doha
-> (2/14/26)
-> 0.75U - Karolina Muchova ML +110 (DK)
+> 14/02 #TennisWinnersOnly🎾 February 14th card add ons ATP Tennis Plays (2U) Etcheverry +3 vs Cerundolo (-124) (1U) Shelton ML + Aliassime ML (+135) #MatchPointBets 🎾 Francisco Cerundolo -179 4U Francisco Cerubdolo -2.5 games 3U Shapovalov +3 - 165 6U Shapovalov +157 1U Felix Auger-Aliassime -195 50 Schoolkate -125 4U Vallejo + Prizmic Parlay ЗU Mmoh +110 2U Faria +100 2U #TailToWin🎾 WTA Doha (2/14/26) 0.75U - Karolina Muchova ML +110 (DK)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Etcheverry +3 | -165 | 2.0 | Spread | - |
-| Shelton ML | None | 1.0 | Moneyline | - |
-| Vallejo + Prizmic Parlay | None | 1.0 | Parlay | - |
+| 4U #MatchPointBets Francisco Cerundolo ML | -179 | 4.0 | Moneyline | - |
 
 ---
 
@@ -1136,35 +638,18 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 12:23 ET
 **Text:**
-> ProfiticSports
-> ➖➖➖➖➖
-> Oklahoma State ML🐳
-> Iowa State -4.5
-> Iowa +2.5
-> St Johns -4.5
-> Oklahoma ML
-> Kennesaw State ML
-> Texas ML
-> Gonzaga -2.5
-> Clemson +14.5
-> NC State -2.5
-> Navy +1.5
-> Florida -9.5
-> USF ML
-> Arizona ML
-> Baez ML
-> Denmark/USA O 6.5 Goals
+> ProfiticSports ➖➖➖➖➖ Oklahoma State ML🐳 Iowa State -4.5 Iowa +2.5 St Johns -4.5 Oklahoma ML Kennesaw State ML Texas ML Gonzaga -2.5 Clemson +14.5 NC State -2.5 Navy +1.5 Florida -9.5 USF ML Arizona ML Baez ML Denmark/USA O 6.5 Goals
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Iowa State | 120 | 1.0 | Spread | - |
-| Iowa | None | 1.0 | Spread | - |
+| ProfiticSports Oklahoma State ML | None | 1.0 | Moneyline | - |
+| Iowa State -4.5 Iowa +2.5 St Johns -4.5 Oklahoma ML | None | 1.0 | Moneyline | - |
 | Kennesaw State ML | None | 1.0 | Moneyline | - |
-| Gonzaga | None | 1.0 | Spread | - |
-| Usf ML | -120 | 1.0 | Moneyline | - |
+| Texas ML | None | 1.0 | Moneyline | - |
+| Arizona ML | None | 1.0 | Moneyline | - |
 | Baez ML | None | 1.0 | Moneyline | - |
-| Denmark vs Usa Over 6.5 Goals | None | 1.0 | Parlay | - |
+| Denmark vs Usa Over 6.5 Goals | None | 1.0 | Total | - |
 
 ---
 
@@ -1174,33 +659,40 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 12:23 ET
 **Text:**
-> provenwinner
-> ➖➖➖➖➖
-> James Madison +1.5 | 2 UNIT RISK
-> CBB
-> 2/14 1:00 pm
-> 2u
-> • Straight
-> +1.5
-> 110
-> Texas A&amp;M +6.5 | 2 UNIT RISK
-> CBB
-> 2/14 10:00 am
-> 2u
-> • Straight
-> +6.5
-> 110
-> SMU ML -145 | 6 UNIT RISK
-> PLATINUM
-> CBB
-> 2/14 11:00 am
-> 6u
-> • Straight
-> 145
-> ML
+> provenwinner ➖➖➖➖➖ James Madison +1.5 | 2 UNIT RISK CBB 2/14 1:00 pm 2u • Straight +1.5 110 Texas A&amp;M +6.5 | 2 UNIT RISK CBB 2/14 10:00 am 2u • Straight +6.5 110 SMU ML -145 | 6 UNIT RISK PLATINUM CBB 2/14 11:00 am 6u • Straight 145 ML
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 6 U provenwinner James Madison \| +1.5 | -145 | 6.0 | Spread | - |
+
+---
+
+## Message ID: 2022723805852860664
+
+### 📝 Source Message
+**Channel:** @MrLeaked_
+**Date:** 2026-02-14 12:25 ET
+**Text:**
+> Hammering Hank FULL CARD Providence +8 5U MAX BET Northwestern +13 4U Memphis +13.5 4U UCLA +16.5 3U Florida State +5.5 3U Texas +2.5 2U Kentucky +13.5 2U ➖ Five *Golden Whale Parlay (1) lowa State Cyclones money line Wake Forest money line (College Basketball) *Golden Whale (2) lowa Hawkeyes +2.5 (College Basketball) *Golden Whale Parlay (3) lowa State Cyclones money line Virginia Cavs money line (College Basketball) *Whale Parlay (4) Wake Forest money line Duke money line (College Basketball) *Bonus Parlay (1) Duke alternate -9.5 Providence alternate +11.5 (College Basketball) *Bonus Parlay (2) Duke alternate -9.5 Northwestern +17.5 ➖ The Sharp Sheets 🏀 Iowa +2.5 ⭐️⭐️⭐️⭐️⭐️ Need A Bookie? DM @leviathanlocks
+
+### 🎯 Parsed Picks
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 5U HammeringHank HammeringHank Full Card Providence +8 | None | 5.0 | Spread | - |
+| Iowa +2.5 | -110 | 1.0 | Spread | - |
+| Northwestern +17.5 | None | 4.0 | Spread | - |
+| Memphis +13.5 | None | 4.0 | Spread | - |
+| UCLA +16.5 | -108 | 3.0 | Spread | - |
+| Florida State +5.5 | None | 3.0 | Spread | - |
+| Texas +2.5 | None | 2.0 | Spread | - |
+| Kentucky +13.5 | None | 2.0 | Spread | - |
+| Providence +8 | -105 | 5.0 | Spread | - |
+| Duke alternate +11.5 | -105 | 1.0 | Spread | - |
+| Wake Forest money line | None | 1.0 | Spread | - |
+| Iowa State Cyclones money line | 120 | 1.0 | Spread | - |
+| Virginia Cavs money line | None | 1.0 | Spread | - |
+| Duke money line | 675 | 1.0 | Spread | - |
 
 ---
 
@@ -1210,16 +702,7 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 13:25 ET
 **Text:**
-> 💰 VIP Results Last Night🔥
-> 
-> ❗Clients Been Cashing in BIG 
-> Inside Our NEW Discord💰
-> 
-> 👉Price: $25/Week | $50/Month 🛍
-> 
-> ⬇️Join the Discord to Unlock 24hrs 
-> of FREE VIP Access⬇️
-> https://t.co/zhgWE3e0El https://t.co/AcBp8BZeHk
+> 💰 VIP Results Last Night🔥 ❗Clients Been Cashing in BIG Inside Our NEW Discord💰 👉Price: $25/Week | $50/Month 🛍 ⬇️Join the Discord to Unlock 24hrs of FREE VIP Access⬇️ https://t.co/zhgWE3e0El https://t.co/AcBp8BZeHk
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -1232,16 +715,7 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:45 ET
 **Text:**
-> Cblez
-> 
-> CBB
-> Idaho -6.5 (2u)
-> Clemson +13 (1u)
-> SMU -2.5 (1u)
-> Marquette +2.5 (1u)
-> TCU/Oklahoma St o156.5 (1u)
-> Kansas +7 (1u)
-> Navy -1 (1u)
+> Cblez CBB Idaho -6.5 (2u) Clemson +13 (1u) SMU -2.5 (1u) Marquette +2.5 (1u) TCU/Oklahoma St o156.5 (1u) Kansas +7 (1u) Navy -1 (1u)
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -1254,14 +728,10 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:45 ET
 **Text:**
-> Football Jesus LV 
-> 
-> All-Star Three Point Contest Winner 2026 Kon Knueppel +350
+> Football Jesus LV All-Star Three Point Contest Winner 2026 Kon Knueppel +350
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| All-Star Three Point Contest Winner 2026 Kon Knueppel ML | 350 | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1271,14 +741,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:46 ET
 **Text:**
-> Thomas Casale
-> 
-> 1u - Tenn -11.5
+> Thomas Casale 1u - Tenn -11.5
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 1u - Tenn | None | 1.0 | Spread | - |
+| 1u Thomas Casale ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -1288,11 +756,7 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:46 ET
 **Text:**
-> Ross Benjamin
-> 
-> CBB 
-> 2% Iowa State -6.5 
-> 2%  Villanova -3.5
+> Ross Benjamin CBB 2% Iowa State -6.5 2% Villanova -3.5
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -1305,17 +769,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:46 ET
 **Text:**
-> Ben Burns
-> 
-> CBB 
-> 2% NC Wilmington -145 
-> 5% Connecticut -15.5
+> Ben Burns CBB 2% NC Wilmington -145 5% Connecticut -15.5
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 2% NC Wilmington ML | -145 | 2.0 | Moneyline | - |
-| 5% Connecticut | None | 5.0 | Spread | - |
+| 2% Ben Burns Cbb ML | None | 2.0 | Moneyline | - |
 
 ---
 
@@ -1325,12 +784,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:47 ET
 **Text:**
-> Marco D’Angelo
-> 
-> 3% Colorado State -4
+> Marco D’Angelo 3% Colorado State -4
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 3% Marco D'Angelo ML | None | 3.0 | Moneyline | - |
 
 ---
 
@@ -1340,15 +799,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:47 ET
 **Text:**
-> Jeff Michaels
-> 
-> CBB
-> 5% Ohio State/Virginia u147' (-110)
+> Jeff Michaels CBB 5% Ohio State/Virginia u147' (-110)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 5% Ohio State vs Virginia Under 147' | None | 5.0 | Total | - |
+| 5% Jeff Michaels Cbb ML | None | 5.0 | Moneyline | - |
 
 ---
 
@@ -1358,14 +814,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:48 ET
 **Text:**
-> Drew Martin 
-> 
-> 5% Louisville/Baylor o162.5
+> Drew Martin 5% Louisville/Baylor o162.5
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 5% Louisville vs Baylor Over 162.5 | None | 5.0 | Total | - |
+| 5% Drew Martin ML | None | 5.0 | Moneyline | - |
 
 ---
 
@@ -1375,15 +829,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:48 ET
 **Text:**
-> Bill Krackman 
-> 
-> 2% Marquette +3 
-> 2% Iowa State -7
-> 3% Syracuse +3.5
-> 3% Tartleton +3
+> Bill Krackman 2% Marquette +3 2% Iowa State -7 3% Syracuse +3.5 3% Tartleton +3
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 2% Bill Krackman ML | None | 2.0 | Moneyline | - |
 
 ---
 
@@ -1393,15 +844,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:49 ET
 **Text:**
-> Carmine Bianco
-> 
-> Olympic Hockey
-> USA TT o5.5 goals
+> Carmine Bianco Olympic Hockey USA TT o5.5 goals
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Usa TT Over 5.5 goals | None | 1.0 | Total | - |
+| Carmine Bianco Olympic Hockey Usa Team Total Over 5.5 goals | None | 1.0 | Total | - |
 
 ---
 
@@ -1411,13 +859,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:49 ET
 **Text:**
-> Micah Roberts
-> 
-> Navy +1.5 -120
-> Purdue ML -139
+> Micah Roberts Navy +1.5 -120 Purdue ML -139
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Micah Roberts Navy +1.5 -120 Purdue ML | -139 | 1.0 | Moneyline | - |
 
 ---
 
@@ -1427,9 +874,7 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:49 ET
 **Text:**
-> Bob Konarski
-> 
-> Clemson +13.5 -110
+> Bob Konarski Clemson +13.5 -110
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -1442,14 +887,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:50 ET
 **Text:**
-> Tokyo Brandon
-> 
-> 5% Air Force/Fresno State u143.5
+> Tokyo Brandon 5% Air Force/Fresno State u143.5
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 5% Air Force vs Fresno State Under 143.5 | None | 5.0 | Total | - |
+| 5% Tokyo Brandon ML | None | 5.0 | Moneyline | - |
 
 ---
 
@@ -1459,20 +902,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:51 ET
 **Text:**
-> Gianni the Greek
-> 
-> 4% Arizona -9.0 (-115)  
-> 3% Iowa State -7.0 (-120)
-> 3% Samford/East Tenn State u146.0
-> 3% St. Francis PA +3.0 (-120)  
-> 3% Wagner/Stonehill u130.5
+> Gianni the Greek 4% Arizona -9.0 (-115) 3% Iowa State -7.0 (-120) 3% Samford/East Tenn State u146.0 3% St. Francis PA +3.0 (-120) 3% Wagner/Stonehill u130.5
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 3% Samford vs East Tenn State Under 146.0 | None | 3.0 | Total | - |
-| 3% St. Francis PA | None | 3.0 | Spread | - |
-| 3% Wagner vs Stonehill Under 130.5 | None | 3.0 | Total | - |
+| 4% Gianni the Greek ML | None | 4.0 | Moneyline | - |
 
 ---
 
@@ -1482,21 +917,10 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:52 ET
 **Text:**
-> Bruce Marshall
-> 
-> CBB
-> Providence Friars +7' (-112)
-> Fordham Rams +5' (-102)
-> Northwestern Wildcats +12' (-102)
-> Texas A&amp;M/Vanderbilt o165' (-110)
+> Bruce Marshall CBB Providence Friars +7' (-112) Fordham Rams +5' (-102) Northwestern Wildcats +12' (-102) Texas A&amp;M/Vanderbilt o165' (-110)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Providence Friars ' | 275 | 1.0 | Spread | - |
-| Fordham Rams ' | None | 1.0 | Spread | - |
-| Northwestern Wildcats ' | None | 1.0 | Spread | - |
-| Texas A vs amp;M vs Vanderbilt Over 165' | -108 | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1506,13 +930,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:52 ET
 **Text:**
-> Ricky Tran
-> 
-> Xavier ML
-> Eastern Washington ML
+> Ricky Tran Xavier ML Eastern Washington ML
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Ricky Tran Xavier ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -1522,14 +945,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:52 ET
 **Text:**
-> Spartan  
-> 
-> 3* Purdue/Iowa o142
+> Spartan 3* Purdue/Iowa o142
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 3* Purdue vs Iowa Over 142 | -112 | 3.0 | Total | - |
+| Spartan 3* Purdue vs Iowa Over 142 +142 | None | 1.0 | Total | - |
 
 ---
 
@@ -1539,22 +960,7 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:55 ET
 **Text:**
-> Big Al
-> 
-> 4* lowa St. -7
-> 3* Providence +7.5
-> 3* Mississippi Valley St. +17.5
-> 3* UT-Rio Grande Valley +2
-> 4* N. Colorado -3.5
-> 3* UTEP +6.5
-> 3* Louisiana-Monroe +13
-> 3* Baylor +6.5
-> 3* Air Force +16.5
-> 3* LSU +14.5
-> 3* Ohio St. +4.5
-> 1* James Madison +1.5
-> 1* Coppin St. +11
-> 1* Santa Clara +5.5
+> Big Al 4* lowa St. -7 3* Providence +7.5 3* Mississippi Valley St. +17.5 3* UT-Rio Grande Valley +2 4* N. Colorado -3.5 3* UTEP +6.5 3* Louisiana-Monroe +13 3* Baylor +6.5 3* Air Force +16.5 3* LSU +14.5 3* Ohio St. +4.5 1* James Madison +1.5 1* Coppin St. +11 1* Santa Clara +5.5
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -1567,14 +973,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:55 ET
 **Text:**
-> Strike Point Sports 
-> 
-> 4u - Oklahoma State -1.5
-> 4u - NC State -5.5
-> 3u - Arizona -9.5
+> Strike Point Sports 4u - Oklahoma State -1.5 4u - NC State -5.5 3u - Arizona -9.5
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 4u Strike Point Sports ML | None | 4.0 | Moneyline | - |
 
 ---
 
@@ -1584,12 +988,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:55 ET
 **Text:**
-> King Of The Court (Swami Site)
-> 
-> 8u - Purdue -1
+> King Of The Court (Swami Site) 8u - Purdue -1
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 8u King Of The Court ML | None | 8.0 | Moneyline | - |
 
 ---
 
@@ -1599,14 +1003,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:56 ET
 **Text:**
-> Larry Hartstein
-> 
-> CBB
-> 1u - Texas A&amp;M +7.5 -110
-> 1u - Oklahoma -1.5 -105
+> Larry Hartstein CBB 1u - Texas A&amp;M +7.5 -110 1u - Oklahoma -1.5 -105
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 1u Larry Hartstein Cbb ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -1616,18 +1018,17 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:57 ET
 **Text:**
-> Hammering Hank
-> 
-> Providence +8 (5u)
-> Northwestern +13 (4u)
-> Memphis +13.5 (4u)
-> UCLA +16.5 (3u)
-> Florida State +5.5 (3u)
-> Texas +2.5 (2u)
-> Kentucky +13.5 (2u)
+> Hammering Hank Providence +8 (5u) Northwestern +13 (4u) Memphis +13.5 (4u) UCLA +16.5 (3u) Florida State +5.5 (3u) Texas +2.5 (2u) Kentucky +13.5 (2u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (5u) Hammering Hank Providence +8 | None | 5.0 | Spread | - |
+| (4u) Northwestern +13 | None | 4.0 | Spread | - |
+| (4u) Memphis +13.5 | None | 4.0 | Spread | - |
+| (3u) Ucla +16.5 | None | 3.0 | Spread | - |
+| (3u) Florida State +5.5 | None | 3.0 | Spread | - |
+| (2u) Texas +2.5 | None | 2.0 | Spread | - |
 
 ---
 
@@ -1637,19 +1038,13 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:58 ET
 **Text:**
-> Your Daily Capper
-> 
-> 1u - NC State - 4 (Alternate Line)
-> 1u - Iowa +1.5
-> 2u - UT Rio Grande Valley ML
-> 1u - Wichita State ML
-> 1u - Santa Clara +6 (Alternate Line)
-> 
-> Parlay
-> 1u - Iowa State ML + Florida -5 (Alternate Line)
+> Your Daily Capper 1u - NC State - 4 () 1u - Iowa +1.5 2u - UT Rio Grande Valley ML 1u - Wichita State ML 1u - Santa Clara +6 () Parlay 1u - Iowa State ML + Florida -5 ()
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 1u Your Daily Capper ML | None | 1.0 | Moneyline | - |
+| Florida -5 | None | 1.0 | Spread | - |
 
 ---
 
@@ -1659,20 +1054,16 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 13:59 ET
 **Text:**
-> Smart Money Sports 
->  
-> Vanderbilt -6.5-105 (2u)
-> UNC -11 -110 (2u)
-> Marquette +2.5 -110 (2u)
-> Florida -7.5-105 (2u)
-> NC State  -5.5-105 (2u)
-> Arizona -9.5 -110 (2u)
-> UConn -9.5 1st Half-105 (3u)
-> Utah St -13.5 -110 (2u)
-> Washington  -6-110 (3u)
+> Smart Money Sports Vanderbilt -6.5-105 (2u) UNC -11 -110 (2u) Marquette +2.5 -110 (2u) Florida -7.5-105 (2u) NC State -5.5-105 (2u) Arizona -9.5 -110 (2u) UConn -9.5 1st Half-105 (3u) Utah St -13.5 -110 (2u) Washington -6-110 (3u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (2u) Unc -11 | -110 | 2.0 | Spread | - |
+| (2u) Arizona -9.5 | -110 | 2.0 | Spread | - |
+| (3u) 1H UConn -9.5 -105 | -105 | 3.0 | Period | - |
+| (2u) Utah St -13.5 | -110 | 2.0 | Spread | - |
+| (3u) Washington -6 | -110 | 3.0 | Spread | - |
 
 ---
 
@@ -1682,18 +1073,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 14:01 ET
 **Text:**
-> August Young
-> 
-> 4u - Georgia St./Old Dominion o147.5
-> 4u - Iowa +1.5
-> 4u - Loyola Marymount/Pepperdine u146.5
+> August Young 4u - Georgia St./Old Dominion o147.5 4u - Iowa +1.5 4u - Loyola Marymount/Pepperdine u146.5
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 4u - Georgia St. vs Old Dominion Over 147.5 | None | 4.0 | Total | - |
-| 4u - Iowa | None | 4.0 | Spread | - |
-| 4u - Loyola Marymount vs Pepperdine Under 146.5 | None | 4.0 | Total | - |
+| 4u August Young ML | None | 4.0 | Moneyline | - |
 
 ---
 
@@ -1703,17 +1088,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 14:01 ET
 **Text:**
-> #SBK ✅
-> Friday
-> 100K WAGER
-> [CBB] Duke / Clemson U134.5 (-120)
-> 
-> sbk recap
+> #SBK ✅ Friday 100K WAGER [CBB] Duke / Clemson U134.5 (-120) sbk recap
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| [Cbb] Duke vs Clemson Under 134.5 | -112 | 1.0 | Total | - |
+| Duke vs Clemson Over 134.5 | -120 | 1.0 | Total | - |
 
 ---
 
@@ -1723,18 +1103,10 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 14:02 ET
 **Text:**
-> Kyle Hunter
-> 
-> 3* Long Island/New Haven u131.5 (-105)
-> 3* Virginia/Ohio St u148.5 (-105)
-> 3* Duquesne/St Bonaventure o152.5 (-110)
+> Kyle Hunter 3* Long Island/New Haven u131.5 (-105) 3* Virginia/Ohio St u148.5 (-105) 3* Duquesne/St Bonaventure o152.5 (-110)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| 3* Long Island vs New Haven Under 131.5 | None | 3.0 | Total | - |
-| 3* Virginia vs Ohio St Under 148.5 | None | 3.0 | Total | - |
-| 3* Duquesne vs St Bonaventure Over 152.5 | None | 3.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1744,14 +1116,12 @@
 **Channel:** @ItsCappersPicks
 **Date:** 2026-02-14 14:06 ET
 **Text:**
-> JUST IN:
-> X TOUT DOES NOT CARE ABOUT HIS FOLLOWERS $, GIVES OUT PLAYS ON BOTH SIDES AT -150 ODDS AND LATER DELETES THE POST FOR THE SIDE THAT LOSES ✅
-> 
-> IN OTHER NEWS:
-> SHAPOVALOV WON A MATCH EVEN WHILE "HE WAS NOT ABLE TO SEE", AS CLAIMED BY THE SAME X TOUT (YEAH HE'S THAT GOOD) 👀 https://t.co/9foHgP75QV
+> JUST IN: X TOUT DOES NOT CARE ABOUT HIS FOLLOWERS $, GIVES OUT PLAYS ON BOTH SIDES AT -150 ODDS AND LATER DELETES THE POST FOR THE SIDE THAT LOSES ✅ IN OTHER NEWS: SHAPOVALOV WON A MATCH EVEN WHILE "HE WAS NOT ABLE TO SEE", AS CLAIMED BY THE SAME X TOUT (YEAH HE'S THAT GOOD) 👀 https://t.co/9foHgP75QV
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| X TOUT DOES NOT CARE ABOUT HIS FOLLOWERS $, GIVES OUT PLAYS ON BOTH SIDES AT -150 ODDS AND LATER DELETES THE POST FOR THE SIDE THAT LOSES 00 IN OTHER NEWS: SHAPOVALOV WON A MATCH EVEN WHILE 2HE WAS NOT ABLE TO SEE2, AS CLAIMED BY THE SAME X TOUT (YEAH HE2S THAT GOOD) 21 | None | 1.0 | UNKNOWN | - |
 
 ---
 
@@ -1764,7 +1134,9 @@
 > @MxROB1983 @Coltonschaef Probably
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| @Coltonschaef Probably | None | 1.0 | UNKNOWN | - |
 
 ---
 
@@ -1774,11 +1146,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 15:03 ET
 **Text:**
-> #JACAV ✅
-> Iowa State -6 (10*)
+> #JACAV ✅ Iowa State -6 (10*)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| #Jacav Iowa State -6 | None | 1.0 | Spread | - |
 
 ---
 
@@ -1788,16 +1161,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 16:29 ET
 **Text:**
-> PardonMyPick
-> ➖➖➖➖➖
-> 10U CBB MAX WHALEPLAY
-> • PURDUE ML -130
-> 7 👁️ 16:19
+> ➖➖➖➖➖ 10U CBB MAX WHALEPLAY • PURDUE ML -130 7 👁️ 16:19
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Purdue ML | -130 | 10.0 | Moneyline | - |
+| 10U Cbb Max Whaleplay Purdue ML 7 16:19 ML | -130 | 10.0 | Moneyline | - |
 
 ---
 
@@ -1807,12 +1176,7 @@
 **Channel:** @allpicksarefree
 **Date:** 2026-02-14 16:30 ET
 **Text:**
-> Pardonmypick 
-> 
-> 3-15 RUN
-> 
-> 10U CBB MAX WHALEPLAY
-> PURDUE ML -130
+> 3-15 RUN 10U CBB MAX WHALEPLAY PURDUE ML -130
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -1825,11 +1189,7 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 16:32 ET
 **Text:**
-> PardonMyPick
-> ➖➖➖➖➖
-> 3U CBB POD
-> • ARIZONA -9 -115
-> 6 👁 16:26
+> ➖➖➖➖➖ 3U CBB POD • ARIZONA -9 -115 6 👁 16:26
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -1842,18 +1202,15 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 16:34 ET
 **Text:**
-> AnalyticsCapper
-> ➖➖➖➖➖
-> AnalyticsCapper
-> 2/14/26
-> Main Card: NCAAB
-> Grand Canyon -11.5 (-110) v. San Jose St 5u
-> UT Rio Grande -1.5 (-110) v. SF Austin 5u POTD
-> Missouri -1.5 (-110) v. Texas 5u
-> Pacific +7.5 (-110) v. St Mary's 5u
+> ➖➖➖➖➖ 2/14/26 Main Card: NCAAB Grand Canyon -11.5 (-110) v. San Jose St 5u UT Rio Grande -1.5 (-110) v. SF Austin 5u POTD Missouri -1.5 (-110) v. Texas 5u Pacific +7.5 (-110) v. St Mary's 5u
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Grand Canyon -11.5 | -110 | 5.0 | Spread | - |
+| UT Rio Grande ML | -110 | 5.0 | Moneyline | - |
+| Missouri -1.5 | -110 | 5.0 | Spread | - |
+| Pacific ML | -110 | 5.0 | Moneyline | - |
 
 ---
 
@@ -1863,19 +1220,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 16:36 ET
 **Text:**
-> TheSharpSquad
-> ➖➖➖➖➖
-> TheSharpSquad
-> SATURDAY NCAAB
-> Another easy $2,000 Soccer winner this morning! 4 Hammer winners in a row! Let's get #5 now!
-> • PARLAY -104 (4u) 🏏
-> Purdue +6.5 / Arizona ML / Arkansas ML
-> Fully expecting Purdue/Iowa to be close either way and Arizona + Arka…
+> TheSharpSquad ➖➖➖➖➖ TheSharpSquad SATURDAY NCAAB Another easy $2,000 Soccer winner this morning! 4 Hammer winners in a row! Let's get #5 now! • PARLAY -104 (4u) 🏏 Purdue +6.5 / Arizona ML / Arkansas ML Fully expecting Purdue/Iowa to be close either way and Arizona + Arka…
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Purdue +6.5 / (NCAAB) Arizona ML / Arkansas ML | -120 | 1.0 | Parlay | - |
+| 4.0u Purdue +6.5 | None | 4.0 | Spread | - |
+| vs Arkansas ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -1885,12 +1236,12 @@
 **Channel:** @MrLeaked_
 **Date:** 2026-02-14 16:50 ET
 **Text:**
-> If you’re looking for Olympic Hockey lineshopping @juice_reel added it 
-> 
-> Only tool I’ve seen it on https://t.co/6kbz3oj665
+> If you’re looking for Olympic Hockey lineshopping @juice_reel added it Only tool I’ve seen it on https://t.co/6kbz3oj665
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Olympic Hockey lineshopping | None | 1.0 | Player Prop | - |
 
 ---
 
@@ -1900,21 +1251,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 17:40 ET
 **Text:**
-> PorterPicks (1/2)
-> ➖➖➖➖➖
-> 🧡🏀 | ncaab
-> PorterPicks REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY 👇 NC STATE (-5.5) over ...
-> PorterPicks 2:17 PM
-> ADDED COLLEGE BASKETBALL SELECTIONS for SATURDAY NIGHT HOOPS
-> TEXAS TECH/ARIZONA
-> OVER 155.5 (-105)
-> (3-UNITS) 💰💰💰
-> 3:30pm P…
+> PorterPicks ➖➖➖➖➖ 🧡🏀 | ncaab PorterPicks REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY 👇 NC STATE (-5.5) over ... PorterPicks 2:17 PM ADDED COLLEGE BASKETBALL SELECTIONS for SATURDAY NIGHT HOOPS TEXAS TECH/ARIZONA OVER 155.5 (-105) (3-UNITS) 💰💰💰 3:30pm P…
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 2U Texas Tech vs Arizona Over 157 -110 | -115 | 2.0 | Total | - |
+| NC State -5.5 | -105 | 3.0 | Spread | - |
 
 ---
 
@@ -1924,21 +1266,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 17:40 ET
 **Text:**
-> PorterPicks (2/2)
-> ➖➖➖➖➖
-> 3:30pm PST
-> GONZAGA (-3.5) over Santa Clara
-> BOUGHT OFF the SIDE
-> 7:30pm PST
-> ENJOY the GAMES 🍻 (edited)
-> 🏀 6 🍻 3
-> PorterPicks ADDED COLLEGE BASKETBALL
-> SELECTIONS for SATURDAY NIGHT HOOPS 👇 TEXAS ...
-> PorterPicks 2:34 PM
-> My apologies BUY OFF ZAGS.. TAK…
+> PorterPicks ➖➖➖➖➖ 3:30pm PST GONZAGA (-3.5) over Santa Clara BOUGHT OFF the SIDE 7:30pm PST ENJOY the GAMES 🍻 (edited) 🏀 6 🍻 3 PorterPicks ADDED COLLEGE BASKETBALL SELECTIONS for SATURDAY NIGHT HOOPS 👇 TEXAS ... PorterPicks 2:34 PM My apologies BUY OFF ZAGS.. TAK…
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Gonzaga -3.5 | -110 | 7.0 | Spread | - |
+| Texas Tech ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -1948,21 +1282,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 17:51 ET
 **Text:**
-> A11Bets (1/3)
-> ➖➖➖➖➖
-> A11Bets
-> NIGHT CBB ADDS
-> Arizona -8.5 (-120) 1.5U
-> Santa Clara +4.5 (-109) 1U
-> Santa Clara ML (+174) 0.25U
-> Pacific +8.5 (-125) 1U
-> Pacific ML (+320) 0.25U
+> A11Bets ➖➖➖➖➖ A11Bets NIGHT CBB ADDS Arizona -8.5 (-120) 1.5U Santa Clara +4.5 (-109) 1U Santa Clara ML (+174) 0.25U Pacific +8.5 (-125) 1U Pacific ML (+320) 0.25U
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 1.5U Arizona | None | 1.5 | Spread | - |
-| 0.25U Pacific ML | None | 1.0 | Spread | - |
+| 1.5U A11Bets A11Bets Night Cbb Adds Arizona -8.5 ML | None | 1.5 | Moneyline | - |
 
 ---
 
@@ -1972,17 +1297,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 17:51 ET
 **Text:**
-> BulliesPicks (2/3)
-> ➖➖➖➖➖
-> BulliesPicks
-> Saturday, February 14
-> NCAAB EXCLUSIVE MAX PLAY
-> McNeese State -11.5 Alternate Line 💎
+> ➖➖➖➖➖ Saturday, February 14 NCAAB McNeese State -11.5 💎
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| McNeese State | None | 1.0 | Spread | - |
+| Saturday, February 14 NCAAB McNeese State -11.5 ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -1992,17 +1312,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 17:51 ET
 **Text:**
-> Picks4Dayzzz (3/3)
-> ➖➖➖➖➖
-> P4D_Picks4Dayzzz
-> CBB Add 🔴
-> Virginia -5 -110 2U
-> Crazy choke from Florida, hopefully that's the only loss today.
+> Picks4Dayzzz ➖➖➖➖➖ P4D_Picks4Dayzzz CBB Add 🔴 Virginia -5 -110 2U Crazy choke from Florida, hopefully that's the only loss today.
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 2U Virginia | -110 | 2.0 | Spread | - |
+| 2U s4Dayzzz P4D_Picks4Dayzzz Cbb Add Virginia -5 ML | -110 | 2.0 | Moneyline | - |
 
 ---
 
@@ -2012,32 +1327,10 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 17:52 ET
 **Text:**
-> Oracle Ai
-> ➖➖➖➖➖
-> Let's keep it goin baby.
-> 🔥 24 ❤️ 7
-> 172 @ 13:18
-> Ai POTD: Memphis tigers +13.5
-> I’m doing +15.5 personally
-> Conf: 78%
-> 🔥 12
-> 171 @ 13:19
-> Pick of the Day
-> Saturday, Feb 14 • 6:00 PM
-> Memphis Tigers @ Utah State Aggies
-> Memphis Tigers +13.5
-> 111
-> 78%
-> +1.9%
-> 0.5u
-> Read …
+> Oracle Ai ➖➖➖➖➖ Let's keep it goin baby. 🔥 24 ❤️ 7 172 @ 13:18 Ai POTD: Memphis tigers +13.5 I’m doing +15.5 personally Conf: 78% 🔥 12 171 @ 13:19 Pick of the Day Saturday, Feb 14 • 6:00 PM Memphis Tigers @ Utah State Aggies Memphis Tigers +13.5 111 78% +1.9% 0.5u Read …
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Ai Potd: Memphis tigers +13.5 | None | 1.0 | Player Prop | - |
-| I'm doing personally | None | 1.0 | Spread | - |
-| Memphis Tigers | None | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -2047,13 +1340,10 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 18:20 ET
 **Text:**
-> #Glitch Whale Exclusive🐳 ✅
-> UNC Wilmington - ML
+> #Glitch Whale 🐳 ✅ UNC Wilmington - ML
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| UNC Wilmington ML | -700 | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -2063,17 +1353,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 18:22 ET
 **Text:**
-> PlatinumLocks
-> ➖➖➖➖➖
-> Platinum Locks 60 UNIT
-> EXCLUSIVE PLAY
-> ARIZONA -8
-> BOL!
+> PlatinumLocks ➖➖➖➖➖ Platinum Locks 60 UNIT PLAY ARIZONA -8 BOL!
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Arizona ML | -115 | 1.0 | Spread | - |
+| PlatinumLocks Platinum Locks Play Arizona -8 Bol! ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -2083,16 +1368,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 18:29 ET
 **Text:**
-> Ross Benjamin
-> 
-> 3% Hawaii/CS Northridge o162.5 (-105) 
-> 2% Saint Marys CA/Pacific u135.5 (-110)
+> Ross Benjamin 3% Hawaii/CS Northridge o162.5 (-105) 2% Saint Marys CA/Pacific u135.5 (-110)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 3% Hawaii vs CS Northridge Over 162.5 | None | 3.0 | Total | - |
-| 2% Saint Marys CA vs Pacific Under 135.5 | None | 2.0 | Total | - |
+| 2% Ross Benjamin Cbb ML | None | 3.0 | Moneyline | - |
 
 ---
 
@@ -2102,14 +1383,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-14 18:30 ET
 **Text:**
-> Vernon Croy
-> 
-> 8u - Gonzaga -4.5
+> Vernon Croy 8u - Gonzaga -4.5
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 8u - Gonzaga | -115 | 8.0 | Spread | - |
+| 8u Vernon Croy ML | None | 8.0 | Moneyline | - |
 
 ---
 
@@ -2119,21 +1398,10 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 19:16 ET
 **Text:**
-> PorterPicks
-> ➖➖➖➖➖
-> 4:15
-> 🏀 | ncaa b
-> doing?? Up 7 with a minute left and can’t call a timeout to avoid potentially turnovers on trap defenses?
-> COLLEGE BASKETBALL has been weird as hell this week! No doubt! 💯
-> 💯 11
-> PorterPicks 4:12 PM
-> REMAINING COLLEGE BASKETBALL SELECTIONS
-> …
+> PorterPicks ➖➖➖➖➖ 4:15 🏀 | ncaa b doing?? Up 7 with a minute left and can’t call a timeout to avoid potentially turnovers on trap defenses? COLLEGE BASKETBALL has been weird as hell this week! No doubt! 💯 💯 11 PorterPicks 4:12 PM REMAINING COLLEGE BASKETBALL SELECTIONS …
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| UNC Wilmington ML | -700 | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -2156,12 +1424,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 21:05 ET
 **Text:**
-> #SEANPERRY
-> 5U SuperMax
-> Texas Tech +10 (CBB)
+> #SEANPERRY 5U SuperMax Texas Tech +10 (CBB)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 5U #Seanperry ML | None | 5.0 | Moneyline | - |
+| None | None | 1.0 | None | - |
 
 ---
 
@@ -2223,11 +1492,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 21:08 ET
 **Text:**
-> #JACAV ✅
-> Purdue ML (10*)
+> #JACAV ✅ Purdue ML (10*)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| #Jacav Purdue ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -2237,24 +1507,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 21:33 ET
 **Text:**
-> #Cblez ✅
-> Cblez (2/2)
-> 2U CBB MAX PLAY OF THE DAY
-> 07:14 am
-> Idaho -6½ -110 (2u)
-> Ticket#
-> Status Pending
-> Risk/Win $ 6,600.00 / $ 6,000.00
-> Game: Idaho St / Idaho
-> • Selection NCAA -718 Game Spread
-> Scheduled Feb 14, 2026 3:00 PM - (CST)
-> Accepted Feb 14, 2026 9:09 AM - (CST)
-> Placed On…
+> #Cblez ✅ Cblez 2U CBB OF THE DAY 07:14 am Idaho -6½ -110 (2u) Ticket# Status Pending Risk/Win $ 6,600.00 / $ 6,000.00 Game: Idaho St / Idaho • Selection NCAA -718 Game Spread Scheduled Feb 14, 2026 3:00 PM - (CST) Accepted Feb 14, 2026 9:09 AM - (CST) Placed On…
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Ncaa Game Spread ML | -718 | 1.0 | Moneyline | - |
+| 2U #Cblez Cblez ML | None | 2.0 | Moneyline | - |
 
 ---
 
@@ -2264,88 +1522,21 @@
 **Channel:** @allpicksarefree
 **Date:** 2026-02-14 21:33 ET
 **Text:**
-> 🔮Tennis Winners Only
-> 
-> ATP
-> Humbert +3 (2u)
-> 
-> WTA
-> Muchova ML (1u)
-> 
-> 🔮Kims Picks
-> 
-> KBL
-> Changwon vs Wonju over 153.5 (3u Max)
-> Goyang Orions ML (1u)
-> 
-> NBL
-> SE Melbourne Phoenix -11.5 (1u)
-> 
-> 🔮Dormroom Degenerates
-> 
-> Olympic Hockey
-> Sweden 1st period -0.5
-> Sweden TT over 3.5
-> Sweden -2.5
-> 
-> 🔮Caleb Picks
-> 
-> ATP
-> FAA -2.5 (10u Max)
-> Taylor Fritz -2 (3u)
-> Nikoloz Basilashvili +3 (3u)
-> 
-> Olympic Hockey
-> Sweden -2.5 (5u)
-> 
-> 🔮Lear Locks
-> 
-> Tennis
-> Gracheva ML (1.5u)
-> Muchova ML (1.5u)
-> 
-> Soccer
-> Como ML (1.5u)
-> 
-> Olympic Hockey
-> Slovakia +2.5 (1.5u)
-> 
-> 🔮Mojo
-> 
-> ATP Rotterdam
-> Humbert +3.5 (4u)
-> 
-> 🔮Dirty Bubble Bets
-> 
-> KBL
-> Daegu Kogas TT over 83.5 (0.75u)
-> 
-> 🔮Bankroll Bill
-> 
-> KBL
-> Busan KCC Egis -5.5 (1.5u)
-> Wonju DB Promy +6 (1u)
-> 
-> NBL
-> SE Melbourne Phoenix -11 (1.5u)
-> NZ Breakers vs Adelaide 36ers under 185 (1.5u)
+> 🔮Tennis Winners Only ATP Humbert +3 (2u) WTA Muchova ML (1u) 🔮Kims Picks KBL Changwon vs Wonju over 153.5 (3u Max) Goyang Orions ML (1u) NBL SE Melbourne Phoenix -11.5 (1u) 🔮Dormroom Degenerates Olympic Hockey Sweden 1st period -0.5 Sweden TT over 3.5 Sweden -2.5 🔮Caleb Picks ATP FAA -2.5 (10u Max) Taylor Fritz -2 (3u) Nikoloz Basilashvili +3 (3u) Olympic Hockey Sweden -2.5 (5u) 🔮Lear Locks Tennis Gracheva ML (1.5u) Muchova ML (1.5u) Soccer Como ML (1.5u) Olympic Hockey Slovakia +2.5 (1.5u) 🔮Mojo ATP Rotterdam Humbert +3.5 (4u) 🔮Dirty Bubble Bets KBL Daegu Kogas TT over 83.5 (0.75u) 🔮Bankroll Bill KBL Busan KCC Egis -5.5 (1.5u) Wonju DB Promy +6 (1u) NBL SE Melbourne Phoenix -11 (1.5u) NZ Breakers vs Adelaide 36ers under 185 (1.5u)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (1.5u) Muchova ML | None | 1.5 | Moneyline | - |
-| (3u) Changwon vs Wonju Over 153.5 | None | 3.0 | Total | - |
-| (1u) Goyang Orions ML | None | 1.0 | Moneyline | - |
-| (1.5u) SE Melbourne Phoenix | None | 1.5 | Spread | - |
-| (10u) Faa | None | 10.0 | Spread | - |
-| (3u) Taylor Fritz | None | 3.0 | Spread | - |
-| (3u) Nikoloz Basilashvili | None | 3.0 | Spread | - |
-| (1.5u) Gracheva ML | None | 1.5 | Moneyline | - |
-| (1.5u) Como ML | None | 1.5 | Moneyline | - |
-| (0.75u) Daegu Kogas TT over 83.5 | None | 0.75 | Total | - |
-| (1.5u) Busan Kcc Egis | None | 1.5 | Spread | - |
-| (1u) Wonju DB Promy | None | 1.0 | Spread | - |
-| (1.5u) NZ Breakers vs Adelaide 36ers under 185 | None | 1.5 | Total | - |
+| (2u) Tennis Winners Only Atp Humbert +3 | None | 2.0 | Spread | - |
+| (1u) Wta Muchova ML | None | 1.5 | Moneyline | - |
+| (3u) Kims Picks Kbl Changwon vs Wonju Over 153.5 | None | 3.0 | Total | - |
+| (1u) Nbl SE Melbourne Phoenix -11.5 | None | 1.5 | Spread | - |
+| (3u) Nikoloz Basilashvili +3 | None | 3.0 | Spread | - |
+| (1.5u) Lear Locks Tennis Gracheva ML | None | 1.5 | Moneyline | - |
+| (1.5u) Soccer Como ML | None | 1.5 | Moneyline | - |
+| (1.5u) Olympic Hockey Slovakia +2.5 | None | 1.5 | Spread | - |
+| (4u) Mojo Atp Rotterdam Humbert +3.5 | None | 4.0 | Spread | - |
+| (1.5u) NZ Breakers vs Adelaide 36ers under 185 +185 | None | 1.5 | Total | - |
 
 ---
 
@@ -2407,16 +1598,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 21:37 ET
 **Text:**
-> PardonMyPick
-> ➖➖➖➖➖
-> 10U CBB MAX WHALEPLAY
-> • SANTA CLARA +5-105
-> 7 21:23
+> ➖➖➖➖➖ 10U CBB MAX WHALEPLAY • SANTA CLARA +5-105 7 21:23
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Santa Clara +5 | -105 | 10.0 | Spread | - |
+| 10U Cbb Max Whaleplay Santa Clara 7 21:23 +5 | -105 | 10.0 | Spread | - |
 
 ---
 
@@ -2426,16 +1613,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 21:37 ET
 **Text:**
-> KimsPicks
-> ➖➖➖➖➖
-> KimsVIP · 7m
-> Wake N Cash
-> Suwon Sonicboom +2.5 (1U)
-> NBL: 🇦🇺
-> Sydney Kings Vs Perth wildcats under 187.5 (1U)
+> KimsPicks ➖➖➖➖➖ KimsVIP · 7m Wake N Cash Suwon Sonicboom +2.5 (1U) NBL: 🇦🇺 Sydney Kings Vs Perth wildcats under 187.5 (1U)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (1U) KimsPicks KimsVIP 7m Wake N Cash Suwon Sonicboom +2.5 ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -2445,15 +1628,12 @@
 **Channel:** @allpicksarefree
 **Date:** 2026-02-14 21:38 ET
 **Text:**
-> Pardonmypick 
-> 
-> 4-15 run
-> 
-> 10U CBB MAX WHALEPLAY
-> SANTA CLARA +5 -105
+> 4-15 run 10U CBB MAX WHALEPLAY SANTA CLARA +5 -105
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 10U 15 run +4 | None | 10.0 | Spread | - |
 
 ---
 
@@ -2463,19 +1643,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 22:15 ET
 **Text:**
-> LearLocks
-> ➖➖➖➖➖
-> LEARLOCKS
-> Olympics hockey
-> • Czechia ML 1.5u -135
-> LEARLOCKS
-> Tennis
-> • Yastremska ML 1.5u -115
-> • Haley baptiste ML 1.5u -110
-> Luidmilla Samsanova ML -130 1.5u
+> LearLocks ➖➖➖➖➖ LEARLOCKS Olympics hockey • Czechia ML 1.5u -135 LEARLOCKS Tennis • Yastremska ML 1.5u -115 • Haley baptiste ML 1.5u -110 Luidmilla Samsanova ML -130 1.5u
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| None | None | 1.0 | None | - |
 
 ---
 
@@ -2485,21 +1658,10 @@
 **Channel:** @Allinonecappers
 **Date:** 2026-02-14 22:22 ET
 **Text:**
-> Make sure you’re in our discord. Tons of plays posted in there that aren’t post here for FREE!
-> 
-> • 60+ Cappers Daily
-> • Channels for each capper
-> • Notifications for only the cappers you want
-> • Chat
-> • More features being added soon
-> 
-> 👇👇👇
-> https://t.co/MHD96VDnzb
+> Make sure you’re in our discord. Tons of plays posted in there that aren’t post here for FREE! • 60+ Cappers Daily • Channels for each capper • Notifications for only the cappers you want • Chat • More features being added soon 👇👇👇 https://t.co/MHD96VDnzb
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Unc Asheville ML | -700 | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -2509,17 +1671,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 22:27 ET
 **Text:**
-> Mojo
-> ➖➖➖➖➖
-> Mojo
-> Early 5U
-> ATP Del Ray 🇺🇸
-> 5U 🇷🇸 Kecmanovic ML -200 🔮
+> Mojo ➖➖➖➖➖ Mojo Early 5U ATP Del Ray 🇺🇸 5U 🇷🇸 Kecmanovic ML -200 🔮
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Kecmanovic ML | -200 | 5.0 | Moneyline | - |
+| 5U Mojo Mojo Early ML | None | 5.0 | Moneyline | - |
 
 ---
 
@@ -2529,27 +1686,10 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 22:32 ET
 **Text:**
-> DirtyBubbleBets
-> ➖➖➖➖➖
-> DirtyBubbleBets
-> KBL🏀🇰🇷
-> 🏀 SK Knights TT u74.5 (-110) 0.75U
-> 🏀 Anyang KGC ML (+100) 0.5U
-> 🎰 KBL Lotto (+1144)
-> Bet Placed
-> SGPx
-> • 4 Pick Parlay
-> • +1144
-> SGP
-> • 2 Pick Parlay
-> Suwon KT Sonicboom @ Busan KCC Egis • Sun 12:00 AM
-> Busan KCC Egis
-> • Moneylin…
+> ➖➖➖➖➖ KBL🏀🇰🇷 🏀 SK Knights TT u74.5 (-110) 0.75U 🏀 Anyang KGC ML (+100) 0.5U 🎰 KBL Lotto (+1144) Bet Placed SGPx • 4 Pick Parlay • +1144 SGP • 2 Pick Parlay Suwon KT Sonicboom @ Busan KCC Egis • Sun 12:00 AM Busan KCC Egis • Moneylin…
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Anyang KGC ML | 100 | 0.5 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -2559,21 +1699,15 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 23:09 ET
 **Text:**
-> BankrollBill
-> ➖➖➖➖➖
-> BankrollBill APP 6:58 PM
-> NBL 🏀
-> Sydney Kings -9.5 -116 (1.5U)
-> 2 Korean basketball plays out in 30 minutes 👍
-> BankrollBill APP 8:08 PM
-> KBL 🇰🇷 (22-8 L30)
-> Daegu KOGAS Pegasus -3 -120 (1.25U)
-> Anyang KGC/Seoul SK Knights under 149.5 -115 (1U)
+> ➖➖➖➖➖ APP 6:58 PM NBL 🏀 Sydney Kings -9.5 -116 (1.5U) 2 Korean basketball plays out in 30 minutes 👍 APP 8:08 PM KBL 🇰🇷 (22-8 L30) Daegu KOGAS Pegasus -3 -120 (1.25U) Anyang KGC/Seoul SK Knights under 149.5 -115 (1U)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
+| (1.5U) App 6:58 PM Nbl Sydney Kings -9.5 ML | -116 | 1.5 | Moneyline | - |
 | Sydney Kings -9.5 | -116 | 1.5 | Spread | - |
+| Daegu KOGAS Pegasus -3 | -120 | 1.25 | Spread | - |
+| Anyang KGC/Seoul SK Knights Under 149.5 | -115 | 1.0 | Total | - |
 
 ---
 
@@ -2583,23 +1717,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-14 23:15 ET
 **Text:**
-> ThisGirlBetz
-> ➖➖➖➖➖
-> ThisGirlBetz
-> OVERNIGHT WTA
-> WTA DUBAI
-> 🎾 D.Yastremska -110 (2u)
-> 🎾 L.Samsonova -130 (3u)
-> 🎾 M.Joint +1.5 (set) -140 (2u)
-> 🎾 L.Sun +155 (2u)
-> 🎾 Z.Sonmez +155 (2u)
-> • ML PARLAY
-> 🎾 Noskova/Krejcikova +100 (3u)
+> ThisGirlBetz ➖➖➖➖➖ ThisGirlBetz OVERNIGHT WTA WTA DUBAI 🎾 D.Yastremska -110 (2u) 🎾 L.Samsonova -130 (3u) 🎾 M.Joint +1.5 (set) -140 (2u) 🎾 L.Sun +155 (2u) 🎾 Z.Sonmez +155 (2u) • ML PARLAY 🎾 Noskova/Krejcikova +100 (3u)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| D.Yastremska ML | -110 | 2.0 | Moneyline | - |
+| (3u) Parlay Noskova vs Krejcikova ML | 100 | 3.0 | Moneyline | - |
+| None | None | 1.0 | None | - |
 
 ---
 
@@ -2609,81 +1733,17 @@
 **Channel:** @Allinonecappers
 **Date:** 2026-02-15 00:15 ET
 **Text:**
-> Tennis Winners Only
-> 
-> WTA
-> Pavlyuchenkova +4 (1u)
-> Fernandez ML (1u)
-> Eala ML (1u)
-> 
-> ➖
-> 
-> Mojo
-> 
-> Tennis
-> FAA ML (7u)
-> Kecmanovic ML (5u)
-> 
-> ➖
-> 
-> Lear Locks
-> 
-> Olympic Hockey
-> Czechia ML (1.5u)
-> 
-> Tennis
-> Yastremska ML (1.5u)
-> Haley Baptiste ML (1.5u)
-> Luidmilla Samsanova ML (1.5u)
-> 
-> ➖
-> 
-> Kims Picks
-> 
-> KBL
-> Suwon Sonicboom +2.5 (1u)
-> 
-> NBL
-> Sydney Kings vs Perth Wildcats under 187.5 (1u)
-> 
-> ➖
-> 
-> Dirty Bubble Bets
-> 
-> KBL
-> SK Knights TT under 74.5 (0.75u)
-> Anyang KGC ML (0.5u)
-> 
-> ➖
-> 
-> Bankroll Bill
-> 
-> KBL
-> Daegu Kogas Pegasus -3 (1.25u)
-> Anyang KGC vs Seoul SK Knights under 149.5 (1u)
-> 
-> NBL
-> Sydney Kings -9.5 (1.5u)
-> 
-> ➖
-> 
-> This Girl Betz
-> 
-> Yastremska ML (2u)
-> Samsonova ML (3u)
-> Joint +1.5 sets (2u)
-> Sun ML (2u)
-> Sonmez ML (2u)
-> Noskova + Krejcikova ML (3u)
+> Tennis Winners Only WTA Pavlyuchenkova +4 (1u) Fernandez ML (1u) Eala ML (1u) ➖ Mojo Tennis FAA ML (7u) Kecmanovic ML (5u) ➖ Lear Locks Olympic Hockey Czechia ML (1.5u) Tennis Yastremska ML (1.5u) Haley Baptiste ML (1.5u) Luidmilla Samsanova ML (1.5u) ➖ Kims Picks KBL Suwon Sonicboom +2.5 (1u) NBL Sydney Kings vs Perth Wildcats under 187.5 (1u) ➖ Dirty Bubble Bets KBL SK Knights TT under 74.5 (0.75u) Anyang KGC ML (0.5u) ➖ Bankroll Bill KBL Daegu Kogas Pegasus -3 (1.25u) Anyang KGC vs Seoul SK Knights under 149.5 (1u) NBL Sydney Kings -9.5 (1.5u) ➖ This Girl Betz Yastremska ML (2u) Samsonova ML (3u) Joint +1.5 sets (2u) Sun ML (2u) Sonmez ML (2u) Noskova + Krejcikova ML (3u)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Yastremska ML | None | 2.0 | Moneyline | - |
-| Samsonova ML | None | 3.0 | Moneyline | - |
-| Sun ML | None | 2.0 | Moneyline | - |
-| Sonmez ML | None | 2.0 | Moneyline | - |
-| Noskova + Krejcikova ML | None | 3.0 | Moneyline | - |
+| (7u) Mojo Tennis Faa ML | None | 7.0 | Moneyline | - |
+| (1u) Kims Picks Kbl Suwon Sonicboom +2.5 | None | 1.0 | Spread | - |
+| (2u) This Girl Betz Yastremska ML | None | 2.0 | Moneyline | - |
+| (2u) Joint +1.5 | None | 2.0 | Spread | - |
+| (2u) Sun ML | None | 2.0 | Moneyline | - |
+| (2u) Sonmez ML | None | 2.0 | Moneyline | - |
 
 ---
 
@@ -2696,7 +1756,9 @@
 > 🔥🔥
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 833 | None | 1.0 | UNKNOWN | - |
 
 ---
 
@@ -2706,61 +1768,21 @@
 **Channel:** @Capperleaked
 **Date:** 2026-02-15 00:44 ET
 **Text:**
-> Tennis / Wake & Cash
-> 
-> 🎾 Mojo
-> 
-> Tennis
-> FAA ML (7u)
-> Kecmanovic ML (5u)
-> 
-> 🎾 TennisWinnersOnly
-> 
-> WTA
-> Pavlyuchenkova +4 (1u)
-> Fernandez ML (1u)
-> Eala ML (1u)
-> 
-> 🏒🎾LearLocks
-> 
-> Olympic Hockey
-> Czechia ML (1.5u)
-> 
-> Tennis
-> Yastremska ML (1.5u)
-> Haley Baptiste ML (1.5u)
-> Luidmilla Samsanova ML (1.5u)
-> 
-> 🏀DirtyBubbleBets
-> 
-> KBL
-> SK Knights TT under 74.5 (0.75u)
-> Anyang KGC ML (0.5u)
-> 
-> 🏀BankrollBill
-> 
-> KBL
-> Daegu Kogas Pegasus -3 (1.25u)
-> Anyang KGC vs Seoul SK Knights under 149.5 (1u)
-> 
-> NBL
-> Sydney Kings -9.5 (1.5u)
-> 
-> Need a new book ? 
-> 
-> DM @leviathanlocks
+> Tennis / Wake & Cash 🎾 Mojo Tennis FAA ML (7u) Kecmanovic ML (5u) 🎾 TennisWinnersOnly WTA Pavlyuchenkova +4 (1u) Fernandez ML (1u) Eala ML (1u) 🏒🎾LearLocks Olympic Hockey Czechia ML (1.5u) Tennis Yastremska ML (1.5u) Haley Baptiste ML (1.5u) Luidmilla Samsanova ML (1.5u) 🏀 KBL SK Knights TT under 74.5 (0.75u) Anyang KGC ML (0.5u) 🏀 KBL Daegu Kogas Pegasus -3 (1.25u) Anyang KGC vs Seoul SK Knights under 149.5 (1u) NBL Sydney Kings -9.5 (1.5u) Need a new book ? DM @leviathanlocks
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (7u) Faa ML | None | 7.0 | Moneyline | - |
-| (1u) Pavlyuchenkova | None | 1.0 | Spread | - |
-| (1u) Fernandez ML | None | 1.0 | Moneyline | - |
+| (7u) Tennis vs Wake & Cash Mojo Tennis Faa ML | None | 7.0 | Moneyline | - |
+| (5u) Kecmanovic ML | None | 5.0 | Moneyline | - |
+| (1u) Tennis Winners Only Wta Pavlyuchenkova +4 | None | 1.0 | Spread | - |
 | (1u) Eala ML | None | 1.0 | Moneyline | - |
-| (1.5u) Czechia ML | None | 1.5 | Moneyline | - |
-| (1.5u) Yastremska ML | None | 1.5 | Moneyline | - |
+| 1.5u LearLocks Learlocks Olympics hockey Czechia ML | None | 1.5 | Moneyline | - |
+| (1.5u) Tennis Yastremska ML | None | 1.5 | Moneyline | - |
 | (1.5u) Haley Baptiste ML | None | 1.5 | Moneyline | - |
-| (1.5u) Luidmilla Samsanova ML | -130 | 1.5 | Moneyline | - |
+| (1.5u) Luidmilla Samsanova ML | None | 1.5 | Moneyline | - |
+| (0.5u) Anyang Kgc ML | None | 0.5 | Moneyline | - |
+| (1.5u) Nbl Sydney Kings -9.5 | None | 1.5 | Spread | - |
 
 ---
 
@@ -2770,13 +1792,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-15 00:52 ET
 **Text:**
-> CalebPicks 
-> 
-> Olympics Hockey
-> Sweden -2.5 (5u)
+> CalebPicks Olympics Hockey Sweden -2.5 (5u)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (5u) CalebPicks Olympics Hockey Sweden -2.5 | None | 5.0 | Spread | - |
 
 ---
 
@@ -2786,19 +1807,10 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-15 00:52 ET
 **Text:**
-> Dormroom Degenerates
-> 
-> Olympics Hockey
-> Sweden 1P -0.5
-> Sweden TT o3.5
-> Sweden -2.5
+> Dormroom Degenerates Olympics Hockey Sweden 1P -0.5 Sweden TT o3.5 Sweden -2.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Sweden 1st period -0.5 ML | None | 1.0 | Period | - |
-| Sweden TT Over 3.5 | None | 1.0 | Total | - |
-| (5u) Sweden | None | 5.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -2808,14 +1820,7 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-15 00:54 ET
 **Text:**
-> BankrollBill
-> 
-> KBL
-> Daegu Kogas Pegasus -3 (1.25u)
-> Anyang KGC/Seoul SK Knights u149.5 (1u)
-> 
-> NBL
-> Sydney Kings -9.5 (1.5u)
+> KBL Daegu Kogas Pegasus -3 (1.25u) Anyang KGC/Seoul SK Knights u149.5 (1u) NBL Sydney Kings -9.5 (1.5u)
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -2828,11 +1833,7 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-15 00:55 ET
 **Text:**
-> DirtyBubbleBets
-> 
-> KBL
-> SK Knights TT u74.5 (0.75u)
-> Anyang KGC ML (0.5u)
+> KBL SK Knights TT u74.5 (0.75u) Anyang KGC ML (0.5u)
 
 ### 🎯 Parsed Picks
 > *No picks extracted from this message.*
@@ -2845,14 +1846,12 @@
 **Channel:** @EZMSports
 **Date:** 2026-02-15 00:56 ET
 **Text:**
-> LearLocks 
-> 
-> Slovakia +2.5 (1.5u)
+> LearLocks Slovakia +2.5 (1.5u)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (1.5u) Slovakia | None | 1.5 | Spread | - |
+| (1.5u) LearLocks Slovakia +2.5 | None | 1.5 | Spread | - |
 
 ---
 
@@ -2862,39 +1861,19 @@
 **Channel:** @ItsCappersPicks
 **Date:** 2026-02-15 01:01 ET
 **Text:**
-> Tennis Cappers 🎾 
-> 
-> 👉🏻 Mojo
-> 
-> ATP Del Ray 🇺🇸
-> 5U 🇷🇸Kecmanovic ML -200 🔮
-> 
-> 👉🏻 TennisWinnersOnly 
-> 
-> (1U) Pavlyuchenkova +4 vs Krejcikova (-111)
-> (1U) Fernandez ML vs Samsonova (+110)
-> (1U) Eala ML vs Baptiste (-109)
-> 
-> 👉🏻 ThisGirlBetz
-> 
-> WTA DUBAI
-> D.Yastremska -110 (2u)
-> L.Samsonova -130 (3u)
-> M.Joint +1.5 (set) -140 (2u)
-> L.Sun +155 (2u)
-> Z.Sonmez +155 ( 2u)
-> 
-> Need a new bookie?
-> Dm @leviathanlocks
+> Tennis Cappers 🎾 👉🏻 Mojo ATP Del Ray 🇺🇸 5U 🇷🇸Kecmanovic ML -200 🔮 👉🏻 TennisWinnersOnly (1U) Pavlyuchenkova +4 vs Krejcikova (-111) (1U) Fernandez ML vs Samsonova (+110) (1U) Eala ML vs Baptiste (-109) 👉🏻 ThisGirlBetz WTA DUBAI D.Yastremska -110 (2u) L.Samsonova -130 (3u) M.Joint +1.5 (set) -140 (2u) L.Sun +155 (2u) Z.Sonmez +155 ( 2u) Need a new bookie? Dm @leviathanlocks
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (5u) Kecmanovic ML | -200 | 5.0 | Moneyline | - |
-| (1U) ML | None | 1.0 | Moneyline | - |
-| (2u) D.Yastremska ML | -110 | 2.0 | Moneyline | - |
+| 5U Tennis Cappers Mojo Atp Del Ray ML | None | 5.0 | Moneyline | - |
+| (1U) Pavlyuchenkova +4 | None | 1.0 | Spread | - |
+| (1u) Fernandez ML | None | 1.0 | Moneyline | - |
+| (1U) vs Samsonova ML | None | 3.0 | Moneyline | - |
+| Eala ML | None | 1.0 | Moneyline | - |
+| (2u) vs Baptiste ThisGirlBetz Wta Dubai D.Yastremska ML | -110 | 2.0 | Moneyline | - |
 | (3u) L.Samsonova ML | -130 | 3.0 | Moneyline | - |
-| (2u) M.Joint | -140 | 2.0 | Spread | - |
+| (2u) M.Joint +1.5 | -140 | 2.0 | Spread | - |
 | (2u) L.Sun ML | 155 | 2.0 | Moneyline | - |
 | 2u) Z.Sonmez ( ML | 155 | 2.0 | Moneyline | - |
 
@@ -2919,42 +1898,20 @@
 **Channel:** @ItsCappersPicks
 **Date:** 2026-02-15 01:07 ET
 **Text:**
-> Wake & Cash Cappers 
-> 
-> 👉🏻 BankrollBill 
-> 
-> NBL
-> Sydney Kings -9.5 -116 (1.50)
-> 
-> KBL (22-8 L30) 🔥
-> Daegu KOGAS Pegasus -3 -120 (1.25U)
-> 
-> Anyang KGC/Seoul SK Knights under 149.5 -115 (1U)
-> 
-> 👉🏻 DirtyBubbleBets 
-> 
-> KBL 🏀🇰🇷
-> 🏀 SK Knights TT u74.5 (-110) 0.75U
-> 🏀 Anyang KGC ML (+100) 0.5U
-> 
-> 👉🏻 KimsPicks 
-> 
-> KBL: 🇰🇷
-> Suwon Sonicboom +2.5 (1U)
-> 
-> NBL: 🇦🇺
-> Syndey Kings Vs Perth wildcats under 187
+> Wake & Cash Cappers 👉🏻 NBL Sydney Kings -9.5 -116 (1.50) KBL (22-8 L30) 🔥 Daegu KOGAS Pegasus -3 -120 (1.25U) Anyang KGC/Seoul SK Knights under 149.5 -115 (1U) 👉🏻 KBL 🏀🇰🇷 🏀 SK Knights TT u74.5 (-110) 0.75U 🏀 Anyang KGC ML (+100) 0.5U 👉🏻 KimsPicks KBL: 🇰🇷 Suwon Sonicboom +2.5 (1U) NBL: 🇦🇺 Syndey Kings Vs Perth wildcats under 187
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (1.5u) Sydney Kings | -116 | 1.5 | Spread | - |
-| (1.25U) Daegu Kogas Pegasus | -120 | 1.25 | Spread | - |
-| (1U) Anyang Kgc vs Seoul SK Knights Under 149.5 -115 | -115 | 1.0 | Total | - |
-| (0.75u) SK Knights TT under 74.5 | None | 0.75 | Total | - |
-| (0.5u) Anyang Kgc ML | None | 0.5 | Moneyline | - |
-| (1U) Suwon Sonicboom | None | 1.0 | Spread | - |
-| (1U) Sydney Kings Vs Perth wildcats under 187.5 | None | 1.0 | Total | - |
+| 1.25u Anyang Kgc vs Seoul SK Knights under 149.5 -115 | -115 | 1.25 | Total | - |
+| (0.75u) Dirty Bubble Bets Kbl SK Knights Team Total under 74.5 | None | 0.75 | Total | - |
+| 0.5u Nbl: Syndey Kings Vs Perth wildcats under 187 +187 | None | 1.0 | Player Prop | - |
+| Sydney Kings -9.5 | -116 | 1.0 | Spread | - |
+| Daegu KOGAS Pegasus -3 | -120 | 1.25 | Spread | - |
+| Anyang KGC/Seoul SK Knights under 149.5 | -115 | 1.0 | Total | - |
+| SK Knights TT u74.5 | -110 | 0.75 | Total | - |
+| Suwon Sonicboom +2.5 | None | 1.0 | Spread | - |
+| Syndey Kings Vs Perth wildcats under 187 | None | 1.0 | Total | - |
 
 ---
 
@@ -2967,9 +1924,7 @@
 > Kingcap Platinum Play ✅
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| UNC +7 | -110 | 3.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -2982,9 +1937,7 @@
 > #KingCap Platinum Play ✅ https://t.co/BPXM8Aqpwq
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Sydney Kings +9.5 | -116 | 1.5 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -2997,7 +1950,9 @@
 > @ZiggySt17254576 It's actually the opposite, posting plays will tell people the reality without losing on $
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| posting plays will tell people the reality without losing on $ | None | 1.0 | UNKNOWN | - |
 
 ---
 
@@ -3007,24 +1962,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:30 ET
 **Text:**
-> PropJoe
-> ➖➖➖➖➖
-> PropJoe 6:43 AM
-> CBB
-> • 2U Wisc Milwaukee -1.5 -110
-> • 2U Butler +3 -110
-> • 1U Oregon State -5.5 -110
-> ATP
-> • 1U Darderi ML -110
-> • 1U Shelton ML +110
+> PropJoe ➖➖➖➖➖ PropJoe 6:43 AM CBB • 2U Wisc Milwaukee -1.5 -110 • 2U Butler +3 -110 • 1U Oregon State -5.5 -110 ATP • 1U Darderi ML -110 • 1U Shelton ML +110
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 2U Wisc Milwaukee | -110 | 2.0 | Spread | - |
-| 1U Oregon State | -110 | 1.0 | Spread | - |
-| 1U Darderi ML | -110 | 1.0 | Moneyline | - |
-| 1U Shelton ML | 110 | 1.0 | Moneyline | - |
+| 2U PropJoe PropJoe 6:43 AM Cbb ML | None | 2.0 | Moneyline | - |
 
 ---
 
@@ -3034,21 +1977,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:30 ET
 **Text:**
-> DormroomDegenerates
-> ➖➖➖➖➖
-> 15 February 2026
-> DormroomDegenerates APP 6:41 AM
-> 2/15 Plays
-> CBB:
-> Illinois -10.5
-> Hockey:
-> McDavid 2+ assists
-> • Parlay:
-> Jack Eichel assist + Quinn Hughes assists
-> (+100)
+> DormroomDegenerates ➖➖➖➖➖ 15 February 2026 DormroomDegenerates APP 6:41 AM 2/15 Plays CBB: Illinois -10.5 Hockey: McDavid 2+ assists • Parlay: Jack Eichel assist + Quinn Hughes assists (+100)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| DormroomDegenerates  15 February 2026 DormroomDegenerates APP 6:41 AM 2 vs 15 Plays CBB: Illinois -10.5 Hockey: McDavid: AS Over 2.5 | 10 | 1.0 | Player Prop | - |
 
 ---
 
@@ -3058,20 +1992,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:30 ET
 **Text:**
-> SetPointBets
-> ➖➖➖➖➖
-> FINALS DAY
-> 06:16 am
-> Minaui/Auger U13.5 aces .83 10U (Bet365)
-> Shelton +1.5 .92 5U (Bet105)
-> Darderi ML .03 3U (Bet105)
+> SetPointBets ➖➖➖➖➖ FINALS DAY 06:16 am Minaui/Auger U13.5 aces .83 10U (Bet365) Shelton +1.5 .92 5U (Bet105) Darderi ML .03 3U (Bet105)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 10U Minaui vs Auger Under 13.5 aces .83 | None | 10.0 | Total | - |
-| 5U Shelton .92 | None | 5.0 | Spread | - |
-| 3U Darderi ML .03 ML | None | 3.0 | Moneyline | - |
+| 3U .03 ML | None | 3.0 | Moneyline | - |
 
 ---
 
@@ -3081,18 +2007,14 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:30 ET
 **Text:**
-> CalebPicks
-> ➖➖➖➖➖
-> Caleb ⚡️ CPIK Yesterday at 10:10 PM
-> ATP
-> Yibing Wu -105 3U
-> Thiago Monteiro +115 3U
+> CalebPicks ➖➖➖➖➖ Caleb ⚡️ CPIK Yesterday at 10:10 PM ATP Yibing Wu -105 3U Thiago Monteiro +115 3U
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 3U Yibing Wu ML | -105 | 3.0 | Moneyline | - |
-| 3U Thiago Monteiro ML | 115 | 3.0 | Moneyline | - |
+| 3U CalebPicks Caleb Cpik Yesterday vs 10:10 PM Atp Yibing Wu ML | -105 | 3.0 | Moneyline | - |
+| Yibing Wu ML | -105 | 3.0 | Moneyline | - |
+| Thiago Monteiro ML | 115 | 3.0 | Moneyline | - |
 
 ---
 
@@ -3102,16 +2024,15 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:31 ET
 **Text:**
-> ISW
-> ➖➖➖➖➖
-> TennisWinnersOnly
-> February 15th atp plays
-> ATP Tennis Plays
-> (1U) Fritz ML vs Shelton (-124)
-> (1U) Darderi ML vs Cerundolo (-106)
+> ISW ➖➖➖➖➖ TennisWinnersOnly February 15th atp plays ATP Tennis Plays (1U) Fritz ML vs Shelton (-124) (1U) Darderi ML vs Cerundolo (-106)
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Fritz ML | -120 | 1.0 | Moneyline | - |
+| (1U) vs Shelton ML | None | 1.0 | Moneyline | - |
+| Darderi ML | None | 1.0 | Moneyline | - |
+| vs Cerundolo ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -3121,17 +2042,15 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:31 ET
 **Text:**
-> ANDERSPICKS
-> ➖➖➖➖➖
-> AndersPicks
-> Sunday Card
-> CBB:
-> Southern Illinois -2.5 -110 1U
-> Oakland ML +116 1U(FD, anything with a + sign is good)
-> Illinois Chicago +1.5 -110 1U
+> ANDERSPICKS ➖➖➖➖➖ AndersPicks Sunday Card CBB: Southern Illinois -2.5 -110 1U Oakland ML +116 1U(FD, anything with a + sign is good) Illinois Chicago +1.5 -110 1U
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 1U 116 ML | None | 1.0 | Moneyline | - |
+| Southern Illinois -2.5 | -110 | 1.0 | Spread | - |
+| Oakland ML | 116 | 1.0 | Moneyline | - |
+| Illinois Chicago +1.5 | -110 | 1.0 | Spread | - |
 
 ---
 
@@ -3141,21 +2060,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:31 ET
 **Text:**
-> PICKS4DAYZZZ
-> ➖➖➖➖➖
-> P4D_Picks4Dayzzz
-> Full Card Sunday 🗓️
-> ATP Dallas 🏆
-> Ben Shelton ML +100 3U
-> CBB
-> Cincinnati + Illinois + Northern Iowa -165 3U
-> Maryland +2.5 -115 2U
-> I’ve taken Ben down a set the last two matches,
-> will be looking to do that again if he drops set 1
-> Just hold…
+> PICKS4DAYZZZ ➖➖➖➖➖ P4D_Picks4Dayzzz Full Card Sunday 🗓️ ATP Dallas 🏆 Ben Shelton ML +100 3U CBB Cincinnati + Illinois + Northern Iowa -165 3U Maryland +2.5 -115 2U I’ve taken Ben down a set the last two matches, will be looking to do that again if he drops set 1 Just hold…
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 3U 100 ML | None | 3.0 | Moneyline | - |
+| None | None | 1.0 | None | - |
 
 ---
 
@@ -3165,20 +2076,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:31 ET
 **Text:**
-> MRBIGBETS
-> ➖➖➖➖➖
-> MrBigBets
-> 2/15 cbb plays
-> Maryland/Rutgers U 144.5 -110 1u
-> 💎Butler +2.5 -102 1u
-> • Another light day units wise. Just 2 straight bets for college basketball
-> Butler over Seton Hall today. You guys probably remember I was high on Butler coming into conference…
+> ➖➖➖➖➖ 2/15 cbb plays Maryland/Rutgers U 144.5 -110 1u 💎Butler +2.5 -102 1u • Another light day units wise. Just 2 straight bets for college basketball Butler over Seton Hall today. You guys probably remember I was high on Butler coming into conference…
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 1u Maryland vs Rutgers Under 144.5 -110 | None | 1.0 | Parlay | - |
-| 1u Butler | -102 | 2.0 | Spread | - |
+| 1u 2 vs 15 cbb plays Maryland vs Rutgers Under 144.5 -110 | -110 | 1.0 | Total | - |
+| None | None | 1.0 | None | - |
 
 ---
 
@@ -3188,19 +2092,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:31 ET
 **Text:**
-> MRBIGBETS
-> ➖➖➖➖➖
-> MrBigBets
-> 2/15 college baseball plays
-> Arkansas state ML -140 1u
-> Oklahoma ML +105 .5u
-> 2 more college baseball plays this afternoon
+> ➖➖➖➖➖ 2/15 college baseball plays Arkansas state ML -140 1u Oklahoma ML +105 .5u 2 more college baseball plays this afternoon
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 1u Arkansas state ML | -140 | 1.0 | Moneyline | - |
-| Oklahoma ML .5u ML | 105 | 1.0 | Moneyline | - |
+| 1u 2 vs 15 college baseball plays Arkansas state ML | -140 | 1.0 | Moneyline | - |
+| None | None | 1.0 | None | - |
 
 ---
 
@@ -3210,23 +2108,16 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:32 ET
 **Text:**
-> NEWMARKTENNIS
-> ➖➖➖➖➖
-> NewmarkTennis
-> ATP Finals Sunday
-> ATP Rotterdam
-> FAA/De Minaur O22.5 -115 (3u)
-> ATP Dallas
-> Fritz ML -120 (3u)
-> ATP Buenos Aires
-> Darderi/Cerundolo O22.5 -115 (3u)
+> NEWMARKTENNIS ➖➖➖➖➖ NewmarkTennis ATP Finals Sunday ATP Rotterdam FAA/De Minaur O22.5 -115 (3u) ATP Dallas Fritz ML -120 (3u) ATP Buenos Aires Darderi/Cerundolo O22.5 -115 (3u)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (3u) Faa vs De Minaur Over 22.5 -115 | -115 | 3.0 | Total | - |
-| (3u) Fritz ML | -120 | 3.0 | Moneyline | - |
-| (3u) Darderi vs Cerundolo Over 22.5 -115 | -115 | 3.0 | Total | - |
+| (3u) Atp Dallas Fritz ML | -120 | 3.0 | Moneyline | - |
+| (3u) Atp Buenos Aires Darderi vs Cerundolo Over 22.5 -115 | -115 | 3.0 | Total | - |
+| FAA/De Minaur: Over 22.5 | -115 | 3.0 | Team Prop | - |
+| Fritz ML | -120 | 3.0 | Moneyline | - |
+| Darderi/Cerundolo: Over 22.5 | -115 | 3.0 | Team Prop | - |
 
 ---
 
@@ -3236,16 +2127,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:32 ET
 **Text:**
-> TTW
-> ➖➖➖➖➖
-> TailToWin
-> ATP Rotterdam 🎾 (2/15/26)
-> 1.5U - Felix Auger Aliassime ML -160 (DK)
+> TTW ➖➖➖➖➖ TailToWin ATP Rotterdam 🎾 (2/15/26) 1.5U - Felix Auger Aliassime ML -160 (DK)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 5U - Felix Auger Aliassime ML | -160 | 5.0 | Moneyline | - |
+| 1.5U Ttw TailToWin Atp Rotterdam ML | None | 1.5 | Moneyline | - |
 
 ---
 
@@ -3255,21 +2142,10 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:32 ET
 **Text:**
-> BETSHARPER
-> ➖➖➖➖➖
-> BetSharper
-> Sunday's Picks
-> • Straight Bets Only, No Parlays
-> All Picks 1 Unit
-> NCAAB:
-> • Marist Moneyline (-120)
-> • Quinnipiac Moneyline (-120)
-> • Milwaukee Moneyline (-135)
+> BETSHARPER ➖➖➖➖➖ BetSharper Sunday's Picks • Straight Bets Only, No Parlays All Picks 1 Unit NCAAB: • Marist Moneyline (-120) • Quinnipiac Moneyline (-120) • Milwaukee Moneyline (-135)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Marist ML | -120 | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -3279,21 +2155,10 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:35 ET
 **Text:**
-> BulliesPicks (1/5)
-> ➖➖➖➖➖
-> BulliesPicks
-> Sunday, February 15
-> NCAAB EXCLUSIVE MAX PLAY
-> San Francisco -3.5 Alternate Line 💎
-> 100 TO 10,000 LADDER CHALLENGE 🪜
-> PLAY #2: San Francisco -3.5 Alternate Line
-> (NCAAB)
+> ➖➖➖➖➖ Sunday, February 15 NCAAB San Francisco -3.5 💎 🪜 San Francisco -3.5 (NCAAB)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| San Francisco | None | 1.0 | Spread | - |
-| Play #2: San Francisco -3.5 Alternate Line | None | 1.0 | Player Prop | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -3303,27 +2168,17 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:36 ET
 **Text:**
-> TheGamblingGawd (2/5)
-> ➖➖➖➖➖
-> TheGamblingGawd
-> Sunday Funday 💰
-> 5U POD: USA Over 6.5 🔥
-> 5U Plays 🌊:
-> USA Over 6.5
-> Canada Over 7.5
-> Robert Morris MI
-> Cleveland St Over 157.5
-> Murray St MI
-> • 2 Team MI parlay Illinois/Dayton
-> 1U plays:
-> Seton Hall MI
-> Seton Hall over 142.5
+> TheGamblingGawd ➖➖➖➖➖ TheGamblingGawd Sunday Funday 💰 5U POD: USA Over 6.5 🔥 5U Plays 🌊: USA Over 6.5 Canada Over 7.5 Robert Morris MI Cleveland St Over 157.5 Murray St MI • 2 Team MI parlay Illinois/Dayton 1U plays: Seton Hall MI Seton Hall over 142.5
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| USA: Total Over 6.5 | None | 5.0 | Team Prop | - |
+| 5U TheGamblingGawd TheGamblingGawd Sunday Funday ML | None | 5.0 | Moneyline | - |
+| USA: Over 6.5 | None | 5.0 | Team Prop | - |
+| Canada: Over 7.5 | None | 5.0 | Team Prop | - |
+| Robert Morris MI/Cleveland St Under 157.5 | None | 1.0 | Total | - |
 | (NCAAB) Illinois ML / (NCAAB) Dayton ML | None | 1.0 | Parlay | - |
+| Seton Hall Over 142.5 | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -3333,16 +2188,12 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:36 ET
 **Text:**
-> OutofLineBets (3/5)
-> ➖➖➖➖➖
-> OutofLineBets
-> CBB
-> UTSA +14.5 -110 2U FD
+> OutofLineBets ➖➖➖➖➖ OutofLineBets CBB UTSA +14.5 -110 2U FD
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 2U Utsa | -110 | 2.0 | Spread | - |
+| 2U OutofLineBets OutofLineBets Cbb Georgia Tech +6 | -110 | 2.0 | Spread | - |
 
 ---
 
@@ -3352,16 +2203,10 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:36 ET
 **Text:**
-> ParlaySafari (4/5)
-> ➖➖➖➖➖
-> ParlaySafari
-> Men's Olympic Hockey
-> 1045am France / Canada OVER 7.5 -142 (1u)
+> ParlaySafari ➖➖➖➖➖ ParlaySafari Men's Olympic Hockey 1045am France / Canada OVER 7.5 -142 (1u)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| France vs Canada Over 7.5 | -142 | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -3371,20 +2216,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:36 ET
 **Text:**
-> ThisGirlBetz (5/5)
-> ➖➖➖➖➖
-> ThisGirlBetz
-> SUNDAY ATP FINAL
-> BUENOS AIRES
-> 🎾 F.Cerundolo -105 (3u)
-> DALLAS
-> 🎾 T.Fritz -130 (3u)
+> ThisGirlBetz ➖➖➖➖➖ ThisGirlBetz SUNDAY ATP FINAL BUENOS AIRES 🎾 F.Cerundolo -105 (3u) DALLAS 🎾 T.Fritz -130 (3u)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (3u) F.Cerundolo ML | -105 | 3.0 | Moneyline | - |
-| (3u) T.Fritz ML | -130 | 3.0 | Moneyline | - |
+| (3u) Dallas T.Fritz ML | -130 | 3.0 | Moneyline | - |
+| None | None | 1.0 | None | - |
 
 ---
 
@@ -3394,24 +2232,26 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:43 ET
 **Text:**
-> LearLocks
-> ➖➖➖➖➖
-> LEARLOCKS
-> Card
-> NCAAB
-> • Purdue Fort Wayne ML/ UAB ML 2u -130
-> • Rutgers ML 1.5u -125
-> • Omaha ML 1.5u -146
-> • Temple -2 1.5u -110
-> I’ll Have nascar out in an hour .
+> LearLocks ➖➖➖➖➖ LEARLOCKS Card NCAAB • Purdue Fort Wayne ML/ UAB ML 2u -130 • Rutgers ML 1.5u -125 • Omaha ML 1.5u -146 • Temple -2 1.5u -110 I’ll Have nascar out in an hour .
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 2u Purdue Fort Wayne ML / Uab ML | -142 | 2.0 | Parlay | - |
-| 1.5u Rutgers ML | None | 1.5 | Moneyline | - |
-| 1.5u Omaha ML | None | 1.5 | Moneyline | - |
-| 1.5u Temple | None | 1.5 | Spread | - |
+| LearLocks Learlocks Card NCAAB Purdue Fort Wayne ML | None | 1.0 | Moneyline | - |
+| 2u vs Uab ML | None | 2.0 | Moneyline | - |
+
+---
+
+## Message ID: 2023061476768948236
+
+### 📝 Source Message
+**Channel:** @ExclusiveCapper
+**Date:** 2026-02-15 10:46 ET
+**Text:**
+> #FIVE ✅❌✅✅✅❌ *Golden Whale Parlay (1) Iowa State Cyclones money line Wake Forest money line (College Basketball) *Golden Whale (2) Iowa Hawkeyes +2.5 *Golden Whale Parlay (3) Virginia Cavs money line *Whale Parlay (4) Duke money line *Bonus Parlay (1) Duke alternate -9.5 …
+
+### 🎯 Parsed Picks
+> *No picks extracted from this message.*
 
 ---
 
@@ -3424,7 +2264,12 @@
 > https://t.co/mwQ3umjuKm
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| (NCAAB) Iowa State Cyclones ML / (NCAAB) Wake Forest ML | None | 1.0 | Parlay | - |
+| Iowa Hawkeyes +2.5 | None | 1.0 | Spread | - |
+| Virginia Cavaliers ML | None | 1.0 | Moneyline | - |
+| Duke Blue Devils -9.5 | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -3439,7 +2284,7 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| None | None | 1.0 | None | - |
+| (1U) VegasKiller Personal Play ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -3449,75 +2294,13 @@
 **Channel:** @allpicksarefree
 **Date:** 2026-02-15 10:51 ET
 **Text:**
-> 🔮 P4D_Picks4Dayzzz
-> 
-> ATP Dallas 
-> Ben Shelton ML +100 3U
-> CBB
-> Cincinnati + Illinois + Northern Iowa -165 3U
-> Maryland +2.5 -115 2U
-> 
-> 🔮 AndersPicks
-> 
-> CBB:
-> Southern Illinois -2.5 -110 1U
-> Oakland ML +116 1U(FD, anything with a + sign is good)
-> Illinois Chicago +1.5 -110 1U
-> 
-> 🔮 DormroomDegenerates 
-> 
-> 2/15 Plays
-> CBB:
-> Illinois -10.5
-> Hockey:
-> McDavid 2+ assists
-> Parlay:
-> Jack Eichel assist + Quinn Hughes assists
-> (+100) 
-> 
-> 🔮OutofLineBets
-> 
-> CBB
-> UTSA +14.5 -110 2U FD
-> 
-> 🔮TheGamblingGawd
-> 
-> Sunday Funday 
-> 5U POD: USA Over 6.5 
-> 5U Plays 
-> USA Over 6.5
-> Canada Over 7.5
-> Robert Morris MI
-> Cleveland St Over 157.5
-> Murray St MI
-> • 2 Team MI parlay Illinois/Dayton
-> 1U plays:
-> Seton Hall MI
-> Seton Hall over 142.5
-> 
-> 🔮 BulliesPicks
-> 
-> NCAAB EXCLUSIVE MAX PLAY
-> San Francisco -3.5 Alternate Line 
-> 100 TO 10,000 LADDER CHALLENGE 
-> PLAY #2: San Francisco -3.5 Alternate Line
-> (NCAAB)
-> 
-> 🔮 BetSharper
-> 
-> NCAAB:
-> Marist Moneyline (-120)
-> Quinnipiac Moneyline (-120)
-> Milwaukee Moneyline (-135)
-> 
-> 🔮 MrBigBets
-> 
-> Arkansas state ML -140 1u
-> Oklahoma ML +105 .5u
-> 2 more college baseball plays this afternoon
+> 🔮 P4D_Picks4Dayzzz ATP Dallas Ben Shelton ML +100 3U CBB Cincinnati + Illinois + Northern Iowa -165 3U Maryland +2.5 -115 2U 🔮 AndersPicks CBB: Southern Illinois -2.5 -110 1U Oakland ML +116 1U(FD, anything with a + sign is good) Illinois Chicago +1.5 -110 1U 🔮 DormroomDegenerates 2/15 Plays CBB: Illinois -10.5 Hockey: McDavid 2+ assists Parlay: Jack Eichel assist + Quinn Hughes assists (+100) 🔮OutofLineBets CBB UTSA +14.5 -110 2U FD 🔮TheGamblingGawd Sunday Funday 5U POD: USA Over 6.5 5U Plays USA Over 6.5 Canada Over 7.5 Robert Morris MI Cleveland St Over 157.5 Murray St MI • 2 Team MI parlay Illinois/Dayton 1U plays: Seton Hall MI Seton Hall over 142.5 🔮 NCAAB San Francisco -3.5 San Francisco -3.5 (NCAAB) 🔮 BetSharper NCAAB: Marist Moneyline (-120) Quinnipiac Moneyline (-120) Milwaukee Moneyline (-135) 🔮 Arkansas state ML -140 1u Oklahoma ML +105 .5u 2 more college baseball plays this afternoon
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| P4D_Picks4Dayzzz Atp Dallas Ben Shelton ML | None | 1.0 | Moneyline | - |
+| 116 1U Illinois Chicago 1.5 -110 1U  DormroomDegenerates 2 vs 15 Plays CBB: Illinois -10.5 Hockey: McDavid: AS Over 2.5 | -110 | 2.0 | Player Prop | - |
 
 ---
 
@@ -3527,17 +2310,13 @@
 **Channel:** @ExclusiveCapper
 **Date:** 2026-02-15 10:51 ET
 **Text:**
-> #TMS ✅
-> • CBB VIP Parlay (half unit)
-> SDSU ML
-> ST Mary ML
-> 
-> tms recap
+> #TMS ✅ • CBB VIP Parlay (half unit) SDSU ML ST Mary ML tms recap
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (Cbb) Sdsu ML / (Cbb) ST Mary ML | None | 0.5 | Parlay | - |
+| #Tms Cbb Vip Parlay Sdsu ML | None | 1.0 | Moneyline | - |
+| ST Mary ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -3547,31 +2326,10 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 08:59 ET
 **Text:**
-> ⬆️ VIP WINNERS 👑
-> 
-> **LIST OF VIP CAPPERS:**
-> BestBET
-> Yourdailycapper 
-> ParlayTravy 
-> Vegasmira
-> AFSports
-> Fivestar
-> Chamba
-> ISW
-> + bonus cappers (Cesar, anon, etc)
-> 
-> ⚡️ **Join us —  TOP Cappers BEST prices** **every day!**
-> 
-> 🤝🤝🤝🤝👉 @PICKSWIZARD1
+> ⬆️ VIP WINNERS 👑 **LIST OF VIP CAPPERS:** BestBET Yourdailycapper ParlayTravy Vegasmira AFSports Fivestar Chamba ISW + bonus cappers (Cesar, anon, etc) ⚡️ **Join us — TOP Cappers BEST prices** **every day!** 🤝🤝🤝🤝👉 @PICKSWIZARD1
 
 **OCR:**
-> HANNELTDP CAPPERS PICKSWIZARD BEST BET TOPLDAPPERSO JPICKSWIZARD BESTBET NCAAB MIAMI OHIO -8.5
-> TOP CAPPERS PICKSWIZARD IS SELL WINNERS ISELLWINNERS TOPCAPPERS PICKSWIZARD ISW College hoops Manhattan-120 1u 3600bet ISW College hoops Ohio-Miami Ohio Ov 163.5 -110 3300bet
-> VIP chamnei ToP Cappers AFSports ·Sacred Hearts+2.5 ($3,000=3%)
-> FIVESTAR FIVESTAR SPORTSPICKS CHANNELTOP CAPPERS I PICKSWIZARD Five *Golden Whale (1) Wisconsin +1.5 (College Basketball) *Golden Whale (2) Wisconsin money line (College Basketball) *Golden Whale Parlay (3) x Ohio Bobcats +11.5 Akron money line (College Basketball) *Golden Whale Parlay (4) x Boise State money line Ohio Bobcats +11.5 (College Basketball)
-> ViP channel Top cappers l CHAMBA Max play: Wisconsin +4 College basketball: 2% each Wisconsin +4 Akron-10.5× UNLV+12.5X College basketball: 2% each Manhattan/Niagara under 138.5×
-> PCHANNELTOP CAPPERS PICKSWIZARD YOUR DAILY CAPPER ELTOPIOAPPERS PICKSWIZARD IANN yourdailycapper NCAAB: 1 Unit ( 7:00 PM EST George Washington Moneyline NCAAB:1Unit(7:00 PM EST) Pennsylvania Moneyline NCAAB:1 Unit(8:00 PM EST Wisconsin +4 Alternate Line
-> IP CHANNELTOP CAPPERS PICKSWIZARD PARLAY TRAVYY AIP DHANNELTOPCAPPERS PICKSWIZARD TRAVY FridayWhalePlays Wisconsin +3.5（NCAAB)
+> HANNELTDP CAPPERS PICKSWIZARD BEST BET TOPLDAPPERSO JPICKSWIZARD BESTBET NCAAB MIAMI OHIO -8.5 TOP CAPPERS PICKSWIZARD IS SELL WINNERS ISELLWINNERS TOPCAPPERS PICKSWIZARD ISW College hoops Manhattan-120 1u 3600bet ISW College hoops Ohio-Miami Ohio Ov 163.5 -110 3300bet VIP chamnei ToP Cappers AFSports ·Sacred Hearts+2.5 ($3,000=3%) FIVESTAR FIVESTAR SPORTSPICKS CHANNELTOP CAPPERS I PICKSWIZARD Five *Golden Whale (1) Wisconsin +1.5 (College Basketball) *Golden Whale (2) Wisconsin money line (College Basketball) *Golden Whale Parlay (3) x Ohio Bobcats +11.5 Akron money line (College Basketball) *Golden Whale Parlay (4) x Boise State money line Ohio Bobcats +11.5 (College Basketball) ViP channel Top cappers l CHAMBA : Wisconsin +4 College basketball: 2% each Wisconsin +4 Akron-10.5× UNLV+12.5X College basketball: 2% each Manhattan/Niagara under 138.5× PCHANNELTOP CAPPERS PICKSWIZARD YOUR DAILY CAPPER ELTOPIOAPPERS PICKSWIZARD IANN yourdailycapper NCAAB: 1 Unit ( 7:00 PM EST George Washington Moneyline NCAAB:1Unit(7:00 PM EST) Pennsylvania Moneyline NCAAB:1 Unit(8:00 PM EST Wisconsin +4 IP CHANNELTOP CAPPERS PICKSWIZARD PARLAY TRAVYY AIP DHANNELTOPCAPPERS PICKSWIZARD TRAVY FridayWhalePlays Wisconsin +3.5（NCAAB)
 
 **Images:**
 - `D:\Programs\Sports Betting\TelegramScraper\v0.0.15\src\data\temp_images\-1001598078987_32084.jpg`
@@ -3583,7 +2341,14 @@
 - `D:\Programs\Sports Betting\TelegramScraper\v0.0.15\src\data\temp_images\-1001598078987_32078.jpg`
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| Ohio vs Miami Ohio Over 163.5 | -110 | 1.0 | Moneyline | - |
+| Manhattan -120 | None | 1.0 | Spread | - |
+| Wisconsin +3.5 | None | 2.0 | Moneyline | - |
+| Ohio Bobcats +11.5 | None | 1.0 | Spread | - |
+| Akron -10.5 | None | 2.0 | Moneyline | - |
+| Manhattan vs Niagara Under 138.5 | -110 | 1.0 | Total | - |
 
 ---
 
@@ -3593,75 +2358,19 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 09:44 ET
 **Text:**
-> 🔮 P4D_Picks4Dayzzz
-> 
-> lowa State -7 -110 3U
-> Florida -12.5 -115 3U
-> Duke+Michigan+Nebraska+Tennessee+Arkansas ML (-149) 3U
-> NCST -5.5 -110 2U
-> Texas Tech / Arizona o157 -110 2U 
-> 
-> 🔮AnalyticsCapper
-> 
-> 2/14/26
-> Early Card: ATP & PGA
-> Humbert +3.5 (-120) v. De Minaur 4u
-> Round 3 Matchup
-> Finau ML (+140) v. English 3u
-> Burns ML (-125) v. Woo Lee 3u
-> 
-> 🔮 TennisWinnersOnly
-> 
-> February 14th card add ons
-> ATP Tennis Plays
-> (2U) Etcheverry +3 vs Cerundolo (-124)
-> (1U) Shelton ML + Aliassime ML (+135)
-> 
-> 🔮MatchPointBets 
-> 
-> Francisco Cerundolo -179 4U
-> Francisco Cerubdolo -2.5 games 3U
-> Shapovalov +3 - 165 6U
-> Shapovalov +157 1U
-> Felix Auger-Aliassime -195 50
-> Schoolkate -125 4U
-> Vallejo + Prizmic Parlay ЗU
-> Mmoh +110 2U
-> Faria +100 2U
-> 
-> 🔮 Tail ToWin
-> 
-> WTA Doha
-> (2/14/26)
-> 0.75U - Karolina Muchova ML +110 (DK)
-> 
-> 🔮AndersPicks
-> 
-> CBB ADDS
-> Houston -22.5 - 105 1U
-> Oklahoma 1H ML -120 1U
-> Was gonna do Houston 1H instead but changed my mind
-> 
-> Saturday Card
-> lowa State -5.5 -110 3U (Full 3U to 6.5)
-> NC State - 4.5 - 115 1U(5.5 or better)
-> Florida -11.5 - 110 1U(13.5 for 5U )
-> 
-> 🔮DirtyBubbleBets 
-> 
-> lowa State -6 (-115) 2U
-> Providence +7.5 (-115) 1U
-> 
-> 🔮MrBigBets
-> 
-> Villanova -3.5 -110 1u
-> Kentucky +12.5 - 110 1u
-> Purdue -2.5 -110 1u
-> USF ML -120 .5u
-> Arizona ML +105 .5u
+> 🔮 P4D_Picks4Dayzzz lowa State -7 -110 3U Florida -12.5 -115 3U Duke+Michigan+Nebraska+Tennessee+Arkansas ML (-149) 3U NCST -5.5 -110 2U Texas Tech / Arizona o157 -110 2U 🔮 2/14/26 Early Card: ATP & PGA Humbert +3.5 (-120) v. De Minaur 4u Round 3 Matchup Finau ML (+140) v. English 3u Burns ML (-125) v. Woo Lee 3u 🔮 TennisWinnersOnly February 14th card add ons ATP Tennis Plays (2U) Etcheverry +3 vs Cerundolo (-124) (1U) Shelton ML + Aliassime ML (+135) 🔮MatchPointBets Francisco Cerundolo -179 4U Francisco Cerubdolo -2.5 games 3U Shapovalov +3 - 165 6U Shapovalov +157 1U Felix Auger-Aliassime -195 50 Schoolkate -125 4U Vallejo + Prizmic Parlay ЗU Mmoh +110 2U Faria +100 2U 🔮 Tail ToWin WTA Doha (2/14/26) 0.75U - Karolina Muchova ML +110 (DK) 🔮AndersPicks CBB ADDS Houston -22.5 - 105 1U Oklahoma 1H ML -120 1U Was gonna do Houston 1H instead but changed my mind Saturday Card lowa State -5.5 -110 3U (Full 3U to 6.5) NC State - 4.5 - 115 1U(5.5 or better) Florida -11.5 - 110 1U(13.5 for 5U ) 🔮 lowa State -6 (-115) 2U Providence +7.5 (-115) 1U 🔮 Villanova -3.5 -110 1u Kentucky +12.5 - 110 1u Purdue -2.5 -110 1u USF ML -120 .5u Arizona ML +105 .5u
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 3U 14 vs 02 #P4D_Picks4Dayzzz lowa State -7 ML | -110 | 3.0 | Moneyline | - |
+| 3u vs English ML | None | 3.0 | Moneyline | - |
+| 3u vs Woo Lee ML | None | 3.0 | Moneyline | - |
+| (1U) Etcheverry 3 vs Cerundolo ML | None | 2.0 | Moneyline | - |
+| (1u) Shelton ML | None | 1.0 | Moneyline | - |
+| Aliassime ML | None | 1.0 | Moneyline | - |
+| (4u) Match Point Bets Tennis Francisco Cerundolo ML | -179 | 4.0 | Moneyline | - |
+| 1U 110 AndersPicks Cbb Adds Houston -22.5 ML | -105 | 1.0 | Moneyline | - |
 
 ---
 
@@ -3671,20 +2380,14 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 09:47 ET
 **Text:**
-> Pardonmypick 
-> 
-> 2U ON EACH CBB
-> CLEMSON +13.5-110
-> NAVY +1.5 -122
-> KANSAS VS IOWA STATE OVER 142.5 -108
-> Will have max/more plays tomorrow
+> 2U ON EACH CBB CLEMSON +13.5-110 NAVY +1.5 -122 KANSAS VS IOWA STATE OVER 142.5 -108 Will have max/more plays tomorrow
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Clemson -110 | None | 1.0 | Spread | - |
-| Navy | -122 | 1.0 | Spread | - |
-| Kansas VS Iowa State Over 142.5 -108 | -108 | 1.0 | Total | - |
+| Clemson +13.5 | -110 | 2.0 | Spread | - |
+| Navy +1.5 | -122 | 2.0 | Spread | - |
+| Kansas vs Iowa State Over 142.5 | -108 | 1.0 | Total | - |
 
 ---
 
@@ -3694,19 +2397,13 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 09:47 ET
 **Text:**
-> Ricky tran
-> 
-> Best bet 
-> Xavier ml
-> 
-> GOY
-> Eastern Washington ml
+> Ricky tran Best bet Xavier ml GOY Eastern Washington ml
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Xavier ml | None | 1.0 | Moneyline | - |
-| Eastern Washington ml | None | 1.0 | Moneyline | - |
+| Ricky tran Best bet Xavier ML | None | 1.0 | Moneyline | - |
+| Goy Eastern Washington ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -3716,26 +2413,21 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 09:53 ET
 **Text:**
-> TheGamblingGawd
-> 
-> 5U POD: Oklahoma MI
-> 5U Plays
-> USA/Denmark Over 6.5
-> Providence +7.5
-> Kansas +6.5
-> UNC -11.5
-> Arizona over 156.5
-> Oklahoma MI
-> Texas MI
-> 2 Team MI Parlay Virginia Tech/St Marys
-> 1U Plays:
-> Arizona -8.5
-> Tennessee St M
-> Devin Booker Win 3pt content
-> Jason Hayes Win Slam Dunk
+> TheGamblingGawd 5U POD: Oklahoma MI 5U Plays USA/Denmark Over 6.5 Providence +7.5 Kansas +6.5 UNC -11.5 Arizona over 156.5 Oklahoma MI Texas MI 2 Team MI Parlay Virginia Tech/St Marys 1U Plays: Arizona -8.5 Tennessee St M Devin Booker Win 3pt content Jason Hayes Win Slam Dunk
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| TheGamblingGawd 5U POD: Oklahoma ML 5U Plays USA vs Denmark Over 6.5 Providence +7.5 Kansas +6.5 UNC -11.5 Arizona over 156.5 Oklahoma ML Texas ML 2 Team ML Parlay Virginia Tech vs St Marys 1U Plays: Arizona -8.5 Tennessee St M Devin Booker: Win 3Pt | -110 | 1.0 | Player Prop | - |
+| Oklahoma vs Texas Over 6.5 | None | 5.0 | Total | - |
+| Providence +7.5 | -110 | 5.0 | Spread | - |
+| Kansas +6.5 | -110 | 5.0 | Spread | - |
+| UNC -11.5 | -102 | 5.0 | Spread | - |
+| Arizona vs Oklahoma Over 156.5 | -115 | 5.0 | Total | - |
+| Virginia Tech vs St Marys | None | 1.0 | Parlay | - |
+| Arizona -8.5 | -120 | 2.0 | Spread | - |
+| Tennessee St M Devin Booker Win 3pt content | None | 1.0 | Spread | - |
+| Jason Hayes Win Slam Dunk | None | 1.0 | Spread | - |
 
 ---
 
@@ -3745,60 +2437,27 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 10:21 ET
 **Text:**
-> 🔮Cblez
-> 
-> CBB
-> Idaho -6.5 (2u)
-> Clemson +13 (1u)
-> SMU -2.5 (1u)
-> Marquette +2.5 (1u)
-> TCU vs Oklahoma St over 156.5 (1u)
-> Kansas +7 (1u)
-> Navy -1 (1u)
-> 
-> 🔮 Bet Labs
-> 
-> CBB
-> Iowa State -5.5 (1u)
-> 
-> 🔮 Micah Roberts
-> 
-> CBB
-> Navy +1.5 (1u)
-> Purdue ML (1u)
-> 
-> 🔮Thomas Casale
-> 
-> CBB
-> Tennessee -11.5 (1u)
-> 
-> 🔮Bob Konarski
-> 
-> CBB
-> Clemson +13.5 (1u)
-> 
-> 🔮 Prop Joe
-> 
-> CBB
-> Texas Tech +9.5 (4u)
-> South Carolina +18 (2u)
-> Oklahoma -1 (2u)
-> Auburn +8.5 (1u)
-> Oklahoma State -1 (1u)
+> 🔮Cblez CBB Idaho -6.5 (2u) Clemson +13 (1u) SMU -2.5 (1u) Marquette +2.5 (1u) TCU vs Oklahoma St over 156.5 (1u) Kansas +7 (1u) Navy -1 (1u) 🔮 Bet Labs CBB Iowa State -5.5 (1u) 🔮 Micah Roberts CBB Navy +1.5 (1u) Purdue ML (1u) 🔮Thomas Casale CBB Tennessee -11.5 (1u) 🔮Bob Konarski CBB Clemson +13.5 (1u) 🔮 Prop Joe CBB Texas Tech +9.5 (4u) South Carolina +18 (2u) Oklahoma -1 (2u) Auburn +8.5 (1u) Oklahoma State -1 (1u)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (1u) Smu | None | 1.0 | Spread | - |
+| (2u) Cblez Cbb Idaho -6.5 | None | 2.0 | Spread | - |
+| (1u) Clemson +13 | None | 1.0 | Spread | - |
+| (1u) Smu -2.5 | None | 1.0 | Spread | - |
+| (1u) Marquette +2.5 | -110 | 2.0 | Spread | - |
 | (1u) Tcu vs Oklahoma St over 156.5 | None | 1.0 | Total | - |
-| (1u) Kansas | None | 1.0 | Spread | - |
-| (1u) Navy | None | 1.0 | Spread | - |
-| (1u) Tennessee | None | 1.0 | Spread | - |
-| (4u) Texas Tech | None | 4.0 | Spread | - |
-| (2u) South Carolina | None | 2.0 | Spread | - |
-| (2u) Oklahoma | None | 2.0 | Spread | - |
-| (1u) Auburn | None | 1.0 | Spread | - |
-| 0.75U Oklahoma State ML | None | 1.0 | Spread | - |
+| (1u) Kansas +7 | None | 1.0 | Spread | - |
+| (1u) Navy -1 | None | 1.0 | Spread | - |
+| (1u) Bet Labs Cbb Iowa State -5.5 | None | 1.0 | Spread | - |
+| (1u) Micah Roberts Cbb Navy +1.5 | None | 1.0 | Spread | - |
+| (1u) Purdue ML | None | 1.0 | Moneyline | - |
+| (1u) Thomas Casale Cbb Tennessee -11.5 | None | 1.0 | Spread | - |
+| (1u) Bob Konarski Cbb Clemson +13.5 | -110 | 1.0 | Spread | - |
+| (4u) Prop Joe Cbb Texas Tech +9.5 | None | 4.0 | Spread | - |
+| (2u) South Carolina +18 | None | 2.0 | Spread | - |
+| (1u) Oklahoma State -1 | None | 2.0 | Spread | - |
+| (1u) Auburn +8.5 | None | 1.0 | Spread | - |
 
 ---
 
@@ -3808,37 +2467,12 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 10:33 ET
 **Text:**
-> SmartMoneySports 
-> 
-> Vanderbilt Commodores -6.5-105 (2u, 1:00e)
-> 
-> North Carolina Tar Heels -11 -110 (2u, 2:00e)
-> 
-> Marquette +2.5 -110 (2u, 3:00e)
-> 
-> Florida Gators -7.5-105 (2u. 3:00e)
-> 
-> NC State Wolfpack -5.5-105 (2u, 4:00e)
-> 
-> Arizona Wildcats -9.5 -110 (2u, 6:30e)
-> 
-> UConn Huskies -9.5 1st Half-105 (3u, 8:00e)
-> 
-> Utah State Aggies -13.5 -110 (2u, 8:00e)
-> 
-> W Washington Huskies -6-110 (3u, 9:00e)
+> SmartMoneySports Vanderbilt Commodores -6.5-105 (2u, 1:00e) North Carolina Tar Heels -11 -110 (2u, 2:00e) Marquette +2.5 -110 (2u, 3:00e) Florida Gators -7.5-105 (2u. 3:00e) NC State Wolfpack -5.5-105 (2u, 4:00e) Arizona Wildcats -9.5 -110 (2u, 6:30e) UConn Huskies -9.5 1st Half-105 (3u, 8:00e) Utah State Aggies -13.5 -110 (2u, 8:00e) W Washington Huskies -6-110 (3u, 9:00e)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (2u Vanderbilt Commodores | -105 | 2.0 | Spread | - |
-| (2u North Carolina Tar Heels | -110 | 2.0 | Spread | - |
-| (1u) Marquette | -110 | 2.0 | Spread | - |
-| (2u Florida Gators | -105 | 2.0 | Spread | - |
-| (2u NC State Wolfpack | -105 | 2.0 | Spread | - |
-| (3u 1H UConn Huskies -9.5 -105 | -105 | 3.0 | Period | - |
-| (2u Utah State Aggies | -110 | 2.0 | Spread | - |
-| (3u W Washington Huskies | -110 | 3.0 | Spread | - |
+| (2u SmartMoneySports Vanderbilt Commodores -6.5 | -105 | 2.0 | Spread | - |
 
 ---
 
@@ -3848,38 +2482,12 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 10:41 ET
 **Text:**
-> 🔮TheBettingQueen
-> 
-> Clemson +13 -110 2U
-> 
-> 🔮 CashCing
-> 
-> 2u, lowa State -6
-> Zu, Nc State -5 - 110
-> 2u, Purdue ML - 135
-> 2u, Clemson +13.5 - 110
-> 2u, Ohio State +4.5 - 110
-> 
-> 🔮BulliesPicks
-> 
-> NCAAB EXCLUSIVE MAX PLAYS
-> (My Highest Confidence Straight Bets)
-> lowa State - 4.5 Alternate Line
-> Florida -11.5 Alternate Line
-> 100 TO 10,000 LADDER CHALLENGE A
-> PLAY #1: lowa State -4.5 Alternate Line (NCAAB)
+> 🔮TheBettingQueen Clemson +13 -110 2U 🔮 CashCing 2u, lowa State -6 Zu, Nc State -5 - 110 2u, Purdue ML - 135 2u, Clemson +13.5 - 110 2u, Ohio State +4.5 - 110 🔮 NCAAB MAX PLAYS (My Highest Confidence Straight Bets) lowa State - 4.5 Florida -11.5 A lowa State -4.5 (NCAAB)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 2u , lowa State | None | 2.0 | Spread | - |
-| 1u - NC State | -110 | 4.0 | Spread | - |
-| 2u , Purdue ML | -135 | 8.0 | Moneyline | - |
-| 2u , Clemson | -110 | 2.0 | Spread | - |
-| 2u , Ohio State | -110 | 2.0 | Spread | - |
-| (1u) Iowa State | -110 | 3.0 | Spread | - |
-| (2u) Florida | -115 | 3.0 | Spread | - |
-| Play #1: lowa State -4.5 Alternate Line | None | 1.0 | Player Prop | - |
+| 2U TheBettingQueen Clemson +13 | -110 | 2.0 | Spread | - |
 
 ---
 
@@ -3889,41 +2497,27 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 10:44 ET
 **Text:**
-> 🔮DormroomDegenerates
-> 
-> Nebraska -12.5
-> lowa St. -5.5
-> NC St. -5.5
-> Ohio St. +4.5
-> Hockey:
-> Finland TT over 3.5 + USA TT over 4.5
-> 
-> 🔮 ThisGirlBetz
-> 
-> SATURDAY NCAAB
-> Clemson +13 -105 (2u)
-> St Johns -8 -115 (1u)
-> Villanova -3.5 -110 (2u)
-> St Bonaventure -130 (1u)
-> Idaho -6.5 -115 (3u)
-> South Dakota St -5.5 -105 (1u)
-> St. Mary's -8.5 - 105 (lu)
+> 🔮DormroomDegenerates Nebraska -12.5 lowa St. -5.5 NC St. -5.5 Ohio St. +4.5 Hockey: Finland TT over 3.5 + USA TT over 4.5 🔮 ThisGirlBetz SATURDAY NCAAB Clemson +13 -105 (2u) St Johns -8 -115 (1u) Villanova -3.5 -110 (2u) St Bonaventure -130 (1u) Idaho -6.5 -115 (3u) South Dakota St -5.5 -105 (1u) St. Mary's -8.5 - 105 (lu)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Nebraska | None | 1.0 | Spread | - |
-| 4* lowa St. | None | 4.0 | Spread | - |
-| NC St. | None | 1.0 | Spread | - |
-| 3* Ohio St. | None | 3.0 | Spread | - |
-| Finland TT over 3.5 / Usa TT over 4.5 | None | 1.0 | Parlay | - |
-| (2u) Clemson | -105 | 2.0 | Spread | - |
-| (1u) St Johns | -115 | 1.0 | Spread | - |
-| (2u) Villanova | -110 | 2.0 | Spread | - |
+| 2.0u St Johns -8 | -115 | 2.0 | Spread | - |
+| (2u) Villanova -3.5 | -110 | 5.0 | Spread | - |
 | (1u) St Bonaventure ML | -130 | 1.0 | Moneyline | - |
-| (3u) Idaho | -115 | 3.0 | Spread | - |
-| (1u) South Dakota St | -105 | 1.0 | Spread | - |
-| St. Mary's | -105 | 1.0 | Spread | - |
+| (3u) Idaho -6.5 | -115 | 3.0 | Spread | - |
+| (1u) South Dakota St -5.5 | -105 | 1.0 | Spread | - |
+| St. Mary's -8.5 | -105 | 1.0 | Spread | - |
+| Nebraska -12.5 | -115 | 1.0 | Spread | - |
+| Iowa St. -5.5 | -118 | 1.0 | Spread | - |
+| Ohio St. +4.5 | None | 1.0 | Spread | - |
+| Clemson +13 | -105 | 2.0 | Spread | - |
+| St Johns -8 | -115 | 1.0 | Spread | - |
+| Villanova -3.5 | -110 | 2.0 | Spread | - |
+| St Bonaventure -130 | None | 1.0 | Spread | - |
+| Idaho -6.5 | -115 | 3.0 | Spread | - |
+| South Dakota St -5.5 | -105 | 1.0 | Spread | - |
+| St. Mary's -8.5 | -105 | 1.0 | Spread | - |
 
 ---
 
@@ -3933,22 +2527,12 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 11:50 ET
 **Text:**
-> CashCing 
-> 
-> 1.5u, Wichita State ML - 120
-> 1.5u. Navy ML -110
-> 1.5u, Oklahoma State +1.5 - 110
-> 1.5u, Hofstra +2.5 - 110
-> 1.5u, UTRVG ML - 110
+> CashCing 1.5u, Wichita State ML - 120 1.5u. Navy ML -110 1.5u, Oklahoma State +1.5 - 110 1.5u, Hofstra +2.5 - 110 1.5u, UTRVG ML - 110
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 1.5u , Wichita State ML | -120 | 5.0 | Moneyline | - |
-| 5u . Navy ML | -110 | 5.0 | Moneyline | - |
-| 1.5u , Oklahoma State | -110 | 5.0 | Spread | - |
-| 1.5u , Hofstra | -110 | 5.0 | Spread | - |
-| 1.5u , Utrvg ML | -110 | 5.0 | Moneyline | - |
+| 1.5u CashCing ML | None | 1.5 | Moneyline | - |
 
 ---
 
@@ -3958,23 +2542,12 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 11:59 ET
 **Text:**
-> Porterpicks 
-> 
-> NC State (-5.5) over MIAMI
-> (3-UNITS)
-> 
-> BAYLOR (+6.5) over Louisville
-> (2-UNITS)
-> 
-> IOWA (+105) over PURDUE
-> (3-UNITS)
+> Porterpicks NC State (-5.5) over MIAMI (3-UNITS) BAYLOR (+6.5) over Louisville (2-UNITS) IOWA (+105) over PURDUE (3-UNITS)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| NC State -5.5 | -110 | 3.0 | Spread | - |
-| Baylor +6.5 | -112 | 2.0 | Spread | - |
-| Iowa ML | 105 | 3.0 | Moneyline | - |
+| Porterpicks NC State -5.5 | -110 | 1.0 | Spread | - |
 
 ---
 
@@ -3984,16 +2557,12 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 12:10 ET
 **Text:**
-> MrE
-> 
-> February 14th, 2026
-> NCAAB- 1 Units (8:30pm EST)
-> Missouri ML
-> Odds -125 (DraftKings)
+> MrE February 14th, 2026 NCAAB- 1 Units (8:30pm EST) Missouri ML Odds -125 (DraftKings)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
+| 1 U MrE February 14th, 2026 Ncaab- ML | None | 1.0 | Moneyline | - |
 | Odds ML | -125 | 1.0 | Moneyline | - |
 
 ---
@@ -4004,20 +2573,15 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 12:14 ET
 **Text:**
-> Porterpicks 
-> 
-> MONEYLINE PARLAY
-> IOWA STATE
-> NC STATE
-> ARIZONA
-> ARKANSAS
-> @ (+170)
-> (4-UNITS)
+> Porterpicks MONEYLINE PARLAY IOWA STATE NC STATE ARIZONA ARKANSAS @ (+170) (4-UNITS)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (NCAAB) Iowa State ML / (NCAAB) NC State ML / (NCAAB) Arizona ML / (NCAAB) Arkansas ML | 170 | 4.0 | Parlay | - |
+| Iowa State ML | None | 4.0 | Moneyline | - |
+| NC State ML | None | 4.0 | Moneyline | - |
+| Arizona ML | None | 4.0 | Moneyline | - |
+| Arkansas ML | None | 4.0 | Moneyline | - |
 
 ---
 
@@ -4027,15 +2591,12 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 16:23 ET
 **Text:**
-> NickyCashin
-> 
-> CBB 4U
-> Arizona Wildcats - 9 (-115) 4U
+> NickyCashin CBB 4U Arizona Wildcats - 9 (-115) 4U
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (2u Arizona Wildcats | -110 | 4.0 | Spread | - |
+| 4U NickyCashin Cbb ML | None | 4.0 | Moneyline | - |
 
 ---
 
@@ -4045,17 +2606,12 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 16:24 ET
 **Text:**
-> Kingcap 
-> 
-> PLAY OF THE DAY
-> 
-> Louisville at Baylor
-> Over 161.5
+> Kingcap PLAY OF THE DAY Louisville at Baylor Over 161.5
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Louisville at Baylor Over 161.5 | -108 | 1.0 | Total | - |
+| Kingcap Play OF The Day Louisville vs Baylor Over 161.5 | None | 1.0 | Total | - |
 
 ---
 
@@ -4065,15 +2621,12 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 16:31 ET
 **Text:**
-> TMS
-> 
-> TMS CBB Premium Selection
-> lowa +1.5 (2 units)
+> TMS TMS CBB Premium Selection lowa +1.5 (2 units)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| (2 u lowa | -105 | 2.0 | Spread | - |
+| (2 u Tms Tms Cbb Premium Selection lowa +1.5 | None | 2.0 | Spread | - |
 
 ---
 
@@ -4083,16 +2636,16 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 16:34 ET
 **Text:**
-> Analyticscapper 
-> 
-> Main Card: NCAAB
-> Grand Canyon -11.5 (-110) v. San Jose St 5u
-> UT Rio Grande -1.5 (-110) v. SF Austin 5u POTD
-> Missouri -1.5 (-110) v. Texas 5u
-> Pacific +7.5 (-110) v. St Mary's 5u
+> Main Card: NCAAB Grand Canyon -11.5 (-110) v. San Jose St 5u UT Rio Grande -1.5 (-110) v. SF Austin 5u POTD Missouri -1.5 (-110) v. Texas 5u Pacific +7.5 (-110) v. St Mary's 5u
 
 ### 🎯 Parsed Picks
-> *No picks extracted from this message.*
+| Pick | Odds | Units | Type | Result |
+| :--- | :--- | :--- | :--- | :--- |
+| 5u Main Card: NCAAB Grand Canyon -11.5 vs San Jose St | None | 5.0 | Player Prop | - |
+| Grand Canyon vs San Jose St | None | 5.0 | Total | - |
+| UT Rio Grande vs SF Austin Over 142.5 | -110 | 5.0 | Total | - |
+| Missouri vs Texas Over 142.5 | -110 | 5.0 | Total | - |
+| Pacific vs St Mary's Over 142.5 | -110 | 5.0 | Total | - |
 
 ---
 
@@ -4102,19 +2655,14 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 20:18 ET
 **Text:**
-> Porterpicks 
-> 
-> MISSOURI (-2) over TEXAS
-> (2-UNITS) 
-> 
-> SOUTH CAROLINA/ALABAMA
-> OVER 167.5
-> (3-UNTS)
+> Porterpicks MISSOURI (-2) over TEXAS (2-UNITS) SOUTH CAROLINA/ALABAMA OVER 167.5 (3-UNTS)
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Missouri -2 | -110 | 2.0 | Spread | - |
+| Porterpicks MISSOURI -2 | -110 | 1.0 | Spread | - |
+| Missouri vs Texas Over 142.5 | -110 | 2.0 | Total | - |
+| South Carolina vs Alabama Over 167.5 | -110 | 3.0 | Total | - |
 
 ---
 
@@ -4124,12 +2672,10 @@
 **Channel:** Telegram
 **Date:** 2026-02-14 22:32 ET
 **Text:**
-> Nicky Cashin
-> 
-> Santa Clara +5.5 (-105) 1.5U
+> Nicky Cashin Santa Clara +5.5 (-105) 1.5U
 
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| 0.25U Santa Clara ML | None | 1.5 | Spread | - |
+| 1.5U Nicky Cashin Santa Clara +5.5 | None | 1.5 | Spread | - |
 

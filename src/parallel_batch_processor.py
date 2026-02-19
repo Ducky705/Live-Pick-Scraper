@@ -68,12 +68,12 @@ PROVIDER_CONFIG = {
         "tier": 1,
     },
     "openrouter": {
-        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "model": "stepfun/step-3.5-flash:free",
         "rpm": 10, # Reduced to 10 to minimize 429s on Free Tier
         "tpm": 100000,
-        "max_concurrent": 2, # Reduced concurrency to avoid burst limits
-        "min_delay": 5.0, # Increased delay between requests
-        "priority": 1, # US-002: HIGHEST PRIORITY
+        "max_concurrent": 5, # Increased for Step 3.5 which handles concurrency better or needs it for throughput
+        "min_delay": 2.0, # Reduced delay
+        "priority": 0, # US-002: HIGHEST PRIORITY (Supercedes Groq)
         "tier": 1,
     },
     "mistral": {
@@ -188,9 +188,9 @@ class ParallelBatchProcessor:
         Initialize processor with EXTREME SPEED configuration.
         """
         self.providers = providers or [
-            "openrouter", # ACCURACY KING: Llama 3.3 70B
-            "mistral",    # SPEED KING: Mistral Nemo (0.7s)
-            "cerebras",   # BACKUP: Llama 3.1 8B (0.73s)
+            "openrouter", # ACCURACY KING: Step 3.5 Flash (95% Recall) & Llama 3.3 70B (81%)
+            # "mistral",    # DISABLED: Low Recall (<60%) - Fast but Inaccurate
+            # "cerebras",   # DISABLED: Low Recall (<60%) - Fast but Inaccurate
             # "groq",     # DISABLED: 403 Forbidden
             # "gemini",   # DISABLED: 429 Rate Limited
         ]

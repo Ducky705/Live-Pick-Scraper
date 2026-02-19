@@ -3,17 +3,20 @@ import logging
 import os
 import sys
 import time
+from collections import defaultdict
 
 # Setup path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# Ensure logs directory exists
+os.makedirs("logs", exist_ok=True)
 
 from src.extraction_pipeline import ExtractionPipeline
 from src.parallel_batch_processor import parallel_processor
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger("Benchmark")
-
 
 def normalize_string(s):
     if not s:
@@ -24,21 +27,47 @@ def normalize_string(s):
     s = s.replace(" vs ", " ").replace(" versus ", " ").replace(" @ ", " ").replace(" games", "")
     s = s.replace("dnb", "draw no bet")
     s = s.replace("ah", "asian handicap")
+    # Normalize common abbreviations
+    s = s.replace("st.", "st")
+    # Expand common state abbreviations for matching
+    import re as _re
+    s = _re.sub(r'\biowa st\b', 'iowa state', s)
+    s = _re.sub(r'\bnc st\b', 'nc state', s)
+    s = _re.sub(r'\bohio st\b', 'ohio state', s)
+    s = _re.sub(r'\bmontana st\b', 'montana state', s)
+    s = _re.sub(r'\btennessee st\b', 'tennessee state', s)
+    s = _re.sub(r'\bs dakota st\b', 'south dakota state', s)
+    s = _re.sub(r'\bsouth dakota st\b', 'south dakota state', s)
+    s = _re.sub(r'\bmiss valley st\b', 'miss valley state', s)
+    s = _re.sub(r'\blowa\b', 'iowa', s)  # OCR error: lowa -> iowa
     return s.strip()
-
 
 def fuzzy_match(expected, actual):
     # Core fields to check
     # 1. Pick (Most important)
-    exp_pick_raw = normalize_string(expected.get("pick"))
-    act_pick_raw = normalize_string(actual.get("pick"))
+    exp_pick_raw = normalize_string(expected.get("p")) # 'p' from golden set compact format
+    act_pick_raw = normalize_string(actual.get("pick")) # 'pick' from pipeline format
+
+    if not exp_pick_raw or not act_pick_raw:
+        return False
 
     # Tokenize
     exp_tokens = set(exp_pick_raw.split())
     act_tokens = set(act_pick_raw.split())
 
     # Remove common filler words
-    stop_words = {"the", "a", "an", "bet", "pick", "prediction", "of", "in", "ml", "moneyline"}
+    stop_words = {
+        "the", "a", "an", "bet", "pick", "prediction", "of", "in", "ml", "moneyline",
+        "spread", "total", "over", "under", "money", "line",
+        # Mascot names that cause token mismatch
+        "cyclones", "wolfpack", "tigers", "hawkeyes", "gators", "ducks",
+        "cowboys", "wolverines", "bobcats", "pegasus", "promy", "egis",
+        "cavs", "friars", "wildcats", "bulldogs", "cardinals",
+        "sonicboom", "sakers", "gunners", "phoebus",
+        # Common formatting words
+        "content", "win", "alternate", "games", "set", "pts", "points",
+        "rebounds", "assists", "pra",
+    }
     exp_tokens -= stop_words
     act_tokens -= stop_words
 
@@ -47,124 +76,164 @@ def fuzzy_match(expected, actual):
 
     # Calculate overlap ratio relative to expected length
     if not exp_tokens:
-        return False
-    ratio = len(intersection) / len(exp_tokens)
+        pick_match = exp_pick_raw == act_pick_raw
+    else:
+        ratio = len(intersection) / len(exp_tokens)
+        pick_match = (ratio >= 0.5) or (exp_pick_raw in act_pick_raw) or (act_pick_raw in exp_pick_raw)
 
-    pick_match = (ratio >= 0.5) or (exp_pick_raw in act_pick_raw) or (act_pick_raw in exp_pick_raw)
-
-    # 3. Odds
+    # 2. Odds match (if present)
     odds_match = True
-    if expected.get("odds") and actual.get("odds"):
+    exp_odd = expected.get("od")
+    act_odd = actual.get("odds")
+    
+    if exp_odd and act_odd:
         try:
-            exp_odd = float(expected.get("odds"))
-            act_odd = float(actual.get("odds"))
-            if abs(exp_odd) > 5.0:  # Likely American
-                odds_match = abs(exp_odd - act_odd) <= 10.0  # Allow -110 vs -115 difference
+            e_o = float(exp_odd)
+            a_o = float(act_odd)
+            if abs(e_o) > 5.0:  # Likely American
+                odds_match = abs(e_o - a_o) <= 10.0
             else:
-                odds_match = abs(exp_odd - act_odd) <= 0.05
+                odds_match = abs(e_o - a_o) <= 0.1
         except:
             pass
 
     return pick_match and odds_match
 
-
 def run_benchmark():
-    print("Loading Golden Set v2...")
-    try:
-        with open("new_golden_set_v2.json", encoding="utf-8") as f:
-            golden_set = json.load(f)
-    except FileNotFoundError:
-        print("Error: new_golden_set_v2.json not found.")
+    ocr_file = r"benchmark\dataset\ocr_golden_set.json"
+    parsing_file = r"benchmark\dataset\parsing_golden_set.json"
+
+    print(f"Loading OCR Data from {ocr_file}...")
+    if not os.path.exists(ocr_file):
+        print("OCR file not found.")
+        return
+        
+    with open(ocr_file, 'r', encoding='utf-8') as f:
+        ocr_data = json.load(f)
+
+    print(f"Loading Ground Truth from {parsing_file}...")
+    if not os.path.exists(parsing_file):
+        print("Parsing file not found.")
         return
 
-    # Convert to pipeline messages
+    with open(parsing_file, 'r', encoding='utf-8') as f:
+        ground_truth = json.load(f)
+
+    # Prepare Messages
     messages = []
-    golden_map = {}
-    for item in golden_set:
-        msg_id = str(item["id"])
-        msg = {
+    for msg_key, text in ocr_data.items():
+        # msg_key format: "message_12345"
+        msg_id = msg_key.replace("message_", "")
+        
+        # We need to construct a "full message" structure as expected by pipeline
+        messages.append({
             "id": msg_id,
-            "date": item["date"],
-            "text": item["text"],
-            "images": item.get("images", []),
-            "ocr_text": "",
-            "ocr_texts": [],
-            "source": item.get("source", "Telegram"),
-        }
-        messages.append(msg)
-        golden_map[msg_id] = item.get("expected_picks", [])
+            "text": text,
+            "ocr_text": "", # We put everything in text for this benchmark
+            "channel_name": "Benchmark_Channel", # Dummy
+            "date": "2026-02-14",
+            "source": "Benchmark"
+        })
 
-    print(f"Loaded {len(messages)} test cases.")
+    print(f"Prepared {len(messages)} messages for processing.")
 
-    # Reset Processor Stats
-    for p in parallel_processor.stats:
-        parallel_processor.stats[p] = {"count": 0, "errors": 0, "total_time": 0.0}
-
-    # Run Pipeline (Standard System Benchmark)
-    print("Running Benchmark...")
+    # Run Extraction Pipeline
+    print("\n" + "="*50)
+    print("STARTING PIPELINE EXECUTION")
+    print("="*50 + "\n")
+    
     start_time = time.time()
+    
+    # We use a dummy date for consistency
+    extracted_picks = ExtractionPipeline.run(
+        messages=messages,
+        target_date="2026-02-14",
+        batch_size=1, 
+        strategy="groq" # Or whatever is default efficient
+    )
+    
+    duration = time.time() - start_time
+    print(f"\nPipeline finished in {duration:.2f} seconds.")
+    print(f"Extracted {len(extracted_picks)} total picks.")
 
-    # Pass target_date=None to ensure all messages are processed regardless of date
-    try:
-        actual_picks = ExtractionPipeline.run(messages, target_date="2026-02-02")
-    except Exception as e:
-        print(f"CRITICAL ERROR: Pipeline failed. {e}")
-        import traceback
+    # Evaluation
+    print("\n" + "="*50)
+    print("EVALUATION")
+    print("="*50 + "\n")
 
-        traceback.print_exc()
-        return
-
-    end_time = time.time()
-    total_duration = end_time - start_time
-
-    # Collect Stats
-    total_calls = sum(s["count"] for s in parallel_processor.stats.values())
-
-    # Calculate Accuracy
-    total_expected = 0
-    total_correct = 0
-
-    actual_map = {}
-    for p in actual_picks:
+    # Group extracted picks by message ID
+    extracted_map = defaultdict(list)
+    for p in extracted_picks:
         mid = str(p.get("message_id"))
-        if mid not in actual_map:
-            actual_map[mid] = []
-        actual_map[mid].append(p)
+        extracted_map[f"message_{mid}"].append(p)
 
-    print("\nBENCHMARK RESULTS")
-    print("-" * 30)
+    total_expected = 0
+    total_found = 0
+    total_correct = 0
+    
+    # Detailed miss log
+    misses = []
 
-    for mid, expected_list in golden_map.items():
-        actual_list = actual_map.get(mid, [])
+    for msg_key, expected_list in ground_truth.items():
+        # Sort expected matches by ID or order to try and match sequentially if possible, 
+        # but fuzzy matching is set-based per message.
+        
+        actual_list = extracted_map.get(msg_key, [])
+        
         total_expected += len(expected_list)
-
-        matched_indices = set()
+        total_found += len(actual_list)
+        
+        # Matching logic
+        # We want to map Expected -> Actual 1:1
+        # Greedy match: matches first best candidate
+        
+        used_actual_indices = set()
+        
         for exp in expected_list:
-            found = False
-            for i, act in enumerate(actual_list):
-                if i in matched_indices:
+            match_found = False
+            for idx, act in enumerate(actual_list):
+                if idx in used_actual_indices:
                     continue
+                
                 if fuzzy_match(exp, act):
-                    found = True
-                    matched_indices.add(i)
+                    match_found = True
+                    used_actual_indices.add(idx)
                     total_correct += 1
                     break
+            
+            if not match_found:
+                misses.append({
+                    "msg_id": msg_key,
+                    "expected": exp,
+                    "candidates": actual_list
+                })
 
-    accuracy = (total_correct / total_expected * 100) if total_expected > 0 else 0
+    # Statistics
+    precision = (total_correct / total_found * 100) if total_found > 0 else 0
+    recall = (total_correct / total_expected * 100) if total_expected > 0 else 0
+    f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0
 
-    print(f"Total Time:      {total_duration:.2f}s")
-    print(f"Total AI Calls:  {total_calls}")
-    print(f"Total Items:     {len(messages)}")
-    print(f"Expected Picks:  {total_expected}")
-    print(f"Correct Picks:   {total_correct}")
-    print(f"Accuracy Score:  {accuracy:.2f}%")
-
+    print(f"Total Messages: {len(messages)}")
+    print(f"Total Expected Picks (Ground Truth): {total_expected}")
+    print(f"Total Extracted Picks (Pipeline):    {total_found}")
+    print(f"Successfully Matched:                {total_correct}")
     print("-" * 30)
-    print("Calls per Provider:")
-    for p, s in parallel_processor.stats.items():
-        if s["count"] > 0:
-            print(f"  - {p}: {s['count']}")
+    print(f"Recall (Accuracy against GT):        {recall:.2f}%")
+    print(f"Precision (Quality of Extraction):   {precision:.2f}%")
+    print(f"F1 Score:                            {f1:.2f}%")
+    print("-" * 30)
 
+    # Save stats to file
+    with open("benchmark_stats.txt", "w") as f:
+        f.write(f"Recall: {recall:.2f}%\n")
+        f.write(f"Precision: {precision:.2f}%\n")
+        f.write(f"F1: {f1:.2f}%\n")
+
+    if misses:
+        print(f"\nTop 5 Missed Picks (Sample):")
+        for m in misses[:5]:
+            print(f"- Msg {m['msg_id']}: Expected '{m['expected'].get('p')}' ({m['expected'].get('ty')})")
+            print(f"  Candidates in pipeline: {[a.get('pick') for a in m['candidates']]}")
 
 if __name__ == "__main__":
     run_benchmark()

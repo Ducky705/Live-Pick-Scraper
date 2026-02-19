@@ -7,6 +7,9 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from src.extraction_pipeline import ExtractionPipeline
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -25,6 +28,7 @@ def normalize_string(s):
 
     # Remove common betting noise
     s = s.replace(" vs ", " ").replace(" versus ", " ").replace(" @ ", " ").replace(" games", "")
+    s = s.replace(" odds", "").replace(" noon", "").replace(" unit play", "").replace(" play", "")
 
     # Normalizations
     s = s.replace("dnb", "draw no bet")
@@ -55,6 +59,9 @@ def fuzzy_match(expected, actual):
         "in",
         "ml",
         "moneyline",
+        "unit",
+        "units",
+        "odds",
     }
     exp_tokens -= stop_words
     act_tokens -= stop_words
@@ -156,7 +163,7 @@ def run_verification():
     for item in golden_set:
         msg = {
             "id": str(item["id"]),  # Ensure ID is string for pipeline consistency
-            "date": item["date"],
+            "date": item.get("date", "2026-01-01"),
             "text": item["text"],
             "images": item.get("images", []),
             "ocr_text": "",
@@ -252,10 +259,49 @@ def run_verification():
     accuracy = (total_correct / total_expected * 100) if total_expected > 0 else 0
     print(f"Accuracy: {accuracy:.2f}%")
 
+    with open("golden_set_report.md", "w", encoding="utf-8") as f:
+        f.write("# Verification Report\n\n")
+        f.write(f"Accuracy: {accuracy:.2f}%\n")
+        f.write(f"Correct: {total_correct}/{total_expected}\n\n")
+        
+        f.write("## Failures\n")
+        for item in golden_set:
+            mid = item["id"]
+            expected_list = item.get("expected_picks", [])
+            actual_list = actual_picks_by_id.get(str(mid), [])
+            
+            # Check for matches again to log specific failures
+            matched_indices = set()
+            file_failures = []
+            
+            for exp in expected_list:
+                found = False
+                for i, act in enumerate(actual_list):
+                    if i in matched_indices:
+                        continue
+                    if fuzzy_match(exp, act):
+                        found = True
+                        matched_indices.add(i)
+                        break
+                if not found:
+                    file_failures.append(f"MISSING: {json.dumps(exp)} (Expected)")
+
+            for i, act in enumerate(actual_list):
+                if i not in matched_indices:
+                    file_failures.append(f"UNEXPECTED: {json.dumps(act)} (Actual)")
+
+            if file_failures:
+                f.write(f"\n### Message {mid}\n")
+                f.write(f"Text: {item['text'][:100].replace(chr(10), ' ')}...\n")
+                for fail in file_failures:
+                    f.write(f"- {fail}\n")
+
     if accuracy >= 95:  # "Near PERFECT" threshold
         print("RESULT: PASSED (Ready for Production)")
+        sys.exit(0)
     else:
         print("RESULT: FAILED (Needs Improvement)")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

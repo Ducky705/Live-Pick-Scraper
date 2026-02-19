@@ -39,7 +39,7 @@ class SemanticValidator:
             "max_spread": 60.0,  # College spreads can be huge
             "spread_odds_range": (-200, 200),
         },
-        "NCAAB": {"min_total": 100.0, "max_total": 180.0, "max_spread": 40.0, "spread_odds_range": (-200, 200)},
+        "NCAAB": {"min_total": 90.0, "max_total": 250.0, "max_spread": 45.0, "spread_odds_range": (-200, 200)},
         "NHL": {
             "min_total": 4.0,
             "max_total": 10.0,
@@ -126,7 +126,6 @@ class SemanticValidator:
             "dm for",
             "message me",
             "guaranteed win",
-            "whale play",
             "max bet alert",
             "promo code",
             "discount",
@@ -148,8 +147,18 @@ class SemanticValidator:
         # Only enforce for Team Sports where we have a complete DB.
         team_sports = {"NBA", "NFL", "NCAAF", "NCAAB", "NHL", "MLB"}
 
-        # If league is NOT in team_sports, we skip this check (e.g. UFC, Tennis, Soccer if not in DB)
+        # If league is NOT in team_sports, we skip this check (e.g. UFC, Tennis, Soccer, KBL, Hockey)
+        # This is critical for niche leagues that don't have team name databases
         should_check_team = sport in team_sports
+
+        # US-300: Fast-pass for non-standard leagues
+        # Skip ALL strict validation for leagues not in our RULES dict
+        # This prevents valid Tennis, Hockey, KBL, College Baseball picks from being dropped
+        niche_leagues = {"TENNIS", "SOCCER", "HOCKEY", "KBL", "NBL", "WTA", "ATP",
+                         "COLLEGE BASEBALL", "PGA", "F1", "EUROLEAGUE", "Other"}
+        if sport.upper() in niche_leagues or sport not in SemanticValidator.RULES:
+            # Only run garbage/URL/odds checks (already done above), skip range validation
+            return True, None
 
         if should_check_team and pick_type in ("Spread", "Moneyline", "Total", "Team Total"):
             # SKIP if we already enriched the game (game_id or opponent found)
@@ -275,9 +284,16 @@ class SemanticValidator:
                         return False, f"Suspicious Odds for Spread: {odds} (Likely Moneyline or Prop)"
 
         # 4. Type Logic
-        # If type is "Moneyline" but line is set (e.g. -5.5), that's inconsistent
+        # If type is "Moneyline" but line is set (e.g. -5.5), that's inconsistent.
+        # Auto-fix: If line looks like odds (e.g. -145), move to odds.
         if pick_type == "Moneyline" and line is not None and abs(line) > 0:
-            return False, f"Moneyline should not have a line/spread value: {line}"
+            if abs(line) >= 50:
+                # Likely odds
+                if odds is None or odds == 0:
+                    pick["odds"] = int(line)
+                pick["line"] = 0.0
+            else:
+                return False, f"Moneyline should not have a line/spread value: {line}"
 
         # 5. Prop Logic
         if pick_type == "Player Prop":

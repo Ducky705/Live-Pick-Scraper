@@ -46,6 +46,43 @@ class GraderEngine:
         if isinstance(pick, str):
             pick = PickParser.parse(pick, league_hint)
 
+        # AI PARSING FALLBACK
+        # If parser failed to find a valid type, or if it looks suspicious (e.g. ML with full text as selection)
+        # Suspicious conditions:
+        # 1. Unknown Type
+        # 2. Moneyline with selection > 5 words (likely failed parsing)
+        # 3. Total without line
+        # 4. Prop without stat
+        # 5. Length Mismatch: Raw text > Selection + 4 words (hidden props/parlays)
+        
+        word_count = len(pick.raw_text.split())
+        sel_count = len(pick.selection.split()) if pick.selection else 0
+        
+        is_suspicious = (
+            pick.bet_type == BetType.UNKNOWN or
+            (pick.bet_type == BetType.MONEYLINE and len(pick.selection.split()) > 5) or
+            (pick.bet_type == BetType.TOTAL and pick.line is None) or 
+            (pick.bet_type == BetType.PLAYER_PROP and not pick.stat) or
+            # Aggressive length check:
+            # Moneyline: If > 1 extra word (e.g. "Lakers to win" -> 2 extra), trigger. "Lakers ML" (1 extra) is fine.
+            (pick.bet_type == BetType.MONEYLINE and word_count > sel_count + 1) or
+            # Spread/Total: If > 2 extra words (e.g. "Lakers -5 Celtics ML"), trigger.
+            # "Golden State Warriors -5" -> 3 sel words, 4 total words -> Diff 1. Safe.
+            (pick.bet_type in (BetType.SPREAD, BetType.TOTAL) and word_count > sel_count + 2) or
+            # Keyword Check for "Fake" Moneylines (Props masquerading as ML)
+            (pick.bet_type == BetType.MONEYLINE and any(kw in pick.selection.lower() for kw in ["points", "rebounds", "assist", "yards", "over", "under"])) or
+            # Suspiciously long selections for Spread/Total (likely multiple bets merged)
+            # EXCEPTION: If it contains "vs" or "@" (e.g. "Knicks vs Nets O 220"), it's likely a Game Total.
+            (pick.bet_type in (BetType.SPREAD, BetType.TOTAL) and len(pick.selection.split()) > 4 and "vs" not in pick.selection.lower() and "@" not in pick.selection)
+        )
+        
+        if is_suspicious:
+             logger.info(f"Triggering AI Parsing Fallback for: {pick.raw_text}")
+             ai_parsed = AIResolver.parse_pick(pick.raw_text, pick.league)
+             if ai_parsed:
+                 logger.info(f"AI Parsing Successful: {ai_parsed.bet_type} - {ai_parsed.selection}")
+                 pick = ai_parsed
+
         # VALIDITY CHECK (Garbage Disposal)
         # Avoid grading nonsense like "Over 6.5" or "Team ML" without context
         from src.grading.validity_filter import ValidityFilter

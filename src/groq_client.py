@@ -4,6 +4,9 @@ import logging
 import os
 import time
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 try:
     from config import GROQ_TOKEN as GROQ_API_KEY

@@ -3,6 +3,10 @@ from src.grading.validity_filter import ValidityFilter
 import logging
 
 # Configure logging to see output
+import logging
+from dotenv import load_dotenv
+
+load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
 def test_validity_filter():

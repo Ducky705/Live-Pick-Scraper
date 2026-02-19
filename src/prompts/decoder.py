@@ -110,6 +110,12 @@ VALID_LEAGUES = {
     "EUROLEAGUE",
     "PGA",
     "F1",
+    "HOCKEY",
+    "KBL",
+    "NBL",
+    "WTA",
+    "ATP",
+    "COLLEGE BASEBALL",
     "Other",
 }
 
@@ -198,6 +204,16 @@ def expand_league(league_value: Any) -> str:
         "LA LIGA": "SOCCER",
         "BUNDESLIGA": "SOCCER",
         "LIGUE 1": "SOCCER",
+        "HOCKEY": "HOCKEY",
+        "OLYMPIC HOCKEY": "HOCKEY",
+        "OLYMPICS HOCKEY": "HOCKEY",
+        "TENNIS": "TENNIS",
+        "WTA": "TENNIS",
+        "ATP": "TENNIS",
+        "KBL": "KBL",
+        "KOREAN BASKETBALL": "KBL",
+        "NBL": "NBL",
+        "COLLEGE BASEBALL": "COLLEGE BASEBALL",
     }
 
     if league_str in league_map:

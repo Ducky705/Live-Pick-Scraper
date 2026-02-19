@@ -21,7 +21,7 @@ class ExtractionPipeline:
     def run(
         messages: list[dict[str, Any]],
         target_date: str,
-        batch_size: int = 20,  # US-006: Increased to 20 for throughput
+        batch_size: int = 5,  # US-006: Optimized for Step 3.5 Flash (95% Recall @ 5)
         strategy: str = "groq",
     ) -> list[dict[str, Any]]:
         """

@@ -1,0 +1,74 @@
+{
+  "provider": "openrouter",
+  "timestamp": "20260217_143924",
+  "summary": {
+    "entries": 3,
+    "total_expected": 3,
+    "total_extracted": 3,
+    "total_matched": 3,
+    "total_missed": 0,
+    "total_extra": 0,
+    "recall_pct": 100.0,
+    "precision_pct": 100.0,
+    "f1_pct": 100.0
+  },
+  "entries": [
+    {
+      "msg_id": "gs001",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 4.4,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Tenn -11.5",
+          "actual": "Tenn -11.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs002",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 4.4,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Colorado State -4",
+          "actual": "Colorado State -4",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs003",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 4.0,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Louisville/Baylor Over 162.5",
+          "actual": "Louisville vs Baylor Over 162.5",
+          "exp_type": "Total",
+          "act_type": "Total",
+          "score": 3
+        }
+      ]
+    }
+  ]
+}

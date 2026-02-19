@@ -9,45 +9,60 @@ import json
 PICK_FORMAT_RULES = """
 RULES FOR PICK EXTRACTION:
 1.  **Format**: Return strict JSON.
-2.  **Entity Resolution**: "Lakers" -> Team: "Lakers", Sport: "NBA". Use the schedule if available.
-3.  **Bet Type**:
-    -   "Team -7" -> Spread
-    -   "Team ML" or "Team Moneyline" -> Moneyline
-    -   "Over 220" or "Team/Team Over 220" -> Total
-    -   "Player Over 20.5 Pts" -> Player Prop
-    -   "Team TT o83.5" -> Team Total (Total bet type, selection = team name)
-    -   "Team/Team O 6.5 Goals" -> Game Total (Total, not a Player Prop)
-4.  **Odds**: American format (-110, +200). If decimal (1.90), convert or leave as is.
-5.  **Units**: "5u", "5%", "3*" (star is units), "Max Bet" (5u), "(4-UNITS)" -> 4. Default to 1.0 if missing.
-6.  **Capper Name**: Identify who is making the pick.
-    -   If the message says "**Dave's Picks**", capper is "Dave".
-    -   If multiple cappers in one message, attribute each pick to the correct capper.
-    -   CRITICAL: The first line of many messages is JUST the capper name (e.g. "Marco D'Angelo"). This is NOT a pick — it is the name of the person making the picks that follow.
-    -   Common pattern: "CapperName\\n\\nLeague\\nTeam -5 (2u)" -> capper is CapperName, pick is "Team -5".
-    -   Separator patterns: "➖➖➖➖➖" or "---" or "➖" between cappers.
-    -   Emoji patterns: 🔮, #, @, ✅ before capper names are labels, not picks.
-7.  **NOISE FILTER (CRITICAL)**:
-    -   Do NOT extract capper names ("Marco D'Angelo", "Tokyo Brandon", "King Of The Court") as picks.
-    -   Do NOT extract book names ("Hard Rock", "FanDuel", "Caesars", "DraftKings", "BetRivers", "MGM") as picks.
-    -   Do NOT extract timestamps ("08:50 am", "2:00pm PST", "16:19") as parts of picks.
-    -   Do NOT extract reaction/view counts ("7 👁️", "🔥 24", "172 @") as parts of picks.
-    -   Do NOT extract section headers ("NCAAB PLAYS", "CBB ADD", "FULL CARD", "Saturday Card") as picks.
-    -   Do NOT extract ticket/bet slip metadata ("Ticket#", "Status Pending", "Risk/Win", "Selection NCAA") as picks.
-    -   Do NOT extract commentary ("Crazy choke from Florida", "Let's get it") as picks.
-    -   Do NOT extract "Straight Bets Only", "Recap", or "Results" as picks.
-    -   IGNORE: "Dm for vip", "Link in bio", "Promo", "Sign up", URLs.
-8.  **MULTI-CAPPER MESSAGES**: Many messages contain picks from MULTIPLE cappers. Extract ALL of them.
-    -   Pattern A: "🔮Capper1\\nLeague1\\nPick1\\n🔮Capper2\\nLeague2\\nPick2"
-    -   Pattern B: "Capper1\\n➖➖➖➖➖\\nPick1\\nCapper2\\n➖➖➖➖➖\\nPick2"
-    -   Pattern C: "#Capper1\\nPick1\\n#Capper2\\nPick2"
-    -   You MUST attribute each pick to the correct capper.
-    -   Do NOT stop after the first capper — scan the ENTIRE message.
+2.  **Goal**: EXTRACT EVERY SINGLE BETTING LINE. Do not aim for perfection, aim for COMPLETENESS.
+3.  **Bet Verification**:
+    -   If it has a Team Name + Number (e.g. "Lakers -5", "Bulls +110"), IT IS A BET.
+    -   If it has "Over" or "Under" + Number (e.g. "Over 220.5"), IT IS A BET.
+    -   If it says "ML" or "Moneyline", IT IS A BET.
+    -   If it says "units" or "u" (e.g. "3u", "Max Play"), IT IS A BET.
+4.  **Handling Headers**:
+    -   Lines like "HammeringHank" or "5 Unit Play" are Context/Headers. Use them to fill `capper_name` and `units` fields for the picks below them.
+    -   If you see a new name, switch `capper_name` for subsequent picks.
+5.  **Noise Handling**:
+    -   Ignore: "DM for VIP", urls, "Link in bio", "Promo".
+    -   Capture: "Analysis", "Writeup" -> put in `reasoning` field if short, otherwise ignore.
+6.  **MULTI-PICK & PARLAY HANDLING**:
+    -   Extract each leg of a parlay as a separate pick if listed separately.
+    -   If listed as "Team A / Team B / Team C", extract as one pick with type "Parlay".
 """
 
 # =============================================================================
 # PROMPT BUILDER FUNCTIONS
 # =============================================================================
 
+
+BATCH_EXAMPLE = """
+EXAMPLE INPUT 1 (Dense Multi-Capper Message):
+### [9001]
+SmartMoney Vanderbilt -6.5 NC State -5.5 Arizona -9.5
+CashC Iowa State -6 Clemson +13.5
+
+EXAMPLE OUTPUT 1:
+{
+  "picks": [
+    { "message_id": "9001", "capper_name": "SmartMoney", "sport": "NCAAB", "bet_type": "Spread", "selection": "Vanderbilt -6.5", "line": -6.5, "odds": null, "units": 1.0, "confidence": 9, "reasoning": "Explicit spread" },
+    { "message_id": "9001", "capper_name": "SmartMoney", "sport": "NCAAB", "bet_type": "Spread", "selection": "NC State -5.5", "line": -5.5, "odds": null, "units": 1.0, "confidence": 9, "reasoning": "Explicit spread" },
+    { "message_id": "9001", "capper_name": "SmartMoney", "sport": "NCAAB", "bet_type": "Spread", "selection": "Arizona -9.5", "line": -9.5, "odds": null, "units": 1.0, "confidence": 9, "reasoning": "Explicit spread" },
+    { "message_id": "9001", "capper_name": "CashC", "sport": "NCAAB", "bet_type": "Spread", "selection": "Iowa State -6", "line": -6.0, "odds": null, "units": 1.0, "confidence": 9, "reasoning": "Explicit spread" },
+    { "message_id": "9001", "capper_name": "CashC", "sport": "NCAAB", "bet_type": "Spread", "selection": "Clemson +13.5", "line": 13.5, "odds": null, "units": 1.0, "confidence": 9, "reasoning": "Explicit spread" }
+  ]
+}
+NOTE: ALL 5 picks extracted. Each capper's picks are separate entries.
+
+EXAMPLE INPUT 2 (Mixed Sports):
+### [9002]
+LearLocks Olympics hockey Czechia ML 1.5u -135
+Tennis Yastremska ML 1.5u -115
+
+EXAMPLE OUTPUT 2:
+{
+  "picks": [
+    { "message_id": "9002", "capper_name": "LearLocks", "sport": "Hockey", "bet_type": "Moneyline", "selection": "Czechia", "line": null, "odds": -135, "units": 1.5, "confidence": 9, "reasoning": "Explicit ML" },
+    { "message_id": "9002", "capper_name": "LearLocks", "sport": "Tennis", "bet_type": "Moneyline", "selection": "Yastremska", "line": null, "odds": -115, "units": 1.5, "confidence": 9, "reasoning": "Explicit ML" }
+  ]
+}
+NOTE: Sport changes mid-message. Each pick gets its correct sport.
+"""
 
 def get_reasoning_extraction_prompt(
     raw_data: str,
@@ -70,21 +85,23 @@ def get_reasoning_extraction_prompt(
     if style_context:
         style_section = f"CAPPER STYLE GUIDE:\n{style_context}\n\n"
 
-    return f"""You are an expert Sports Betting Analyst. Your goal is to extract valid betting picks from raw text with 100% accuracy.
+    return f"""You are an expert Sports Betting Analyst. Your goal is to extract valid betting picks from a BATCH of raw text messages with 100% accuracy.
 
 DATA INPUT FORMAT:
+The input contains multiple messages separated by headers:
 ### [MessageID]
 [Text content...]
-[OCR content...]
 
 {schedule_section}{style_section}
 {PICK_FORMAT_RULES}
+{BATCH_EXAMPLE}
 
 CRITICAL INSTRUCTION:
-1.  Perform a "Mental Verification" step for every potential pick.
-2.  **EXTRACT ALL VALID PICKS**. Do not stop after the first one. Scan the entire text.
-3.  Verify: "Is 'BetSharper' a team?" -> No. -> Skip.
-4.  Verify: "Is 'Lakers -5' a bet?" -> Yes. -> Extract.
+1.  **BATCH PROCESSING**: The input contains MULTIPLE messages (e.g. ### [ID1], ### [ID2]). You must process EVERY SINGLE message.
+2.  **ITERATION**: Read ### [ID1], extract picks. Then read ### [ID2], extract picks. Repeat until the end.
+3.  **DO NOT STOP** after the first message.
+4.  Perform a "Mental Verification" step for every potential pick.
+5.  Verify: "Is 'Lakers -5' a bet?" -> Yes. -> Extract.
 
 OUTPUT FORMAT (JSON):
 {{
@@ -98,98 +115,121 @@ OUTPUT FORMAT (JSON):
       "line": -5.0,
       "odds": -110,
       "units": 1.0,
-      "confidence": 9,
-      "reasoning": "Explicit mention of Lakers spread"
+      "confidence": 9.5,
+      "reasoning": "Found valid spread pattern 'Lakers -5'",
+      "_source_text": "Lakers -5 (2u)"
     }}
   ]
 }}
 
-If no valid picks are found, return {{ "picks": [] }}.
-
-DATA TO PROCESS:
-{raw_data}"""
-
-
-def get_compact_extraction_prompt(
-    raw_data: str,
-    current_date: str | None = None,
-    schedule_context: str | None = None,
-    style_context: str | None = None,
-) -> str:
-    """
-    Backward compatibility alias. Redirects to reasoning prompt.
-    """
-    return get_reasoning_extraction_prompt(
-        raw_data, current_date, schedule_context, style_context
-    )
-
-
-def get_compact_revision_prompt(failed_items: list[dict[str, Any]]) -> str:
-    """
-    Generate a reasoning-based revision prompt.
-    """
-    # Simply json dump the failed items for clarity
-    items_str = json.dumps(failed_items, indent=2)
-
-    return f"""You are fixing failed extractions.
-The following picks were flagged as invalid or incomplete.
-Please re-analyze the context and correct them.
-
-FAILED ITEMS:
-{items_str}
-
-INSTRUCTIONS:
-1. Check the 'original_text' or 'context'.
-2. If the pick is valid but malformed, fix it.
-3. If it was NOT a pick (e.g. a header, garbage), return "action": "delete".
-4. If it was a duplicate, return "action": "delete".
-
-OUTPUT JSON:
-{{
-  "corrections": [
-    {{
-      "message_id": "...",
-      "selection": "Corrected Selection",
-      "action": "fix" 
-    }}
-  ]
-}}
+RAW DATA TO PROCESS:
+{raw_data}
 """
 
-
-def get_dsl_extraction_prompt(raw_data: str, current_date: str | None = None) -> str:
+def normalize_response(
+    raw_response: str,
+    expand: bool = False,
+    valid_message_ids: list[str] | None = None,
+    message_context: dict[str, str] | None = None,
+) -> list[dict[str, Any]]:
     """
-    Legacy DSL prompt. Kept if needed, but we prefer JSON.
+    Parses the JSON response from the LLM.
+    Handles markdown blocks, partial JSON, and simple syntax errors.
     """
-    return get_reasoning_extraction_prompt(raw_data, current_date)
+    cleaned_json = raw_response.strip()
+    
+    # Remove markdown code blocks
+    if cleaned_json.startswith("```json"):
+        cleaned_json = cleaned_json.replace("```json", "").replace("```", "").strip()
+    elif cleaned_json.startswith("```"):
+        cleaned_json = cleaned_json.replace("```", "").strip()
 
+    try:
+        data = json.loads(cleaned_json)
+        
+        # Determine format
+        if isinstance(data, list):
+            picks = data
+        elif isinstance(data, dict):
+            if "picks" in data:
+                picks = data["picks"]
+            elif "bets" in data:
+                picks = data["bets"]
+            elif "data" in data and isinstance(data["data"], list):
+                picks = data["data"]
+            else:
+                # Last resort: if the dict itself looks like a pick, wrap it
+                if "selection" in data or "pick" in data:
+                    picks = [data]
+                else:
+                    return []
+        else:
+            return []
 
-def compress_raw_data(selected_data: list[dict[str, Any]]) -> str:
+        # Basic cleanup
+        normalized_picks = []
+        for p in picks:
+            # Flatten compressed keys if present (from older prompts)
+            # "p" -> "pick", "o" -> "odds", etc.
+            if "p" in p and "pick" not in p: p["pick"] = p["p"]
+            if "o" in p and "odds" not in p: p["odds"] = p["o"]
+            if "u" in p and "units" not in p: p["units"] = p["u"]
+            if "t" in p and "type" not in p: p["type"] = p["t"]
+            if "l" in p and "league" not in p: p["league"] = p["l"]
+            if "c" in p and "capper_name" not in p: p["capper_name"] = p["c"]
+            if "r" in p and "reasoning" not in p: p["reasoning"] = p["r"]
+            if "i" in p and "message_id" not in p: p["message_id"] = p["i"]
+
+            # Cap confidence
+            if "confidence" in p:
+                try:
+                    conf = float(p["confidence"])
+                    if conf > 10: p["confidence"] = 10
+                except:
+                    p["confidence"] = 5.0
+
+            normalized_picks.append(p)
+
+        return normalized_picks
+
+    except json.JSONDecodeError:
+        return []
+
+# Alias for compatibility
+get_compact_extraction_prompt = get_reasoning_extraction_prompt
+get_compact_revision_prompt = get_reasoning_extraction_prompt
+get_dsl_extraction_prompt = get_reasoning_extraction_prompt
+get_cot_extraction_prompt = get_reasoning_extraction_prompt
+
+def compress_raw_data(data: list[dict[str, Any]] | str) -> str:
     """
-    Prepare raw data for the prompt.
-    Keeps the ### ID format as it is clean and robust.
+    Compresses input data into a dense text format for the AI prompt.
+    Handles both raw lists of messages and pre-formatted strings.
     """
-    from src.utils import clean_text_for_ai
+    import re
 
-    lines = []
-    for item in selected_data:
-        entry = f"### {item['id']}"
+    if isinstance(data, list):
+        # Convert list of messages to the standard text format
+        # Format:
+        # ### [MessageID]
+        # [Text]
+        # [OCR - optional]
+        buffer = []
+        for msg in data:
+            m_id = msg.get("id", "Unknown")
+            text = msg.get("text", "")
+            ocr = msg.get("ocr_text", "")
+            
+            buffer.append(f"### [{m_id}]")
+            if text:
+                buffer.append(text.strip())
+            if ocr:
+                buffer.append(f"[OCR]: {ocr.strip()}")
+            buffer.append("") # Separator
+        
+        text = "\n".join(buffer)
+    else:
+        text = str(data)
 
-        text = clean_text_for_ai(item.get("text", ""))
-        ocr_texts = item.get("ocr_texts", [])
-
-        # Fallback to legacy field
-        if not ocr_texts and item.get("ocr_text"):
-            ocr_texts = [item.get("ocr_text")]
-
-        if text:
-            entry += f"\n{text}"
-
-        for i, ocr in enumerate(ocr_texts):
-            cleaned = clean_text_for_ai(ocr)
-            if cleaned:
-                entry += f"\n[OCR] {cleaned}"
-
-        lines.append(entry)
-
-    return "\n".join(lines)
+    # Standard cleanup
+    return re.sub(r'\n{3,}', '\n\n', text).strip()

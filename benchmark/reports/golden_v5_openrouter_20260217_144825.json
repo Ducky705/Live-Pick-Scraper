@@ -1,0 +1,803 @@
+{
+  "provider": "openrouter",
+  "timestamp": "20260217_144825",
+  "summary": {
+    "entries": 20,
+    "total_expected": 70,
+    "total_extracted": 71,
+    "total_matched": 70,
+    "total_missed": 0,
+    "total_extra": 1,
+    "recall_pct": 100.0,
+    "precision_pct": 98.6,
+    "f1_pct": 99.3
+  },
+  "entries": [
+    {
+      "msg_id": "gs001",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 3.8,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Tenn -11.5",
+          "actual": "Tenn -11.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs002",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 3.8,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Colorado State -4",
+          "actual": "Colorado State -4",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs003",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 4.2,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Louisville/Baylor Over 162.5",
+          "actual": "Louisville vs Baylor Over 162.5",
+          "exp_type": "Total",
+          "act_type": "Total",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "msg_id": "gs004",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 4.2,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Gonzaga -4.5",
+          "actual": "Gonzaga -4.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs005",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 4.4,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "USA TT Over 5.5",
+          "actual": "Usa TT Over 5.5 goals",
+          "exp_type": "Total",
+          "act_type": "Team Prop",
+          "score": 2
+        }
+      ]
+    },
+    {
+      "msg_id": "gs006",
+      "expected_count": 16,
+      "actual_count": 16,
+      "matched": 16,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 49.2,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Oklahoma State ML",
+          "actual": "Oklahoma State ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Iowa State -4.5",
+          "actual": "Iowa State -4.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Iowa +2.5",
+          "actual": "Iowa +2.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "St Johns -4.5",
+          "actual": "St Johns -4.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Oklahoma ML",
+          "actual": "Oklahoma ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Kennesaw State ML",
+          "actual": "Kennesaw State ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Texas ML",
+          "actual": "Texas ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Gonzaga -2.5",
+          "actual": "Gonzaga -2.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Clemson +14.5",
+          "actual": "Clemson +14.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "NC State -2.5",
+          "actual": "NC State -2.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Navy +1.5",
+          "actual": "Navy +1.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Florida -9.5",
+          "actual": "Florida -9.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "USF ML",
+          "actual": "Usf ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Arizona ML",
+          "actual": "Arizona ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Baez ML",
+          "actual": "Baez ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Denmark/USA Over 6.5",
+          "actual": "Denmark vs Usa Over 6.5 Goals",
+          "exp_type": "Total",
+          "act_type": "Total",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "msg_id": "gs007",
+      "expected_count": 7,
+      "actual_count": 7,
+      "matched": 7,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 17.5,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Idaho -6.5",
+          "actual": "Idaho -6.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Clemson +13",
+          "actual": "Clemson +13",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "SMU -2.5",
+          "actual": "Smu -2.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Marquette +2.5",
+          "actual": "Marquette +2.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "TCU/Oklahoma St Over 156.5",
+          "actual": "Tcu vs Oklahoma St Over 156.5",
+          "exp_type": "Total",
+          "act_type": "Total",
+          "score": 3
+        },
+        {
+          "status": "MATCH",
+          "expected": "Kansas +7",
+          "actual": "Kansas +7",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Navy -1",
+          "actual": "Navy -1",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs008",
+      "expected_count": 3,
+      "actual_count": 3,
+      "matched": 3,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 18.3,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Oklahoma State -1.5",
+          "actual": "Oklahoma State -1.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "NC State -5.5",
+          "actual": "NC State -5.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Arizona -9.5",
+          "actual": "Arizona -9.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs009",
+      "expected_count": 4,
+      "actual_count": 4,
+      "matched": 4,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 10.6,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Marquette +3",
+          "actual": "Marquette +3",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Iowa State -7",
+          "actual": "Iowa State -7",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Syracuse +3.5",
+          "actual": "Syracuse +3.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Tartleton +3",
+          "actual": "Tartleton +3",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs010",
+      "expected_count": 2,
+      "actual_count": 2,
+      "matched": 2,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 5.9,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Navy +1.5",
+          "actual": "Navy +1.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Purdue ML",
+          "actual": "Purdue ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs011",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 3.9,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Clemson +13.5",
+          "actual": "Clemson +13.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs012",
+      "expected_count": 2,
+      "actual_count": 2,
+      "matched": 2,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 6.4,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Iowa State -6.5",
+          "actual": "Iowa State -6.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Villanova -3.5",
+          "actual": "Villanova -3.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs013",
+      "expected_count": 5,
+      "actual_count": 5,
+      "matched": 5,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 13.1,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Arizona -9.0",
+          "actual": "Arizona -9.0",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Iowa State -7.0",
+          "actual": "Iowa State -7.0",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Samford/East Tenn State Under 146.0",
+          "actual": "Samford vs East Tenn State Under 146.0",
+          "exp_type": "Total",
+          "act_type": "Total",
+          "score": 3
+        },
+        {
+          "status": "MATCH",
+          "expected": "St. Francis PA +3.0",
+          "actual": "St. Francis PA +3.0",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Wagner/Stonehill Under 130.5",
+          "actual": "Wagner vs Stonehill Under 130.5",
+          "exp_type": "Total",
+          "act_type": "Total",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "msg_id": "gs014",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 3.8,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Purdue ML",
+          "actual": "Purdue ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs015",
+      "expected_count": 1,
+      "actual_count": 1,
+      "matched": 1,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 4.4,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Texas Tech +10",
+          "actual": "Texas Tech +10",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs016",
+      "expected_count": 2,
+      "actual_count": 3,
+      "matched": 2,
+      "missed": 0,
+      "extra": 1,
+      "elapsed_s": 7.9,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Iowa State -7",
+          "actual": "Iowa State -7",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Iowa State ML / Oregon ML",
+          "actual": "Iowa State ML",
+          "exp_type": "Parlay",
+          "act_type": "Moneyline",
+          "score": 2
+        },
+        {
+          "status": "EXTRA",
+          "expected": null,
+          "actual": "Oregon ML",
+          "act_type": "Moneyline"
+        }
+      ]
+    },
+    {
+      "msg_id": "gs017",
+      "expected_count": 7,
+      "actual_count": 7,
+      "matched": 7,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 16.8,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Providence +8",
+          "actual": "Providence +8",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Northwestern +13",
+          "actual": "Northwestern +13",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Memphis +13.5",
+          "actual": "Memphis +13.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "UCLA +16.5",
+          "actual": "Ucla +16.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Florida State +5.5",
+          "actual": "Florida State +5.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Texas +2.5",
+          "actual": "Texas +2.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Kentucky +13.5",
+          "actual": "Kentucky +13.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs018",
+      "expected_count": 3,
+      "actual_count": 3,
+      "matched": 3,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 8.1,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "James Madison +1.5",
+          "actual": "James Madison +1.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Texas A&M +6.5",
+          "actual": "Texas A&M +6.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "SMU ML",
+          "actual": "Smu ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs019",
+      "expected_count": 6,
+      "actual_count": 6,
+      "matched": 6,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 15.8,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Iowa St. -7",
+          "actual": "Iowa St. -7",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Providence +7.5",
+          "actual": "Providence +7.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Mississippi Valley St. +17.5",
+          "actual": "Mississippi Valley St. +17.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "UT-Rio Grande Valley +2",
+          "actual": "UT-Rio Grande Valley +2",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "N. Colorado -3.5",
+          "actual": "N. Colorado -3.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "UTEP +6.5",
+          "actual": "Utep +6.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "msg_id": "gs020",
+      "expected_count": 5,
+      "actual_count": 5,
+      "matched": 5,
+      "missed": 0,
+      "extra": 0,
+      "elapsed_s": 12.5,
+      "details": [
+        {
+          "status": "MATCH",
+          "expected": "Arizona -8.5",
+          "actual": "Arizona -8.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Santa Clara +4.5",
+          "actual": "Santa Clara +4.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Santa Clara ML",
+          "actual": "Santa Clara ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Pacific +8.5",
+          "actual": "Pacific +8.5",
+          "exp_type": "Spread",
+          "act_type": "Spread",
+          "score": 4
+        },
+        {
+          "status": "MATCH",
+          "expected": "Pacific ML",
+          "actual": "Pacific ML",
+          "exp_type": "Moneyline",
+          "act_type": "Moneyline",
+          "score": 4
+        }
+      ]
+    }
+  ]
+}

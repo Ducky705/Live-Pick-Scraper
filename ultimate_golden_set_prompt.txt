@@ -1,0 +1,326 @@
+You are an expert Sports Betting Analyst. Your goal is to extract valid betting picks from raw text with 100% accuracy.
+
+DATA INPUT FORMAT:
+### [MessageID]
+[Text content...]
+
+
+RULES FOR PICK EXTRACTION:
+1.  **Format**: Return strict JSON.
+2.  **Entity Resolution**: "Lakers" -> Team: "Lakers", Sport: "NBA". Use the schedule if available.
+3.  **Bet Type**:
+    -   "Team -7" -> Spread
+    -   "Team ML" or "Team Moneyline" -> Moneyline
+    -   "Over 220" or "Team/Team Over 220" -> Total
+    -   "Player Over 20.5 Pts" -> Player Prop
+    -   "Team TT o83.5" -> Team Total (Total bet type, selection = team name)
+    -   "Team/Team O 6.5 Goals" -> Game Total (Total, not a Player Prop)
+4.  **Odds**: American format (-110, +200). If decimal (1.90), convert or leave as is.
+5.  **Units**: "5u", "5%", "3*" (star is units), "Max Bet" (5u), "(4-UNITS)" -> 4. Default to 1.0 if missing.
+6.  **Capper Name**: Identify who is making the pick.
+    -   If the message says "**Dave's Picks**", capper is "Dave".
+    -   If multiple cappers in one message, attribute each pick to the correct capper.
+    -   CRITICAL: The first line of many messages is JUST the capper name (e.g. "Marco D'Angelo"). This is NOT a pick — it is the name of the person making the picks that follow.
+    -   Common pattern: "CapperName\n\nLeague\nTeam -5 (2u)" -> capper is CapperName, pick is "Team -5".
+    -   Separator patterns: "➖➖➖➖➖" or "---" or "➖" between cappers.
+    -   Emoji patterns: 🔮, #, @, ✅ before capper names are labels, not picks.
+7.  **NOISE FILTER (CRITICAL)**:
+    -   Do NOT extract capper names ("Marco D'Angelo", "Tokyo Brandon", "King Of The Court") as picks.
+    -   Do NOT extract book names ("Hard Rock", "FanDuel", "Caesars", "DraftKings", "BetRivers", "MGM") as picks.
+    -   Do NOT extract timestamps ("08:50 am", "2:00pm PST", "16:19") as parts of picks.
+    -   Do NOT extract reaction/view counts ("7 👁️", "🔥 24", "172 @") as parts of picks.
+    -   Do NOT extract section headers ("NCAAB PLAYS", "CBB ADD", "FULL CARD", "Saturday Card") as picks.
+    -   Do NOT extract ticket/bet slip metadata ("Ticket#", "Status Pending", "Risk/Win", "Selection NCAA") as picks.
+    -   Do NOT extract commentary ("Crazy choke from Florida", "Let's get it") as picks.
+    -   Do NOT extract "Straight Bets Only", "Recap", or "Results" as picks.
+    -   IGNORE: "Dm for vip", "Link in bio", "Promo", "Sign up", URLs.
+8.  **MULTI-CAPPER MESSAGES**: Many messages contain picks from MULTIPLE cappers. Extract ALL of them.
+    -   Pattern A: "🔮Capper1\nLeague1\nPick1\n🔮Capper2\nLeague2\nPick2"
+    -   Pattern B: "Capper1\n➖➖➖➖➖\nPick1\nCapper2\n➖➖➖➖➖\nPick2"
+    -   Pattern C: "#Capper1\nPick1\n#Capper2\nPick2"
+    -   You MUST attribute each pick to the correct capper.
+    -   Do NOT stop after the first capper — scan the ENTIRE message.
+
+
+CRITICAL INSTRUCTION:
+1.  Perform a "Mental Verification" step for every potential pick.
+2.  **EXTRACT ALL VALID PICKS**. Do not stop after the first one. Scan the entire text.
+3.  Verify: "Is 'BetSharper' a team?" -> No. -> Skip.
+4.  Verify: "Is 'Lakers -5' a bet?" -> Yes. -> Extract.
+
+OUTPUT FORMAT (JSON):
+{
+  "picks": [
+    {
+      "message_id": "12345",
+      "capper_name": "Name",
+      "sport": "NBA/NFL/NCAAB/etc",
+      "bet_type": "Spread/Moneyline/Total/Player Prop",
+      "selection": "Lakers -5",
+      "line": -5.0,
+      "odds": -110,
+      "units": 1.0,
+      "confidence": 9,
+      "reasoning": "Explicit mention of Lakers spread"
+    }
+  ]
+}
+
+If no valid picks are found, return { "picks": [] }.
+
+DATA TO PROCESS:
+### [32098]
+Porterpicks MONEYLINE PARLAY IOWA STATE NC STATE ARIZONA ARKANSAS @ (+170) (4-UNITS)
+
+### [32087]
+2U ON EACH CBB CLEMSON +13.5-110 NAVY +1.5 -122 KANSAS VS IOWA STATE OVER 142.5 -108 Will have max/more plays tomorrow
+
+### [32084]
+⬆️ VIP WINNERS 👑 **LIST OF VIP CAPPERS:** BestBET Yourdailycapper ParlayTravy Vegasmira AFSports Fivestar Chamba ISW + bonus cappers (Cesar, anon, etc) ⚡️ **Join us — TOP Cappers BEST prices** **every day!** 🤝🤝🤝🤝👉 @PICKSWIZARD1
+HANNELTDP CAPPERS PICKSWIZARD BEST BET TOPLDAPPERSO JPICKSWIZARD BESTBET NCAAB MIAMI OHIO -8.5 TOP CAPPERS PICKSWIZARD IS SELL WINNERS ISELLWINNERS TOPCAPPERS PICKSWIZARD ISW College hoops Manhattan-120 1u 3600bet ISW College hoops Ohio-Miami Ohio Ov 163.5 -110 3300bet VIP chamnei ToP Cappers AFSports ·Sacred Hearts+2.5 ($3,000=3%) FIVESTAR FIVESTAR SPORTSPICKS CHANNELTOP CAPPERS I PICKSWIZARD Five *Golden Whale (1) Wisconsin +1.5 (College Basketball) *Golden Whale (2) Wisconsin money line (College Basketball) *Golden Whale Parlay (3) x Ohio Bobcats +11.5 Akron money line (College Basketball) *Golden Whale Parlay (4) x Boise State money line Ohio Bobcats +11.5 (College Basketball) ViP channel Top cappers l CHAMBA : Wisconsin +4 College basketball: 2% each Wisconsin +4 Akron-10.5× UNLV+12.5X College basketball: 2% each Manhattan/Niagara under 138.5× PCHANNELTOP CAPPERS PICKSWIZARD YOUR DAILY CAPPER ELTOPIOAPPERS PICKSWIZARD IANN yourdailycapper NCAAB: 1 Unit ( 7:00 PM EST George Washington Moneyline NCAAB:1Unit(7:00 PM EST) Pennsylvania Moneyline NCAAB:1 Unit(8:00 PM EST Wisconsin +4 IP CHANNELTOP CAPPERS PICKSWIZARD PARLAY TRAVYY AIP DHANNELTOPCAPPERS PICKSWIZARD TRAVY FridayWhalePlays Wisconsin +3.5（NCAAB)
+
+### [11211]
+**PorterPicks**
+PorterPicks 6:45PM EARLY COLLEGEBASKETBALLSELECTIONfor SATURDAY IOWA STATE (-6) over KANSAS $$$ (4-UNITS) 10:00am PST - ABC
+
+### [11208]
+**🏀 Wayne Root Pinnacle- Kansas +7.5 🏀 Big Al CBB 4* lowa St. -7, 1:00 pm CONFERENCE FAVORITE OF THE YEAR! 3* Providence +7.5, 1:00 pm 3* Miss Valley St. +17.5 5:00 pm 3* UT-Rio Grande Valley +2, 5:30 pm 🏀 KyleHunter 3* New Haven Under 131.5 3* Ohio St Under 148.5 3* St Bonny Over 152.5 🏀 Bob Konarski CBB (52-30) Clemson +13.5**
+
+### [32103]
+Main Card: NCAAB Grand Canyon -11.5 (-110) v. San Jose St 5u UT Rio Grande -1.5 (-110) v. SF Austin 5u POTD Missouri -1.5 (-110) v. Texas 5u Pacific +7.5 (-110) v. St Mary's 5u
+
+### [11209]
+**BetSharper & MathewP07**
+Matthewp07 CBB Plays Mix & Match: Bryce Hopkins over 15.5 points Amani Hansberry over 7.5 rebounds Paul McNeil over 12.5 points JT Toppin under 32.5 PRA Let's get it Personally playing Hopkins pairs on UNDERDOG, Hansberry+Toppin on Chalkboard using a boost, the remaining 2 pairs on Sleeper. That's where I'm getting the bestvalue available to me, as always make sure to line shop. Write ups to come once fully completed Saturday's Picks First losing day in 6 days and one point away from another winning day. Big card today like usual. Drop your unit size to handle the volume if you don't have a bigger bankroll to play with. But you should if you have been tailing for a few weeks to months. Straight Bets Only, No Parlays All Picks 1 Unit NCAAB: lowa State -7 (-110) Kentucky/Florida O154.5 (-110) NC State-5.5(-110) lowa +2.5 (-110) S Carolina/Alabama O167.5(-110) Minnesota/Washington 0138.5 (-110) Montana State/Montana O144.5 (-110)
+
+### [32093]
+🔮DormroomDegenerates Nebraska -12.5 lowa St. -5.5 NC St. -5.5 Ohio St. +4.5 Hockey: Finland TT over 3.5 + USA TT over 4.5 🔮 ThisGirlBetz SATURDAY NCAAB Clemson +13 -105 (2u) St Johns -8 -115 (1u) Villanova -3.5 -110 (2u) St Bonaventure -130 (1u) Idaho -6.5 -115 (3u) South Dakota St -5.5 -105 (1u) St. Mary's -8.5 - 105 (lu)
+
+### [11204]
+(21-7L28) KBL BusanKCCEgis-5.5-118(1.5U) Wonju DBPromy +6-115(1U) BETS KBL Daegu K0GAS TT o83.5 (-110) 0.75U KBLLotto (+1186) 4 Pick Parlay Hide Legs^ SGPx +1186 Wonju Dongbu Promy @ Changwon LG Sakers·Sat 2:30AM Changwon LG Sakers-5.5 Spread Under 154.5 Total Goyang Sky Gunners @ Mobis Phoebus·Sat 12:00AM Goyang Sky Gunners Moneyline Daegu KOGAS Pegasus @ Busan KCC Egis·Sat 12:00AM Over 172.5 Total
+
+### [32089]
+TheGamblingGawd 5U POD: Oklahoma MI 5U Plays USA/Denmark Over 6.5 Providence +7.5 Kansas +6.5 UNC -11.5 Arizona over 156.5 Oklahoma MI Texas MI 2 Team MI Parlay Virginia Tech/St Marys 1U Plays: Arizona -8.5 Tennessee St M Devin Booker Win 3pt content Jason Hayes Win Slam Dunk
+
+### [32104]
+Porterpicks MISSOURI (-2) over TEXAS (2-UNITS) SOUTH CAROLINA/ALABAMA OVER 167.5 (3-UNTS)
+
+### [2022722061203050528]
+14/02 #Porterpicks IOWA STATE (-6) over KANSAS (4-UNITS) #Betsharper NCAAB: lowa State -7 (-110) Kentucky/Florida o154.5 (-110) NC State -5.5 (-110) lowa +2.5 (-110) S Carolina/Alabama o167.5 (-110) Minnesota/Washington o138.5 (-110) Montana State/Montana o144.5 (-110) #NickyCashin Michigan Wolverines - 15.5 (-110) 2U lowa State Cyclones - 5.5 (-120) 3U 2pm CBB Florida Gators -12.5 (-110) 2U 2pm CBB Oregon Ducks -6.5 (-110) 2U 3pm CBB NC State Wolfpack -5.5 (-105) 2U 3pm Wyoming Cowboys +5 (-112) 1.5U
+
+### [2022723151348797743]
+14/02 #TennisWinnersOnly🎾 February 14th card add ons ATP Tennis Plays (2U) Etcheverry +3 vs Cerundolo (-124) (1U) Shelton ML + Aliassime ML (+135) #MatchPointBets 🎾 Francisco Cerundolo -179 4U Francisco Cerubdolo -2.5 games 3U Shapovalov +3 - 165 6U Shapovalov +157 1U Felix Auger-Aliassime -195 50 Schoolkate -125 4U Vallejo + Prizmic Parlay ЗU Mmoh +110 2U Faria +100 2U #TailToWin🎾 WTA Doha (2/14/26) 0.75U - Karolina Muchova ML +110 (DK)
+
+### [2023061626958610512]
+https://t.co/mwQ3umjuKm
+
+### [2023061476768948236]
+#FIVE ✅❌✅✅✅❌ *Golden Whale Parlay (1) Iowa State Cyclones money line Wake Forest money line (College Basketball) *Golden Whale (2) Iowa Hawkeyes +2.5 *Golden Whale Parlay (3) Virginia Cavs money line *Whale Parlay (4) Duke money line *Bonus Parlay (1) Duke alternate -9.5 …
+
+### [2023058762936783245]
+ParlaySafari ➖➖➖➖➖ ParlaySafari Men's Olympic Hockey 1045am France / Canada OVER 7.5 -142 (1u)
+
+### [2023058714723250419]
+➖➖➖➖➖ Sunday, February 15 NCAAB San Francisco -3.5 💎 🪜 San Francisco -3.5 (NCAAB)
+
+### [2023057753657266312]
+BETSHARPER ➖➖➖➖➖ BetSharper Sunday's Picks • Straight Bets Only, No Parlays All Picks 1 Unit NCAAB: • Marist Moneyline (-120) • Quinnipiac Moneyline (-120) • Milwaukee Moneyline (-135)
+
+### [2022927580421054673]
+#KingCap Platinum Play ✅ https://t.co/BPXM8Aqpwq
+
+### [2022923210098946152]
+Kingcap Platinum Play ✅
+
+### [2022914150662357406]
+https://t.co/G9WzpvgQik
+
+### [2022862671347896619]
+https://t.co/QbCx6ZcsJw
+
+### [2022862664238592236]
+Anon VIP ✅
+
+### [2022862273073618993]
+https://t.co/oR0CHPShuC
+
+### [2022862266215907657]
+✅
+
+### [2022855257588473873]
+https://t.co/fDZR9HfBrR
+
+### [2022855163677962374]
+https://t.co/znt5ObHntb
+
+### [2022855090327986647]
+https://t.co/yMZpgnO8Xx
+
+### [2022855064075841593]
+Golf Source✅
+
+### [2022848522261852361]
+#Golf Algo on fire 🔥 https://t.co/gnuR0nHXdF
+
+### [2022827303835713555]
+PorterPicks ➖➖➖➖➖ 4:15 🏀 | ncaa b doing?? Up 7 with a minute left and can’t call a timeout to avoid potentially turnovers on trap defenses? COLLEGE BASKETBALL has been weird as hell this week! No doubt! 💯 💯 11 PorterPicks 4:12 PM REMAINING COLLEGE BASKETBALL SELECTIONS …
+
+### [2022813101574304229]
+#Glitch Whale 🐳 ✅ UNC Wilmington - ML
+
+### [2022806281728200992]
+Oracle Ai ➖➖➖➖➖ Let's keep it goin baby. 🔥 24 ❤️ 7 172 @ 13:18 Ai POTD: Memphis tigers +13.5 I’m doing +15.5 personally Conf: 78% 🔥 12 171 @ 13:19 Pick of the Day Saturday, Feb 14 • 6:00 PM Memphis Tigers @ Utah State Aggies Memphis Tigers +13.5 111 78% +1.9% 0.5u Read …
+
+### [2022803270930960546]
+PorterPicks ➖➖➖➖➖ 3:30pm PST GONZAGA (-3.5) over Santa Clara BOUGHT OFF the SIDE 7:30pm PST ENJOY the GAMES 🍻 (edited) 🏀 6 🍻 3 PorterPicks ADDED COLLEGE BASKETBALL SELECTIONS for SATURDAY NIGHT HOOPS 👇 TEXAS ... PorterPicks 2:34 PM My apologies BUY OFF ZAGS.. TAK…
+
+### [2022803231118668208]
+PorterPicks ➖➖➖➖➖ 🧡🏀 | ncaab PorterPicks REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY 👇 NC STATE (-5.5) over ... PorterPicks 2:17 PM ADDED COLLEGE BASKETBALL SELECTIONS for SATURDAY NIGHT HOOPS TEXAS TECH/ARIZONA OVER 155.5 (-105) (3-UNITS) 💰💰💰 3:30pm P…
+
+### [2022786483854156079]
+➖➖➖➖➖ 2/14/26 Main Card: NCAAB Grand Canyon -11.5 (-110) v. San Jose St 5u UT Rio Grande -1.5 (-110) v. SF Austin 5u POTD Missouri -1.5 (-110) v. Texas 5u Pacific +7.5 (-110) v. St Mary's 5u
+
+### [2022747961508184413]
+#SBK ✅ Friday 100K WAGER [CBB] Duke / Clemson U134.5 (-120) sbk recap
+
+### [2022738864234992104]
+💰 VIP Results Last Night🔥 ❗Clients Been Cashing in BIG Inside Our NEW Discord💰 👉Price: $25/Week | $50/Month 🛍 ⬇️Join the Discord to Unlock 24hrs of FREE VIP Access⬇️ https://t.co/zhgWE3e0El https://t.co/AcBp8BZeHk
+
+### [2022720997825073552]
+PorterPicks ➖➖➖➖➖ 🕘 9:13 #️⃣ | ncaab 🏀 6 5 🦆 5 NEW MESSAGES 🔽 PorterPicks REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY 🔽 NC STATE (-5.5) over ... PorterPicks 9:11 AM • MONEYLINE PARLAY IOWA STATE NC STATE ARIZONA ARKANSAS @ (+170) (4-UNITS) 💵💵💵💵 Great spot…
+
+### [2022717139854016649]
+PorterPicks ➖➖➖➖➖ PorterPicks 8:55 AM REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY NC STATE (-5.5) over MIAMI (3-UNITS) 🏅💰💰 1:00pm PST BAYLOR (+6.5) over Louisville (2-UNITS) 💰🏅 1:00pm PST IOWA (+105) over PURDUE (3-UNITS) 🏅💰💰 2:00pm PST WILL post a couple …
+
+### [2022712345835851952]
+💫VIP Winners From Yesterday ⬆️ 💰🎉** STOP MISSING WINNERS Sign up here for instant access 👉 &lt;#1457854154990162064&gt; @everyone
+
+### [2022872371963593133]
+LearLocks ➖➖➖➖➖ LEARLOCKS Olympics hockey • Czechia ML 1.5u -135 LEARLOCKS Tennis • Yastremska ML 1.5u -115 • Haley baptiste ML 1.5u -110 Luidmilla Samsanova ML -130 1.5u
+
+### [2022718086558671024]
+AndersPicks ➖➖➖➖➖ AndersPicks CBB ADD Oregon -6 -110 1U(Caesars) 6 -105 at Circa
+
+### [2022887457482477609]
+ThisGirlBetz ➖➖➖➖➖ ThisGirlBetz OVERNIGHT WTA WTA DUBAI 🎾 D.Yastremska -110 (2u) 🎾 L.Samsonova -130 (3u) 🎾 M.Joint +1.5 (set) -140 (2u) 🎾 L.Sun +155 (2u) 🎾 Z.Sonmez +155 (2u) • ML PARLAY 🎾 Noskova/Krejcikova +100 (3u)
+
+### [2022854768251510851]
+#SEANPERRY 5U SuperMax Texas Tech +10 (CBB)
+
+### [2022715107491328233]
+OutofLineBets ➖➖➖➖➖ OutofLineBets CBB Georgia Tech +6 -105 2U
+
+### [2022723093211337144]
+McBets ➖➖➖➖➖ NEW MESSAGES McBets APP 9:15 AM NCAAB Adds Iowa State -7 (-120) 1.5u • Parlay (-135) 1.5u Iowa State ML Oregon ML
+
+### [2023057643858755760]
+PICKS4DAYZZZ ➖➖➖➖➖ P4D_Picks4Dayzzz Full Card Sunday 🗓️ ATP Dallas 🏆 Ben Shelton ML +100 3U CBB Cincinnati + Illinois + Northern Iowa -165 3U Maryland +2.5 -115 2U I’ve taken Ben down a set the last two matches, will be looking to do that again if he drops set 1 Just hold…
+
+### [2023057702688010625]
+➖➖➖➖➖ 2/15 college baseball plays Arkansas state ML -140 1u Oklahoma ML +105 .5u 2 more college baseball plays this afternoon
+
+### [2023057675387384008]
+➖➖➖➖➖ 2/15 cbb plays Maryland/Rutgers U 144.5 -110 1u 💎Butler +2.5 -102 1u • Another light day units wise. Just 2 straight bets for college basketball Butler over Seton Hall today. You guys probably remember I was high on Butler coming into conference…
+
+### [2023057624682373166]
+ANDERSPICKS ➖➖➖➖➖ AndersPicks Sunday Card CBB: Southern Illinois -2.5 -110 1U Oakland ML +116 1U(FD, anything with a + sign is good) Illinois Chicago +1.5 -110 1U
+
+### [2022715502976458894]
+SetPointBets ➖➖➖➖➖ MAX 08:48 am Prizmic ML / Boscardin +6.5 .67 10U Prizmic -3.5 .67 5U Boscardin +4.5 .80 3U
+
+### [2023058787276402808]
+ThisGirlBetz ➖➖➖➖➖ ThisGirlBetz SUNDAY ATP FINAL BUENOS AIRES 🎾 F.Cerundolo -105 (3u) DALLAS 🎾 T.Fritz -130 (3u)
+
+### [2022885941262602713]
+➖➖➖➖➖ APP 6:58 PM NBL 🏀 Sydney Kings -9.5 -116 (1.5U) 2 Korean basketball plays out in 30 minutes 👍 APP 8:08 PM KBL 🇰🇷 (22-8 L30) Daegu KOGAS Pegasus -3 -120 (1.25U) Anyang KGC/Seoul SK Knights under 149.5 -115 (1U)
+
+### [2023057450811740225]
+CalebPicks ➖➖➖➖➖ Caleb ⚡️ CPIK Yesterday at 10:10 PM ATP Yibing Wu -105 3U Thiago Monteiro +115 3U
+
+### [2023057730441802224]
+NEWMARKTENNIS ➖➖➖➖➖ NewmarkTennis ATP Finals Sunday ATP Rotterdam FAA/De Minaur O22.5 -115 (3u) ATP Dallas Fritz ML -120 (3u) ATP Buenos Aires Darderi/Cerundolo O22.5 -115 (3u)
+
+### [2023058737196413230]
+TheGamblingGawd ➖➖➖➖➖ TheGamblingGawd Sunday Funday 💰 5U POD: USA Over 6.5 🔥 5U Plays 🌊: USA Over 6.5 Canada Over 7.5 Robert Morris MI Cleveland St Over 157.5 Murray St MI • 2 Team MI parlay Illinois/Dayton 1U plays: Seton Hall MI Seton Hall over 142.5
+
+### [2022717682961772621]
+HammeringHank ➖➖➖➖➖ HammeringHank FULL CARD 💎🔨 Providence +8 5U MAX BET💎🔨 Northwestern +13 4U 🔨 Memphis +13.5 4 🔨 UCLA +16.5 3U 🔨 Florida State +5.5 3U 🔨 Texas +2.5 2U 🔨 Kentucky +13.5 2U 🔨
+
+### [2022996480110551192]
+@ZiggySt17254576 It's actually the opposite, posting plays will tell people the reality without losing on $
+
+### [2022906358799220738]
+🔥🔥
+
+### [2022753551206736310]
+@MxROB1983 @Coltonschaef Probably
+
+### [2022749334484472285]
+JUST IN: X TOUT DOES NOT CARE ABOUT HIS FOLLOWERS $, GIVES OUT PLAYS ON BOTH SIDES AT -150 ODDS AND LATER DELETES THE POST FOR THE SIDE THAT LOSES ✅ IN OTHER NEWS: SHAPOVALOV WON A MATCH EVEN WHILE "HE WAS NOT ABLE TO SEE", AS CLAIMED BY THE SAME X TOUT (YEAH HE'S THAT GOOD) 👀 https://t.co/9foHgP75QV
+
+### [2022915768921526438]
+Wake & Cash Cappers 👉🏻 NBL Sydney Kings -9.5 -116 (1.50) KBL (22-8 L30) 🔥 Daegu KOGAS Pegasus -3 -120 (1.25U) Anyang KGC/Seoul SK Knights under 149.5 -115 (1U) 👉🏻 KBL 🏀🇰🇷 🏀 SK Knights TT u74.5 (-110) 0.75U 🏀 Anyang KGC ML (+100) 0.5U 👉🏻 KimsPicks KBL: 🇰🇷 Suwon Sonicboom +2.5 (1U) NBL: 🇦🇺 Syndey Kings Vs Perth wildcats under 187
+
+### [2022874235337871558]
+Make sure you’re in our discord. Tons of plays posted in there that aren’t post here for FREE! • 60+ Cappers Daily • Channels for each capper • Notifications for only the cappers you want • Chat • More features being added soon 👇👇👇 https://t.co/MHD96VDnzb
+
+### [2022790483454349654]
+If you’re looking for Olympic Hockey lineshopping @juice_reel added it Only tool I’ve seen it on https://t.co/6kbz3oj665
+
+### [2022723805852860664]
+Hammering Hank FULL CARD Providence +8 5U MAX BET Northwestern +13 4U Memphis +13.5 4U UCLA +16.5 3U Florida State +5.5 3U Texas +2.5 2U Kentucky +13.5 2U ➖ Five *Golden Whale Parlay (1) lowa State Cyclones money line Wake Forest money line (College Basketball) *Golden Whale (2) lowa Hawkeyes +2.5 (College Basketball) *Golden Whale Parlay (3) lowa State Cyclones money line Virginia Cavs money line (College Basketball) *Whale Parlay (4) Wake Forest money line Duke money line (College Basketball) *Bonus Parlay (1) Duke alternate -9.5 Providence alternate +11.5 (College Basketball) *Bonus Parlay (2) Duke alternate -9.5 Northwestern +17.5 ➖ The Sharp Sheets 🏀 Iowa +2.5 ⭐️⭐️⭐️⭐️⭐️ Need A Bookie? DM @leviathanlocks
+
+### [2022719990902985152]
+SmartMoney Vanderbilt -6.5 North Carolina -11 Marquette +2.5 Florida -7.5 NC State -5.5 Arizona -9.5 UConn 1H -9.5 Utah State -13.5 TBQueen Clemson +13 CashC Iowa State -6 NC State -5 Purdue ML Clemson +13.5 Ohio State +4.5 Bullies Iowa State -4.5 Florida -11.5
+
+### [2022911896568107480]
+Dormroom Degenerates Olympics Hockey Sweden 1P -0.5 Sweden TT o3.5 Sweden -2.5
+
+### [2022748343601148194]
+Kyle Hunter 3* Long Island/New Haven u131.5 (-105) 3* Virginia/Ohio St u148.5 (-105) 3* Duquesne/St Bonaventure o152.5 (-110)
+
+### [2022746497536950293]
+Big Al 4* lowa St. -7 3* Providence +7.5 3* Mississippi Valley St. +17.5 3* UT-Rio Grande Valley +2 4* N. Colorado -3.5 3* UTEP +6.5 3* Louisiana-Monroe +13 3* Baylor +6.5 3* Air Force +16.5 3* LSU +14.5 3* Ohio St. +4.5 1* James Madison +1.5 1* Coppin St. +11 1* Santa Clara +5.5
+
+### [2022745723666927842]
+Bruce Marshall CBB Providence Friars +7' (-112) Fordham Rams +5' (-102) Northwestern Wildcats +12' (-102) Texas A&amp;M/Vanderbilt o165' (-110)
+
+### [2022744131156750372]
+Football Jesus LV All-Star Three Point Contest Winner 2026 Kon Knueppel +350
+
+### [2022539191931035843]
+Dormroom Degenerates Olympic Hockey Sweden 1P -0.5 Sweden TT o3.5 Sweden -2.5
+
+### [2022746697408111012]
+Larry Hartstein CBB 1u - Texas A&amp;M +7.5 -110 1u - Oklahoma -1.5 -105
+
+### [2022744246940483984]
+Ross Benjamin CBB 2% Iowa State -6.5 2% Villanova -3.5
+
+### [2022745462697267344]
+Gianni the Greek 4% Arizona -9.0 (-115) 3% Iowa State -7.0 (-120) 3% Samford/East Tenn State u146.0 3% St. Francis PA +3.0 (-120) 3% Wagner/Stonehill u130.5
+
+### [2022744367245726119]
+Ben Burns CBB 2% NC Wilmington -145 5% Connecticut -15.5
+
+### [2022745028758769783]
+Micah Roberts Navy +1.5 -120 Purdue ML -139
+
+### [2022744855928279468]
+Bill Krackman 2% Marquette +3 2% Iowa State -7 3% Syracuse +3.5 3% Tartleton +3
+
+### [2022815588335427935]
+Ross Benjamin 3% Hawaii/CS Northridge o162.5 (-105) 2% Saint Marys CA/Pacific u135.5 (-110)
+
+### [2022746562775126051]
+Strike Point Sports 4u - Oklahoma State -1.5 4u - NC State -5.5 3u - Arizona -9.5
+
+### [2022747307297653012]
+Your Daily Capper 1u - NC State - 4 () 1u - Iowa +1.5 2u - UT Rio Grande Valley ML 1u - Wichita State ML 1u - Santa Clara +6 () Parlay 1u - Iowa State ML + Florida -5 ()
+
+### [2022747948564746548]
+August Young 4u - Georgia St./Old Dominion o147.5 4u - Iowa +1.5 4u - Loyola Marymount/Pepperdine u146.5
+
+### [2022463511868379227]
+3-14 last 17 MAX picks MICHIGAN STATE VS WISCONSIN UNDER 148.5 -112 CBB MAX
+

@@ -1,4 +1,3 @@
-Total Requests: 1190
-Total Time: 236.3138
-Avg Latency: 0.1986
-Throughput: 5.0357
+Recall: 18.48%
+Precision: 72.86%
+F1: 29.48%

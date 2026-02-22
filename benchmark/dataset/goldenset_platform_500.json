@@ -1,0 +1,16 @@
+[
+    {
+        "message_id": "dummy_1",
+        "text": "Lakers -5.5",
+        "source": "telegram",
+        "capper": "TestCapper",
+        "expected_picks": [
+            {
+                "pick": "Lakers -5.5",
+                "odds": null,
+                "units": 1.0,
+                "type": "Spread"
+            }
+        ]
+    }
+]

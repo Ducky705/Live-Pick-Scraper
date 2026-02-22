@@ -27,7 +27,10 @@ def generate_ai_prompt(selected_data: list[dict[str, Any]], schedule_context: st
     compressed_data = compress_raw_data(selected_data)
 
     # 2. Build the prompt using the JSON module (Strict JSON for stability)
-    return get_compact_extraction_prompt(compressed_data, schedule_context=schedule_context, style_context=style_context)
+    prompt = get_compact_extraction_prompt(compressed_data, schedule_context=schedule_context, style_context=style_context)
+    
+    # Apply double prompting for non-reasoning LLM performance boost (arxiv 2512.14982)
+    return prompt + "\n\n" + prompt
 
 
 def generate_revision_prompt(failed_items: list[dict[str, Any]]) -> str:
@@ -35,7 +38,9 @@ def generate_revision_prompt(failed_items: list[dict[str, Any]]) -> str:
     Generates a targeted refinement prompt for failed items.
     Delegate to the core compact revision prompt.
     """
-    return get_compact_revision_prompt(failed_items)
+    prompt = get_compact_revision_prompt(failed_items)
+    # Apply double prompting for non-reasoning LLM performance boost (arxiv 2512.14982)
+    return prompt + "\n\n" + prompt
 
 
 def generate_compact_prompt(selected_data: list[dict[str, Any]]) -> str:

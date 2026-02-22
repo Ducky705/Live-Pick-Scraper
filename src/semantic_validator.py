@@ -133,6 +133,12 @@ class SemanticValidator:
             "subscriber",
             "subscription",
             "bankroll",
+            # Hallucination Blocklist (Common OCR artifacts/Capper names)
+            "tokyo",
+            "brandon",
+            "whale", 
+            "safe play",
+            "unit play",
         ]
         text_lower = pick_text.lower()
         if any(phrase in text_lower for phrase in garbage_phrases):

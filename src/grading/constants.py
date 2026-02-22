@@ -92,6 +92,11 @@ LEAGUE_ALIASES_MAP = {
     "boxing": "boxing",
     "liga mx": "liga_mx",
     "eredivisie": "eredivisie",
+    # Combat Sports
+    "mma": "ufc",
+    "mixed martial arts": "ufc",
+    "bellator": "ufc",  # Group under UFC for grading unless PFL specific
+    "pfl": "ufc",       # Group under UFC for grader simplicity (or keep separate if needed)
 }
 
 # Soccer leagues (for 3-way ML handling)

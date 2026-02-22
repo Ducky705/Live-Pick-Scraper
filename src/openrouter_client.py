@@ -5,8 +5,8 @@ import time
 import requests
 
 DEFAULT_MODELS = [
-    "stepfun/step-3.5-flash:free",            # PRIMARY: The "Unicorn" (95.3% Recall @ BS=5)
-    "meta-llama/llama-3.3-70b-instruct:free", # SECONDARY: Reliable Baseline (81% Recall)
+    "stepfun/step-3.5-flash:free",              # PRIMARY: Fast and no strict limits
+    "qwen/qwen3-next-80b-a3b-instruct:free",    # SECONDARY: High reasoning, fully free but strict rate limit
     "nvidia/llama-3.1-nemotron-70b-instruct:free", # TERTIARY: Last resort (57% Recall)
 ]
 

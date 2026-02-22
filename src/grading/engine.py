@@ -870,8 +870,11 @@ class GraderEngine:
             return GradedPick(pick, GradeResult.LOSS, summary, game_id=game_id)
 
         # Tie handling
-        league_lower = pick.league.lower()
-        if league_lower in SOCCER_LEAGUES:
-            return GradedPick(pick, GradeResult.LOSS, summary + " (Draw)", game_id=game_id)
+        league_lower = pick.league.lower() if pick.league else ""
+        if league_lower in SOCCER_LEAGUES or "soccer" in league_lower:
+            # 3-Way Market: Draw = Loss, UNLESS "Draw No Bet" (DNB) is specified
+            is_dnb = "dnb" in pick.selection.lower() or "draw no bet" in pick.selection.lower()
+            if not is_dnb:
+                return GradedPick(pick, GradeResult.LOSS, summary + " (Draw)", game_id=game_id)
 
         return GradedPick(pick, GradeResult.PUSH, summary, game_id=game_id)

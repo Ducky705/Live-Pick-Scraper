@@ -392,6 +392,10 @@ def extract_json_from_response(text: str) -> dict | list | None:
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
     text = text.strip()
 
+    # Extract from thinking blocks
+    if "</thinking>" in text:
+        text = text.split("</thinking>")[-1].strip()
+
     # Try direct parse first (most efficient)
     try:
         return json.loads(text)

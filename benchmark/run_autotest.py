@@ -36,12 +36,17 @@ def similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, a.lower().strip(), b.lower().strip()).ratio()
 
 
-def normalize_pick(pick: str) -> str:
+def normalize_pick(pick: Any) -> str:
     """Normalize a pick string for comparison."""
     if not pick:
         return ""
+    
+    # Handle dictionary input (extract 'pick' or convert to string)
+    if isinstance(pick, dict):
+        pick = pick.get("pick", "") or str(pick)
+        
     # Remove common noise
-    normalized = pick.lower().strip()
+    normalized = str(pick).lower().strip()
     # Remove odds patterns
     normalized = normalized.replace("-110", "").replace("+100", "")
     # Remove extra whitespace

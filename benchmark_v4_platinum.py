@@ -76,8 +76,8 @@ def fuzzy_match(expected, actual):
     return pick_match and odds_match
 
 def run_benchmark_v2():
-    ocr_file = r"benchmark\dataset\ocr_golden_set_v2.json"
-    parsing_file = r"benchmark\dataset\parsing_golden_set_v2.json"
+    ocr_file = r"benchmark\dataset\ocr_golden_set.json"
+    parsing_file = r"benchmark\dataset\parsing_golden_set.json"
 
     print(f"Loading OCR Data from {ocr_file}...")
     if not os.path.exists(ocr_file):
@@ -124,7 +124,7 @@ def run_benchmark_v2():
     extracted_picks = ExtractionPipeline.run(
         messages=messages,
         target_date="2026-02-14",
-        batch_size=10, 
+        batch_size=5, 
         strategy="groq" # Or whatever is default efficient
     )
     

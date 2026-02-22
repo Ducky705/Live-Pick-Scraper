@@ -29,7 +29,7 @@ METRICS = {
 _original_execute = parallel_processor._execute_request
 
 
-def _patched_execute_request(provider: str, messages: list[dict]) -> str:
+def _patched_execute_request(provider: str, messages: list[dict], **kwargs) -> str:
     """Patched execution to count metrics."""
     METRICS["total_requests"] += 1
 
@@ -39,7 +39,7 @@ def _patched_execute_request(provider: str, messages: list[dict]) -> str:
 
     start = time.time()
     try:
-        result = _original_execute(provider, messages)
+        result = _original_execute(provider, messages, **kwargs)
         # Estimate output tokens
         if result:
             response_len = len(result)

@@ -1,60 +1,21 @@
-<<<<<<< Updated upstream
 {
   "speed": {
-<<<<<<< Updated upstream
-    "duration": 5.809808254241943,
-    "throughput": 8.606136005175946,
-    "latency_ms": 116.19616508483887
-  },
-  "efficiency": {
-    "total_requests": 4,
-    "requests_per_msg": 0.08,
-    "total_tokens": 1419.25
-  },
-  "accuracy": {
-    "accuracy": 22.0,
-    "recall": 83.46,
-    "precision": 96.0,
-=======
-    "duration": 7.403300523757935,
-    "throughput": 6.753744473771527,
-    "latency_ms": 148.0660104751587
+    "duration": 76.35634636878967,
+    "throughput": 0.013096488341259158,
+    "latency_ms": 76356.34636878967
   },
   "efficiency": {
     "total_requests": 1,
-    "requests_per_msg": 0.02,
-    "total_tokens": 396.75
+    "requests_per_msg": 1.0,
+    "total_tokens": 82.25
   },
   "accuracy": {
-    "accuracy": 18.0,
-    "recall": 71.15,
-    "precision": 95.45,
->>>>>>> Stashed changes
-    "total_picks_expected": 260,
-    "total_picks_found": 306,
-    "total_missed": 43,
-    "total_false_positives": 89
+    "accuracy": 100.0,
+    "recall": 100.0,
+    "precision": 100.0,
+    "total_picks_expected": 1,
+    "total_picks_found": 1,
+    "total_missed": 0,
+    "total_false_positives": 0
   }
-=======
-{
-  "speed": {
-    "duration": 7.403300523757935,
-    "throughput": 6.753744473771527,
-    "latency_ms": 148.0660104751587
-  },
-  "efficiency": {
-    "total_requests": 1,
-    "requests_per_msg": 0.02,
-    "total_tokens": 396.75
-  },
-  "accuracy": {
-    "accuracy": 18.0,
-    "recall": 71.15,
-    "precision": 95.45,
-    "total_picks_expected": 260,
-    "total_picks_found": 261,
-    "total_missed": 75,
-    "total_false_positives": 76
-  }
->>>>>>> Stashed changes
 }

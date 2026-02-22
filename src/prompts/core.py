@@ -10,20 +10,23 @@ PICK_FORMAT_RULES = """
 RULES FOR PICK EXTRACTION:
 1.  **Format**: Return strict JSON.
 2.  **Goal**: EXTRACT EVERY SINGLE BETTING LINE. Do not aim for perfection, aim for COMPLETENESS.
-3.  **Bet Verification**:
+3.  **Bet Verification (CRITICAL)**:
+    -   **TEAM CHECK**: The selection MUST be a valid team or player name. 
+        -   INVALID: "Safe Play", "Whale", "Max Bet", "Tokyo", "Brandon", "Unit". These are headers, NOT picks.
+        -   VALID: "Lakers", "Chiefs", "Djokovic", "Over 220.5".
     -   If it has a Team Name + Number (e.g. "Lakers -5", "Bulls +110"), IT IS A BET.
     -   If it has "Over" or "Under" + Number (e.g. "Over 220.5"), IT IS A BET.
     -   If it says "ML" or "Moneyline", IT IS A BET.
-    -   If it says "units" or "u" (e.g. "3u", "Max Play"), IT IS A BET.
 4.  **Handling Headers**:
     -   Lines like "HammeringHank" or "5 Unit Play" are Context/Headers. Use them to fill `capper_name` and `units` fields for the picks below them.
     -   If you see a new name, switch `capper_name` for subsequent picks.
 5.  **Noise Handling**:
-    -   Ignore: "DM for VIP", urls, "Link in bio", "Promo".
+    -   **IGNORE**: "DM for VIP", urls, "Link in bio", "Promo", "Tokyo", "Brandon".
     -   Capture: "Analysis", "Writeup" -> put in `reasoning` field if short, otherwise ignore.
 6.  **MULTI-PICK & PARLAY HANDLING**:
-    -   Extract each leg of a parlay as a separate pick if listed separately.
-    -   If listed as "Team A / Team B / Team C", extract as one pick with type "Parlay".
+    -   **EXTRACT ALL LEGS**: If a message lists "Team A / Team B / Team C", you must output 3 separate picks (or 1 parlay pick with all teams).
+    -   Do not just extract the first one. LOOK DEEPER.
+    -   Nested parlays often look like: "Leg 1: X, Leg 2: Y". Extract both X and Y.
 """
 
 # =============================================================================
@@ -96,14 +99,24 @@ The input contains multiple messages separated by headers:
 {PICK_FORMAT_RULES}
 {BATCH_EXAMPLE}
 
-CRITICAL INSTRUCTION:
-1.  **BATCH PROCESSING**: The input contains MULTIPLE messages (e.g. ### [ID1], ### [ID2]). You must process EVERY SINGLE message.
-2.  **ITERATION**: Read ### [ID1], extract picks. Then read ### [ID2], extract picks. Repeat until the end.
-3.  **DO NOT STOP** after the first message.
-4.  Perform a "Mental Verification" step for every potential pick.
-5.  Verify: "Is 'Lakers -5' a bet?" -> Yes. -> Extract.
+CRITICAL DIRECTIVE: You must act as an automated data extraction engine. You must process the text below by FIRST outputting your step-by-step analysis within <thinking> tags. Following the thinking tags, you must output EXCLUSIVELY valid JSON conforming to the schema.
+
+Within the <thinking> tags, you MUST execute the following numbered sequence for EVERY message:
+1. Denoising and Triage: Identify and isolate the actual mathematical wagering signal from the surrounding marketing filler. Explicitly state what text is being ignored.
+2. Entity Translation: Explicitly translate all identified shorthand (e.g., converting "BTTS" to "Both Teams To Score" or "5U" to a numeric stake of "5").
+3. Schema Mapping: Mentally map the identified variables to the specific required JSON schema keys.
+4. Null Value Verification: Cross-reference your findings against the required schema and explicitly note any missing variables (assigning null to those).
+
+UNDER NO CIRCUMSTANCES may you output any text outside of the XML <thinking> and the final JSON object. Do not wrap the JSON output in markdown code blocks. Output the raw JSON string directly following the closure of the <thinking> tag.
 
 OUTPUT FORMAT (JSON):
+<thinking>
+Message [ID1]: 
+1. Denoising: ...
+2. Translation: ...
+3. Mapping: ...
+4. Null Verification: ...
+</thinking>
 {{
   "picks": [
     {{
@@ -126,6 +139,8 @@ RAW DATA TO PROCESS:
 {raw_data}
 """
 
+import re
+
 def normalize_response(
     raw_response: str,
     expand: bool = False,
@@ -138,6 +153,10 @@ def normalize_response(
     """
     cleaned_json = raw_response.strip()
     
+    # Extract from thinking if present
+    if "</thinking>" in cleaned_json:
+        cleaned_json = cleaned_json.split("</thinking>")[-1].strip()
+        
     # Remove markdown code blocks
     if cleaned_json.startswith("```json"):
         cleaned_json = cleaned_json.replace("```json", "").replace("```", "").strip()

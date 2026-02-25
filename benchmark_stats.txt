@@ -1,3 +1,4 @@
-Recall: 55.07%
-Precision: 96.20%
-F1: 70.05%
+Recall: 49.64%
+Precision: 88.96%
+F1: 63.72%
+Grading Accuracy: 78.83%

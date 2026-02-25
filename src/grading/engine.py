@@ -43,11 +43,20 @@ class GraderEngine:
             GradedPick with result
         """
         # Parse if string
+        original_text = pick if isinstance(pick, str) else getattr(pick, "raw_text", str(pick))
+        
         if isinstance(pick, str):
             pick = PickParser.parse(pick, league_hint)
 
         # AI PARSING FALLBACK
         # If parser failed to find a valid type, or if it looks suspicious (e.g. ML with full text as selection)
+        if pick is None:
+             return GradedPick(
+                 Pick(raw_text=original_text, league=league_hint, bet_type=BetType.UNKNOWN, selection=""), 
+                 GradeResult.ERROR, 
+                 details="Could not parse pick string."
+             )
+
         # Suspicious conditions:
         # 1. Unknown Type
         # 2. Moneyline with selection > 5 words (likely failed parsing)
@@ -129,10 +138,12 @@ class GraderEngine:
         odds: int | None = None
     ) -> tuple[dict[str, Any], str | None] | None:
         """
-        Find a game using rule-based Matcher, falling back to AIResolver.
+        Find a game using rule-based Matcher. If rule-based fails, we ask the AI 
+        to resolve it one time, then permanently save the discovered alias so it works
+        deterministically from pure code next time.
         Returns: (game_dict, optional_resolved_team_name)
         """
-        # 1. Rule-Based Match (Fast)
+        # 1. Rule-Based Match (Fast & Deterministic)
         game = Matcher.find_game(text, league, self.scores, line=line, odds=odds)
         if game:
             return game, None
@@ -144,15 +155,21 @@ class GraderEngine:
         if roster_match:
             return roster_match
             
-        # 2. AI Fallback (Slow)
-        # Only try if we have scores to search
+        # 2. AI Fallback + Auto-Learning Loop (One-Time Cost)
         if self.scores:
-            logger.info(f"Triggering AI Resolver for: {text}")
+            from src.grading.ai_resolver import AIResolver
+            from src.grading.dictionary_updater import DictionaryUpdater
+            
+            logger.info(f"Triggering AI Resolver to auto-learn alias for: {text}")
             result = AIResolver.resolve_pick(text, league, self.scores)
+            
             if result:
-                # result is now (game, resolved_team_name)
+                ai_game, resolved_team_name = result
+                # Learn it for next time!
+                DictionaryUpdater.learn_team_alias(resolved_team_name, text)
                 return result
                 
+        logger.warning(f"UNRESOLVED_ALIAS: Could not match game/player for '{text}' in league '{league}', even with AI fallback.")
         return None
 
     def _find_game_with_roster_search(self, text: str, league: str) -> tuple[dict[str, Any], str | None] | None:
@@ -316,7 +333,7 @@ class GraderEngine:
         for leg in pick.legs:
             leg_result = self.grade(leg)
             leg_results.append(leg_result)
-            details_parts.append(f"{leg.selection[:30]}: {leg_result.grade.value}")
+            details_parts.append(f"{leg_result.pick.selection[:30]}: {leg_result.grade.value}")
 
             if leg_result.grade == GradeResult.LOSS:
                 has_loss = True

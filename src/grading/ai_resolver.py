@@ -79,48 +79,37 @@ OUTPUT FORMAT (JSON):
 }}
         """
         
-        # TIER 1: SPEED (Cerebras -> Groq)
+        # TIER 1: ACCURACY CHAMPION (OpenRouter - stepfun)
         # ---------------------------------------------------------
         try:
-            # 1. Cerebras (Llama 3.3 70b)
-            # "CHAMPION" provider for concurrency
-            response = cerebras_completion(prompt, model="llama-3.3-70b", timeout=10)
+            response = openrouter_completion(prompt, timeout=15)
             if response:
-                return AIResolver._parse_response(response, pick_text, candidate_games, "Cerebras")
+                return AIResolver._parse_response(response, pick_text, candidate_games, "OpenRouter")
         except Exception as e:
-            logger.warning(f"[Tier 1] Cerebras failed: {e}")
+            logger.warning(f"[Tier 1] OpenRouter failed: {e}")
 
-        try:
-            # 2. Groq (Llama 3.3 70b)
-            # "FASTEST" provider
-            response = groq_text_completion(prompt, timeout=10)
-            if response:
-                return AIResolver._parse_response(response, pick_text, candidate_games, "Groq")
-        except Exception as e:
-            logger.warning(f"[Tier 1] Groq failed: {e}")
-
-        # TIER 2: QUALITY (Mistral -> OpenRouter)
+        # TIER 2: FAST BACKUPS (Mistral -> Cerebras)
         # ---------------------------------------------------------
         try:
-             # 3. Mistral (Codestral/Large - Great for JSON)
-             response = mistral_completion(prompt, model="mistral-large-latest", timeout=15)
+             # Mistral (open-mistral-nemo)
+             response = mistral_completion(prompt, model="open-mistral-nemo", timeout=15)
              if response:
                  return AIResolver._parse_response(response, pick_text, candidate_games, "Mistral")
         except Exception as e:
             logger.warning(f"[Tier 2] Mistral failed: {e}")
 
         try:
-            # 4. OpenRouter (DeepSeek/Llama fallback)
-            response = openrouter_completion(prompt, timeout=15)
+            # Cerebras (Llama 3.1 8b)
+            response = cerebras_completion(prompt, model="llama3.1-8b", timeout=10)
             if response:
-                return AIResolver._parse_response(response, pick_text, candidate_games, "OpenRouter")
+                return AIResolver._parse_response(response, pick_text, candidate_games, "Cerebras")
         except Exception as e:
-            logger.warning(f"[Tier 2] OpenRouter failed: {e}")
+            logger.warning(f"[Tier 2] Cerebras failed: {e}")
 
-        # TIER 3: SAFETY NET (Gemini)
+        # TIER 3: SAFETY NET (Gemini - if available)
         # ---------------------------------------------------------
         try:
-            # 5. Gemini (Flash 1.5 - Free Tier)
+            # Gemini (Flash 1.5 - Free Tier)
             response = gemini_text_completion(prompt, model="gemini-1.5-flash", timeout=15)
             if response:
                 return AIResolver._parse_response(response, pick_text, candidate_games, "Gemini")
@@ -135,6 +124,9 @@ OUTPUT FORMAT (JSON):
         """Helper to parse JSON response from any LLM."""
         try:
             data = json.loads(response_text)
+            if not data:
+                return None
+            
             game_id = data.get("game_id")
             resolved_team = data.get("team")
             
@@ -198,8 +190,25 @@ OUTPUT FORMAT (JSON):
     "legs": [ ...recursive pick objects for parlays... ]
 }}
 """
+        # TIER 1: OpenRouter
         try:
-            # 1. Cerebras (Llama 3.1 8b - Fast & Reliable)
+            response = openrouter_completion(prompt, timeout=15)
+            if response:
+                return AIResolver._parse_extraction_response(response, pick_text, league)
+        except Exception as e:
+            logger.warning(f"AI Parsing (OpenRouter) failed: {e}")
+
+        # TIER 2: Mistral
+        try:
+            response = mistral_completion(prompt, model="open-mistral-nemo", timeout=15)
+            if response:
+                return AIResolver._parse_extraction_response(response, pick_text, league)
+        except Exception as e:
+            logger.warning(f"AI Parsing (Mistral) failed: {e}")
+
+        # TIER 3: Cerebras
+        try:
+            # Cerebras (Llama 3.1 8b - Fast & Reliable)
             # 70b is giving 404, so using 8b with enhanced prompting
             response = cerebras_completion(prompt, model="llama3.1-8b", timeout=15)
             if response:

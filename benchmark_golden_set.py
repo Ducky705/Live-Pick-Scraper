@@ -12,7 +12,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 os.makedirs("logs", exist_ok=True)
 
 from src.extraction_pipeline import ExtractionPipeline
-from src.parallel_batch_processor import parallel_processor
+from src.grading.engine import GraderEngine
+from src.score_fetcher import fetch_scores_for_date
+from src.grading.parser import PickParser
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -29,6 +31,8 @@ def normalize_string(s):
     s = s.replace("ah", "asian handicap")
     # Normalize common abbreviations
     s = s.replace("st.", "st")
+    # Handle acronym names properly (L.Samsonova to L Samsonova)
+    s = s.replace(".", " ")
     # Expand common state abbreviations for matching
     import re as _re
     s = _re.sub(r'\biowa st\b', 'iowa state', s)
@@ -40,6 +44,7 @@ def normalize_string(s):
     s = _re.sub(r'\bsouth dakota st\b', 'south dakota state', s)
     s = _re.sub(r'\bmiss valley st\b', 'miss valley state', s)
     s = _re.sub(r'\blowa\b', 'iowa', s)  # OCR error: lowa -> iowa
+    s = _re.sub(r'\bteam total\b', 'tt', s)
     return s.strip()
 
 def fuzzy_match(expected, actual):
@@ -156,6 +161,20 @@ def run_benchmark():
     print(f"\nPipeline finished in {duration:.2f} seconds.")
     print(f"Extracted {len(extracted_picks)} total picks.")
 
+    # fetch scores
+    print("\nFetching scores for the benchmark date...")
+    scores = fetch_scores_for_date("2026-02-14")
+    grader = GraderEngine(scores)
+    
+    # Grade extracted picks
+    for p in extracted_picks:
+        try:
+            parsed = PickParser.parse(p.get("pick", ""), p.get("league", "Other"), p.get("date", "2026-02-14"))
+            graded = grader.grade(parsed)
+            p["grade"] = graded.grade.value
+        except Exception:
+            p["grade"] = "ERROR"
+            
     # Evaluation
     print("\n" + "="*50)
     print("EVALUATION")
@@ -170,6 +189,10 @@ def run_benchmark():
     total_expected = 0
     total_found = 0
     total_correct = 0
+    
+    total_grades_expected = 0
+    total_grades_correct = 0
+    total_grades_miss = []
     
     # Detailed miss log
     misses = []
@@ -199,6 +222,18 @@ def run_benchmark():
                     match_found = True
                     used_actual_indices.add(idx)
                     total_correct += 1
+                    
+                    # Grade matching
+                    if 'grade' in exp:
+                        total_grades_expected += 1
+                        if exp['grade'] == act.get('grade'):
+                            total_grades_correct += 1
+                        else:
+                            total_grades_miss.append({
+                                'pick': exp.get('p'),
+                                'expected_grade': exp['grade'],
+                                'actual_grade': act.get('grade')
+                            })
                     break
             
             if not match_found:
@@ -222,18 +257,28 @@ def run_benchmark():
     print(f"Precision (Quality of Extraction):   {precision:.2f}%")
     print(f"F1 Score:                            {f1:.2f}%")
     print("-" * 30)
+    
+    grading_accuracy = (total_grades_correct / total_grades_expected * 100) if total_grades_expected > 0 else 0
+    print(f"Grading Accuracy (on matched):       {grading_accuracy:.2f}% ({total_grades_correct}/{total_grades_expected})")
+    print("-" * 30)
 
     # Save stats to file
     with open("benchmark_stats.txt", "w") as f:
         f.write(f"Recall: {recall:.2f}%\n")
         f.write(f"Precision: {precision:.2f}%\n")
         f.write(f"F1: {f1:.2f}%\n")
+        f.write(f"Grading Accuracy: {grading_accuracy:.2f}%\n")
 
     if misses:
         print(f"\nTop 5 Missed Picks (Sample):")
         for m in misses[:5]:
             print(f"- Msg {m['msg_id']}: Expected '{m['expected'].get('p')}' ({m['expected'].get('ty')})")
             print(f"  Candidates in pipeline: {[a.get('pick') for a in m['candidates']]}")
+
+    if total_grades_miss:
+        print(f"\nTop 5 Grading Misses (Sample):")
+        for m in total_grades_miss[:5]:
+            print(f"- Pick '{m['pick']}': Expected {m['expected_grade']}, Got {m['actual_grade']}")
 
 if __name__ == "__main__":
     run_benchmark()

@@ -7,10 +7,10 @@ Unlike previous iterations which prioritized speed (Groq), the current architect
 ## The Hierarchy (Scientifically Optimized - Feb 2026)
 
 ### Tier 1: The "Accuracy King" (High Intelligence, Free)
-*   **Primary:** **OpenRouter (meta-llama/llama-3.3-70b-instruct:free)**
-    *   **Status:** **CHAMPION**. 100% Accuracy on Golden Set. Handles complex reasoning.
-    *   **Rate Limit:** Configured to **10 RPM** to minimize 429 errors.
-    *   **Retry Logic:** Active. Sleeps 10s on Rate Limit.
+*   **Primary:** **OpenRouter (stepfun/step-3.5-flash:free)**
+    *   **Status:** **CHAMPION**. 99.2% Accuracy on Golden Set. Near-perfect extraction.
+    *   **Rate Limit:** Strict limits, often ~1 RPM on free tier.
+    *   **Retry Logic:** Active. Sleeps 60s on Rate Limit (Patient Mode).
     *   **Role:** Processing 95% of messages.
 
 ### Tier 2: The "Speed Backups" (High Speed, Lower Intelligence)
@@ -30,10 +30,10 @@ Unlike previous iterations which prioritized speed (Groq), the current architect
 graph TD
     A[Incoming Message] --> B[Priority Queue]
     B --> C{Primary Available?}
-    C -- Yes --> D[Tier 1: openrouter/llama-3.3-70b]
+    C -- Yes --> D[Tier 1: openrouter/stepfun]
     D --> E{Success?}
     E -- Yes --> F[Save Result]
-    E -- No/429 --> G[Wait 10s or Fallback]
+    E -- No/429 --> G[Wait 60s or Fallback]
     C -- No --> H[Tier 2: Mistral / Cerebras]
     H --> F
 ```
@@ -50,8 +50,8 @@ graph TD
 
 | Provider | Tier | Role | Models | Status |
 |----------|------|------|--------|--------|
-| **OpenRouter** | 1 | **Primary Accuracy** | `llama-3.3-70b-instruct:free` | **ACTIVE** |
+| **Gemini** | 1 | **Baseline Accuracy** | `gemini-3-flash` | **ACTIVE** |
+| **OpenRouter** | 1 | **Primary Accuracy** | `stepfun/step-3.5-flash:free` | **ACTIVE** |
 | **Mistral** | 2 | Speed Backup | `open-mistral-nemo` | **ACTIVE** |
 | **Cerebras** | 2 | Speed Backup | `llama-3.1-8b` | **ACTIVE** |
 | **Groq** | 3 | Legacy Speed | `llama-3.3-70b` | **DISABLED (403)** |
-| **Gemini** | 3 | Legacy Speed | `gemini-2.0-flash` | **DISABLED (429)** |

@@ -56,7 +56,9 @@ async def main():
 
     # 2. FETCH DATA (Yesterday/Today)
     ET = timezone(timedelta(hours=-5))
-    target_date = "2026-02-05" # now_et.strftime("%Y-%m-%d")
+    now_et = datetime.now(ET)
+    yesterday_et = now_et - timedelta(days=1)
+    target_date = yesterday_et.strftime("%Y-%m-%d")
 
     print(f"\nTarget Date: {target_date} (ET)")
 

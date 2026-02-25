@@ -535,6 +535,8 @@ def normalize_response(
     if not isinstance(picks, list):
         return []
 
+    picks = [p for p in picks if isinstance(p, dict)]
+
     # Inject message context if available (for source verification)
     if message_context:
         for p in picks:

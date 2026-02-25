@@ -17,7 +17,7 @@ GLOBAL_CEREBRAS_SEMAPHORE = Semaphore(CEREBRAS_CONCURRENCY_LIMIT)
 LOCK_ACQUIRE_TIMEOUT = 30  # Reduced for faster failure
 
 # Model Configuration - User-specified high-performance model
-DEFAULT_TEXT_MODEL = "llama3.1-70b"
+DEFAULT_TEXT_MODEL = "llama3.1-8b"
 
 # Available models with rate limits (30 RPM, 60K TPM each)
 CEREBRAS_MODELS = {

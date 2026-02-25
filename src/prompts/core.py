@@ -15,16 +15,20 @@ RULES FOR PICK EXTRACTION:
         -   INVALID: "Safe Play", "Whale", "Max Bet", "Tokyo", "Brandon", "Unit". These are headers, NOT picks.
         -   VALID: "Lakers", "Chiefs", "Djokovic", "Over 220.5".
     -   If it has a Team Name + Number (e.g. "Lakers -5", "Bulls +110"), IT IS A BET.
-    -   If it has "Over" or "Under" + Number (e.g. "Over 220.5"), IT IS A BET.
+    -   If it has "Over" or "Under" + Number (e.g. "Over 220.5"), IT IS A BET. If the team names (e.g., Houston/Kansas) are found in the surrounding text, you MUST attach them to the selection (e.g. "Houston vs Kansas Under 138.5"). Do not output just "Under 138.5".
     -   If it says "ML" or "Moneyline", IT IS A BET.
 4.  **Handling Headers**:
     -   Lines like "HammeringHank" or "5 Unit Play" are Context/Headers. Use them to fill `capper_name` and `units` fields for the picks below them.
     -   If you see a new name, switch `capper_name` for subsequent picks.
-5.  **Noise Handling**:
+5.  **DENSE AGGREGATIONS**:
+    -   If a message contains a huge wall of text with many cappers and dozens of picks, YOU MUST READ THE ENTIRE MESSAGE and extract EVERY SINGLE PICK. Do not stop early.
+6.  **Noise Handling & OCR Errors**:
     -   **IGNORE**: "DM for VIP", urls, "Link in bio", "Promo", "Tokyo", "Brandon".
     -   Capture: "Analysis", "Writeup" -> put in `reasoning` field if short, otherwise ignore.
-6.  **MULTI-PICK & PARLAY HANDLING**:
+    -   **Fix OCR Typos**: If you see "+10O" it usually translates to "+100" odds (Moneyline), NOT a "+10" spread. Use logic to determine if it's odds or spread.
+7.  **MULTI-PICK & PARLAY HANDLING**:
     -   **EXTRACT ALL LEGS**: If a message lists "Team A / Team B / Team C", you must output 3 separate picks (or 1 parlay pick with all teams).
+    -   **PARLAYS**: If selections are explicitly joined by a slash '/' or ' + ' (e.g., "Demon 2:0 / Kovacevic +1.5S"), treat them as a single combined selection with the bet type "Parlay". Do not break them into separate straight bets.
     -   Do not just extract the first one. LOOK DEEPER.
     -   Nested parlays often look like: "Leg 1: X, Leg 2: Y". Extract both X and Y.
 """

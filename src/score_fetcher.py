@@ -1,10 +1,10 @@
+import asyncio
 import concurrent.futures
 import datetime
 import logging
 import time
-import asyncio
-import aiohttp
 
+import aiohttp
 import requests
 import urllib3
 from requests.adapters import HTTPAdapter
@@ -308,7 +308,7 @@ async def async_fetch_scores_for_date(date_str, requested_leagues=None, current_
     """
     from src.score_cache import get_cache
 
-    # Cache is sync, but fast enough to run on main loop? 
+    # Cache is sync, but fast enough to run on main loop?
     # Or wrap in to_thread? SQLite is usually fast.
     cache = get_cache()
 
@@ -382,21 +382,21 @@ async def async_fetch_scores_for_date(date_str, requested_leagues=None, current_
         tasks = []
         for url, lname in urls_to_fetch:
             tasks.append(async_fetch_url(session, url, lname))
-        
+
         # Gather results
         results = await asyncio.gather(*tasks, return_exceptions=True)
-        
+
         # Process results
         for i, res in enumerate(results):
             if isinstance(res, Exception):
                 logger.error(f"Async fetch failed: {res}")
                 continue
-            
+
             # Map back to league name
             league_name = urls_to_fetch[i][1]
             events = res
-            
-            # _parse_espn_event is sync/CPU bound. 
+
+            # _parse_espn_event is sync/CPU bound.
             # If 100s of events, might block loop briefly. Accepted for now.
             for game in events:
                 if game["id"] not in processed_game_ids:
@@ -633,13 +633,13 @@ def fetch_odds_for_date(date_str: str) -> dict:
 
     odds_by_game = {}
     tasks = []
-    
+
     # Session for pooling
     session = get_session()
 
     # 1. First, fetch all scoreboards to get the list of events
     # We can do this serially or parallel, but parallel is better for 20+ leagues
-    
+
     scoreboard_urls = []
     for league_name, (sport, league_key) in ODDS_LEAGUE_MAPPING.items():
         url = f"https://site.api.espn.com/apis/site/v2/sports/{sport}/{league_key}/scoreboard?dates={api_date}&limit=300"
@@ -653,27 +653,27 @@ def fetch_odds_for_date(date_str: str) -> dict:
             resp = session.get(url, timeout=10)
             if resp.status_code != 200:
                 return []
-            
+
             data = resp.json()
             events = data.get("events", [])
             local_comps = []
-            
+
             for event in events:
                 event_id = event.get("id")
                 if not event_id: continue
-                
+
                 # Setup competitions
                 comps = event.get("competitions", [])
                 if not comps and "groupings" in event:
                      for group in event.get("groupings", []):
                         comps.extend(group.get("competitions", []))
-                
+
                 for comp in comps:
                     comp_id = comp.get("id", event_id)
                     # Extract competitor names once here to avoid needing lookup later?
-                    # Actually _fetch_competition_odds doesn't return names. 
-                    # We need to pass them or extract them later. 
-                    # The original code extracted them AFTER fetching odds. 
+                    # Actually _fetch_competition_odds doesn't return names.
+                    # We need to pass them or extract them later.
+                    # The original code extracted them AFTER fetching odds.
                     # We can store the comp object to extract names later.
                     local_comps.append({
                         "sport": sport,
@@ -681,7 +681,7 @@ def fetch_odds_for_date(date_str: str) -> dict:
                         "event_id": event_id,
                         "comp_id": comp_id,
                         "league_name": league_name,
-                        "comp_data": comp 
+                        "comp_data": comp
                     })
             return local_comps
         except Exception as e:
@@ -692,7 +692,7 @@ def fetch_odds_for_date(date_str: str) -> dict:
     logger.info("Fetching scoreboards to identify games for odds...")
     with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
         results = executor.map(fetch_scoreboard, scoreboard_urls)
-        
+
     for res in results:
         competitions_to_fetch.extend(res)
 
@@ -705,27 +705,27 @@ def fetch_odds_for_date(date_str: str) -> dict:
     # 2. Fetch odds for all competitions in parallel
     def fetch_single_odd(item):
         o = _fetch_competition_odds(
-            item["sport"], 
-            item["league_key"], 
-            item["event_id"], 
-            item["comp_id"], 
+            item["sport"],
+            item["league_key"],
+            item["event_id"],
+            item["comp_id"],
             item["league_name"]
         )
         if o:
             # Extract names from the passed comp_data
             competitors = item["comp_data"].get("competitors", [])
             home, away = _extract_competitor_names(competitors, item["league_name"])
-            
+
             o["home_team"] = home
             o["away_team"] = away
-            
+
             key = f"{item['league_name']}:{item['event_id']}:{item['comp_id']}"
             return key, o
         return None
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=30) as executor:
         future_to_item = {executor.submit(fetch_single_odd, item): item for item in competitions_to_fetch}
-        
+
         for future in concurrent.futures.as_completed(future_to_item):
             try:
                 result = future.result()

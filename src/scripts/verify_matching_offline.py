@@ -2,7 +2,6 @@
 import json
 import logging
 import os
-import sys
 from datetime import datetime
 
 # Setup basic logging
@@ -55,10 +54,10 @@ def smart_match(raw_name, candidates):
 
     # 2. Fuzzy Match
     choices = [c["name"] for c in candidates]
-    
+
     best_candidate = None
     score = 0
-    
+
     if HAS_RAPIDFUZZ:
         match = process.extractOne(clean_raw, choices, scorer=fuzz.WRatio, score_cutoff=AI_VERIFY_THRESHOLD)
         if match:
@@ -93,7 +92,7 @@ def smart_match(raw_name, candidates):
             "type": "fuzzy_auto",
             "reason": f"High confidence fuzzy match ({score:.1f})"
         }
-    
+
     # 3. Ambiguous (would trigger AI)
     # in offline mode, we treat this as "Potential Match" but return None to simulate "New Capper"
     # OR we can flag it.
@@ -104,7 +103,7 @@ def smart_match(raw_name, candidates):
 
 def main():
     print("Starting Offline Capper Matching Verification...")
-    
+
     # 1. Load Picks
     picks_file = "src/data/output/picks_2026-02-14_raw.json" # Adjust path if needed
     if not os.path.exists(picks_file):
@@ -119,14 +118,14 @@ def main():
             return
 
     try:
-        with open(picks_file, "r") as f:
+        with open(picks_file) as f:
             picks_data = json.load(f)
             # Handle different formats (list of dicts or dict with 'picks' key)
             if isinstance(picks_data, dict):
                 picks = picks_data.get("picks", [])
             else:
                 picks = picks_data
-            
+
             print(f"Loaded {len(picks)} picks from {picks_file}")
     except Exception as e:
         print(f"Failed to load picks: {e}")
@@ -163,18 +162,18 @@ def main():
             continue
 
         match = smart_match(raw_name, candidates)
-        
+
         status = "MATCHED" if match else "NEW_CAPPER"
-        
+
         if status == "MATCHED":
             results["matched"] += 1
             log_str = f"[MATCH] '{raw_name}' -> '{match['name']}' ({match['score']:.1f}%)"
         else:
             results["new_capper"] += 1
             log_str = f"[NEW]   '{raw_name}' (No match found)"
-            
+
         print(log_str)
-        
+
         results["details"].append({
             "raw": raw_name,
             "status": status,

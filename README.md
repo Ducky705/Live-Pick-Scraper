@@ -37,13 +37,17 @@ CapperKing           | NCAAB      | Kansas +3.5                         | -105  
 git clone https://github.com/Ducky705/Telegram-Scraper.git
 cd Telegram-Scraper
 pip install -r requirements.txt
+playwright install chromium
 
 # Configure
 cp .env.example .env
-# Add your API keys (see Environment Variables below)
+# Add your API keys (see GEMINI.MD or docs for specifics)
 
-# Run
+# Production Run
 python cli_tool.py
+
+# Test / Dry Run (Skip Supabase upload)
+python cli_tool.py --dry-run
 ```
 
 All data, logs, and sessions are stored in the `data/` directory.
@@ -131,9 +135,11 @@ Detailed documentation for each subsystem:
 
 ## Changelog
 
-### v4.6.1 (January 23, 2026)
+### v4.6.1 (February 26, 2026)
 - **Polish**: Final documentation, diagram, and arrow direction fixes.
-- **Refinement**: Cleaned up root directory and optimized import paths.
+- **Refinement**: Cleaned up root directory, removed 130+ orphaned files, and optimized import paths.
+- **Testing**: Rebuilt testing suite with 30+ passing automated assertions.
+- **CLI**: Re-introduced argparse for safe `--dry-run` and `--help` flags.
 
 ### v4.6.0 (January 23, 2026)
 - **Performance Milestone**: Introduced Persistent SQLite Caching.

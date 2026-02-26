@@ -372,7 +372,7 @@ def deduplicate_by_capper(picks: list[dict]) -> list[dict]:
         by_capper[key].append(pick)
 
     result = []
-    
+
     for capper, capper_picks in by_capper.items():
         # Deduplicate within this capper's picks
         deduped = deduplicate_picks(capper_picks)

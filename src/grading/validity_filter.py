@@ -4,9 +4,8 @@ Deterministic validity filter for picks.
 Replaces the previous LLM-based filter with fast, reproducible heuristic rules.
 """
 
-import re
 import logging
-from typing import Tuple
+import re
 
 from src.team_aliases import TEAM_ALIASES
 
@@ -27,7 +26,7 @@ class ValidityFilter:
             for alias in aliases:
                 self.known_aliases.add(alias.lower())
 
-    def is_valid(self, pick_text: str, league: str = "Unknown") -> Tuple[bool, str]:
+    def is_valid(self, pick_text: str, league: str = "Unknown") -> tuple[bool, str]:
         """
         Determines if a pick text is valid enough to attempt grading.
         Returns (is_valid, reason).

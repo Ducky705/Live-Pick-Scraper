@@ -5,7 +5,7 @@ from datetime import UTC, datetime, timedelta, timezone
 
 from twikit import Client
 
-from config import SESSIONS_DIR, TEMP_IMG_DIR, PROXY_URL, USER_AGENTS
+from config import PROXY_URL, SESSIONS_DIR, TEMP_IMG_DIR, USER_AGENTS
 
 # Check for credentials in env
 TWITTER_USERNAME = os.getenv("TWITTER_USERNAME")
@@ -25,14 +25,14 @@ class TwitterManager:
         if self.client is None:
             # Use a random user agent to avoid detection
             ua = random.choice(USER_AGENTS)
-            
+
             # Twikit supports proxy string usage
             print(f"[Twitter] Initializing Client. Proxy: {bool(PROXY_URL)}")
             self.client = Client("en-US", user_agent=ua, proxy=PROXY_URL)
 
             # Manual Cookie Injection (Bypass Cloudflare Login)
             if not os.path.exists(COOKIES_PATH) and TWITTER_AUTH_TOKEN and TWITTER_CT0:
-                print(f"[Twitter] Creating cookies from .env tokens...")
+                print("[Twitter] Creating cookies from .env tokens...")
                 import json
                 cookies = {
                     "auth_token": TWITTER_AUTH_TOKEN,
@@ -318,10 +318,6 @@ class TwitterManager:
                     while results:
                         collected_batch.extend(results)
                         print(f"  - Found {len(results)} tweets in page. Total batch: {len(collected_batch)}")
-
-                        # Stop if we have enough or if we went too far back (search usually handles 'since' well)
-                        if len(collected_batch) >= limit:
-                            break
 
                         # Jitter
                         await asyncio.sleep(random.uniform(2.0, 4.0))

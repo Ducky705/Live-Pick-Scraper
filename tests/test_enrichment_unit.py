@@ -1,9 +1,10 @@
 import asyncio
 
+import pytest
 from src.enrichment.engine import EnrichmentEngine
 from src.models import BetPick
 
-
+@pytest.mark.asyncio
 async def test_specific_enrichment():
     engine = EnrichmentEngine()
 

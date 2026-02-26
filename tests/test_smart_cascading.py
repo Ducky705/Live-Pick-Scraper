@@ -1,33 +1,14 @@
 import unittest
 from unittest.mock import patch
 
-from src.parallel_batch_processor import (
-    ComplexityRouter,
-    ParallelBatchProcessor,
-)
+from src.parallel_batch_processor import ParallelBatchProcessor
 
 
 class TestSmartCascading(unittest.TestCase):
     def setUp(self):
-        self.processor = ParallelBatchProcessor()
+        self.processor = ParallelBatchProcessor(providers=["gemini", "cerebras", "groq"])
 
-    def test_complexity_router_text(self):
-        """Tier 1: Simple text"""
-        batch = [{"id": 1, "text": "Simple bet"}]
-        routing = ComplexityRouter.analyze_batch(batch)
-        self.assertEqual(routing["tier"], 1)
 
-    def test_complexity_router_complex(self):
-        """Tier 2: Long text"""
-        batch = [{"id": 1, "text": "A" * 3001}]
-        routing = ComplexityRouter.analyze_batch(batch)
-        self.assertEqual(routing["tier"], 2)
-
-    def test_complexity_router_vision(self):
-        """Tier 2: Image"""
-        batch = [{"id": 1, "text": "Hi", "image": "path/to/img.jpg"}]
-        routing = ComplexityRouter.analyze_batch(batch)
-        self.assertEqual(routing["tier"], 2)
 
     @patch("src.parallel_batch_processor.gemini_text_completion")
     def test_tier_1_success(self, mock_gemini):
@@ -58,7 +39,7 @@ class TestSmartCascading(unittest.TestCase):
         self.assertEqual(results[0], "Recovered")
         # Ensure stats reflect this
         self.assertEqual(self.processor.stats["groq"]["count"], 1)
-        self.assertGreater(self.processor.circuit_breaker.errors["gemini"], 0)
+        self.assertGreater(self.processor.consecutive_errors["gemini"], 0)
 
 
 if __name__ == "__main__":

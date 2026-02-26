@@ -3,13 +3,13 @@
 Team and player matching logic using aliases and fuzzy matching.
 """
 
-import re
 import difflib
+import re
 from typing import Any
 
 from src.grading.constants import LEAGUE_ALIASES_MAP
-from src.team_aliases import TEAM_ALIASES
 from src.player_map import PLAYER_TO_TEAM_MAP
+from src.team_aliases import TEAM_ALIASES
 
 
 class Matcher:
@@ -30,13 +30,13 @@ class Matcher:
                 # Normalize all aliases
                 norm_aliases = {cls.normalize(a) for a in aliases if cls.normalize(a)}
                 norm_aliases.add(canon_norm)
-                
+
                 # Map every variation to the full set (merging if collision)
                 for var in norm_aliases:
                     if var not in cls._ALIAS_INDEX:
                         cls._ALIAS_INDEX[var] = set()
                     cls._ALIAS_INDEX[var].update(norm_aliases)
-        
+
         team_norm = cls.normalize(team_name)
         # Return index hits, or just the team itself if not found
         return cls._ALIAS_INDEX.get(team_norm, {team_norm})
@@ -56,20 +56,20 @@ class Matcher:
         # and partial matches ("Warriors" vs "Golden State Warriors")
         best_token_match = None
         best_token_score = 0.0
-        
+
         target_tokens = set(Matcher.normalize(target).split())
         if not target_tokens:
             return None
-            
+
         for cand in candidates:
             cand_tokens = set(Matcher.normalize(cand).split())
             if not cand_tokens:
                 continue
-                
+
             intersection = target_tokens.intersection(cand_tokens)
             if not intersection:
                 continue
-                
+
             # Score: Intersection over Min Length (Subset logic)
             # "Golden State" (2) in "Golden State Warriors" (3) -> 2/2 = 1.0
             # "State Golden" (2) in "Golden State" (2) -> 2/2 = 1.0
@@ -77,16 +77,16 @@ class Matcher:
             # Use min length of tokens to favor subsets matches
             denom = min(len(target_tokens), len(cand_tokens))
             score = scan_len / denom if denom > 0 else 0
-            
+
             if score > best_token_score:
                 best_token_score = score
                 best_token_match = cand
-        
+
         # Threshold for token matching should be high (0.9 or 1.0 typically for subsets)
         # But let's be safe.
         if best_token_score >= 0.9: # Almost perfect subset/reorder
             return best_token_match
-            
+
         return None
 
     @staticmethod
@@ -140,18 +140,18 @@ class Matcher:
 
         # --- VECTORIZED LOOKUP START ---
         games_to_search = league_games if league_games else games
-        
+
         # Use Vector Search if we have enough games to justify the overhead
         if len(games_to_search) > 50:
             from src.grading.vector_index import VectorIndex
-            
+
             # Simple caching key based on first game ID + length
             # (Crude, but avoids rebuilding for same game list)
             cache_key = f"{len(games_to_search)}_{games_to_search[0].get('id', '')}"
-            
+
             if not hasattr(Matcher, "_vector_index_cache"):
                 Matcher._vector_index_cache = {}
-                
+
             index = Matcher._vector_index_cache.get(cache_key)
             if not index:
                 index = VectorIndex()
@@ -162,21 +162,21 @@ class Matcher:
                     # Index Team 2
                     t2 = Matcher.normalize(game.get("team2", ""))
                     index.add(t2, game)
-                    
+
                     # Index Aliases
                     for alias in Matcher._get_team_aliases(t1):
                         index.add(Matcher.normalize(alias), game)
                     for alias in Matcher._get_team_aliases(t2):
                          index.add(Matcher.normalize(alias), game)
-                         
+
                 index.build()
                 Matcher._vector_index_cache[cache_key] = index
-            
+
             # Query Index
             results = index.query(Matcher.normalize(pick_text), top_k=3, threshold=0.4)
             if results:
                 best_game, best_score = results[0]
-                
+
                 # AMBIGUITY CHECK:
                 # If we have multiple results, check if the second best is also very good (close to best)
                 if len(results) > 1:
@@ -202,10 +202,10 @@ class Matcher:
                  # Even if we found a match, check if there are OTHER matches in this league that complicate things.
                  # E.g. "Giants" in a league with "SF Giants" and "NY Giants" (unlikely in same league usually, but possible)
                  pass
-            
+
             if result:
                 return result
-        
+
         # 1.5 AMBIGUITY CHECK (Contextual Disambiguation)
         # If no specific league context was useful, search ALL games.
         matches = Matcher._find_all_matches(pick_text, games)
@@ -213,7 +213,7 @@ class Matcher:
              # If exactly one match found, we have found our team
              if len(matches) == 1:
                  return matches[0]
-             
+
              # If multiple matches, use CONTEXT (Line/Odds) to resolve
              if line is not None or odds is not None:
                  best_context_match = Matcher._resolve_ambiguity_with_context(matches, pick_text, line, odds)
@@ -222,7 +222,7 @@ class Matcher:
 
              # If context didn't help, return None (ambiguous)
              pass
-        
+
         # 1.5 AMBIGUITY CHECK (User Request: "Which Kings played?")
         # If no specific league context was useful, search ALL games.
         # But ensure we only find ONE matching team.
@@ -231,13 +231,13 @@ class Matcher:
              # If exactly one match found, we have found our "Kings"
              if len(matches) == 1:
                  return matches[0]
-             
+
              # If multiple matches, we can't be sure unless we have more context.
              # but maybe one is a "perfect" match and others are partial?
              # For now, if multiple matches exist, we consider it ambiguous and return None
              # (letting downstream logic or AI handle it)
              pass
-        
+
         # 2b. Check Player Aliases (Superstar Mapping)
         # If pick mentions "LeBron", map to "Los Angeles Lakers" and search for that team
         pick_lower = pick_text.lower()
@@ -264,7 +264,7 @@ class Matcher:
             t2 = Matcher.normalize(g.get("team2", ""))
             candidate_teams[t1] = g
             candidate_teams[t2] = g
-            
+
         pick_norm = Matcher.normalize(pick_text)
         # Check if any significant word in pick loosely matches a team name
         words = pick_norm.split()
@@ -272,7 +272,7 @@ class Matcher:
         # Also try bigrams
         if len(words) > 1:
             possible_targets.extend([" ".join(words[i:i+2]) for i in range(len(words)-1)])
-            
+
         for target in possible_targets:
             fuzzy = Matcher._fuzzy_match(target, list(candidate_teams.keys()), threshold=0.85)
             if fuzzy:
@@ -285,10 +285,10 @@ class Matcher:
              leader, _ = Matcher.find_player_in_leaders(pick_text, game)
              if leader:
                  return game
-             
-             # Note: Checking full boxscore here might be too slow for all games, 
+
+             # Note: Checking full boxscore here might be too slow for all games,
              # so we stick to leaders for now.
-        
+
         return None
 
     @staticmethod
@@ -339,7 +339,7 @@ class Matcher:
         """
         matches = []
         pick_norm = Matcher.normalize(pick_text)
-        
+
         candidates = []
 
         for game in games:
@@ -351,10 +351,10 @@ class Matcher:
                 score += 1
             if Matcher._team_in_text(t2, pick_norm):
                 score += 1
-            
+
             if score > 0:
                 matches.append(game)
-                
+
         # Deduplicate by game ID
         unique_matches = []
         seen_ids = set()
@@ -362,16 +362,16 @@ class Matcher:
             if m.get("id") not in seen_ids:
                 unique_matches.append(m)
                 seen_ids.add(m.get("id"))
-                
+
         return unique_matches
 
         return unique_matches
 
     @staticmethod
     def _resolve_ambiguity_with_context(
-        matches: list[dict[str, Any]], 
-        pick_text: str, 
-        line: float | None = None, 
+        matches: list[dict[str, Any]],
+        pick_text: str,
+        line: float | None = None,
         odds: int | None = None
     ) -> dict[str, Any] | None:
         """
@@ -379,30 +379,30 @@ class Matcher:
         """
         if not matches:
             return None
-            
+
         # Strategy:
         # If we have line info, we can't easily cross-reference unless we have implied lines or fetched odds.
         # But for now, we can check basic league-specific logic if lines differ vastly.
         # e.g. "Kings -5" -> NBA (Kings) vs NHL (Kings ML or -1.5)
-        # 
+        #
         # But wait, we don't know the lines of the matches unless we have them.
         # However, we can use the 'league' of the matches to infer likelihood.
-        # 
+        #
         # If matches are from different leagues, use line magnitude.
         # NBA lines: usually > 100 (for Total) or any spread.
         # NHL lines: usually < 10 (Total) or -1.5 (+/-).
         # MLB lines: usually -1.5 (+/-) or Total < 15.
         # NFL lines: Spread < 20, Total < 60.
-        
+
         matches_by_league = {}
         for m in matches:
             lg = m.get("league", "").lower()
             matches_by_league[lg] = m
-            
+
         # Case 1: NBA vs NHL ("Kings")
         nba_match = matches_by_league.get("nba")
         nhl_match = matches_by_league.get("nhl")
-        
+
         if nba_match and nhl_match and line is not None:
              # If line is large (e.g. 220), it's NBA Total.
              if abs(line) > 15:
@@ -410,16 +410,16 @@ class Matcher:
              # If line is -5, likely NBA (hockey rarely -5)
              if abs(line) > 2.5:
                  return nba_match
-        
+
         # Case 2: NFL vs MLB ("Giants")
         nfl_match = matches_by_league.get("nfl")
         mlb_match = matches_by_league.get("mlb")
-        
+
         if nfl_match and mlb_match and line is not None:
              # NFL spreads often 3, 7. MLB usually 1.5.
              if abs(line) > 2.0:
                  return nfl_match
-        
+
         return None  # Still ambiguous
 
     @staticmethod
@@ -430,15 +430,15 @@ class Matcher:
 
         # Get all possible names for this team (O(1) lookup)
         all_names = Matcher._get_expanded_aliases(team_name)
-        
+
         for name in all_names:
             if not name: continue
-            
+
             # Check 1: Direct match with boundary
             # Note: name is already normalized
             if re.search(r"\b" + re.escape(name) + r"\b", text):
                 return True
-                
+
             # Check 2: Partial/Multi-word matching (from original logic)
             # Original heuristics checks for "first two words" etc.
             words = name.split()
@@ -447,7 +447,7 @@ class Matcher:
                 first_two = " ".join(words[:2])
                 if len(first_two) > 5 and re.search(r"\b" + re.escape(first_two) + r"\b", text):
                     return True
-        
+
         return False
 
     @staticmethod
@@ -466,10 +466,10 @@ class Matcher:
         # Let's iterate sorted by length descending to match longest alias first?
         # Original logic stopped at first found.
         aliases = sorted(Matcher._get_expanded_aliases(team_name), key=len, reverse=True)
-        
+
         for alias_norm in aliases:
             if not alias_norm: continue
-            
+
             # Direct find
             idx = text.find(alias_norm)
             if idx != -1:
@@ -479,11 +479,11 @@ class Matcher:
                     # Check char before and after
                     valid_start = (idx == 0) or (not text[idx-1].isalnum())
                     valid_end = (idx + len(alias_norm) == len(text)) or (not text[idx+len(alias_norm)].isalnum())
-                    
+
                     if not (valid_start and valid_end):
                         continue
                 return idx, alias_norm
-        
+
         return -1, ""
 
     @staticmethod
@@ -506,7 +506,7 @@ class Matcher:
             return t2, t1, False
         elif t1_match and t2_match:
             # Ambiguous: Both teams found
-            
+
             # Find WHERE they are matched
             i1, match1 = Matcher._find_alias_match(t1, pick_norm)
             i2, match2 = Matcher._find_alias_match(t2, pick_norm)
@@ -514,7 +514,7 @@ class Matcher:
             # Heuristic 1: Count occurrences of the MATCHED string
             c1 = pick_norm.count(match1) if match1 else 0
             c2 = pick_norm.count(match2) if match2 else 0
-            
+
             if c1 > c2:
                 return t1, t2, True
             if c2 > c1:
@@ -527,19 +527,19 @@ class Matcher:
                 if i1 != -1 and i2 != -1:
                     dist1 = abs(digit_idx - i1)
                     dist2 = abs(digit_idx - i2)
-                    
+
                     if dist1 < dist2 - 5:
                         return t1, t2, True
                     if dist2 < dist1 - 5:
                         return t2, t1, False
-            
+
             # Heuristic 3: First Mentioned
             if i1 != -1 and i2 != -1:
                 if i1 < i2:
                     return t1, t2, True
                 else:
                     return t2, t1, False
-                
+
         return None, None, False
 
     @staticmethod
@@ -565,7 +565,7 @@ class Matcher:
         parts = target.split()
         last_name = parts[-1] if parts else target
         first_name = parts[0] if len(parts) > 1 else ""
-        
+
         candidates = []
         candidate_map = {}
 
@@ -590,7 +590,7 @@ class Matcher:
                         return player
                 else:
                     return player
-        
+
         # Fuzzy Fallback
         fuzzy_name = Matcher._fuzzy_match(target, candidates, threshold=0.85)
         if fuzzy_name:
@@ -620,7 +620,7 @@ class Matcher:
                     athlete = leader.get("athlete", {})
                     p_name = athlete.get("displayName", "") or athlete.get("fullName", "")
                     p_norm = Matcher.normalize(p_name)
-                    
+
                     # Check both directions: Is player in text? Or text in player?
                     if target in p_norm or p_norm in target:
                         return leader, cat_name

@@ -46,7 +46,7 @@ COMPACT_TO_FULL = {
     # New Reasoning Schema Support
     "bet_type": "type",
     "selection": "pick",
-    "sport": "league", 
+    "sport": "league",
 }
 
 # Type abbreviation -> Full type name
@@ -950,28 +950,28 @@ def infer_league_from_entity(entity: str) -> str | None:
     # Since checking 200 keys against a string is slow (O(K*N)),
     # and checking if words in string are in map is O(W).
     # "New York Knicks" -> check "new", "york", "knicks", "new york", "york knicks", "new york knicks"?
-    
+
     # We try checking suffix/words which is common for teams (e.g. "Boston Celtics" -> "Celtics")
     words = entity_lower.split()
     if not words:
         return None
-        
+
     # Check last word (most team names end with the unique identifier)
     # e.g. "Celtics", "Lakers", "Knicks"
     last_word = words[-1]
     if last_word in ENTITY_TO_LEAGUE_MAP:
         return ENTITY_TO_LEAGUE_MAP[last_word]
-        
+
     # Check last two words (e.g. "Red Wings", "Blue Jackets")
     if len(words) >= 2:
         last_two = f"{words[-2]} {words[-1]}"
         if last_two in ENTITY_TO_LEAGUE_MAP:
             return ENTITY_TO_LEAGUE_MAP[last_two]
-            
-    # Fallback to the original iterative approach if heuristics fail, 
+
+    # Fallback to the original iterative approach if heuristics fail,
     # but ONLY on the sets that matter (Professional first)
     # Although the word check above covers 99% of valid cases if the sets are good.
-    
+
     # 4. Fuzzy Matching (Strategy C)
     # If we are here, exact and suffix match failed.
     # We only check fuzzy if the word is long enough to be a team name (avoid matching "bet" to "bets")
@@ -986,7 +986,7 @@ def infer_league_from_entity(entity: str) -> str | None:
             best_match = matches[0]
             # logging.info(f"Fuzzy Match: '{entity_lower}' -> '{best_match}'")
             return ENTITY_TO_LEAGUE_MAP[best_match]
-            
+
     return None
 
 
@@ -2131,7 +2131,7 @@ def validate_and_correct_pick(pick: dict[str, Any]) -> dict[str, Any]:
         return pick
 
     result = dict(pick)
-    
+
     # CRITICAL FIX: Handle case where AI returns a list for "pick" instead of string
     pick_val = result.get("pick")
     if isinstance(pick_val, list):
@@ -2139,7 +2139,7 @@ def validate_and_correct_pick(pick: dict[str, Any]) -> dict[str, Any]:
         result["pick"] = pick_str
     else:
         pick_str = str(pick_val) if pick_val is not None else ""
-        
+
     current_type = result.get("type", "Unknown")
 
     # Step 0: Ensure all keys are available (expand if needed)

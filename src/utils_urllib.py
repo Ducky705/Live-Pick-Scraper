@@ -1,11 +1,11 @@
 
 import json
-import urllib.request
+import logging
+import ssl
 import urllib.error
 import urllib.parse
-import ssl
-import logging
-from typing import Any, Dict, Optional
+import urllib.request
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -21,25 +21,25 @@ class Response:
         self._data = data
         self.headers = headers
         self.text = data.decode('utf-8') if data else ""
-        
+
     def json(self):
         return json.loads(self.text)
-        
+
     def raise_for_status(self):
         if 400 <= self.status_code < 600:
             raise Exception(f"HTTP Error {self.status_code}: {self.text}")
 
-def request(method: str, url: str, headers: Dict[str, str] = None, json_data: Any = None, timeout: int = 30) -> Response:
+def request(method: str, url: str, headers: dict[str, str] = None, json_data: Any = None, timeout: int = 30) -> Response:
     if headers is None:
         headers = {}
-        
+
     data = None
     if json_data is not None:
         data = json.dumps(json_data).encode('utf-8')
         headers['Content-Type'] = 'application/json'
-        
+
     req = urllib.request.Request(url, data=data, headers=headers, method=method)
-    
+
     try:
         with urllib.request.urlopen(req, timeout=timeout, context=ctx) as f:
             resp_data = f.read()

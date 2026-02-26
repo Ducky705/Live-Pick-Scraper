@@ -19,33 +19,47 @@ def test_image_classifier():
     # Test with a simple numpy array (simulated image)
     import numpy as np
 
-    from src.image_classifier import ImageClassifier, OCRStrategy
+    from src.image_classifier import ImageClassifier
 
-    # Simulate a dark background image (should recommend Vision AI)
+    # Simulate a dark background image (should return False or pass)
     dark_img = np.zeros((400, 600, 3), dtype=np.uint8)
     dark_img[:, :] = [30, 30, 30]  # Dark background
 
-    analysis = ImageClassifier.classify_from_array(dark_img)
-    print("Dark image analysis:")
-    print(f"  Strategy: {analysis.strategy.value}")
-    print(f"  Confidence: {analysis.confidence:.0%}")
-    print(f"  Reasons: {analysis.reasons}")
-    print(f"  Is dark background: {analysis.is_dark_background}")
+    import tempfile
+    import cv2
+    import os
+    
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
+        temp_name_dark = f.name
+    
+    try:
+        cv2.imwrite(temp_name_dark, dark_img)
+        is_slip = ImageClassifier.is_betting_slip(temp_name_dark)
+        assert not is_slip, "Low variance/dark image should not be considered a betting slip"
+    finally:
+        os.unlink(temp_name_dark)
+    
+    print("  PASSED: Dark images rejected as betting slips")
 
-    assert analysis.strategy == OCRStrategy.VISION_AI_REQUIRED, "Dark image should require Vision AI"
-    print("  PASSED: Dark images route to Vision AI")
-
-    # Simulate a bright document-style image (should recommend Tesseract)
+    # Simulate a bright document-style image with some edges
     bright_img = np.ones((400, 600, 3), dtype=np.uint8) * 240  # Bright/white background
+    # Add fake grid to get high edge density
+    for i in range(0, 400, 5):
+        cv2.line(bright_img, (0, i), (600, i), (0, 0, 0), 1)
+    for j in range(0, 600, 5):
+        cv2.line(bright_img, (j, 0), (j, 400), (0, 0, 0), 1)
 
-    analysis = ImageClassifier.classify_from_array(bright_img)
-    print("\nBright image analysis:")
-    print(f"  Strategy: {analysis.strategy.value}")
-    print(f"  Confidence: {analysis.confidence:.0%}")
-    print(f"  Reasons: {analysis.reasons}")
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
+        temp_name_bright = f.name
 
-    assert analysis.strategy == OCRStrategy.TESSERACT_LIKELY, "Bright clean image should use Tesseract"
-    print("  PASSED: Clean images route to Tesseract")
+    try:
+        cv2.imwrite(temp_name_bright, bright_img)
+        is_slip = ImageClassifier.is_betting_slip(temp_name_bright)
+        assert is_slip, "Bright image with edges should be considered a betting slip"
+    finally:
+        os.unlink(temp_name_bright)
+
+    print("  PASSED: Clean images with edges accepted as betting slips")
 
     return True
 
@@ -251,7 +265,7 @@ def test_decoder_format_normalization():
         ("Luka Doncic 23+ PTS", "Player Prop", "Luka Doncic: Pts Over 22.5"),
         # MLP parlays now get league prefixes (fix for grading errors)
         ("De Minaur/Warriors MLP", "Parlay", "(TENNIS) De Minaur ML / (NBA) Warriors ML"),
-        ("CHIEFS", "Moneyline", "Chiefs"),  # Title case
+        ("CHIEFS", "Moneyline", "Chiefs ML"),  # Title case with ML
     ]
 
     print("Format normalization tests:")

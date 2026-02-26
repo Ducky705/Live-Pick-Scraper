@@ -52,7 +52,7 @@ class RuleBasedExtractor:
     RE_PROP_WIN = re.compile(r"Win\s+(3pt|Slam Dunk|Event|Match|Set)", re.IGNORECASE)
     # Updated to handle (2u at start of line
     RE_UNITS_PREFIX = re.compile(r"^[\(]?(\d+(?:\.\d+)?)(?:\*|u|%|unit)[\)]?\s*", re.IGNORECASE)
-    RE_UNITS_SUFFIX = re.compile(r"[\s\(](\d+(?:\.\d+)?)\s*(?:u|unit|%)[\)]?", re.IGNORECASE) 
+    RE_UNITS_SUFFIX = re.compile(r"[\s\(](\d+(?:\.\d+)?)\s*(?:u|unit|%)[\)]?", re.IGNORECASE)
     RE_PARENS = re.compile(r"\(.*?\)")
 
     # Stricter Anytime Goal match: Must start with a Name (Capitalized word), not just any text
@@ -69,17 +69,17 @@ class RuleBasedExtractor:
         """
         if not text:
             return ""
-            
+
         # 1. Space out Units: "(1.5U)" -> " (1.5U) " and add newline after
         # This handles "Clemson +13 (1u) SMU -2.5 (1u)" -> "Clemson +13 (1u) \n SMU -2.5 (1u)"
         text = re.sub(r'(\(\d+(?:\.\d+)?u\))', r' \1\n', text, flags=re.IGNORECASE)
-        
+
         # 2. Separate ML: "Xavier ML Eastern" -> "Xavier ML\nEastern"
         text = re.sub(r'\bML\b', 'ML\n', text, flags=re.IGNORECASE)
-        
+
         # 3. Space out Odds/Lines mashed with parens: "-118(1.5U)" -> "-118 (1.5U)"
         text = re.sub(r'(-?\d{3,4})(\()', r'\1 \2', text)
-        
+
         # 4. BankrollBill Format: "Team-5.5-118" -> "Team -5.5 -118"
         # Look for "text-number" where text is letters
         text = re.sub(r'([a-zA-Z])(-)(\d)', r'\1 \2\3', text)
@@ -87,16 +87,16 @@ class RuleBasedExtractor:
         # 5. Spread-Odds Mashed: "13.5-110" -> "13.5 -110" or "5+105" -> "5 +105"
         # Look for digit followed by +/- and 3+ digits (odds)
         text = re.sub(r'(\d)([+-])(\d{3,})', r'\1 \2\3', text)
-        
+
         # 6. Normalize Abbreviations (Phase 3 Fixes)
         # "TT" -> "Team Total" (Avoids matching inside words like ATT)
         text = re.sub(r'\bTT\b', 'Team Total', text)
-        
+
         # "1P", "2P", "3P" -> "1st Period", "2nd Period", "3rd Period" (Hockey/Basketball)
         text = re.sub(r'\b1P\b', '1st Period', text, flags=re.IGNORECASE)
         text = re.sub(r'\b2P\b', '2nd Period', text, flags=re.IGNORECASE)
         text = re.sub(r'\b3P\b', '3rd Period', text, flags=re.IGNORECASE)
-        
+
         # "v." -> "vs" (Handle "Team A v. Team B")
         # Ensure it's surrounded by spaces or newlines to avoid matching "Av. Ave"
         text = re.sub(r'\s+v\.\s+', ' vs ', text, flags=re.IGNORECASE)
@@ -169,7 +169,7 @@ class RuleBasedExtractor:
             # Pre-split on Parlay Separators (||)
             if "||" in full_text:
                 full_text = full_text.replace("||", "\n")
-            
+
             # SPLITTER: Handle multiple picks on one line with "+" (e.g. "Shelton ML + Aliassime ML")
             # Only split if BOTH sides look like picks or names.
             if "+" in full_text and "ML" in full_text:
@@ -190,13 +190,13 @@ class RuleBasedExtractor:
             # ALSO: Pre-process to split "3U TeamB" patterns (Unit suffix followed by new Start)
             # Regex: Finds digit+unit followed by space and Capital Letter
             full_text = re.sub(r"(\d+(?:\.\d+)?(?:u|unit|units|%|\*))\s+(?=[A-Z])", r"\1\n", full_text, flags=re.IGNORECASE)
-            
+
             # Handle "(2u) Team" or "(2u, time) Team" pattern
             full_text = re.sub(r"(\)\s*)(?=[A-Z])", r"\1\n", full_text)
 
             # Clean "Sauce" first
             full_text = clean_sauce_text(full_text)
-            
+
             # Clean mashed text (separating units, MLs)
             full_text = RuleBasedExtractor._clean_mashed_text(full_text)
 
@@ -212,7 +212,7 @@ class RuleBasedExtractor:
                  # But verify it matches the start of text
                  first_line = lines[0].strip()
                  if first_line.startswith("**") and capper_match.group(1) in first_line:
-                      # CRITICAL FIX: If the header line ACTUALLY contains a pick (e.g. "**Name 5% Pick**"), 
+                      # CRITICAL FIX: If the header line ACTUALLY contains a pick (e.g. "**Name 5% Pick**"),
                        # DO NOT SKIP IT.
                        if not RuleBasedExtractor._has_pick_indicators(first_line):
                             i = 1
@@ -222,7 +222,7 @@ class RuleBasedExtractor:
             while i < len(lines):
                 line = lines[i].strip()
                 i += 1
-                
+
 
 
                 if not line:
@@ -232,7 +232,7 @@ class RuleBasedExtractor:
                 # Remove "Pick:", "Selection:", "My Pick:", "MAX BET"
                 if "MAX BET" in line:
                     line = line.replace("MAX BET", "")
-                
+
                 line = RuleBasedExtractor.RE_REMOVE_PREFIX.sub("", line)
                 # Remove numbering (e.g. "1. ", "1) ")
                 line = RuleBasedExtractor.RE_REMOVE_NUMBERING.sub("", line)
@@ -308,7 +308,7 @@ class RuleBasedExtractor:
                 while i < len(lines):
                     next_line = lines[i].strip()
                     next_line_clean = RuleBasedExtractor.RE_NON_ASCII.sub("", next_line).strip()
-                    
+
                     if not next_line:
                         i += 1
                         continue
@@ -316,7 +316,7 @@ class RuleBasedExtractor:
                     # Check if next line is a STRICT continuation (Price, Line, Units)
                     # It should NOT contain a new Team Name or Prop Description.
                     is_continuation = False
-                    
+
                     # 1. Price/Odds: -110, +200, +105, -120 (start with +/-)
                     if re.match(r"^[+-]\d+", next_line_clean):
                         is_continuation = True
@@ -329,19 +329,19 @@ class RuleBasedExtractor:
                     # 4. Units only: (1U), 5U
                     elif RuleBasedExtractor.RE_UNITS_PREFIX.match(next_line_clean):
                         is_continuation = True
-                    
+
                     # Merge Decision
                     current_has_ind = RuleBasedExtractor._has_pick_indicators(line)
                     next_has_ind = RuleBasedExtractor._has_pick_indicators(next_line)
-                    
+
                     should_merge = False
 
                     if not current_has_ind:
                         # Current is just text (Team Name?). Always merge if next has info.
                         # But stop if next line also looks like a Team Name (No indicators)?
                         # "Team A" \n "Team B" -> Don't merge.
-                        
-                        # SPECIAL CHECK: If continuation is via UNITS, but the line has TEXT (Prop/Team), 
+
+                        # SPECIAL CHECK: If continuation is via UNITS, but the line has TEXT (Prop/Team),
                         # it's likely a new pick, not a continuation of the previous line (Header).
                         # e.g. "Header" \n "5u Team -5" -> Don't merge.
                         # e.g. "Team" \n "5u" -> Merge.
@@ -358,12 +358,11 @@ class RuleBasedExtractor:
                                     should_merge = True
                             else:
                                 should_merge = True
-                    else:
-                        # Current HAS indicators (Pick).
-                        # Only merge if next line is a continuation (Price/Line/Units).
-                        # Do NOT merge if next line is another Pick (Indicator + Not Just Price).
-                        if is_continuation:
-                            should_merge = True
+                    # Current HAS indicators (Pick).
+                    # Only merge if next line is a continuation (Price/Line/Units).
+                    # Do NOT merge if next line is another Pick (Indicator + Not Just Price).
+                    elif is_continuation:
+                        should_merge = True
 
                     if should_merge:
                          line = f"{line} {next_line_clean}"
@@ -410,9 +409,9 @@ class RuleBasedExtractor:
                         # Extract Line and Stat
                         val_str = prop_match.group(1)
                         stat_str = prop_match.group(2).upper()
-                        
+
                         # Fix stat abbreviations
-                        if "THREE" in stat_str or "3PM" in stat_str: 
+                        if "THREE" in stat_str or "3PM" in stat_str:
                             stat_str = "Threes"
                         elif "PT" in stat_str: stat_str = "Points"
                         elif "REB" in stat_str: stat_str = "Rebounds"
@@ -422,16 +421,16 @@ class RuleBasedExtractor:
                         player_name = line[:prop_match.start()].strip()
                         # Clean player name
                         player_name = RuleBasedExtractor.RE_PARENS.sub("", player_name).strip()
-                        
+
                         if len(player_name) > 3:
                             # Construct Pick directly
                             pick_val = f"{player_name}: {stat_str} Over {val_str}.5" # Assume Over for N+ formatting
-                            
+
                             # Extract odds if present in the rest of the line
                             odds = 0
                             remainder = line[prop_match.end():]
                             units, _, _ = RuleBasedExtractor._extract_and_remove_units(remainder)
-                            
+
                             # Find odds in remainder
                             odds_match = RuleBasedExtractor.RE_ODDS_PATTERN.search(remainder)
                             if odds_match:
@@ -492,14 +491,14 @@ class RuleBasedExtractor:
                         team = over_match.group(1).strip()
                         spread = over_match.group(2).strip()
                         # opponent = over_match.group(3).strip() # Unused but good for context
-                        
+
                         if len(team) > 3:
                              p_dict = {
                                 "message_id": str(msg_id) if msg_id else "unknown",
                                 "capper_name": msg.get("author") or "Unknown",
-                                "league": infer_league_from_entity(team) or "NCAAB", 
+                                "league": infer_league_from_entity(team) or "NCAAB",
                                 "type": "Spread",
-                                "pick": f"{team} {spread}", 
+                                "pick": f"{team} {spread}",
                                 "odds": -110,
                                 "units": 1.0, # Default (checking for units elsewhere?)
                                 "line": float(spread),
@@ -514,7 +513,7 @@ class RuleBasedExtractor:
                              u, _, _ = RuleBasedExtractor._extract_and_remove_units(rem)
                              if u != 1.0:
                                  p_dict["units"] = u
-                                 
+
                              msg_picks.append(p_dict)
                              continue
 
@@ -570,7 +569,7 @@ class RuleBasedExtractor:
 
                         # Convert to standard dict format
                         capper = capper_name_from_text or msg.get("author") or "Unknown"
-                        
+
                         pick_dict = RuleBasedExtractor._to_pick_dict(
                             parsed, str(msg_id) if msg_id else "unknown", line, units
                         )
@@ -580,7 +579,7 @@ class RuleBasedExtractor:
                         # Golden Set expects: "(2u Team -5" or "4* Team +7"
                         # We have units string + selection. We need to add Line/Odds if they were stripped.
                         full_pick_str = pick_dict["pick"]
-                        
+
                         # Add line if not present (heuristic check)
                         if parsed.line is not None and str(parsed.line) not in full_pick_str:
                              # Format line: -5.0 -> -5, +3.5 -> +3.5
@@ -588,7 +587,7 @@ class RuleBasedExtractor:
                              line_str = f"+{line_val}" if line_val > 0 else str(line_val)
                              if line_str.endswith(".0"): line_str = line_str[:-2]
                              full_pick_str += f" {line_str}"
-                        
+
                         pick_dict["pick"] = full_pick_str
 
                         # Add metadata
@@ -596,12 +595,11 @@ class RuleBasedExtractor:
                         pick_dict["confidence"] = 8.5  # High confidence on 0-10 scale
 
                         msg_picks.append(pick_dict)
-                    
-                    else:
-                        # CRITICAL: If extraction failed but we found units, SAVE THEM for next line!
-                        # This covers the "Header 5% \n Pick" case where Header failed validation
-                        if units != 1.0:
-                             pending_units = units
+
+                    # CRITICAL: If extraction failed but we found units, SAVE THEM for next line!
+                    # This covers the "Header 5% \n Pick" case where Header failed validation
+                    elif units != 1.0:
+                         pending_units = units
 
 
                 except Exception:
@@ -613,10 +611,10 @@ class RuleBasedExtractor:
             # 4. Decision Logic
             if msg_picks:
                 # SPECIAL CASE: If we found individual picks but the text said "Parlay",
-                # previously we deferred to AI. 
+                # previously we deferred to AI.
                 # NOW: We accept them. Better to have "Straight" bets extracted than nothing if AI fails.
                 # We can optionally tag them as "Potential Parlay Leg" in reasoning if needed, but for now just accept.
-                
+
                 # If we found multiple picks and "Parlay" is mentioned, trust it's a list of legs.
                 extracted_picks.extend(msg_picks)
                 handled_msgs += 1

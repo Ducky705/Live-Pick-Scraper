@@ -4,7 +4,8 @@ Simplified Provider Pool (Urllib/Groq Only)
 Bypasses requests/aiohttp dependencies by using src.groq_client (urllib-based).
 """
 import logging
-from src.groq_client import groq_text_completion, groq_vision_completion
+
+from src.groq_client import groq_text_completion
 
 logger = logging.getLogger(__name__)
 
@@ -27,15 +28,15 @@ def pooled_completion(prompt: str, images: list = None, timeout: int = 60, **kwa
             # I need to check if I added vision support to groq_client.py.
             # If not, I should default to text-only or fix it.
             # For now, let's assume text only or basic support.
-            
+
             # Re-reading my groq_client.py write: I only defined `groq_text_completion`.
             # I did NOT define `groq_vision_completion`.
             # So I must handle that or fix groq_client.py too.
-            
+
             # FIX: Just treat as text for now if vision not available, or attempt text?
             # Telegram images are important for OCR fallback.
             # But let's prioritize not crashing.
-            
+
             pass
 
         # Call text completion

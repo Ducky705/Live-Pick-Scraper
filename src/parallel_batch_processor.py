@@ -351,23 +351,29 @@ class ParallelBatchProcessor:
         fallback_order: list[str],
         **kwargs,
     ) -> dict:
-        """Retry a batch with fallback providers."""
-        for provider in fallback_order:
-            if provider == failed_provider:
-                continue
+        """Retry a batch with exponential backoff until it succeeds, but respect an extreme hard-stop cutoff."""
+        attempt = 1
+        max_retries = 20 # Extreme cutoff (allows roughly ~15-20 minutes of backoff before hard failing)
+        
+        while attempt <= max_retries:
+            for provider in fallback_order:
+                result = self._process_batch(batch_id, batch, provider, **kwargs)
+                if result["status"] == "success":
+                    logger.info(f"Batch {batch_id} recovered via {provider} on attempt {attempt}")
+                    return result
 
-            # Kwargs already contains context from the original submission if we did it right
-            result = self._process_batch(batch_id, batch, provider, **kwargs)
-            if result["status"] == "success":
-                logger.info(f"Batch {batch_id} recovered via {provider}")
-                return result
+            # If all fallback providers fail, sleep and exponentially backoff to respect hard API rate limits
+            backoff_sleep = min(60.0, 5.0 * (2 ** attempt))
+            logger.warning(f"Batch {batch_id} failed on all providers (Attempt {attempt}/{max_retries}). Sleeping {backoff_sleep}s...")
+            time.sleep(backoff_sleep)
+            attempt += 1
 
-        logger.error(f"Batch {batch_id} failed on all providers")
+        logger.error(f"FATAL: Batch {batch_id} breached maximum {max_retries} retries. Extreme cutoff reached. Failing batch.")
         return {
             "batch_id": batch_id,
             "status": "error",
             "data": None,
-            "provider": "all_failed",
+            "provider": "extreme_cutoff_failed",
         }
 
     def process_batches(self, batches: list[list[dict]], allowed_providers: list[str] | None = None, **kwargs) -> list[Any]:
@@ -445,7 +451,7 @@ class ParallelBatchProcessor:
                 done = sum(1 for r in results if r is not None and r.get("status") == "success") # Only count successes? No, results is array.
                 # Actually results contains Nones initially.
                 # done = len([r for r in results if r is not None])
-                
+
                 if (i+1) % 10 == 0: # Approximate logging
                     pass # logger.info(...)
 
@@ -458,8 +464,8 @@ class ParallelBatchProcessor:
                 if r and r.get("status") == "success":
                     working_providers.add(r.get("provider"))
 
-            base_fallback_order = ["groq", "cerebras", "mistral", "gemini"]
-            fallback_order = [p for p in base_fallback_order if p in target_providers]
+            base_fallback_order = ["openrouter"]
+            fallback_order = ["openrouter"]
 
             # Prioritize working, respecting configuration priority
             sorted_working = sorted(
@@ -471,10 +477,10 @@ class ParallelBatchProcessor:
                 if wp in fallback_order:
                     fallback_order.remove(wp)
                     fallback_order.insert(0, wp)
-            
+
             # Create safe fallback if empty
             if not fallback_order:
-                fallback_order = ["mistral", "groq"] # Default safe bets
+                fallback_order = ["openrouter"] # Default safe bets
 
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures_retry = {}

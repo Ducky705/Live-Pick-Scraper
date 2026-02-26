@@ -2,7 +2,6 @@
 import json
 import os
 import re
-from functools import lru_cache
 
 # Path to the team database
 DB_PATH = os.path.join(os.path.dirname(__file__), "data", "teams_db.json")
@@ -25,9 +24,9 @@ class UniversalMatcher:
             return
 
         try:
-            with open(DB_PATH, "r") as f:
+            with open(DB_PATH) as f:
                 self._teams_data = json.load(f)
-                
+
             # Build Index
             # Map every alias (normalized) to a set of leagues
             self._index = {}
@@ -37,11 +36,11 @@ class UniversalMatcher:
                     # Normalize strict: lowercase, no punctuation
                     norm_name = self._normalize_key(name)
                     if not norm_name: continue
-                    
+
                     if norm_name not in self._index:
                         self._index[norm_name] = set()
                     self._index[norm_name].add(league)
-                    
+
         except Exception as e:
             print(f"Error loading Team DB: {e}")
 
@@ -61,7 +60,7 @@ class UniversalMatcher:
         if not norm_text: return None
 
         tokens = norm_text.split()
-        
+
         # storage: league -> max_match_length
         candidates = {}
 
@@ -72,7 +71,7 @@ class UniversalMatcher:
                 if phrase in self._index:
                     matched_leagues = self._index[phrase]
                     weight = len(phrase) # Use character length of the match as weight
-                    
+
                     for lg in matched_leagues:
                         if lg not in candidates:
                             candidates[lg] = 0
@@ -80,22 +79,22 @@ class UniversalMatcher:
 
         if not candidates:
             return None
-            
+
         # Decision Logic
         # Sort by:
         # 1. Match Length (descending) - specific names ("Florida Panthers") beat generic ("Panthers")
         # 2. Priority Hierarchy (descending) - resolution for equal match length
-        
+
         PRIORITY = ["nfl", "nba", "mlb", "nhl", "epl", "ucl", "ncaaf", "ncaab"]
-        
+
         def get_priority_score(lg):
              return PRIORITY.index(lg) if lg in PRIORITY else 999
 
         # Sort: Primary key = Length (desc), Secondary = Priority (asc/lower index is better)
         sorted_candidates = sorted(
-            candidates.items(), 
+            candidates.items(),
             key=lambda item: (-item[1], get_priority_score(item[0]))
         )
-        
+
         best_league, best_score = sorted_candidates[0]
         return best_league

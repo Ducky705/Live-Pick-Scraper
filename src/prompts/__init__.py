@@ -7,10 +7,10 @@ This module provides:
 """
 
 from .core import (
-    get_reasoning_extraction_prompt,
-    get_compact_extraction_prompt, # Kept as alias
+    get_compact_extraction_prompt,  # Kept as alias
     get_compact_revision_prompt,
     get_dsl_extraction_prompt,
+    get_reasoning_extraction_prompt,
 )
 from .decoder import (
     COMPACT_TO_FULL,

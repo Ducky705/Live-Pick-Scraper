@@ -12,8 +12,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Add src to path
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-# Mock config if needed, or rely on src.config
+root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(root_dir)
+sys.path.append(os.path.join(root_dir, "src"))
 from src.auto_processor import auto_select_messages
 from src.ocr_handler import extract_text_ai, extract_text_batch
 from src.openrouter_client import openrouter_completion

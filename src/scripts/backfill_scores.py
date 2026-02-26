@@ -1,7 +1,7 @@
+import datetime
 import json
 import logging
 import sys
-import datetime
 from pathlib import Path
 from typing import Any
 
@@ -10,7 +10,6 @@ project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(project_root))
 
 from src.score_fetcher import fetch_scores_for_date
-from src.grading.constants import ESPN_LEAGUE_MAP
 
 # Setup logging
 logging.basicConfig(
@@ -25,7 +24,7 @@ def load_json(path: Path) -> Any:
         logger.error(f"File not found: {path}")
         return None
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
         logger.error(f"Error loading {path}: {e}")
@@ -49,7 +48,7 @@ def main():
     if not picks_cache_path:
         logger.error("No picks cache found in src/data/")
         return
-    
+
     logger.info(f"Loading picks from: {picks_cache_path}")
     picks = load_json(picks_cache_path)
     if not picks:
@@ -61,7 +60,7 @@ def main():
     if not messages_data or "messages" not in messages_data:
         logger.error("Invalid messages.json format")
         return
-    
+
     # Map message_id -> date
     msg_date_map = {}
     for msg in messages_data["messages"]:
@@ -73,26 +72,26 @@ def main():
             # Example: "2026-01-23 19:01 ET" -> "2026-01-23"
             clean_date = date_str.split(" ")[0]
             msg_date_map[msg_id] = clean_date
-            
+
     # 3. Identify Missing Dates
     dates_to_fetch = set()
     pending_count = 0
-    
+
     for pick in picks:
         grade = pick.get("grade")
         details = pick.get("grading_details", "")
-        
+
         # Criteria for backfill: PENDING or specific error messages
         needs_backfill = (
-            grade == "PENDING" or 
-            "Game not found" in details or 
+            grade == "PENDING" or
+            "Game not found" in details or
             pick.get("score_summary") == ""
         )
-        
+
         if needs_backfill:
             msg_id = str(pick.get("message_id"))
             date = msg_date_map.get(msg_id)
-            
+
             # Fallback: Try Snowflake decoding
             if not date and msg_id.isdigit() and len(msg_id) > 15:
                 try:
@@ -116,12 +115,12 @@ def main():
     # 4. Fetch Scores based on dates
     # We fetch for ALL leagues to be safe, or we could filter by the leagues present in pending picks.
     # For now, let's just fetch everything consistent with ScoreFetcher defaults.
-    
+
     for date_str in sorted(list(dates_to_fetch)):
         logger.info(f"Fetching scores for {date_str}...")
         try:
             # fetch_scores_for_date handles caching internally
-            games = fetch_scores_for_date(date_str, force_refresh=True) 
+            games = fetch_scores_for_date(date_str, force_refresh=True)
             logger.info(f"  -> Fetched {len(games)} games.")
         except Exception as e:
             logger.error(f"Failed to fetch for {date_str}: {e}")

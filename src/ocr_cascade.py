@@ -604,7 +604,7 @@ class OCRCascade:
 
         if not needs_vision:
             return [r for r in results if r is not None]
-            
+
         # Step 1.5: Filter out non-betting slips from Vision Queue
         # We don't want to waste expensive Vision API calls on garbage that RapidOCR failed on.
         from src.image_classifier import classifier
@@ -622,7 +622,7 @@ class OCRCascade:
                     prompt_type=prompt_type,
                     error="Filtered by ImageClassifier",
                 )
-                
+
         needs_vision = filtered_vision_queue
         if not needs_vision:
              return [

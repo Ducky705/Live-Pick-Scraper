@@ -1,17 +1,27 @@
 # src/grading/engine.py
 """
 Core grading engine - evaluates picks against game results.
+
+### AI Agent Context Search Hints:
+* **Purpose**: Orchestrates V3 Grading.
+* **Input**: Parsed `Pick` objects (from `PickParser`) and ESPN scores (from `DataLoader`).
+* **Output**: `GradedPick` containing Win/Loss/Push/Pending enum.
+* **Important Side-Effects**: 
+    - This module will trigger `AIResolver` fallback networks if a pick is "suspicious" (e.g., word count mismatch for Moneyline).
+    - Concurrently pre-fetches player boxscores.
+    - Saves learned team aliases back to memory automatically.
+WARNING: Do NOT modify heuristic word counts in `is_suspicious` without writing accompanying strict unit tests, as it controls AI billing triggers.
 """
 
 import logging
 from typing import Any
 
+from src.grading.ai_resolver import AIResolver
 from src.grading.constants import SOCCER_LEAGUES, STAT_KEY_MAP
 from src.grading.loader import DataLoader
 from src.grading.matcher import Matcher
 from src.grading.parser import PickParser
 from src.grading.schema import BetType, GradedPick, GradeResult, Pick
-from src.grading.ai_resolver import AIResolver
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +54,7 @@ class GraderEngine:
         """
         # Parse if string
         original_text = pick if isinstance(pick, str) else getattr(pick, "raw_text", str(pick))
-        
+
         if isinstance(pick, str):
             pick = PickParser.parse(pick, league_hint)
 
@@ -52,8 +62,8 @@ class GraderEngine:
         # If parser failed to find a valid type, or if it looks suspicious (e.g. ML with full text as selection)
         if pick is None:
              return GradedPick(
-                 Pick(raw_text=original_text, league=league_hint, bet_type=BetType.UNKNOWN, selection=""), 
-                 GradeResult.ERROR, 
+                 Pick(raw_text=original_text, league=league_hint, bet_type=BetType.UNKNOWN, selection=""),
+                 GradeResult.ERROR,
                  details="Could not parse pick string."
              )
 
@@ -63,14 +73,14 @@ class GraderEngine:
         # 3. Total without line
         # 4. Prop without stat
         # 5. Length Mismatch: Raw text > Selection + 4 words (hidden props/parlays)
-        
+
         word_count = len(pick.raw_text.split())
         sel_count = len(pick.selection.split()) if pick.selection else 0
-        
+
         is_suspicious = (
             pick.bet_type == BetType.UNKNOWN or
             (pick.bet_type == BetType.MONEYLINE and len(pick.selection.split()) > 5) or
-            (pick.bet_type == BetType.TOTAL and pick.line is None) or 
+            (pick.bet_type == BetType.TOTAL and pick.line is None) or
             (pick.bet_type == BetType.PLAYER_PROP and not pick.stat) or
             # Aggressive length check:
             # Moneyline: If > 1 extra word (e.g. "Lakers to win" -> 2 extra), trigger. "Lakers ML" (1 extra) is fine.
@@ -84,7 +94,7 @@ class GraderEngine:
             # EXCEPTION: If it contains "vs" or "@" (e.g. "Knicks vs Nets O 220"), it's likely a Game Total.
             (pick.bet_type in (BetType.SPREAD, BetType.TOTAL) and len(pick.selection.split()) > 4 and "vs" not in pick.selection.lower() and "@" not in pick.selection)
         )
-        
+
         if is_suspicious:
              logger.info(f"Triggering AI Parsing Fallback for: {pick.raw_text}")
              ai_parsed = AIResolver.parse_pick(pick.raw_text, pick.league)
@@ -95,10 +105,10 @@ class GraderEngine:
         # VALIDITY CHECK (Garbage Disposal)
         # Avoid grading nonsense like "Over 6.5" or "Team ML" without context
         from src.grading.validity_filter import ValidityFilter
-        
+
         validator = ValidityFilter()
         is_valid, reason = validator.is_valid(pick.raw_text, pick.league)
-        
+
         if not is_valid:
              logger.warning(f"Pick rejected by ValidityFilter: {pick.raw_text} ({reason})")
              return GradedPick(pick, GradeResult.VOID, details=f"Invalid: {reason}")
@@ -123,7 +133,7 @@ class GraderEngine:
                 result = self._grade_moneyline(pick)
             else:
                 result = GradedPick(pick, GradeResult.PENDING, details="Unknown bet type")
-            
+
             return result
 
         except Exception as e:
@@ -131,10 +141,10 @@ class GraderEngine:
             return GradedPick(pick, GradeResult.ERROR, details=str(e))
 
     def _find_game(
-        self, 
-        text: str, 
-        league: str, 
-        line: float | None = None, 
+        self,
+        text: str,
+        league: str,
+        line: float | None = None,
         odds: int | None = None
     ) -> tuple[dict[str, Any], str | None] | None:
         """
@@ -147,21 +157,20 @@ class GraderEngine:
         game = Matcher.find_game(text, league, self.scores, line=line, odds=odds)
         if game:
             return game, None
-            
+
         # 1.5 Roster Search (Deep)
         # If Matcher failed (likely because player isn't a leader or team isn't mentioned),
         # search full rosters of all games.
         roster_match = self._find_game_with_roster_search(text, league)
         if roster_match:
             return roster_match
-            
+
         # 2. FAST ALIAS LOOKUP (Deterministic)
-        # Because we pre-fetched AI aliases via _prefetch_ai_aliases, any newly learned 
+        # Because we pre-fetched AI aliases via _prefetch_ai_aliases, any newly learned
         # aliases are already in the team_aliases.py dictionary (and loaded in memory).
         # We try Matcher *again* now that the dictionary might have been updated.
-        from src.grading.constants import Matcher 
         # Matcher was already executed iteratively on _prefetch_ai_aliases result ingestion!
-        
+
         logger.warning(f"UNRESOLVED_ALIAS: Could not match game/player for '{text}' in league '{league}', even after batched AI prefetch.")
         return None
 
@@ -174,7 +183,7 @@ class GraderEngine:
             return None
 
         logger.info(f"Searching rosters for: {text}")
-        
+
         # Determine target league games
         if league and league.lower() != "other":
              # Use Matcher's league logic implicitly or just filter manually
@@ -190,8 +199,8 @@ class GraderEngine:
 
         # Search each game
         parsed = PickParser.parse(text, league)
-        target_name = parsed.subject or text 
-        
+        target_name = parsed.subject or text
+
         for game in games_to_search:
             # 1. Check leaders first (Fast)
             leader, _ = Matcher.find_player_in_leaders(target_name, game)
@@ -205,7 +214,7 @@ class GraderEngine:
                 if player:
                     logger.info(f"Found player {target_name} in {game['team1']} vs {game['team2']}")
                     return game, None
-        
+
         return None
 
     def _is_likely_player_prop(self, text: str) -> bool:
@@ -244,12 +253,12 @@ class GraderEngine:
     def _prefetch_ai_aliases(self, picks: list[dict[str, Any]]):
         """Identify which selections need AI resolution, batch resolve them, and update aliases."""
         unresolved_queries = set()
-        
+
         for p in picks:
             text = p.get("pick", p.get("p", ""))
             league = p.get("league", p.get("lg", "other"))
             date = p.get("date")
-            
+
             parsed = PickParser.parse(text, league, date)
             if not parsed or parsed.bet_type == BetType.UNKNOWN:
                 continue
@@ -259,7 +268,7 @@ class GraderEngine:
             is_suspicious = (
                 parsed.bet_type == BetType.UNKNOWN or
                 (parsed.bet_type == BetType.MONEYLINE and len(parsed.selection.split()) > 5) or
-                (parsed.bet_type == BetType.TOTAL and parsed.line is None) or 
+                (parsed.bet_type == BetType.TOTAL and parsed.line is None) or
                 (parsed.bet_type == BetType.PLAYER_PROP and not parsed.stat) or
                 (parsed.bet_type == BetType.MONEYLINE and word_count > sel_count + 1) or
                 (parsed.bet_type in (BetType.SPREAD, BetType.TOTAL) and word_count > sel_count + 2) or
@@ -268,9 +277,9 @@ class GraderEngine:
             )
 
             if is_suspicious:
-                continue 
+                continue
 
-            search_text = parsed.selection 
+            search_text = parsed.selection
             if parsed.bet_type == BetType.TOTAL:
                 import re
                 team_match = re.match(r'^(.+?)\s+(?:over|under|[ou])\s+[\d.]+', search_text, re.IGNORECASE)
@@ -287,7 +296,7 @@ class GraderEngine:
                     from src.grading.constants import LEAGUE_ALIASES_MAP
                     norm_league = LEAGUE_ALIASES_MAP.get(parsed.league.lower(), parsed.league.lower())
                     league_scores = [
-                        g for g in self.scores 
+                        g for g in self.scores
                         if LEAGUE_ALIASES_MAP.get(g.get("league", "").lower(), g.get("league", "").lower()) == norm_league
                         or g.get("league", "").lower() == norm_league
                     ]
@@ -300,14 +309,14 @@ class GraderEngine:
 
         from src.grading.ai_resolver import AIResolver
         from src.grading.dictionary_updater import DictionaryUpdater
-        
+
         logger.info(f"Batch pre-fetching AI aliases for {len(unresolved_pairs)} items...")
         batch_size = 15
-        
+
         for i in range(0, len(unresolved_pairs), batch_size):
             batch = unresolved_pairs[i:i+batch_size]
             resolved_dict = AIResolver.resolve_batch(batch, self.scores)
-            
+
             for (txt, lg), result in resolved_dict.items():
                 if result:
                     _, resolved_team_name = result
@@ -569,7 +578,7 @@ class GraderEngine:
         # Check if subject matches team names
         is_team_prop = False
         team_key = None
-        
+
         if Matcher._team_in_text(game["team1"], pick.subject):
             team_key = "team1_data"
             is_team_prop = True
@@ -582,7 +591,7 @@ class GraderEngine:
         elif pick.subject == game["team2"] or pick.subject in game["team2"]:
              team_key = "team2_data"
              is_team_prop = True
-            
+
         if is_team_prop:
             # Look in team statistics
             team_stats = game.get(team_key, {}).get("statistics", [])
@@ -594,13 +603,13 @@ class GraderEngine:
             # Map "Total Points" -> "points"
             clean_stat = pick.stat.lower().replace("total", "").strip()
             # Also handle camelCase in pick.stat if necessary, but lower() handles that.
-            
+
             for stat_entry in team_stats:
                 entry_name = stat_entry.get("name", "").lower()
                 entry_abbr = stat_entry.get("abbreviation", "").lower()
-                
+
                 # Check exact or partial match
-                if (clean_stat == entry_name or 
+                if (clean_stat == entry_name or
                     clean_stat == entry_abbr or
                     clean_stat in entry_name or
                     entry_name in clean_stat): # Check for containment (e.g. yards vs totalYards)
@@ -610,7 +619,7 @@ class GraderEngine:
                         break
                     except:
                         pass
-        
+
         # 3. Fetch full boxscore if still not found (Player Props deeper search)
         if stat_value is None and not is_team_prop:
             boxscore = self._get_boxscore(game)
@@ -672,7 +681,7 @@ class GraderEngine:
             flat_boxscore = boxscore
             self._boxscore_cache[game_id] = flat_boxscore
             game["full_boxscore"] = flat_boxscore
-            cache.set_boxscore(game_id, flat_boxscore) 
+            cache.set_boxscore(game_id, flat_boxscore)
             return flat_boxscore
 
         return None
@@ -680,22 +689,22 @@ class GraderEngine:
     def _flatten_boxscore(self, raw_boxscore: dict) -> list[dict]:
         """Flatten ESPN boxscore into a list of player dicts with named stats."""
         players_list = []
-        
+
         # ESPN Boxscore structure: boxscore['players'] -> List of Team Groups
         team_groups = raw_boxscore.get("players", [])
         if not isinstance(team_groups, list):
              return []
-             
+
         for team_group in team_groups:
             stats_groups = team_group.get("statistics", [])
             team_name = team_group.get("team", {}).get("displayName", "")
-            
+
             for stat_cat in stats_groups:
                 keys = stat_cat.get("keys", []) # e.g. ["min", "points", ...]
                 # If keys missing, fallback to lowercased names
                 if not keys:
                     keys = [n.lower() for n in stat_cat.get("names", [])]
-                
+
                 athletes = stat_cat.get("athletes", [])
                 for entry in athletes:
                     athlete_data = entry.get("athlete", {})
@@ -708,23 +717,23 @@ class GraderEngine:
                              name = f"{fname} {lname}".strip()
                          else:
                              name = "Unknown"
-                    
+
                     stats_values = entry.get("stats", [])
-                    
+
                     # Create player dict
                     p_dict = {
                         "name": name,
                         "team": team_name,
                         "id": athlete_data.get("id"),
                     }
-                    
+
                     # Map keys to values
                     for i, key in enumerate(keys):
                         if i < len(stats_values):
                             p_dict[key] = stats_values[i]
-                            
+
                     players_list.append(p_dict)
-                    
+
         return players_list
 
     def _extract_stat(self, player: dict, stat_key: str) -> float | None:
@@ -772,7 +781,7 @@ class GraderEngine:
         # The selection might be "Iowa vs Purdue Over 142" or just "Over 222.5".
         # We need to find team names, not pass "Over 222.5" to _find_game.
         search_text = pick.selection
-        
+
         # Try to extract team names from the selection
         # Patterns: "Team1 vs Team2 Over/Under X", "Team1/Team2 o/u X", "Team Over/Under X (team total)"
         import re
@@ -782,11 +791,11 @@ class GraderEngine:
         )
         if team_match:
             search_text = team_match.group(1).strip()
-        
+
         # If search_text is just "Over" or "Under" (no team context), try raw_text
         if search_text.lower() in ("over", "under", "o", "u", ""):
             search_text = pick.raw_text
-        
+
         result = self._find_game(search_text, pick.league, line=pick.line, odds=pick.odds)
         if not result:
             return GradedPick(pick, GradeResult.PENDING, details="Game not found")
@@ -903,10 +912,10 @@ class GraderEngine:
         # Check winner flags first
         winner_picked = False
         winner_opp = False
-        
+
         # Only check winner flags if it's a team pick
         if not is_draw_pick:
-             is_t1 = (picked == game.get("team1")) or (picked == game.get("team1_display")) 
+             is_t1 = (picked == game.get("team1")) or (picked == game.get("team1_display"))
              # Safety re-resolve
              p_resolv, o_resolv, is_t1_flag = Matcher.resolve_picked_team(picked, game)
              if p_resolv:
@@ -932,13 +941,13 @@ class GraderEngine:
             # If status is None, assume Final (as we load from final-only source or validated matches)
             status = game.get("status")
             is_final = status == "STATUS_FINAL" or status is None
-            
-            if s1 == s2 and is_final: 
+
+            if s1 == s2 and is_final:
                  return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
             elif is_final:
                  return GradedPick(pick, GradeResult.LOSS, summary, game_id=game_id)
             return GradedPick(pick, GradeResult.PENDING, summary, game_id=game_id)
-        
+
         if winner_picked:
              return GradedPick(pick, GradeResult.WIN, summary, game_id=game_id)
         elif winner_opp:

@@ -5,14 +5,11 @@ from typing import Any
 
 from dotenv import load_dotenv
 
-from src.groq_client import groq_text_completion
-from src.openrouter_client import openrouter_completion
 from src.cerebras_client import cerebras_completion
-from src.mistral_client import mistral_completion
 from src.gemini_client import gemini_text_completion
-
-from src.grading.schema import Pick, BetType
-from datetime import datetime
+from src.grading.schema import BetType, Pick
+from src.mistral_client import mistral_completion
+from src.openrouter_client import openrouter_completion
 
 load_dotenv()
 
@@ -39,23 +36,23 @@ class AIResolver:
         """
         if not games:
             return None
-            
+
         # Filter games by league if provided (optimization)
         candidate_games = games
         if league:
             filtered = [g for g in games if g.get("league", "").lower() == league.lower()]
             if filtered:
                 candidate_games = filtered
-                
+
         # Constrain candidates to save tokens (top 50 should cover most days per league)
         candidate_games = candidate_games[:50]
-        
+
         # Build prompt
         game_list_str = "\n".join([
             f"- ID: {g.get('id')} | {g.get('team1')} vs {g.get('team2')} ({g.get('league')})"
             for g in candidate_games
         ])
-        
+
         prompt = f"""
 You are a sports betting expert. Match the following pick to one of the games listed below.
 
@@ -78,7 +75,7 @@ OUTPUT FORMAT (JSON):
     "reason": "explanation"
 }}
         """
-        
+
         # TIER 1: ACCURACY CHAMPION (OpenRouter - stepfun)
         # ---------------------------------------------------------
         try:
@@ -126,10 +123,10 @@ OUTPUT FORMAT (JSON):
             data = json.loads(response_text)
             if not data:
                 return None
-            
+
             game_id = data.get("game_id")
             resolved_team = data.get("team")
-            
+
             if game_id:
                 for g in games:
                     if str(g.get("id")) == str(game_id):
@@ -152,7 +149,7 @@ OUTPUT FORMAT (JSON):
         """
         if not games or not items:
             return {item: None for item in items}
-            
+
         results = {}
         # Collect candidate games.
         # It's better to show all games from the requested leagues.
@@ -165,7 +162,7 @@ OUTPUT FORMAT (JSON):
 
         if not candidate_games:
             candidate_games = games
-            
+
         candidate_games = candidate_games[:100] # Limit tokens
 
         game_list_str = "\n".join([
@@ -196,7 +193,7 @@ Return a JSON array of objects, EXACTLY ONE for each input pick, IN THE EXACT SA
     {{ "game_id": null, "team": null }}
 ]
 """
-        
+
         try:
             response = openrouter_completion(prompt, timeout=30)
             if response:
@@ -206,23 +203,23 @@ Return a JSON array of objects, EXACTLY ONE for each input pick, IN THE EXACT SA
                 end_idx = text.rfind(']') + 1
                 if start_idx != -1 and end_idx != -1:
                     text = text[start_idx:end_idx]
-                
+
                 data = json.loads(text)
-                
+
                 if isinstance(data, list):
                     for i, (pick_text, league) in enumerate(items):
                         if i >= len(data): break
                         mapping = data[i]
                         game_id = mapping.get("game_id")
                         resolved_team = mapping.get("team")
-                        
+
                         found_game = None
                         if game_id:
                             for g in candidate_games:
                                 if str(g.get("id")) == str(game_id):
                                     found_game = g
                                     break
-                                    
+
                         if found_game and resolved_team:
                             results[(pick_text, league)] = (found_game, resolved_team)
                         else:
@@ -310,7 +307,7 @@ OUTPUT FORMAT (JSON):
                 return AIResolver._parse_extraction_response(response, pick_text, league)
         except Exception as e:
             logger.warning(f"AI Parsing (Cerebras 8b) failed: {e}")
-            
+
         return None
 
     @staticmethod
@@ -320,7 +317,7 @@ OUTPUT FORMAT (JSON):
             # Clean md blocks
             text = response_text.replace("```json", "").replace("```", "").strip()
             data = json.loads(text)
-            
+
             b_type_str = data.get("bet_type", "Unknown").upper().replace(" ", "_")
             try:
                 bet_type = BetType[b_type_str]
@@ -336,7 +333,7 @@ OUTPUT FORMAT (JSON):
                     try:
                         l_type = BetType[leg_data.get("bet_type", "").upper().replace(" ", "_")]
                     except: pass
-                    
+
                     legs.append(Pick(
                         raw_text=leg_data.get("selection", ""),
                         league=league,

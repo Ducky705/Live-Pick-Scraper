@@ -31,10 +31,10 @@ class PickParser:
 
         # Clean text
         text = pick_text.strip()
-        
+
         # 0. Extract Units globally
         units_val, text = PickParser._extract_units(text)
-        
+
         league_norm = LEAGUE_ALIASES_MAP.get(league.lower(), league.lower())
 
         # If league is unknown, try to infer from team names
@@ -114,10 +114,10 @@ class PickParser:
                 "strikeouts",
             ]
 
-            
+
             # Use regex to avoid partial matches (e.g. "ks" in "Knicks")
             prop_regex = r"\b(" + "|".join(re.escape(k) for k in prop_keywords) + r")\b"
-            
+
             if re.search(prop_regex, text, re.IGNORECASE):
                 # Attempt to parse as prop by injecting a colon before the Over/Under
                 # Pattern: Find first occurrence of Over/Under/o/u/O/U
@@ -140,14 +140,14 @@ class PickParser:
         # --- ADAPTIVE PARSING LAYER ---
         from src.parsing.fingerprinter import Fingerprinter
         from src.parsing.registry import TemplateRegistry
-        
+
         # Instantiate Registry (Singleton-ish typically, but load cheap here)
         # TODO: Move to class level or singleton to avoid reload
         registry = TemplateRegistry()
-        
+
         fp = Fingerprinter.fingerprint(text)
         tmpl = registry.get_template(fp)
-        
+
         if tmpl:
             # FAST PATH: Logic from Template
             pattern, mapping = tmpl
@@ -155,26 +155,26 @@ class PickParser:
             if match:
                 # Construct Pick from Match
                 groups = match.groupdict()
-                
+
                 # Default Fields
                 selection = groups.get(mapping.get("selection", "selection"), text)
                 line_val = None
                 odds_val = None
-                
-                if "line" in groups and groups["line"]:
+
+                if groups.get("line"):
                     try:
                         line_val = float(groups["line"])
                     except: pass
-                    
-                if "odds" in groups and groups["odds"]:
+
+                if groups.get("odds"):
                     try:
                         odds_val = int(groups["odds"])
                     except: pass
-                    
+
                 units_val = None
-                if "units" in groups and groups["units"]:
+                if groups.get("units"):
                     units_val = groups["units"]
-                    
+
                 # Simplistic return for now - assumes Spread/ML/Total based on fields
                 pick = Pick(
                     raw_text=text,
@@ -186,31 +186,30 @@ class PickParser:
                     odds=odds_val,
                     units=units_val
                 )
-                
+
                 # Format Compliance: Ensure "Team ML" format
                 if pick.bet_type == BetType.MONEYLINE:
                     if "ml" not in pick.selection.lower() and "moneyline" not in pick.selection.lower():
                         if not any(c.isdigit() for c in pick.selection):
                              pick.selection = f"{pick.selection} ML"
-                
+
                 if pick:
                      pick.units = units_val
                 return pick
-        else:
-            # AUTO-LEARNING (Cache Miss)
-            # Only attempt to learn if text seems "pick-like" (length > 5, has numbers?)
-            # Heuristic: Don't learn extremely short or long texts
-            if 5 < len(text) < 200:
-                # OPTIMIZATION: Only attempt to learn if text contains at least one digit.
-                # All valid bets (Odds, Lines, Units) contain digits.
-                if not re.search(r"\d", text):
-                    return None
+        # AUTO-LEARNING (Cache Miss)
+        # Only attempt to learn if text seems "pick-like" (length > 5, has numbers?)
+        # Heuristic: Don't learn extremely short or long texts
+        elif 5 < len(text) < 200:
+            # OPTIMIZATION: Only attempt to learn if text contains at least one digit.
+            # All valid bets (Odds, Lines, Units) contain digits.
+            if not re.search(r"\d", text):
+                return None
 
-                # LEARNER DISABLED
-                pass
+            # LEARNER DISABLED
+            pass
 
         # ------------------------------
-        
+
         # 6. SPREAD vs MONEYLINE
         pick = PickParser._parse_spread_or_ml(text, league_norm, date)
         if pick:
@@ -312,10 +311,9 @@ class PickParser:
             if " " in pattern:
                 if pattern in text_lower:
                     return period_id
-            else:
-                # Use word boundary to avoid false positives (e.g. "f1" in "diff15")
-                if re.search(r'\b' + re.escape(pattern) + r'\b', text_lower):
-                    return period_id
+            # Use word boundary to avoid false positives (e.g. "f1" in "diff15")
+            elif re.search(r'\b' + re.escape(pattern) + r'\b', text_lower):
+                return period_id
 
         # Regex for compact format: "1H", "1Q", "F5", etc. at start of string only
         match = re.match(r"^([12][hq]|[1-4][qp]|f[135])\s+", text_lower)
@@ -463,12 +461,12 @@ class PickParser:
         """
         text_clean = text
         units = None
-        
-        # Regex for units: 
+
+        # Regex for units:
         # Optional parens, number, "u" or "unit(s)", optional parens
         # Case insensitive
         match = re.search(r"(?:\(|^|\s)(\d+(?:\.\d+)?)\s*(?:u|units?)(?:\)|$|\s)", text, re.IGNORECASE)
-        
+
         if match:
              try:
                  units = match.group(1)
@@ -478,7 +476,7 @@ class PickParser:
                  text_clean = re.sub(r"\s+", " ", text_clean).strip()
              except:
                  pass
-                 
+
         return units, text_clean
 
     @staticmethod
@@ -624,7 +622,7 @@ class PickParser:
         line = None
         is_over = None
         stat = rest
-        
+
         # Pattern: "Pts Over 25.5" or "Over 25.5 Pts" or "O 25.5"
         # Added [ou] to support single letter abbreviations
         line_match = re.search(r"(?:over|under|o/u|[ou]|>|<)\s*(\d+\.?\d*)", rest_lower)

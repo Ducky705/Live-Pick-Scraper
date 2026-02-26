@@ -1,26 +1,28 @@
 import json
-import re
-import os
 import logging
-from typing import Optional, Dict, Any, Pattern
+import os
+import re
+from re import Pattern
+from typing import Any
+
 
 class TemplateRegistry:
     """
     Manages the storage and retrieval of Regex templates for parsing picks.
     """
-    
+
     def __init__(self, storage_path: str = "data/templates.json"):
         self.storage_path = storage_path
-        self.templates: Dict[str, Dict[str, Any]] = {} 
+        self.templates: dict[str, dict[str, Any]] = {}
         # Structure: { fingerprint: { "regex": str, "mapping": dict, "example": str } }
-        self._compiled_cache: Dict[str, Pattern] = {}
+        self._compiled_cache: dict[str, Pattern] = {}
         self.load()
-        
+
     def load(self):
         """Load templates from disk."""
         if os.path.exists(self.storage_path):
             try:
-                with open(self.storage_path, "r") as f:
+                with open(self.storage_path) as f:
                     self.templates = json.load(f)
                 # clear cache
                 self._compiled_cache = {}
@@ -29,7 +31,7 @@ class TemplateRegistry:
                 self.templates = {}
         else:
             self.templates = {}
-            
+
     def save(self):
         """Save templates to disk."""
         try:
@@ -38,23 +40,23 @@ class TemplateRegistry:
                 json.dump(self.templates, f, indent=2)
         except Exception as e:
             logging.error(f"Failed to save templates: {e}")
-            
-    def get_template(self, fingerprint: str) -> Optional[tuple[Pattern, Dict[str, str]]]:
+
+    def get_template(self, fingerprint: str) -> tuple[Pattern, dict[str, str]] | None:
         """
         Retrieve a compiled regex and group mapping for a fingerprint.
         Return (pattern, mapping) or None.
         """
         if fingerprint not in self.templates:
             return None
-            
+
         entry = self.templates[fingerprint]
         regex_str = entry["regex"]
         mapping = entry["mapping"]
-        
+
         # Check compiled cache
         if fingerprint in self._compiled_cache:
             return self._compiled_cache[fingerprint], mapping
-            
+
         # Compile and cache
         try:
             pattern = re.compile(regex_str, re.IGNORECASE)
@@ -63,9 +65,9 @@ class TemplateRegistry:
         except re.error as e:
             logging.error(f"Invalid regex for fingerprint '{fingerprint}': {e}")
             return None
-            
-    def register_template(self, fingerprint: str, regex: str, mapping: Dict[str, str], example: str = ""):
-        """
+
+    def register_template(self, fingerprint: str, regex: str, mapping: dict[str, str], example: str = ""):
+        r"""
         Register a new template.
         
         Args:
@@ -84,5 +86,5 @@ class TemplateRegistry:
         # Invalidate cache for this key
         if fingerprint in self._compiled_cache:
             del self._compiled_cache[fingerprint]
-            
+
         self.save()

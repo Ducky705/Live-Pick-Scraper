@@ -10,7 +10,7 @@ from telethon import TelegramClient
 from telethon.errors import FloodWaitError, SessionPasswordNeededError
 from telethon.tl.types import MessageMediaPhoto
 
-from config import API_HASH, API_ID, SESSION_FILE_PATH, TEMP_IMG_DIR, PROXY_URL
+from config import API_HASH, API_ID, PROXY_URL, SESSION_FILE_PATH, TEMP_IMG_DIR
 
 
 class TelegramManager:
@@ -56,6 +56,7 @@ class TelegramManager:
                     # Telethon expects tuple/dict: (python_socks.PROXY_TYPE_HTTP, '1.1.1.1', 8080, True, 'user', 'pass')
                     # We'll use a simple dict format if possible or manual parsing
                     from urllib.parse import urlparse
+
                     import python_socks
 
                     parsed = urlparse(PROXY_URL)
@@ -64,7 +65,7 @@ class TelegramManager:
                         scheme = python_socks.PROXY_TYPE_SOCKS5
                     elif "socks4" in parsed.scheme:
                         scheme = python_socks.PROXY_TYPE_SOCKS4
-                    
+
                     proxy_config = {
                         'proxy_type': scheme,
                         'addr': parsed.hostname,
@@ -214,19 +215,19 @@ class TelegramManager:
         logger.info(f"Fetching for Date: {target_date_obj}")
 
         all_messages = []
-        
+
         # --- PARALLEL IMAGE DOWNLOADING QUEUE ---
         download_queue = asyncio.Queue()
-        
+
         # Worker function
         async def image_worker():
             while True:
                 item = await download_queue.get()
                 msg_dict, message, filename = item
-                
+
                 try:
                     path = os.path.join(TEMP_IMG_DIR, filename)
-                    
+
                     if not os.path.exists(path):
                         # Try thumbnail first ('x' = 800px), fallback to full image
                         try:
@@ -236,13 +237,13 @@ class TelegramManager:
                         except Exception:
                             # logger.debug(f"Thumbnail failed for {filename}, trying full...")
                             await client.download_media(message, path)
-                    
+
                     if os.path.exists(path):
                         # Update the shared dictionary (Thread-safe in asyncio since single-threaded loop)
                         msg_dict["images"].append(path)
                         if not msg_dict["image"]:
                             msg_dict["image"] = path
-                            
+
                 except FloodWaitError as e:
                     logger.warning(f"[Anti-Flood] Worker sleeping {e.seconds}s...")
                     await asyncio.sleep(e.seconds + 2)
@@ -255,10 +256,10 @@ class TelegramManager:
 
         # Start 20 parallel workers
         workers = [asyncio.create_task(image_worker()) for _ in range(20)]
-        
+
         try:
             for i, channel_id in enumerate(channel_ids):
-                # Report Progress 
+                # Report Progress
                 percent = int((i / len(channel_ids)) * 95)
                 await self._report_progress(percent, f"Reading Channel {i + 1}/{len(channel_ids)}...")
 
@@ -281,7 +282,7 @@ class TelegramManager:
                         offset_dt = datetime.combine(target_date_obj + timedelta(days=1), datetime.min.time())
                         offset_dt = offset_dt.replace(tzinfo=ET_OFFSET)
 
-                        async for message in client.iter_messages(entity, limit=500, offset_date=offset_dt):
+                        async for message in client.iter_messages(entity, limit=None, offset_date=offset_dt):
                             if not message.date:
                                 continue
 
@@ -294,13 +295,13 @@ class TelegramManager:
                                 break
 
                             gid = message.grouped_id
-                            
+
                             # Determine the target dictionary
                             target_dict = None
-                            
+
                             # Standard fields relative to THIS message
                             msg_text = message.text or ""
-                            
+
                             if gid:
                                 if gid in grouped_buffer:
                                     # Existing Group - Merge
@@ -337,7 +338,7 @@ class TelegramManager:
                                     "do_ocr": True,
                                 }
                                 all_messages.append(target_dict)
-                            
+
                             # QUEUE IMAGE DOWNLOAD IMMEDIATELY
                             if message.media and isinstance(message.media, MessageMediaPhoto):
                                 filename = f"{channel_id}_{message.id}.jpg"
@@ -369,7 +370,7 @@ class TelegramManager:
             # Cancel workers
             for w in workers:
                 w.cancel()
-            
+
         await self._report_progress(100, "Complete")
         return all_messages
 

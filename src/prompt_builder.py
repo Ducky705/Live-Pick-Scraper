@@ -28,7 +28,7 @@ def generate_ai_prompt(selected_data: list[dict[str, Any]], schedule_context: st
 
     # 2. Build the prompt using the JSON module (Strict JSON for stability)
     prompt = get_compact_extraction_prompt(compressed_data, schedule_context=schedule_context, style_context=style_context)
-    
+
     # Apply double prompting for non-reasoning LLM performance boost (arxiv 2512.14982)
     return prompt + "\n\n" + prompt
 

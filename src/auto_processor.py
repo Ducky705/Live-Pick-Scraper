@@ -143,7 +143,7 @@ def classify_message_fast(message: dict[str, Any]) -> dict[str, Any]:
     """
     text = message.get("text", "") or ""
     ocr = message.get("ocr_text", "") or ""
-    
+
     # Combine caption and OCR text for better context
     full_text = (text + "\n" + ocr).strip()
 

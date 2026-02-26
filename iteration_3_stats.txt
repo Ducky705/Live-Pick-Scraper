@@ -1,3 +1,0 @@
-Total Requests: 5
-Avg Latency: 0.3948
-Total Picks: 8

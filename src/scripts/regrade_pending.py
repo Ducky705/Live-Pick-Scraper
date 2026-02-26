@@ -21,7 +21,7 @@ logger = logging.getLogger("RegradePending")
 def load_json(path: Path) -> Any:
     """Load JSON file safely."""
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
         logger.error(f"Error loading {path}: {e}")
@@ -48,7 +48,7 @@ def main():
 
     data_dir = project_root / "src" / "data"
     picks_cache_path = find_latest_picks_cache(data_dir)
-    
+
     if not picks_cache_path:
         logger.error("No picks cache found.")
         return
@@ -61,7 +61,7 @@ def main():
     # Identify pending picks
     pending_indices = []
     pending_items = []
-    
+
     for i, pick in enumerate(picks):
         grade = pick.get("grade")
         if grade == "PENDING" or "Game not found" in pick.get("grading_details", ""):
@@ -76,7 +76,7 @@ def main():
 
     count = len(pending_indices)
     logger.info(f"Found {count} pending picks to regrade.")
-    
+
     if count == 0:
         logger.info("No pending picks found. Exiting.")
         return
@@ -93,7 +93,7 @@ def main():
     # src/grading/auto_processor.py usually does:
     # scores = DataLoader.fetch_scores(dates)
     # engine = GraderEngine(scores)
-    
+
     # We need to know which dates to feed the engine.
     # We can rely on the same Snowflake logic or just fetch everything relevant?
     # Or, we can instantiate GraderEngine with an empty list and assume it fetches dynamically?
@@ -101,15 +101,15 @@ def main():
     # It has `_get_boxscore` which fetches.
     # But `_find_game` iterates `self.scores`.
     # So we MUST populate `self.scores`.
-    
+
     # So we need to collect dates again.
     import datetime
-    
+
     # Simple Snowflake extraction again (duplicated logic, but safe)
     dates_to_fetch = set()
     msg_date_map = {} # We don't have this here easily without reloading strings.
     # Let's just use Snowflake logic primarily.
-    
+
     # Also load messages.json if available
     messages_path = project_root / "data" / "cache" / "messages.json"
     if messages_path.exists():
@@ -131,23 +131,23 @@ def main():
                 date = dt.strftime("%Y-%m-%d")
             except:
                 pass
-        
+
         if date:
             dates_to_fetch.add(date)
-    
+
     logger.info(f"Fetching scores for dates: {sorted(list(dates_to_fetch))}")
     if not dates_to_fetch:
         logger.warning("No dates found for pending picks. Regrade might fail.")
-    
+
     scores = DataLoader.fetch_scores(list(dates_to_fetch))
     logger.info(f"Loaded {len(scores)} games.")
 
     engine = GraderEngine(scores)
-    
+
     # Run Grading
     logger.info("Running batch grading...")
     graded_results = engine.grade_batch(pending_items)
-    
+
     # Update Picks
     success_count = 0
     for idx, result in zip(pending_indices, graded_results):
@@ -157,27 +157,27 @@ def main():
         # GradedPick.to_dict returns a clean structure.
         # It's safer to merge?
         # Let's overwrite, assuming GraderEngine preserves essential info in result.pick
-        
+
         # Check if status changed from PENDING
         if result.grade.value != "PENDING":
             success_count += 1
-            
+
         new_dict = result.to_dict()
         # Ensure we keep the message_id and other root fields that might not be in GradedPick
         # GradedPick doesn't seem to have message_id in to_dict (it has game_id).
         # We need to preserve 'message_id', 'capper_name', etc.
-        
+
         original = picks[idx]
         new_dict["message_id"] = original.get("message_id")
         new_dict["capper_name"] = original.get("capper_name")
         new_dict["_source_text"] = original.get("_source_text")
         new_dict["extraction_method"] = original.get("extraction_method")
         # And any others?
-        
+
         picks[idx] = new_dict
-        
+
     logger.info(f"Regrade complete. Resolved {success_count}/{count} pending picks.")
-    
+
     # Save back
     save_json(picks_cache_path, picks)
 

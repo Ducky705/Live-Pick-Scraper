@@ -1,15 +1,15 @@
-from .message_chunker import MessageChunker
-
-# Copying content from legacy utils directly here because 
+# Copying content from legacy utils directly here because
 # src/utils.py (file) and src/utils/ (folder) conflict.
 # By making src/utils a package, we must put the utility functions in __init__.py
 # or a submodule exposed here.
-
 import glob
 import os
 import re
 import unicodedata
 from collections import Counter
+
+from .message_chunker import MessageChunker
+
 
 def normalize_string(text: str | None, remove_spaces: bool = False) -> str:
     if not text:

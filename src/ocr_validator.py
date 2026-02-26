@@ -451,17 +451,17 @@ def check_team_overlap(text: str) -> int:
     Returns count of unique teams found.
     """
     from src.team_aliases import TEAM_ALIASES
-    
+
     if not text:
         return 0
-        
+
     text_lower = text.lower()
     found_teams = set()
-    
-    # We flatten the aliases for efficient searching? 
+
+    # We flatten the aliases for efficient searching?
     # Or just iterate. The alias list is ~200 items, not too bad.
     # To be safer/faster, we could pre-compile this, but lazy import is fine for now.
-    
+
     for team_key, aliases in TEAM_ALIASES.items():
         for alias in aliases:
             # simple substring check, or regex for word boundary?
@@ -470,6 +470,6 @@ def check_team_overlap(text: str) -> int:
             if alias in text_lower:
                  found_teams.add(team_key)
                  break # Found this team, move to next string
-                 
+
     return len(found_teams)
 

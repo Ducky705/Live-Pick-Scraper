@@ -1,0 +1,77 @@
+[
+  {
+    "batch_index": 0,
+    "raw_response": "<thinking>\nMessage [1]:\n1. Denoising: The text \"Lakers -5 2U\" is a concise betting pick with no marketing filler. The entire string constitutes the wagering signal.\n2. Entity Translation: \n   - \"Lakers\": team name (Los Angeles Lakers).\n   - \"-5\": point spread (Lakers favored by 5 points).\n   - \"2U\": translates to 2 units (stake).\n3. Schema Mapping:\n   - message_id: \"1\"\n   - capper_name: not present in text; default to empty string.\n   - sport: \"NBA\" (inferred from team name Lakers, an NBA team per schedule context).\n   - bet_type: \"Spread\" (team name followed by a negative number indicates spread).\n   - selection: \"Lakers -5\"\n   - line: -5.0 (numeric spread value).\n   - odds: not provided; null.\n   - units: 2.0 (from \"2U\").\n   - confidence: default 9 (as per examples).\n   - reasoning: \"Explicit spread\"\n   - _source_text: \"Lakers -5 2U\"\n4. Null Verification: capper_name missing \u2192 assign empty string. odds missing \u2192 assign null. All other fields have valid values.\n\nMessage [2]:\n1. Denoising: Text \"Celtics ML 5U\" is a clear moneyline bet with units. No filler present.\n2. Entity Translation:\n   - \"Celtics\": team name (Boston Celtics).\n   - \"ML\": abbreviation for Moneyline.\n   - \"5U\": 5 units.\n3. Schema Mapping:\n   - message_id: \"2\"\n   - capper_name: not present \u2192 \"\"\n   - sport: \"NBA\" (Celtics are an NBA team).\n   - bet_type: \"Moneyline\"\n   - selection: \"Celtics\"\n   - line: null (moneyline has no point spread).\n   - odds: not provided in text; null.\n   - units: 5.0\n   - confidence: 9\n   - reasoning: \"Explicit ML\"\n   - _source_text: \"Celtics ML 5U\"\n4. Null Verification: capper_name and odds missing \u2192 assign \"\" and null.\n\nMessage [3]:\n1. Denoising: Identical to Message [1]: \"Lakers -5 2U\".\n2. Entity Translation: Identical to Message [1].\n3. Schema Mapping: Identical to Message [1] but message_id \"3\".\n4. Null Verification: Same as Message [1].\n\nMessage [4]:\n1. Denoising: Text \"Unique Message\" contains no valid betting signal (no team name with number, no Over/Under, no ML, etc.). It is ignored.\n2. Entity Translation: None.\n3. Schema Mapping: No pick to extract.\n4. Null Verification: No pick, so no fields to assign.\n</thinking>\n{\n  \"picks\": [\n    {\n      \"message_id\": \"1\",\n      \"capper_name\": \"\",\n      \"sport\": \"NBA\",\n      \"bet_type\": \"Spread\",\n      \"selection\": \"Lakers -5\",\n      \"line\": -5.0,\n      \"odds\": null,\n      \"units\": 2.0,\n      \"confidence\": 9,\n      \"reasoning\": \"Explicit spread\",\n      \"_source_text\": \"Lakers -5 2U\"\n    },\n    {\n      \"message_id\": \"2\",\n      \"capper_name\": \"\",\n      \"sport\": \"NBA\",\n      \"bet_type\": \"Moneyline\",\n      \"selection\": \"Celtics\",\n      \"line\": null,\n      \"odds\": null,\n      \"units\": 5.0,\n      \"confidence\": 9,\n      \"reasoning\": \"Explicit ML\",\n      \"_source_text\": \"Celtics ML 5U\"\n    },\n    {\n      \"message_id\": \"3\",\n      \"capper_name\": \"\",\n      \"sport\": \"NBA\",\n      \"bet_type\": \"Spread\",\n      \"selection\": \"Lakers -5\",\n      \"line\": -5.0,\n      \"odds\": null,\n      \"units\": 2.0,\n      \"confidence\": 9,\n      \"reasoning\": \"Explicit spread\",\n      \"_source_text\": \"Lakers -5 2U\"\n    }\n  ]\n}",
+    "parsed_picks": [
+      {
+        "message_id": "1",
+        "capper_name": "",
+        "league": "NBA",
+        "type": "Spread",
+        "pick": "Lakers -5",
+        "line": -5.0,
+        "odds": null,
+        "units": 2.0,
+        "confidence": 9.0,
+        "reasoning": "Explicit spread",
+        "id": "1",
+        "cn": "",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Lakers -5",
+        "od": null,
+        "u": 2.0
+      },
+      {
+        "message_id": "2",
+        "capper_name": "",
+        "league": "NBA",
+        "type": "Moneyline",
+        "pick": "Celtics ML",
+        "line": null,
+        "odds": null,
+        "units": 5.0,
+        "confidence": 9.0,
+        "reasoning": "Explicit ML",
+        "id": "2",
+        "cn": "",
+        "lg": "NBA",
+        "ty": "Moneyline",
+        "p": "Celtics",
+        "od": null,
+        "u": 5.0
+      },
+      {
+        "message_id": "3",
+        "capper_name": "",
+        "league": "NBA",
+        "type": "Spread",
+        "pick": "Lakers -5",
+        "line": -5.0,
+        "odds": null,
+        "units": 2.0,
+        "confidence": 9.0,
+        "reasoning": "Explicit spread",
+        "id": "3",
+        "cn": "",
+        "lg": "NBA",
+        "ty": "Spread",
+        "p": "Lakers -5",
+        "od": null,
+        "u": 2.0
+      }
+    ],
+    "message_ids": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "input_batch": [
+      "Lakers -5 2U\n",
+      "Celtics ML 5U\n",
+      "Lakers -5 2U\n",
+      "Unique Message\n"
+    ]
+  }
+]

@@ -136,14 +136,14 @@ class SemanticValidator:
             # Hallucination Blocklist (Common OCR artifacts/Capper names)
             "tokyo",
             "brandon",
-            "whale", 
+            "whale",
             "safe play",
             "unit play",
         ]
         text_lower = pick_text.lower()
         if any(phrase in text_lower for phrase in garbage_phrases):
              # Exception: "Whale Play" might be followed by a real pick?
-             # Usually the extractor puts the pick separately. If the pick TEXT itself contains this, 
+             # Usually the extractor puts the pick separately. If the pick TEXT itself contains this,
              # and it's short, it's likely garbage.
              return False, f"Garbage text detected: '{pick_text}' contains blocked phrase"
 
@@ -179,16 +179,16 @@ class SemanticValidator:
                 # Check if any valid team name is present in the pick text
                 found_team = False
                 pick_lower = pick_text.lower()
-                
+
                 # Check for Player Prop keywords - if present, this might be a misclassified prop
                 # In that case, we shouldn't enforce Team Name (matches "Kenneth Walker: Rush Yds")
                 prop_keywords = [
-                    "pts", "points", "reb", "ast", "goal", "score", "sog", "shot", "hit", "base", 
-                    "yds", "yards", "att", "attempts", "threes", "3pm", "tackles", "int", "pass", 
+                    "pts", "points", "reb", "ast", "goal", "score", "sog", "shot", "hit", "base",
+                    "yds", "yards", "att", "attempts", "threes", "3pm", "tackles", "int", "pass",
                     "rush", "rec", "reception"
                 ]
                 is_prop_like = any(k in pick_lower for k in prop_keywords)
-                
+
                 if is_prop_like:
                     # It's likely a prop. Skip team name check.
                     found_team = True
@@ -246,8 +246,8 @@ class SemanticValidator:
 
                 # RELAXATION: Check for Player Prop keywords classified as Total
                 prop_keywords = [
-                    "pts", "points", "reb", "ast", "goal", "score", "sog", "shot", "hit", "base", 
-                    "yds", "yards", "att", "attempts", "threes", "3pm", "tackles", "int", "pass", 
+                    "pts", "points", "reb", "ast", "goal", "score", "sog", "shot", "hit", "base",
+                    "yds", "yards", "att", "attempts", "threes", "3pm", "tackles", "int", "pass",
                     "rush", "rec", "reception"
                 ]
                 is_prop_text = any(k in pick_text.lower() for k in prop_keywords)
@@ -258,9 +258,9 @@ class SemanticValidator:
                         # Heuristic: Min is 0.25x of Game Total Min, Max is 0.85x of Game Total Max
                         tt_min = rules["min_total"] * 0.25
                         tt_max = rules["max_total"] * 0.85
-                        
+
                         if line < tt_min or line > tt_max:
-                             # Should we stricter? 
+                             # Should we stricter?
                              if sport == "NFL" and line < 6.0: # TD props?
                                  pass
                              elif line < tt_min or line > tt_max:

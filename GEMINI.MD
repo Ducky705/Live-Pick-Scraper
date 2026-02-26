@@ -96,3 +96,10 @@
     ```bash
     python benchmark/benchmark_performance.py # Run speed/accuracy tests
     ```
+
+## 🤖 AI Agent Instructions
+If you are an AI assistant navigating this repository, adhere strictly to the following rules:
+1. **Never write new scratch scripts or outputs to the root directory.** Always use `/scratch`, `/tmp`, or `/scripts` to avoid cluttering the production root.
+2. **Read `CODE_STRUCTURE.md`** before making any architectural changes. It maps the data flow and tells you exactly which file orchestrates which operation.
+3. **Pydantic Validation is Mandatory.** Do not bypass data models in `src/models.py`. Ensure any new pick properties are added to `BetPick` safely.
+4. **Testing before committing.** Always run `python -m pytest tests/` before considering a code modification complete. It catches breaking changes in normalization/extraction logic immediately.

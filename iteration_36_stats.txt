@@ -1,4 +1,0 @@
-Total Requests: 360
-Total Time: 9.8602
-Avg Latency: 0.0274
-Throughput: 36.5103

@@ -1,25 +1,23 @@
-import re
-import logging
 import json
-from typing import Optional, Dict
+import logging
+import re
 
-from src.mistral_client import mistral_completion, CODESTRAL
 
 class Learner:
     """
     Connects to an LLM (Mistral Codestral) to generate Regex templates for unknown formats.
     """
-    
-    def learn_format(self, text: str) -> Optional[tuple[str, Dict[str, str]]]:
+
+    def learn_format(self, text: str) -> tuple[str, dict[str, str]] | None:
         """
         Generate a regex and mapping for the given text using AI.
         Strategies: Mistral (Codestral) -> Groq (Llama 3) -> OpenRouter (DeepSeek)
         """
         prompt = self._build_prompt(text)
-        
+
         # Strategy 1: Mistral (Best for Code, but rate limited)
         try:
-            from src.mistral_client import mistral_completion, CODESTRAL
+            from src.mistral_client import CODESTRAL, mistral_completion
             response = mistral_completion(prompt, model=CODESTRAL, validate_json=True)
             if response:
                 result = self._parse_response(response, text)
@@ -37,7 +35,7 @@ class Learner:
                 if result: return result
         except Exception as e:
             logging.warning(f"Learner (Groq) failed: {e}")
-            
+
         # Strategy 3: OpenRouter (Fallback / Accuracy)
         try:
             from src.openrouter_client import openrouter_completion
@@ -48,37 +46,37 @@ class Learner:
                 if result: return result
         except Exception as e:
             logging.warning(f"Learner (OpenRouter) failed: {e}")
-            
+
         return None
 
-    def _parse_response(self, response_json_str: str, text: str) -> Optional[tuple[str, Dict[str, str]]]:
+    def _parse_response(self, response_json_str: str, text: str) -> tuple[str, dict[str, str]] | None:
         try:
             data = json.loads(response_json_str)
             regex = data.get("regex")
             mapping = data.get("mapping")
-            
+
             if not regex or not mapping:
                 return None
-            
+
             # Validation 1: Regex Compiles
             try:
                 pattern = re.compile(regex, re.IGNORECASE)
             except re.error:
                 logging.error(f"Learner generated invalid regex: {regex}")
                 return None
-                
+
             # Validation 2: Regex Matches Input
             match = pattern.match(text)
             if not match:
                 logging.error(f"Learner regex did not match input.\nInput: {text}\nRegex: {regex}")
                 return None
-                
+
             # Validation 3: Essential Groups Exist
             groups = match.groupdict()
             if "selection" not in mapping or mapping["selection"] not in groups:
                  logging.warning(f"Learner regex missing 'selection' group: {regex}")
                  return None
-                 
+
             return regex, mapping
         except Exception:
             return None
@@ -100,8 +98,8 @@ Requirements:
     - `units` (The bet size, e.g. 2u, 5*, or text like "Max Bet")
     
     IMPORTANT:
-    - If a part of the string varies (like "Max Bet" vs "Whale Play"), use a generic match like `.*` or `[\w\s]+` inside the group or non-capturing group.
-    - Handle optional whitespace `\s*` liberally.
+    - If a part of the string varies (like "Max Bet" vs "Whale Play"), use a generic match like `.*` or `[\\w\\s]+` inside the group or non-capturing group.
+    - Handle optional whitespace `\\s*` liberally.
 4. Return a JSON object with:
     - "regex": The raw regex string (escape backslashes properly).
     - "mapping": A dictionary mapping your group names to the localized fields ["selection", "line", "odds", "units"].

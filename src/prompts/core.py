@@ -1,6 +1,6 @@
+import json
 from datetime import datetime
 from typing import Any
-import json
 
 # =============================================================================
 # ACCURACY-FIRST SCHEMA DEFINITIONS
@@ -145,6 +145,7 @@ RAW DATA TO PROCESS:
 
 import re
 
+
 def normalize_response(
     raw_response: str,
     expand: bool = False,
@@ -156,11 +157,11 @@ def normalize_response(
     Handles markdown blocks, partial JSON, and simple syntax errors.
     """
     cleaned_json = raw_response.strip()
-    
+
     # Extract from thinking if present
     if "</thinking>" in cleaned_json:
         cleaned_json = cleaned_json.split("</thinking>")[-1].strip()
-        
+
     # Remove markdown code blocks
     if cleaned_json.startswith("```json"):
         cleaned_json = cleaned_json.replace("```json", "").replace("```", "").strip()
@@ -169,7 +170,7 @@ def normalize_response(
 
     try:
         data = json.loads(cleaned_json)
-        
+
         # Determine format
         if isinstance(data, list):
             picks = data
@@ -180,12 +181,11 @@ def normalize_response(
                 picks = data["bets"]
             elif "data" in data and isinstance(data["data"], list):
                 picks = data["data"]
+            # Last resort: if the dict itself looks like a pick, wrap it
+            elif "selection" in data or "pick" in data:
+                picks = [data]
             else:
-                # Last resort: if the dict itself looks like a pick, wrap it
-                if "selection" in data or "pick" in data:
-                    picks = [data]
-                else:
-                    return []
+                return []
         else:
             return []
 
@@ -229,7 +229,6 @@ def compress_raw_data(data: list[dict[str, Any]] | str) -> str:
     Compresses input data into a dense text format for the AI prompt.
     Handles both raw lists of messages and pre-formatted strings.
     """
-    import re
 
     if isinstance(data, list):
         # Convert list of messages to the standard text format
@@ -242,14 +241,14 @@ def compress_raw_data(data: list[dict[str, Any]] | str) -> str:
             m_id = msg.get("id", "Unknown")
             text = msg.get("text", "")
             ocr = msg.get("ocr_text", "")
-            
+
             buffer.append(f"### [{m_id}]")
             if text:
                 buffer.append(text.strip())
             if ocr:
                 buffer.append(f"[OCR]: {ocr.strip()}")
             buffer.append("") # Separator
-        
+
         text = "\n".join(buffer)
     else:
         text = str(data)

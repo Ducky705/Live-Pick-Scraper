@@ -2,8 +2,9 @@ import logging
 from typing import Any
 
 from src.grading.constants import LEAGUE_ALIASES_MAP
+
 try:
-    from src.score_fetcher import fetch_scores_for_date, fetch_odds_for_date, get_odds_for_pick
+    from src.score_fetcher import fetch_odds_for_date, fetch_scores_for_date, get_odds_for_pick
 except ImportError:
     fetch_scores_for_date = None
     fetch_odds_for_date = None
@@ -31,14 +32,14 @@ def enrich_picks(picks: list[dict[str, Any]], target_date: str) -> list[dict[str
     # 1. Identify relevant leagues
     relevant_leagues = set()
     picks_needing_odds = []
-    
+
     for p in picks:
         lg = (p.get("league") or p.get("lg") or "").lower()
         if lg and lg != "other" and lg != "unknown":
             normalized_lg = LEAGUE_ALIASES_MAP.get(lg, lg)
             if normalized_lg:
                 relevant_leagues.add(normalized_lg)
-                
+
                 # Check if pick needs odds (has no odds, or odds is 0/None)
                 # We interpret "missing odds" as None, empty string, or 0/0.0
                 current_odds = p.get("odds")
@@ -59,13 +60,13 @@ def enrich_picks(picks: list[dict[str, Any]], target_date: str) -> list[dict[str
         games = fetch_scores_for_date(target_date, requested_leagues=list(relevant_leagues), final_only=False)
     except Exception as e:
         logger.error(f"Failed to fetch games for enrichment: {e}")
-        # Even if score fetch fails, we might still want to try odds? 
+        # Even if score fetch fails, we might still want to try odds?
         # But usually odds depend on similar connectivity. Let's return to avoid long timeouts if offline.
         return picks
 
     if not games:
         logger.info("No games found for enrichment.")
-        # Proceeding to odds might be futile if no scores found, but let's allow flow to continue 
+        # Proceeding to odds might be futile if no scores found, but let's allow flow to continue
         # just in case odds API behaves differently (unlikely).
         # Actually, if no games, we can't build game_lookup, so standard enrichment fails.
         # But odds enrichment is separate. Let's keep going.
@@ -131,45 +132,45 @@ def enrich_picks(picks: list[dict[str, Any]], target_date: str) -> list[dict[str
 
     if enriched_count > 0:
         logger.info(f"Enriched {enriched_count} picks with game details (Opponent/Date).")
-        
+
     # 5. Fetch and Enrich Odds (if needed)
     if picks_needing_odds:
         try:
             logger.info("Fetching odds to backfill missing data...")
             odds_data = fetch_odds_for_date(target_date)
-            
+
             odds_enriched_count = 0
             for p in picks_needing_odds:
                 # Re-check if we have league (it might have been missing before, but unlikely if we are here)
                 lg = (p.get("league") or p.get("lg") or "").lower()
                 league = LEAGUE_ALIASES_MAP.get(lg, lg)
-                
+
                 if not league:
                     continue
-                    
+
                 pick_text = p.get("pick", "")
-                
+
                 # Get specific odds for this pick
                 matched_odds = get_odds_for_pick(pick_text, league, odds_data)
-                
+
                 if matched_odds:
                     # Determine which odd value to use based on pick type/text
-                    
+
                     found_odd = None
                     pick_lower = pick_text.lower()
-                    
+
                     # Simple heuristic mapping
                     home_team = matched_odds.get("home_team", "").lower()
                     away_team = matched_odds.get("away_team", "").lower()
-                    
+
                     is_home = _is_team_in_text(home_team, pick_lower)
                     is_away = _is_team_in_text(away_team, pick_lower)
-                    
+
                     # Detect Bet Type
                     is_over = "over" in pick_lower or " o " in pick_lower
                     is_under = "under" in pick_lower or " u " in pick_lower
                     is_spread = "+" in pick_text or "-" in pick_text # Very rough check for spread line
-                    
+
                     if is_over:
                         found_odd = matched_odds.get("over_odds")
                     elif is_under:
@@ -180,18 +181,17 @@ def enrich_picks(picks: list[dict[str, Any]], target_date: str) -> list[dict[str
                             found_odd = matched_odds.get("spread_home_odds")
                         elif is_away:
                             found_odd = matched_odds.get("spread_away_odds")
-                    else:
-                        # Default to Moneyline if no spread indicators
-                        if is_home:
-                             found_odd = matched_odds.get("moneyline_home")
-                        elif is_away:
-                             found_odd = matched_odds.get("moneyline_away")
-                    
+                    # Default to Moneyline if no spread indicators
+                    elif is_home:
+                         found_odd = matched_odds.get("moneyline_home")
+                    elif is_away:
+                         found_odd = matched_odds.get("moneyline_away")
+
                     if found_odd:
                         p["odds"] = found_odd
                         p["deduction_source"] = "ESPN_API_BACKFILL"
                         odds_enriched_count += 1
-                        
+
             if odds_enriched_count > 0:
                 logger.info(f"Backfilled odds for {odds_enriched_count} picks from ESPN.")
 
@@ -205,14 +205,14 @@ def _is_team_in_text(team_name: str, text: str) -> bool:
     if not team_name: return False
     # Check full name or significant parts
     if team_name in text: return True
-    
+
     # Check words > 3 chars
     words = [w for w in team_name.split() if len(w) > 3]
     if not words: return False
-    
+
     # Require at least one significant word if strict, but maybe simplistic is okay
     for w in words:
         if w in text:
             return True
-            
+
     return False

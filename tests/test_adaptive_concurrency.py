@@ -75,7 +75,7 @@ def test_integration():
     print("\n=== STARTING INTEGRATION TEST ===")
 
     # Mock the execute_request to simulate 429s
-    processor = ParallelBatchProcessor()
+    processor = ParallelBatchProcessor(providers=["groq", "openrouter"])
 
     # Reset limiter for 'groq' to known state
     groq_limiter = processor.adaptive_limiters["groq"]

@@ -1,5 +1,5 @@
-import re
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ class MessageChunker:
             return []
 
         lines = [line.strip() for line in text.split('\n') if line.strip()]
-        
+
         if len(lines) <= self.max_lines:
             return [text]
 
@@ -35,10 +35,10 @@ class MessageChunker:
         # - Are short (< 40 chars)
         # - Contain special keywords (Units, Capper Name patterns)
         # - Don't look like a bet (No odds like -110, +150)
-        
+
         headers = []
         body_start_index = 0
-        
+
         for i, line in enumerate(lines[:5]): # Only check first 5 lines
             if self._is_header_line(line):
                 headers.append(line)
@@ -46,19 +46,19 @@ class MessageChunker:
             else:
                 # If we hit a bet line, stop looking for headers
                 break
-        
+
         # 2. Chunk the Body
         body_lines = lines[body_start_index:]
         chunks = []
-        
+
         header_text = "\n".join(headers) + "\n" if headers else ""
-        
+
         # Create separate chunks
         current_chunk = []
-        
+
         for i, line in enumerate(body_lines):
             current_chunk.append(line)
-            
+
             # Check if chunk is full
             # But try not to break in the middle of a related block if possible?
             # For iteration 1, strict line count is safer than complex logic
@@ -80,12 +80,12 @@ class MessageChunker:
         Determines if a line is likely a header (context) rather than a pick.
         """
         line_upper = line.upper()
-        
+
         # 1. Check for Odds (If it has odds, it's a PICK, not a header)
         # Regex for -110, +140, 1.95, etc.
         if re.search(r'[+\-]\d{3}', line) or re.search(r'\d\.\d{2}', line):
             return False
-            
+
         # 2. Check for Keywords
         header_keywords = [
             "UNIT", "PLAY", "SYSTEM", "CAPPER", "PICKS", "CARD", "SLATE",
@@ -93,7 +93,7 @@ class MessageChunker:
         ]
         if any(k in line_upper for k in header_keywords):
             return True
-            
+
         # 3. Short lines (Capper Names often short) or Emoji Headers
         # Relaxed length text to 50 chars to catch "Fivestar Sports Picks Channel..."
         if len(line) < 50 and not any(char.isdigit() for char in line):
@@ -105,5 +105,5 @@ class MessageChunker:
             # Check if it's just punctuation like "..." or "---"
             if not all(c in "-=_.*" for c in line):
                 return True
-            
+
         return False

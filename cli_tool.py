@@ -1,3 +1,15 @@
+"""
+CapperSuite CLI - Main Entry Point
+
+### AI Agent Context Search Hints:
+* **Purpose**: Bootstraps the application, parses user inputs via Argparse, and triggers the `ExtractionPipeline`.
+* **Architecture Note**: This module MUST REMAIN AT THE ROOT DIRECTORY. It depends on `src/` modules.
+* **Side-Effects**: 
+    - Writes directly to `/data` local storage (`logs/`, `session_cookies.json`).
+    - Uses Supabase client if `--dry-run` is omitted.
+* **Warning**: If making architectural changes, please review `CODE_STRUCTURE.md` first.
+"""
+import argparse
 import asyncio
 import json
 import logging
@@ -35,7 +47,7 @@ logging.basicConfig(
 )
 
 
-async def main():
+async def main(dry_run: bool = False, date_arg: str = None):
     print("=" * 50)
     print("   TELEGRAM & TWITTER SCRAPER CLI   ")
     print("=" * 50)
@@ -77,12 +89,16 @@ async def main():
     # Twitter
     tw = TwitterManager()
 
-    # 2. FETCH DATA (Yesterday in Eastern Time)
-    ET = timezone(timedelta(hours=-5))  # EST (use -4 for EDT if needed)
-    now_et = datetime.now(ET)
-    yesterday_et = now_et - timedelta(days=1)
-    target_date = yesterday_et.strftime("%Y-%m-%d")
-    logging.info(f"Target Date: {target_date} (Eastern Time, now ET: {now_et.strftime('%Y-%m-%d %H:%M')})")
+    # 2. FETCH DATA
+    if date_arg:
+        target_date = date_arg
+        logging.info(f"Target Date: {target_date} (Provided via arguments)")
+    else:
+        ET = timezone(timedelta(hours=-5))  # EST (use -4 for EDT if needed)
+        now_et = datetime.now(ET)
+        yesterday_et = now_et - timedelta(days=1)
+        target_date = yesterday_et.strftime("%Y-%m-%d")
+        logging.info(f"Target Date: {target_date} (Eastern Time, now ET: {now_et.strftime('%Y-%m-%d %H:%M')})")
 
     # Fetch Telegram
     if not API_ID or not API_HASH:
@@ -118,7 +134,7 @@ async def main():
 
         for did in discord_ids:
             logging.info(f"Fetching from Discord Channel: {did}...")
-            msgs = ds.fetch_messages(did, limit=50)
+            msgs = await ds.fetch_messages(did, target_date=target_date)
             discord_msgs.extend(msgs)
 
         logging.info(f"Fetched {len(discord_msgs)} Discord messages.")
@@ -126,7 +142,17 @@ async def main():
         logging.info("Skipping Discord fetch (No TARGET_DISCORD_CHANNEL_ID).")
 
     # Combine
-    all_msgs = tg_msgs + tw_msgs + discord_msgs
+    raw_msgs = tg_msgs + tw_msgs + discord_msgs
+    
+    # 2.5 STRICT DATE FILTER
+    all_msgs = []
+    for m in raw_msgs:
+        m_date = str(m.get("date", ""))
+        # Filter for the target date to prevent API over-fetching from bleeding into grading
+        if target_date in m_date:
+            all_msgs.append(m)
+
+    logging.info(f"Fetched {len(raw_msgs)} messages across sources. Filtered to {len(all_msgs)} for {target_date}.")
 
     # 3. DEDUPLICATION
     logging.info("Deduplicating messages...")
@@ -287,10 +313,6 @@ async def main():
     print("-" * 95)
 
     # 9. SUPABASE UPLOAD
-    # Check for --dry-run or --no-upload flag
-    # FORCE DRY RUN per user instruction
-    dry_run = True  # '--dry-run' in sys.argv or '--no-upload' in sys.argv
-
     if dry_run:
         logging.info("Skipping Supabase upload (--dry-run mode)")
         print("\n[DRY RUN] Supabase upload skipped. Review picks above and run without --dry-run to upload.")
@@ -314,8 +336,17 @@ async def main():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="CapperSuite CLI - Telegram & Twitter Sports Pick Scraper")
+    parser.add_argument("--dry-run", action="store_true", help="Run without uploading to Supabase")
+    parser.add_argument("--no-upload", action="store_true", help="Alias for --dry-run")
+    parser.add_argument("--date", type=str, help="Target date in YYYY-MM-DD format (defaults to yesterday ET)")
+    args = parser.parse_args()
+
+    is_dry_run = args.dry_run or args.no_upload
+    date_arg = args.date
+
     try:
-        asyncio.run(main())
+        asyncio.run(main(dry_run=is_dry_run, date_arg=date_arg))
     except KeyboardInterrupt:
         print("\nScraper stopped by user.")
     except Exception as e:

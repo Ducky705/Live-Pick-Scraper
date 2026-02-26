@@ -230,14 +230,13 @@ class MultiPickValidator:
         # Allow some tolerance based on confidence
         if actual_count == 0 and estimate.estimated_count > 0:
             tolerance = 0
+        # RELAXED TOLERANCE (US-006): Be less aggressive.
+        # Only enforce strict count if we are VERY confident (> 0.85)
+        # UNLESS strict mode is enabled (Paranoid Mode)
+        elif strict:
+            tolerance = 0
         else:
-            # RELAXED TOLERANCE (US-006): Be less aggressive.
-            # Only enforce strict count if we are VERY confident (> 0.85)
-            # UNLESS strict mode is enabled (Paranoid Mode)
-            if strict:
-                tolerance = 0
-            else:
-                tolerance = 0 if estimate.confidence > 0.85 else 1
+            tolerance = 0 if estimate.confidence > 0.85 else 1
 
         is_valid = missing_count <= tolerance
 
@@ -312,7 +311,7 @@ class MultiPickValidator:
 
 
 def validate_and_flag_missing(
-    messages: list[dict[str, Any]], 
+    messages: list[dict[str, Any]],
     parsed_picks: list[dict[str, Any]],
     strict: bool = False
 ) -> tuple[list[dict[str, Any]], list[int]]:

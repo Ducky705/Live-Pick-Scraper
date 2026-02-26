@@ -1,7 +1,7 @@
 # Pick Verification Report - 2026-02-14
 
 **Total Messages Processed:** 84
-**Total Picks Extracted:** 241
+**Total Picks Extracted:** 81
 
 ---
 
@@ -17,10 +17,10 @@
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
 | Busan Kcc Egis -5.5 | -118 | 1.5 | Spread | - |
-| Wonju Dongbu Promy +6 | -115 | 1.0 | Spread | - |
+| Wonju DB Promy +6 | -115 | 1.0 | Spread | - |
 | Daegu Kogas: Total Points Over 83.5 | -110 | 0.75 | Team Prop | - |
 | Changwon LG Sakers -5.5 | None | 1.0 | Spread | - |
-| Wonju Dongbu Promy vs Changwon LG Sakers Under 154.5 | None | 1.0 | Total | - |
+| Wonju DB Promy vs Changwon LG Sakers Under 154.5 | None | 1.0 | Total | - |
 | Goyang Sky Gunners ML | None | 1.0 | Moneyline | - |
 | Daegu Kogas Pegasus vs Busan Kcc Egis Over 172.5 | None | 1.0 | Total | - |
 
@@ -38,12 +38,12 @@
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
 | Kansas +7.5 | None | 1.0 | Spread | - |
-| Iowa St. -7 | -118 | 4.0 | Spread | - |
+| Iowa State -7 | -110 | 4.0 | Spread | - |
 | Providence +7.5 | -105 | 3.0 | Spread | - |
-| Mississippi Valley St. +17.5 | None | 3.0 | Spread | - |
+| UT Rio Grande Valley +2 | None | 3.0 | Spread | - |
 | New Haven: Total Points Under 131.5 | None | 3.0 | Team Prop | - |
-| Ohio St. Under 148.5 | None | 3.0 | Total | - |
-| Duquesne vs St. Bonaventure Over 152.5 | -110 | 3.0 | Total | - |
+| Ohio State Under 148.5 | None | 3.0 | Total | - |
+| St. Bonaventure Over 152.5 | None | 3.0 | Total | - |
 | Clemson +13.5 | -110 | 1.0 | Spread | - |
 
 ---
@@ -97,9 +97,7 @@
 > 3-14 last 17 MAX picks MICHIGAN STATE VS WISCONSIN UNDER 148.5 -112 CBB MAX
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Michigan State vs Wisconsin Under 148.5 | -112 | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -138,9 +136,7 @@
 > OutofLineBets ➖➖➖➖➖ OutofLineBets CBB Georgia Tech +6 -105 2U
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Georgia Tech +6 | -105 | 2.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -153,10 +149,7 @@
 > SetPointBets ➖➖➖➖➖ MAX 08:48 am Prizmic ML / Boscardin +6.5 .67 10U Prizmic -3.5 .67 5U Boscardin +4.5 .80 3U
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Prizmic -3.5 | None | 5.0 | Moneyline | - |
-| Boscardin +6.5 | None | 10.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -169,10 +162,7 @@
 > PorterPicks ➖➖➖➖➖ PorterPicks 8:55 AM REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY NC STATE (-5.5) over MIAMI (3-UNITS) 🏅💰💰 1:00pm PST BAYLOR (+6.5) over Louisville (2-UNITS) 💰🏅 1:00pm PST IOWA (+105) over PURDUE (3-UNITS) 🏅💰💰 2:00pm PST WILL post a couple …
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Baylor +6.5 | -112 | 2.0 | Spread | - |
-| Iowa ML | 105 | 3.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -185,15 +175,7 @@
 > HammeringHank ➖➖➖➖➖ HammeringHank FULL CARD 💎🔨 Providence +8 5U MAX BET💎🔨 Northwestern +13 4U 🔨 Memphis +13.5 4 🔨 UCLA +16.5 3U 🔨 Florida State +5.5 3U 🔨 Texas +2.5 2U 🔨 Kentucky +13.5 2U 🔨
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Providence +8 | -105 | 5.0 | Spread | - |
-| Northwestern +13 | None | 4.0 | Spread | - |
-| Memphis +13.5 | None | 4.0 | Spread | - |
-| Ucla +16.5 | -108 | 3.0 | Spread | - |
-| Florida State +5.5 | None | 3.0 | Spread | - |
-| Texas +2.5 | None | 2.0 | Spread | - |
-| Kentucky +13.5 | None | 2.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -206,9 +188,7 @@
 > AndersPicks ➖➖➖➖➖ AndersPicks CBB ADD Oregon -6 -110 1U(Caesars) 6 -105 at Circa
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Oregon -6 | -110 | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -221,24 +201,7 @@
 > SmartMoney Vanderbilt -6.5 North Carolina -11 Marquette +2.5 Florida -7.5 NC State -5.5 Arizona -9.5 UConn 1H -9.5 Utah State -13.5 TBQueen Clemson +13 CashC Iowa State -6 NC State -5 Purdue ML Clemson +13.5 Ohio State +4.5 Bullies Iowa State -4.5 Florida -11.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Vanderbilt -6.5 | -108 | 1.0 | Spread | - |
-| North Carolina -11 | None | 1.0 | Spread | - |
-| Marquette +2.5 | None | 1.0 | Spread | - |
-| Florida -7.5 | None | 1.0 | Spread | - |
-| NC State -5.5 | -110 | 1.0 | Spread | - |
-| Arizona -9.5 | -120 | 1.0 | Spread | - |
-| 1H UConn -9.5 | -105 | 1.0 | Period | - |
-| Utah State -13.5 | None | 1.0 | Spread | - |
-| Clemson +13 | -105 | 1.0 | Spread | - |
-| Iowa State -6 | -118 | 1.0 | Spread | - |
-| NC State -5 | None | 1.0 | Spread | - |
-| Purdue ML | -139 | 1.0 | Moneyline | - |
-| Clemson +13.5 | -110 | 1.0 | Spread | - |
-| Ohio State +4.5 | None | 1.0 | Spread | - |
-| Iowa State -4.5 | -118 | 1.0 | Spread | - |
-| Florida -11.5 | None | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -273,12 +236,11 @@
 | South Carolina vs Alabama Over 167.5 | -110 | 1.0 | Total | - |
 | Minnesota vs Washington Over 138.5 | -110 | 1.0 | Total | - |
 | Montana State vs Montana Over 144.5 | -110 | 1.0 | Total | - |
-| Michigan Wolverines -15.5 | -110 | 2.0 | Spread | - |
-| Iowa State Cyclones -5.5 | -120 | 3.0 | Spread | - |
-| Florida Gators -12.5 | -110 | 2.0 | Spread | - |
-| Oregon Ducks -6.5 | -110 | 2.0 | Spread | - |
-| NC State Wolfpack -5.5 | -105 | 2.0 | Spread | - |
-| Wyoming Cowboys +5 | -112 | 1.5 | Spread | - |
+| Michigan -15.5 | -110 | 2.0 | Spread | - |
+| Iowa State -5.5 | -120 | 3.0 | Spread | - |
+| Florida -12.5 | -110 | 2.0 | Spread | - |
+| Oregon -6.5 | -110 | 2.0 | Spread | - |
+| Wyoming +5 | -112 | 1.5 | Spread | - |
 
 ---
 
@@ -291,10 +253,7 @@
 > McBets ➖➖➖➖➖ NEW MESSAGES McBets APP 9:15 AM NCAAB Adds Iowa State -7 (-120) 1.5u • Parlay (-135) 1.5u Iowa State ML Oregon ML
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Iowa State -7 | -120 | 1.5 | Spread | - |
-| NCAAB) Iowa State ML / (NCAAB) Oregon ML | -135 | 1.5 | Parlay | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -307,18 +266,7 @@
 > 14/02 #TennisWinnersOnly🎾 February 14th card add ons ATP Tennis Plays (2U) Etcheverry +3 vs Cerundolo (-124) (1U) Shelton ML + Aliassime ML (+135) #MatchPointBets 🎾 Francisco Cerundolo -179 4U Francisco Cerubdolo -2.5 games 3U Shapovalov +3 - 165 6U Shapovalov +157 1U Felix Auger-Aliassime -195 50 Schoolkate -125 4U Vallejo + Prizmic Parlay ЗU Mmoh +110 2U Faria +100 2U #TailToWin🎾 WTA Doha (2/14/26) 0.75U - Karolina Muchova ML +110 (DK)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Etcheverry +3 | -124 | 1.0 | Spread | - |
-| TENNIS) Shelton ML / (TENNIS) Aliassime ML | 135 | 1.0 | Parlay | - |
-| Francisco Cerundolo -2.5 games | -179 | 4.0 | Moneyline | - |
-| Shapovalov +3 | -165 | 6.0 | Spread | - |
-| Felix Auger-Aliassime ML | -195 | 5.0 | Moneyline | - |
-| Schoolkate ML | -125 | 4.0 | Moneyline | - |
-| TENNIS) Vallejo ML / (TENNIS) Prizmic ML | None | 3.0 | Parlay | - |
-| Mmoh ML | 110 | 2.0 | Moneyline | - |
-| Faria ML | 100 | 2.0 | Moneyline | - |
-| Karolina Muchova ML | 110 | 0.75 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -331,14 +279,7 @@
 > Hammering Hank FULL CARD Providence +8 5U MAX BET Northwestern +13 4U Memphis +13.5 4U UCLA +16.5 3U Florida State +5.5 3U Texas +2.5 2U Kentucky +13.5 2U ➖ Five *Golden Whale Parlay (1) lowa State Cyclones money line Wake Forest money line (College Basketball) *Golden Whale (2) lowa Hawkeyes +2.5 (College Basketball) *Golden Whale Parlay (3) lowa State Cyclones money line Virginia Cavs money line (College Basketball) *Whale Parlay (4) Wake Forest money line Duke money line (College Basketball) *Bonus Parlay (1) Duke alternate -9.5 Providence alternate +11.5 (College Basketball) *Bonus Parlay (2) Duke alternate -9.5 Northwestern +17.5 ➖ The Sharp Sheets 🏀 Iowa +2.5 ⭐️⭐️⭐️⭐️⭐️ Need A Bookie? DM @leviathanlocks
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Iowa State Cyclones Ml, Wake Forest ML | 120 | 1.0 | Moneyline | - |
-| Iowa Hawkeyes +2.5 | -118 | 1.0 | Spread | - |
-| Iowa State Cyclones Ml, Virginia Cavaliers ML | 120 | 1.0 | Moneyline | - |
-| Wake Forest Ml, Duke ML | 675 | 1.0 | Moneyline | - |
-| Duke -9.5, Northwestern +17.5 | -105 | 1.0 | Spread | - |
-| Iowa +2.5 | -110 | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -377,10 +318,7 @@
 > Ross Benjamin CBB 2% Iowa State -6.5 2% Villanova -3.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Iowa State -6.5 | -118 | 2.0 | Spread | - |
-| Villanova -3.5 | -110 | 2.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -393,10 +331,7 @@
 > Ben Burns CBB 2% NC Wilmington -145 5% Connecticut -15.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Unc Wilmington ML | -145 | 2.0 | Moneyline | - |
-| Connecticut -15.5 | -105 | 5.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -409,12 +344,7 @@
 > Bill Krackman 2% Marquette +3 2% Iowa State -7 3% Syracuse +3.5 3% Tartleton +3
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Marquette +3 | None | 2.0 | Spread | - |
-| Iowa State -7 | -110 | 2.0 | Spread | - |
-| Syracuse +3.5 | None | 3.0 | Spread | - |
-| Tartleton +3 | None | 3.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -427,10 +357,7 @@
 > Micah Roberts Navy +1.5 -120 Purdue ML -139
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Navy +1.5 | -120 | 1.0 | Spread | - |
-| Purdue ML | -139 | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -443,13 +370,7 @@
 > Gianni the Greek 4% Arizona -9.0 (-115) 3% Iowa State -7.0 (-120) 3% Samford/East Tenn State u146.0 3% St. Francis PA +3.0 (-120) 3% Wagner/Stonehill u130.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Arizona -9.0 | -115 | 4.0 | Spread | - |
-| Iowa State -7.0 | -120 | 3.0 | Spread | - |
-| Samford vs East Tennessee State Under 146.0 | None | 3.0 | Total | - |
-| St. Francis (Pa) +3.0 | -120 | 3.0 | Spread | - |
-| Wagner vs Stonehill Under 130.5 | None | 3.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -462,12 +383,7 @@
 > Bruce Marshall CBB Providence Friars +7' (-112) Fordham Rams +5' (-102) Northwestern Wildcats +12' (-102) Texas A&amp;M/Vanderbilt o165' (-110)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Providence Friars +7.5 | -112 | 1.0 | Spread | - |
-| Fordham Rams +5.5 | -102 | 1.0 | Spread | - |
-| Northwestern Wildcats +12.5 | -102 | 1.0 | Spread | - |
-| Texas A&M vs Vanderbilt Over 165.5 | -110 | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -480,18 +396,7 @@
 > Big Al 4* lowa St. -7 3* Providence +7.5 3* Mississippi Valley St. +17.5 3* UT-Rio Grande Valley +2 4* N. Colorado -3.5 3* UTEP +6.5 3* Louisiana-Monroe +13 3* Baylor +6.5 3* Air Force +16.5 3* LSU +14.5 3* Ohio St. +4.5 1* James Madison +1.5 1* Coppin St. +11 1* Santa Clara +5.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Northern Colorado -3.5 | -108 | 4.0 | Spread | - |
-| Utep +6.5 | None | 3.0 | Spread | - |
-| Louisiana-Monroe +13 | -108 | 3.0 | Spread | - |
-| Baylor +6.5 | -112 | 3.0 | Spread | - |
-| Air Force +16.5 | None | 3.0 | Spread | - |
-| Lsu +14.5 | None | 3.0 | Spread | - |
-| Ohio St. +4.5 | None | 3.0 | Spread | - |
-| James Madison +1.5 | None | 1.0 | Spread | - |
-| Coppin St. +11 | None | 1.0 | Spread | - |
-| Santa Clara +5.5 | None | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -504,11 +409,7 @@
 > Strike Point Sports 4u - Oklahoma State -1.5 4u - NC State -5.5 3u - Arizona -9.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Oklahoma State -1.5 | None | 4.0 | Spread | - |
-| NC State -5.5 | -110 | 4.0 | Spread | - |
-| Arizona -9.5 | -120 | 3.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -521,10 +422,7 @@
 > Larry Hartstein CBB 1u - Texas A&amp;M +7.5 -110 1u - Oklahoma -1.5 -105
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Texas A&M +7.5 | -110 | 1.0 | Spread | - |
-| Oklahoma -1.5 | -105 | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -537,14 +435,7 @@
 > Your Daily Capper 1u - NC State - 4 () 1u - Iowa +1.5 2u - UT Rio Grande Valley ML 1u - Wichita State ML 1u - Santa Clara +6 () Parlay 1u - Iowa State ML + Florida -5 ()
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| NC State -4 | None | 1.0 | Spread | - |
-| Iowa +1.5 | -118 | 1.0 | Spread | - |
-| UT Rio Grande Valley ML | None | 2.0 | Moneyline | - |
-| Wichita State ML | None | 1.0 | Moneyline | - |
-| Santa Clara +6 | None | 1.0 | Spread | - |
-| NCAAB) Iowa State ML / (NCAAB) Florida -5 | -118 | 1.0 | Parlay | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -557,11 +448,7 @@
 > August Young 4u - Georgia St./Old Dominion o147.5 4u - Iowa +1.5 4u - Loyola Marymount/Pepperdine u146.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Georgia St. vs Old Dominion Over 147.5 | None | 4.0 | Total | - |
-| Iowa +1.5 | -118 | 4.0 | Spread | - |
-| Loyola Marymount vs Pepperdine Under 146.5 | None | 4.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -574,9 +461,7 @@
 > #SBK ✅ Friday 100K WAGER [CBB] Duke / Clemson U134.5 (-120) sbk recap
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Duke vs Clemson Under 134.5 | -120 | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -589,10 +474,7 @@
 > Kyle Hunter 3* Long Island/New Haven u131.5 (-105) 3* Virginia/Ohio St u148.5 (-105) 3* Duquesne/St Bonaventure o152.5 (-110)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Long Island vs New Haven Under 131.5 | -105 | 3.0 | Total | - |
-| Virginia vs Ohio State Under 148.5 | -105 | 3.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -657,10 +539,7 @@
 > PorterPicks ➖➖➖➖➖ 🧡🏀 | ncaab PorterPicks REMAINING COLLEGE BASKETBALL SELECTIONS for SATURDAY 👇 NC STATE (-5.5) over ... PorterPicks 2:17 PM ADDED COLLEGE BASKETBALL SELECTIONS for SATURDAY NIGHT HOOPS TEXAS TECH/ARIZONA OVER 155.5 (-105) (3-UNITS) 💰💰💰 3:30pm P…
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| NC State -5.5 | -110 | 3.0 | Spread | - |
-| Texas Tech vs Arizona Over 155.5 | -105 | 3.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -673,9 +552,7 @@
 > PorterPicks ➖➖➖➖➖ 3:30pm PST GONZAGA (-3.5) over Santa Clara BOUGHT OFF the SIDE 7:30pm PST ENJOY the GAMES 🍻 (edited) 🏀 6 🍻 3 PorterPicks ADDED COLLEGE BASKETBALL SELECTIONS for SATURDAY NIGHT HOOPS 👇 TEXAS ... PorterPicks 2:34 PM My apologies BUY OFF ZAGS.. TAK…
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Gonzaga -3.5 | -115 | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -688,9 +565,7 @@
 > Oracle Ai ➖➖➖➖➖ Let's keep it goin baby. 🔥 24 ❤️ 7 172 @ 13:18 Ai POTD: Memphis tigers +13.5 I’m doing +15.5 personally Conf: 78% 🔥 12 171 @ 13:19 Pick of the Day Saturday, Feb 14 • 6:00 PM Memphis Tigers @ Utah State Aggies Memphis Tigers +13.5 111 78% +1.9% 0.5u Read …
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Memphis Tigers +13.5 | 111 | 0.5 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -703,9 +578,7 @@
 > # 🐳 ✅ UNC Wilmington - ML
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Unc Wilmington ML | -145 | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -718,10 +591,7 @@
 > Ross Benjamin 3% Hawaii/CS Northridge o162.5 (-105) 2% Saint Marys CA/Pacific u135.5 (-110)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Hawaii vs CS Northridge Over 162.5 | -105 | 3.0 | Total | - |
-| Saint Marys CA vs Pacific Under 135.5 | -110 | 2.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -760,9 +630,7 @@
 > #SEANPERRY 5U SuperMax Texas Tech +10 (CBB)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Texas Tech +10 | None | 5.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -879,12 +747,7 @@
 > LearLocks ➖➖➖➖➖ LEARLOCKS Olympics hockey • Czechia ML 1.5u -135 LEARLOCKS Tennis • Yastremska ML 1.5u -115 • Haley baptiste ML 1.5u -110 Luidmilla Samsanova ML -130 1.5u
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Czechia ML | -135 | 1.5 | Moneyline | - |
-| Yastremska | -115 | 1.5 | Moneyline | - |
-| Haley baptiste ML | -110 | 1.5 | Moneyline | - |
-| Luidmilla Samsanova ML | -130 | 1.5 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -910,11 +773,7 @@
 > ➖➖➖➖➖ APP 6:58 PM NBL 🏀 Sydney Kings -9.5 -116 (1.5U) 2 Korean basketball plays out in 30 minutes 👍 APP 8:08 PM KBL 🇰🇷 (22-8 L30) Daegu KOGAS Pegasus -3 -120 (1.25U) Anyang KGC/Seoul SK Knights under 149.5 -115 (1U)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Sydney Kings -9.5 | -116 | 1.5 | Spread | - |
-| Daegu Kogas Pegasus -3 | -120 | 1.25 | Spread | - |
-| Anyang Kgc vs Seoul SK Knights Under 149.5 | -115 | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -927,14 +786,7 @@
 > ThisGirlBetz ➖➖➖➖➖ ThisGirlBetz OVERNIGHT WTA WTA DUBAI 🎾 D.Yastremska -110 (2u) 🎾 L.Samsonova -130 (3u) 🎾 M.Joint +1.5 (set) -140 (2u) 🎾 L.Sun +155 (2u) 🎾 Z.Sonmez +155 (2u) • ML PARLAY 🎾 Noskova/Krejcikova +100 (3u)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| D.Yastremska | -110 | 2.0 | Moneyline | - |
-| L.Samsonova ML | -130 | 3.0 | Moneyline | - |
-| M.Joint +1.5 (Set | -140 | 2.0 | Parlay | - |
-| L.Sun ML | 155 | 2.0 | Moneyline | - |
-| Z.Sonmez ML | 155 | 2.0 | Moneyline | - |
-| TENNIS) Noskova / (TENNIS) Krejcikova | 100 | 3.0 | Parlay | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -960,10 +812,7 @@
 > Dormroom Degenerates Olympics Hockey Sweden 1P -0.5 Sweden TT o3.5 Sweden -2.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Sweden First Period -0.5 | None | 1.0 | Spread | - |
-| Sweden -2.5 | None | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -989,14 +838,7 @@
 > Wake & Cash Cappers 👉🏻 NBL Sydney Kings -9.5 -116 (1.50) KBL (22-8 L30) 🔥 Daegu KOGAS Pegasus -3 -120 (1.25U) Anyang KGC/Seoul SK Knights under 149.5 -115 (1U) 👉🏻 KBL 🏀🇰🇷 🏀 SK Knights TT u74.5 (-110) 0.75U 🏀 Anyang KGC ML (+100) 0.5U 👉🏻 KimsPicks KBL: 🇰🇷 Suwon Sonicboom +2.5 (1U) NBL: 🇦🇺 Syndey Kings Vs Perth wildcats under 187
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Sydney Kings -9.5 | -116 | 1.5 | Spread | - |
-| Daegu Kogas Pegasus -3 | -120 | 1.25 | Spread | - |
-| Anyang Kgc vs Seoul SK Knights Under 149.5 | -115 | 1.0 | Total | - |
-| Seoul SK Knights: Total Points Under 74.5 | -110 | 0.75 | Team Prop | - |
-| Suwon Sonicboom +2.5 | None | 1.0 | Spread | - |
-| Sydney Kings vs Perth Wildcats Under 187 | None | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1048,10 +890,7 @@
 > CalebPicks ➖➖➖➖➖ Caleb ⚡️ CPIK Yesterday at 10:10 PM ATP Yibing Wu -105 3U Thiago Monteiro +115 3U
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Yibing Wu ML | -105 | 3.0 | Moneyline | - |
-| Thiago Monteiro ML | 115 | 3.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1064,11 +903,7 @@
 > ANDERSPICKS ➖➖➖➖➖ AndersPicks Sunday Card CBB: Southern Illinois -2.5 -110 1U Oakland ML +116 1U(FD, anything with a + sign is good) Illinois Chicago +1.5 -110 1U
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Southern Illinois -2.5 | -110 | 1.0 | Spread | - |
-| Oakland ML | 116 | 1.0 | Moneyline | - |
-| Illinois Chicago +1.5 | -110 | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1081,11 +916,7 @@
 > PICKS4DAYZZZ ➖➖➖➖➖ P4D_Picks4Dayzzz Full Card Sunday 🗓️ ATP Dallas 🏆 Ben Shelton ML +100 3U CBB Cincinnati + Illinois + Northern Iowa -165 3U Maryland +2.5 -115 2U I’ve taken Ben down a set the last two matches, will be looking to do that again if he drops set 1 Just hold…
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Ben Shelton ML | 100 | 3.0 | Moneyline | - |
-| NCAAB) Cincinnati / (NCAAB) Illinois / (NCAAB) Northern Iowa | -165 | 3.0 | Parlay | - |
-| Maryland +2.5 | -115 | 2.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1098,10 +929,7 @@
 > ➖➖➖➖➖ 2/15 cbb plays Maryland/Rutgers U 144.5 -110 1u 💎Butler +2.5 -102 1u • Another light day units wise. Just 2 straight bets for college basketball Butler over Seton Hall today. You guys probably remember I was high on Butler coming into conference…
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Maryland vs Rutgers Under 144.5 | -110 | 1.0 | Total | - |
-| Butler vs Seton Hall +2.5 | -102 | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1114,10 +942,7 @@
 > ➖➖➖➖➖ 2/15 college baseball plays Arkansas state ML -140 1u Oklahoma ML +105 .5u 2 more college baseball plays this afternoon
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Arkansas State ML | -140 | 1.0 | Moneyline | - |
-| Oklahoma ML | 105 | 0.5 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1130,11 +955,7 @@
 > NEWMARKTENNIS ➖➖➖➖➖ NewmarkTennis ATP Finals Sunday ATP Rotterdam FAA/De Minaur O22.5 -115 (3u) ATP Dallas Fritz ML -120 (3u) ATP Buenos Aires Darderi/Cerundolo O22.5 -115 (3u)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Faa vs De Minaur Over 22.5 | -115 | 3.0 | Total | - |
-| Fritz ML | -120 | 3.0 | Moneyline | - |
-| Darderi vs Cerundolo Over 22.5 | -115 | 3.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1147,11 +968,7 @@
 > BETSHARPER ➖➖➖➖➖ BetSharper Sunday's Picks • Straight Bets Only, No Parlays All Picks 1 Unit NCAAB: • Marist Moneyline (-120) • Quinnipiac Moneyline (-120) • Milwaukee Moneyline (-135)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Marist ML | -120 | 1.0 | Moneyline | - |
-| Quinnipiac ML | -120 | 1.0 | Moneyline | - |
-| Milwaukee ML | -135 | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1164,9 +981,7 @@
 > ➖➖➖➖➖ Sunday, February 15 NCAAB San Francisco -3.5 💎 🪜 San Francisco -3.5 (NCAAB)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| San Francisco -3.5 | None | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1179,14 +994,7 @@
 > TheGamblingGawd ➖➖➖➖➖ TheGamblingGawd Sunday Funday 💰 5U POD: USA Over 6.5 🔥 5U Plays 🌊: USA Over 6.5 Canada Over 7.5 Robert Morris MI Cleveland St Over 157.5 Murray St MI • 2 Team MI parlay Illinois/Dayton 1U plays: Seton Hall MI Seton Hall over 142.5
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Canada: Total Points Over 7.5 | None | 5.0 | Team Prop | - |
-| Robert Morris ML | None | 5.0 | Moneyline | - |
-| Cleveland St Over 157.5 | None | 5.0 | Total | - |
-| Murray St ML | None | 5.0 | Moneyline | - |
-| NCAAB) Illinois ML / (NCAAB) Dayton ML | None | 5.0 | Parlay | - |
-| Seton Hall Over 142.5 | None | 1.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1199,9 +1007,7 @@
 > ParlaySafari ➖➖➖➖➖ ParlaySafari Men's Olympic Hockey 1045am France / Canada OVER 7.5 -142 (1u)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| France vs Canada Over 7.5 | -142 | 1.0 | Total | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1214,10 +1020,7 @@
 > ThisGirlBetz ➖➖➖➖➖ ThisGirlBetz SUNDAY ATP FINAL BUENOS AIRES 🎾 F.Cerundolo -105 (3u) DALLAS 🎾 T.Fritz -130 (3u)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| F.Cerundolo ML | -105 | 3.0 | Moneyline | - |
-| T.Fritz ML | -130 | 3.0 | Moneyline | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1230,14 +1033,7 @@
 > #FIVE ✅❌✅✅✅❌ *Golden Whale Parlay (1) Iowa State Cyclones money line Wake Forest money line (College Basketball) *Golden Whale (2) Iowa Hawkeyes +2.5 *Golden Whale Parlay (3) Virginia Cavs money line *Whale Parlay (4) Duke money line *Bonus Parlay (1) Duke alternate -9.5 …
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Iowa State Cyclones ML | 120 | 1.0 | Moneyline | - |
-| Wake Forest ML | None | 1.0 | Moneyline | - |
-| Iowa Hawkeyes +2.5 | -118 | 1.0 | Spread | - |
-| Virginia Cavs ML | None | 1.0 | Moneyline | - |
-| Duke ML | 675 | 1.0 | Moneyline | - |
-| Duke -9.5 | -105 | 1.0 | Spread | - |
+> *No picks extracted from this message.*
 
 ---
 
@@ -1267,14 +1063,14 @@
 | :--- | :--- | :--- | :--- | :--- |
 | Miami Ohio -8.5 | None | 1.0 | Spread | - |
 | Manhattan ML | -120 | 1.0 | Moneyline | - |
-| Ohio vs Miami (Ohio) Over 163.5 | -110 | 1.0 | Total | - |
+| Ohio vs Miami Over 163.5 | -110 | 1.0 | Total | - |
 | Wisconsin +1.5 | None | 1.0 | Spread | - |
-| NCAAB) Ohio Bobcats +11.5 / (NCAAB) Akron ML | None | 1.0 | Parlay | - |
-| NCAAB) Boise State ML / (NCAAB) Ohio Bobcats +11.5 | None | 1.0 | Parlay | - |
-| Wisconsin +4 | None | 1.0 | Spread | - |
-| Akron -10.5 | None | 1.0 | Spread | - |
-| Unlv +12.5 | None | 1.0 | Spread | - |
-| Manhattan vs Niagara Under 138.5 | None | 1.0 | Total | - |
+| Ohio Bobcats +11.5 | None | 1.0 | Spread | - |
+| Akron ML | None | 1.0 | Moneyline | - |
+| Wisconsin +4 | None | 2.0 | Spread | - |
+| Akron -10.5 | None | 2.0 | Spread | - |
+| Unlv +12.5 | None | 2.0 | Spread | - |
+| Manhattan vs Niagara Under 138.5 | None | 2.0 | Total | - |
 | George Washington ML | None | 1.0 | Moneyline | - |
 | Wisconsin +4 | None | 1.0 | Spread | - |
 | Wisconsin +3.5 | None | 1.0 | Spread | - |
@@ -1309,15 +1105,16 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
+| Oklahoma ML | None | 5.0 | Moneyline | - |
 | Usa vs Denmark Over 6.5 | None | 5.0 | Total | - |
 | Providence +7.5 | -105 | 5.0 | Spread | - |
 | Kansas +6.5 | None | 5.0 | Spread | - |
 | Unc -11.5 | -102 | 5.0 | Spread | - |
-| Arizona over 156.5 | -115 | 5.0 | Total | - |
-| Oklahoma ML | 105 | 5.0 | Moneyline | - |
+| Arizona Over 156.5 | -115 | 5.0 | Total | - |
 | Texas ML | None | 5.0 | Moneyline | - |
 | NCAAB) Virginia Tech / (NCAAB) St Marys | None | 5.0 | Parlay | - |
 | Arizona -8.5 | -120 | 1.0 | Spread | - |
+| Tennessee St ML | None | 1.0 | Moneyline | - |
 
 ---
 
@@ -1334,15 +1131,14 @@
 | :--- | :--- | :--- | :--- | :--- |
 | Nebraska -12.5 | -115 | 1.0 | Spread | - |
 | Iowa St. -5.5 | -118 | 1.0 | Spread | - |
-| NC State -5.5 | -110 | 1.0 | Spread | - |
-| Ohio State +4.5 | None | 1.0 | Spread | - |
-| Finland: Total Points Over 3.5 | None | 1.0 | Team Prop | - |
+| Ohio St. +4.5 | None | 1.0 | Spread | - |
+| Finland Total over 3.5 vs Usa Total Over 4.5 | None | 1.0 | Team Prop | - |
 | Clemson +13 | -105 | 2.0 | Spread | - |
-| St. Johns -8 | -115 | 1.0 | Spread | - |
+| St Johns -8 | -115 | 1.0 | Spread | - |
 | Villanova -3.5 | -110 | 2.0 | Spread | - |
 | St Bonaventure ML | -130 | 1.0 | Moneyline | - |
 | Idaho -6.5 | -115 | 3.0 | Spread | - |
-| South Dakota St. -5.5 | -105 | 1.0 | Spread | - |
+| South Dakota St -5.5 | -105 | 1.0 | Spread | - |
 | St. Mary's -8.5 | -105 | 1.0 | Spread | - |
 
 ---
@@ -1358,7 +1154,7 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| NCAAB) Iowa State / (NCAAB) NC State / (NCAAB) Arizona / (NCAAB) Arkansas | 170 | 4.0 | Parlay | - |
+| Iowa State Ml, NC State Ml, Arizona Ml, Arkansas ML | 170 | 4.0 | Moneyline | - |
 
 ---
 
@@ -1373,10 +1169,10 @@
 ### 🎯 Parsed Picks
 | Pick | Odds | Units | Type | Result |
 | :--- | :--- | :--- | :--- | :--- |
-| Grand Canyon -11.5 vs San Jose St | -110 | 5.0 | Spread | - |
-| UT Rio Grande -1.5 vs SF Austin | -110 | 5.0 | Spread | - |
-| Missouri -1.5 vs Texas | -110 | 5.0 | Spread | - |
-| Pacific +7.5 vs St Mary's | -110 | 5.0 | Spread | - |
+| Grand Canyon -11.5 | -110 | 5.0 | Spread | - |
+| UT Rio Grande -1.5 | -110 | 5.0 | Spread | - |
+| Missouri -1.5 | -110 | 5.0 | Spread | - |
+| Pacific +7.5 | -110 | 5.0 | Spread | - |
 
 ---
 
@@ -1389,8 +1185,5 @@
 > Porterpicks MISSOURI (-2) over TEXAS (2-UNITS) SOUTH CAROLINA/ALABAMA OVER 167.5 (3-UNTS)
 
 ### 🎯 Parsed Picks
-| Pick | Odds | Units | Type | Result |
-| :--- | :--- | :--- | :--- | :--- |
-| Missouri -2 | None | 2.0 | Spread | - |
-| South Carolina vs Alabama Over 167.5 | -110 | 3.0 | Total | - |
+> *No picks extracted from this message.*
 

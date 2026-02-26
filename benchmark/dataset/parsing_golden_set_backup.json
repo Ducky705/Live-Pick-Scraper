@@ -1,0 +1,2886 @@
+{
+    "message_32098": [
+        {
+            "id": 1,
+            "cn": "Porterpicks",
+            "lg": "NCAAB",
+            "ty": "Moneyline Parlay",
+            "p": "Iowa State / NC State / Arizona / Arkansas",
+            "od": 170,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_32087": [
+        {
+            "id": 1,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Clemson +13.5",
+            "od": -110,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Navy +1.5",
+            "od": -122,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Kansas/Iowa State Over 142.5",
+            "od": -108,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_32084": [
+        {
+            "id": 1,
+            "cn": "JPICKSWIZARD",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Miami Ohio -8.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "ISW",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Manhattan",
+            "od": -120,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "ISW",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Ohio/Miami Ohio Over 163.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "AFSports",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Sacred Heart +2.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Wisconsin +1.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Wisconsin",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Ohio +11.5 / Akron ML",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Boise State ML / Ohio +11.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "Chamba",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Wisconsin +4",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 10,
+            "cn": "Chamba",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Akron -10.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 11,
+            "cn": "Chamba",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UNLV +12.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 12,
+            "cn": "Chamba",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Manhattan/Niagara Under 138.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 13,
+            "cn": "YourDailyCapper",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "George Washington",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 14,
+            "cn": "YourDailyCapper",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Pennsylvania",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 15,
+            "cn": "YourDailyCapper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Wisconsin +4",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 16,
+            "cn": "Parlay Travy",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Wisconsin +3.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_11211": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -6",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_11208": [
+        {
+            "id": 1,
+            "cn": "Wayne Root",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Kansas +7.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa St. -7",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Providence +7.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Miss Valley St. +17.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UT-Rio Grande Valley +2",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "Kyle Hunter",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "New Haven Under 131.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "Kyle Hunter",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Ohio St Under 148.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "Kyle Hunter",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "St Bonny Over 152.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "Bob Konarski",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Clemson +13.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_32103": [
+        {
+            "id": 1,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Grand Canyon -11.5",
+            "od": -110,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UT Rio Grande -1.5",
+            "od": -110,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Missouri -1.5",
+            "od": -110,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Pacific +7.5",
+            "od": -110,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_11209": [
+        {
+            "id": 1,
+            "cn": "Matthewp07",
+            "lg": "NCAAB",
+            "ty": "Player Prop",
+            "p": "Bryce Hopkins over 15.5 points",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Matthewp07",
+            "lg": "NCAAB",
+            "ty": "Player Prop",
+            "p": "Amani Hansberry over 7.5 rebounds",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Matthewp07",
+            "lg": "NCAAB",
+            "ty": "Player Prop",
+            "p": "Paul McNeil over 12.5 points",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Matthewp07",
+            "lg": "NCAAB",
+            "ty": "Player Prop",
+            "p": "JT Toppin under 32.5 PRA",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -7",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Kentucky/Florida O154.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC State -5.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa +2.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "S Carolina/Alabama O167.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 10,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Minnesota/Washington O138.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 11,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Montana State/Montana O144.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_32093": [
+        {
+            "id": 1,
+            "cn": "DormroomDegenerates",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Nebraska -12.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "DormroomDegenerates",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa St. -5.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "DormroomDegenerates",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC St. -5.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "DormroomDegenerates",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Ohio St. +4.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "DormroomDegenerates",
+            "lg": "Hockey",
+            "ty": "Team Total",
+            "p": "Finland TT over 3.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "DormroomDegenerates",
+            "lg": "Hockey",
+            "ty": "Team Total",
+            "p": "USA TT over 4.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "ThisGirlBetz",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Clemson +13",
+            "od": -105,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "ThisGirlBetz",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "St Johns -8",
+            "od": -115,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "ThisGirlBetz",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Villanova -3.5",
+            "od": -110,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 10,
+            "cn": "ThisGirlBetz",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "St Bonaventure",
+            "od": -130,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 11,
+            "cn": "ThisGirlBetz",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Idaho -6.5",
+            "od": -115,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 12,
+            "cn": "ThisGirlBetz",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "South Dakota St -5.5",
+            "od": -105,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 13,
+            "cn": "ThisGirlBetz",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "St. Mary's -8.5",
+            "od": -105,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_11204": [
+        {
+            "id": 1,
+            "cn": "Unknown",
+            "lg": "KBL",
+            "ty": "Spread",
+            "p": "Busan KCC Egis -5.5",
+            "od": -118,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Unknown",
+            "lg": "KBL",
+            "ty": "Spread",
+            "p": "Wonju DB Promy +6",
+            "od": -115,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Unknown",
+            "lg": "KBL",
+            "ty": "Team Total",
+            "p": "Daegu KOGAS TT o83.5",
+            "od": -110,
+            "u": 0.75,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_32089": [
+        {
+            "id": 1,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Oklahoma",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "TheGamblingGawd",
+            "lg": "Hockey",
+            "ty": "Total",
+            "p": "USA/Denmark Over 6.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Providence +7.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Kansas +6.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UNC -11.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Arizona over 156.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Texas",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Virginia Tech ML / St Marys ML",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Arizona -8.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 10,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Tennessee St",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 11,
+            "cn": "TheGamblingGawd",
+            "lg": "NBA",
+            "ty": "Prop",
+            "p": "Devin Booker Win 3pt content",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 12,
+            "cn": "TheGamblingGawd",
+            "lg": "NBA",
+            "ty": "Prop",
+            "p": "Jason Hayes Win Slam Dunk",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_32104": [
+        {
+            "id": 1,
+            "cn": "Porterpicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Missouri -2",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Porterpicks",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "South Carolina/Alabama Over 167.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022722061203050528": [
+        {
+            "id": 1,
+            "cn": "Porterpicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -6",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -7",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Kentucky/Florida o154.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC State -5.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa +2.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "S Carolina/Alabama o167.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Minnesota/Washington o138.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Montana State/Montana o144.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "NickyCashin",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Michigan Wolverines -15.5",
+            "od": -110,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 10,
+            "cn": "NickyCashin",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State Cyclones -5.5",
+            "od": -120,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 11,
+            "cn": "NickyCashin",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Florida Gators -12.5",
+            "od": -110,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 12,
+            "cn": "NickyCashin",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Oregon Ducks -6.5",
+            "od": -110,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 13,
+            "cn": "NickyCashin",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC State Wolfpack -5.5",
+            "od": -105,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 14,
+            "cn": "NickyCashin",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Wyoming Cowboys +5",
+            "od": -112,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022723151348797743": [
+        {
+            "id": 1,
+            "cn": "TennisWinnersOnly",
+            "lg": "Tennis",
+            "ty": "Spread",
+            "p": "Etcheverry +3",
+            "od": -124,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "TennisWinnersOnly",
+            "lg": "Tennis",
+            "ty": "Parlay",
+            "p": "Shelton ML + Aliassime ML",
+            "od": 135,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "MatchPointBets",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Francisco Cerundolo",
+            "od": -179,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "MatchPointBets",
+            "lg": "Tennis",
+            "ty": "Spread",
+            "p": "Francisco Cerubdolo -2.5 games",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "MatchPointBets",
+            "lg": "Tennis",
+            "ty": "Spread",
+            "p": "Shapovalov +3",
+            "od": -165,
+            "u": 6.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "MatchPointBets",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Shapovalov",
+            "od": 157,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "MatchPointBets",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Felix Auger-Aliassime",
+            "od": -195,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "MatchPointBets",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Schoolkate",
+            "od": -125,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "MatchPointBets",
+            "lg": "Tennis",
+            "ty": "Parlay",
+            "p": "Vallejo + Prizmic",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 10,
+            "cn": "MatchPointBets",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Mmoh",
+            "od": 110,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 11,
+            "cn": "MatchPointBets",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Faria",
+            "od": 100,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 12,
+            "cn": "TailToWin",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Karolina Muchova",
+            "od": 110,
+            "u": 0.75,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023061476768948236": [
+        {
+            "id": 1,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Iowa State ML / Wake Forest ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa Hawkeyes +2.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Virginia Cavs",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Duke",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Duke alternate -9.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023058762936783245": [
+        {
+            "id": 1,
+            "cn": "ParlaySafari",
+            "lg": "Hockey",
+            "ty": "Total",
+            "p": "France / Canada OVER 7.5",
+            "od": -142,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023058714723250419": [
+        {
+            "id": 1,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "San Francisco -3.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023057753657266312": [
+        {
+            "id": 1,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Marist",
+            "od": -120,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Quinnipiac",
+            "od": -120,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "BetSharper",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Milwaukee",
+            "od": -135,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022813101574304229": [
+        {
+            "id": 1,
+            "cn": "Glitch Whale",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "UNC Wilmington",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022806281728200992": [
+        {
+            "id": 1,
+            "cn": "Oracle Ai",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Memphis Tigers +13.5",
+            "od": null,
+            "u": 0.5,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022803270930960546": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "TEXAS TECH/ARIZONA OVER 155.5",
+            "od": -105,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022803231118668208": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC STATE -5.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "PorterPicks",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "TEXAS TECH/ARIZONA OVER 155.5",
+            "od": -105,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022786483854156079": [
+        {
+            "id": 1,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Grand Canyon -11.5",
+            "od": -110,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UT Rio Grande -1.5",
+            "od": -110,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Missouri -1.5",
+            "od": -110,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Pacific +7.5",
+            "od": -110,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022747961508184413": [
+        {
+            "id": 1,
+            "cn": "SBK",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Duke / Clemson U134.5",
+            "od": -120,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022720997825073552": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC STATE -5.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "PorterPicks",
+            "lg": "NCAAB",
+            "ty": "Moneyline Parlay",
+            "p": "IOWA STATE / NC STATE / ARIZONA / ARKANSAS",
+            "od": 170,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022717139854016649": [
+        {
+            "id": 1,
+            "cn": "PorterPicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC STATE -5.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "PorterPicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "BAYLOR +6.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "PorterPicks",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "IOWA",
+            "od": 105,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022872371963593133": [
+        {
+            "id": 1,
+            "cn": "LearLocks",
+            "lg": "Hockey",
+            "ty": "Moneyline",
+            "p": "Czechia",
+            "od": -135,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "LearLocks",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Yastremska",
+            "od": -115,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "LearLocks",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Haley baptiste",
+            "od": -110,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "LearLocks",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Luidmilla Samsanova",
+            "od": -130,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022718086558671024": [
+        {
+            "id": 1,
+            "cn": "AndersPicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Oregon -6",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022887457482477609": [
+        {
+            "id": 1,
+            "cn": "ThisGirlBetz",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "D.Yastremska",
+            "od": -110,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "ThisGirlBetz",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "L.Samsonova",
+            "od": -130,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "ThisGirlBetz",
+            "lg": "Tennis",
+            "ty": "Spread",
+            "p": "M.Joint +1.5 (set)",
+            "od": -140,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "ThisGirlBetz",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "L.Sun",
+            "od": 155,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "ThisGirlBetz",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Z.Sonmez",
+            "od": 155,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "ThisGirlBetz",
+            "lg": "Tennis",
+            "ty": "Parlay",
+            "p": "Noskova/Krejcikova",
+            "od": 100,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022854768251510851": [
+        {
+            "id": 1,
+            "cn": "Sean Perry",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Texas Tech +10",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022715107491328233": [
+        {
+            "id": 1,
+            "cn": "OutofLineBets",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Georgia Tech +6",
+            "od": -105,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022723093211337144": [
+        {
+            "id": 1,
+            "cn": "McBets",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -7",
+            "od": -120,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "McBets",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Iowa State ML / Oregon ML",
+            "od": -135,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023057643858755760": [
+        {
+            "id": 1,
+            "cn": "Picks4Dayzzz",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Ben Shelton",
+            "od": 100,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Picks4Dayzzz",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Cincinnati + Illinois + Northern Iowa",
+            "od": -165,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Picks4Dayzzz",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Maryland +2.5",
+            "od": -115,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023057702688010625": [
+        {
+            "id": 1,
+            "cn": "Unknown",
+            "lg": "College Baseball",
+            "ty": "Moneyline",
+            "p": "Arkansas state",
+            "od": -140,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Unknown",
+            "lg": "College Baseball",
+            "ty": "Moneyline",
+            "p": "Oklahoma",
+            "od": 105,
+            "u": 0.5,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023057675387384008": [
+        {
+            "id": 1,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Maryland/Rutgers U 144.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Butler +2.5",
+            "od": -102,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023057624682373166": [
+        {
+            "id": 1,
+            "cn": "AndersPicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Southern Illinois -2.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "AndersPicks",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Oakland",
+            "od": 116,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "AndersPicks",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Illinois Chicago +1.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022715502976458894": [
+        {
+            "id": 1,
+            "cn": "SetPointBets",
+            "lg": "Tennis",
+            "ty": "Parlay",
+            "p": "Prizmic ML / Boscardin +6.5",
+            "od": null,
+            "u": 10.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "SetPointBets",
+            "lg": "Tennis",
+            "ty": "Spread",
+            "p": "Prizmic -3.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "SetPointBets",
+            "lg": "Tennis",
+            "ty": "Spread",
+            "p": "Boscardin +4.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023058787276402808": [
+        {
+            "id": 1,
+            "cn": "ThisGirlBetz",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "F.Cerundolo",
+            "od": -105,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "ThisGirlBetz",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "T.Fritz",
+            "od": -130,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022885941262602713": [
+        {
+            "id": 1,
+            "cn": "Unknown",
+            "lg": "NBL",
+            "ty": "Spread",
+            "p": "Sydney Kings -9.5",
+            "od": -116,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Unknown",
+            "lg": "KBL",
+            "ty": "Spread",
+            "p": "Daegu KOGAS Pegasus -3",
+            "od": -120,
+            "u": 1.25,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Unknown",
+            "lg": "KBL",
+            "ty": "Total",
+            "p": "Anyang KGC/Seoul SK Knights under 149.5",
+            "od": -115,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023057450811740225": [
+        {
+            "id": 1,
+            "cn": "CalebPicks",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Yibing Wu",
+            "od": -105,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "CalebPicks",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Thiago Monteiro",
+            "od": 115,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023057730441802224": [
+        {
+            "id": 1,
+            "cn": "NewmarkTennis",
+            "lg": "Tennis",
+            "ty": "Total",
+            "p": "FAA/De Minaur O22.5",
+            "od": -115,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "NewmarkTennis",
+            "lg": "Tennis",
+            "ty": "Moneyline",
+            "p": "Fritz",
+            "od": -120,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "NewmarkTennis",
+            "lg": "Tennis",
+            "ty": "Total",
+            "p": "Darderi/Cerundolo O22.5",
+            "od": -115,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2023058737196413230": [
+        {
+            "id": 1,
+            "cn": "TheGamblingGawd",
+            "lg": "Hockey",
+            "ty": "Total",
+            "p": "USA Over 6.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "TheGamblingGawd",
+            "lg": "Hockey",
+            "ty": "Total",
+            "p": "Canada Over 7.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Robert Morris",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Cleveland St Over 157.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Murray St",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Illinois ML / Dayton ML",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Seton Hall",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "TheGamblingGawd",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Seton Hall over 142.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022717682961772621": [
+        {
+            "id": 1,
+            "cn": "HammeringHank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Providence +8",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "HammeringHank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Northwestern +13",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "HammeringHank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Memphis +13.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "HammeringHank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UCLA +16.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "HammeringHank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Florida State +5.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "HammeringHank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Texas +2.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "HammeringHank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Kentucky +13.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022915768921526438": [
+        {
+            "id": 1,
+            "cn": "Wake & Cash",
+            "lg": "NBL",
+            "ty": "Spread",
+            "p": "Sydney Kings -9.5",
+            "od": -116,
+            "u": 1.5,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Wake & Cash",
+            "lg": "KBL",
+            "ty": "Spread",
+            "p": "Daegu KOGAS Pegasus -3",
+            "od": -120,
+            "u": 1.25,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Wake & Cash",
+            "lg": "KBL",
+            "ty": "Total",
+            "p": "Anyang KGC/Seoul SK Knights under 149.5",
+            "od": -115,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Wake & Cash",
+            "lg": "KBL",
+            "ty": "Team Total",
+            "p": "SK Knights TT u74.5",
+            "od": -110,
+            "u": 0.75,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "Wake & Cash",
+            "lg": "KBL",
+            "ty": "Moneyline",
+            "p": "Anyang KGC",
+            "od": 100,
+            "u": 0.5,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "KimsPicks",
+            "lg": "KBL",
+            "ty": "Spread",
+            "p": "Suwon Sonicboom +2.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "KimsPicks",
+            "lg": "NBL",
+            "ty": "Total",
+            "p": "Syndey Kings Vs Perth wildcats under 187",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022723805852860664": [
+        {
+            "id": 1,
+            "cn": "Hammering Hank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Providence +8",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Hammering Hank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Northwestern +13",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Hammering Hank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Memphis +13.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Hammering Hank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UCLA +16.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "Hammering Hank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Florida State +5.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "Hammering Hank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Texas +2.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "Hammering Hank",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Kentucky +13.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Iowa State ML / Wake Forest ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa Hawkeyes +2.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 10,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Iowa State ML / Virginia Cavs ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 11,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Wake Forest ML / Duke ML",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 12,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Duke alt -9.5 / Providence alt +11.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 13,
+            "cn": "FiveStar",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Duke alt -9.5 / Northwestern +17.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 14,
+            "cn": "The Sharp Sheets",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa +2.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022719990902985152": [
+        {
+            "id": 1,
+            "cn": "SmartMoney",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Vanderbilt -6.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "SmartMoney",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "North Carolina -11",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "SmartMoney",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Marquette +2.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "SmartMoney",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Florida -7.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "SmartMoney",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC State -5.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "SmartMoney",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Arizona -9.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "SmartMoney",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UConn 1H -9.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "SmartMoney",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Utah State -13.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "TBQueen",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Clemson +13",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 10,
+            "cn": "CashC",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -6",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 11,
+            "cn": "CashC",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC State -5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 12,
+            "cn": "CashC",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Purdue",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 13,
+            "cn": "CashC",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Clemson +13.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 14,
+            "cn": "CashC",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Ohio State +4.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 15,
+            "cn": "Bullies",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -4.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 16,
+            "cn": "Bullies",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Florida -11.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022911896568107480": [
+        {
+            "id": 1,
+            "cn": "Dormroom Degenerates",
+            "lg": "Hockey",
+            "ty": "Spread",
+            "p": "Sweden 1P -0.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Dormroom Degenerates",
+            "lg": "Hockey",
+            "ty": "Team Total",
+            "p": "Sweden TT o3.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Dormroom Degenerates",
+            "lg": "Hockey",
+            "ty": "Spread",
+            "p": "Sweden -2.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022748343601148194": [
+        {
+            "id": 1,
+            "cn": "Kyle Hunter",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Long Island/New Haven u131.5",
+            "od": -105,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Kyle Hunter",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Virginia/Ohio St u148.5",
+            "od": -105,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Kyle Hunter",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Duquesne/St Bonaventure o152.5",
+            "od": -110,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022746497536950293": [
+        {
+            "id": 1,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa St. -7",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Providence +7.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Mississippi Valley St. +17.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UT-Rio Grande Valley +2",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "N. Colorado -3.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "UTEP +6.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 7,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Louisiana-Monroe +13",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 8,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Baylor +6.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 9,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Air Force +16.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 10,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "LSU +14.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 11,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Ohio St. +4.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 12,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "James Madison +1.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 13,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Coppin St. +11",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 14,
+            "cn": "Big Al",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Santa Clara +5.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022745723666927842": [
+        {
+            "id": 1,
+            "cn": "Bruce Marshall",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Providence Friars +7.5",
+            "od": -112,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Bruce Marshall",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Fordham Rams +5.5",
+            "od": -102,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Bruce Marshall",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Northwestern Wildcats +12.5",
+            "od": -102,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Bruce Marshall",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Texas A&M/Vanderbilt o165.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022744131156750372": [
+        {
+            "id": 1,
+            "cn": "Football Jesus LV",
+            "lg": "NBA",
+            "ty": "Prop",
+            "p": "Kon Knueppel +350",
+            "od": 350,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022539191931035843": [
+        {
+            "id": 1,
+            "cn": "Dormroom Degenerates",
+            "lg": "Hockey",
+            "ty": "Spread",
+            "p": "Sweden 1P -0.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Dormroom Degenerates",
+            "lg": "Hockey",
+            "ty": "Team Total",
+            "p": "Sweden TT o3.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Dormroom Degenerates",
+            "lg": "Hockey",
+            "ty": "Spread",
+            "p": "Sweden -2.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022746697408111012": [
+        {
+            "id": 1,
+            "cn": "Larry Hartstein",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Texas A&M +7.5",
+            "od": -110,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Larry Hartstein",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Oklahoma -1.5",
+            "od": -105,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022744246940483984": [
+        {
+            "id": 1,
+            "cn": "Ross Benjamin",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -6.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Ross Benjamin",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Villanova -3.5",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022745462697267344": [
+        {
+            "id": 1,
+            "cn": "Gianni the Greek",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Arizona -9.0",
+            "od": -115,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Gianni the Greek",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -7.0",
+            "od": -120,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Gianni the Greek",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Samford/East Tenn State u146.0",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Gianni the Greek",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "St. Francis PA +3.0",
+            "od": -120,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "Gianni the Greek",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Wagner/Stonehill u130.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022744367245726119": [
+        {
+            "id": 1,
+            "cn": "Ben Burns",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "NC Wilmington",
+            "od": -145,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Ben Burns",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Connecticut -15.5",
+            "od": null,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022745028758769783": [
+        {
+            "id": 1,
+            "cn": "Micah Roberts",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Navy +1.5",
+            "od": -120,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Micah Roberts",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Purdue",
+            "od": -139,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022744855928279468": [
+        {
+            "id": 1,
+            "cn": "Bill Krackman",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Marquette +3",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Bill Krackman",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa State -7",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Bill Krackman",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Syracuse +3.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Bill Krackman",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Tartleton +3",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022815588335427935": [
+        {
+            "id": 1,
+            "cn": "Ross Benjamin",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Hawaii/CS Northridge o162.5",
+            "od": -105,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Ross Benjamin",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Saint Marys CA/Pacific u135.5",
+            "od": -110,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022746562775126051": [
+        {
+            "id": 1,
+            "cn": "Strike Point Sports",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Oklahoma State -1.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Strike Point Sports",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC State -5.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Strike Point Sports",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Arizona -9.5",
+            "od": null,
+            "u": 3.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022747307297653012": [
+        {
+            "id": 1,
+            "cn": "Your Daily Capper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "NC State -4",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "Your Daily Capper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa +1.5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "Your Daily Capper",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "UT Rio Grande Valley",
+            "od": null,
+            "u": 2.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 4,
+            "cn": "Your Daily Capper",
+            "lg": "NCAAB",
+            "ty": "Moneyline",
+            "p": "Wichita State",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 5,
+            "cn": "Your Daily Capper",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Santa Clara +6",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 6,
+            "cn": "Your Daily Capper",
+            "lg": "NCAAB",
+            "ty": "Parlay",
+            "p": "Iowa State ML + Florida -5",
+            "od": null,
+            "u": 1.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022747948564746548": [
+        {
+            "id": 1,
+            "cn": "August Young",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Georgia St./Old Dominion o147.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 2,
+            "cn": "August Young",
+            "lg": "NCAAB",
+            "ty": "Spread",
+            "p": "Iowa +1.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        },
+        {
+            "id": 3,
+            "cn": "August Young",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "Loyola Marymount/Pepperdine u146.5",
+            "od": null,
+            "u": 4.0,
+            "dt": "2026-02-14"
+        }
+    ],
+    "message_2022463511868379227": [
+        {
+            "id": 1,
+            "cn": "Unknown",
+            "lg": "NCAAB",
+            "ty": "Total",
+            "p": "MICHIGAN STATE VS WISCONSIN UNDER 148.5",
+            "od": -112,
+            "u": 5.0,
+            "dt": "2026-02-14"
+        }
+    ]
+}

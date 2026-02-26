@@ -140,6 +140,101 @@ OUTPUT FORMAT (JSON):
             return None
 
     @staticmethod
+    def resolve_batch(items: list[tuple[str, str]], games: list[dict[str, Any]]) -> dict[tuple[str, str], tuple[dict, str] | None]:
+        """
+        Resolve multiple picks in a single prompt to save time and API calls.
+        
+        Args:
+            items: List of (pick_text, league) tuples
+            games: List of candidate games
+        Returns:
+            Dictionary mapping original (pick_text, league) keys to their resolved (game, team_name) tuple or None
+        """
+        if not games or not items:
+            return {item: None for item in items}
+            
+        results = {}
+        # Collect candidate games.
+        # It's better to show all games from the requested leagues.
+        leagues_requested = {l.lower() for _, l in items if l}
+        candidate_games = []
+        for g in games:
+            lg = str(g.get("league", "")).lower()
+            if not leagues_requested or lg in leagues_requested:
+                candidate_games.append(g)
+
+        if not candidate_games:
+            candidate_games = games
+            
+        candidate_games = candidate_games[:100] # Limit tokens
+
+        game_list_str = "\n".join([
+            f"- ID: {g.get('id')} | {g.get('team1')} vs {g.get('team2')} ({g.get('league')})"
+            for g in candidate_games
+        ])
+
+        items_str = "\n".join([f"{i+1}. PICK: '{txt}' (League: {lg})" for i, (txt, lg) in enumerate(items)])
+
+        prompt = f"""
+You are a sports betting expert. Match the following list of picks to one of the games listed below.
+
+AVAILABLE GAMES:
+{game_list_str}
+
+UNRESOLVED PICKS:
+{items_str}
+
+INSTRUCTIONS:
+1. Try to match each pick to a game. Account for typos, nicknames, and aliases.
+2. If it clearly matches, provide the mapped Game ID and the resolved Standard Team Name.
+3. If no clear match exists, provide null.
+
+OUTPUT FORMAT:
+Return a JSON array of objects, EXACTLY ONE for each input pick, IN THE EXACT SAME ORDER.
+[
+    {{ "game_id": "string_id_from_list", "team": "Standard Team Name" }},
+    {{ "game_id": null, "team": null }}
+]
+"""
+        
+        try:
+            response = openrouter_completion(prompt, timeout=30)
+            if response:
+                text = response.replace("```json", "").replace("```", "").strip()
+                # find the first '[' to avoid leading conversational text
+                start_idx = text.find('[')
+                end_idx = text.rfind(']') + 1
+                if start_idx != -1 and end_idx != -1:
+                    text = text[start_idx:end_idx]
+                
+                data = json.loads(text)
+                
+                if isinstance(data, list):
+                    for i, (pick_text, league) in enumerate(items):
+                        if i >= len(data): break
+                        mapping = data[i]
+                        game_id = mapping.get("game_id")
+                        resolved_team = mapping.get("team")
+                        
+                        found_game = None
+                        if game_id:
+                            for g in candidate_games:
+                                if str(g.get("id")) == str(game_id):
+                                    found_game = g
+                                    break
+                                    
+                        if found_game and resolved_team:
+                            results[(pick_text, league)] = (found_game, resolved_team)
+                        else:
+                            results[(pick_text, league)] = None
+                return {item: results.get(item) for item in items}
+        except Exception as e:
+            logger.warning(f"Batch AI Resolve failed: {e}")
+
+        return {item: None for item in items}
+
+
+    @staticmethod
     def parse_pick(pick_text: str, league: str) -> Pick | None:
         """
         Parse a complex or natural language pick using AI.

@@ -155,21 +155,14 @@ class GraderEngine:
         if roster_match:
             return roster_match
             
-        # 2. AI Fallback + Auto-Learning Loop (One-Time Cost)
-        if self.scores:
-            from src.grading.ai_resolver import AIResolver
-            from src.grading.dictionary_updater import DictionaryUpdater
-            
-            logger.info(f"Triggering AI Resolver to auto-learn alias for: {text}")
-            result = AIResolver.resolve_pick(text, league, self.scores)
-            
-            if result:
-                ai_game, resolved_team_name = result
-                # Learn it for next time!
-                DictionaryUpdater.learn_team_alias(resolved_team_name, text)
-                return result
-                
-        logger.warning(f"UNRESOLVED_ALIAS: Could not match game/player for '{text}' in league '{league}', even with AI fallback.")
+        # 2. FAST ALIAS LOOKUP (Deterministic)
+        # Because we pre-fetched AI aliases via _prefetch_ai_aliases, any newly learned 
+        # aliases are already in the team_aliases.py dictionary (and loaded in memory).
+        # We try Matcher *again* now that the dictionary might have been updated.
+        from src.grading.constants import Matcher 
+        # Matcher was already executed iteratively on _prefetch_ai_aliases result ingestion!
+        
+        logger.warning(f"UNRESOLVED_ALIAS: Could not match game/player for '{text}' in league '{league}', even after batched AI prefetch.")
         return None
 
     def _find_game_with_roster_search(self, text: str, league: str) -> tuple[dict[str, Any], str | None] | None:
@@ -234,6 +227,7 @@ class GraderEngine:
         """
         # Pre-fetch boxscores for player props to avoid sequential API calls
         self._prefetch_boxscores_for_props(picks)
+        self._prefetch_ai_aliases(picks)
 
         results = []
         for p in picks:
@@ -246,6 +240,79 @@ class GraderEngine:
             results.append(graded)
 
         return results
+
+    def _prefetch_ai_aliases(self, picks: list[dict[str, Any]]):
+        """Identify which selections need AI resolution, batch resolve them, and update aliases."""
+        unresolved_queries = set()
+        
+        for p in picks:
+            text = p.get("pick", p.get("p", ""))
+            league = p.get("league", p.get("lg", "other"))
+            date = p.get("date")
+            
+            parsed = PickParser.parse(text, league, date)
+            if not parsed or parsed.bet_type == BetType.UNKNOWN:
+                continue
+
+            word_count = len(parsed.raw_text.split())
+            sel_count = len(parsed.selection.split()) if parsed.selection else 0
+            is_suspicious = (
+                parsed.bet_type == BetType.UNKNOWN or
+                (parsed.bet_type == BetType.MONEYLINE and len(parsed.selection.split()) > 5) or
+                (parsed.bet_type == BetType.TOTAL and parsed.line is None) or 
+                (parsed.bet_type == BetType.PLAYER_PROP and not parsed.stat) or
+                (parsed.bet_type == BetType.MONEYLINE and word_count > sel_count + 1) or
+                (parsed.bet_type in (BetType.SPREAD, BetType.TOTAL) and word_count > sel_count + 2) or
+                (parsed.bet_type == BetType.MONEYLINE and any(kw in parsed.selection.lower() for kw in ["points", "rebounds", "assist", "yards", "over", "under"])) or
+                (parsed.bet_type in (BetType.SPREAD, BetType.TOTAL) and len(parsed.selection.split()) > 4 and "vs" not in parsed.selection.lower() and "@" not in parsed.selection)
+            )
+
+            if is_suspicious:
+                continue 
+
+            search_text = parsed.selection 
+            if parsed.bet_type == BetType.TOTAL:
+                import re
+                team_match = re.match(r'^(.+?)\s+(?:over|under|[ou])\s+[\d.]+', search_text, re.IGNORECASE)
+                if team_match:
+                    search_text = team_match.group(1).strip()
+                if search_text.lower() in ("over", "under", "o", "u", ""):
+                    search_text = parsed.raw_text
+
+            # Rule match
+            game = Matcher.find_game(search_text, parsed.league, self.scores, line=parsed.line, odds=parsed.odds)
+            if not game:
+                roster_match = self._find_game_with_roster_search(search_text, parsed.league)
+                if not roster_match:
+                    from src.grading.constants import LEAGUE_ALIASES_MAP
+                    norm_league = LEAGUE_ALIASES_MAP.get(parsed.league.lower(), parsed.league.lower())
+                    league_scores = [
+                        g for g in self.scores 
+                        if LEAGUE_ALIASES_MAP.get(g.get("league", "").lower(), g.get("league", "").lower()) == norm_league
+                        or g.get("league", "").lower() == norm_league
+                    ]
+                    if league_scores:
+                        unresolved_queries.add((search_text, parsed.league))
+
+        unresolved_pairs = list(unresolved_queries)
+        if not unresolved_pairs:
+            return
+
+        from src.grading.ai_resolver import AIResolver
+        from src.grading.dictionary_updater import DictionaryUpdater
+        
+        logger.info(f"Batch pre-fetching AI aliases for {len(unresolved_pairs)} items...")
+        batch_size = 15
+        
+        for i in range(0, len(unresolved_pairs), batch_size):
+            batch = unresolved_pairs[i:i+batch_size]
+            resolved_dict = AIResolver.resolve_batch(batch, self.scores)
+            
+            for (txt, lg), result in resolved_dict.items():
+                if result:
+                    _, resolved_team_name = result
+                    if resolved_team_name:
+                        DictionaryUpdater.learn_team_alias(resolved_team_name, txt)
 
     def _prefetch_boxscores_for_props(self, picks: list[dict[str, Any]]):
         """

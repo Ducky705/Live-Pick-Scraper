@@ -8,7 +8,9 @@
             "p": "Iowa State / NC State / Arizona / Arkansas",
             "od": 170,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa State ML: WIN / NC State ML: LOSS / Arizona ML: LOSS / Arkansas ML: WIN"
         }
     ],
     "message_32087": [
@@ -20,7 +22,9 @@
             "p": "Clemson +13.5",
             "od": -110,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Clemson Tigers 54.0 (+13.5=67.5) vs Duke Blue Devils 67.0"
         },
         {
             "id": 2,
@@ -30,7 +34,9 @@
             "p": "Navy +1.5",
             "od": -122,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Navy Midshipmen 84.0 (+1.5=85.5) vs Colgate Raiders 80.0"
         },
         {
             "id": 3,
@@ -40,7 +46,9 @@
             "p": "Kansas/Iowa State Over 142.5",
             "od": -108,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 130.0 vs 142.5"
         }
     ],
     "message_32084": [
@@ -52,7 +60,9 @@
             "p": "Miami Ohio -8.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Miami Hurricanes 77.0 (+-8.5=68.5) vs NC State Wolfpack 76.0"
         },
         {
             "id": 2,
@@ -62,7 +72,9 @@
             "p": "Manhattan",
             "od": -120,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 3,
@@ -72,7 +84,9 @@
             "p": "Ohio/Miami Ohio Over 163.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 153.0 vs 163.5"
         },
         {
             "id": 4,
@@ -82,7 +96,9 @@
             "p": "Sacred Heart +2.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Presbyterian Blue Hose 58.0 (+2.5=60.5) vs UNC Asheville Bulldogs 57.0"
         },
         {
             "id": 5,
@@ -92,7 +108,9 @@
             "p": "Wisconsin +1.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 6,
@@ -102,7 +120,9 @@
             "p": "Wisconsin",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 7,
@@ -112,7 +132,9 @@
             "p": "Ohio +11.5 / Akron ML",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Ohio: PENDING / Akron: PENDING"
         },
         {
             "id": 8,
@@ -122,7 +144,9 @@
             "p": "Boise State ML / Ohio +11.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Boise State ML: PENDING / Ohio: PENDING"
         },
         {
             "id": 9,
@@ -132,7 +156,9 @@
             "p": "Wisconsin +4",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 10,
@@ -142,7 +168,9 @@
             "p": "Akron -10.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 11,
@@ -152,7 +180,9 @@
             "p": "UNLV +12.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 12,
@@ -162,7 +192,9 @@
             "p": "Manhattan/Niagara Under 138.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 115.0 vs 138.5"
         },
         {
             "id": 13,
@@ -172,7 +204,9 @@
             "p": "George Washington",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Washington Huskies 69 - 57 Minnesota Golden Gophers"
         },
         {
             "id": 14,
@@ -182,7 +216,9 @@
             "p": "Pennsylvania",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 15,
@@ -192,7 +228,9 @@
             "p": "Wisconsin +4",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 16,
@@ -202,7 +240,9 @@
             "p": "Wisconsin +3.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         }
     ],
     "message_11211": [
@@ -214,7 +254,9 @@
             "p": "Iowa State -6",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-6.0=68.0) vs Kansas Jayhawks 56.0"
         }
     ],
     "message_11208": [
@@ -226,7 +268,9 @@
             "p": "Kansas +7.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Kansas Jayhawks 56.0 (+7.5=63.5) vs Iowa State Cyclones 74.0"
         },
         {
             "id": 2,
@@ -236,7 +280,9 @@
             "p": "Iowa St. -7",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+-7.0=50.0) vs Purdue Boilermakers 78.0"
         },
         {
             "id": 3,
@@ -246,7 +292,9 @@
             "p": "Providence +7.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Providence Friars 69.0 (+7.5=76.5) vs St. John's Red Storm 79.0"
         },
         {
             "id": 4,
@@ -256,7 +304,9 @@
             "p": "Miss Valley St. +17.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Mississippi Valley State Delta Devils 65.0 (+17.5=82.5) vs Alabama A&M Bulldogs 72.0"
         },
         {
             "id": 5,
@@ -266,7 +316,9 @@
             "p": "UT-Rio Grande Valley +2",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UT Rio Grande Valley Vaqueros 57.0 (+2.0=59.0) vs Stephen F. Austin Lumberjacks 66.0"
         },
         {
             "id": 6,
@@ -276,7 +328,9 @@
             "p": "New Haven Under 131.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 107.0 vs 131.5"
         },
         {
             "id": 7,
@@ -286,7 +340,9 @@
             "p": "Ohio St Under 148.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 136.0 vs 148.5"
         },
         {
             "id": 8,
@@ -296,7 +352,9 @@
             "p": "St Bonny Over 152.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 151.0 vs 152.5"
         },
         {
             "id": 9,
@@ -306,7 +364,9 @@
             "p": "Clemson +13.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Clemson Tigers 54.0 (+13.5=67.5) vs Duke Blue Devils 67.0"
         }
     ],
     "message_32103": [
@@ -318,7 +378,9 @@
             "p": "Grand Canyon -11.5",
             "od": -110,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 2,
@@ -328,7 +390,9 @@
             "p": "UT Rio Grande -1.5",
             "od": -110,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UT Rio Grande Valley Vaqueros 57.0 (+-1.5=55.5) vs Stephen F. Austin Lumberjacks 66.0"
         },
         {
             "id": 3,
@@ -338,7 +402,9 @@
             "p": "Missouri -1.5",
             "od": -110,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Missouri Tigers 68.0 (+-1.5=66.5) vs Texas Longhorns 85.0"
         },
         {
             "id": 4,
@@ -348,7 +414,9 @@
             "p": "Pacific +7.5",
             "od": -110,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Pacific Tigers 61.0 (+7.5=68.5) vs Saint Mary's Gaels 72.0"
         }
     ],
     "message_11209": [
@@ -360,7 +428,9 @@
             "p": "Bryce Hopkins over 15.5 points",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Bryce Hopkins pts: 9.0 vs 15.5"
         },
         {
             "id": 2,
@@ -370,7 +440,9 @@
             "p": "Amani Hansberry over 7.5 rebounds",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Amani Hansberry reb: 5.0 vs 7.5"
         },
         {
             "id": 3,
@@ -380,7 +452,9 @@
             "p": "Paul McNeil over 12.5 points",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Paul McNeil Jr. pts: 14.0 vs 12.5"
         },
         {
             "id": 4,
@@ -390,7 +464,9 @@
             "p": "JT Toppin under 32.5 PRA",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 153.0 vs 32.5"
         },
         {
             "id": 5,
@@ -400,7 +476,9 @@
             "p": "Iowa State -7",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-7.0=67.0) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 6,
@@ -410,7 +488,9 @@
             "p": "Kentucky/Florida O154.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Kentucky ML: LOSS / Florida O154.5: WIN"
         },
         {
             "id": 7,
@@ -420,7 +500,9 @@
             "p": "NC State -5.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-5.5=70.5) vs Miami Hurricanes 77.0"
         },
         {
             "id": 8,
@@ -430,7 +512,9 @@
             "p": "Iowa +2.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+2.5=59.5) vs Purdue Boilermakers 78.0"
         },
         {
             "id": 9,
@@ -440,7 +524,9 @@
             "p": "S Carolina/Alabama O167.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "S Carolina ML: PENDING / Alabama O167.5: WIN"
         },
         {
             "id": 10,
@@ -450,7 +536,9 @@
             "p": "Minnesota/Washington O138.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Minnesota ML: LOSS / Washington O138.5: WIN"
         },
         {
             "id": 11,
@@ -460,7 +548,9 @@
             "p": "Montana State/Montana O144.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Montana State ML: WIN / Montana O144.5: LOSS"
         }
     ],
     "message_32093": [
@@ -472,7 +562,9 @@
             "p": "Nebraska -12.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Nebraska Cornhuskers 68.0 (+-12.5=55.5) vs Northwestern Wildcats 49.0"
         },
         {
             "id": 2,
@@ -482,7 +574,9 @@
             "p": "Iowa St. -5.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+-5.5=51.5) vs Purdue Boilermakers 78.0"
         },
         {
             "id": 3,
@@ -492,7 +586,9 @@
             "p": "NC St. -5.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 4,
@@ -502,7 +598,9 @@
             "p": "Ohio St. +4.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 5,
@@ -512,7 +610,9 @@
             "p": "Finland TT over 3.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 150.0 vs 3.5"
         },
         {
             "id": 6,
@@ -522,7 +622,9 @@
             "p": "USA TT over 4.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 180.0 vs 4.5"
         },
         {
             "id": 7,
@@ -532,7 +634,9 @@
             "p": "Clemson +13",
             "od": -105,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PUSH",
+            "grading_details": "Clemson Tigers 54.0 (+13.0=67.0) vs Duke Blue Devils 67.0"
         },
         {
             "id": 8,
@@ -542,7 +646,9 @@
             "p": "St Johns -8",
             "od": -115,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "St. John's Red Storm 79.0 (+-8.0=71.0) vs Providence Friars 69.0"
         },
         {
             "id": 9,
@@ -552,7 +658,9 @@
             "p": "Villanova -3.5",
             "od": -110,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Villanova Wildcats 80.0 (+-3.5=76.5) vs Creighton Bluejays 69.0"
         },
         {
             "id": 10,
@@ -562,7 +670,9 @@
             "p": "St Bonaventure",
             "od": -130,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "St. Bonaventure Bonnies 73 - 78 Duquesne Dukes"
         },
         {
             "id": 11,
@@ -572,7 +682,9 @@
             "p": "Idaho -6.5",
             "od": -115,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Idaho Vandals 99.0 (+-6.5=92.5) vs Idaho State Bengals 69.0"
         },
         {
             "id": 12,
@@ -582,7 +694,9 @@
             "p": "South Dakota St -5.5",
             "od": -105,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "South Dakota State Jackrabbits 87.0 (+-5.5=81.5) vs Oral Roberts Golden Eagles 69.0"
         },
         {
             "id": 13,
@@ -592,7 +706,9 @@
             "p": "St. Mary's -8.5",
             "od": -105,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         }
     ],
     "message_11204": [
@@ -604,7 +720,9 @@
             "p": "Busan KCC Egis -5.5",
             "od": -118,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UNC Asheville Bulldogs 57.0 (+-5.5=51.5) vs Presbyterian Blue Hose 58.0"
         },
         {
             "id": 2,
@@ -614,7 +732,9 @@
             "p": "Wonju DB Promy +6",
             "od": -115,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 3,
@@ -624,7 +744,9 @@
             "p": "Daegu KOGAS TT o83.5",
             "od": -110,
             "u": 0.75,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         }
     ],
     "message_32089": [
@@ -636,7 +758,9 @@
             "p": "Oklahoma",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Oklahoma Sooners 94 - 78 Georgia Bulldogs"
         },
         {
             "id": 2,
@@ -646,7 +770,9 @@
             "p": "USA/Denmark Over 6.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 180.0 vs 6.5"
         },
         {
             "id": 3,
@@ -656,7 +782,9 @@
             "p": "Providence +7.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Providence Friars 69.0 (+7.5=76.5) vs St. John's Red Storm 79.0"
         },
         {
             "id": 4,
@@ -666,7 +794,9 @@
             "p": "Kansas +6.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Kansas Jayhawks 56.0 (+6.5=62.5) vs Iowa State Cyclones 74.0"
         },
         {
             "id": 5,
@@ -676,7 +806,9 @@
             "p": "UNC -11.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "North Carolina Tar Heels 79.0 (+-11.5=67.5) vs Pittsburgh Panthers 65.0"
         },
         {
             "id": 6,
@@ -686,7 +818,9 @@
             "p": "Arizona over 156.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 153.0 vs 156.5"
         },
         {
             "id": 7,
@@ -696,7 +830,9 @@
             "p": "Texas",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Missouri Tigers 68 - 85 Texas Longhorns"
         },
         {
             "id": 8,
@@ -706,7 +842,9 @@
             "p": "Virginia Tech ML / St Marys ML",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Virginia Tech ML: PENDING / St Marys ML: PENDING"
         },
         {
             "id": 9,
@@ -716,7 +854,9 @@
             "p": "Arizona -8.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75.0 (+-8.5=66.5) vs Texas Tech Red Raiders 78.0"
         },
         {
             "id": 10,
@@ -726,7 +866,9 @@
             "p": "Tennessee St",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Morehead State Eagles 94 - 86 Tennessee State Tigers"
         },
         {
             "id": 11,
@@ -736,7 +878,9 @@
             "p": "Devin Booker Win 3pt content",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 12,
@@ -746,7 +890,9 @@
             "p": "Jason Hayes Win Slam Dunk",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75 - 78 Texas Tech Red Raiders"
         }
     ],
     "message_32104": [
@@ -758,7 +904,9 @@
             "p": "Missouri -2",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Missouri Tigers 68.0 (+-2.0=66.0) vs Texas Longhorns 85.0"
         },
         {
             "id": 2,
@@ -768,7 +916,9 @@
             "p": "South Carolina/Alabama Over 167.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 164.0 vs 167.5"
         }
     ],
     "message_2022722061203050528": [
@@ -780,7 +930,9 @@
             "p": "Iowa State -6",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-6.0=68.0) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 2,
@@ -790,7 +942,9 @@
             "p": "Iowa State -7",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-7.0=67.0) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 3,
@@ -800,7 +954,9 @@
             "p": "Kentucky/Florida o154.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Kentucky ML: LOSS / Florida o154.5: WIN"
         },
         {
             "id": 4,
@@ -810,7 +966,9 @@
             "p": "NC State -5.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-5.5=70.5) vs Miami Hurricanes 77.0"
         },
         {
             "id": 5,
@@ -820,7 +978,9 @@
             "p": "Iowa +2.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+2.5=59.5) vs Purdue Boilermakers 78.0"
         },
         {
             "id": 6,
@@ -830,7 +990,9 @@
             "p": "S Carolina/Alabama o167.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "S Carolina ML: PENDING / Alabama o167.5: WIN"
         },
         {
             "id": 7,
@@ -840,7 +1002,9 @@
             "p": "Minnesota/Washington o138.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Minnesota ML: LOSS / Washington o138.5: WIN"
         },
         {
             "id": 8,
@@ -850,7 +1014,9 @@
             "p": "Montana State/Montana o144.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Montana State ML: WIN / Montana o144.5: LOSS"
         },
         {
             "id": 9,
@@ -860,7 +1026,9 @@
             "p": "Michigan Wolverines -15.5",
             "od": -110,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Michigan Wolverines 86.0 (+-15.5=70.5) vs UCLA Bruins 56.0"
         },
         {
             "id": 10,
@@ -870,7 +1038,9 @@
             "p": "Iowa State Cyclones -5.5",
             "od": -120,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-5.5=68.5) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 11,
@@ -880,7 +1050,9 @@
             "p": "Florida Gators -12.5",
             "od": -110,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Florida Gators 92.0 (+-12.5=79.5) vs Kentucky Wildcats 83.0"
         },
         {
             "id": 12,
@@ -890,7 +1062,9 @@
             "p": "Oregon Ducks -6.5",
             "od": -110,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Oregon Ducks 83.0 (+-6.5=76.5) vs Penn State Nittany Lions 72.0"
         },
         {
             "id": 13,
@@ -900,7 +1074,9 @@
             "p": "NC State Wolfpack -5.5",
             "od": -105,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-5.5=70.5) vs Miami Hurricanes 77.0"
         },
         {
             "id": 14,
@@ -910,7 +1086,9 @@
             "p": "Wyoming Cowboys +5",
             "od": -112,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Oklahoma State Cowboys 92.0 (+5.0=97.0) vs TCU Horned Frogs 95.0"
         }
     ],
     "message_2022723151348797743": [
@@ -922,7 +1100,9 @@
             "p": "Etcheverry +3",
             "od": -124,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PUSH",
+            "grading_details": "Arizona Wildcats 75.0 (+3.0=78.0) vs Texas Tech Red Raiders 78.0"
         },
         {
             "id": 2,
@@ -932,7 +1112,9 @@
             "p": "Shelton ML + Aliassime ML",
             "od": 135,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Pierre-Hugues Herbert: WIN / Pierre-Hugues Herbert: WIN"
         },
         {
             "id": 3,
@@ -942,7 +1124,9 @@
             "p": "Francisco Cerundolo",
             "od": -179,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 4,
@@ -952,7 +1136,9 @@
             "p": "Francisco Cerubdolo -2.5 games",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75.0 (+-2.5=72.5) vs Texas Tech Red Raiders 78.0"
         },
         {
             "id": 5,
@@ -962,7 +1148,9 @@
             "p": "Shapovalov +3",
             "od": -165,
             "u": 6.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PUSH",
+            "grading_details": "Arizona Wildcats 75.0 (+3.0=78.0) vs Texas Tech Red Raiders 78.0"
         },
         {
             "id": 6,
@@ -972,7 +1160,9 @@
             "p": "Shapovalov",
             "od": 157,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 7,
@@ -982,7 +1172,8 @@
             "p": "Felix Auger-Aliassime",
             "od": -195,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "ERROR"
         },
         {
             "id": 8,
@@ -992,7 +1183,9 @@
             "p": "Schoolkate",
             "od": -125,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 9,
@@ -1002,7 +1195,8 @@
             "p": "Vallejo + Prizmic",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "ERROR"
         },
         {
             "id": 10,
@@ -1012,7 +1206,9 @@
             "p": "Mmoh",
             "od": 110,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 11,
@@ -1022,7 +1218,9 @@
             "p": "Faria",
             "od": 100,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 12,
@@ -1032,7 +1230,9 @@
             "p": "Karolina Muchova",
             "od": 110,
             "u": 0.75,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         }
     ],
     "message_2023061476768948236": [
@@ -1044,7 +1244,9 @@
             "p": "Iowa State ML / Wake Forest ML",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State ML: WIN / Wake Forest ML: WIN"
         },
         {
             "id": 2,
@@ -1054,7 +1256,9 @@
             "p": "Iowa Hawkeyes +2.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+2.5=59.5) vs Purdue Boilermakers 78.0"
         },
         {
             "id": 3,
@@ -1064,7 +1268,9 @@
             "p": "Virginia Cavs",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Ohio State Buckeyes 66 - 70 Virginia Cavaliers"
         },
         {
             "id": 4,
@@ -1074,7 +1280,9 @@
             "p": "Duke",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Duke Blue Devils 67 - 54 Clemson Tigers"
         },
         {
             "id": 5,
@@ -1084,7 +1292,9 @@
             "p": "Duke alternate -9.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Duke Blue Devils 67.0 (+-9.5=57.5) vs Clemson Tigers 54.0"
         }
     ],
     "message_2023058762936783245": [
@@ -1096,7 +1306,9 @@
             "p": "France / Canada OVER 7.5",
             "od": -142,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 173.0 vs 7.5"
         }
     ],
     "message_2023058714723250419": [
@@ -1108,7 +1320,9 @@
             "p": "San Francisco -3.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         }
     ],
     "message_2023057753657266312": [
@@ -1120,7 +1334,9 @@
             "p": "Marist",
             "od": -120,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "UNC Asheville Bulldogs 57 - 58 Presbyterian Blue Hose"
         },
         {
             "id": 2,
@@ -1130,7 +1346,9 @@
             "p": "Quinnipiac",
             "od": -120,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 3,
@@ -1140,7 +1358,9 @@
             "p": "Milwaukee",
             "od": -135,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "UNC Asheville Bulldogs 57 - 58 Presbyterian Blue Hose"
         }
     ],
     "message_2022813101574304229": [
@@ -1152,7 +1372,9 @@
             "p": "UNC Wilmington",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "UNC Wilmington Seahawks 70 - 66 Hofstra Pride"
         }
     ],
     "message_2022806281728200992": [
@@ -1164,7 +1386,9 @@
             "p": "Memphis Tigers +13.5",
             "od": null,
             "u": 0.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Grambling Tigers 79.0 (+13.5=92.5) vs Texas Southern Tigers 82.0"
         }
     ],
     "message_2022803270930960546": [
@@ -1176,7 +1400,9 @@
             "p": "TEXAS TECH/ARIZONA OVER 155.5",
             "od": -105,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 153.0 vs 155.5"
         }
     ],
     "message_2022803231118668208": [
@@ -1188,7 +1414,9 @@
             "p": "NC STATE -5.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-5.5=70.5) vs Miami Hurricanes 77.0"
         },
         {
             "id": 2,
@@ -1198,7 +1426,9 @@
             "p": "TEXAS TECH/ARIZONA OVER 155.5",
             "od": -105,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 153.0 vs 155.5"
         }
     ],
     "message_2022786483854156079": [
@@ -1210,7 +1440,9 @@
             "p": "Grand Canyon -11.5",
             "od": -110,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 2,
@@ -1220,7 +1452,9 @@
             "p": "UT Rio Grande -1.5",
             "od": -110,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UT Rio Grande Valley Vaqueros 57.0 (+-1.5=55.5) vs Stephen F. Austin Lumberjacks 66.0"
         },
         {
             "id": 3,
@@ -1230,7 +1464,9 @@
             "p": "Missouri -1.5",
             "od": -110,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Missouri Tigers 68.0 (+-1.5=66.5) vs Texas Longhorns 85.0"
         },
         {
             "id": 4,
@@ -1240,7 +1476,9 @@
             "p": "Pacific +7.5",
             "od": -110,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Pacific Tigers 61.0 (+7.5=68.5) vs Saint Mary's Gaels 72.0"
         }
     ],
     "message_2022747961508184413": [
@@ -1252,7 +1490,9 @@
             "p": "Duke / Clemson U134.5",
             "od": -120,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Duke ML: WIN / Clemson U134.5: LOSS"
         }
     ],
     "message_2022720997825073552": [
@@ -1264,7 +1504,9 @@
             "p": "NC STATE -5.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-5.5=70.5) vs Miami Hurricanes 77.0"
         },
         {
             "id": 2,
@@ -1274,7 +1516,9 @@
             "p": "IOWA STATE / NC STATE / ARIZONA / ARKANSAS",
             "od": 170,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "IOWA STATE ML: WIN / NC STATE ML: LOSS / ARIZONA ML: LOSS / ARKANSAS ML: WIN"
         }
     ],
     "message_2022717139854016649": [
@@ -1286,7 +1530,9 @@
             "p": "NC STATE -5.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-5.5=70.5) vs Miami Hurricanes 77.0"
         },
         {
             "id": 2,
@@ -1296,7 +1542,9 @@
             "p": "BAYLOR +6.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Baylor Bears 71.0 (+6.5=77.5) vs Louisville Cardinals 82.0"
         },
         {
             "id": 3,
@@ -1306,7 +1554,9 @@
             "p": "IOWA",
             "od": 105,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57 - 78 Purdue Boilermakers"
         }
     ],
     "message_2022872371963593133": [
@@ -1318,7 +1568,9 @@
             "p": "Czechia",
             "od": -135,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 2,
@@ -1328,7 +1580,9 @@
             "p": "Yastremska",
             "od": -115,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 3,
@@ -1338,7 +1592,9 @@
             "p": "Haley baptiste",
             "od": -110,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 4,
@@ -1348,7 +1604,9 @@
             "p": "Luidmilla Samsanova",
             "od": -130,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         }
     ],
     "message_2022718086558671024": [
@@ -1360,7 +1618,9 @@
             "p": "Oregon -6",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Oregon Ducks 83.0 (+-6.0=77.0) vs Penn State Nittany Lions 72.0"
         }
     ],
     "message_2022887457482477609": [
@@ -1372,7 +1632,8 @@
             "p": "D.Yastremska",
             "od": -110,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "ERROR"
         },
         {
             "id": 2,
@@ -1382,7 +1643,8 @@
             "p": "L.Samsonova",
             "od": -130,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "ERROR"
         },
         {
             "id": 3,
@@ -1392,7 +1654,9 @@
             "p": "M.Joint +1.5 (set)",
             "od": -140,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Invalid scores"
         },
         {
             "id": 4,
@@ -1402,7 +1666,9 @@
             "p": "L.Sun",
             "od": 155,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 5,
@@ -1412,7 +1678,8 @@
             "p": "Z.Sonmez",
             "od": 155,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "ERROR"
         },
         {
             "id": 6,
@@ -1422,7 +1689,9 @@
             "p": "Noskova/Krejcikova",
             "od": 100,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         }
     ],
     "message_2022854768251510851": [
@@ -1434,7 +1703,9 @@
             "p": "Texas Tech +10",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Texas Tech Red Raiders 78.0 (+10.0=88.0) vs Arizona Wildcats 75.0"
         }
     ],
     "message_2022715107491328233": [
@@ -1446,7 +1717,9 @@
             "p": "Georgia Tech +6",
             "od": -105,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Georgia Tech Yellow Jackets 74.0 (+6.0=80.0) vs Notre Dame Fighting Irish 89.0"
         }
     ],
     "message_2022723093211337144": [
@@ -1458,7 +1731,9 @@
             "p": "Iowa State -7",
             "od": -120,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-7.0=67.0) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 2,
@@ -1468,7 +1743,9 @@
             "p": "Iowa State ML / Oregon ML",
             "od": -135,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State ML: WIN / Oregon ML: WIN"
         }
     ],
     "message_2023057643858755760": [
@@ -1480,7 +1757,9 @@
             "p": "Ben Shelton",
             "od": 100,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75 - 78 Texas Tech Red Raiders"
         },
         {
             "id": 2,
@@ -1490,7 +1769,8 @@
             "p": "Cincinnati + Illinois + Northern Iowa",
             "od": -165,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "ERROR"
         },
         {
             "id": 3,
@@ -1500,7 +1780,9 @@
             "p": "Maryland +2.5",
             "od": -115,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         }
     ],
     "message_2023057702688010625": [
@@ -1512,7 +1794,9 @@
             "p": "Arkansas state",
             "od": -140,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arkansas State Red Wolves 88 - 92 South Alabama Jaguars"
         },
         {
             "id": 2,
@@ -1522,7 +1806,9 @@
             "p": "Oklahoma",
             "od": 105,
             "u": 0.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Oklahoma Sooners 94 - 78 Georgia Bulldogs"
         }
     ],
     "message_2023057675387384008": [
@@ -1534,7 +1820,9 @@
             "p": "Maryland/Rutgers U 144.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Maryland ML: PENDING / Rutgers U 144.5: WIN"
         },
         {
             "id": 2,
@@ -1544,7 +1832,9 @@
             "p": "Butler +2.5",
             "od": -102,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         }
     ],
     "message_2023057624682373166": [
@@ -1556,7 +1846,9 @@
             "p": "Southern Illinois -2.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Southern Jaguars 87.0 (+-2.5=84.5) vs Prairie View A&M Panthers 82.0"
         },
         {
             "id": 2,
@@ -1566,7 +1858,9 @@
             "p": "Oakland",
             "od": 116,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "UNC Asheville Bulldogs 57 - 58 Presbyterian Blue Hose"
         },
         {
             "id": 3,
@@ -1576,7 +1870,9 @@
             "p": "Illinois Chicago +1.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         }
     ],
     "message_2022715502976458894": [
@@ -1588,7 +1884,9 @@
             "p": "Prizmic ML / Boscardin +6.5",
             "od": null,
             "u": 10.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Pierre-Hugues Herbert: WIN / Pierre-Hugues Herbert: PENDING"
         },
         {
             "id": 2,
@@ -1598,7 +1896,9 @@
             "p": "Prizmic -3.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75.0 (+-3.5=71.5) vs Texas Tech Red Raiders 78.0"
         },
         {
             "id": 3,
@@ -1608,7 +1908,9 @@
             "p": "Boscardin +4.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Game not found"
         }
     ],
     "message_2023058787276402808": [
@@ -1620,7 +1922,8 @@
             "p": "F.Cerundolo",
             "od": -105,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "ERROR"
         },
         {
             "id": 2,
@@ -1630,7 +1933,8 @@
             "p": "T.Fritz",
             "od": -130,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "ERROR"
         }
     ],
     "message_2022885941262602713": [
@@ -1642,7 +1946,9 @@
             "p": "Sydney Kings -9.5",
             "od": -116,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75.0 (+-9.5=65.5) vs Texas Tech Red Raiders 78.0"
         },
         {
             "id": 2,
@@ -1652,7 +1958,9 @@
             "p": "Daegu KOGAS Pegasus -3",
             "od": -120,
             "u": 1.25,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Presbyterian Blue Hose 58.0 (+-3.0=55.0) vs UNC Asheville Bulldogs 57.0"
         },
         {
             "id": 3,
@@ -1662,7 +1970,9 @@
             "p": "Anyang KGC/Seoul SK Knights under 149.5",
             "od": -115,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 141.0 vs 149.5"
         }
     ],
     "message_2023057450811740225": [
@@ -1674,7 +1984,9 @@
             "p": "Yibing Wu",
             "od": -105,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 2,
@@ -1684,7 +1996,9 @@
             "p": "Thiago Monteiro",
             "od": 115,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75 - 78 Texas Tech Red Raiders"
         }
     ],
     "message_2023057730441802224": [
@@ -1696,7 +2010,9 @@
             "p": "FAA/De Minaur O22.5",
             "od": -115,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "FAA ML: VOID / Aleksandar Vukic: LOSS"
         },
         {
             "id": 2,
@@ -1706,7 +2022,9 @@
             "p": "Fritz",
             "od": -120,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 3,
@@ -1716,7 +2034,9 @@
             "p": "Darderi/Cerundolo O22.5",
             "od": -115,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Darderi ML: VOID / Pierre-Hugues Herbert: WIN"
         }
     ],
     "message_2023058737196413230": [
@@ -1728,7 +2048,9 @@
             "p": "USA Over 6.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 180.0 vs 6.5"
         },
         {
             "id": 2,
@@ -1738,7 +2060,9 @@
             "p": "Canada Over 7.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 173.0 vs 7.5"
         },
         {
             "id": 3,
@@ -1748,7 +2072,9 @@
             "p": "Robert Morris",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 4,
@@ -1758,7 +2084,9 @@
             "p": "Cleveland St Over 157.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 115.0 vs 157.5"
         },
         {
             "id": 5,
@@ -1768,7 +2096,9 @@
             "p": "Murray St",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 6,
@@ -1778,7 +2108,9 @@
             "p": "Illinois ML / Dayton ML",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Illinois ML: PENDING / Dayton: PENDING"
         },
         {
             "id": 7,
@@ -1788,7 +2120,9 @@
             "p": "Seton Hall",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 8,
@@ -1798,7 +2132,9 @@
             "p": "Seton Hall over 142.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Total: 115.0 vs 142.5"
         }
     ],
     "message_2022717682961772621": [
@@ -1810,7 +2146,9 @@
             "p": "Providence +8",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Providence Friars 69.0 (+8.0=77.0) vs St. John's Red Storm 79.0"
         },
         {
             "id": 2,
@@ -1820,7 +2158,9 @@
             "p": "Northwestern +13",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Northwestern Wildcats 49.0 (+13.0=62.0) vs Nebraska Cornhuskers 68.0"
         },
         {
             "id": 3,
@@ -1830,7 +2170,9 @@
             "p": "Memphis +13.5",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Memphis Tigers 75.0 (+13.5=88.5) vs Utah State Aggies 99.0"
         },
         {
             "id": 4,
@@ -1840,7 +2182,9 @@
             "p": "UCLA +16.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UCLA Bruins 56.0 (+16.5=72.5) vs Michigan Wolverines 86.0"
         },
         {
             "id": 5,
@@ -1850,7 +2194,9 @@
             "p": "Florida State +5.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Florida State Seminoles 92.0 (+5.5=97.5) vs Virginia Tech Hokies 69.0"
         },
         {
             "id": 6,
@@ -1860,7 +2206,9 @@
             "p": "Texas +2.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Texas Longhorns 85.0 (+2.5=87.5) vs Missouri Tigers 68.0"
         },
         {
             "id": 7,
@@ -1870,7 +2218,9 @@
             "p": "Kentucky +13.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Kentucky Wildcats 83.0 (+13.5=96.5) vs Florida Gators 92.0"
         }
     ],
     "message_2022915768921526438": [
@@ -1882,7 +2232,9 @@
             "p": "Sydney Kings -9.5",
             "od": -116,
             "u": 1.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UNC Asheville Bulldogs 57.0 (+-9.5=47.5) vs Presbyterian Blue Hose 58.0"
         },
         {
             "id": 2,
@@ -1892,7 +2244,9 @@
             "p": "Daegu KOGAS Pegasus -3",
             "od": -120,
             "u": 1.25,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Presbyterian Blue Hose 58.0 (+-3.0=55.0) vs UNC Asheville Bulldogs 57.0"
         },
         {
             "id": 3,
@@ -1902,7 +2256,9 @@
             "p": "Anyang KGC/Seoul SK Knights under 149.5",
             "od": -115,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 141.0 vs 149.5"
         },
         {
             "id": 4,
@@ -1912,7 +2268,9 @@
             "p": "SK Knights TT u74.5",
             "od": -110,
             "u": 0.75,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UCF Knights 67 - 74 West Virginia Mountaineers"
         },
         {
             "id": 5,
@@ -1922,7 +2280,9 @@
             "p": "Anyang KGC",
             "od": 100,
             "u": 0.5,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 6,
@@ -1932,7 +2292,9 @@
             "p": "Suwon Sonicboom +2.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Presbyterian Blue Hose 58.0 (+2.5=60.5) vs UNC Asheville Bulldogs 57.0"
         },
         {
             "id": 7,
@@ -1942,7 +2304,9 @@
             "p": "Syndey Kings Vs Perth wildcats under 187",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 153.0 vs 187.0"
         }
     ],
     "message_2022723805852860664": [
@@ -1954,7 +2318,9 @@
             "p": "Providence +8",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Providence Friars 69.0 (+8.0=77.0) vs St. John's Red Storm 79.0"
         },
         {
             "id": 2,
@@ -1964,7 +2330,9 @@
             "p": "Northwestern +13",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Northwestern Wildcats 49.0 (+13.0=62.0) vs Nebraska Cornhuskers 68.0"
         },
         {
             "id": 3,
@@ -1974,7 +2342,9 @@
             "p": "Memphis +13.5",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Memphis Tigers 75.0 (+13.5=88.5) vs Utah State Aggies 99.0"
         },
         {
             "id": 4,
@@ -1984,7 +2354,9 @@
             "p": "UCLA +16.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UCLA Bruins 56.0 (+16.5=72.5) vs Michigan Wolverines 86.0"
         },
         {
             "id": 5,
@@ -1994,7 +2366,9 @@
             "p": "Florida State +5.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Florida State Seminoles 92.0 (+5.5=97.5) vs Virginia Tech Hokies 69.0"
         },
         {
             "id": 6,
@@ -2004,7 +2378,9 @@
             "p": "Texas +2.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Texas Longhorns 85.0 (+2.5=87.5) vs Missouri Tigers 68.0"
         },
         {
             "id": 7,
@@ -2014,7 +2390,9 @@
             "p": "Kentucky +13.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Kentucky Wildcats 83.0 (+13.5=96.5) vs Florida Gators 92.0"
         },
         {
             "id": 8,
@@ -2024,7 +2402,9 @@
             "p": "Iowa State ML / Wake Forest ML",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State ML: WIN / Wake Forest ML: WIN"
         },
         {
             "id": 9,
@@ -2034,7 +2414,9 @@
             "p": "Iowa Hawkeyes +2.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+2.5=59.5) vs Purdue Boilermakers 78.0"
         },
         {
             "id": 10,
@@ -2044,7 +2426,9 @@
             "p": "Iowa State ML / Virginia Cavs ML",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State ML: WIN / Virginia Cavs ML: WIN"
         },
         {
             "id": 11,
@@ -2054,7 +2438,9 @@
             "p": "Wake Forest ML / Duke ML",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Wake Forest ML: WIN / Duke ML: WIN"
         },
         {
             "id": 12,
@@ -2064,7 +2450,9 @@
             "p": "Duke alt -9.5 / Providence alt +11.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Duke alt: WIN / Providence alt: WIN"
         },
         {
             "id": 13,
@@ -2074,7 +2462,9 @@
             "p": "Duke alt -9.5 / Northwestern +17.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Duke alt: WIN / Northwestern: LOSS"
         },
         {
             "id": 14,
@@ -2084,7 +2474,9 @@
             "p": "Iowa +2.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+2.5=59.5) vs Purdue Boilermakers 78.0"
         }
     ],
     "message_2022719990902985152": [
@@ -2096,7 +2488,9 @@
             "p": "Vanderbilt -6.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Vanderbilt Commodores 82.0 (+-6.5=75.5) vs Texas A&M Aggies 69.0"
         },
         {
             "id": 2,
@@ -2106,7 +2500,9 @@
             "p": "North Carolina -11",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "North Carolina Tar Heels 79.0 (+-11.0=68.0) vs Pittsburgh Panthers 65.0"
         },
         {
             "id": 3,
@@ -2116,7 +2512,9 @@
             "p": "Marquette +2.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Marquette Golden Eagles 88.0 (+2.5=90.5) vs Xavier Musketeers 96.0"
         },
         {
             "id": 4,
@@ -2126,7 +2524,9 @@
             "p": "Florida -7.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Florida Gators 92.0 (+-7.5=84.5) vs Kentucky Wildcats 83.0"
         },
         {
             "id": 5,
@@ -2136,7 +2536,9 @@
             "p": "NC State -5.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-5.5=70.5) vs Miami Hurricanes 77.0"
         },
         {
             "id": 6,
@@ -2146,7 +2548,9 @@
             "p": "Arizona -9.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75.0 (+-9.5=65.5) vs Texas Tech Red Raiders 78.0"
         },
         {
             "id": 7,
@@ -2156,7 +2560,9 @@
             "p": "UConn 1H -9.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "1H: UConn Huskies 79.0+-9.5=69.5 vs Georgetown Hoyas 75.0"
         },
         {
             "id": 8,
@@ -2166,7 +2572,9 @@
             "p": "Utah State -13.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Utah State Aggies 99.0 (+-13.5=85.5) vs Memphis Tigers 75.0"
         },
         {
             "id": 9,
@@ -2176,7 +2584,9 @@
             "p": "Clemson +13",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PUSH",
+            "grading_details": "Clemson Tigers 54.0 (+13.0=67.0) vs Duke Blue Devils 67.0"
         },
         {
             "id": 10,
@@ -2186,7 +2596,9 @@
             "p": "Iowa State -6",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-6.0=68.0) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 11,
@@ -2196,7 +2608,9 @@
             "p": "NC State -5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-5.0=71.0) vs Miami Hurricanes 77.0"
         },
         {
             "id": 12,
@@ -2206,7 +2620,9 @@
             "p": "Purdue",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa Hawkeyes 57 - 78 Purdue Boilermakers"
         },
         {
             "id": 13,
@@ -2216,7 +2632,9 @@
             "p": "Clemson +13.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Clemson Tigers 54.0 (+13.5=67.5) vs Duke Blue Devils 67.0"
         },
         {
             "id": 14,
@@ -2226,7 +2644,9 @@
             "p": "Ohio State +4.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Ohio State Buckeyes 66.0 (+4.5=70.5) vs Virginia Cavaliers 70.0"
         },
         {
             "id": 15,
@@ -2236,7 +2656,9 @@
             "p": "Iowa State -4.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-4.5=69.5) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 16,
@@ -2246,7 +2668,9 @@
             "p": "Florida -11.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Florida Gators 92.0 (+-11.5=80.5) vs Kentucky Wildcats 83.0"
         }
     ],
     "message_2022911896568107480": [
@@ -2258,7 +2682,9 @@
             "p": "Sweden 1P -0.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 2,
@@ -2268,7 +2694,9 @@
             "p": "Sweden TT o3.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74 - 56 Kansas Jayhawks"
         },
         {
             "id": 3,
@@ -2278,7 +2706,9 @@
             "p": "Sweden -2.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75.0 (+-2.5=72.5) vs Texas Tech Red Raiders 78.0"
         }
     ],
     "message_2022748343601148194": [
@@ -2290,7 +2720,9 @@
             "p": "Long Island/New Haven u131.5",
             "od": -105,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Long Island ML: LOSS / New Haven u131.5: WIN"
         },
         {
             "id": 2,
@@ -2300,7 +2732,9 @@
             "p": "Virginia/Ohio St u148.5",
             "od": -105,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Virginia ML: WIN / Ohio St u148.5: PENDING"
         },
         {
             "id": 3,
@@ -2310,7 +2744,9 @@
             "p": "Duquesne/St Bonaventure o152.5",
             "od": -110,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Duquesne ML: WIN / St Bonaventure o152.5: LOSS"
         }
     ],
     "message_2022746497536950293": [
@@ -2322,7 +2758,9 @@
             "p": "Iowa St. -7",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+-7.0=50.0) vs Purdue Boilermakers 78.0"
         },
         {
             "id": 2,
@@ -2332,7 +2770,9 @@
             "p": "Providence +7.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Providence Friars 69.0 (+7.5=76.5) vs St. John's Red Storm 79.0"
         },
         {
             "id": 3,
@@ -2342,7 +2782,9 @@
             "p": "Mississippi Valley St. +17.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Mississippi Valley State Delta Devils 65.0 (+17.5=82.5) vs Alabama A&M Bulldogs 72.0"
         },
         {
             "id": 4,
@@ -2352,7 +2794,9 @@
             "p": "UT-Rio Grande Valley +2",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UT Rio Grande Valley Vaqueros 57.0 (+2.0=59.0) vs Stephen F. Austin Lumberjacks 66.0"
         },
         {
             "id": 5,
@@ -2362,7 +2806,9 @@
             "p": "N. Colorado -3.5",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 6,
@@ -2372,7 +2818,9 @@
             "p": "UTEP +6.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 7,
@@ -2382,7 +2830,9 @@
             "p": "Louisiana-Monroe +13",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "UL Monroe Warhawks 84.0 (+13.0=97.0) vs Texas State Bobcats 95.0"
         },
         {
             "id": 8,
@@ -2392,7 +2842,9 @@
             "p": "Baylor +6.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Baylor Bears 71.0 (+6.5=77.5) vs Louisville Cardinals 82.0"
         },
         {
             "id": 9,
@@ -2402,7 +2854,9 @@
             "p": "Air Force +16.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 10,
@@ -2412,7 +2866,9 @@
             "p": "LSU +14.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "LSU Tigers 63.0 (+14.5=77.5) vs Tennessee Volunteers 73.0"
         },
         {
             "id": 11,
@@ -2422,7 +2878,9 @@
             "p": "Ohio St. +4.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 12,
@@ -2432,7 +2890,9 @@
             "p": "James Madison +1.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "James Madison Dukes 69.0 (+1.5=70.5) vs App State Mountaineers 58.0"
         },
         {
             "id": 13,
@@ -2442,7 +2902,9 @@
             "p": "Coppin St. +11",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Coppin State Eagles 58.0 (+11.0=69.0) vs North Carolina Central Eagles 56.0"
         },
         {
             "id": 14,
@@ -2452,7 +2914,9 @@
             "p": "Santa Clara +5.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Santa Clara Broncos 86.0 (+5.5=91.5) vs Gonzaga Bulldogs 94.0"
         }
     ],
     "message_2022745723666927842": [
@@ -2464,7 +2928,9 @@
             "p": "Providence Friars +7.5",
             "od": -112,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Providence Friars 69.0 (+7.5=76.5) vs St. John's Red Storm 79.0"
         },
         {
             "id": 2,
@@ -2474,7 +2940,9 @@
             "p": "Fordham Rams +5.5",
             "od": -102,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Fordham Rams 70.0 (+5.5=75.5) vs Rhode Island Rams 66.0"
         },
         {
             "id": 3,
@@ -2484,7 +2952,9 @@
             "p": "Northwestern Wildcats +12.5",
             "od": -102,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Northwestern Wildcats 49.0 (+12.5=61.5) vs Nebraska Cornhuskers 68.0"
         },
         {
             "id": 4,
@@ -2494,7 +2964,9 @@
             "p": "Texas A&M/Vanderbilt o165.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Texas A&M ML: PENDING / Vanderbilt o165.5: WIN"
         }
     ],
     "message_2022744131156750372": [
@@ -2506,7 +2978,9 @@
             "p": "Kon Knueppel +350",
             "od": 350,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "UNC Asheville Bulldogs 57 - 58 Presbyterian Blue Hose"
         }
     ],
     "message_2022539191931035843": [
@@ -2518,7 +2992,9 @@
             "p": "Sweden 1P -0.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 2,
@@ -2528,7 +3004,9 @@
             "p": "Sweden TT o3.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74 - 56 Kansas Jayhawks"
         },
         {
             "id": 3,
@@ -2538,7 +3016,9 @@
             "p": "Sweden -2.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         }
     ],
     "message_2022746697408111012": [
@@ -2550,7 +3030,9 @@
             "p": "Texas A&M +7.5",
             "od": -110,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 2,
@@ -2560,7 +3042,9 @@
             "p": "Oklahoma -1.5",
             "od": -105,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Oklahoma Sooners 94.0 (+-1.5=92.5) vs Georgia Bulldogs 78.0"
         }
     ],
     "message_2022744246940483984": [
@@ -2572,7 +3056,9 @@
             "p": "Iowa State -6.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-6.5=67.5) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 2,
@@ -2582,7 +3068,9 @@
             "p": "Villanova -3.5",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Villanova Wildcats 80.0 (+-3.5=76.5) vs Creighton Bluejays 69.0"
         }
     ],
     "message_2022745462697267344": [
@@ -2594,7 +3082,9 @@
             "p": "Arizona -9.0",
             "od": -115,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75.0 (+-9.0=66.0) vs Texas Tech Red Raiders 78.0"
         },
         {
             "id": 2,
@@ -2604,7 +3094,9 @@
             "p": "Iowa State -7.0",
             "od": -120,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-7.0=67.0) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 3,
@@ -2614,7 +3106,9 @@
             "p": "Samford/East Tenn State u146.0",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Samford ML: WIN / East Tenn State u146.0: WIN"
         },
         {
             "id": 4,
@@ -2624,7 +3118,9 @@
             "p": "St. Francis PA +3.0",
             "od": -120,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         },
         {
             "id": 5,
@@ -2634,7 +3130,9 @@
             "p": "Wagner/Stonehill u130.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Wagner ML: WIN / Stonehill u130.5: LOSS"
         }
     ],
     "message_2022744367245726119": [
@@ -2646,7 +3144,9 @@
             "p": "NC Wilmington",
             "od": -145,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "VOID",
+            "grading_details": "Invalid: No betting structure (digits/keywords) found and not a known team alias"
         },
         {
             "id": 2,
@@ -2656,7 +3156,9 @@
             "p": "Connecticut -15.5",
             "od": null,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "PENDING",
+            "grading_details": "Could not resolve team"
         }
     ],
     "message_2022745028758769783": [
@@ -2668,7 +3170,9 @@
             "p": "Navy +1.5",
             "od": -120,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Navy Midshipmen 84.0 (+1.5=85.5) vs Colgate Raiders 80.0"
         },
         {
             "id": 2,
@@ -2678,7 +3182,9 @@
             "p": "Purdue",
             "od": -139,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa Hawkeyes 57 - 78 Purdue Boilermakers"
         }
     ],
     "message_2022744855928279468": [
@@ -2690,7 +3196,9 @@
             "p": "Marquette +3",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Marquette Golden Eagles 88.0 (+3.0=91.0) vs Xavier Musketeers 96.0"
         },
         {
             "id": 2,
@@ -2700,7 +3208,9 @@
             "p": "Iowa State -7",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State Cyclones 74.0 (+-7.0=67.0) vs Kansas Jayhawks 56.0"
         },
         {
             "id": 3,
@@ -2710,7 +3220,9 @@
             "p": "Syracuse +3.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Syracuse Orange 79.0 (+3.5=82.5) vs SMU Mustangs 78.0"
         },
         {
             "id": 4,
@@ -2720,7 +3232,9 @@
             "p": "Tartleton +3",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Tarleton State Texans 59.0 (+3.0=62.0) vs Abilene Christian Wildcats 73.0"
         }
     ],
     "message_2022815588335427935": [
@@ -2732,7 +3246,9 @@
             "p": "Hawaii/CS Northridge o162.5",
             "od": -105,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Hawaii ML: LOSS / CS Northridge o162.5: WIN"
         },
         {
             "id": 2,
@@ -2742,7 +3258,9 @@
             "p": "Saint Marys CA/Pacific u135.5",
             "od": -110,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Saint Marys CA ML: WIN / Pacific u135.5: LOSS"
         }
     ],
     "message_2022746562775126051": [
@@ -2754,7 +3272,9 @@
             "p": "Oklahoma State -1.5",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Oklahoma State Cowboys 92.0 (+-1.5=90.5) vs TCU Horned Frogs 95.0"
         },
         {
             "id": 2,
@@ -2764,7 +3284,9 @@
             "p": "NC State -5.5",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-5.5=70.5) vs Miami Hurricanes 77.0"
         },
         {
             "id": 3,
@@ -2774,7 +3296,9 @@
             "p": "Arizona -9.5",
             "od": null,
             "u": 3.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Arizona Wildcats 75.0 (+-9.5=65.5) vs Texas Tech Red Raiders 78.0"
         }
     ],
     "message_2022747307297653012": [
@@ -2786,7 +3310,9 @@
             "p": "NC State -4",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "NC State Wolfpack 76.0 (+-4.0=72.0) vs Miami Hurricanes 77.0"
         },
         {
             "id": 2,
@@ -2796,7 +3322,9 @@
             "p": "Iowa +1.5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+1.5=58.5) vs Purdue Boilermakers 78.0"
         },
         {
             "id": 3,
@@ -2806,7 +3334,9 @@
             "p": "UT Rio Grande Valley",
             "od": null,
             "u": 2.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "UT Rio Grande Valley Vaqueros 57 - 66 Stephen F. Austin Lumberjacks"
         },
         {
             "id": 4,
@@ -2816,7 +3346,9 @@
             "p": "Wichita State",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Wichita State Shockers 81 - 77 Tulsa Golden Hurricane"
         },
         {
             "id": 5,
@@ -2826,7 +3358,9 @@
             "p": "Santa Clara +6",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Santa Clara Broncos 86.0 (+6.0=92.0) vs Gonzaga Bulldogs 94.0"
         },
         {
             "id": 6,
@@ -2836,7 +3370,9 @@
             "p": "Iowa State ML + Florida -5",
             "od": null,
             "u": 1.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Iowa State ML: WIN / Florida: WIN"
         }
     ],
     "message_2022747948564746548": [
@@ -2848,7 +3384,9 @@
             "p": "Georgia St./Old Dominion o147.5",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "ERROR",
+            "grading_details": "'NoneType' object has no attribute 'raw_text'"
         },
         {
             "id": 2,
@@ -2858,7 +3396,9 @@
             "p": "Iowa +1.5",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Iowa Hawkeyes 57.0 (+1.5=58.5) vs Purdue Boilermakers 78.0"
         },
         {
             "id": 3,
@@ -2868,7 +3408,9 @@
             "p": "Loyola Marymount/Pepperdine u146.5",
             "od": null,
             "u": 4.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "LOSS",
+            "grading_details": "Loyola Marymount ML: LOSS / Pepperdine u146.5: WIN"
         }
     ],
     "message_2022463511868379227": [
@@ -2880,7 +3422,9 @@
             "p": "MICHIGAN STATE VS WISCONSIN UNDER 148.5",
             "od": -112,
             "u": 5.0,
-            "dt": "2026-02-14"
+            "dt": "2026-02-14",
+            "grade": "WIN",
+            "grading_details": "Total: 142.0 vs 148.5"
         }
     ]
 }

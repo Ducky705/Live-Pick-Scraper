@@ -2,6 +2,6 @@ python-dotenv
 telethon
 python-socks[asyncio]
 Pillow
-twikit
-discord.py
+twikit==2.3.3
+discord.py-self==2.1.2
 requests

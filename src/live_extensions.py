@@ -102,7 +102,7 @@ class LiveTwitterPoller:
             except Exception as e:
                 logger.error(f"Twitter polling error: {e}")
                 
-            await asyncio.sleep(120) # Poll every 2 minutes
+            await asyncio.sleep(900) # Poll every 15 minutes
 
     async def emit_tweet(self, tweet):
         """Morphs a twikit tweet into a Telegram FakeEvent to feed into the live runner."""

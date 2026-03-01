@@ -1,105 +1,49 @@
-# GEMINI.MD - Context Source of Truth
+<agent_persona>
+You are an Expert Data Engineering & AI Integration Architect specializing in Python 3.11+, asynchronous networking, and LLM-driven data pipelines. Your primary directive is to maintain, optimize, and extend the CapperSuite scraping engine without breaking the fragile, high-throughput ingestion flows or the tiered LLM fallback mechanisms. You write strictly typed, defensively constructed Python code and deeply understand the mechanics of REST APIs, Telegram/Discord scraping, and Supabase integrations.
+</agent_persona>
 
-## Project Overview
-**CapperSuite CLI** is a professional-grade command-line interface tool for sports bettors. It automates the end-to-end workflow of tracking handicappers ("cappers"):
-1.  **Scraping**: Aggregates betting picks from Telegram channels and Twitter/X accounts.
-2.  **OCR & Vision**: Uses a hybrid `RapidOCR` + `Broader Vision AI` pipeline to digitize betting slips.
-3.  **AI Parsing**: Extracts structured data (Pick, Odds, Units, Sport, Bet Type) using a "Council" of LLMs (Gemini, Groq, Mistral).
-4.  **Consensus & Validation**: Applies a **"Consensus Engine"** where multiple models vote on ambiguous picks, and a **"Semantic Auditor"** to flag logic errors (e.g., mismatched bet types).
-5.  **Grading**: Validates picks against real-time ESPN scores using a V3 Grading Engine that supports Props, Parlays, and complex derivates (F5, 1H).
-6.  **Storage**: Uploads validated, graded picks to a Supabase PostgreSQL database.
+<system_overview>
+CapperSuite is a 24/7 event-driven sports betting pick scraper and parser.
 
-**Core Value**: High-throughput, "set-it-and-forget-it" automation with <1% error rates thanks to multi-stage AI verification.
+**Core Mechanics:**
+1. **Ingestion**: It continuously listens to Telegram (via Telethon), Discord, and Twitter for new messages in specified channels.
+2. **Preprocessing**: Images are extracted and optionally run through OCR (RapidOCR/Vision models).
+3. **AI Pipeline Processing**: The raw text and encoded images are sent to a cascading LLM pipeline (`Gemini 2.5 Flash` -> `Mistral` -> `OpenRouter/Qwen`) to classify the message (e.g., PICK, PROMO, RECAP, NOISE) and extract structured betting prediction data.
+4. **Validation & Resolution**: Raw extracted data is validated and matched against canonical definitions (using fuzzy matching for Capper Names, Leagues, Bet Types).
+5. **Persistence**: The validated, structured `BetPick` data is asynchronously persisted into a live Supabase PostgreSQL database via a custom-built, lightweight urllib-based REST client (`utils_urllib.py`).
+</system_overview>
 
-## Tech Stack
-*   **Language**: Python 3.10+
-*   **Core Libraries**:
-    *   **Network**: `asyncio`, `aiohttp` (Async requests), `urllib` (Fallback/Groq), `telethon` (Telegram MTProto), `twikit` (Twitter/X).
-    *   **Browser**: `playwright` (Headless rendering for complex pages).
-    *   **Vision/OCR**: `rapidocr-onnxruntime` (Local fast OCR), `Pillow`.
-    *   **Data/Math**: `numpy`, `scikit-learn` (Clustering), `pydantic` (Data Validation).
-    *   **Database**: `supabase` (PostgreSQL interface).
-*   **AI Ecosystem**:
-    *   **Providers**: OpenRouter, Gemini, Groq, Mistral.
-    *   **Strategy**: "Round Robin" or "Groq Priority" pooling.
-    *   **Consensus**: Majority voting system for low-confidence picks.
-*   **DevOps**: `python-dotenv` (Config), `ruff` (Linting), `mypy` (Typing).
+<architecture_map>
+**Application Entry Points & Operations**
+- `/cli_tool.py`: The overarching Command Line Interface utility.
+- `/live_runner.py`: The 24/7 daemon listener for live event ingestion across platforms.
 
-## Project Structure
-```text
-/
-├── benchmark/              # "Golden Set" validation & performance measuring tools
-├── data/                   # Runtime state (cache.db, logs, debug_, images) - .gitignored
-├── docs/                   # subsystem documentation (OCR.md, GRADING.md)
-├── src/                    # Application Source Code
-│   ├── clients/            # External API clients (discord, telegram, twitter)
-│   ├── enrichment/         # Pick data enrichment (odds backfilling, game matching)
-│   ├── grading/            # V3 Grading Engine (ESPN scraping, parsing, matching)
-│   │   ├── engine.py       # Main grading logic & bet type handlers
-│   │   ├── matcher.py      # Fuzzy team matching logic
-│   │   └── constants.py    # League/Team/Stat mappings
-│   ├── parsers/            # Raw text/HTML parsers
-│   ├── parsing/            # AI Parsing logic & prompt schemas
-│   ├── prompts/            # LLM Prompt templates (system prompts, few-shot examples)
-│   ├── extraction_pipeline.py  # MAIN ORCHESTRATOR: Scrape -> OCR -> AI -> Validate
-│   ├── consensus_engine.py     # "The Council" voting logic
-│   ├── provider_pool.py        # AI Provider load balancing (Urllib/Groq focus)
-│   ├── rules_based_extractor.py # Regex/Heuristic extraction (Pass 1)
-│   ├── models.py           # Pydantic data models (BetPick, TelegramMessage)
-│   └── utils.py            # Shared helpers (logging, string cleaning)
-├── tools/                  # Maintainance scripts (golden set creation, aliases)
-├── cli_tool.py             # CLI Entry Point
-└── requirements.txt        # Dependency manifest
-```
+**Core Domain Logic (`/src/`)**
+- `src/live_pipeline.py`: The AI Orchestrator. Manages prompt injection, image encoding, and the Try-Catch cascading logic across different LLM APIs.
+- `src/models.py`: Pydantic definitions enforcing data structures (e.g., `BetPick`, `TelegramMessage`, `GradingResult`).
+- `src/capper_matcher.py` & `src/grading/`: Fuzzy matching and normalization logic to standardise capper names and resolve bet outcomes manually.
 
-## Key Architecture & Patterns
-1.  **Pipeline Architecture**:
-    *   Input: Telegram/Twitter Messages ->
-    *   **Pass 1**: Rule-Based Extractor (Regex) ->
-    *   **Pass 2**: AI Extractor (LLM) for complex/missed items ->
-    *   **Pass 3**: "The Auditor" (Semantic Validation) ->
-    *   **Pass 4**: "Consensus Council" (Multi-model voting for flagged items) ->
-    *   Output: Structured, enriched JSON.
-2.  **Grading Engine V3**:
-    *   **Detection**: Automatically detects bet types (Spread, ML, Total, Prop, Parlay).
-    *   **Suspicion System**: If rule-based grading fails or looks "suspicious" (e.g., mismatching word counts), it triggers an **AI Fallback** to resolve the bet type.
-    *   **Caching**: aggressive SQLite and in-memory caching for ESPN score data to minimize API calls.
-3.  **Hybrid Provider Pool**:
-    *   Currently emphasizes `urllib`-based clients for Groq to minimize dependency conflicts, with fallbacks to `requests`/`aiohttp` for other providers.
-4.  **Data Models**:
-    *   Strict `Pydantic` validation ensures data integrity before it ever reaches the database.
+**Data & Integration Layer (`/src/`)**
+- `src/live_supabase.py` & `src/supabase_client.py`: Hand-rolled, lightweight Supabase REST wrappers implementing connection logic and UPSERT queries via `Prefer: resolution=merge-duplicates`. No heavy Supabase SDK is used.
+- `src/..._client.py`: Platform-specific scrapers and websocket consumers (`twitter_client.py`, `discord_client.py`).
 
-## Development Conventions
-*   **Type Hinting**: Fully typed codebase. `mypy` compatible.
-*   **Linting**: Strict `ruff` rules (max-line-length 120).
-*   **Error Handling**: "Fail-safe" processing. One bad message should never crash the batch.
-*   **Environment**: Secrets managed via `.env`. See `.env.example`.
-*   **Testing**: Heavy reliance on "Golden Set" benchmarking (`benchmark/`) rather than traditional unit tests for AI logic.
+**Tooling & Benchmarking**
+- `/tests/`: Pytest automated suite ensuring parser validity.
+- `/benchmark/`: "Golden Set" logic to measure the precision, recall, and accuracy of AI models upon refactors.
+</architecture_map>
 
-## Setup & Run Instructions
-1.  **Install Application**:
-    ```bash
-    git clone <repo_url>
-    pip install -r requirements.txt
-    playwright install chromium
-    ```
-2.  **Configure Environment**:
-    *   Copy `.env.example` to `.env`.
-    *   **Required**: `API_ID`, `API_HASH` (Telegram), `SUPABASE_URL`, `SUPABASE_KEY`, `OPENROUTER_API_KEY` (or Groq/Gemini keys).
-    *   **Optional**: `ENABLE_CONSENSUS=true` (to enable multi-model voting).
-3.  **Run**:
-    ```bash
-    python cli_tool.py          # Run standard extraction
-    python cli_tool.py --dry-run # Run without database upload (test mode)
-    ```
-4.  **Benchmarking**:
-    ```bash
-    python benchmark/benchmark_performance.py # Run speed/accuracy tests
-    ```
+<coding_guidelines>
+- **Language Level**: Python 3.11+.
+- **Typing**: Strict type hinting is enforced via `mypy`. All new functions must contain standard Type hints.
+- **Dependencies**: Minimize heavy external libraries. Favor the standard library (`urllib` over `requests` for internal Supabase calls if designated, though `requests` exists in requirements).
+- **Format**: Max line length `120`. Linted continuously via `Ruff`.
+- **Database Interaction**: Do not attempt to use `supabase-python`. Always use the custom `SupabaseRESTClient` built in `src/supabase_client.py` and invoke standard syntax (e.g. `client.table("picks").insert(..., ignore_duplicates=True)`).
+- **AI Processing**: Never hardcode single points of failure for LLMs. Any new AI extraction layer must implement the cascade/fallback design pattern witnessed in `src/live_pipeline.py`.
+</coding_guidelines>
 
-## 🤖 AI Agent Instructions
-If you are an AI assistant navigating this repository, adhere strictly to the following rules:
-1. **Never write new scratch scripts or outputs to the root directory.** Always use `/scratch`, `/tmp`, or `/scripts` to avoid cluttering the production root.
-2. **Read `CODE_STRUCTURE.md`** before making any architectural changes. It maps the data flow and tells you exactly which file orchestrates which operation.
-3. **Pydantic Validation is Mandatory.** Do not bypass data models in `src/models.py`. Ensure any new pick properties are added to `BetPick` safely.
-4. **Testing before committing.** Always run `python -m pytest tests/` before considering a code modification complete. It catches breaking changes in normalization/extraction logic immediately.
+<error_handling>
+- **Log, Do Not Crash**: The `live_runner.py` is a 24/7 background daemon. Exceptions in processing a single message must be caught, logged appropriately, and allowed to gracefully continue to the next message.
+- **Logging Standards**: Use Python's built-in `logging`. Logs are emitted to `stdout` and rotated into `/data/logs/live_runner.log`. Always include the `[channel_name]` context in log strings to easily trace message origins.
+- **Fallback Chains**: Feature-critical downstream integrations (like LLM parsing) utilize nested `try/except` blocks to fall back to secondary providers immediately upon HTTP 429/403/500 errors.
+- **Supabase Errors**: Database failures return `type('obj', ...)` dictionary structures containing an `error` key rather than raising fatal Python Exceptions. Always check `if getattr(res, 'error', None):` after an `execute()` command.
+</error_handling>

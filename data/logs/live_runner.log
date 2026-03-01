@@ -1,0 +1,444 @@
+2026-02-28 18:12:09,845 - telethon.network.mtprotostate - WARNING - Server resent the older message 7611980540866811905, ignoring
+2026-02-28 18:12:23,676 - telethon.network.mtprotostate - WARNING - Server resent the older message 7611980600347344897, ignoring
+2026-02-28 18:12:24,200 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:12:26,367 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:12:28,454 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:12:30,613 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:12:32,713 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:12:39,368 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:12:41,561 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:12:44,115 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:12:47,199 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:12:49,532 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:13:53,070 - telethon.network.mtprotostate - WARNING - Server resent the older message 7611980984263280641, ignoring
+2026-02-28 18:13:53,424 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] New message id=32311
+2026-02-28 18:13:53,424 - live_runner - INFO - [DRY-RUN] Would insert raw pick for FREE CAPPERS PICKS | 🔮
+2026-02-28 18:13:53,424 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Sending to AI for classification/extraction...
+2026-02-28 18:13:53,581 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:13:53,581 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Classified as ERROR_API. No picks saved.
+2026-02-28 18:13:55,588 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] New message id=32310
+2026-02-28 18:13:55,588 - live_runner - INFO - [DRY-RUN] Would insert raw pick for FREE CAPPERS PICKS | 🔮
+2026-02-28 18:13:55,588 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Sending to AI for classification/extraction...
+2026-02-28 18:13:55,651 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:13:55,651 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Classified as ERROR_API. No picks saved.
+2026-02-28 18:13:57,663 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] New message id=32309
+2026-02-28 18:13:57,663 - live_runner - INFO - [DRY-RUN] Would insert raw pick for FREE CAPPERS PICKS | 🔮
+2026-02-28 18:13:57,663 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Sending to AI for classification/extraction...
+2026-02-28 18:13:57,727 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:13:57,727 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Classified as ERROR_API. No picks saved.
+2026-02-28 18:13:59,736 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] New message id=32308
+2026-02-28 18:13:59,736 - live_runner - INFO - [DRY-RUN] Would insert raw pick for FREE CAPPERS PICKS | 🔮
+2026-02-28 18:13:59,736 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Sending to AI for classification/extraction...
+2026-02-28 18:13:59,921 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:13:59,921 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Classified as ERROR_API. No picks saved.
+2026-02-28 18:14:01,932 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] New message id=32307
+2026-02-28 18:14:01,933 - live_runner - INFO - [DRY-RUN] Would insert raw pick for FREE CAPPERS PICKS | 🔮
+2026-02-28 18:14:01,933 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Sending to AI for classification/extraction...
+2026-02-28 18:14:02,013 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:14:02,013 - live_runner - INFO - [FREE CAPPERS PICKS | 🔮] Classified as ERROR_API. No picks saved.
+2026-02-28 18:14:04,143 - live_runner - INFO - [Cappers leaked ‼️] New message id=11405
+2026-02-28 18:14:04,143 - live_runner - INFO - [DRY-RUN] Would insert raw pick for Cappers leaked ‼️
+2026-02-28 18:14:04,143 - live_runner - INFO - [Cappers leaked ‼️] Downloading image to D:\Programs\Sports Betting\Live Pick Scraper\v0.0.7\data\temp_images\live_-1001560546587_11405.jpg...
+2026-02-28 18:14:08,228 - live_runner - INFO - [Cappers leaked ‼️] Sending to AI for classification/extraction...
+2026-02-28 18:14:08,345 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:14:08,345 - live_runner - INFO - [Cappers leaked ‼️] Classified as ERROR_API. No picks saved.
+2026-02-28 18:14:10,361 - live_runner - INFO - [Cappers leaked ‼️] New message id=11403
+2026-02-28 18:14:10,362 - live_runner - INFO - [DRY-RUN] Would insert raw pick for Cappers leaked ‼️
+2026-02-28 18:14:10,362 - live_runner - INFO - [Cappers leaked ‼️] Sending to AI for classification/extraction...
+2026-02-28 18:14:10,437 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:14:10,437 - live_runner - INFO - [Cappers leaked ‼️] Classified as ERROR_API. No picks saved.
+2026-02-28 18:14:12,446 - live_runner - INFO - [Cappers leaked ‼️] New message id=11402
+2026-02-28 18:14:12,446 - live_runner - INFO - [DRY-RUN] Would insert raw pick for Cappers leaked ‼️
+2026-02-28 18:14:12,446 - live_runner - INFO - [Cappers leaked ‼️] Downloading image to D:\Programs\Sports Betting\Live Pick Scraper\v0.0.7\data\temp_images\live_-1001560546587_11402.jpg...
+2026-02-28 18:14:12,943 - live_runner - INFO - [Cappers leaked ‼️] Sending to AI for classification/extraction...
+2026-02-28 18:14:13,050 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:14:13,051 - live_runner - INFO - [Cappers leaked ‼️] Classified as ERROR_API. No picks saved.
+2026-02-28 18:14:15,060 - live_runner - INFO - [Cappers leaked ‼️] New message id=11401
+2026-02-28 18:14:15,061 - live_runner - INFO - [DRY-RUN] Would insert raw pick for Cappers leaked ‼️
+2026-02-28 18:14:15,061 - live_runner - INFO - [Cappers leaked ‼️] Downloading image to D:\Programs\Sports Betting\Live Pick Scraper\v0.0.7\data\temp_images\live_-1001560546587_11401.jpg...
+2026-02-28 18:14:16,037 - live_runner - INFO - [Cappers leaked ‼️] Sending to AI for classification/extraction...
+2026-02-28 18:14:16,122 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:14:16,122 - live_runner - INFO - [Cappers leaked ‼️] Classified as ERROR_API. No picks saved.
+2026-02-28 18:14:18,128 - live_runner - INFO - [Cappers leaked ‼️] New message id=11400
+2026-02-28 18:14:18,129 - live_runner - INFO - [DRY-RUN] Would insert raw pick for Cappers leaked ‼️
+2026-02-28 18:14:18,129 - live_runner - INFO - [Cappers leaked ‼️] Downloading image to D:\Programs\Sports Betting\Live Pick Scraper\v0.0.7\data\temp_images\live_-1001560546587_11400.jpg...
+2026-02-28 18:14:18,383 - live_runner - INFO - [Cappers leaked ‼️] Sending to AI for classification/extraction...
+2026-02-28 18:14:18,489 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:14:18,489 - live_runner - INFO - [Cappers leaked ‼️] Classified as ERROR_API. No picks saved.
+2026-02-28 18:16:59,208 - telethon.network.mtprotostate - WARNING - Server resent the older message 7611981783725091841, ignoring
+2026-02-28 18:16:59,933 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:17:02,118 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:17:04,219 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:17:06,304 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:17:08,377 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:17:14,835 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:17:16,962 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:17:19,564 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:17:22,636 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:17:24,988 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 18:26:07,836 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2026-02-28 19:42:08,167 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:42:10,363 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:42:12,463 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:42:14,552 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:42:16,742 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:42:23,208 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:42:25,285 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:42:27,856 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:42:31,024 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:42:33,486 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:23,441 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:25,531 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:27,722 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:29,801 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:31,896 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:38,781 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:40,866 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:43,468 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:46,510 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 19:57:48,841 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:23,217 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:25,647 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:27,742 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:29,814 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:31,912 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:38,572 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:40,625 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:43,306 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:46,397 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:00:48,783 - src.live_pipeline - ERROR - OpenRouter API Error 403: {"error":{"message":"Key limit exceeded (total limit). Manage it using https://openrouter.ai/settings/keys","code":403}}
+2026-02-28 20:05:41,914 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:05:46,846 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Jaylan1K' (Max Score < 80)
+2026-02-28 20:05:49,491 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:05:53,849 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:05:59,409 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:06:04,728 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:06:17,426 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:06:22,569 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:06:30,803 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,803 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:30,805 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,805 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:30,806 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,806 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:30,807 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,807 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:30,808 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,808 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:30,810 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,810 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:30,811 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,811 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:30,811 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,813 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:30,814 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,814 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:30,815 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:06:30,815 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:06:33,996 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:06:34,284 - src.live_pipeline - ERROR - GEMINI Extraction Error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-2.5-flash\nPlease retry in 25.725115511s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '5'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '25s'}]}}
+2026-02-28 20:06:38,039 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:06:38,346 - src.live_pipeline - ERROR - GEMINI Extraction Error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-2.5-flash\nPlease retry in 21.662066835s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '5'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '21s'}]}}
+2026-02-28 20:06:41,259 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:06:41,486 - src.live_pipeline - ERROR - GEMINI Extraction Error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-2.5-flash\nPlease retry in 18.522811605s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '5'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '18s'}]}}
+2026-02-28 20:09:09,945 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:09:14,899 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Jaylan1K' (Max Score < 80)
+2026-02-28 20:09:17,629 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:09:22,009 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:09:27,914 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:09:33,815 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:09:46,206 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:09:50,337 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:09:58,301 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,301 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:09:58,303 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,303 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:09:58,304 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,304 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:09:58,306 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,306 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:09:58,307 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,307 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:09:58,308 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,308 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:09:58,308 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,308 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:09:58,310 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,310 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:09:58,311 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,311 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:09:58,312 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BIG AL' ~ 'Big Al Mcmordie' (Score: 90.0). Asking AI...
+2026-02-28 20:09:58,312 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BIG AL' is NOT 'Big Al Mcmordie'.
+2026-02-28 20:10:01,585 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:10:14,939 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,939 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,941 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,942 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,942 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,944 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,945 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,946 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,946 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,948 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,949 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,950 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,951 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,951 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,953 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,954 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,955 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,956 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,957 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:14,957 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Sauce' (Max Score < 80)
+2026-02-28 20:10:18,651 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-28 20:10:20,886 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Cappers leaked' (Max Score < 80)
+2026-02-28 20:10:20,888 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Cappers leaked' ~ 'Cap' (Score: 90.0). Asking AI...
+2026-02-28 20:10:20,888 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Cappers leaked' is NOT 'Cap'.
+2026-02-28 20:10:24,161 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:21:07,684 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:21:15,028 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:21:21,684 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Duckinvestments' (Max Score < 80)
+2026-03-01 18:21:21,685 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Duckinvestments' (Max Score < 80)
+2026-03-01 18:21:21,686 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Duckinvestments' (Max Score < 80)
+2026-03-01 18:21:21,687 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Duckinvestments' (Max Score < 80)
+2026-03-01 18:21:21,688 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Duckinvestments' (Max Score < 80)
+2026-03-01 18:21:21,689 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Duckinvestments' (Max Score < 80)
+2026-03-01 18:21:21,689 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Duckinvestments' (Max Score < 80)
+2026-03-01 18:21:24,373 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:21:36,288 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:21:40,862 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:21:50,720 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:21:53,993 - src.capper_matcher - INFO - [SmartMatch] No match found for 'RussReallyWins' (Max Score < 80)
+2026-03-01 18:21:53,995 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'RussReallyWins' == '#Russreallywins' (Score: 96.55172413793103)
+2026-03-01 18:21:58,442 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:22:01,609 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:22:05,615 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:22:09,562 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 18:22:12,487 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Cappers leaked' (Max Score < 80)
+2026-03-01 19:17:16,246 - telethon.network.mtprotosender - INFO - Connecting to 149.154.167.92:443/TcpFull...
+2026-03-01 19:17:16,282 - telethon.network.mtprotosender - INFO - Connection to 149.154.167.92:443/TcpFull complete!
+2026-03-01 19:17:17,998 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:17:21,470 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:17:23,803 - telethon.client.downloads - INFO - Starting direct file download in chunks of 131072 at 0, stride 131072
+2026-03-01 19:17:23,859 - telethon.client.downloads - INFO - File lives in another DC
+2026-03-01 19:17:23,902 - telethon.network.mtprotosender - INFO - Connecting to 91.108.56.154:443/TcpFull...
+2026-03-01 19:17:25,536 - telethon.network.mtprotosender - INFO - Connection to 91.108.56.154:443/TcpFull complete!
+2026-03-01 19:17:25,537 - telethon.client.telegrambaseclient - INFO - Exporting auth for new borrowed sender in DcOption(id=5, ip_address='91.108.56.154', port=443, ipv6=False, media_only=False, tcpo_only=False, cdn=False, static=False, this_port_only=False, secret=None)
+2026-03-01 19:17:27,678 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:17:34,258 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:17:34,261 - src.capper_matcher - INFO - [SmartMatch] No match found for 'RussReallyWins' (Max Score < 80)
+2026-03-01 19:17:34,262 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'RussReallyWins' == '#Russreallywins' (Score: 96.55172413793103)
+2026-03-01 19:17:34,400 - live_runner - INFO - [CAPPERS PICKS] New message id=13321
+2026-03-01 19:17:34,400 - live_runner - INFO - [DRY-RUN] Would insert raw pick for CAPPERS PICKS
+2026-03-01 19:17:34,400 - live_runner - INFO - [CAPPERS PICKS] Downloading image to D:\Programs\Sports Betting\Live Pick Scraper\v0.0.7\data\temp_images\live_-1002066008165_13321.jpg...
+2026-03-01 19:17:34,400 - telethon.client.downloads - INFO - Starting direct file download in chunks of 131072 at 0, stride 131072
+2026-03-01 19:17:34,449 - telethon.client.downloads - INFO - File lives in another DC
+2026-03-01 19:17:35,296 - live_runner - INFO - [CAPPERS PICKS] Sending to AI for classification/extraction...
+2026-03-01 19:17:35,296 - src.live_pipeline - INFO - [CAPPERS PICKS] Trying Direct Google Gemini API...
+2026-03-01 19:17:35,973 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:17:39,379 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:17:39,382 - src.capper_matcher - INFO - [SmartMatch] No match found for 'RussReallyWins' (Max Score < 80)
+2026-03-01 19:17:39,384 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'RussReallyWins' == '#Russreallywins' (Score: 96.55172413793103)
+2026-03-01 19:17:39,384 - live_runner - INFO - [CAPPERS PICKS] AI extracted 1 picks.
+2026-03-01 19:17:39,385 - telethon.network.mtprotosender - INFO - Disconnecting from 149.154.167.92:443/TcpFull...
+2026-03-01 19:17:39,387 - telethon.network.mtprotosender - INFO - Disconnection from 149.154.167.92:443/TcpFull complete!
+2026-03-01 19:17:39,388 - telethon.network.mtprotosender - INFO - Disconnecting from 91.108.56.154:443/TcpFull...
+2026-03-01 19:17:39,388 - telethon.network.mtprotosender - INFO - Disconnection from 91.108.56.154:443/TcpFull complete!
+2026-03-01 19:17:40,743 - httpx - INFO - HTTP Request: GET https://x.com "HTTP/1.1 200 OK"
+2026-03-01 19:17:40,892 - httpx - INFO - HTTP Request: GET https://abs.twimg.com/responsive-web/client-web/ondemand.s.ce6c377a.js "HTTP/1.1 200 OK"
+2026-03-01 19:17:41,196 - httpx - INFO - HTTP Request: GET https://x.com/i/api/graphql/flaR-PUMshxFWZWPNpq4zA/SearchTimeline?variables=%7B%22rawQuery%22%3A+%22from%3Aleakedcaps%22%2C+%22count%22%3A+1%2C+%22querySource%22%3A+%22typed_query%22%2C+%22product%22%3A+%22Latest%22%7D&features=%7B%22creator_subscriptions_tweet_preview_api_enabled%22%3A+true%2C+%22c9s_tweet_anatomy_moderator_badge_enabled%22%3A+true%2C+%22tweetypie_unmention_optimization_enabled%22%3A+true%2C+%22responsive_web_edit_tweet_api_enabled%22%3A+true%2C+%22graphql_is_translatable_rweb_tweet_is_translatable_enabled%22%3A+true%2C+%22view_counts_everywhere_api_enabled%22%3A+true%2C+%22longform_notetweets_consumption_enabled%22%3A+true%2C+%22responsive_web_twitter_article_tweet_consumption_enabled%22%3A+true%2C+%22tweet_awards_web_tipping_enabled%22%3A+false%2C+%22longform_notetweets_rich_text_read_enabled%22%3A+true%2C+%22longform_notetweets_inline_media_enabled%22%3A+true%2C+%22rweb_video_timestamps_enabled%22%3A+true%2C+%22responsive_web_graphql_exclude_directive_enabled%22%3A+true%2C+%22verified_phone_label_enabled%22%3A+false%2C+%22freedom_of_speech_not_reach_fetch_enabled%22%3A+true%2C+%22standardized_nudges_misinfo%22%3A+true%2C+%22tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled%22%3A+true%2C+%22responsive_web_media_download_video_enabled%22%3A+false%2C+%22responsive_web_graphql_skip_user_profile_image_extensions_enabled%22%3A+false%2C+%22responsive_web_graphql_timeline_navigation_enabled%22%3A+true%2C+%22responsive_web_enhance_cards_enabled%22%3A+false%7D "HTTP/1.1 200 OK"
+2026-03-01 19:17:41,199 - live_runner - INFO - [@leakedcaps] New message id=2028153980656771191
+2026-03-01 19:17:41,199 - live_runner - INFO - [DRY-RUN] Would insert raw pick for @leakedcaps
+2026-03-01 19:17:41,199 - live_runner - INFO - [@leakedcaps] Sending to AI for classification/extraction...
+2026-03-01 19:17:41,199 - src.live_pipeline - INFO - [@leakedcaps] Trying Direct Google Gemini API...
+2026-03-01 19:17:41,840 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:17:48,161 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:17:48,163 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Porter' ~ 'Porterpicks' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,163 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Porter' is NOT 'Porterpicks'.
+2026-03-01 19:17:48,164 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Porter' ~ 'Porterpicks' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,164 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Porter' is NOT 'Porterpicks'.
+2026-03-01 19:17:48,166 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'SmartMoney' ~ 'Smartmoneysports' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,166 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'SmartMoney' is NOT 'Smartmoneysports'.
+2026-03-01 19:17:48,167 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'SmartMoney' == 'Smart Money' (Score: 95.23809523809523)
+2026-03-01 19:17:48,168 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'SmartMoney' ~ 'Smartmoneysports' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,168 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'SmartMoney' is NOT 'Smartmoneysports'.
+2026-03-01 19:17:48,168 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'SmartMoney' == 'Smart Money' (Score: 95.23809523809523)
+2026-03-01 19:17:48,170 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'SmartMoney' ~ 'Smartmoneysports' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,170 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'SmartMoney' is NOT 'Smartmoneysports'.
+2026-03-01 19:17:48,172 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'SmartMoney' == 'Smart Money' (Score: 95.23809523809523)
+2026-03-01 19:17:48,173 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'SmartMoney' ~ 'Smartmoneysports' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,173 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'SmartMoney' is NOT 'Smartmoneysports'.
+2026-03-01 19:17:48,174 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'SmartMoney' == 'Smart Money' (Score: 95.23809523809523)
+2026-03-01 19:17:48,175 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Bet Lab' ~ 'Ab' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,175 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Bet Lab' is NOT 'Ab'.
+2026-03-01 19:17:48,176 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Bet Lab' ~ 'Ab' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,176 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Bet Lab' is NOT 'Ab'.
+2026-03-01 19:17:48,177 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'CashC' ~ 'Cashcing' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,177 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'CashC' is NOT 'Cashcing'.
+2026-03-01 19:17:48,178 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'CashC' ~ 'Cashcing' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,178 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'CashC' is NOT 'Cashcing'.
+2026-03-01 19:17:48,435 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'CashC' ~ 'Cashcing' (Score: 90.0). Asking AI...
+2026-03-01 19:17:48,436 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'CashC' is NOT 'Cashcing'.
+2026-03-01 19:17:48,436 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:17:48,438 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:17:48,438 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:17:48,439 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:17:48,440 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:17:48,440 - live_runner - INFO - [@leakedcaps] AI extracted 15 picks.
+2026-03-01 19:17:48,809 - httpx - INFO - HTTP Request: GET https://x.com/i/api/graphql/flaR-PUMshxFWZWPNpq4zA/SearchTimeline?variables=%7B%22rawQuery%22%3A+%22from%3Aallcappersfree%22%2C+%22count%22%3A+1%2C+%22querySource%22%3A+%22typed_query%22%2C+%22product%22%3A+%22Latest%22%7D&features=%7B%22creator_subscriptions_tweet_preview_api_enabled%22%3A+true%2C+%22c9s_tweet_anatomy_moderator_badge_enabled%22%3A+true%2C+%22tweetypie_unmention_optimization_enabled%22%3A+true%2C+%22responsive_web_edit_tweet_api_enabled%22%3A+true%2C+%22graphql_is_translatable_rweb_tweet_is_translatable_enabled%22%3A+true%2C+%22view_counts_everywhere_api_enabled%22%3A+true%2C+%22longform_notetweets_consumption_enabled%22%3A+true%2C+%22responsive_web_twitter_article_tweet_consumption_enabled%22%3A+true%2C+%22tweet_awards_web_tipping_enabled%22%3A+false%2C+%22longform_notetweets_rich_text_read_enabled%22%3A+true%2C+%22longform_notetweets_inline_media_enabled%22%3A+true%2C+%22rweb_video_timestamps_enabled%22%3A+true%2C+%22responsive_web_graphql_exclude_directive_enabled%22%3A+true%2C+%22verified_phone_label_enabled%22%3A+false%2C+%22freedom_of_speech_not_reach_fetch_enabled%22%3A+true%2C+%22standardized_nudges_misinfo%22%3A+true%2C+%22tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled%22%3A+true%2C+%22responsive_web_media_download_video_enabled%22%3A+false%2C+%22responsive_web_graphql_skip_user_profile_image_extensions_enabled%22%3A+false%2C+%22responsive_web_graphql_timeline_navigation_enabled%22%3A+true%2C+%22responsive_web_enhance_cards_enabled%22%3A+false%7D "HTTP/1.1 200 OK"
+2026-03-01 19:17:48,809 - live_runner - INFO - [@allcappersfree] New message id=2028145996946125160
+2026-03-01 19:17:48,809 - live_runner - INFO - [DRY-RUN] Would insert raw pick for @allcappersfree
+2026-03-01 19:17:48,809 - live_runner - INFO - [@allcappersfree] Sending to AI for classification/extraction...
+2026-03-01 19:17:48,810 - src.live_pipeline - INFO - [@allcappersfree] Trying Direct Google Gemini API...
+2026-03-01 19:17:49,486 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:18:23,014 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:18:23,021 - src.capper_matcher - INFO - [SmartMatch] No match found for 'TailToWin' (Max Score < 80)
+2026-03-01 19:18:23,023 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:18:23,024 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:18:23,025 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:18:23,026 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:18:23,027 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:18:23,037 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:18:23,038 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:18:23,038 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:18:23,040 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:18:23,042 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:18:23,044 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BetLabs' ~ 'Ab' (Score: 90.0). Asking AI...
+2026-03-01 19:18:23,044 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BetLabs' is NOT 'Ab'.
+2026-03-01 19:18:23,045 - live_runner - INFO - [@allcappersfree] AI extracted 56 picks.
+2026-03-01 19:20:22,727 - telethon.network.mtprotosender - INFO - Connecting to 149.154.167.92:443/TcpFull...
+2026-03-01 19:20:22,772 - telethon.network.mtprotosender - INFO - Connection to 149.154.167.92:443/TcpFull complete!
+2026-03-01 19:20:24,641 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:20:27,539 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:20:28,871 - telethon.client.downloads - INFO - Starting direct file download in chunks of 131072 at 0, stride 131072
+2026-03-01 19:20:28,926 - telethon.client.downloads - INFO - File lives in another DC
+2026-03-01 19:20:28,983 - telethon.network.mtprotosender - INFO - Connecting to 91.108.56.154:443/TcpFull...
+2026-03-01 19:20:30,667 - telethon.network.mtprotosender - INFO - Connection to 91.108.56.154:443/TcpFull complete!
+2026-03-01 19:20:30,668 - telethon.client.telegrambaseclient - INFO - Exporting auth for new borrowed sender in DcOption(id=5, ip_address='91.108.56.154', port=443, ipv6=False, media_only=False, tcpo_only=False, cdn=False, static=False, this_port_only=False, secret=None)
+2026-03-01 19:20:32,915 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:20:39,252 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:20:39,256 - src.capper_matcher - INFO - [SmartMatch] No match found for 'RussReallyWins' (Max Score < 80)
+2026-03-01 19:20:39,257 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'RussReallyWins' == '#Russreallywins' (Score: 96.55172413793103)
+2026-03-01 19:20:39,529 - live_runner - INFO - [CAPPERS PICKS] New message id=13321
+2026-03-01 19:20:39,529 - live_runner - INFO - [DRY-RUN] Would insert raw pick for CAPPERS PICKS
+2026-03-01 19:20:39,529 - live_runner - INFO - [CAPPERS PICKS] Downloading image to D:\Programs\Sports Betting\Live Pick Scraper\v0.0.7\data\temp_images\live_-1002066008165_13321.jpg...
+2026-03-01 19:20:39,530 - telethon.client.downloads - INFO - Starting direct file download in chunks of 131072 at 0, stride 131072
+2026-03-01 19:20:39,643 - telethon.client.downloads - INFO - File lives in another DC
+2026-03-01 19:20:40,567 - live_runner - INFO - [CAPPERS PICKS] Sending to AI for classification/extraction...
+2026-03-01 19:20:40,567 - src.live_pipeline - INFO - [CAPPERS PICKS] Trying Direct Google Gemini API...
+2026-03-01 19:20:41,216 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:20:44,719 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:20:44,721 - src.capper_matcher - INFO - [SmartMatch] No match found for 'RussReallyWins' (Max Score < 80)
+2026-03-01 19:20:44,722 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'RussReallyWins' == '#Russreallywins' (Score: 96.55172413793103)
+2026-03-01 19:20:44,722 - live_runner - INFO - [CAPPERS PICKS] AI extracted 1 picks.
+2026-03-01 19:20:44,723 - telethon.network.mtprotosender - INFO - Disconnecting from 149.154.167.92:443/TcpFull...
+2026-03-01 19:20:44,726 - telethon.network.mtprotosender - INFO - Disconnection from 149.154.167.92:443/TcpFull complete!
+2026-03-01 19:20:44,726 - telethon.network.mtprotosender - INFO - Disconnecting from 91.108.56.154:443/TcpFull...
+2026-03-01 19:20:44,726 - telethon.network.mtprotosender - INFO - Disconnection from 91.108.56.154:443/TcpFull complete!
+2026-03-01 19:20:45,993 - httpx - INFO - HTTP Request: GET https://x.com "HTTP/1.1 200 OK"
+2026-03-01 19:20:46,076 - httpx - INFO - HTTP Request: GET https://abs.twimg.com/responsive-web/client-web/ondemand.s.ce6c377a.js "HTTP/1.1 200 OK"
+2026-03-01 19:20:46,342 - httpx - INFO - HTTP Request: GET https://x.com/i/api/graphql/flaR-PUMshxFWZWPNpq4zA/SearchTimeline?variables=%7B%22rawQuery%22%3A+%22from%3Aleakedcaps%22%2C+%22count%22%3A+1%2C+%22querySource%22%3A+%22typed_query%22%2C+%22product%22%3A+%22Latest%22%7D&features=%7B%22creator_subscriptions_tweet_preview_api_enabled%22%3A+true%2C+%22c9s_tweet_anatomy_moderator_badge_enabled%22%3A+true%2C+%22tweetypie_unmention_optimization_enabled%22%3A+true%2C+%22responsive_web_edit_tweet_api_enabled%22%3A+true%2C+%22graphql_is_translatable_rweb_tweet_is_translatable_enabled%22%3A+true%2C+%22view_counts_everywhere_api_enabled%22%3A+true%2C+%22longform_notetweets_consumption_enabled%22%3A+true%2C+%22responsive_web_twitter_article_tweet_consumption_enabled%22%3A+true%2C+%22tweet_awards_web_tipping_enabled%22%3A+false%2C+%22longform_notetweets_rich_text_read_enabled%22%3A+true%2C+%22longform_notetweets_inline_media_enabled%22%3A+true%2C+%22rweb_video_timestamps_enabled%22%3A+true%2C+%22responsive_web_graphql_exclude_directive_enabled%22%3A+true%2C+%22verified_phone_label_enabled%22%3A+false%2C+%22freedom_of_speech_not_reach_fetch_enabled%22%3A+true%2C+%22standardized_nudges_misinfo%22%3A+true%2C+%22tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled%22%3A+true%2C+%22responsive_web_media_download_video_enabled%22%3A+false%2C+%22responsive_web_graphql_skip_user_profile_image_extensions_enabled%22%3A+false%2C+%22responsive_web_graphql_timeline_navigation_enabled%22%3A+true%2C+%22responsive_web_enhance_cards_enabled%22%3A+false%7D "HTTP/1.1 200 OK"
+2026-03-01 19:20:46,345 - live_runner - INFO - [@leakedcaps] New message id=2028153980656771191
+2026-03-01 19:20:46,345 - live_runner - INFO - [DRY-RUN] Would insert raw pick for @leakedcaps
+2026-03-01 19:20:46,345 - live_runner - INFO - [@leakedcaps] Sending to AI for classification/extraction...
+2026-03-01 19:20:46,345 - src.live_pipeline - INFO - [@leakedcaps] Trying Direct Google Gemini API...
+2026-03-01 19:20:46,981 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:20:53,257 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:20:53,261 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Porter' ~ 'Porterpicks' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,261 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Porter' is NOT 'Porterpicks'.
+2026-03-01 19:20:53,262 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Porter' ~ 'Porterpicks' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,262 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Porter' is NOT 'Porterpicks'.
+2026-03-01 19:20:53,263 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'SmartMoney' ~ 'Smartmoneysports' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,263 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'SmartMoney' is NOT 'Smartmoneysports'.
+2026-03-01 19:20:53,264 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'SmartMoney' == 'Smart Money' (Score: 95.23809523809523)
+2026-03-01 19:20:53,265 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'SmartMoney' ~ 'Smartmoneysports' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,265 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'SmartMoney' is NOT 'Smartmoneysports'.
+2026-03-01 19:20:53,266 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'SmartMoney' == 'Smart Money' (Score: 95.23809523809523)
+2026-03-01 19:20:53,267 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'SmartMoney' ~ 'Smartmoneysports' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,267 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'SmartMoney' is NOT 'Smartmoneysports'.
+2026-03-01 19:20:53,268 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'SmartMoney' == 'Smart Money' (Score: 95.23809523809523)
+2026-03-01 19:20:53,269 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'SmartMoney' ~ 'Smartmoneysports' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,269 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'SmartMoney' is NOT 'Smartmoneysports'.
+2026-03-01 19:20:53,270 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'SmartMoney' == 'Smart Money' (Score: 95.23809523809523)
+2026-03-01 19:20:53,271 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Bet Lab' ~ 'Ab' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,271 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Bet Lab' is NOT 'Ab'.
+2026-03-01 19:20:53,272 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Bet Lab' ~ 'Ab' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,272 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Bet Lab' is NOT 'Ab'.
+2026-03-01 19:20:53,272 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'CashC' ~ 'Cashcing' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,272 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'CashC' is NOT 'Cashcing'.
+2026-03-01 19:20:53,274 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'CashC' ~ 'Cashcing' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,274 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'CashC' is NOT 'Cashcing'.
+2026-03-01 19:20:53,492 - src.supabase_client - ERROR - Supabase REST Error 409: {"code":"23505","details":"Key (canonical_name)=(CashC) already exists.","hint":null,"message":"duplicate key value violates unique constraint \"capper_directory_canonical_name_key\""}
+2026-03-01 19:20:53,493 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'CashC' ~ 'Cashcing' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,493 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'CashC' is NOT 'Cashcing'.
+2026-03-01 19:20:53,493 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'CashC' ~ 'Cashcing' (Score: 90.0). Asking AI...
+2026-03-01 19:20:53,493 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'CashC' is NOT 'Cashcing'.
+2026-03-01 19:20:53,671 - src.supabase_client - ERROR - Supabase REST Error 409: {"code":"23505","details":"Key (canonical_name)=(CashC) already exists.","hint":null,"message":"duplicate key value violates unique constraint \"capper_directory_canonical_name_key\""}
+2026-03-01 19:20:53,671 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:20:53,672 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:20:53,673 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:20:53,673 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:20:53,675 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Nicky Cash' ~ 'Nicky Cashin' (Score: 90.9090909090909). Asking AI...
+2026-03-01 19:20:53,675 - live_runner - INFO - [@leakedcaps] AI extracted 15 picks.
+2026-03-01 19:20:54,027 - httpx - INFO - HTTP Request: GET https://x.com/i/api/graphql/flaR-PUMshxFWZWPNpq4zA/SearchTimeline?variables=%7B%22rawQuery%22%3A+%22from%3Aallcappersfree%22%2C+%22count%22%3A+1%2C+%22querySource%22%3A+%22typed_query%22%2C+%22product%22%3A+%22Latest%22%7D&features=%7B%22creator_subscriptions_tweet_preview_api_enabled%22%3A+true%2C+%22c9s_tweet_anatomy_moderator_badge_enabled%22%3A+true%2C+%22tweetypie_unmention_optimization_enabled%22%3A+true%2C+%22responsive_web_edit_tweet_api_enabled%22%3A+true%2C+%22graphql_is_translatable_rweb_tweet_is_translatable_enabled%22%3A+true%2C+%22view_counts_everywhere_api_enabled%22%3A+true%2C+%22longform_notetweets_consumption_enabled%22%3A+true%2C+%22responsive_web_twitter_article_tweet_consumption_enabled%22%3A+true%2C+%22tweet_awards_web_tipping_enabled%22%3A+false%2C+%22longform_notetweets_rich_text_read_enabled%22%3A+true%2C+%22longform_notetweets_inline_media_enabled%22%3A+true%2C+%22rweb_video_timestamps_enabled%22%3A+true%2C+%22responsive_web_graphql_exclude_directive_enabled%22%3A+true%2C+%22verified_phone_label_enabled%22%3A+false%2C+%22freedom_of_speech_not_reach_fetch_enabled%22%3A+true%2C+%22standardized_nudges_misinfo%22%3A+true%2C+%22tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled%22%3A+true%2C+%22responsive_web_media_download_video_enabled%22%3A+false%2C+%22responsive_web_graphql_skip_user_profile_image_extensions_enabled%22%3A+false%2C+%22responsive_web_graphql_timeline_navigation_enabled%22%3A+true%2C+%22responsive_web_enhance_cards_enabled%22%3A+false%7D "HTTP/1.1 200 OK"
+2026-03-01 19:20:54,027 - live_runner - INFO - [@allcappersfree] New message id=2028145996946125160
+2026-03-01 19:20:54,027 - live_runner - INFO - [DRY-RUN] Would insert raw pick for @allcappersfree
+2026-03-01 19:20:54,027 - live_runner - INFO - [@allcappersfree] Sending to AI for classification/extraction...
+2026-03-01 19:20:54,027 - src.live_pipeline - INFO - [@allcappersfree] Trying Direct Google Gemini API...
+2026-03-01 19:20:54,706 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:21:25,514 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:21:25,523 - src.capper_matcher - INFO - [SmartMatch] No match found for 'TailToWin' (Max Score < 80)
+2026-03-01 19:21:25,523 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:21:25,525 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:21:25,525 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:21:25,526 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:21:25,527 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'P4D_Picks4Dayzzz' == 'P4Dpicks4Dayzzz' (Score: 96.7741935483871)
+2026-03-01 19:21:25,536 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:21:25,536 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:21:25,539 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:21:25,539 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:21:25,539 - src.capper_matcher - INFO - [SmartMatch] No match found for 'PropJoe' (Max Score < 80)
+2026-03-01 19:21:25,542 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'BetLabs' ~ 'Ab' (Score: 90.0). Asking AI...
+2026-03-01 19:21:25,542 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'BetLabs' is NOT 'Ab'.
+2026-03-01 19:21:25,543 - live_runner - INFO - [@allcappersfree] AI extracted 56 picks.
+2026-03-01 19:21:25,893 - httpx - INFO - HTTP Request: GET https://x.com/i/api/graphql/flaR-PUMshxFWZWPNpq4zA/SearchTimeline?variables=%7B%22rawQuery%22%3A+%22from%3AAllinonecappers%22%2C+%22count%22%3A+1%2C+%22querySource%22%3A+%22typed_query%22%2C+%22product%22%3A+%22Latest%22%7D&features=%7B%22creator_subscriptions_tweet_preview_api_enabled%22%3A+true%2C+%22c9s_tweet_anatomy_moderator_badge_enabled%22%3A+true%2C+%22tweetypie_unmention_optimization_enabled%22%3A+true%2C+%22responsive_web_edit_tweet_api_enabled%22%3A+true%2C+%22graphql_is_translatable_rweb_tweet_is_translatable_enabled%22%3A+true%2C+%22view_counts_everywhere_api_enabled%22%3A+true%2C+%22longform_notetweets_consumption_enabled%22%3A+true%2C+%22responsive_web_twitter_article_tweet_consumption_enabled%22%3A+true%2C+%22tweet_awards_web_tipping_enabled%22%3A+false%2C+%22longform_notetweets_rich_text_read_enabled%22%3A+true%2C+%22longform_notetweets_inline_media_enabled%22%3A+true%2C+%22rweb_video_timestamps_enabled%22%3A+true%2C+%22responsive_web_graphql_exclude_directive_enabled%22%3A+true%2C+%22verified_phone_label_enabled%22%3A+false%2C+%22freedom_of_speech_not_reach_fetch_enabled%22%3A+true%2C+%22standardized_nudges_misinfo%22%3A+true%2C+%22tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled%22%3A+true%2C+%22responsive_web_media_download_video_enabled%22%3A+false%2C+%22responsive_web_graphql_skip_user_profile_image_extensions_enabled%22%3A+false%2C+%22responsive_web_graphql_timeline_navigation_enabled%22%3A+true%2C+%22responsive_web_enhance_cards_enabled%22%3A+false%7D "HTTP/1.1 200 OK"
+2026-03-01 19:21:25,894 - live_runner - INFO - [@Allinonecappers] New message id=2028145722676084792
+2026-03-01 19:21:25,895 - live_runner - INFO - [DRY-RUN] Would insert raw pick for @Allinonecappers
+2026-03-01 19:21:25,895 - live_runner - INFO - [@Allinonecappers] Sending to AI for classification/extraction...
+2026-03-01 19:21:25,895 - src.live_pipeline - INFO - [@Allinonecappers] Trying Direct Google Gemini API...
+2026-03-01 19:21:26,532 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-03-01 19:21:58,809 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-01 19:21:58,825 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Prop Joe' ~ 'Prop Bet Guy' (Score: 85.5). Asking AI...
+2026-03-01 19:21:58,825 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Prop Joe' is NOT 'Prop Bet Guy'.
+2026-03-01 19:21:58,826 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Prop Joe' ~ 'Prop Bet Guy' (Score: 85.5). Asking AI...
+2026-03-01 19:21:58,826 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Prop Joe' is NOT 'Prop Bet Guy'.
+2026-03-01 19:21:58,827 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Prop Joe' ~ 'Prop Bet Guy' (Score: 85.5). Asking AI...
+2026-03-01 19:21:58,827 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Prop Joe' is NOT 'Prop Bet Guy'.
+2026-03-01 19:21:58,827 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Prop Joe' ~ 'Prop Bet Guy' (Score: 85.5). Asking AI...
+2026-03-01 19:21:58,827 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Prop Joe' is NOT 'Prop Bet Guy'.
+2026-03-01 19:21:58,828 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Prop Joe' ~ 'Prop Bet Guy' (Score: 85.5). Asking AI...
+2026-03-01 19:21:58,828 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Prop Joe' is NOT 'Prop Bet Guy'.
+2026-03-01 19:21:58,829 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Tennis Winners Only' (Max Score < 80)
+2026-03-01 19:21:58,831 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'Tennis Winners Only' == 'Tennis Winners Only Atp' (Score: 95.0)
+2026-03-01 19:21:58,831 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Tennis Winners Only' (Max Score < 80)
+2026-03-01 19:21:58,833 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'Tennis Winners Only' == 'Tennis Winners Only Atp' (Score: 95.0)
+2026-03-01 19:21:58,835 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'Bullies Picks' == 'Bulliespicks' (Score: 96.0)
+2026-03-01 19:21:58,835 - src.capper_matcher - INFO - [SmartMatch] Auto-Match: 'Bullies Picks' == 'Bulliespicks' (Score: 96.0)
+2026-03-01 19:21:58,837 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Bet Labs' ~ 'Ab' (Score: 90.0). Asking AI...
+2026-03-01 19:21:58,837 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Bet Labs' is NOT 'Ab'.
+2026-03-01 19:21:58,838 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'Bet Labs' ~ 'Ab' (Score: 90.0). Asking AI...
+2026-03-01 19:21:58,838 - src.capper_matcher - INFO - [SmartMatch] AI Skipped (Sim): 'Bet Labs' is NOT 'Ab'.
+2026-03-01 19:21:58,838 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'The Sharp Sheets' ~ 'Thesharpsheets' (Score: 93.33333333333333). Asking AI...
+2026-03-01 19:21:58,839 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'The Sharp Sheets' ~ 'Thesharpsheets' (Score: 93.33333333333333). Asking AI...
+2026-03-01 19:21:58,839 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'The Sharp Sheets' ~ 'Thesharpsheets' (Score: 93.33333333333333). Asking AI...
+2026-03-01 19:21:58,841 - src.capper_matcher - INFO - [SmartMatch] Ambiguous Match: 'The Sharp Sheets' ~ 'Thesharpsheets' (Score: 93.33333333333333). Asking AI...
+2026-03-01 19:21:58,843 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Chamba' (Max Score < 80)
+2026-03-01 19:21:58,844 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Chamba' (Max Score < 80)
+2026-03-01 19:21:58,845 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Chamba' (Max Score < 80)
+2026-03-01 19:21:58,845 - src.capper_matcher - INFO - [SmartMatch] No match found for 'Chamba' (Max Score < 80)
+2026-03-01 19:21:58,845 - live_runner - INFO - [@Allinonecappers] AI extracted 61 picks.
+2026-03-01 19:21:58,845 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2026-03-01 19:21:58,847 - discord.client - INFO - logging in using static token
+2026-03-01 19:21:59,162 - asyncio - ERROR - Unclosed connector
+connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x000001C81E9E5550>, 30553.906)])']
+connector: <aiohttp.connector.TCPConnector object at 0x000001C87FBBB410>

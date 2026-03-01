@@ -1,0 +1,30 @@
+{
+  "date": "2026-01-22",
+  "timestamp": "2026-01-23T12:32:26.647441",
+  "results": {
+    "fetch": {
+      "all_leagues_fresh": 3.6303610000004483,
+      "all_leagues_games": 587,
+      "all_leagues_cached": 0.291690799999742,
+      "nba_nfl_only": 0.19294230000014068,
+      "nba_nfl_games": 8,
+      "ncaab_only_fresh": 0.7226378000004843,
+      "ncaab_games": 38,
+      "ncaab_only_cached": 0.0027282999999442836
+    },
+    "grade": {
+      "grading_time": 0.8229713000000629,
+      "picks_count": 12
+    },
+    "pipeline": {
+      "optimized_fetch": 0.021663799999259936,
+      "optimized_grade": 0.7298298999994586,
+      "optimized_total": 0.7514936999987185,
+      "optimized_games": 54,
+      "baseline_fetch": 0.09818769999947108,
+      "baseline_grade": 0.8050539000005301,
+      "baseline_total": 0.9032416000000012,
+      "baseline_games": 65
+    }
+  }
+}
